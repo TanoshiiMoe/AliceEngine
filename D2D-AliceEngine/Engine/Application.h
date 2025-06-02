@@ -1,0 +1,28 @@
+#pragma once
+#include "pch.h"
+#include "D2DRenderer.h"
+
+using namespace Microsoft::WRL;
+
+class Application
+{
+public:
+	virtual void Initialize();
+	virtual void Run();
+	virtual void Uninitialize();
+
+	D2DRenderer* m_pD2DRenderer;
+
+protected:
+	HWND m_hwnd = nullptr;
+	HINSTANCE m_hInstance;
+	std::wstring	m_WindowName = L"D2DWindowClass";
+	std::wstring	m_TitleName = L"Default Title Name";
+	std::string		m_ModulePath;
+	std::string		m_WorkingPath;
+
+	UINT m_width = 1024;
+	UINT m_height = 768;
+	bool m_resized = false;
+};
+
