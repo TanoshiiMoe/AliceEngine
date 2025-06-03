@@ -79,7 +79,7 @@ void DemoGame::Initialize()
 	ShowWindow(m_hwnd, SW_SHOW);
 
 	CoInitialize(nullptr);
-	m_pD2DRenderer->Initialize(m_hwnd, m_width, m_height);
+	m_pD2DRenderer->Initialize(m_hwnd);
 }
 
 void DemoGame::Run()
@@ -116,6 +116,11 @@ void DemoGame::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 
+	case WM_KEYDOWN:
+		if (wParam == VK_SPACE)
+			m_pD2DRenderer->m_useScreenEffect = !m_pD2DRenderer->m_useScreenEffect;
+		break;
+
 	case WM_SIZE:
 	{
 		if (wParam == SIZE_MINIMIZED)
@@ -135,7 +140,7 @@ void DemoGame::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (m_resized)
 		{
 			m_pD2DRenderer->Uninitialize();
-			m_pD2DRenderer->Initialize(hwnd, m_width, m_height);
+			m_pD2DRenderer->Initialize(hwnd);
 		}
 		break;
 	default:

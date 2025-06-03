@@ -23,8 +23,15 @@
 #include <dxgi1_6.h> // IDXGIFactory7
 #pragma comment(lib, "dxgi.lib")
 
+#include <dwrite.h>
+#pragma comment(lib,"dwrite.lib")
+
 #include <wincodec.h>
 #pragma comment(lib,"windowscodecs.lib")
+
+#include <d2d1effects_2.h>
+#pragma comment(lib, "dxguid.lib")
 #include <string>
+#include <comdef.h>
 
 #endif //PCH_H
