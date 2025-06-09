@@ -36,6 +36,8 @@
 #include "Define.h"
 #include <vector>
 #include <memory>
+#include <math.h>
+#include <cmath>
 #include "DoubleLinkedList.h"
 
 #endif //PCH_H

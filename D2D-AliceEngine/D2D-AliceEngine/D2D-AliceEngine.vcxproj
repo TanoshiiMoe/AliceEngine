@@ -141,19 +141,15 @@
   <ItemGroup>
     <ClInclude Include="D2D-AliceEngine.h" />
     <ClInclude Include="DemoGame.h" />
-    <ClInclude Include="Earth.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Sun.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D2D-AliceEngine.cpp" />
     <ClCompile Include="DemoGame.cpp" />
-    <ClCompile Include="Earth.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Sun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D2D-AliceEngine.rc" />

@@ -140,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="BitmapImage.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="Define.h" />
@@ -153,7 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="BitmapImage.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="Define.cpp" />

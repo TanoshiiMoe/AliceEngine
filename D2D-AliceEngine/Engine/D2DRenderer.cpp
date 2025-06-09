@@ -442,49 +442,68 @@ void D2DRenderer::DrawTestSpriteBatch()
 
 void D2DRenderer::DrawInRenderList()
 {
-	// Resize 플래그가 세트되었으면 SwapChain과 타겟 비트맵 재생성
 	if (m_resizePending)
 	{
 		CreateSwapChainAndD2DTarget();
 		m_resizePending = false;
 	}
 
-	// ① 매 프레임마다 SetTarget 호출
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
-	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED); //DrawSpriteBatch requires
-
-	// ② BeginDraw
+	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	//m_d2dDeviceContext->BeginDraw();
 	//m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::DarkSlateBlue));
-	
-	//m_d2dDeviceContext->SetTransform(transform);
-	// 렌더 리스트에 있는 오브젝트 전부 그리기
-	D2D1_RECT_F* destRects = (D2D1_RECT_F*)malloc(sizeof(D2D1_RECT_F) * m_renderList.size());
-	D2D1_RECT_U* srcRects = (D2D1_RECT_U*)malloc(sizeof(D2D1_RECT_U) * m_renderList.size());
-	int index = 0;
-	for (auto it = m_renderList.begin(); it != m_renderList.end(); it++)
-	{
-		Transform* transform = (*it)->m_localTransform;
-		m_d2dDeviceContext->SetTransform(transform->ToMatrix());
+	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-		D2D1_SIZE_U bmpSize = (*it)->m_bitmapImage.GetBitmap()->GetPixelSize();
-		destRects[index] = D2D1::RectF(
-			transform->GetPosition().x,
-			transform->GetPosition().y,
-			transform->GetPosition().x + (FLOAT)bmpSize.width,
-			transform->GetPosition().y + (FLOAT)bmpSize.height
-		);
+	size_t objCount = m_renderList.size();
+	D2D1_RECT_F* destRects = (D2D1_RECT_F*)malloc(sizeof(D2D1_RECT_F) * objCount);
+	D2D1_RECT_U* srcRects = (D2D1_RECT_U*)malloc(sizeof(D2D1_RECT_U) * objCount);
+	D2D1_MATRIX_3X2_F* transforms = new D2D1_MATRIX_3X2_F[objCount];
+
+	int index = 0;
+	for (auto it = m_renderList.begin(); it != m_renderList.end(); ++it, ++index)
+	{
+		Object* obj = *it;
+
+		D2D1_SIZE_U bmpSize = obj->m_bitmap.Get()->GetPixelSize();
+		D2D1_POINT_2F pivot = {
+			bmpSize.width * 0.5f,
+			bmpSize.height * 0.5f
+		};
+		// 원본 사각형
 		srcRects[index] = { 0, 0, bmpSize.width, bmpSize.height };
+
+		// 최종 월드 변환 행렬
+		D2D1::Matrix3x2F worldMatrix = obj->m_worldTransform->ToMatrix();
+
+		// 월드에서 이미지 중심이 어디에 찍히는지 계산
+		D2D1_POINT_2F worldCenter = worldMatrix.TransformPoint(pivot);
+
+		// 해당 중심 기준으로 사각형 보정
+		destRects[index] = D2D1::RectF(
+			worldCenter.x - pivot.x,
+			worldCenter.y - pivot.y,
+			worldCenter.x + pivot.x,
+			worldCenter.y + pivot.y
+		);
+
+		transforms[index] = obj->m_worldTransform->ToMatrix(worldCenter);
 	}
 
+	// 스프라이트 그리기
 	g_spriteBatch->Clear();
-	HRESULT hr = g_spriteBatch->AddSprites(3, destRects, srcRects, nullptr, nullptr);
+	HRESULT hr = g_spriteBatch->AddSprites(
+		static_cast<UINT32>(objCount),
+		destRects,
+		srcRects,
+		nullptr,
+		transforms
+	);
 	assert(SUCCEEDED(hr));
 
 	m_d2dDeviceContext->DrawSpriteBatch(
 		g_spriteBatch.Get(),
 		0,
-		3,
+		static_cast<UINT32>(objCount),
 		m_d2dBitmapFromFile.Get(),
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		D2D1_SPRITE_OPTIONS_NONE
@@ -492,8 +511,8 @@ void D2DRenderer::DrawInRenderList()
 
 	free(destRects);
 	free(srcRects);
+	free(transforms);
 
-	// ④ EndDraw & 에러 체크
 	hr = m_d2dDeviceContext->EndDraw();
 	if (FAILED(hr)) {
 		OutputError(hr);

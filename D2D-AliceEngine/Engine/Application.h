@@ -34,11 +34,15 @@ protected:
 	std::string		m_ModulePath;
 	std::string		m_WorkingPath;
 
-	UINT m_width = 1024;
-	UINT m_height = 768;
+	UINT m_width = Define::SCREEN_WIDTH;
+	UINT m_height = Define::SCREEN_HEIGHT;
 	bool m_resized = false;
 
 public:
 	void MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+	Object* m_Sun;
+	Object* m_Earth;
+	Object* m_Moon;
 };
 

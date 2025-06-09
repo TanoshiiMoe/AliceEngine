@@ -115,14 +115,79 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	case WM_KEYDOWN:
 		if (wParam == VK_SPACE)
 			m_pD2DRenderer->m_useScreenEffect = !m_pD2DRenderer->m_useScreenEffect;
-		if (wParam == 0x41)
+		if (wParam == VK_Z)
 		{
-			for (auto it = m_pD2DRenderer->m_renderList.begin(); it != m_pD2DRenderer->m_renderList.end(); it++)
-			{
-				float rotation = (*it)->m_localTransform->GetRotation();
-				rotation += 30.0f;
-				(*it)->m_localTransform->SetRotation(rotation);
-			}
+			float rotation = m_Sun->m_localTransform->GetRotation();
+			rotation += 5.0f;
+			m_Sun->m_localTransform->SetRotation(rotation);
+		}
+		if (wParam == VK_C)
+		{
+			float rotation = m_Sun->m_localTransform->GetRotation();
+			rotation -= 5.0f;
+			m_Sun->m_localTransform->SetRotation(rotation);
+		}
+
+		if (wParam == VK_Q)
+		{
+			float rotation = m_Earth->m_localTransform->GetRotation();
+			rotation += 5.0f;
+			m_Earth->m_localTransform->SetRotation(rotation);
+		}
+		if (wParam == VK_W)
+		{
+			float rotation = m_Earth->m_localTransform->GetRotation();
+			rotation -= 5.0f;
+			m_Earth->m_localTransform->SetRotation(rotation);
+		}
+
+		if (wParam == VK_J)
+		{
+			D2D1_VECTOR_2F pos = m_Earth->m_localTransform->GetPosition();
+			pos.x += 5.0f;
+			m_Earth->m_localTransform->SetPosition(pos.x, pos.y);
+		}
+		if (wParam == VK_G)
+		{
+			D2D1_VECTOR_2F pos = m_Earth->m_localTransform->GetPosition();
+			pos.x -= 5.0f;
+			m_Earth->m_localTransform->SetPosition(pos.x, pos.y);
+		}
+		if (wParam == VK_Y)
+		{
+			D2D1_VECTOR_2F pos = m_Earth->m_localTransform->GetPosition();
+			pos.y += 5.0f;
+			m_Earth->m_localTransform->SetPosition(pos.x, pos.y);
+		}
+		if (wParam == VK_H)
+		{
+			D2D1_VECTOR_2F pos = m_Earth->m_localTransform->GetPosition();
+			pos.y -= 5.0f;
+			m_Earth->m_localTransform->SetPosition(pos.x, pos.y);
+		}
+		if (wParam == VK_RIGHT)
+		{
+			D2D1_VECTOR_2F pos = m_Sun->m_localTransform->GetPosition();
+			pos.x += 5.0f;
+			m_Sun->m_localTransform->SetPosition(pos.x, pos.y);
+		}
+		if (wParam == VK_LEFT)
+		{
+			D2D1_VECTOR_2F pos = m_Sun->m_localTransform->GetPosition();
+			pos.x -= 5.0f;
+			m_Sun->m_localTransform->SetPosition(pos.x, pos.y);
+		}
+		if (wParam == VK_UP)
+		{
+			D2D1_VECTOR_2F pos = m_Sun->m_localTransform->GetPosition();
+			pos.y += 5.0f;
+			m_Sun->m_localTransform->SetPosition(pos.x, pos.y);
+		}
+		if (wParam == VK_DOWN)
+		{
+			D2D1_VECTOR_2F pos = m_Sun->m_localTransform->GetPosition();
+			pos.y -= 5.0f;
+			m_Sun->m_localTransform->SetPosition(pos.x, pos.y);
 		}
 		break;
 	case WM_SIZE:
