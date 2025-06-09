@@ -17,3 +17,5 @@
 #include <string>
 
 #include "../Engine/Application.h"
+#include "../Engine/Object.h"
+#include "../Engine/Transform.h"

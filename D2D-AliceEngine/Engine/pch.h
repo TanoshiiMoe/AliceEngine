@@ -33,5 +33,9 @@
 #pragma comment(lib, "dxguid.lib")
 #include <string>
 #include <comdef.h>
+#include "Define.h"
+#include <vector>
+#include <memory>
+#include "DoubleLinkedList.h"
 
 #endif //PCH_H

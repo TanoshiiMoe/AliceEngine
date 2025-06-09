@@ -243,12 +243,13 @@ void D2DRenderer::Render()
 	m_d2dDeviceContext->BeginDraw();
 	m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
 
-	DrawTestBrushAndShape();
-	DrawTestImage();
-	DrawTestText();
-	DrawTestShadowEffect();
-	DrawTestScreenEffect();
-	DrawTestSpriteBatch();
+	//DrawTestBrushAndShape();
+	//DrawTestImage();
+	//DrawTestText();
+	//DrawTestShadowEffect();
+	//DrawTestScreenEffect();
+	//DrawTestSpriteBatch();
+	DrawInRenderList();
 
 	m_d2dDeviceContext->EndDraw();
 	m_dxgiSwapChain->Present(1, 0);
@@ -431,6 +432,66 @@ void D2DRenderer::DrawTestSpriteBatch()
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		D2D1_SPRITE_OPTIONS_NONE
 	);
+
+	// ④ EndDraw & 에러 체크
+	hr = m_d2dDeviceContext->EndDraw();
+	if (FAILED(hr)) {
+		OutputError(hr);
+	}
+}
+
+void D2DRenderer::DrawInRenderList()
+{
+	// Resize 플래그가 세트되었으면 SwapChain과 타겟 비트맵 재생성
+	if (m_resizePending)
+	{
+		CreateSwapChainAndD2DTarget();
+		m_resizePending = false;
+	}
+
+	// ① 매 프레임마다 SetTarget 호출
+	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
+	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED); //DrawSpriteBatch requires
+
+	// ② BeginDraw
+	//m_d2dDeviceContext->BeginDraw();
+	//m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::DarkSlateBlue));
+	
+	//m_d2dDeviceContext->SetTransform(transform);
+	// 렌더 리스트에 있는 오브젝트 전부 그리기
+	D2D1_RECT_F* destRects = (D2D1_RECT_F*)malloc(sizeof(D2D1_RECT_F) * m_renderList.size());
+	D2D1_RECT_U* srcRects = (D2D1_RECT_U*)malloc(sizeof(D2D1_RECT_U) * m_renderList.size());
+	int index = 0;
+	for (auto it = m_renderList.begin(); it != m_renderList.end(); it++)
+	{
+		Transform* transform = (*it)->m_transform;
+		m_d2dDeviceContext->SetTransform(transform->ToMatrix());
+
+		D2D1_SIZE_U bmpSize = (*it)->m_bitmapImage.GetBitmap()->GetPixelSize();
+		destRects[index] = D2D1::RectF(
+			transform->GetPosition().x,
+			transform->GetPosition().y,
+			transform->GetPosition().x + (FLOAT)bmpSize.width,
+			transform->GetPosition().y + (FLOAT)bmpSize.height
+		);
+		srcRects[index] = { 0, 0, bmpSize.width, bmpSize.height };
+	}
+
+	g_spriteBatch->Clear();
+	HRESULT hr = g_spriteBatch->AddSprites(3, destRects, srcRects, nullptr, nullptr);
+	assert(SUCCEEDED(hr));
+
+	m_d2dDeviceContext->DrawSpriteBatch(
+		g_spriteBatch.Get(),
+		0,
+		3,
+		m_d2dBitmapFromFile.Get(),
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		D2D1_SPRITE_OPTIONS_NONE
+	);
+
+	free(destRects);
+	free(srcRects);
 
 	// ④ EndDraw & 에러 체크
 	hr = m_d2dDeviceContext->EndDraw();

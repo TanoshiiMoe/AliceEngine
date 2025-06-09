@@ -115,8 +115,16 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	case WM_KEYDOWN:
 		if (wParam == VK_SPACE)
 			m_pD2DRenderer->m_useScreenEffect = !m_pD2DRenderer->m_useScreenEffect;
+		if (wParam == 0x41)
+		{
+			for (auto it = m_pD2DRenderer->m_renderList.begin(); it != m_pD2DRenderer->m_renderList.end(); it++)
+			{
+				float rotation = (*it)->m_transform->GetRotation();
+				rotation += 30.0f;
+				(*it)->m_transform->SetRotation(rotation);
+			}
+		}
 		break;
-
 	case WM_SIZE:
 	{
 		if (wParam == SIZE_MINIMIZED)

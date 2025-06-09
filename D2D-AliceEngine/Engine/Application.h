@@ -2,12 +2,13 @@
 #include "pch.h"
 #include "D2DRenderer.h"
 #include "Singleton.h"
+#include "Camera.h"
 
 using namespace Microsoft::WRL;
 
 class Application : public Singleton<Application>
 {
-protected:
+public:
 	Application();
 	virtual ~Application();
 	static Application* m_pInstance;
@@ -23,6 +24,7 @@ public:
 	virtual void Uninitialize();
 
 	D2DRenderer* m_pD2DRenderer;
+	Camera m_mainCamera; // Main Camera
 
 protected:
 	HWND m_hwnd = nullptr;

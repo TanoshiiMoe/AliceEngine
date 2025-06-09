@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Object.h"
 
 using namespace Microsoft::WRL;
 
@@ -10,6 +11,9 @@ public:
 	D2DRenderer();
 	~D2DRenderer();
 	// D2D 렌더링을 위한 초기화 및 해제
+
+	// 렌더링 대기열
+	DoubleLinkedList<Object*> m_renderList;
 
 private:
 	HWND m_hwnd = nullptr;
@@ -24,6 +28,8 @@ public:
 	void DrawTestShadowEffect();
 	void DrawTestScreenEffect();
 	void DrawTestSpriteBatch();
+
+	void DrawInRenderList();
 
 	HRESULT CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap);
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수
