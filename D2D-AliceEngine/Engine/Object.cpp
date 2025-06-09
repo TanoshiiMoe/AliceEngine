@@ -3,9 +3,9 @@
 
 void Object::Initialize()
 {
-	if (m_transform == nullptr)
+	if (m_localTransform == nullptr)
 	{
-		m_transform = new Transform();
+		m_localTransform = new Transform();
 	}
 }
 

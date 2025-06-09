@@ -13,8 +13,8 @@ public:
 	void Initialize() override
 	{
 		__super::Initialize();
-		m_transform->SetPosition(100.0f, 100.0f);
-		m_transform->SetScale(1.0f, 1.0f);
+		m_localTransform->SetPosition(100.0f, 100.0f);
+		m_localTransform->SetScale(1.0f, 1.0f);
 	}
 
 	void Release() override

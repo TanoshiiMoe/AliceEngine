@@ -119,9 +119,9 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		{
 			for (auto it = m_pD2DRenderer->m_renderList.begin(); it != m_pD2DRenderer->m_renderList.end(); it++)
 			{
-				float rotation = (*it)->m_transform->GetRotation();
+				float rotation = (*it)->m_localTransform->GetRotation();
 				rotation += 30.0f;
-				(*it)->m_transform->SetRotation(rotation);
+				(*it)->m_localTransform->SetRotation(rotation);
 			}
 		}
 		break;

@@ -464,7 +464,7 @@ void D2DRenderer::DrawInRenderList()
 	int index = 0;
 	for (auto it = m_renderList.begin(); it != m_renderList.end(); it++)
 	{
-		Transform* transform = (*it)->m_transform;
+		Transform* transform = (*it)->m_localTransform;
 		m_d2dDeviceContext->SetTransform(transform->ToMatrix());
 
 		D2D1_SIZE_U bmpSize = (*it)->m_bitmapImage.GetBitmap()->GetPixelSize();

@@ -8,19 +8,20 @@ class Object
 public:
 	Object() 
 	{
-		m_transform = new Transform();
+		m_localTransform = new Transform();
 	}
 	virtual ~Object() 
 	{
-		m_transform = nullptr;
+		m_localTransform = nullptr;
 	}
 
 	virtual void Initialize();
 	virtual void LoadData();
 	virtual void Release();
 
-	DoubleLinkedList<Transform*> m_sceneGraph;
-	Transform* m_transform; // Transform ÄÄÆ÷³ÍÆ®
+	DoubleLinkedList<Transform*> childList;
+	Transform* m_localTransform; // Transform ÄÄÆ÷³ÍÆ®
+	Transform* m_worldTransform; // Transform ÄÄÆ÷³ÍÆ®
 	BitmapImage m_bitmapImage; // BitmapImage ÄÄÆ÷³ÍÆ®
 };
 
