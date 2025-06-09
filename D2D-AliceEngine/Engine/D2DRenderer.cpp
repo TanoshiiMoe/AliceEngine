@@ -390,7 +390,7 @@ void D2DRenderer::DrawTestScreenEffect()
 void D2DRenderer::DrawTestSpriteBatch()
 {
 	// Resize 플래그가 세트되었으면 SwapChain과 타겟 비트맵 재생성
-	if (m_resizePending) 
+	if (m_resizePending)
 	{
 		CreateSwapChainAndD2DTarget();
 		m_resizePending = false;
@@ -483,7 +483,7 @@ HRESULT D2DRenderer::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** ou
 void D2DRenderer::CreateSwapChainAndD2DTarget()
 {
 	// 1. 현재 타겟 해제
-	if (m_d2dDeviceContext) 
+	if (m_d2dDeviceContext)
 	{
 		m_d2dDeviceContext->SetTarget(nullptr);
 	}
