@@ -26,7 +26,7 @@ void DemoGame::Initialize()
 	// Áö±¸
 	m_Earth = std::make_shared<Object>();
 	m_Earth->LoadBitmapData(L"Earth.png");
-	m_Earth->m_localTransform->SetPosition(300, 0);
+	m_Earth->m_localTransform->SetPosition(500, 0);
 	m_Earth->m_localTransform->SetScale(0.5f, 0.5f);
 	m_Earth->SetPivot(0.5f);
 	m_Sun->AddChild(m_Earth->weak_from_this());
@@ -35,7 +35,7 @@ void DemoGame::Initialize()
 	// ´Þ
 	m_Moon = std::make_shared<Object>();
 	m_Moon->LoadBitmapData(L"Moon.png");
-	m_Moon->m_localTransform->SetPosition(0, 0);
+	m_Moon->m_localTransform->SetPosition(300, 0);
 	m_Moon->m_localTransform->SetScale(0.5f, 0.5f);
 	m_Moon->SetPivot(0.5f);
 	m_Earth->AddChild(m_Moon->weak_from_this());

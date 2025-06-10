@@ -63,18 +63,20 @@ void Object::Render()
 
 	// 비트맵 크기 및 피벗
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-	D2D1_POINT_2F localPivot = {
+	D2D1_POINT_2F pivotOffset = {
 		bmpSize.width * m_pivot.x,
 		bmpSize.height * m_pivot.y
 	};
 
+	D2D1::Matrix3x2F pivotTranslate = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
+
 	// 로컬 피벗 기준 월드 변환
-	D2D1::Matrix3x2F world = m_worldTransform->ToMatrix(localPivot);
+	D2D1::Matrix3x2F world = m_worldTransform->ToMatrix();
 
 	// 카메라 역행렬 적용
 	D2D1::Matrix3x2F cameraInv = camera->m_worldTransform->ToMatrix();
 	cameraInv.Invert();
-	D2D1::Matrix3x2F view = world * cameraInv;
+	D2D1::Matrix3x2F view = pivotTranslate * world * cameraInv;
 
 	// Unity 좌표계면 변환 추가
 	if (Application::GetInstance()->m_pD2DRenderer->m_eTransformType == ETransformType::Unity)

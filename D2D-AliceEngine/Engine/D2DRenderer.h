@@ -55,7 +55,7 @@ public:
 	bool m_resizePending = false;
 
 	// Transform Type
-	ETransformType m_eTransformType = ETransformType::D2D;
+	ETransformType m_eTransformType = ETransformType::Unity;
 	void SwitchTransformType(ETransformType _type)
 	{
 		m_eTransformType = _type;
