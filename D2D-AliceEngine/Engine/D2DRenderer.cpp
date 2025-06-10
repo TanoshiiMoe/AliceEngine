@@ -48,11 +48,8 @@ void D2DRenderer::Initialize(HWND hwnd)
 	ComPtr<IDXGIFactory7> dxgiFactory;
 	CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
 
-	// hwnd의 width, height 가져오기
-	RECT rc = {};
-	GetClientRect(hwnd, &rc);
-	UINT width = rc.right - rc.left;
-	UINT height = rc.bottom - rc.top;
+	int width{ 0 }, height{ 0 };
+	GetApplicationSize(width, height);
 
 	// SwapChain 생성
 	DXGI_SWAP_CHAIN_DESC1 scDesc = {};
@@ -82,8 +79,7 @@ void D2DRenderer::Initialize(HWND hwnd)
 	);
 	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_d2dBitmapTarget.GetAddressOf());
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
-	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), m_pBlackBrush.GetAddressOf());
-	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Gray), m_pGrayBrush.GetAddressOf());
+	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), m_pRedBrush.GetAddressOf());
 
 	// Image
 	// Create WIC factory
@@ -131,7 +127,6 @@ void D2DRenderer::Initialize(HWND hwnd)
 	assert(SUCCEEDED(hr));
 }
 
-
 void D2DRenderer::Uninitialize()
 {
 	m_wicImagingFactory = nullptr;
@@ -142,8 +137,7 @@ void D2DRenderer::Uninitialize()
 	m_d2dBitmapTarget = nullptr;
 
 	// For BrushAndShape
-	m_pBlackBrush = nullptr;		// 렌더타겟이 생성하는 리소스 역시 장치의존
-	m_pGrayBrush = nullptr;
+	m_pRedBrush = nullptr;
 
 	// For DrawText
 	m_blackBrush = nullptr;
@@ -199,6 +193,7 @@ void D2DRenderer::DrawInRenderList()
 	}
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
+	
 	for (auto it = m_renderList.begin(); it != m_renderList.end(); ++it)
 	{
 		std::weak_ptr<Object> obj = *it;
@@ -211,6 +206,14 @@ void D2DRenderer::DrawInRenderList()
 	if (FAILED(hr)) {
 		OutputError(hr);
 	}
+}
+
+void D2DRenderer::GetApplicationSize(int& width, int& height)
+{
+	RECT rc = {};
+	GetClientRect(m_hwnd, &rc);
+	width = rc.right - rc.left;
+	height = rc.bottom - rc.top;
 }
 
 HRESULT D2DRenderer::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap)

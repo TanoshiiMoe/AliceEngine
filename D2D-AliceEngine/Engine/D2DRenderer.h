@@ -31,6 +31,8 @@ public:
 	void DrawTestText();
 	void DrawInRenderList();
 
+	void GetApplicationSize(int& width, int& height);
+
 	HRESULT CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap);
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수
 	void OutputError(HRESULT hr);
@@ -41,8 +43,7 @@ public:
 	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext;
 	ComPtr<ID2D1Bitmap1> m_d2dBitmapTarget;
 	// For BrushAndShape
-	ComPtr<ID2D1SolidColorBrush> m_pBlackBrush;		// 렌더타겟이 생성하는 리소스 역시 장치의존
-	ComPtr<ID2D1SolidColorBrush> m_pGrayBrush;
+	ComPtr<ID2D1SolidColorBrush> m_pRedBrush;		// 렌더타겟이 생성하는 리소스 역시 장치의존
 
 	// For DrawText
 	ComPtr<ID2D1SolidColorBrush> m_blackBrush;
