@@ -2,6 +2,15 @@
 
 #include "pch.h"
 
+/*
+* @brief Transform 클래스.
+* @details 2D 공간에서 위치, 회전, 크기를 관리합니다.
+* 
+* ToMatrix() : 위치, 회전, 크기를 반영한 매트릭스를 반환
+* ToMatrix(const D2D1_POINT_2F& pivot) : 주어진 피벗을 기준으로 위치, 회전, 크기를 반영한 매트릭스를 반환
+* SetFromMatrix(const D2D1::Matrix3x2F& mat) : 매트릭스에서 위치, 회전, 크기를 추출하여 설정
+*/
+
 class Transform
 {
 public:

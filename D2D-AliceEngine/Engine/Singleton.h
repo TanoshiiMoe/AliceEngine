@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+* @brief Singleton 클래스.
+* @details 이 클래스를 상속받은 클래스는 싱글톤 패턴을 적용할 수 있습니다.
+*/
+
 template <typename T>
 class Singleton {
 public:

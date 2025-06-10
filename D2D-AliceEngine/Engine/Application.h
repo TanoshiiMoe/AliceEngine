@@ -23,14 +23,14 @@ public:
 	virtual void Run();
 	virtual void Uninitialize();
 
-	D2DRenderer* m_pD2DRenderer;
-	Camera m_mainCamera; // Main Camera
+	std::shared_ptr<D2DRenderer> m_pD2DRenderer;
+	std::shared_ptr<Camera> m_mainCamera; // Main Camera
 
 protected:
 	HWND m_hwnd = nullptr;
 	HINSTANCE m_hInstance;
-	std::wstring	m_WindowName = L"D2DWindowClass";
-	std::wstring	m_TitleName = L"Default Title Name";
+	std::wstring	m_WindowName = Define::WINDOW_CLASS_NAME;
+	std::wstring	m_TitleName = Define::WINDOW_TITLE;
 	std::string		m_ModulePath;
 	std::string		m_WorkingPath;
 
@@ -41,8 +41,8 @@ protected:
 public:
 	void MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	Object* m_Sun;
-	Object* m_Earth;
-	Object* m_Moon;
+	std::shared_ptr<Object> m_Sun;
+	std::shared_ptr<Object> m_Earth;
+	std::shared_ptr<Object> m_Moon;
 };
 

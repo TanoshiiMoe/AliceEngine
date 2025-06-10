@@ -40,4 +40,6 @@
 #include <cmath>
 #include "DoubleLinkedList.h"
 
+#include <map>
+
 #endif //PCH_H
