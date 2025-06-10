@@ -6,15 +6,16 @@
 * @details 현재는 Object를 상속받아 기본적인 기능만 구현되어 있습니다.
 */
 
-class Camera : public Object
+class Camera
 {
 public:
 	Camera() {};
 	~Camera() {};
 
-	void Initialize() override;
-	void LoadBitmapData(const std::wstring& path) override;
-	void Release() override;
-	void Render() override;
+	void Initialize();
+	void Release();
+	void Render();
+
+	std::shared_ptr<Transform> m_transform;
 };
 

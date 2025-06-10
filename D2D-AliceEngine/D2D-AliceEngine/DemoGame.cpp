@@ -14,32 +14,21 @@ DemoGame::~DemoGame()
 void DemoGame::Initialize()
 {
 	__super::Initialize();
-	m_pD2DRenderer->Initialize(m_hwnd);
+	m_pD2DRenderManager->Initialize(m_hwnd);
 
-	m_Sun = std::make_shared<Object>();
-	m_Sun->LoadBitmapData(L"Sun.png");
-	m_Sun->m_localTransform->SetPosition(0, 0);
-	m_Sun->m_localTransform->SetScale(0.5f, 0.5f);
-	m_Sun->SetPivot(0.5f);
-	m_pD2DRenderer->m_renderList.push_back(m_Sun);
+	//태양
+	m_Sun = std::make_shared<Object>(L"Sun.png", FVector2(0,0), 0.0f, FVector2(0.5f,0.5f), FVector2(0.5f));
+	m_pD2DRenderManager->AddRenderer(m_Sun->GetRenderer());
 
 	// 지구
-	m_Earth = std::make_shared<Object>();
-	m_Earth->LoadBitmapData(L"Earth.png");
-	m_Earth->m_localTransform->SetPosition(500, 0);
-	m_Earth->m_localTransform->SetScale(0.5f, 0.5f);
-	m_Earth->SetPivot(0.5f);
-	m_Sun->AddChild(m_Earth->weak_from_this());
-	m_pD2DRenderer->m_renderList.push_back(m_Earth);
+	m_Earth = std::make_shared<Object>(L"Earth.png", FVector2(500, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
+	m_Sun->m_bitmapRenderer->AddChild(m_Earth->m_bitmapRenderer->weak_from_this());
+	m_pD2DRenderManager->AddRenderer(m_Earth->GetRenderer());
 
 	// 달
-	m_Moon = std::make_shared<Object>();
-	m_Moon->LoadBitmapData(L"Moon.png");
-	m_Moon->m_localTransform->SetPosition(300, 0);
-	m_Moon->m_localTransform->SetScale(0.5f, 0.5f);
-	m_Moon->SetPivot(0.5f);
-	m_Earth->AddChild(m_Moon->weak_from_this());
-	m_pD2DRenderer->m_renderList.push_back(m_Moon);
+	m_Moon = std::make_shared<Object>(L"Moon.png", FVector2(300, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
+	m_Earth->m_bitmapRenderer->AddChild(m_Moon->m_bitmapRenderer->weak_from_this());
+	m_pD2DRenderManager->AddRenderer(m_Moon->GetRenderer());
 }
 
 void DemoGame::Run()
@@ -56,21 +45,33 @@ void DemoGame::Run()
 		}
 		else
 		{
-			m_Earth->m_localTransform->Rotation += 0.5f; // 지구 자전
-			m_Moon->m_localTransform->Rotation -= 2.0f; // 달 자전
-			m_Sun->m_localTransform->Rotation += 0.2f;
-			m_Sun->UpdateWorldTransform();
-			m_pD2DRenderer->Render();
+			Update();
+			Render();
 		}
 	}
+}
+
+void DemoGame::Render()
+{
+	__super::Render();
+}
+
+void DemoGame::Update()
+{
+	__super::Update();
+
+	m_Earth->m_bitmapRenderer->m_localTransform->Rotation += 0.5f; // 지구 자전
+	m_Moon->m_bitmapRenderer->m_localTransform->Rotation -= 2.0f; // 달 자전
+	m_Sun->m_bitmapRenderer->m_localTransform->Rotation += 0.2f;
+	m_Sun->Update();
 }
 
 void DemoGame::Uninitialize()
 {
 	__super::Uninitialize();
 
-	m_pD2DRenderer->Uninitialize();
-	m_pD2DRenderer = nullptr;
+	m_pD2DRenderManager->Uninitialize();
+	m_pD2DRenderManager = nullptr;
 	CoUninitialize();
 
 	m_Sun->Release();

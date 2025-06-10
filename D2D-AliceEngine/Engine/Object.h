@@ -1,65 +1,43 @@
 #pragma once
 #include "pch.h"
 #include "Transform.h"
+#include "BitmapRenderer.h"
 
 /*
 * @brief Object 클래스.
-* @details ComPtr로 ID2D1Bitmap1를 관리하고, Transform 컴포넌트를 포함합니다.
-* @details 월드 변환을 재귀적으로 계산하고, 자식 객체의 Transform을 관리합니다.
+* @details 이미지와 좌표를 관리하는 BitmapRenderer 컴포넌트를 포함합니다.
 */
-
-using namespace Microsoft::WRL;
 
 class Object : public std::enable_shared_from_this<Object>
 {
 public:
 	Object()
+	{}
+	Object(const std::wstring& path, const FVector2& position = FVector2(0.0f), const float& rotation = 0.0f, const FVector2& scale = FVector2(1.0f), const FVector2& pivot = FVector2(0.0f))
 	{
-		m_localTransform = std::make_shared<Transform>();
-		m_worldTransform = std::make_shared<Transform>();
+		Initialize(path, position, rotation, scale, pivot);
 	}
 	virtual ~Object()
 	{
-		m_localTransform.reset();
-		m_worldTransform.reset();
-		m_localTransform = nullptr;
-		m_worldTransform = nullptr;
-		//m_bitmap = nullptr;
+		if (m_bitmapRenderer)
+		{
+			m_bitmapRenderer.reset();
+		}
 	}
 
-	std::shared_ptr<Transform> m_localTransform; // Transform 컴포넌트
-	std::shared_ptr<Transform> m_worldTransform; // Transform 컴포넌트
-	D2D1_VECTOR_2F m_pivot{0,0}; // 좌표 중심점
-	ComPtr<ID2D1Bitmap1> m_bitmap; // BitmapImage 컴포넌트
-
 	virtual void Initialize();
-	virtual void LoadBitmapData(const std::wstring& path);
+	virtual void Initialize(const std::wstring& path, const FVector2& position = FVector2(0.0f), const float& rotation = 0.0f, const FVector2& scale = FVector2(1.0f), const FVector2& pivot = FVector2(0.0f));
+	virtual void Update();
 	virtual void Release();
 	virtual void Render();
 
-	// 계층구조 관리
-	std::weak_ptr<Object> parent;
-	std::vector<std::shared_ptr<Object>> children;
+	void LoadData(const std::wstring& path);
 
-	inline void AddChild(std::weak_ptr<Object> child)
-	{
-		if (child.lock() == nullptr) return; // nullptr 체크
-		child.lock()->parent = this->shared_from_this();
-		children.push_back(child.lock());
-	}
+public:
+	std::shared_ptr<BitmapRenderer> m_bitmapRenderer;
 
-	inline void SetPivot(const float& _x, const float& _y)
+	inline std::weak_ptr<BitmapRenderer> GetRenderer()
 	{
-		m_pivot.x = _x;
-		m_pivot.y = _y;
+		return m_bitmapRenderer;
 	}
-	inline void SetPivot(const float& _x)
-	{
-		m_pivot.x = _x;
-		m_pivot.y = _x;
-	}
-
-	// 재귀로 월드 변환 계산
-	void UpdateWorldTransform();
 };
-

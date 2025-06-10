@@ -3,20 +3,15 @@
 
 void Camera::Initialize()
 {
-	__super::Initialize();
-}
-
-void Camera::LoadBitmapData(const std::wstring& path)
-{
-	__super::LoadBitmapData(path);
+	m_transform = std::make_shared<Transform>();
 }
 
 void Camera::Release()
 {
-	__super::Release();
+	m_transform = nullptr;
 }
 
 void Camera::Render()
 {
-	__super::Render();
+
 }

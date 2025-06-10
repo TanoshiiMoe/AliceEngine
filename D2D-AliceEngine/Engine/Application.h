@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "D2DRenderer.h"
+#include "D2DRenderManager.h"
 #include "Singleton.h"
 #include "Camera.h"
 
@@ -21,9 +21,11 @@ public:
 public:
 	virtual void Initialize();
 	virtual void Run();
+	virtual void Render();
+	virtual void Update();
 	virtual void Uninitialize();
 
-	std::shared_ptr<D2DRenderer> m_pD2DRenderer;
+	std::shared_ptr<D2DRenderManager> m_pD2DRenderManager;
 	std::shared_ptr<Camera> m_mainCamera; // Main Camera
 
 protected:
@@ -40,7 +42,6 @@ protected:
 
 public:
 	void MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 	std::shared_ptr<Object> m_Sun;
 	std::shared_ptr<Object> m_Earth;
 	std::shared_ptr<Object> m_Moon;
