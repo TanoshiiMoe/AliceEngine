@@ -18,7 +18,7 @@ void DemoGame::Initialize()
 
 	m_Sun = std::make_shared<Object>();
 	m_Sun->LoadBitmapData(L"Sun.png");
-	m_Sun->m_localTransform->SetPosition(180, 100);
+	m_Sun->m_localTransform->SetPosition(0, 0);
 	m_Sun->m_localTransform->SetScale(0.5f, 0.5f);
 	m_Sun->SetPivot(0.5f);
 	m_pD2DRenderer->m_renderList.push_back(m_Sun);
