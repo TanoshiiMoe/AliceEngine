@@ -50,7 +50,7 @@ void BitmapRenderer::Update()
 void BitmapRenderer::Release()
 {
 	__super::Release();
-	m_bitmap = nullptr;
+	//m_bitmap = nullptr;
 	m_localTransform.reset();
 	m_worldTransform.reset();
 	m_localTransform = nullptr;

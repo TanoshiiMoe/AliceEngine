@@ -44,7 +44,6 @@ public:
 	D2D1_VECTOR_2F m_pivot{ 0,0 }; // 좌표 중심점
 	ComPtr<ID2D1Bitmap1> m_bitmap; // BitmapImage 컴포넌트
 
-
 	inline void SetPivot(const float& _x, const float& _y)
 	{
 		m_pivot.x = _x;

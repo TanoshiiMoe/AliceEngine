@@ -70,11 +70,11 @@ void DemoGame::Uninitialize()
 {
 	__super::Uninitialize();
 
-	m_pD2DRenderManager->Uninitialize();
-	m_pD2DRenderManager = nullptr;
-	CoUninitialize();
-
 	m_Sun->Release();
 	m_Earth->Release();
 	m_Moon->Release();
+
+	m_pD2DRenderManager->Uninitialize();
+	m_pD2DRenderManager = nullptr;
+	CoUninitialize();
 }
