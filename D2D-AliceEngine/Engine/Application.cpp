@@ -149,7 +149,7 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			m_Earth->m_localTransform->SetRotation(rotation);
 		}
 
-		/*if (wParam == VK_J)
+		if (wParam == VK_J)
 		{
 			D2D1_VECTOR_2F pos = m_Earth->m_localTransform->GetPosition();
 			pos.x += 5.0f;
@@ -172,7 +172,7 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			D2D1_VECTOR_2F pos = m_Earth->m_localTransform->GetPosition();
 			pos.y -= 5.0f;
 			m_Earth->m_localTransform->SetPosition(pos.x, pos.y);
-		}*/
+		}
 		if (wParam == VK_RIGHT)
 		{
 			D2D1_VECTOR_2F pos = m_Sun->m_localTransform->GetPosition();

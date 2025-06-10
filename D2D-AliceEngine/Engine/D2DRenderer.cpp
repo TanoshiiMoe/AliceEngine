@@ -180,8 +180,7 @@ void D2DRenderer::DrawTestText()
 	// 기준점
 	m_d2dDeviceContext->SetTransform(transform);
 
-	//WCHAR sc_helloWorld[] = L"태양, 지구, 달 \n [w/s] : 카메라 위,아래 이동 \n [a/d] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [z,c] : 태양 회전 \n [b,m] : 지구 회전 \n [y,h] : 지구 상,하 이동 \n [g,j] : 지구 좌,우 이동 \n [화살표] : 태양 이동  ";
-	WCHAR sc_helloWorld[] = L"태양, 지구, 달 \n [w/s] : 카메라 위,아래 이동 \n [a/d] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [z,c] : 태양 회전 \n [b,m] : 지구 회전 \n [화살표] : 태양 이동  ";
+	WCHAR sc_helloWorld[] = L"태양, 지구, 달 \n [w/s] : 카메라 위,아래 이동 \n [a/d] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [z,c] : 태양 회전 \n [b,m] : 지구 회전 \n [y,h] : 지구 상,하 이동 \n [g,j] : 지구 좌,우 이동 \n [화살표] : 태양 이동  ";
 	m_d2dDeviceContext->DrawText(
 		sc_helloWorld,
 		ARRAYSIZE(sc_helloWorld) - 1,
