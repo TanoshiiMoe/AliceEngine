@@ -1,11 +1,11 @@
 #pragma once
 #include "stdafx.h"
 
-class DemoGame : public Application
+class DemoGameApp : public Application
 {
 public:
-	DemoGame();
-	virtual ~DemoGame();
+	DemoGameApp();
+	virtual ~DemoGameApp();
 
 public:
 	void Initialize() override;

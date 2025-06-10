@@ -141,7 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="D2D-AliceEngine.h" />
-    <ClInclude Include="DemoGame.h" />
+    <ClInclude Include="DemoGameApp.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -149,7 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D2D-AliceEngine.cpp" />
-    <ClCompile Include="DemoGame.cpp" />
+    <ClCompile Include="DemoGameApp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

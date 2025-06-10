@@ -1,17 +1,17 @@
 #pragma once
-#include "DemoGame.h"
+#include "DemoGameApp.h"
 
-DemoGame::DemoGame()
+DemoGameApp::DemoGameApp()
 {
 
 }
 
-DemoGame::~DemoGame()
+DemoGameApp::~DemoGameApp()
 {
 
 }
 
-void DemoGame::Initialize()
+void DemoGameApp::Initialize()
 {
 	__super::Initialize();
 	m_pD2DRenderManager->Initialize(m_hwnd);
@@ -31,7 +31,7 @@ void DemoGame::Initialize()
 	m_pD2DRenderManager->AddRenderer(m_Moon->GetRenderer());
 }
 
-void DemoGame::Run()
+void DemoGameApp::Run()
 {
 	__super::Run();
 	// 메시지 루프
@@ -51,12 +51,12 @@ void DemoGame::Run()
 	}
 }
 
-void DemoGame::Render()
+void DemoGameApp::Render()
 {
 	__super::Render();
 }
 
-void DemoGame::Update()
+void DemoGameApp::Update()
 {
 	__super::Update();
 
@@ -66,7 +66,7 @@ void DemoGame::Update()
 	m_Sun->Update();
 }
 
-void DemoGame::Uninitialize()
+void DemoGameApp::Uninitialize()
 {
 	__super::Uninitialize();
 

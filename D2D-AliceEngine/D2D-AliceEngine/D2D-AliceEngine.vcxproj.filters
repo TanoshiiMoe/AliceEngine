@@ -27,7 +27,7 @@
     <ClInclude Include="D2D-AliceEngine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="DemoGame.h">
+    <ClInclude Include="DemoGameApp.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -38,7 +38,7 @@
     <ClCompile Include="D2D-AliceEngine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="DemoGame.cpp">
+    <ClCompile Include="DemoGameApp.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">

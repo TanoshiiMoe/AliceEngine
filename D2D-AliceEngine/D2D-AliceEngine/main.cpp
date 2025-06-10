@@ -1,9 +1,9 @@
 #pragma once
-#include "DemoGame.h"
+#include "DemoGameApp.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
-	DemoGame* pGame = new DemoGame();
+	DemoGameApp* pGame = new DemoGameApp();
 	if (pGame != nullptr)
 	{
 		pGame->Initialize();
