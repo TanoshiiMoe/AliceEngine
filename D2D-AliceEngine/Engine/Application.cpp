@@ -1,22 +1,19 @@
 #pragma once
 #include "pch.h"
 #include "Application.h"
-#include "D2DRenderManager.h"
+#include "Manager/D2DRenderManager.h"
 
 Application::Application()
 {
 	m_hwnd = nullptr;
 	m_hInstance = nullptr;
 	m_mainCamera = nullptr;
-	m_pInstance = this;
 }
 
 Application::~Application()
 {
 
 }
-
-Application* Application::m_pInstance = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -46,6 +43,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void Application::Initialize()
 {
 	m_pD2DRenderManager = std::make_shared<D2DRenderManager>();
+	m_pComponentManager = std::make_shared<ComponentManager>();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -103,12 +101,18 @@ void Application::Run()
 
 void Application::Update()
 {
+	m_pComponentManager->Update();
+}
+
+void Application::Input()
+{
 
 }
 
 void Application::Render()
 {
 	m_pD2DRenderManager->Render();
+	m_pComponentManager->Render();
 }
 
 void Application::Uninitialize()
@@ -134,7 +138,7 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			m_pD2DRenderManager->m_eTransformType = ETransformType::Unity;
 		}
 
-		if (wParam == VK_Z)
+		/*if (wParam == VK_Z)
 		{
 			float rotation = m_Sun->m_bitmapRenderer->m_localTransform->GetRotation();
 			rotation += 5.0f;
@@ -207,7 +211,7 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 			D2D1_VECTOR_2F pos = m_Sun->m_bitmapRenderer->m_localTransform->GetPosition();
 			pos.y -= 5.0f;
 			m_Sun->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
+		}*/
 
 		// Camera
 		if (wParam == VK_D)

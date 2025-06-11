@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
-#include "D2DRenderManager.h"
+#include "Manager/D2DRenderManager.h"
+#include "Manager/ComponentManager.h"
 #include "Singleton.h"
 #include "Camera.h"
 
@@ -11,21 +12,17 @@ class Application : public Singleton<Application>
 public:
 	Application();
 	virtual ~Application();
-	static Application* m_pInstance;
-	static Application* GetInstance()
-	{
-		assert(m_pInstance != nullptr && "Application instance not created!");
-		return m_pInstance;
-	}
 
 public:
 	virtual void Initialize();
 	virtual void Run();
 	virtual void Render();
 	virtual void Update();
+	virtual void Input();
 	virtual void Uninitialize();
 
 	std::shared_ptr<D2DRenderManager> m_pD2DRenderManager;
+	std::shared_ptr<ComponentManager> m_pComponentManager;
 	std::shared_ptr<Camera> m_mainCamera; // Main Camera
 
 protected:

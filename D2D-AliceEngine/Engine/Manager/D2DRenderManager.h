@@ -1,7 +1,8 @@
 #pragma once
 
-#include "pch.h"
-#include "Object.h"
+#include "../pch.h"
+#include "../Interface/IRenderer.h"
+#include "../Object/Object.h"
 
 using namespace Microsoft::WRL;
 enum class ETransformType

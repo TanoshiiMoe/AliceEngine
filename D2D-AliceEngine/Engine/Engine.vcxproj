@@ -78,6 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -112,6 +113,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -142,12 +144,17 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="BitmapRenderer.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="D2DRenderManager.h" />
+    <ClInclude Include="Interface\IRenderer.h" />
+    <ClInclude Include="Manager\ComponentManager.h" />
+    <ClInclude Include="Manager\D2DRenderManager.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="IRenderer.h" />
+    <ClInclude Include="Interface\IObject.h" />
+    <ClInclude Include="Interface\IComponent.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="StringHelper.h" />
     <ClInclude Include="TMath.h" />
-    <ClInclude Include="Object.h" />
+    <ClInclude Include="Object\Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Transform.h" />
@@ -156,12 +163,17 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BitmapRenderer.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="D2DRenderManager.cpp" />
+    <ClCompile Include="Interface\IRenderer.cpp" />
+    <ClCompile Include="Manager\ComponentManager.cpp" />
+    <ClCompile Include="Manager\D2DRenderManager.cpp" />
     <ClCompile Include="Define.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="IRenderer.cpp" />
+    <ClCompile Include="Interface\IObject.cpp" />
+    <ClCompile Include="Interface\IComponent.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="StringHelper.cpp" />
     <ClCompile Include="TMath.cpp" />
-    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

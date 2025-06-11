@@ -39,6 +39,9 @@
 #include <math.h>
 #include <cmath>
 #include <map>
+#include <unordered_map>
+#include <sstream>
+#include <iomanip>
 
 #include "TMath.h"
 

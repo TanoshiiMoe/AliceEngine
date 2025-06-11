@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Transform.h"
-#include "IRenderer.h"
+#include "Interface/IRenderer.h"
 
 using namespace Microsoft::WRL;
 
