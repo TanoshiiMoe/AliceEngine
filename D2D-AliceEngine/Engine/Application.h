@@ -2,8 +2,10 @@
 #include "pch.h"
 #include "Manager/D2DRenderManager.h"
 #include "Manager/ComponentManager.h"
+#include "Manager/SceneManager.h"
 #include "Singleton.h"
 #include "Camera.h"
+#include "Scene/Scene.h"
 
 using namespace Microsoft::WRL;
 
@@ -23,6 +25,7 @@ public:
 
 	std::shared_ptr<D2DRenderManager> m_pD2DRenderManager;
 	std::shared_ptr<ComponentManager> m_pComponentManager;
+	std::shared_ptr<SceneManager> m_pSceneManager;
 	std::shared_ptr<Camera> m_mainCamera; // Main Camera
 
 protected:
@@ -39,8 +42,5 @@ protected:
 
 public:
 	void MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-	std::shared_ptr<Object> m_Sun;
-	std::shared_ptr<Object> m_Earth;
-	std::shared_ptr<Object> m_Moon;
 };
-
+#define GetApplication() Application::Get()

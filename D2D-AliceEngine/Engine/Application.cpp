@@ -44,6 +44,7 @@ void Application::Initialize()
 {
 	m_pD2DRenderManager = std::make_shared<D2DRenderManager>();
 	m_pComponentManager = std::make_shared<ComponentManager>();
+	m_pSceneManager = std::make_shared<SceneManager>();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -90,6 +91,8 @@ void Application::Initialize()
 
 	CoInitialize(nullptr);
 
+	m_pD2DRenderManager->Initialize(m_hwnd);
+
 	m_mainCamera = std::make_shared<Camera>();
 	m_mainCamera->Initialize();
 }
@@ -102,6 +105,7 @@ void Application::Run()
 void Application::Update()
 {
 	m_pComponentManager->Update();
+	m_pSceneManager->Update();
 }
 
 void Application::Input()
@@ -112,12 +116,16 @@ void Application::Input()
 void Application::Render()
 {
 	m_pD2DRenderManager->Render();
-	m_pComponentManager->Render();
 }
 
 void Application::Uninitialize()
 {
 	m_mainCamera->Release();
+	m_pD2DRenderManager->Uninitialize();
+	m_pD2DRenderManager = nullptr;
+	m_pComponentManager->Uninitialize();
+	m_pSceneManager->UnInitialize();
+	CoUninitialize();
 }
 
 void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -126,118 +134,6 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		break;
-
-	case WM_KEYDOWN:
-		if (wParam == VK_1)
-		{
-			m_pD2DRenderManager->m_eTransformType = ETransformType::D2D;
-		}
-		if (wParam == VK_2)
-		{
-			m_pD2DRenderManager->m_eTransformType = ETransformType::Unity;
-		}
-
-		/*if (wParam == VK_Z)
-		{
-			float rotation = m_Sun->m_bitmapRenderer->m_localTransform->GetRotation();
-			rotation += 5.0f;
-			m_Sun->m_bitmapRenderer->m_localTransform->SetRotation(rotation);
-		}
-		if (wParam == VK_C)
-		{
-			float rotation = m_Sun->m_bitmapRenderer->m_localTransform->GetRotation();
-			rotation -= 5.0f;
-			m_Sun->m_bitmapRenderer->m_localTransform->SetRotation(rotation);
-		}
-
-		if (wParam == VK_B)
-		{
-			float rotation = m_Earth->m_bitmapRenderer->m_localTransform->GetRotation();
-			rotation += 5.0f;
-			m_Earth->m_bitmapRenderer->m_localTransform->SetRotation(rotation);
-		}
-		if (wParam == VK_M)
-		{
-			float rotation = m_Earth->m_bitmapRenderer->m_localTransform->GetRotation();
-			rotation -= 5.0f;
-			m_Earth->m_bitmapRenderer->m_localTransform->SetRotation(rotation);
-		}
-
-		if (wParam == VK_J)
-		{
-			D2D1_VECTOR_2F pos = m_Earth->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.x += 5.0f;
-			m_Earth->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_G)
-		{
-			D2D1_VECTOR_2F pos = m_Earth->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.x -= 5.0f;
-			m_Earth->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_Y)
-		{
-			D2D1_VECTOR_2F pos = m_Earth->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.y += 5.0f;
-			m_Earth->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_H)
-		{
-			D2D1_VECTOR_2F pos = m_Earth->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.y -= 5.0f;
-			m_Earth->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_RIGHT)
-		{
-			D2D1_VECTOR_2F pos = m_Sun->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.x += 5.0f;
-			m_Sun->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_LEFT)
-		{
-			D2D1_VECTOR_2F pos = m_Sun->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.x -= 5.0f;
-			m_Sun->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_UP)
-		{
-			D2D1_VECTOR_2F pos = m_Sun->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.y += 5.0f;
-			m_Sun->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_DOWN)
-		{
-			D2D1_VECTOR_2F pos = m_Sun->m_bitmapRenderer->m_localTransform->GetPosition();
-			pos.y -= 5.0f;
-			m_Sun->m_bitmapRenderer->m_localTransform->SetPosition(pos.x, pos.y);
-		}*/
-
-		// Camera
-		if (wParam == VK_D)
-		{
-			D2D1_VECTOR_2F pos = m_mainCamera->m_transform->GetPosition();
-			pos.x += 5.0f;
-			m_mainCamera->m_transform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_A)
-		{
-			D2D1_VECTOR_2F pos = m_mainCamera->m_transform->GetPosition();
-			pos.x -= 5.0f;
-			m_mainCamera->m_transform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_W)
-		{
-			D2D1_VECTOR_2F pos = m_mainCamera->m_transform->GetPosition();
-			pos.y -= 5.0f;
-			m_mainCamera->m_transform->SetPosition(pos.x, pos.y);
-		}
-		if (wParam == VK_S)
-		{
-			D2D1_VECTOR_2F pos = m_mainCamera->m_transform->GetPosition();
-			pos.y += 5.0f;
-			m_mainCamera->m_transform->SetPosition(pos.x, pos.y);
-		}
 		break;
 	case WM_SIZE:
 	{

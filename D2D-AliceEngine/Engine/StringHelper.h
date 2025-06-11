@@ -3,6 +3,7 @@
 
 class StringHelper
 {
+public:
 	static std::wstring MakeUniqueName() {
 		SYSTEMTIME st;
 		GetLocalTime(&st);

@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-#include "SolarSystemScene.h"
+#include "Object/Object.h"
 
 class DemoGameApp : public Application
 {
@@ -16,6 +16,7 @@ public:
 	void Input() override;
 	void Uninitialize() override;
 
-public:
-	std::shared_ptr<SolarSystemScene> m_solarSystemScene;
+	std::weak_ptr<Object> m_sun;
+	std::weak_ptr<Object> m_earth;
+	std::weak_ptr<Object> m_moon;
 };

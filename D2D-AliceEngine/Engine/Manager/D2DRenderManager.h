@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../pch.h"
-#include "../Interface/IRenderer.h"
-#include "../Object/Object.h"
+#include "pch.h"
+#include "Interface/IRenderer.h"
+#include "Object/Object.h"
 
 using namespace Microsoft::WRL;
 enum class ETransformType
@@ -12,7 +12,7 @@ enum class ETransformType
 	Max
 };
 
-class D2DRenderManager
+class D2DRenderManager : public Singleton<D2DRenderManager>
 {
 public:
 	D2DRenderManager();
@@ -67,4 +67,4 @@ public:
 		m_eTransformType = _type;
 	}
 };
-
+#define GetD2DRenderManager() D2DRenderManager::Get()

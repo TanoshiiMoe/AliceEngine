@@ -5,7 +5,7 @@ void IRenderer::Initialize()
 {
 }
 
-void IRenderer::Render()
+void IRenderer::Update()
 {
 }
 

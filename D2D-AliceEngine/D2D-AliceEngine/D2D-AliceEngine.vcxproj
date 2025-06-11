@@ -146,8 +146,6 @@
     <ClInclude Include="DemoGameApp.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="SolarSystemObject.h" />
-    <ClInclude Include="SolarSystemScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -155,8 +153,6 @@
     <ClCompile Include="D2D-AliceEngine.cpp" />
     <ClCompile Include="DemoGameApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SolarSystemObject.cpp" />
-    <ClCompile Include="SolarSystemScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D2D-AliceEngine.rc" />

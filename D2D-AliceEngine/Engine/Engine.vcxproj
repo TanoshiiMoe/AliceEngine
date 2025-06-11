@@ -151,7 +151,8 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Interface\IObject.h" />
     <ClInclude Include="Interface\IComponent.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Manager\SceneManager.h" />
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="TMath.h" />
     <ClInclude Include="Object\Object.h" />
@@ -170,7 +171,8 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Interface\IObject.cpp" />
     <ClCompile Include="Interface\IComponent.cpp" />
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Manager\SceneManager.cpp" />
     <ClCompile Include="StringHelper.cpp" />
     <ClCompile Include="TMath.cpp" />
     <ClCompile Include="Object\Object.cpp" />

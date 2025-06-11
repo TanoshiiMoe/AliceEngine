@@ -1,9 +1,12 @@
 #pragma once
-class IRenderer
+#include "IComponent.h"
+
+class IRenderer : public IComponent
 {
 public:
-	virtual void Initialize();
-	virtual void Render();
-	virtual void Release();
+	void Initialize() override;
+	void Update() override;
+	virtual void Render() = 0;
+	void Release() override;
 };
 
