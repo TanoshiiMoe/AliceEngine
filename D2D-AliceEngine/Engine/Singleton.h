@@ -33,3 +33,5 @@ private:
 
 template <typename T>
 T* Singleton<T>::s_instance = nullptr;
+
+#define GetSingleton(type) Singleton<type>::Get()
