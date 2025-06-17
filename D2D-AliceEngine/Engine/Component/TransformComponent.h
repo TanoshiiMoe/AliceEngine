@@ -46,6 +46,26 @@ public:
 	Transform* m_localTransform; // Transform ÄÄÆ÷³ÍÆ®
 	Transform* m_worldTransform; // Transform ÄÄÆ÷³ÍÆ®
 
+	inline void SetPosition(const float& _x, const float& _y)
+	{
+		m_localTransform->SetPosition(_x, _y);
+	}
+
+	inline void SetRotation(const float& _val)
+	{
+		m_localTransform->SetRotation(_val);
+	}
+
+	inline void AddRotation(const float& _val)
+	{
+		m_localTransform->SetRotation(m_localTransform->GetRotation() + _val);
+	}
+
+	inline void AddPosition(const float& _x, const float& _y)
+	{
+		m_localTransform->SetPosition(m_localTransform->GetPosition().x + _x, m_localTransform->GetPosition().y + _y);
+	}
+
 	inline void SetPivot(const float& _x, const float& _y)
 	{
 		m_pivot.x = _x;

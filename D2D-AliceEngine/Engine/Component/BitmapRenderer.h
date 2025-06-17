@@ -6,11 +6,11 @@
 
 using namespace Microsoft::WRL;
 
-class BitmapRenderer : public RenderComponent
+class SpriteRenderer : public RenderComponent
 {
 public:
-	BitmapRenderer() {}
-	~BitmapRenderer() {}
+	SpriteRenderer() {}
+	~SpriteRenderer() {}
 
 	void Initialize() override;
 	void LoadData(const std::wstring& path);

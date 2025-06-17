@@ -123,12 +123,14 @@ public:
 	void LoadData(const std::wstring& path);
 
 public:
-	std::weak_ptr<BitmapRenderer> m_bitmapRenderer;
+	std::weak_ptr<SpriteRenderer> m_bitmapRenderer;
 	std::weak_ptr<TransformComponent> m_transformComponent;
 
-	inline std::weak_ptr<BitmapRenderer> GetRenderer()
+	inline std::weak_ptr<SpriteRenderer> GetRenderer()
 	{
 		return m_bitmapRenderer;
 	}
 
 };
+
+#define transform m_transformComponent.lock()

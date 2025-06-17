@@ -163,12 +163,12 @@ void D2DRenderManager::DrawTestText()
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity()); // 변환 초기화
 	D2D1_SIZE_F size = m_d2dDeviceContext->GetSize();
 
-	D2D1_MATRIX_3X2_F transform = D2D1::Matrix3x2F::Scale(1.0f, 1.0f, D2D1::Point2F(0.0f, 0.0f)) *
+	D2D1_MATRIX_3X2_F _transform = D2D1::Matrix3x2F::Scale(1.0f, 1.0f, D2D1::Point2F(0.0f, 0.0f)) *
 		D2D1::Matrix3x2F::Rotation(0.0f, D2D1::Point2F(0.0f, 0.0f)) *
 		D2D1::Matrix3x2F::Translation(0, 150);  // 이동
 
 	// 기준점
-	m_d2dDeviceContext->SetTransform(transform);
+	m_d2dDeviceContext->SetTransform(_transform);
 
 	WCHAR sc_helloWorld[] = L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동";	m_d2dDeviceContext->DrawText(
 		sc_helloWorld,

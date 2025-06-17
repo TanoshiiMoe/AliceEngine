@@ -9,7 +9,7 @@ void gameObject::Initialize()
 
 void gameObject::Initialize(const std::wstring& path, const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot)
 {
-	m_bitmapRenderer = AddComponent<BitmapRenderer>();
+	m_bitmapRenderer = AddComponent<SpriteRenderer>();
 	m_transformComponent = AddComponent<TransformComponent>();
 	m_transformComponent.lock()->SetTransform(position, rotation, scale, pivot);
 	m_bitmapRenderer.lock()->m_pTransform = m_transformComponent.lock()->m_worldTransform;

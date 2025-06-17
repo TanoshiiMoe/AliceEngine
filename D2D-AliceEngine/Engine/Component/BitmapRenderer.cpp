@@ -3,24 +3,24 @@
 #include "Manager/D2DRenderManager.h"
 #include "Application.h"
 
-void BitmapRenderer::Initialize()
+void SpriteRenderer::Initialize()
 {
 	__super::Initialize();
 }
 
-void BitmapRenderer::LoadData(const std::wstring& path)
+void SpriteRenderer::LoadData(const std::wstring& path)
 {
 	HRESULT hr = D2DRenderManager::Get().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str(), &m_bitmap);
 	assert(SUCCEEDED(hr));
 }
 
-void BitmapRenderer::Release()
+void SpriteRenderer::Release()
 {
 	__super::Release();
 }
 
-void BitmapRenderer::Render()
+void SpriteRenderer::Render()
 {
 	if (!m_bitmap)
 		return;
