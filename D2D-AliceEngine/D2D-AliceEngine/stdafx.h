@@ -17,5 +17,5 @@
 #include <string>
 
 #include "../Engine/Application.h"
-#include "../Engine/Object/Object.h"
+#include "../Engine/Object/gameObject.h"
 #include "../Engine/Transform.h"

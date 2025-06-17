@@ -1,19 +1,19 @@
 #pragma once
 #include "pch.h"
 #include "Transform.h"
-#include "Interface/IRenderer.h"
+#include "System/RenderSystem.h"
+#include "Component/RenderComponent.h"
 
 using namespace Microsoft::WRL;
 
-class BitmapRenderer : public IRenderer, public std::enable_shared_from_this<BitmapRenderer>
+class BitmapRenderer : public RenderComponent
 {
 public:
 	BitmapRenderer() {}
-	virtual ~BitmapRenderer() {}
+	~BitmapRenderer() {}
 
 	void Initialize() override;
-	void LoadBitmapData(const std::wstring& path);
-	void Update() override;
+	void LoadData(const std::wstring& path);
 	void Release() override;
 	void Render() override;
 

@@ -8,16 +8,11 @@ void BitmapRenderer::Initialize()
 	__super::Initialize();
 }
 
-void BitmapRenderer::LoadBitmapData(const std::wstring& path)
+void BitmapRenderer::LoadData(const std::wstring& path)
 {
-	HRESULT hr = GetSingleton(D2DRenderManager).CreateBitmapFromFile(
+	HRESULT hr = D2DRenderManager::Get().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str(), &m_bitmap);
 	assert(SUCCEEDED(hr));
-}
-
-void BitmapRenderer::Update()
-{
-	
 }
 
 void BitmapRenderer::Release()
@@ -30,8 +25,8 @@ void BitmapRenderer::Render()
 	if (!m_bitmap)
 		return;
 
-	ID2D1DeviceContext7* context = GetSingleton(D2DRenderManager).m_d2dDeviceContext.Get();
-	Camera* camera = GetSingleton(Application).m_mainCamera.get();
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	Camera* camera = SceneManager::GetCamera();
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // ºñÆ®¸Ê Å©±â ¹× ÇÇ¹þ
 	D2D1_POINT_2F pivotOffset = {
 		bmpSize.width * m_pivot->x,
@@ -42,7 +37,7 @@ void BitmapRenderer::Render()
 	D2D1::Matrix3x2F world = m_pTransform.lock()->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
-	if (GetSingleton(D2DRenderManager).m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity;
 	}
@@ -52,7 +47,7 @@ void BitmapRenderer::Render()
 	view = view * world * cameraInv;
 
 	// Unity ÁÂÇ¥°è¸é º¯È¯ Ãß°¡
-	if (GetSingleton(D2DRenderManager).m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}
@@ -62,5 +57,5 @@ void BitmapRenderer::Render()
 	context->DrawBitmap(m_bitmap.Get());
 	context->DrawRectangle(
 		D2D1::RectF(0, 0,
-			bmpSize.width, bmpSize.height), GetSingleton(D2DRenderManager).m_pRedBrush.Get(), 5.0f);
+			bmpSize.width, bmpSize.height), D2DRenderManager::Get().m_pRedBrush.Get(), 5.0f);
 }

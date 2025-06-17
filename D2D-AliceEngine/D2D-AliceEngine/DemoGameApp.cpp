@@ -16,24 +16,24 @@ void DemoGameApp::Initialize()
 {
 	__super::Initialize();
 
-	std::weak_ptr<Scene> SolarSystemScene = SceneManager::AddScene(L"SolarSystemScene");
+	Scene* SolarSystemScene = SceneManager::AddScene(L"SolarSystemScene");
 	SceneManager::ChangeScene(L"SolarSystemScene");
-
-	if (SolarSystemScene.lock())
+    
+	if (SolarSystemScene)
 	{
-		m_sun = SolarSystemScene.lock()->NewObject<Object>(L"Sun");
-		m_sun.lock()->Initialize(L"Sun.png", FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
-		m_pD2DRenderManager->AddRenderer(m_sun.lock()->GetRenderer());
+		m_sun = SolarSystemScene->NewObject<gameObject>(L"Sun");
+		m_sun->Initialize(L"Sun.png", FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
+		m_pD2DRenderManager->AddRenderer(m_sun->GetRenderer());
 
-		m_earth = SolarSystemScene.lock()->NewObject<Object>(L"Earth");
-		m_earth.lock()->Initialize(L"Earth.png", FVector2(500, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
-		m_sun.lock()->AddChildObject(m_earth.lock());
-		m_pD2DRenderManager->AddRenderer(m_earth.lock()->GetRenderer());
+		m_earth = SolarSystemScene->NewObject<gameObject>(L"Earth");
+		m_earth->Initialize(L"Earth.png", FVector2(500, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
+		m_sun->AddChildObject(m_earth);
+		m_pD2DRenderManager->AddRenderer(m_earth->GetRenderer());
 
-		m_moon = SolarSystemScene.lock()->NewObject<Object>(L"Moon");
-		m_moon.lock()->Initialize(L"Moon.png", FVector2(300, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
-		m_earth.lock()->AddChildObject(m_moon.lock());
-		m_pD2DRenderManager->AddRenderer(m_moon.lock()->GetRenderer());
+		m_moon = SolarSystemScene->NewObject<gameObject>(L"Moon");
+		m_moon->Initialize(L"Moon.png", FVector2(300, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
+		m_earth->AddChildObject(m_moon);
+		m_pD2DRenderManager->AddRenderer(m_moon->GetRenderer());
 	}
 	
 }
@@ -68,9 +68,9 @@ void DemoGameApp::Update()
 {
 	__super::Update();
 
-	m_earth.lock()->m_localTransform.lock()->Rotation += 0.5f; // 지구 자전
-	m_moon.lock()->m_localTransform.lock()->Rotation -= 2.0f; // 달 자전
-	m_sun.lock()->m_localTransform.lock()->Rotation += 0.2f;
+	m_earth->m_localTransform.lock()->Rotation += 0.5f; // 지구 자전
+	m_moon->m_localTransform.lock()->Rotation -= 2.0f; // 달 자전
+	m_sun->m_localTransform.lock()->Rotation += 0.2f;
 }
 
 void DemoGameApp::Input()
@@ -85,6 +85,8 @@ void DemoGameApp::Input()
         '9', '0', 'O', 'L', 'K', VK_OEM_1  // '9','0','O','L','K',';'
     };
 
+
+	Camera* m_mainCamera = SceneManager::GetCamera();
     for (int key : keys)
     {
         if (GetAsyncKeyState(key) & 0x8000)
@@ -93,50 +95,50 @@ void DemoGameApp::Input()
             {
             case VK_Z:
             {
-                float rot = m_sun.lock()->m_localTransform.lock()->GetRotation();
-                m_sun.lock()->m_localTransform.lock()->SetRotation(rot + 5.0f);
+                float rot = m_sun->m_localTransform.lock()->GetRotation();
+                m_sun->m_localTransform.lock()->SetRotation(rot + 5.0f);
                 break;
             }
             case VK_C:
             {
-                float rot = m_sun.lock()->m_localTransform.lock()->GetRotation();
-                m_sun.lock()->m_localTransform.lock()->SetRotation(rot - 5.0f);
+                float rot = m_sun->m_localTransform.lock()->GetRotation();
+                m_sun->m_localTransform.lock()->SetRotation(rot - 5.0f);
                 break;
             }
             case VK_B:
             {
-                float rot = m_earth.lock()->m_localTransform.lock()->GetRotation();
-                m_earth.lock()->m_localTransform.lock()->SetRotation(rot + 5.0f);
+                float rot = m_earth->m_localTransform.lock()->GetRotation();
+                m_earth->m_localTransform.lock()->SetRotation(rot + 5.0f);
                 break;
             }
             case VK_M:
             {
-                float rot = m_earth.lock()->m_localTransform.lock()->GetRotation();
-                m_earth.lock()->m_localTransform.lock()->SetRotation(rot - 5.0f);
+                float rot = m_earth->m_localTransform.lock()->GetRotation();
+                m_earth->m_localTransform.lock()->SetRotation(rot - 5.0f);
                 break;
             }
             case VK_J:
             {
-                auto pos = m_earth.lock()->m_localTransform.lock()->GetPosition();
-                m_earth.lock()->m_localTransform.lock()->SetPosition(pos.x + 5.0f, pos.y);
+                auto pos = m_earth->m_localTransform.lock()->GetPosition();
+                m_earth->m_localTransform.lock()->SetPosition(pos.x + 5.0f, pos.y);
                 break;
             }
             case VK_G:
             {
-                auto pos = m_earth.lock()->m_localTransform.lock()->GetPosition();
-                m_earth.lock()->m_localTransform.lock()->SetPosition(pos.x - 5.0f, pos.y);
+                auto pos = m_earth->m_localTransform.lock()->GetPosition();
+                m_earth->m_localTransform.lock()->SetPosition(pos.x - 5.0f, pos.y);
                 break;
             }
             case VK_Y:
             {
-                auto pos = m_earth.lock()->m_localTransform.lock()->GetPosition();
-                m_earth.lock()->m_localTransform.lock()->SetPosition(pos.x, pos.y + 5.0f);
+                auto pos = m_earth->m_localTransform.lock()->GetPosition();
+                m_earth->m_localTransform.lock()->SetPosition(pos.x, pos.y + 5.0f);
                 break;
             }
             case VK_H:
             {
-                auto pos = m_earth.lock()->m_localTransform.lock()->GetPosition();
-                m_earth.lock()->m_localTransform.lock()->SetPosition(pos.x, pos.y - 5.0f);
+                auto pos = m_earth->m_localTransform.lock()->GetPosition();
+                m_earth->m_localTransform.lock()->SetPosition(pos.x, pos.y - 5.0f);
                 break;
             }
             case VK_RIGHT:
@@ -175,66 +177,65 @@ void DemoGameApp::Input()
             }
             case VK_D:
             {
-                auto pos = m_sun.lock()->m_localTransform.lock()->GetPosition();
-                m_sun.lock()->m_localTransform.lock()->SetPosition(pos.x + 5.0f, pos.y);
+                auto pos = m_sun->m_localTransform.lock()->GetPosition();
+                m_sun->m_localTransform.lock()->SetPosition(pos.x + 5.0f, pos.y);
                 break;
             }
             case VK_A:
             {
-                auto pos = m_sun.lock()->m_localTransform.lock()->GetPosition();
-                m_sun.lock()->m_localTransform.lock()->SetPosition(pos.x - 5.0f, pos.y);
+                auto pos = m_sun->m_localTransform.lock()->GetPosition();
+                m_sun->m_localTransform.lock()->SetPosition(pos.x - 5.0f, pos.y);
                 break;
             }
             case VK_W:
             {
-                auto pos = m_sun.lock()->m_localTransform.lock()->GetPosition();
-                m_sun.lock()->m_localTransform.lock()->SetPosition(pos.x, pos.y - 5.0f);
+                auto pos = m_sun->m_localTransform.lock()->GetPosition();
+                m_sun->m_localTransform.lock()->SetPosition(pos.x, pos.y - 5.0f);
                 break;
             }
             case VK_S:
             {
-                auto pos = m_sun.lock()->m_localTransform.lock()->GetPosition();
-                m_sun.lock()->m_localTransform.lock()->SetPosition(pos.x, pos.y + 5.0f);
+                auto pos = m_sun->m_localTransform.lock()->GetPosition();
+                m_sun->m_localTransform.lock()->SetPosition(pos.x, pos.y + 5.0f);
                 break;
             }
 
             case '9':
             {
-                float rot = m_moon.lock()->m_localTransform.lock()->GetRotation();
-                m_moon.lock()->m_localTransform.lock()->SetRotation(rot + 5.0f);
+                float rot = m_moon->m_localTransform.lock()->GetRotation();
+                m_moon->m_localTransform.lock()->SetRotation(rot + 5.0f);
                 break;
             }
             case '0':
             {
-                float rot = m_moon.lock()->m_localTransform.lock()->GetRotation();
-                m_moon.lock()->m_localTransform.lock()->SetRotation(rot - 5.0f);
+                float rot = m_moon->m_localTransform.lock()->GetRotation();
+                m_moon->m_localTransform.lock()->SetRotation(rot - 5.0f);
                 break;
             }
             case 'O':
             {
-                auto pos = m_moon.lock()->m_localTransform.lock()->GetPosition();
-                m_moon.lock()->m_localTransform.lock()->SetPosition(pos.x, pos.y - 5.0f);
+                auto pos = m_moon->m_localTransform.lock()->GetPosition();
+                m_moon->m_localTransform.lock()->SetPosition(pos.x, pos.y - 5.0f);
                 break;
             }
             case 'L':
             {
-                auto pos = m_moon.lock()->m_localTransform.lock()->GetPosition();
-                m_moon.lock()->m_localTransform.lock()->SetPosition(pos.x, pos.y + 5.0f);
+                auto pos = m_moon->m_localTransform.lock()->GetPosition();
+                m_moon->m_localTransform.lock()->SetPosition(pos.x, pos.y + 5.0f);
                 break;
             }
             case 'K':
             {
-                auto pos = m_moon.lock()->m_localTransform.lock()->GetPosition();
-                m_moon.lock()->m_localTransform.lock()->SetPosition(pos.x - 5.0f, pos.y);
+                auto pos = m_moon->m_localTransform.lock()->GetPosition();
+                m_moon->m_localTransform.lock()->SetPosition(pos.x - 5.0f, pos.y);
                 break;
             }
             case VK_OEM_1:  // ';' 키
             {
-                auto pos = m_moon.lock()->m_localTransform.lock()->GetPosition();
-                m_moon.lock()->m_localTransform.lock()->SetPosition(pos.x + 5.0f, pos.y);
+                auto pos = m_moon->m_localTransform.lock()->GetPosition();
+                m_moon->m_localTransform.lock()->SetPosition(pos.x + 5.0f, pos.y);
                 break;
             }
-
             }
         }
     }

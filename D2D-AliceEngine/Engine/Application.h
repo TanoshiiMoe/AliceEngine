@@ -1,7 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "Manager/D2DRenderManager.h"
-#include "Manager/ComponentManager.h"
+#include "System/RenderSystem.h"
 #include "Manager/SceneManager.h"
 #include "Singleton.h"
 #include "Camera.h"
@@ -13,7 +13,7 @@ class Application : public Singleton<Application>
 {
 public:
 	Application();
-	virtual ~Application();
+	~Application();
 
 public:
 	virtual void Initialize();
@@ -23,10 +23,9 @@ public:
 	virtual void Input();
 	virtual void Uninitialize();
 
-	std::shared_ptr<D2DRenderManager> m_pD2DRenderManager;
-	std::shared_ptr<ComponentManager> m_pComponentManager;
-	std::shared_ptr<SceneManager> m_pSceneManager;
-	std::shared_ptr<Camera> m_mainCamera; // Main Camera
+	D2DRenderManager* m_pD2DRenderManager;
+	RenderSystem* m_pRenderSystem;
+	SceneManager* m_pSceneManager;
 
 protected:
 	HWND m_hwnd = nullptr;

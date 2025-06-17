@@ -1,5 +1,5 @@
 #pragma once
-#include "Object/Object.h"
+#include "Object/gameObject.h"
 #include "Scene/Scene.h"
 #include "Singleton.h"
 
@@ -15,12 +15,27 @@ public:
 
 	std::weak_ptr<Scene> m_currentScene;	// ÇöÀç ¾À
 
-	static std::weak_ptr<Scene> GetCurrentScene()
+	Scene* GetCurrentScene()
 	{
-		return Get().m_currentScene;
+		if (std::shared_ptr<Scene> sharedScene = m_currentScene.lock())
+		{
+			return sharedScene.get();
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
-	static std::weak_ptr<Scene> AddScene(const std::wstring& NewobjectName)
+	static Camera* GetCamera()
+	{
+		if (Get().m_currentScene.lock())
+		{
+			return Get().m_currentScene.lock()->GetCamera();
+		}
+	}
+
+	static Scene* AddScene(const std::wstring& NewobjectName)
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
 
@@ -30,9 +45,8 @@ public:
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
 
 		auto result = Get().m_scenes.emplace(createdObj->GetUUID(), createdObj);
-		auto iter = result.first;
 
-		return std::dynamic_pointer_cast<Scene>(iter->second);
+		return createdObj.get();
 	}
 
 	static std::weak_ptr<Scene> GetUUIDFromObjectName(const std::wstring& name)

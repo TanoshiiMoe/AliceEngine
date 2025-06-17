@@ -126,7 +126,7 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	assert(SUCCEEDED(hr));
 }
 
-void D2DRenderManager::Uninitialize()
+void D2DRenderManager::UnInitialize()
 {
 	m_wicImagingFactory = nullptr;
 
@@ -195,7 +195,7 @@ void D2DRenderManager::DrawInRenderList()
 	
 	for (auto it = m_containerRenders.begin(); it != m_containerRenders.end(); ++it)
 	{
-		std::weak_ptr<IRenderer> obj = *it;
+		std::weak_ptr<RenderComponent> obj = *it;
 		if (obj.lock())
 		{
 			obj.lock()->Render();

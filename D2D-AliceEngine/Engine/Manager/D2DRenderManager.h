@@ -1,8 +1,8 @@
 #pragma once
 
 #include "pch.h"
-#include "Interface/IRenderer.h"
-#include "Object/Object.h"
+#include "Component/RenderComponent.h"
+#include "Object/gameObject.h"
 
 using namespace Microsoft::WRL;
 enum class ETransformType
@@ -19,18 +19,23 @@ public:
 	~D2DRenderManager();
 
 	// 렌더링 대기열
-	std::vector<std::weak_ptr<IRenderer>> m_containerRenders;
+	std::vector<std::weak_ptr<RenderComponent>> m_containerRenders;
 
-	inline void AddRenderer(std::weak_ptr<IRenderer> renderer)
+	inline void AddRenderer(std::weak_ptr<RenderComponent> renderer)
 	{
 		m_containerRenders.push_back(renderer);
+	}
+
+	inline static ID2D1DeviceContext7* GetD2DDevice()
+	{
+		return Get().m_d2dDeviceContext.Get();
 	}
 
 private:
 	HWND m_hwnd = nullptr;
 public:
 	void Initialize(HWND hwnd);
-	void Uninitialize();
+	void UnInitialize();
 	void Render();
 
 	void DrawTestText();		// Widget으로 빼야하는 기능
@@ -67,4 +72,3 @@ public:
 		m_eTransformType = _type;
 	}
 };
-#define GetD2DRenderManager() D2DRenderManager::Get()

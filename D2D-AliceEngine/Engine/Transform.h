@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.h"
-#include "Interface/IComponent.h"
+#include "Component/Component.h"
 
 /*
 * @brief Transform 클래스.
@@ -12,7 +12,7 @@
 * SetFromMatrix(const D2D1::Matrix3x2F& mat) : 매트릭스에서 위치, 회전, 크기를 추출하여 설정
 */
 
-class Transform : public IComponent
+class Transform : public Component
 {
 public:
 	D2D1_VECTOR_2F Translation;	// 위치

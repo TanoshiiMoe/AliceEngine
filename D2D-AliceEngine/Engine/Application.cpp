@@ -7,12 +7,13 @@ Application::Application()
 {
 	m_hwnd = nullptr;
 	m_hInstance = nullptr;
-	m_mainCamera = nullptr;
 }
 
 Application::~Application()
 {
-
+	delete m_pD2DRenderManager;
+	delete m_pRenderSystem;
+	delete m_pSceneManager;
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -42,9 +43,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Application::Initialize()
 {
-	m_pD2DRenderManager = std::make_shared<D2DRenderManager>();
-	m_pComponentManager = std::make_shared<ComponentManager>();
-	m_pSceneManager = std::make_shared<SceneManager>();
+	m_pD2DRenderManager = new D2DRenderManager();
+	m_pRenderSystem = new RenderSystem();
+	m_pSceneManager = new SceneManager();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -92,9 +93,6 @@ void Application::Initialize()
 	CoInitialize(nullptr);
 
 	m_pD2DRenderManager->Initialize(m_hwnd);
-
-	m_mainCamera = std::make_shared<Camera>();
-	m_mainCamera->Initialize();
 }
 
 void Application::Run()
@@ -104,7 +102,6 @@ void Application::Run()
 
 void Application::Update()
 {
-	m_pComponentManager->Update();
 	m_pSceneManager->Update();
 }
 
@@ -120,10 +117,9 @@ void Application::Render()
 
 void Application::Uninitialize()
 {
-	m_mainCamera->Release();
-	m_pD2DRenderManager->Uninitialize();
+	m_pRenderSystem->UnInitialize();
+	m_pD2DRenderManager->UnInitialize();
 	m_pD2DRenderManager = nullptr;
-	m_pComponentManager->Uninitialize();
 	m_pSceneManager->UnInitialize();
 	CoUninitialize();
 }
