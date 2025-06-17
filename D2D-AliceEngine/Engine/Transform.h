@@ -12,16 +12,12 @@
 * SetFromMatrix(const D2D1::Matrix3x2F& mat) : 매트릭스에서 위치, 회전, 크기를 추출하여 설정
 */
 
-class Transform : public Component
+class Transform
 {
 public:
 	D2D1_VECTOR_2F Translation;	// 위치
 	float Rotation;				// 회전 (degree)
 	D2D1_VECTOR_2F Scale;		// 크기
-
-	void Initialize() override;
-	void Update() override;
-	void Release() override;
 
 	Transform() : Translation{ 0.0f, 0.0f }, Rotation(0.0f), Scale{ 1.0f,1.0f } {}
 

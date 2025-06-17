@@ -34,7 +34,7 @@ void BitmapRenderer::Render()
 	};
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = m_pTransform.lock()->ToMatrix();
+	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)

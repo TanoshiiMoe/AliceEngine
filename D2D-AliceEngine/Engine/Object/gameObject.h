@@ -4,6 +4,7 @@
 #include "../BitmapRenderer.h"
 #include "../System/RenderSystem.h"
 #include "Object.h"
+#include <Component/TransformComponent.h>
 
 /*
 * @brief Object 클래스.
@@ -121,35 +122,11 @@ public:
 
 public:
 	std::weak_ptr<BitmapRenderer> m_bitmapRenderer;
+	std::weak_ptr<TransformComponent> m_transformComponent;
 
 	inline std::weak_ptr<BitmapRenderer> GetRenderer()
 	{
 		return m_bitmapRenderer;
 	}
 
-	// 계층구조 관리
-	std::weak_ptr<gameObject> parent;
-	std::vector<std::weak_ptr<gameObject>> children;
-
-	inline void AddChildObject(gameObject* child)
-	{
-		if (child == nullptr) return; // nullptr 체크
-		child->parent = this->weak_from_this();
-		children.push_back(child->weak_from_this());
-	}
-
-	FVector2 m_pivot{ 0,0 }; // 좌표 중심점
-	std::weak_ptr<Transform> m_localTransform; // Transform 컴포넌트
-	std::weak_ptr<Transform> m_worldTransform; // Transform 컴포넌트
-
-	inline void SetPivot(const float& _x, const float& _y)
-	{
-		m_pivot.x = _x;
-		m_pivot.y = _y;
-	}
-	inline void SetPivot(const float& _x)
-	{
-		m_pivot.x = _x;
-		m_pivot.y = _x;
-	}
 };

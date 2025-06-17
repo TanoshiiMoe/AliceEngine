@@ -31,11 +31,6 @@ void Scene::Release()
 void Scene::Update()
 {
 	RenderSystem::Get().Update();
-
-	for (auto& object : m_objects)
-	{
-		object.second.get()->Update();
-	}
-	
+	TransformSystem::Get().Update();
 	InputSystem::Get().Update();
 }

@@ -34,13 +34,13 @@ void DemoGameApp::Initialize()
 		m_earth = SolarSystemScene->NewObject<gameObject>(L"Earth");
 		m_earth->Initialize(L"Earth.png", FVector2(500, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
 		m_earth->AddComponent<EarthInputContext>();
-		m_sun->AddChildObject(m_earth);
+		m_sun->m_transformComponent.lock()->AddChildObject(m_earth->m_transformComponent);
 		m_pD2DRenderManager->AddRenderer(m_earth->GetRenderer());
 
 		m_moon = SolarSystemScene->NewObject<gameObject>(L"Moon");
 		m_moon->Initialize(L"Moon.png", FVector2(300, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
 		m_moon->AddComponent<MoonInputContext>();
-		m_earth->AddChildObject(m_moon);
+		m_earth->m_transformComponent.lock()->AddChildObject(m_moon->m_transformComponent);
 		m_pD2DRenderManager->AddRenderer(m_moon->GetRenderer());
 	}
 	
@@ -75,9 +75,9 @@ void DemoGameApp::Update()
 {
 	__super::Update();
 
-	m_earth->m_localTransform.lock()->Rotation += 0.5f; // 지구 자전
-	m_moon->m_localTransform.lock()->Rotation -= 2.0f; // 달 자전
-	m_sun->m_localTransform.lock()->Rotation += 0.2f;
+	m_earth->m_transformComponent.lock()->m_localTransform->Rotation += 0.5f; // 지구 자전
+	m_moon->m_transformComponent.lock()->m_localTransform->Rotation -= 2.0f; // 달 자전
+	m_sun->m_transformComponent.lock()->m_localTransform->Rotation += 0.2f;
 }
 
 void DemoGameApp::Uninitialize()

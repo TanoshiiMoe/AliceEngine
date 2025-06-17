@@ -27,6 +27,7 @@ public:
 	D2DRenderManager* m_pD2DRenderManager;
 	RenderSystem* m_pRenderSystem;
 	InputSystem* m_pInputSystem;
+	TransformSystem* m_pTransformSystem;
 	SceneManager* m_pSceneManager;
 
 protected:
