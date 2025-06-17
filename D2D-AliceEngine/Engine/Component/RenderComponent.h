@@ -5,7 +5,7 @@
 class RenderComponent : public Component
 {
 public:
-	RenderComponent() { RenderSystem::Get().Regist(this->weak_from_this()); }
+	RenderComponent() {}
 	~RenderComponent() { RenderSystem::Get().UnRegist(this->weak_from_this()); }
 public:
 	void Initialize() override;

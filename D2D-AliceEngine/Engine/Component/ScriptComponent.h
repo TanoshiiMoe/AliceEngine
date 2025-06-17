@@ -4,9 +4,11 @@
 
 class ScriptComponent : public Component
 {
+	ScriptComponent() {}
+	~ScriptComponent() { ScriptSystem::Get().UnRegist(this->weak_from_this()); }
 public:
 	void Initialize() override { ScriptSystem::Get().Regist(this->weak_from_this()); }
-	void Release() override { ScriptSystem::Get().UnRegist(this->weak_from_this()); }
+	void Release() override {  }
 
 	virtual void Update() = 0;
 	virtual void OnStart() = 0;

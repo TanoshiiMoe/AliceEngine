@@ -13,6 +13,7 @@ Application::~Application()
 {
 	delete m_pD2DRenderManager;
 	delete m_pRenderSystem;
+	delete m_pInputSystem;
 	delete m_pSceneManager;
 }
 
@@ -45,6 +46,7 @@ void Application::Initialize()
 {
 	m_pD2DRenderManager = new D2DRenderManager();
 	m_pRenderSystem = new RenderSystem();
+	m_pInputSystem = new InputSystem();
 	m_pSceneManager = new SceneManager();
 
 	char szPath[MAX_PATH] = { 0, };
@@ -118,6 +120,7 @@ void Application::Render()
 void Application::Uninitialize()
 {
 	m_pRenderSystem->UnInitialize();
+	m_pInputSystem->UnRegistAll();
 	m_pD2DRenderManager->UnInitialize();
 	m_pD2DRenderManager = nullptr;
 	m_pSceneManager->UnInitialize();

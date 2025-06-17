@@ -6,6 +6,7 @@
 #include "Singleton.h"
 #include "Camera.h"
 #include "Scene/Scene.h"
+#include <System/InputSystem.h>
 
 using namespace Microsoft::WRL;
 
@@ -25,6 +26,7 @@ public:
 
 	D2DRenderManager* m_pD2DRenderManager;
 	RenderSystem* m_pRenderSystem;
+	InputSystem* m_pInputSystem;
 	SceneManager* m_pSceneManager;
 
 protected:

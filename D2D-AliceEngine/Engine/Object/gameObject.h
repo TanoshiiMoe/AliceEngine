@@ -52,6 +52,7 @@ public:
 	{
 		std::shared_ptr<Component> createdComp = std::make_shared<T>();
 
+		createdComp->Initialize();
 		createdComp->SetOwner(this->weak_from_this());
 		createdComp->SetOwnerName(GetName());
 		createdComp->SetUUID(StringHelper::MakeUniqueName());

@@ -13,7 +13,6 @@ public:
 	void Run() override;
 	void Render() override;
 	void Update() override;
-	void Input() override;
 	void Uninitialize() override;
 
 	gameObject* m_sun;

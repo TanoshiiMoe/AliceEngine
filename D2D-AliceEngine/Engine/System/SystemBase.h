@@ -9,7 +9,7 @@ public:
 	~SystemBase() {}
 
 public:
-	void Regist(const std::weak_ptr<Component>&& _component)
+	void Regist(const std::weak_ptr<Component>& _component)
 	{
 		m_Components.emplace_back(_component);
 	}

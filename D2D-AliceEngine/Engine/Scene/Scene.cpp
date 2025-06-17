@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Scene.h"
+#include <System/InputSystem.h>
 
 Scene::Scene()
 {
@@ -36,4 +37,5 @@ void Scene::Update()
 		object.second.get()->Update();
 	}
 	
+	InputSystem::Get().Update();
 }

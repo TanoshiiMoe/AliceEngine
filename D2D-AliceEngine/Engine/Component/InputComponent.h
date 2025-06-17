@@ -4,11 +4,10 @@
 class InputComponent : public Component
 {
 public:
-	InputComponent() { InputSystem::Get().Regist(this->weak_from_this()); }
+	InputComponent() { }
 	~InputComponent() { InputSystem::Get().UnRegist(this->weak_from_this()); }
 public:
-	virtual void Initialize() {}
+	virtual void Initialize() { InputSystem::Get().Regist(this->weak_from_this()); }
 	virtual void Update() {}
 	virtual void Release() {}
-
 };
