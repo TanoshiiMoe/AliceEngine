@@ -4,6 +4,7 @@ class Component : public std::enable_shared_from_this<Component>
 {
 public:
 	Component() { SetName(L"Default Component Name"); }
+	Component(const std::wstring& name) { SetName(name); }
 	virtual ~Component() {};
 public:
 	virtual void Initialize() = 0;
@@ -13,7 +14,6 @@ public:
 	virtual void OnStart() {};
 	virtual void OnEnd() {};
 	virtual void OnCreate() {};
-	virtual void OnEnable() {}
 	virtual void OnDestroy() {}
 
 public:

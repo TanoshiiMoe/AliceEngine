@@ -1,6 +1,6 @@
 #pragma once
 #include <Component/Component.h>
-#include <Singleton.h>
+#include <Core/Singleton.h>
 
 class SystemBase
 {

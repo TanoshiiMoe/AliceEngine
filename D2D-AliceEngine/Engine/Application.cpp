@@ -13,6 +13,7 @@ Application::~Application()
 {
 	delete m_pD2DRenderManager;
 	delete m_pRenderSystem;
+	delete m_pScriptSystem;
 	delete m_pInputSystem;
 	delete m_pTransformSystem;
 	delete m_pSceneManager;
@@ -47,6 +48,7 @@ void Application::Initialize()
 {
 	m_pD2DRenderManager = new D2DRenderManager();
 	m_pRenderSystem = new RenderSystem();
+	m_pScriptSystem = new ScriptSystem();
 	m_pInputSystem = new InputSystem();
 	m_pTransformSystem = new TransformSystem();
 	m_pSceneManager = new SceneManager();
@@ -106,7 +108,7 @@ void Application::Run()
 
 void Application::Update()
 {
-	m_pSceneManager->Update();
+	SceneManager::Get().Update();
 }
 
 void Application::Input()
@@ -124,6 +126,7 @@ void Application::Uninitialize()
 	m_pRenderSystem->UnInitialize();
 	m_pInputSystem->UnRegistAll();
 	m_pTransformSystem->UnRegistAll();
+	m_pScriptSystem->UnRegistAll();
 	m_pD2DRenderManager->UnInitialize();
 	m_pD2DRenderManager = nullptr;
 	m_pSceneManager->UnInitialize();

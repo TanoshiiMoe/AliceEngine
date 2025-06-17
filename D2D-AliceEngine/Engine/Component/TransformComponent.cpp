@@ -4,17 +4,10 @@
 void TransformComponent::Initialize()
 {
 	TransformSystem::Get().Regist(this->weak_from_this());
-	m_localTransform = new Transform();
-	m_worldTransform = new Transform();
 }
 
 void TransformComponent::Release()
 {
-	delete m_localTransform;
-	delete m_worldTransform;
-	m_localTransform = nullptr;
-	m_worldTransform = nullptr;
-
 	for (auto child : children)
 	{
 		if (child.lock())

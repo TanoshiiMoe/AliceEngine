@@ -1,7 +1,7 @@
 #pragma once
 #include "Component/Component.h"
-#include "StringHelper.h"
-#include "Singleton.h"
+#include <Helpers/StringHelper.h>
+#include <Core/Singleton.h>
 #include "../System/SystemBase.h"
 
 class RenderSystem : public SystemBase, public Singleton<RenderSystem>

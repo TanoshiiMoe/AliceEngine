@@ -142,8 +142,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
-    <ClInclude Include="BitmapRenderer.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component\BitmapRenderer.h" />
+    <ClInclude Include="Object\Camera.h" />
     <ClInclude Include="Component\RenderComponent.h" />
     <ClInclude Include="Component\ScriptComponent.h" />
     <ClInclude Include="Component\InputComponent.h" />
@@ -151,26 +151,26 @@
     <ClInclude Include="System\ScriptSystem.h" />
     <ClInclude Include="System\RenderSystem.h" />
     <ClInclude Include="Manager\D2DRenderManager.h" />
-    <ClInclude Include="Define.h" />
+    <ClInclude Include="Define\Define.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Object\Object.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="System\SystemBase.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Manager\SceneManager.h" />
-    <ClInclude Include="StringHelper.h" />
-    <ClInclude Include="TMath.h" />
+    <ClInclude Include="Helpers\StringHelper.h" />
+    <ClInclude Include="Math\TMath.h" />
     <ClInclude Include="Object\gameObject.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Singleton.h" />
-    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Core\Singleton.h" />
+    <ClInclude Include="Math\Transform.h" />
     <ClInclude Include="Component\TransformComponent.h" />
     <ClInclude Include="System\TransformSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="BitmapRenderer.cpp" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Component\BitmapRenderer.cpp" />
+    <ClCompile Include="Object\Camera.cpp" />
     <ClCompile Include="Component\RenderComponent.cpp" />
     <ClCompile Include="Component\ScriptComponent.cpp" />
     <ClCompile Include="Component\InputComponent.cpp" />
@@ -178,15 +178,15 @@
     <ClCompile Include="System\ScriptSystem.cpp" />
     <ClCompile Include="System\RenderSystem.cpp" />
     <ClCompile Include="Manager\D2DRenderManager.cpp" />
-    <ClCompile Include="Define.cpp" />
+    <ClCompile Include="Define\Define.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Object\Object.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="System\SystemBase.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Manager\SceneManager.cpp" />
-    <ClCompile Include="StringHelper.cpp" />
-    <ClCompile Include="TMath.cpp" />
+    <ClCompile Include="Helpers\StringHelper.cpp" />
+    <ClCompile Include="Math\TMath.cpp" />
     <ClCompile Include="Object\gameObject.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -194,8 +194,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Singleton.cpp" />
-    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Core\Singleton.cpp" />
+    <ClCompile Include="Math\Transform.cpp" />
     <ClCompile Include="Component\TransformComponent.cpp" />
     <ClCompile Include="System\TransformSystem.cpp" />
   </ItemGroup>

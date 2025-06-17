@@ -16,6 +16,8 @@ void gameObject::Initialize(const std::wstring& path, const FVector2& position, 
 	m_bitmapRenderer.lock()->m_pivot = &m_transformComponent.lock()->m_pivot;
 
 	LoadData(path);
+
+	D2DRenderManager::Get().AddRenderer(m_bitmapRenderer);
 }
 
 

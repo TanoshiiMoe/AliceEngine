@@ -1,7 +1,7 @@
 #pragma once
 #include "../pch.h"
-#include "../Transform.h"
-#include "../BitmapRenderer.h"
+#include <Math/Transform.h>
+#include <Component/BitmapRenderer.h>
 #include "../System/RenderSystem.h"
 #include "Object.h"
 #include <Component/TransformComponent.h>
@@ -28,30 +28,32 @@ public:
 		m_Components.clear();
 	}
 
+	virtual void OnStart()
+	{
+		for (std::weak_ptr<Component>&& comp : m_Components)
+		{
+			comp.lock()->OnStart();
+		}
+	}
+
+	virtual void OnEnd()
+	{
+		for (std::weak_ptr<Component>&& comp : m_Components)
+		{
+			comp.lock()->OnEnd();
+		}
+	}
+
 	/*
 	* @ Component를 관리하는 로직입니다.
 	*/
 
 	std::vector<std::shared_ptr<Component>> m_Components;
 
-	/*template<class T, typename... Args>
+	template<class T, typename... Args>
 	std::weak_ptr<T> AddComponent(Args&&... args)
 	{	
-		std::shared_ptr<Component> createdComp = std::make_shared<T>(std::forward<Args>(args)...);
-
-		createdComp->SetOwner(this->weak_from_this());
-		createdComp->SetOwnerName(GetName());
-		createdComp->SetUUID(StringHelper::MakeUniqueName());
-
-		m_Components.emplace_back(createdComp);
-
-		return std::dynamic_pointer_cast<T>(createdComp);
-	}*/
-
-	template<class T>
-	std::weak_ptr<T> AddComponent()
-	{
-		std::shared_ptr<Component> createdComp = std::make_shared<T>();
+		std::shared_ptr<T> createdComp = std::make_shared<T>(std::forward<Args>(args)...);
 
 		createdComp->Initialize();
 		createdComp->SetOwner(this->weak_from_this());

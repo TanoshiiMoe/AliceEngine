@@ -33,7 +33,7 @@
 #pragma comment(lib, "dxguid.lib")
 #include <string>
 #include <comdef.h>
-#include "Define.h"
+#include <Define/Define.h>
 #include <vector>
 #include <memory>
 #include <math.h>
@@ -43,6 +43,6 @@
 #include <sstream>
 #include <iomanip>
 
-#include "TMath.h"
+#include <Math/TMath.h>
 
 #endif //PCH_H

@@ -14,8 +14,4 @@ public:
 	void Render() override;
 	void Update() override;
 	void Uninitialize() override;
-
-	gameObject* m_sun;
-	gameObject* m_earth;
-	gameObject* m_moon;
 };

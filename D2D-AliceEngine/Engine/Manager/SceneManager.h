@@ -1,7 +1,7 @@
 #pragma once
 #include "Object/gameObject.h"
 #include "Scene/Scene.h"
-#include "Singleton.h"
+#include <Core/Singleton.h>
 
 class SceneManager : public Singleton<SceneManager>
 {
@@ -34,12 +34,12 @@ public:
 			return Get().m_currentScene.lock()->GetCamera();
 		}
 	}
-
-	static Scene* AddScene(const std::wstring& NewobjectName)
+	template<class T>
+	static T* AddScene(const std::wstring& NewobjectName)
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
 
-		std::shared_ptr<Scene> createdObj = std::make_shared<Scene>();
+		std::shared_ptr<T> createdObj = std::make_shared<T>();
 
 		createdObj->SetName(NewobjectName);
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
@@ -69,16 +69,17 @@ public:
 
 		if (searchedScene.lock())
 		{
-			if (Get().m_currentScene.lock())
+			if (Get().m_currentScene.lock())	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
 			{
+				Get().m_currentScene.lock()->OnExit();
 				Get().m_currentScene.lock()->Release();
 			}
+			searchedScene.lock()->Initialize();
+			searchedScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
 			Get().m_currentScene = searchedScene;
-			Get().m_currentScene.lock()->Initialize();
 		}
 	}
 
 private:
 	std::unordered_map<std::wstring, std::shared_ptr<Scene>> m_scenes;
 };
-#define GetSceneManager() SceneManager::Get()

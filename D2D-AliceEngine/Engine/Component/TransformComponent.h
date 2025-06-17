@@ -1,12 +1,23 @@
 #pragma once
 #include "Component.h"
 #include <System/TransformSystem.h>
-#include <Transform.h>
+#include <Math/Transform.h>
 class TransformComponent : public Component
 {
 public:
-	TransformComponent() {}
-	~TransformComponent() { TransformSystem::Get().UnRegist(this->weak_from_this()); }
+	TransformComponent() 
+	{
+		m_localTransform = new Transform();
+		m_worldTransform = new Transform();
+	}
+	~TransformComponent() 
+	{
+		TransformSystem::Get().UnRegist(this->weak_from_this());
+		delete m_localTransform;
+		delete m_worldTransform;
+		m_localTransform = nullptr;
+		m_worldTransform = nullptr;
+	}
 public:
 	void Initialize() override; 
 	void Release() override;

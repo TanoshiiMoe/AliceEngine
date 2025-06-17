@@ -3,10 +3,11 @@
 #include "Manager/D2DRenderManager.h"
 #include "System/RenderSystem.h"
 #include "Manager/SceneManager.h"
-#include "Singleton.h"
-#include "Camera.h"
+#include <Core/Singleton.h>
+#include <Object/Camera.h>
 #include "Scene/Scene.h"
 #include <System/InputSystem.h>
+#include <System/ScriptSystem.h>
 
 using namespace Microsoft::WRL;
 
@@ -26,6 +27,7 @@ public:
 
 	D2DRenderManager* m_pD2DRenderManager;
 	RenderSystem* m_pRenderSystem;
+	ScriptSystem* m_pScriptSystem;
 	InputSystem* m_pInputSystem;
 	TransformSystem* m_pTransformSystem;
 	SceneManager* m_pSceneManager;

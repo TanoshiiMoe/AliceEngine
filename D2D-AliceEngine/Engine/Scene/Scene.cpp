@@ -1,36 +1,56 @@
 #include "pch.h"
 #include "Scene.h"
 #include <System/InputSystem.h>
+#include <System/ScriptSystem.h>
 
 Scene::Scene()
 {
-	m_mainCamera = nullptr;
-}
-
-Scene::~Scene()
-{
-
-}
-
-void Scene::Initialize()
-{
-	GetSingleton(RenderSystem).Initialize();
+	RenderSystem::Get().Initialize();
 	for (auto& object : m_objects)
 	{
 		object.second.get()->Initialize();
 	}
+	m_mainCamera = nullptr;
 	m_mainCamera = new Camera();
 	m_mainCamera->Initialize();
 }
 
-void Scene::Release()
+Scene::~Scene()
 {
 	m_mainCamera->Release();
+}
+
+void Scene::Initialize()
+{
+	
+}
+
+void Scene::Release()
+{
+
 }
 
 void Scene::Update()
 {
 	RenderSystem::Get().Update();
 	TransformSystem::Get().Update();
+	ScriptSystem::Get().Update();
 	InputSystem::Get().Update();
 }
+
+void Scene::OnEnter()
+{
+	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+	{
+		it->second->OnStart();
+	}
+}
+
+void Scene::OnExit()
+{
+	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+	{
+		it->second->OnEnd();
+	}
+}
+

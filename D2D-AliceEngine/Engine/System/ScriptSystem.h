@@ -3,8 +3,13 @@
 class ScriptSystem : public SystemBase, public Singleton<ScriptSystem>
 {
 public:
-	virtual void Update() = 0;
+	void Onstart()
+	{
 
+	}
+	void Update()
+	{
 
+	}
 };
 

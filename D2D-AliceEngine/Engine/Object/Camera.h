@@ -1,6 +1,6 @@
 #pragma once
 #include "Object/Object.h"
-#include "Transform.h"
+#include <Math/Transform.h>
 
 /*
 * @brief 카메라 클래스. 
