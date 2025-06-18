@@ -13,6 +13,7 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
+	void aruInput();
 	void SunInput();
 	void MoonInput();
 	void EarthInput();
@@ -21,5 +22,7 @@ public:
 	gameObject* m_sun;
 	gameObject* m_earth;
 	gameObject* m_moon;
+	gameObject* m_widget;
+	gameObject* m_aru;
 };
 

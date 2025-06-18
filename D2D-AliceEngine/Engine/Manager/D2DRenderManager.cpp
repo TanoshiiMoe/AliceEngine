@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "D2DRenderManager.h"
+#include "Component/TextRenderComponent.h"
 
 D2DRenderManager::D2DRenderManager()
 {
@@ -79,7 +80,6 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	);
 	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_d2dBitmapTarget.GetAddressOf());
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
-	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red), m_pRedBrush.GetAddressOf());
 
 	// Image
 	// Create WIC factory
@@ -88,30 +88,11 @@ void D2DRenderManager::Initialize(HWND hwnd)
 		__uuidof(m_wicImagingFactory),
 		(void**)m_wicImagingFactory.GetAddressOf());
 
-	// Text Brush
-	m_d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), m_blackBrush.GetAddressOf());
-
 	// DirectWrite 팩터리를 만듭니다.
 	DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
 		__uuidof(m_dWriteFactory),
 		reinterpret_cast<IUnknown**>(m_dWriteFactory.GetAddressOf()));
-
-	// DirectWrite 텍스트 형식 개체를 만듭니다.
-	m_dWriteFactory->CreateTextFormat(
-		L"Consolas", // FontName    제어판-모든제어판-항목-글꼴-클릭 으로 글꼴이름 확인가능
-		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		24.0f,   // Font Size
-		L"", //locale
-		&m_dWriteTextFormat
-	);
-
-	// 텍스트를 수평 및 수직으로 중앙에 맞춥니다.
-	m_dWriteTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_JUSTIFIED);
-	m_dWriteTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
 	// 4. D2D 타겟 비트맵 및 SetTarget
 	CreateSwapChainAndD2DTarget();
@@ -135,13 +116,8 @@ void D2DRenderManager::UnInitialize()
 	m_d2dDeviceContext = nullptr;
 	m_d2dBitmapTarget = nullptr;
 
-	// For BrushAndShape
-	m_pRedBrush = nullptr;
-
 	// For DrawText
-	m_blackBrush = nullptr;
 	m_dWriteFactory = nullptr;
-	m_dWriteTextFormat = nullptr;
 
 	// For ImageDraw
 	m_wicImagingFactory = nullptr;
@@ -151,36 +127,30 @@ void D2DRenderManager::UnInitialize()
 
 void D2DRenderManager::Render()
 {
-	DrawInRenderList();
-	DrawTestText();
+	DrawSpriteRenderer();
+	DrawBoxComponent();
 
 	m_dxgiSwapChain->Present(1, 0);
 }
 
-void D2DRenderManager::DrawTestText()
+void D2DRenderManager::DrawBoxComponent()
 {
 	m_d2dDeviceContext->BeginDraw();
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity()); // 변환 초기화
-	D2D1_SIZE_F size = m_d2dDeviceContext->GetSize();
 
-	D2D1_MATRIX_3X2_F _transform = D2D1::Matrix3x2F::Scale(1.0f, 1.0f, D2D1::Point2F(0.0f, 0.0f)) *
-		D2D1::Matrix3x2F::Rotation(0.0f, D2D1::Point2F(0.0f, 0.0f)) *
-		D2D1::Matrix3x2F::Translation(0, 150);  // 이동
+	for (auto it = m_boxComponentRenders.begin(); it != m_boxComponentRenders.end(); ++it)
+	{
+		std::weak_ptr<RenderComponent> obj = *it;
+		if (obj.lock())
+		{
+			obj.lock()->Render();
+		}
+	}
 
-	// 기준점
-	m_d2dDeviceContext->SetTransform(_transform);
-
-	WCHAR sc_helloWorld[] = L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동";	m_d2dDeviceContext->DrawText(
-		sc_helloWorld,
-		ARRAYSIZE(sc_helloWorld) - 1,
-		m_dWriteTextFormat.Get(),
-		D2D1::RectF(0, 0, size.width, size.height / 2),
-		m_blackBrush.Get()
-	);
 	m_d2dDeviceContext->EndDraw();
 }
 
-void D2DRenderManager::DrawInRenderList()
+void D2DRenderManager::DrawSpriteRenderer()
 {
 	m_d2dDeviceContext->BeginDraw();
 	m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
@@ -193,7 +163,7 @@ void D2DRenderManager::DrawInRenderList()
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	
-	for (auto it = m_containerRenders.begin(); it != m_containerRenders.end(); ++it)
+	for (auto it = m_spriteRenderers.begin(); it != m_spriteRenderers.end(); ++it)
 	{
 		std::weak_ptr<RenderComponent> obj = *it;
 		if (obj.lock())

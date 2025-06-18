@@ -45,4 +45,6 @@
 
 #include <Math/TMath.h>
 
+using namespace Microsoft::WRL;
+
 #endif //PCH_H

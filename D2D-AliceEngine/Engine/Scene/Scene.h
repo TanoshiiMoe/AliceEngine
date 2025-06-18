@@ -26,7 +26,7 @@ public:
 
 public:
 	template<class TReturnType>
-	TReturnType* AddObject(const std::wstring& NewobjectName)
+	TReturnType* NewObject(const std::wstring& NewobjectName)
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
 
@@ -55,6 +55,22 @@ public:
 		}
 		return false;
 	}
+
+	bool RemoveObjectByName(const std::wstring& objectName)
+	{
+		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			// 키 값이 objectName과 같으면 삭제 (UUID로 저장되어 있다면 GetName() 비교)
+			if (it->second && it->second->GetName() == objectName)
+			{
+				it->second.reset();
+				m_objects.erase(it);
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 private:
 	std::unordered_map<std::wstring, std::shared_ptr<gameObject>> m_objects;

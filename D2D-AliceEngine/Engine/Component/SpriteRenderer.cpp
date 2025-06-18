@@ -20,6 +20,12 @@ void SpriteRenderer::Release()
 	__super::Release();
 }
 
+/*
+* @briefs : 변환행렬을 적용하여 비트맵을 원하는 위치에 그립니다.
+* @details
+*	ETransformType : 좌표계 구분
+*/
+
 void SpriteRenderer::Render()
 {
 	if (!m_bitmap)
@@ -55,7 +61,4 @@ void SpriteRenderer::Render()
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
 	context->DrawBitmap(m_bitmap.Get());
-	context->DrawRectangle(
-		D2D1::RectF(0, 0,
-			bmpSize.width, bmpSize.height), D2DRenderManager::Get().m_pRedBrush.Get(), 5.0f);
 }

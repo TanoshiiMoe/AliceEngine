@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "Application.h"
 #include "Manager/D2DRenderManager.h"
+#include <Core/Input.h>
+#include <Core/Time.h>
 
 Application::Application()
 {
@@ -99,6 +101,9 @@ void Application::Initialize()
 	CoInitialize(nullptr);
 
 	m_pD2DRenderManager->Initialize(m_hwnd);
+
+	Input::Initialize(m_hwnd);
+	Time::Initialize();
 }
 
 void Application::Run()
@@ -109,6 +114,8 @@ void Application::Run()
 void Application::Update()
 {
 	SceneManager::Get().Update();
+	Time::UpdateTime();
+	Input::Update();
 }
 
 void Application::Input()

@@ -10,14 +10,18 @@ class SpriteRenderer : public RenderComponent
 {
 public:
 	SpriteRenderer() {}
-	~SpriteRenderer() {}
+	~SpriteRenderer() { m_bitmap = nullptr; }
 
 	void Initialize() override;
 	void LoadData(const std::wstring& path);
 	void Release() override;
 	void Render() override;
 
-	Transform* m_pTransform;
-	FVector2* m_pivot;
+	FVector2 GetSize()
+	{
+		D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
+		return FVector2(bmpSize.width, bmpSize.height);
+	}
+
 	ComPtr<ID2D1Bitmap1> m_bitmap; // BitmapImage ÄÄÆ÷³ÍÆ®
 };

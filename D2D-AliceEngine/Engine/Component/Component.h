@@ -11,9 +11,9 @@ public:
 	virtual void Update() = 0;
 	virtual void Release() = 0;
 
-	virtual void OnStart() {};
-	virtual void OnEnd() {};
-	virtual void OnCreate() {};
+	virtual void OnStart() {}
+	virtual void OnEnd() {}
+	virtual void OnCreate() {}
 	virtual void OnDestroy() {}
 
 public:

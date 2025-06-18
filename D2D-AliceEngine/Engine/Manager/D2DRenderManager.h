@@ -4,7 +4,6 @@
 #include "Component/RenderComponent.h"
 #include "Object/gameObject.h"
 
-using namespace Microsoft::WRL;
 enum class ETransformType
 {
 	D2D,
@@ -19,11 +18,12 @@ public:
 	~D2DRenderManager();
 
 	// 렌더링 대기열
-	std::vector<std::weak_ptr<RenderComponent>> m_containerRenders;
+	std::vector<std::weak_ptr<RenderComponent>> m_spriteRenderers;
+	std::vector<std::weak_ptr<RenderComponent>> m_boxComponentRenders;
 
 	inline void AddRenderer(std::weak_ptr<RenderComponent> renderer)
 	{
-		m_containerRenders.push_back(renderer);
+		m_spriteRenderers.push_back(renderer);
 	}
 
 	inline static ID2D1DeviceContext7* GetD2DDevice()
@@ -38,8 +38,8 @@ public:
 	void UnInitialize();
 	void Render();
 
-	void DrawTestText();		// Widget으로 빼야하는 기능
-	void DrawInRenderList();	// m_containerRenders를 모두 그리기
+	void DrawBoxComponent();		// Widget으로 빼야하는 기능
+	void DrawSpriteRenderer();	// m_containerRenders를 모두 그리기
 
 	void GetApplicationSize(int& width, int& height);
 
@@ -52,13 +52,9 @@ public:
 	ComPtr<IDXGISwapChain1> m_dxgiSwapChain;
 	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext;
 	ComPtr<ID2D1Bitmap1> m_d2dBitmapTarget;
-	// For BrushAndShape
-	ComPtr<ID2D1SolidColorBrush> m_pRedBrush;		// 렌더타겟이 생성하는 리소스 역시 장치의존
 
 	// For DrawText
-	ComPtr<ID2D1SolidColorBrush> m_blackBrush;
 	ComPtr<IDWriteFactory> m_dWriteFactory;
-	ComPtr<IDWriteTextFormat> m_dWriteTextFormat;
 	// For ImageDraw
 	ComPtr<IWICImagingFactory> m_wicImagingFactory;
 	// SpriteBatch

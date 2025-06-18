@@ -2,24 +2,21 @@
 #include "gameObject.h"
 #include "../Application.h"
 
+gameObject::gameObject(const FVector2& position = FVector2(0.0f), const float& rotation = 0.0f, const FVector2& scale = FVector2(1.0f), const FVector2& pivot = FVector2(0.0f))
+{
+	Initialize(position, rotation, scale, pivot);
+}
+
 void gameObject::Initialize()
 {
-	
+	m_transformComponent = AddComponentByWeak<TransformComponent>();
 }
 
-void gameObject::Initialize(const std::wstring& path, const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot)
+void gameObject::Initialize(const FVector2& position = FVector2(0.0f), const float& rotation = 0.0f, const FVector2& scale = FVector2(1.0f), const FVector2& pivot = FVector2(0.0f))
 {
-	m_bitmapRenderer = AddComponent<SpriteRenderer>();
-	m_transformComponent = AddComponent<TransformComponent>();
+	m_transformComponent = AddComponentByWeak<TransformComponent>();
 	m_transformComponent.lock()->SetTransform(position, rotation, scale, pivot);
-	m_bitmapRenderer.lock()->m_pTransform = m_transformComponent.lock()->m_worldTransform;
-	m_bitmapRenderer.lock()->m_pivot = &m_transformComponent.lock()->m_pivot;
-
-	LoadData(path);
-
-	D2DRenderManager::Get().AddRenderer(m_bitmapRenderer);
 }
-
 
 void gameObject::Update()
 {
@@ -29,12 +26,4 @@ void gameObject::Update()
 void gameObject::Release()
 {
 	
-}
-
-void gameObject::LoadData(const std::wstring& path)
-{
-	if (m_bitmapRenderer.lock())
-	{
-		m_bitmapRenderer.lock()->LoadData(path);
-	}
 }

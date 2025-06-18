@@ -142,7 +142,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Component\BoxComponent.h" />
+    <ClInclude Include="Component\TextRenderComponent.h" />
     <ClInclude Include="Component\SpriteRenderer.h" />
+    <ClInclude Include="Core\Input.h" />
     <ClInclude Include="Object\Camera.h" />
     <ClInclude Include="Component\RenderComponent.h" />
     <ClInclude Include="Component\ScriptComponent.h" />
@@ -166,10 +169,15 @@
     <ClInclude Include="Math\Transform.h" />
     <ClInclude Include="Component\TransformComponent.h" />
     <ClInclude Include="System\TransformSystem.h" />
+    <ClInclude Include="Math\TColor.h" />
+    <ClInclude Include="Core\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Component\BoxComponent.cpp" />
+    <ClCompile Include="Component\TextRenderComponent.cpp" />
     <ClCompile Include="Component\SpriteRenderer.cpp" />
+    <ClCompile Include="Core\Input.cpp" />
     <ClCompile Include="Object\Camera.cpp" />
     <ClCompile Include="Component\RenderComponent.cpp" />
     <ClCompile Include="Component\ScriptComponent.cpp" />
@@ -198,6 +206,8 @@
     <ClCompile Include="Math\Transform.cpp" />
     <ClCompile Include="Component\TransformComponent.cpp" />
     <ClCompile Include="System\TransformSystem.cpp" />
+    <ClCompile Include="Math\TColor.cpp" />
+    <ClCompile Include="Core\Time.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
