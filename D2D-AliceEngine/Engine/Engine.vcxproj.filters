@@ -45,7 +45,7 @@
     <ClInclude Include="Component\Component.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Component\BitmapRenderer.h">
+    <ClInclude Include="Component\SpriteRenderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Math\TMath.h">
@@ -122,7 +122,7 @@
     <ClCompile Include="Component\Component.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Component\BitmapRenderer.cpp">
+    <ClCompile Include="Component\SpriteRenderer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Math\TMath.cpp">

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "BitmapRenderer.h"
+#include "SpriteRenderer.h"
 #include "Manager/D2DRenderManager.h"
 #include "Application.h"
 

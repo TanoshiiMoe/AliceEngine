@@ -1,7 +1,7 @@
 #pragma once
 #include "../pch.h"
 #include <Math/Transform.h>
-#include <Component/BitmapRenderer.h>
+#include <Component/SpriteRenderer.h>
 #include "../System/RenderSystem.h"
 #include "Object.h"
 #include <Component/TransformComponent.h>
