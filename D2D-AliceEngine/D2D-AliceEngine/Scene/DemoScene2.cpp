@@ -30,22 +30,23 @@ void DemoScene2::OnEnter()
 
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget->Initialize();
-	m_widget->AddComponent<TextRenderComponent>()->SetContent(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [Q] : 카메라를 아루에게 붙이기 \n [E] : 카메라를 떼기 \n * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n\n <아루> \n [5,6] : 무기 스폰, 무기 삭제 \n [7,8] : 지갑 스폰, 지갑 삭제 \n [W,A,S,D] : 이동");
+	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [Q] : 카메라를 아루에게 붙이기 \n [E] : 카메라를 떼기 \n * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n\n <아루> \n [5,6] : 무기 스폰, 무기 파괴 \n [7,8] : 지갑 스폰, 지갑 파괴 \n [W,A,S,D] : 이동 \n [4] : 아루 이름 한영 전환");
 	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 150));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 139, 255));
 
 	m_widget2 = NewObject<gameObject>(L"widget2");
 	m_widget2->Initialize();
-	m_widget2->transform()->SetPosition(0, 500);
-	m_widget2->AddComponent<TextRenderComponent>()->SetContent(L" <씬> \n [3] : 씬 전환");
+	m_widget2->transform()->SetPosition(0, 0);
+	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <씬> \n [3] : 씬 전환");
+	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
 	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(FVector2(850, 0));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
 	m_widget3 = NewObject<gameObject>(L"widget3");
 	m_widget3->Initialize();
 	m_widget3->transform()->SetPosition(0, 0);
-	m_widget3->AddComponent<TextRenderComponent>()->SetContent(L" <현재 씬> " + GetName());
+	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <현재 씬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
 	m_widget3->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
@@ -58,10 +59,15 @@ void DemoScene2::OnEnter()
 	m_aru->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
 	m_aru->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
 	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
-	m_aru->AddComponent<TextRenderComponent>()->SetContent(m_aru->GetName());
+
+	/*
+	* 게임오브젝트에 TextRenderComponent를 붙이는 예시
+	*/
+	m_aru->AddComponent<TextRenderComponent>()->SetText(m_aru->GetName());
 	m_aru->GetComponent<TextRenderComponent>()->SetTransformType(ETransformType::Unity);
 	m_aru->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_aru->GetComponent<TextRenderComponent>()->SetPosition(FVector2(-512, -312));
+	m_aru->GetComponent<TextRenderComponent>()->SetScale(FVector2(3, 3));
+	m_aru->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.5f));
 
 	m_aru->AddComponent<InputComponent>()->SetAction([this]() { aruInput(); });
 	m_aru->AddComponent<InputComponent>()->SetAction([this]() { CameraInput(); });
@@ -74,6 +80,13 @@ void DemoScene2::OnExit()
 
 void DemoScene2::aruInput()
 {
+	if (Input::IsKeyPressed(VK_4))
+	{
+		if (m_aru->GetComponent<TextRenderComponent>()->GetText() == L"aru")
+			m_aru->GetComponent<TextRenderComponent>()->SetText(L"아루");
+		else
+			m_aru->GetComponent<TextRenderComponent>()->SetText(L"aru");
+	}
 	if (Input::IsKeyPressed(VK_5))
 	{
 		gameObject* gun = NewObject<gameObject>(L"gun");

@@ -8,6 +8,7 @@ TextRenderComponent::TextRenderComponent()
 {
 	InitializeFormat();
 	InitializeColor();
+	InitializeLayout();
 }
 
 TextRenderComponent::TextRenderComponent(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
@@ -18,6 +19,7 @@ TextRenderComponent::TextRenderComponent(const std::wstring& content = L"", cons
 	m_fontSize = fontSize;
 	InitializeFormat();
 	InitializeColor();
+	InitializeLayout();
 }
 
 TextRenderComponent::~TextRenderComponent()
@@ -40,34 +42,55 @@ void TextRenderComponent::Release()
 void TextRenderComponent::Render()
 {
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();  // 이동
+	if (!context || m_content.empty()) return;
 
+	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
+
+	// 텍스트 크기 측정
+	DWRITE_TEXT_METRICS metrics{};
+	m_layout->GetMetrics(&metrics);
+
+	// 피벗 보정
+	D2D1_POINT_2F pivotOffset = {
+		metrics.width * m_pivot->x,
+		metrics.height * m_pivot->y
+	};
+	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
+
+	// 로컬 변환 먼저 적용 (내부 transform + pivotAdjust)
+	D2D1::Matrix3x2F localTransform =
+		D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
+		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation()) *
+		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
+
+	// 그 뒤에 world, camera 적용
+	// m_pTransform이 계산된 worldTransform의 주소를 가지고 있음
 	if (m_eTransformType == ETransformType::Unity)
 	{
-		Camera* camera = SceneManager::GetCamera();
 		D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-		D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
-		D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
-		view = view * unity;
+		D2D1::Matrix3x2F world = m_pTransform ? m_pTransform->ToMatrix() : D2D1::Matrix3x2F::Identity();
+
+		Camera* camera = SceneManager::GetCamera();
+		D2D1::Matrix3x2F cameraInv = camera ? camera->m_transform->ToMatrix() : D2D1::Matrix3x2F::Identity();
 		cameraInv.Invert();
-		view = view * world * cameraInv;
+
+		view = unity * world * cameraInv;
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}
+	else
+	{
+		view = m_pTransform ? m_pTransform->ToMatrix() : D2D1::Matrix3x2F::Identity();
+	}
 
-	D2D1_SIZE_F size = context->GetSize();
+	D2D1::Matrix3x2F finalTransform = pivotAdjust * localTransform * view;
+	context->SetTransform(finalTransform);
 
-	D2D1::Matrix3x2F _transform = D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
-		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation()) *
-		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);  // 이동
-
-	view = _transform * view;
-	context->SetTransform(view);
-
+	// 그리기
 	context->DrawText(
 		m_content.c_str(),
 		static_cast<UINT32>(m_content.length()),
 		m_dWriteTextFormat.Get(),
-		D2D1::RectF(0, 0, size.width, size.height / 2),
+		D2D1::RectF(0, 0, metrics.width, metrics.height),
 		m_pBrush.Get()
 	);
 }
@@ -97,6 +120,19 @@ void TextRenderComponent::InitializeColor()
 	ID2D1DeviceContext7* d2dDeviceContext = D2DRenderManager::Get().m_d2dDeviceContext.Get();
 	m_pBrush = nullptr;
 	d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(m_color.r, m_color.g, m_color.b, m_color.a), m_pBrush.GetAddressOf());
+}
+
+void TextRenderComponent::InitializeLayout()
+{
+	m_layout = nullptr;
+	HRESULT hr = D2DRenderManager::Get().m_dWriteFactory->CreateTextLayout(
+		m_content.c_str(),
+		static_cast<UINT32>(m_content.length()),
+		m_dWriteTextFormat.Get(),
+		FLT_MAX, FLT_MAX,
+		&m_layout
+	);
+	if (FAILED(hr)) return;
 }
 
 void TextRenderComponent::SetTextAlignment(ETextFormat format)
@@ -156,9 +192,10 @@ void TextRenderComponent::SetTextAlignment(ETextFormat format)
 	}
 }
 
-void TextRenderComponent::SetContent(const std::wstring& content)
+void TextRenderComponent::SetText(const std::wstring& content)
 {
 	m_content = content;
+	InitializeLayout();
 }
 
 void TextRenderComponent::SetColor(const FColor& color)

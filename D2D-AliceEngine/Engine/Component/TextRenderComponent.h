@@ -20,13 +20,16 @@ public:
 
 	void Render();
 
+	ComPtr<IDWriteTextLayout> m_layout;
 	ComPtr<IDWriteTextFormat> m_dWriteTextFormat;
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
 
 	void InitializeFormat();
 	void InitializeColor();
+	void InitializeLayout();
 	void SetTextAlignment(ETextFormat format);
-	void SetContent(const std::wstring& content);
+	inline std::wstring& GetText() { return m_content; }
+	void SetText(const std::wstring& content);
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
 	void SetPosition(const FVector2& pos);
