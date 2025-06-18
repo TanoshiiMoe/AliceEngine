@@ -17,6 +17,7 @@ void DemoScene::Initialize()
 
 void DemoScene::Release()
 {
+	__super::Release();
 }
 
 void DemoScene::Update()
@@ -33,6 +34,10 @@ void DemoScene::OnEnter()
 
 	m_sun = NewObject<gameObject>(L"Sun");
 	m_sun->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
+	m_sun->AddComponent<TextRenderComponent>()->SetContent(m_sun->GetName());
+	m_sun->GetComponent<TextRenderComponent>()->SetTransformType(ETransformType::Unity);
+	m_sun->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_sun->GetComponent<TextRenderComponent>()->SetPosition(FVector2(-512, -412));
 	m_sun->AddComponent<SpriteRenderer>()->LoadData(L"Sun.png");
 	m_sun->AddComponent<BoxComponent>(m_sun->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
 
@@ -48,17 +53,29 @@ void DemoScene::OnEnter()
 
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget->Initialize();
-	m_widget->AddComponent<TextRenderComponent>()->SetContent(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동 \n\n <아루> \n [5,6] : 무기 스폰, 무기 삭제 \n [7,8] : 지갑 스폰, 지갑 삭제 \n [4,E,R,T] : 이동");
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, 100));
+	m_widget->AddComponent<TextRenderComponent>()->SetContent(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동 \n\n");
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 150));
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
-	m_aru = NewObject<gameObject>(L"aru");
-	m_aru->Initialize(FVector2(350, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
-	m_aru->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
+	m_widget2 = NewObject<gameObject>(L"widget2");
+	m_widget2->Initialize();
+	m_widget2->transform()->SetPosition(0,0);
+	m_widget2->AddComponent<TextRenderComponent>()->SetContent(L" <씬> \n [3] : 씬 전환");
+	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
+	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(FVector2(850, 0));
+	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+
+	m_widget3 = NewObject<gameObject>(L"widget3");
+	m_widget3->Initialize();
+	m_widget3->transform()->SetPosition(0, 0);
+	m_widget3->AddComponent<TextRenderComponent>()->SetContent(L" <현재 씬> " + GetName());
+	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
+	m_widget3->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 10));
+	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
 	m_sun->AddChildObject(m_earth);
 	m_earth->AddChildObject(m_moon);
 
-	m_aru->AddComponent<InputComponent>()->SetAction([this]() { aruInput(); });
 	m_sun->AddComponent<InputComponent>()->SetAction([this]() { SunInput(); });
 	m_earth->AddComponent<InputComponent>()->SetAction([this]() { EarthInput(); });
 	m_moon->AddComponent<InputComponent>()->SetAction([this]() { MoonInput(); });
@@ -70,102 +87,61 @@ void DemoScene::OnExit()
 	__super::OnExit();
 }
 
-void DemoScene::aruInput()
-{
-	if (Input::IsKeyPressed(VK_5))
-	{
-		gameObject* gun = NewObject<gameObject>(L"gun");
-		gun->Initialize(FVector2(FRandom::GetRandomInRange(-512,512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		gun->AddComponent<SpriteRenderer>()->LoadData(L"gun.png");
-	}
-	if (Input::IsKeyPressed(VK_6))
-	{
-		RemoveObjectByName(L"gun");
-	}
-	if (Input::IsKeyPressed(VK_7))
-	{
-		gameObject* wallet = NewObject<gameObject>(L"wallet");
-		wallet->Initialize(FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		wallet->AddComponent<SpriteRenderer>()->LoadData(L"wallet.png");
-	}
-	if (Input::IsKeyPressed(VK_8))
-	{
-		RemoveObjectByName(L"wallet");
-	}
-	if (Input::IsKeyPressed(VK_3))
-	{
-		SceneManager::GetCamera()->SetOwner(m_aru);
-	}
-
-	if (GetAsyncKeyState(VK_T) & 0x8000)
-	{
-		m_aru->transform()->AddPosition(5.0f, 0);
-	}
-	if (GetAsyncKeyState(VK_E) & 0x8000)
-	{
-		m_aru->transform()->AddPosition(-5.0f, 0);
-	}
-	if (GetAsyncKeyState(VK_R) & 0x8000)
-	{
-		m_aru->transform()->AddPosition(0, -5.0f);
-	}
-	if (GetAsyncKeyState(VK_4) & 0x8000)
-	{
-		m_aru->transform()->AddPosition(0, 5.0f);
-	}
-}
-
 void DemoScene::SunInput()
 {
-	if (GetAsyncKeyState(VK_Z) & 0x8000)
+	if (Input::IsKeyPressed(VK_3))
+	{
+		SceneManager::ChangeScene(L"aruScene");
+	}
+	if (Input::IsKeyPressed(VK_Z))
 	{
 		m_sun->transform()->AddRotation(5.0f);
 	}
-	if (GetAsyncKeyState(VK_C) & 0x8000)
+	if (Input::IsKeyPressed(VK_C))
 	{
 		m_sun->transform()->AddRotation(-5.0f);
 	}
-	if (GetAsyncKeyState(VK_D) & 0x8000)
+	if (Input::IsKeyDown(VK_D))
 	{
 		m_sun->transform()->AddPosition(5.0f, 0);
 	}
-	if (GetAsyncKeyState(VK_A) & 0x8000)
+	if (Input::IsKeyDown(VK_A))
 	{
 		m_sun->transform()->AddPosition(-5.0f, 0);
 	}
-	if (GetAsyncKeyState(VK_W) & 0x8000)
-	{
-		m_sun->transform()->AddPosition(0, -5.0f);
-	}
-	if (GetAsyncKeyState(VK_S) & 0x8000)
+	if (Input::IsKeyDown(VK_W))
 	{
 		m_sun->transform()->AddPosition(0, 5.0f);
+	}
+	if (Input::IsKeyDown(VK_S))
+	{
+		m_sun->transform()->AddPosition(0, -5.0f);
 	}
 }
 
 void DemoScene::MoonInput()
 {
-	if (GetAsyncKeyState('9') & 0x8000)
+	if (Input::IsKeyPressed('9'))
 	{
 		m_moon->transform()->AddRotation(5.0f);
 	}
-	if (GetAsyncKeyState('0') & 0x8000)
+	if (Input::IsKeyPressed('0'))
 	{
 		m_moon->transform()->AddRotation(-5.0f);
 	}
-	if (GetAsyncKeyState(VK_O) & 0x8000)
+	if (Input::IsKeyDown(VK_O))
 	{
 		m_moon->transform()->AddPosition(0, -5.0f);
 	}
-	if (GetAsyncKeyState(VK_L) & 0x8000)
+	if (Input::IsKeyDown(VK_L))
 	{
 		m_moon->transform()->AddPosition(0, 5.0f);
 	}
-	if (GetAsyncKeyState(VK_K) & 0x8000)
+	if (Input::IsKeyDown(VK_K))
 	{
 		m_moon->transform()->AddPosition(-5.0f, 0);
 	}
-	if (GetAsyncKeyState(VK_OEM_1) & 0x8000)
+	if (Input::IsKeyDown(VK_OEM_1)) // 보통 ; 키
 	{
 		m_moon->transform()->AddPosition(5.0f, 0);
 	}
@@ -173,55 +149,56 @@ void DemoScene::MoonInput()
 
 void DemoScene::EarthInput()
 {
-	if (GetAsyncKeyState(VK_B) & 0x8000)
+	if (Input::IsKeyPressed(VK_B))
 	{
 		m_earth->transform()->AddRotation(5.0f);
 	}
-	if (GetAsyncKeyState(VK_M) & 0x8000)
+	if (Input::IsKeyPressed(VK_M))
 	{
 		m_earth->transform()->AddRotation(-5.0f);
 	}
-	if (GetAsyncKeyState(VK_J) & 0x8000)
+	if (Input::IsKeyDown(VK_J))
 	{
 		m_earth->transform()->AddPosition(5.0f, 0);
 	}
-	if (GetAsyncKeyState(VK_G) & 0x8000)
+	if (Input::IsKeyDown(VK_G))
 	{
 		m_earth->transform()->AddPosition(-5.0f, 0);
 	}
-	if (GetAsyncKeyState(VK_Y) & 0x8000)
+	if (Input::IsKeyDown(VK_Y))
 	{
 		m_earth->transform()->AddPosition(0, 5.0f);
 	}
-	if (GetAsyncKeyState(VK_H) & 0x8000)
+	if (Input::IsKeyDown(VK_H))
 	{
 		m_earth->transform()->AddPosition(0, -5.0f);
 	}
 }
 
+
 void DemoScene::CameraInput()
 {
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	if (Input::IsKeyDown(VK_RIGHT))
 	{
 		SceneManager::GetCamera()->AddPosition(5.0f, 0);
 	}
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	if (Input::IsKeyDown(VK_LEFT))
 	{
 		SceneManager::GetCamera()->AddPosition(-5.0f, 0);
 	}
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	if (Input::IsKeyDown(VK_UP))
 	{
 		SceneManager::GetCamera()->AddPosition(0, 5.0f);
 	}
-	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	if (Input::IsKeyDown(VK_DOWN))
 	{
 		SceneManager::GetCamera()->AddPosition(0, -5.0f);
 	}
-	if (GetAsyncKeyState(VK_1) & 0x8000)
+	if (Input::IsKeyPressed(VK_1))
 	{
 		D2DRenderManager::Get().SwitchTransformType(ETransformType::D2D);
 	}
-	if (GetAsyncKeyState(VK_2) & 0x8000)
+	if (Input::IsKeyPressed(VK_2))
 	{
 		D2DRenderManager::Get().SwitchTransformType(ETransformType::Unity);
 	}

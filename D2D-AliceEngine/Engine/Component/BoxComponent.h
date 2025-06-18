@@ -22,7 +22,6 @@ public:
 	FColor GetColor() { return m_color; }
 
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
-	ComPtr<ID2D1Bitmap1> m_bitmap; // BitmapImage ÄÄÆ÷³ÍÆ®
 	FColor m_color = FColor::Black;
 	FVector2 m_size;
 };

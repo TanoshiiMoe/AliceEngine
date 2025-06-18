@@ -19,6 +19,34 @@ namespace Define
 
 	static const std::wstring BASE_RESOURCE_PATH = L"../Resource/";
 	static const float PI = 3.14159265f;
+
+	enum class ETextFormat
+	{
+		TopLeft,
+		TopCenter,
+		TopRight,
+		MiddleLeft,
+		MiddleCenter,
+		MiddleRight,
+		BottomLeft,
+		BottomCenter,
+		BottomRight,
+		Max
+	};
+	enum class ETransformType
+	{
+		D2D,
+		Unity,
+		Max
+	};
+	enum class ERenderLayer
+	{
+		SpriteComponent,
+		BoxComponent,
+		TextRenderComponent,
+		Max
+	};
+
 };
 
 #define VK_A 0x41  // 'A'

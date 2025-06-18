@@ -27,7 +27,11 @@ void Scene::Initialize()
 
 void Scene::Release()
 {
-
+	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+	{
+		it->second.reset();
+	}
+	m_objects.clear();
 }
 
 void Scene::Update()

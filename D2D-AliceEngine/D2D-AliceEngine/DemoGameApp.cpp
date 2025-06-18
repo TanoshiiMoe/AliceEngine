@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "DemoGameApp.h"
 #include "Scene/DemoScene.h"
+#include "Scene/DemoScene2.h"
 
 DemoGameApp::DemoGameApp()
 {
@@ -17,6 +18,7 @@ void DemoGameApp::Initialize()
 {
 	__super::Initialize();
 
+	SceneManager::AddScene<DemoScene2>(L"aruScene");
 	DemoScene* SolarSystemScene = SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
 	SceneManager::ChangeScene(L"SolarSystemScene");
 }

@@ -21,6 +21,11 @@ public:
 		m_transform->SetPosition(_x, _y);
 	}
 
+	inline FVector2 GetPosition()
+	{
+		return FVector2(m_transform->GetPosition().x, m_transform->GetPosition().y);
+	}
+
 	inline void SetRotation(const float& _val)
 	{
 		m_transform->SetRotation(_val);
@@ -39,6 +44,10 @@ public:
 	inline void SetOwner(gameObject* obj)
 	{
 		owner = obj;
+	}
+	inline void ClearOwner()
+	{
+		owner = nullptr;
 	}
 	gameObject* owner = nullptr;
 	std::shared_ptr<Transform> m_transform;

@@ -2,15 +2,11 @@
 
 #include "pch.h"
 #include "Component/RenderComponent.h"
+#include "Component/TextRenderComponent.h"
+#include "Component/BoxComponent.h"
 #include "Object/gameObject.h"
 
-enum class ETransformType
-{
-	D2D,
-	Unity,
-	Max
-};
-
+using namespace Define;
 class D2DRenderManager : public Singleton<D2DRenderManager>
 {
 public:
@@ -18,12 +14,27 @@ public:
 	~D2DRenderManager();
 
 	// 렌더링 대기열
-	std::vector<std::weak_ptr<RenderComponent>> m_spriteRenderers;
-	std::vector<std::weak_ptr<RenderComponent>> m_boxComponentRenders;
+	std::vector<std::vector<std::weak_ptr<RenderComponent>>> m_renderers;
 
 	inline void AddRenderer(std::weak_ptr<RenderComponent> renderer)
 	{
-		m_spriteRenderers.push_back(renderer);
+		if (!renderer.expired())
+		{
+			auto sharedRenderer = renderer.lock();
+
+			if (std::dynamic_pointer_cast<SpriteRenderer>(sharedRenderer))
+			{
+				m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
+			}
+			else if (std::dynamic_pointer_cast<BoxComponent>(sharedRenderer))
+			{
+				m_renderers[static_cast<int>(ERenderLayer::BoxComponent)].push_back(renderer);
+			}
+			else if (std::dynamic_pointer_cast<TextRenderComponent>(sharedRenderer))
+			{
+				m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
+			}
+		}
 	}
 
 	inline static ID2D1DeviceContext7* GetD2DDevice()
@@ -37,9 +48,6 @@ public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
 	void Render();
-
-	void DrawBoxComponent();		// Widget으로 빼야하는 기능
-	void DrawSpriteRenderer();	// m_containerRenders를 모두 그리기
 
 	void GetApplicationSize(int& width, int& height);
 

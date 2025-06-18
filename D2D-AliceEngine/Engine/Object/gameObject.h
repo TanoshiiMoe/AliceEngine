@@ -41,6 +41,7 @@ public:
 		{
 			comp.lock()->OnEnd();
 		}
+		m_Components.clear();
 	}
 
 	/*

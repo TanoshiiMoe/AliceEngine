@@ -63,23 +63,29 @@ public:
 		return std::weak_ptr<Scene>();
 	}
 
-	static void ChangeScene(const std::wstring& NewobjectName)
+	void PerformSceneChange(const std::wstring& NewobjectName)
 	{
 		std::weak_ptr<Scene> searchedScene = GetUUIDFromObjectName(NewobjectName);
 
 		if (searchedScene.lock())
 		{
-			if (Get().m_currentScene.lock())	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
+			if (m_currentScene.lock())	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
 			{
-				Get().m_currentScene.lock()->OnExit();
-				Get().m_currentScene.lock()->Release();
+				m_currentScene.lock()->OnExit();
+				m_currentScene.lock()->Release();
 			}
 			searchedScene.lock()->Initialize();
 			searchedScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
-			Get().m_currentScene = searchedScene;
+			m_currentScene = searchedScene;
 		}
+	}
+
+	static void ChangeScene(const std::wstring& NewobjectName)
+	{
+		Get().m_nextSceneName = NewobjectName;
 	}
 
 private:
 	std::unordered_map<std::wstring, std::shared_ptr<Scene>> m_scenes;
+	std::wstring m_nextSceneName;
 };

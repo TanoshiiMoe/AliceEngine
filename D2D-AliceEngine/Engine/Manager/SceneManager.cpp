@@ -22,8 +22,14 @@ void SceneManager::UnInitialize()
 
 void SceneManager::Update()
 {
-	if(m_currentScene.lock())
-	{
-		m_currentScene.lock()->Update();
-	}
+    if (!m_nextSceneName.empty())
+    {
+        PerformSceneChange(m_nextSceneName);
+        m_nextSceneName.clear();
+    }
+
+    if (auto scene = m_currentScene.lock())
+        scene->Update();
+
+    GetCamera()->Update();
 }

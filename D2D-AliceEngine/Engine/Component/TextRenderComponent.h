@@ -5,6 +5,8 @@
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 #include <Math/Transform.h>
+
+using namespace Define;
 class TextRenderComponent : public RenderComponent
 {
 public:
@@ -23,12 +25,16 @@ public:
 
 	void InitializeFormat();
 	void InitializeColor();
+	void SetTextAlignment(ETextFormat format);
 	void SetContent(const std::wstring& content);
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
 	void SetPosition(const FVector2& pos);
+	void SetScale(const FVector2& scale);
+	void SetTransformType(const ETransformType& type);
 
 public:
+	ETransformType m_eTransformType = ETransformType::D2D;
 	Transform m_transform;
 	std::wstring m_content = L"";
 	FColor m_color = FColor::Black;

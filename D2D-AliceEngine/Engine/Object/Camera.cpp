@@ -12,7 +12,11 @@ void Camera::Update()
 {
 	if (owner)
 	{
-		SetPosition(owner->transform()->m_localTransform->GetPosition().x, owner->transform()->m_localTransform->GetPosition().y);
+		SetPosition(
+			owner->transform()->m_localTransform->GetPosition().x,
+			owner->transform()->m_localTransform->GetPosition().y
+		)
+;
 	}
 }
 

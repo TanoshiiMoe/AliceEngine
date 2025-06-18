@@ -5,10 +5,12 @@
 
 D2DRenderManager::D2DRenderManager()
 {
+	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<std::weak_ptr<RenderComponent>>());
 }
 
 D2DRenderManager::~D2DRenderManager()
 {
+	m_renderers.clear();
 }
 
 void D2DRenderManager::Initialize(HWND hwnd)
@@ -127,31 +129,6 @@ void D2DRenderManager::UnInitialize()
 
 void D2DRenderManager::Render()
 {
-	DrawSpriteRenderer();
-	DrawBoxComponent();
-
-	m_dxgiSwapChain->Present(1, 0);
-}
-
-void D2DRenderManager::DrawBoxComponent()
-{
-	m_d2dDeviceContext->BeginDraw();
-	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity()); // 변환 초기화
-
-	for (auto it = m_boxComponentRenders.begin(); it != m_boxComponentRenders.end(); ++it)
-	{
-		std::weak_ptr<RenderComponent> obj = *it;
-		if (obj.lock())
-		{
-			obj.lock()->Render();
-		}
-	}
-
-	m_d2dDeviceContext->EndDraw();
-}
-
-void D2DRenderManager::DrawSpriteRenderer()
-{
 	m_d2dDeviceContext->BeginDraw();
 	m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
 
@@ -162,20 +139,27 @@ void D2DRenderManager::DrawSpriteRenderer()
 	}
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
-	
-	for (auto it = m_spriteRenderers.begin(); it != m_spriteRenderers.end(); ++it)
+
+	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+
+	for (auto& pair : m_renderers)
 	{
-		std::weak_ptr<RenderComponent> obj = *it;
-		if (obj.lock())
+		const std::vector<std::weak_ptr<RenderComponent>>& renderList = pair;
+		for (const auto& obj : renderList)
 		{
-			obj.lock()->Render();
+			if (auto locked = obj.lock())
+			{
+				locked->Render();
+			}
 		}
 	}
+
 	HRESULT hr = m_d2dDeviceContext->EndDraw();
 	if (FAILED(hr)) {
 		OutputError(hr);
 	}
-	m_d2dDeviceContext->EndDraw();
+
+	m_dxgiSwapChain->Present(1, 0);
 }
 
 void D2DRenderManager::GetApplicationSize(int& width, int& height)

@@ -1,10 +1,12 @@
 #pragma once
+
+#pragma once
 #include <Scene/Scene.h>
-class DemoScene : public Scene
+class DemoScene2 : public Scene
 {
 public:
-	DemoScene() {}
-	~DemoScene() {}
+	DemoScene2() {}
+	~DemoScene2() {}
 
 	void Initialize() override;
 	void Release() override;
@@ -13,14 +15,11 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
-	void SunInput();
-	void MoonInput();
-	void EarthInput();
+	void aruInput();
 	void CameraInput();
 
-	gameObject* m_sun;
-	gameObject* m_earth;
-	gameObject* m_moon;
+	gameObject* m_aru;
+	gameObject* m_tree;
 	gameObject* m_widget;
 	gameObject* m_widget2;
 	gameObject* m_widget3;
