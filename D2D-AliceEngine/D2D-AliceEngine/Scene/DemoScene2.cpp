@@ -28,6 +28,11 @@ void DemoScene2::OnEnter()
 {
 	__super::OnEnter();
 
+	m_yuuka = NewObject<gameObject>(L"yuuka");
+	m_yuuka->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
+	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\YuukaBottle.mp4", 24);
+	m_yuuka->GetComponent<AnimationComponent>()->Play();
+
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget->Initialize();
 	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [Q] : 카메라를 아루에게 붙이기 \n [E] : 카메라를 떼기 \n * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n\n <아루> \n [5,6] : 무기 스폰, 무기 파괴 \n [7,8] : 지갑 스폰, 지갑 파괴 \n [W,A,S,D] : 이동 \n [4] : 아루 이름 한영 전환");
@@ -53,7 +58,7 @@ void DemoScene2::OnEnter()
 
 	m_tree = NewObject<gameObject>(L"tree");
 	m_tree->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
-	m_tree->AddComponent<SpriteRenderer>()->LoadData(L"tree.jpg");
+	//m_tree->AddComponent<SpriteRenderer>()->LoadData(L"tree.jpg");
 
 	m_aru = NewObject<gameObject>(L"aru");
 	m_aru->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));

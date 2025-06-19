@@ -5,6 +5,7 @@
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
 #include <Core/Input.h>
+#include <Component/AnimationComponent.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 weak_ptr를 반환합니다.
@@ -31,6 +32,11 @@ void DemoScene::Update()
 void DemoScene::OnEnter()
 {
 	__super::OnEnter();
+
+	m_yuuka = NewObject<gameObject>(L"yuuka");
+	m_yuuka->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
+	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka.mp4", 24);
+	m_yuuka->GetComponent<AnimationComponent>()->Play();
 
 	m_sun = NewObject<gameObject>(L"Sun");
 	m_sun->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
@@ -114,11 +120,11 @@ void DemoScene::SunInput()
 		else
 			m_sun->GetComponent<TextRenderComponent>()->SetText(L"Sun");
 	}
-	if (Input::IsKeyPressed(VK_Z))
+	if (Input::IsKeyDown(VK_Z))
 	{
 		m_sun->transform()->AddRotation(5.0f);
 	}
-	if (Input::IsKeyPressed(VK_C))
+	if (Input::IsKeyDown(VK_C))
 	{
 		m_sun->transform()->AddRotation(-5.0f);
 	}
@@ -142,11 +148,11 @@ void DemoScene::SunInput()
 
 void DemoScene::MoonInput()
 {
-	if (Input::IsKeyPressed('9'))
+	if (Input::IsKeyDown('9'))
 	{
 		m_moon->transform()->AddRotation(5.0f);
 	}
-	if (Input::IsKeyPressed('0'))
+	if (Input::IsKeyDown('0'))
 	{
 		m_moon->transform()->AddRotation(-5.0f);
 	}
@@ -170,11 +176,11 @@ void DemoScene::MoonInput()
 
 void DemoScene::EarthInput()
 {
-	if (Input::IsKeyPressed(VK_B))
+	if (Input::IsKeyDown(VK_B))
 	{
 		m_earth->transform()->AddRotation(5.0f);
 	}
-	if (Input::IsKeyPressed(VK_M))
+	if (Input::IsKeyDown(VK_M))
 	{
 		m_earth->transform()->AddRotation(-5.0f);
 	}

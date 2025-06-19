@@ -41,6 +41,7 @@ namespace Define
 	};
 	enum class ERenderLayer
 	{
+		AnimationComponent,
 		SpriteComponent,
 		BoxComponent,
 		TextRenderComponent,

@@ -18,6 +18,8 @@ public:
 	void EarthInput();
 	void CameraInput();
 
+	gameObject* m_yuuka;
+
 	gameObject* m_sun;
 	gameObject* m_earth;
 	gameObject* m_moon;

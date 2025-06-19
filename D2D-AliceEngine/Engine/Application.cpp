@@ -100,7 +100,7 @@ void Application::Initialize()
 
 	CoInitialize(nullptr);
 
-	m_pD2DRenderManager->Initialize(m_hwnd);
+	D2DRenderManager::Get().Initialize(m_hwnd);
 
 	Input::Initialize(m_hwnd);
 	Time::Initialize();
@@ -114,6 +114,7 @@ void Application::Run()
 void Application::Update()
 {
 	SceneManager::Get().Update();
+	D2DRenderManager::Get().Update();
 	Time::UpdateTime();
 	Input::Update();
 }
@@ -125,7 +126,7 @@ void Application::Input()
 
 void Application::Render()
 {
-	m_pD2DRenderManager->Render();
+	D2DRenderManager::Get().Render();
 }
 
 void Application::Uninitialize()

@@ -141,11 +141,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\AnimationComponent.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Component\BoxComponent.h" />
     <ClInclude Include="Component\TextRenderComponent.h" />
     <ClInclude Include="Component\SpriteRenderer.h" />
     <ClInclude Include="Core\Input.h" />
+    <ClInclude Include="Helpers\FFmpegHelper.h" />
     <ClInclude Include="Object\Camera.h" />
     <ClInclude Include="Component\RenderComponent.h" />
     <ClInclude Include="Component\ScriptComponent.h" />
@@ -173,11 +175,13 @@
     <ClInclude Include="Core\Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\AnimationComponent.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Component\BoxComponent.cpp" />
     <ClCompile Include="Component\TextRenderComponent.cpp" />
     <ClCompile Include="Component\SpriteRenderer.cpp" />
     <ClCompile Include="Core\Input.cpp" />
+    <ClCompile Include="Helpers\FFmpegHelper.cpp" />
     <ClCompile Include="Object\Camera.cpp" />
     <ClCompile Include="Component\RenderComponent.cpp" />
     <ClCompile Include="Component\ScriptComponent.cpp" />

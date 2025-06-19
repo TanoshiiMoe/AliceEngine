@@ -23,4 +23,5 @@ void Camera::Update()
 void Camera::Release()
 {
 	m_transform = nullptr;
+	ClearOwner();
 }

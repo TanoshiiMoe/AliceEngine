@@ -5,6 +5,7 @@
 #include "Component/TextRenderComponent.h"
 #include "Component/BoxComponent.h"
 #include "Object/gameObject.h"
+#include <Component/AnimationComponent.h>
 
 using namespace Define;
 class D2DRenderManager : public Singleton<D2DRenderManager>
@@ -25,6 +26,10 @@ public:
 			if (std::dynamic_pointer_cast<SpriteRenderer>(sharedRenderer))
 			{
 				m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
+			}
+			else if (std::dynamic_pointer_cast<AnimationComponent>(sharedRenderer))
+			{
+				m_renderers[static_cast<int>(ERenderLayer::AnimationComponent)].push_back(renderer);
 			}
 			else if (std::dynamic_pointer_cast<BoxComponent>(sharedRenderer))
 			{
@@ -47,6 +52,7 @@ private:
 public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
+	void Update();
 	void Render();
 
 	void GetApplicationSize(int& width, int& height);

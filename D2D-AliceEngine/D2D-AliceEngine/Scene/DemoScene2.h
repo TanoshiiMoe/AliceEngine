@@ -18,6 +18,8 @@ public:
 	void aruInput();
 	void CameraInput();
 
+	gameObject* m_yuuka;
+
 	gameObject* m_aru;
 	gameObject* m_tree;
 	gameObject* m_widget;
