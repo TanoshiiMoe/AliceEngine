@@ -58,7 +58,7 @@ void DemoScene2::OnEnter()
 
 	m_tree = NewObject<gameObject>(L"tree");
 	m_tree->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
-	//m_tree->AddComponent<SpriteRenderer>()->LoadData(L"tree.jpg");
+	//m_tree->AddComponent<SpriteRenderer>()->LoadData(L"BackGround/BG_CS_Arona_04.png");
 
 	m_aru = NewObject<gameObject>(L"aru");
 	m_aru->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));

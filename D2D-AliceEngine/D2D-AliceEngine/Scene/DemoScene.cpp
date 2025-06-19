@@ -35,7 +35,7 @@ void DemoScene::OnEnter()
 
 	m_yuuka = NewObject<gameObject>(L"yuuka");
 	m_yuuka->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
-	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka.mp4", 24);
+	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka2.mp4", 24);
 	m_yuuka->GetComponent<AnimationComponent>()->Play();
 
 	m_sun = NewObject<gameObject>(L"Sun");
