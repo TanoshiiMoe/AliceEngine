@@ -107,7 +107,7 @@ public:
 	{
 		for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
 		{
-			if (*it == targetComponent)
+			if ((*it).get() == targetComponent)
 			{
 				(*it)->OnDestroy();
 				m_Components.erase(it);

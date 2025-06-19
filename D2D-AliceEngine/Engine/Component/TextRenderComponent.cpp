@@ -206,7 +206,7 @@ void TextRenderComponent::SetColor(const FColor& color)
 
 void TextRenderComponent::SetFontSize(const float& _size)
 {
-	m_font = _size;
+	m_fontSize = _size;
 	InitializeFormat();
 }
 

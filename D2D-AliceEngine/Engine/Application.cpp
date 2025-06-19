@@ -10,7 +10,8 @@ Application::Application()
 {
 	m_hwnd = nullptr;
 	m_hInstance = nullptr;
-	FileHelper::CopyResourceToBuildPath();
+	FileHelper::CopyFilesToBuildPath(L"Resource");
+	//FileHelper::CopyFilesToBuildPath(L"Extension");
 }
 
 Application::~Application()

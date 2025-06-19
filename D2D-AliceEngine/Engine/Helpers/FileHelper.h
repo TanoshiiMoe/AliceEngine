@@ -150,10 +150,10 @@ public:
 		return true;
 	}
 
-	static void CopyResourceToBuildPath()
+	static void CopyFilesToBuildPath(const std::wstring& _str)
 	{
-		std::wstring sourcePath = ToAbsolutePath(L"") + L"..\\..\\Resource";
-		std::wstring targetPath = ToAbsolutePath(L"") + L"\\Resource";
+		std::wstring sourcePath = ToAbsolutePath(L"") + L"..\\..\\" + _str;
+		std::wstring targetPath = ToAbsolutePath(L"") + L"\\" + _str;
 
 		CreateDirectoryIfNotExists(targetPath);
 

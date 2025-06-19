@@ -35,8 +35,9 @@ void DemoScene::OnEnter()
 
 	m_yuuka = NewObject<gameObject>(L"yuuka");
 	m_yuuka->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
-	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka2.mp4", 24);
+	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka2.mp4", 60);
 	m_yuuka->GetComponent<AnimationComponent>()->Play();
+
 
 	m_sun = NewObject<gameObject>(L"Sun");
 	m_sun->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
@@ -70,7 +71,7 @@ void DemoScene::OnEnter()
 
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget->Initialize();
-	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [4] : 태양 이름 한영 전환 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동 \n\n");
+	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [4] : 태양 이름 한영 전환 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동 \n\n <애니메이션> \n [5,6] : 아스나, 유우카 전환");
 	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 150));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
@@ -119,6 +120,20 @@ void DemoScene::SunInput()
 			m_sun->GetComponent<TextRenderComponent>()->SetText(L"태양");
 		else
 			m_sun->GetComponent<TextRenderComponent>()->SetText(L"Sun");
+	}
+	if (Input::IsKeyPressed(VK_5))
+	{
+		m_yuuka->GetComponent<AnimationComponent>()->Stop();
+		m_yuuka->RemoveComponent<AnimationComponent>(m_yuuka->GetComponent<AnimationComponent>());
+		m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\asna.mp4", 60);
+		m_yuuka->GetComponent<AnimationComponent>()->Play();
+	}
+	if (Input::IsKeyPressed(VK_6))
+	{
+		m_yuuka->GetComponent<AnimationComponent>()->Stop();
+		m_yuuka->RemoveComponent<AnimationComponent>(m_yuuka->GetComponent<AnimationComponent>());
+		m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka2.mp4", 60);
+		m_yuuka->GetComponent<AnimationComponent>()->Play();
 	}
 	if (Input::IsKeyDown(VK_Z))
 	{

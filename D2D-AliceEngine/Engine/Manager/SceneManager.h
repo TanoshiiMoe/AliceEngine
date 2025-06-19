@@ -33,6 +33,7 @@ public:
 		{
 			return Get().m_currentScene.lock()->GetCamera();
 		}
+		return nullptr;
 	}
 	template<class T>
 	static T* AddScene(const std::wstring& NewobjectName)

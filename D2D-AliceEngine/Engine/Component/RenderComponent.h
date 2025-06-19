@@ -7,7 +7,7 @@
 class RenderComponent : public Component
 {
 public:
-	RenderComponent() {}
+	RenderComponent() { m_pTransform = nullptr; m_pivot = nullptr; }
 	~RenderComponent() { RenderSystem::Get().UnRegist(this->weak_from_this()); }
 public:
 	void Initialize() override;

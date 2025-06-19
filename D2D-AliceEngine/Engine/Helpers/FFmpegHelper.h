@@ -44,11 +44,13 @@ public:
 			}
 		}
 
-		std::wstring command = L"ffmpeg -y -i \"" + inputPath + L"\" -vf fps=" + std::to_wstring(fps) +
+		std::wstring ffmpegPath = Define::BASE_EXTENSION_PATH + L"FFmpeg\\ffmpeg.exe";
+		std::wstring command = ffmpegPath + L" -y -i \"" + inputPath + L"\" -vf fps=" + std::to_wstring(fps) +
 			L" \"" + outputDir + L"\\" + prefixBuffer + L"_%04d.png\"";
 
 		STARTUPINFOW si = { sizeof(si) };
 		PROCESS_INFORMATION pi;
+
 
 		// ffmpeg ½ÇÇà
 		if (!CreateProcessW(nullptr, &command[0], nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi)) 

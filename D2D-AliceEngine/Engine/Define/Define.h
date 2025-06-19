@@ -18,6 +18,7 @@ namespace Define
 	static const bool ENABLE_DEBUG_MODE = true; // 디버그 모드 활성화 여부
 
 	static const std::wstring BASE_RESOURCE_PATH = L"../Resource/";
+	static const std::wstring BASE_EXTENSION_PATH = L"../Extension/";
 	static const float PI = 3.14159265f;
 
 	enum class ETextFormat
