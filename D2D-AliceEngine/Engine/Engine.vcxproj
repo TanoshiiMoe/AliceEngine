@@ -147,6 +147,7 @@
     <ClInclude Include="Component\TextRenderComponent.h" />
     <ClInclude Include="Component\SpriteRenderer.h" />
     <ClInclude Include="Core\Input.h" />
+    <ClInclude Include="Helpers\FileHelper.h" />
     <ClInclude Include="Helpers\FFmpegHelper.h" />
     <ClInclude Include="Object\Camera.h" />
     <ClInclude Include="Component\RenderComponent.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="Component\TextRenderComponent.cpp" />
     <ClCompile Include="Component\SpriteRenderer.cpp" />
     <ClCompile Include="Core\Input.cpp" />
+    <ClCompile Include="Helpers\FileHelper.cpp" />
     <ClCompile Include="Helpers\FFmpegHelper.cpp" />
     <ClCompile Include="Object\Camera.cpp" />
     <ClCompile Include="Component\RenderComponent.cpp" />

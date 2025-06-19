@@ -4,11 +4,13 @@
 #include "Manager/D2DRenderManager.h"
 #include <Core/Input.h>
 #include <Core/Time.h>
+#include <Helpers/FileHelper.h>
 
 Application::Application()
 {
 	m_hwnd = nullptr;
 	m_hInstance = nullptr;
+	FileHelper::CopyResourceToBuildPath();
 }
 
 Application::~Application()
