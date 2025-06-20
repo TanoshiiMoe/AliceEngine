@@ -7,6 +7,7 @@
 #include <Helpers/FFmpegHelper.h>
 #include <Core/Time.h>
 
+
 void AnimationComponent::Initialize()
 {
 	__super::Initialize();
