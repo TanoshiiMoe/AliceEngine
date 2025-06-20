@@ -54,7 +54,7 @@
     <ClInclude Include="Scene\Scene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Object.h">
+    <ClInclude Include="Object\UObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Helpers\StringHelper.h">
@@ -114,6 +114,9 @@
     <ClInclude Include="Helpers\FileHelper.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Manager\UpdateTaskManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -155,7 +158,7 @@
     <ClCompile Include="Scene\Scene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Object.cpp">
+    <ClCompile Include="Object\UObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Helpers\StringHelper.cpp">
@@ -213,6 +216,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Helpers\FileHelper.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\UpdateTaskManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,5 @@
 #pragma once
-class Object
+class UObject
 {
 public:
 	virtual void Initialize() = 0;

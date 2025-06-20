@@ -1,10 +1,10 @@
 #pragma once
 #include "pch.h"
 #include "Object/gameObject.h"
-#include "Object/Object.h"
+#include "Object/UObject.h"
 #include <Object/Camera.h>
 
-class Scene : public Object
+class Scene : public UObject
 {
 public:
 	Scene();

@@ -49,6 +49,28 @@ namespace Define
 		Max
 	};
 
+	// Unreal ↔ Unity 주요 Tick/Update 비교
+	// TG_PrePhysics       : EarlyUpdate         // (AI/입력, Unity의 EarlyUpdate)
+	// TG_StartPhysics     : FixedUpdate 시작 전 // (Unity에 직접 대응 없음, 보통 FixedUpdate 준비)
+	// TG_DuringPhysics    : FixedUpdate         // (물리 연산, Unity의 FixedUpdate)
+	// TG_EndPhysics       : FixedUpdate 종료 후 // (Unity에 직접 대응 없음, 보통 FixedUpdate 후처리)
+	// TG_PostPhysics      : Update/LateUpdate   // (게임로직, Unity의 Update/LateUpdate)
+	// TG_PostUpdateWork   : PreRender/Render    // (카메라, 렌더링, Unity의 PreRender/Render)
+	// TG_LastDemotable    : (특수 상황용, 언리얼만의 단계)
+	// TG_NewlySpawned     : (새 객체 처리용, 언리얼만의 단계)
+	enum class ETickingGroup
+	{
+		TG_PrePhysics,       // Unity: EarlyUpdate (AI/입력)
+		TG_StartPhysics,     // Unity: FixedUpdate 직전
+		TG_DuringPhysics,    // Unity: FixedUpdate (물리 연산)
+		TG_EndPhysics,       // Unity: FixedUpdate 직후
+		TG_PostPhysics,      // Unity: Update/LateUpdate (게임로직)
+		TG_PostUpdateWork,   // Unity: PreRender/Render (카메라, 렌더링)
+		TG_LastDemotable,
+		TG_NewlySpawned,
+		TG_MAX,
+	};
+
 };
 
 #define VK_A 0x41  // 'A'

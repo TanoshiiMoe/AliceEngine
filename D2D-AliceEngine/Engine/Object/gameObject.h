@@ -3,7 +3,7 @@
 #include <Math/Transform.h>
 #include <Component/SpriteRenderer.h>
 #include <System/RenderSystem.h>
-#include <Object/Object.h>
+#include <Object/UObject.h>
 #include <Component/TransformComponent.h>
 
 /*
@@ -12,7 +12,7 @@
 */
 
 class D2DRenderManager;
-class gameObject : public Object, public std::enable_shared_from_this<gameObject>
+class gameObject : public UObject, public std::enable_shared_from_this<gameObject>
 {
 public:
 	gameObject(){}

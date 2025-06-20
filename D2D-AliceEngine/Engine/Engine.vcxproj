@@ -159,7 +159,7 @@
     <ClInclude Include="Manager\D2DRenderManager.h" />
     <ClInclude Include="Define\Define.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Object\Object.h" />
+    <ClInclude Include="Object\UObject.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="System\SystemBase.h" />
     <ClInclude Include="Scene\Scene.h" />
@@ -174,6 +174,7 @@
     <ClInclude Include="System\TransformSystem.h" />
     <ClInclude Include="Math\TColor.h" />
     <ClInclude Include="Core\Time.h" />
+    <ClInclude Include="Manager\UpdateTaskManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\AnimationComponent.cpp" />
@@ -194,7 +195,7 @@
     <ClCompile Include="Manager\D2DRenderManager.cpp" />
     <ClCompile Include="Define\Define.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Object\Object.cpp" />
+    <ClCompile Include="Object\UObject.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="System\SystemBase.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
@@ -214,6 +215,7 @@
     <ClCompile Include="System\TransformSystem.cpp" />
     <ClCompile Include="Math\TColor.cpp" />
     <ClCompile Include="Core\Time.cpp" />
+    <ClCompile Include="Manager\UpdateTaskManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
