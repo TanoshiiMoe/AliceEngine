@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "AnimationComponent.h"
-#include "pch.h"
 #include "SpriteRenderer.h"
 #include "Manager/D2DRenderManager.h"
 #include "Application.h"
