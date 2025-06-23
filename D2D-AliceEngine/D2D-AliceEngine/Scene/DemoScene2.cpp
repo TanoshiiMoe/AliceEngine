@@ -40,7 +40,7 @@ void DemoScene2::OnEnter()
 	m_yuuka->GetComponent<AnimationComponent>()->Play();
 
 	m_widget = NewObject<gameObject>(L"widget");
-	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [Q] : 카메라를 아루에게 붙이기 \n [E] : 카메라를 떼기 \n * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n\n <아루> \n [5,6] : 무기 스폰, 무기 파괴 \n [7,8] : 지갑 스폰, 지갑 파괴 \n [W,A,S,D] : 이동 \n [4] : 아루 이름 한영 전환 \n [T] 아루 데미지 5 주기");
+	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [Q] : 카메라를 아루에게 붙이기 \n [E] : 카메라를 떼기 \n * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n\n <아루> \n [5,6] : 무기 스폰, 무기 파괴 \n [7,8] : 지갑 스폰, 지갑 파괴 \n [W,A,S,D] : 이동 \n [4] : 아루 이름 한영 전환 \n\n ::Delegate \n [T] 아루 데미지 5 주기 \n [Y] : 아루 5 회복하기 \n [U] : 아루 최대체력 10 늘리기");
 	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 150));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
@@ -72,7 +72,7 @@ void DemoScene2::OnEnter()
 	m_aru->transform()->SetScale(0.5f, 0.5f);
 	m_aru->transform()->SetPivot(0.5f);
 	m_aru->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
-	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
+	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
 
 	/*
 	* 게임오브젝트에 TextRenderComponent를 붙이는 예시
@@ -98,24 +98,45 @@ void DemoScene2::OnEnter()
 	m_aruStatText2->SetScale(FVector2(3, 3));
 	m_aruStatText2->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.3f));
 
+	m_aruStatText3 = m_aru->AddComponent<TextRenderComponent>();
+	m_aruStatText3->SetText(L"test");
+	m_aruStatText3->SetTransformType(ETransformType::Unity);
+	m_aruStatText3->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_aruStatText3->SetScale(FVector2(3, 3));
+	m_aruStatText3->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.4f));
+
 	/*
 	* 커스텀 구조체로 델리게이트를 바인딩 하는 예제
 	*/
 	m_aruStat = m_aru->AddComponent<StatComponent<MyStat>>();
 	m_aruStat->SetStat("HP", 30);
-	m_aruStatText->SetTextFormat( L"prev HP : ", m_aruStat->GetStat("HP"));
-	m_aruStatText2->SetTextFormat(L"cur HP : ", m_aruStat->GetStat("HP"));
+	m_aruStat->SetStat("MAXHP", 30);
+	m_aruStatText->SetTextFormat( L"직전 체력 : ", m_aruStat->GetStat("HP"));
+	m_aruStatText2->SetTextFormat(L"현재 체력 : ", m_aruStat->GetStat("HP"));
+	m_aruStatText3->SetTextFormat(L"최대 체력 : ", m_aruStat->GetStat("MAXHP"));
 
-	m_aruStat->OnChangeStat.Add(nullptr, [this](const std::string& name, float oldVal, float newVal) 
+	m_aruStat->OnChangeStatMap["HP"].Add(nullptr, [this](float oldVal, float newVal)
 	{
-		if (newVal <= 0)
+		if (newVal <= 0)	// 죽는 시점
 		{
 			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
 			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"dead.png");
 			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
 		}
-		m_aruStatText->SetTextFormat(L"prev HP : ", oldVal);
-		m_aruStatText2->SetTextFormat(L"cur HP : ", newVal);
+		else if (oldVal <= 0)	// 부활하는 시점
+		{
+			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
+			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
+			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
+		}
+
+		m_aruStatText->SetTextFormat(L"직전 체력 : ", oldVal);
+		m_aruStatText2->SetTextFormat(L"현재 체력 : ", newVal);
+	});;
+
+	m_aruStat->OnChangeStatMap["MAXHP"].Add(nullptr, [this](float oldVal, float newVal)
+	{
+		m_aruStatText3->SetTextFormat(L"최대 체력 : ", newVal);
 	});;
 
 	/*
@@ -138,6 +159,14 @@ void DemoScene2::aruInput()
 	if (Input::IsKeyPressed(VK_T))
 	{
 		m_aruStat->TakeDamage("HP", 5);
+	}
+	if (Input::IsKeyPressed(VK_Y))
+	{
+		m_aruStat->Heal("MAXHP", "HP", 5);
+	}
+	if (Input::IsKeyPressed(VK_U))
+	{
+		m_aruStat->SetStat("MAXHP", m_aruStat->GetStat("MAXHP")+10);
 	}
 	if (Input::IsKeyPressed(VK_4))
 	{

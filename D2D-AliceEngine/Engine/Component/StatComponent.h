@@ -25,13 +25,14 @@ m_Stat = m_obj->AddComponent<StatComponent<MyStat>>();
 
 struct DefaultStat {
 	float HP = 100.f;
+	float MAXHP = 100.f;
 	float MP = 50.f;
 	float STR = 10.f;
 	float DEX = 20.f;
 	float INT = 30.f;
 };
 
-DEFINE_STAT_TRAITS_5(DefaultStat, HP, MP, STR, DEX, INT)
+DEFINE_STAT_TRAITS_6(DefaultStat, MAXHP, HP, MP, STR, DEX, INT)
 
 template<typename T = DefaultStat>
 class StatComponent : public Component
@@ -41,6 +42,7 @@ public:
 	T prevValue;
 
 	MultiDelegate<std::string, float, float> OnChangeStat;
+	std::unordered_map<std::string, MultiDelegate<float, float>> OnChangeStatMap;
 
 	virtual void Initialize() override {}
 	virtual void Update()  override {}
@@ -59,7 +61,11 @@ public:
 		if (valPtr && prevPtr && *valPtr != newVal) {
 			*prevPtr = *valPtr;
 			*valPtr = newVal;
-			OnChangeStat.BroadCast(statName, *prevPtr, *valPtr);
+			MultiDelegate<std::string, float, float> OnChangeStat;
+			auto it = OnChangeStatMap.find(statName);
+			if (it != OnChangeStatMap.end()) {
+				it->second.BroadCast(*prevPtr, *valPtr);
+			}
 		}
 	}
 
@@ -70,7 +76,13 @@ public:
 
 	void TakeDamage(const std::string& statName, float val)
 	{
-		int result = std::max<float>(0, GetStat(statName) - val);
+		float result = std::max<float>(0, GetStat(statName) - val);
+		SetStat(statName, result);
+	}
+
+	void Heal(const std::string& statMAXName, const std::string& statName , float val)
+	{
+		float result = std::min<float>(GetStat(statMAXName), GetStat(statName) + val);
 		SetStat(statName, result);
 	}
 
