@@ -5,6 +5,7 @@
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 #include <Math/Transform.h>
+#include <sstream>
 
 using namespace Define;
 class TextRenderComponent : public RenderComponent
@@ -30,6 +31,21 @@ public:
 	void SetTextAlignment(ETextFormat format);
 	inline std::wstring& GetText() { return m_content; }
 	void SetText(const std::wstring& content);
+	void SetText(const float& val);
+	template<typename... Args>
+	void SetTextFormat(const Args&... args)
+	{
+		std::wostringstream oss;
+
+		// C++14에서는 fold expression이 없으므로 초기화 리스트 트릭 사용
+		using expander = int[];
+		(void)expander {
+			0, (static_cast<void>(oss << args), 0)...
+		};
+
+		m_content = oss.str();
+		InitializeLayout();
+	}
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
 	void SetPosition(const FVector2& pos);

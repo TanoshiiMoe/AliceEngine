@@ -15,7 +15,7 @@ class D2DRenderManager;
 class gameObject : public UObject, public std::enable_shared_from_this<gameObject>
 {
 public:
-	gameObject(){}
+	gameObject() { Initialize(); }
 	gameObject(const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot);
 	
 	virtual ~gameObject()

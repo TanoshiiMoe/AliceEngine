@@ -198,6 +198,12 @@ void TextRenderComponent::SetText(const std::wstring& content)
 	InitializeLayout();
 }
 
+void TextRenderComponent::SetText(const float& val)
+{
+	m_content = std::to_wstring(val);
+	InitializeLayout();
+}
+
 void TextRenderComponent::SetColor(const FColor& color)
 {
 	m_color = color;

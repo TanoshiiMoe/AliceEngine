@@ -126,6 +126,9 @@
     <ClInclude Include="Component\StatComponent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Core\StatTraits.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -237,6 +240,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Component\StatComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\StatTraits.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

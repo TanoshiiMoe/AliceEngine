@@ -30,7 +30,6 @@ public:
 	}
 	void SetPosition(const float& _x, const float& _y)
 	{
-		dirty = true;
 		Translation.x = _x;
 		Translation.y = _y;
 	}
@@ -40,7 +39,6 @@ public:
 	}
 	void SetRotation(float rotation)
 	{
-		dirty = true;
 		Rotation = rotation;
 	}
 	D2D1_VECTOR_2F GetScale() const
@@ -49,7 +47,6 @@ public:
 	}
 	void SetScale(const float& scaleX, const float& scaleY)
 	{
-		dirty = true;
 		Scale.x = scaleX;
 		Scale.y = scaleY;
 	}

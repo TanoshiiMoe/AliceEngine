@@ -34,15 +34,18 @@ void DemoScene::OnEnter()
 {
 	__super::OnEnter();
 
-	m_spineTest = NewObject<gameObject>(L"m_spineTest");
-	m_spineTest->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
-	m_spineTest->AddComponent<Spine2DRenderComponent>()->LoadData(L"Resource\\yuuka_spr\\yuuka_spr");
+	// spine2D 테스트
+	//m_spineTest = NewObject<gameObject>(L"m_spineTest");
+	//m_spineTest->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
+	//m_spineTest->AddComponent<Spine2DRenderComponent>()->LoadData(L"Resource\\yuuka_spr\\yuuka_spr");
 
 	m_yuuka = NewObject<gameObject>(L"yuuka");
-	m_yuuka->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
+	m_yuuka->transform()->SetPosition(0, 0);
+	m_yuuka->transform()->SetRotation(0);
+	m_yuuka->transform()->SetScale(0.8f, 0.8f);
+	m_yuuka->transform()->SetPivot(0.5f);
 	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka2.mp4", 60);
 	m_yuuka->GetComponent<AnimationComponent>()->Play();
-
 
 	m_sun = NewObject<gameObject>(L"Sun");
 	m_sun->Initialize(FVector2(0, 0), 0.0f, FVector2(0.5f, 0.5f), FVector2(0.5f));
@@ -75,13 +78,11 @@ void DemoScene::OnEnter()
 	m_moon->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_moon->GetComponent<SpriteRenderer>()->GetSize().y * 0.7f));
 
 	m_widget = NewObject<gameObject>(L"widget");
-	m_widget->Initialize();
 	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [4] : 태양 이름 한영 전환 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동 \n\n <애니메이션> \n [5,6] : 아스나, 유우카 전환");
 	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 150));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
 	m_widget2 = NewObject<gameObject>(L"widget2");
-	m_widget2->Initialize();
 	m_widget2->transform()->SetPosition(0,0);
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <씬> \n [3] : 씬 전환");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
@@ -89,7 +90,6 @@ void DemoScene::OnEnter()
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
 	m_widget3 = NewObject<gameObject>(L"widget3");
-	m_widget3->Initialize();
 	m_widget3->transform()->SetPosition(0, 0);
 	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <현재 씬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);

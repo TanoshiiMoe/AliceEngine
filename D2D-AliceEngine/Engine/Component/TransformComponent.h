@@ -58,6 +58,12 @@ public:
 		SetDirty();
 	}
 
+	inline void SetScale(const float& _x, const float& _y)
+	{
+		m_localTransform->SetScale(_x, _y);
+		SetDirty();
+	}
+
 	inline void AddRotation(const float& _val)
 	{
 		m_localTransform->SetRotation(m_localTransform->GetRotation() + _val);

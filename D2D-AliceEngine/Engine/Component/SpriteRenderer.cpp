@@ -10,6 +10,7 @@ void SpriteRenderer::Initialize()
 
 void SpriteRenderer::LoadData(const std::wstring& path)
 {
+	if (m_bitmap) m_bitmap = nullptr;
 	HRESULT hr = D2DRenderManager::Get().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str(), &m_bitmap);
 	assert(SUCCEEDED(hr));
