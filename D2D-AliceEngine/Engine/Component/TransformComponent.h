@@ -49,21 +49,25 @@ public:
 	inline void SetPosition(const float& _x, const float& _y)
 	{
 		m_localTransform->SetPosition(_x, _y);
+		SetDirty();
 	}
 
 	inline void SetRotation(const float& _val)
 	{
 		m_localTransform->SetRotation(_val);
+		SetDirty();
 	}
 
 	inline void AddRotation(const float& _val)
 	{
 		m_localTransform->SetRotation(m_localTransform->GetRotation() + _val);
+		SetDirty();
 	}
 
 	inline void AddPosition(const float& _x, const float& _y)
 	{
 		m_localTransform->SetPosition(m_localTransform->GetPosition().x + _x, m_localTransform->GetPosition().y + _y);
+		SetDirty();
 	}
 
 	inline void SetPivot(const float& _x, const float& _y)
@@ -75,6 +79,17 @@ public:
 	{
 		m_pivot.x = _x;
 		m_pivot.y = _x;
+	}
+
+	inline void SetDirty()
+	{
+		m_localTransform->dirty = true;
+		m_worldTransform->dirty = true;
+		for (auto& child : children)
+		{
+			if (auto c = child.lock())
+				c->SetDirty();
+		}
 	}
 };
 

@@ -19,6 +19,9 @@ public:
 	float Rotation;				// 회전 (degree)
 	D2D1_VECTOR_2F Scale;		// 크기
 
+	D2D1::Matrix3x2F cachedMatrix = D2D1::Matrix3x2F::Identity();
+	bool dirty = true;
+
 	Transform() : Translation{ 0.0f, 0.0f }, Rotation(0.0f), Scale{ 1.0f,1.0f } {}
 
 	D2D1_VECTOR_2F GetPosition() const
@@ -27,6 +30,7 @@ public:
 	}
 	void SetPosition(const float& _x, const float& _y)
 	{
+		dirty = true;
 		Translation.x = _x;
 		Translation.y = _y;
 	}
@@ -36,6 +40,7 @@ public:
 	}
 	void SetRotation(float rotation)
 	{
+		dirty = true;
 		Rotation = rotation;
 	}
 	D2D1_VECTOR_2F GetScale() const
@@ -44,6 +49,7 @@ public:
 	}
 	void SetScale(const float& scaleX, const float& scaleY)
 	{
+		dirty = true;
 		Scale.x = scaleX;
 		Scale.y = scaleY;
 	}
@@ -55,20 +61,30 @@ public:
 		Scale = scale;
 	}
 
-	D2D1::Matrix3x2F ToMatrix() const
+	D2D1::Matrix3x2F ToMatrix()
 	{
-		D2D1::Matrix3x2F scale = D2D1::Matrix3x2F::Scale(Scale.x, Scale.y);
-		D2D1::Matrix3x2F rotation = D2D1::Matrix3x2F::Rotation(Rotation);
-		D2D1::Matrix3x2F translation = D2D1::Matrix3x2F::Translation(Translation.x, Translation.y);
-		return scale * rotation * translation;
+		if (dirty)
+		{
+			D2D1::Matrix3x2F scale = D2D1::Matrix3x2F::Scale(Scale.x, Scale.y);
+			D2D1::Matrix3x2F rotation = D2D1::Matrix3x2F::Rotation(Rotation);
+			D2D1::Matrix3x2F translation = D2D1::Matrix3x2F::Translation(Translation.x, Translation.y);
+			cachedMatrix =  scale * rotation * translation;
+			dirty = false;
+		}
+		return cachedMatrix;
 	}
 
-	D2D1::Matrix3x2F ToMatrix(const D2D1_POINT_2F& pivot) const
+	D2D1::Matrix3x2F ToMatrix(const D2D1_POINT_2F& pivot)
 	{
-		auto scale = D2D1::Matrix3x2F::Scale(Scale.x, Scale.y, pivot);
-		auto rotate = D2D1::Matrix3x2F::Rotation(Rotation, pivot);
-		auto translate = D2D1::Matrix3x2F::Translation(Translation.x, Translation.y);
-		return scale * rotate * translate;
+		if (dirty)
+		{
+			auto scale = D2D1::Matrix3x2F::Scale(Scale.x, Scale.y, pivot);
+			auto rotate = D2D1::Matrix3x2F::Rotation(Rotation, pivot);
+			auto translate = D2D1::Matrix3x2F::Translation(Translation.x, Translation.y);
+			cachedMatrix = scale * rotate * translate;
+			dirty = false;
+		}
+		return cachedMatrix;
 	}
 
 	void SetFromMatrix(const D2D1::Matrix3x2F& mat)
