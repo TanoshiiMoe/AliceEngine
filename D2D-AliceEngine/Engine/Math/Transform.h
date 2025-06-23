@@ -32,6 +32,7 @@ public:
 	{
 		Translation.x = _x;
 		Translation.y = _y;
+		dirty = true;
 	}
 	float GetRotation() const
 	{
@@ -40,6 +41,7 @@ public:
 	void SetRotation(float rotation)
 	{
 		Rotation = rotation;
+		dirty = true;
 	}
 	D2D1_VECTOR_2F GetScale() const
 	{
@@ -49,6 +51,7 @@ public:
 	{
 		Scale.x = scaleX;
 		Scale.y = scaleY;
+		dirty = true;
 	}
 
 	void SetTransform(const D2D1_VECTOR_2F& location, float rotation, const D2D1_VECTOR_2F& scale)
@@ -56,6 +59,7 @@ public:
 		Translation = location;
 		Rotation = rotation;
 		Scale = scale;
+		dirty = true;
 	}
 
 	D2D1::Matrix3x2F ToMatrix()
