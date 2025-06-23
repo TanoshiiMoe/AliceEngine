@@ -6,6 +6,7 @@
 #include <Component/BoxComponent.h>
 #include <Core/Input.h>
 #include <Component/AnimationComponent.h>
+#include <Component/Spine2DRenderComponent.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 weak_ptr를 반환합니다.
@@ -32,6 +33,10 @@ void DemoScene::Update()
 void DemoScene::OnEnter()
 {
 	__super::OnEnter();
+
+	m_spineTest = NewObject<gameObject>(L"m_spineTest");
+	m_spineTest->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
+	m_spineTest->AddComponent<Spine2DRenderComponent>()->LoadData(L"Resource\\yuuka_spr\\yuuka_spr");
 
 	m_yuuka = NewObject<gameObject>(L"yuuka");
 	m_yuuka->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));

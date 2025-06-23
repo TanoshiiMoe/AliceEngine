@@ -264,6 +264,12 @@
     <ClInclude Include="3.8\include\spine\Vertices.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="3.8\include\spine\spine-alice.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="3.8\include\spine\Spine2DTextureLoader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spine2D.cpp">
@@ -453,6 +459,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="3.8\src\spine\VertexEffect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="3.8\src\spine\spine-alice.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="3.8\src\spine\Spine2DTextureLoader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

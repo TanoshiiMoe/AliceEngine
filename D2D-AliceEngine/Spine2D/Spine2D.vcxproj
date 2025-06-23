@@ -204,6 +204,7 @@
     <ClInclude Include="3.8\include\spine\Slot.h" />
     <ClInclude Include="3.8\include\spine\SlotData.h" />
     <ClInclude Include="3.8\include\spine\SpacingMode.h" />
+    <ClInclude Include="3.8\include\spine\spine-alice.h" />
     <ClInclude Include="3.8\include\spine\spine.h" />
     <ClInclude Include="3.8\include\spine\SpineObject.h" />
     <ClInclude Include="3.8\include\spine\SpineString.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="3.8\include\spine\Vertices.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="3.8\include\spine\Spine2DTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="3.8\src\spine\Animation.cpp" />
@@ -275,6 +277,7 @@
     <ClCompile Include="3.8\src\spine\Skin.cpp" />
     <ClCompile Include="3.8\src\spine\Slot.cpp" />
     <ClCompile Include="3.8\src\spine\SlotData.cpp" />
+    <ClCompile Include="3.8\src\spine\spine-alice.cpp" />
     <ClCompile Include="3.8\src\spine\SpineObject.cpp" />
     <ClCompile Include="3.8\src\spine\TextureLoader.cpp" />
     <ClCompile Include="3.8\src\spine\Timeline.cpp" />
@@ -294,6 +297,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Spine2D.cpp" />
+    <ClCompile Include="3.8\src\spine\Spine2DTextureLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

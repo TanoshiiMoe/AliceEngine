@@ -1,15 +1,30 @@
-#include "pch.h"
 #include <spine/spine-alice.h>
 #include <spine/Slot.h>
 #include <spine/Attachment.h>
 #include <spine/RegionAttachment.h>
 #include <spine/MeshAttachment.h>
 #include <spine/ClippingAttachment.h>
-
-#include <cmath>
+#include <spine/Spine2DTextureLoader.h>
 
 namespace spine {
 
+    SkeletonDrawable_D2D::SkeletonDrawable_D2D(ID2D1Bitmap1* _bitmap, const std::wstring& path)
+    {
+        D2DSpine2DTextureLoader* textureLoader = new D2DSpine2DTextureLoader(_bitmap);
+		// 1. Atlas 로드
+		std::string spath;
+        spath.assign(path.begin(), path.end());
+        Atlas* atlas = new Atlas((spath + ".atlas").c_str(), textureLoader);
+
+        SkeletonBinary binary(atlas);
+        binary.setScale(1.0f); // 스케일 조정
+
+        spine::SkeletonData* skeletonData = binary.readSkeletonDataFile("Resource\\yuuka_spr\\yuuka_spr.skel");
+        if (!skeletonData)
+        {
+            // 에러 처리: binary.getError().buffer()
+        }
+    }
     SkeletonDrawable_D2D::SkeletonDrawable_D2D(SkeletonData* skeletonData, AnimationStateData* stateData)
         : skeleton(new Skeleton(skeletonData)), stateData(stateData), ownsStateData(false) {
 

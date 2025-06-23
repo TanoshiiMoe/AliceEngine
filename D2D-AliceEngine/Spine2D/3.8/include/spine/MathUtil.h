@@ -47,10 +47,10 @@ public:
 	static const float Rad_Deg;
 
 	template<typename T>
-	static inline T min(T a, T b) { return a < b ? a : b; }
+	static T min(T a, T b) { return a < b ? a : b; }
 
 	template<typename T>
-	static inline T max(T a, T b) { return a > b ? a : b; }
+	static T max(T a, T b) { return a > b ? a : b; }
 
 	static float sign(float val);
 

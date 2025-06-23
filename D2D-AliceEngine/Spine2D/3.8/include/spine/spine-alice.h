@@ -4,14 +4,21 @@
 #include <spine/extension.h>
 #include <d2d1_1.h>
 #include <wrl/client.h>
-#include <vector>
+#include <Vector>
+#include <iostream>
+
+spine::SpineExtension* spine::getDefaultExtension() {
+	return new spine::DefaultSpineExtension(); // 표준 malloc/free 사용
+}
 
 namespace spine {
 
     using Microsoft::WRL::ComPtr;
 
-    class SkeletonDrawable_D2D {
+    class SkeletonDrawable_D2D 
+    {
     public:
+        SkeletonDrawable_D2D(ID2D1Bitmap1* _bitmap, const std::wstring& path);
         SkeletonDrawable_D2D(SkeletonData* skeletonData, AnimationStateData* stateData = nullptr);
         ~SkeletonDrawable_D2D();
 
@@ -40,5 +47,9 @@ namespace spine {
 
         void InitializeBrush(ID2D1DeviceContext* context);
     };
-
 } // namespace spine
+
+
+
+
+

@@ -19,6 +19,7 @@ public:
 	void CameraInput();
 
 	gameObject* m_yuuka;
+	gameObject* m_spineTest;
 
 	gameObject* m_sun;
 	gameObject* m_earth;
