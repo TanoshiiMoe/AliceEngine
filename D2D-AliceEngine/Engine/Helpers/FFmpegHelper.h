@@ -1,6 +1,8 @@
 #pragma once
 #include "pch.h"
 #include "FileHelper.h"
+#include <Manager/PackageResourceManager.h>
+#include <manager/D2DRenderManager.h>
 
 class FFmpegHelper
 {
@@ -11,6 +13,7 @@ public:
 		std::vector<std::wstring> frameFiles;
 		WCHAR folderNameBuffer[100] = L"frames";
 		WCHAR prefixBuffer[100] = L"frame";
+		std::wstring extension = L"jpg";
 
 		std::wstring inputPath = FileHelper::ToAbsolutePath(baseDir);
 		//std::wstring inputPath =  L"../" + Define::BASE_RESOURCE_PATH + baseDir; // ¿¹: L"BackGround/Yuuka.mp4"
@@ -44,9 +47,12 @@ public:
 			}
 		}
 
+		int x = 0, y = 0;
+		D2DRenderManager::Get().GetApplicationSize(x,y);
 		std::wstring ffmpegPath = Define::BASE_EXTENSION_PATH + L"FFmpeg\\ffmpeg.exe";
 		std::wstring command = ffmpegPath + L" -y -i \"" + inputPath + L"\" -vf fps=" + std::to_wstring(fps) +
-			L" \"" + outputDir + L"\\" + prefixBuffer + L"_%04d.png\"";
+			L",scale=" + std::to_wstring(x) + L":" + std::to_wstring(y) +
+			L" -q:v 20 \"" + outputDir + L"\\" + prefixBuffer + L"_%04d." + extension +L"\"";
 
 		STARTUPINFOW si = { sizeof(si) };
 		PROCESS_INFORMATION pi;
@@ -63,7 +69,9 @@ public:
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 
-		return FileHelper::GetFilesWithPattern(outputDir, prefixBuffer + std::wstring(L"_*.png"));
+		PackageResourceManager::Get().Initialize();
+
+		return FileHelper::GetFilesWithPattern(outputDir, prefixBuffer + std::wstring(L"_*."+ extension));
 	}
 };
 

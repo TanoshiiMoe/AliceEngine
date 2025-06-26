@@ -57,7 +57,6 @@ public:
 
 	void GetApplicationSize(int& width, int& height);
 
-	HRESULT CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap);
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수
 	void OutputError(HRESULT hr);
 
@@ -69,8 +68,6 @@ public:
 
 	// For DrawText
 	ComPtr<IDWriteFactory> m_dWriteFactory;
-	// For ImageDraw
-	ComPtr<IWICImagingFactory> m_wicImagingFactory;
 	// SpriteBatch
 	ComPtr<ID2D1SpriteBatch>    g_spriteBatch;
 	bool m_resizePending = false;

@@ -10,7 +10,11 @@
 #include <Core/StatTraits.h>  // 이 파일을 통해 BuildOffsetMap 분리
 
 /*
-* @briefs : Stat을 관리하는 Component 입니다.
+* @briefs : 
+*	Stat을 관리하는 Component 입니다. 
+*	Stat은 게임 오브젝트의 능력치, 상태 등을 나타내는 구조체로 정의됩니다.
+*	이제 많은 능력치를 구조체로 관리할 수 있습니다.
+* 
 * @details : 
 * 원하는 Stat을 구조체로 만들어 관리가 가능합니다. 
 * 기본 Stat는 DefaultStat입니다.
@@ -38,6 +42,15 @@ template<typename T = DefaultStat>
 class StatComponent : public Component
 {
 public:
+	StatComponent() {
+		memset(&value, 0, sizeof(T));
+		memset(&prevValue, 0, sizeof(T));
+	}
+	~StatComponent() {
+		OnChangeStatMap.clear();
+		OnChangeStat.Clear();
+	}
+public:
 	T value;
 	T prevValue;
 
@@ -48,13 +61,7 @@ public:
 	virtual void Update()  override {}
 	virtual void Release()  override {}
 
-	StatComponent() {
-		memset(&value, 0, sizeof(T));
-		memset(&prevValue, 0, sizeof(T));
-	}
-
 	// Get, Set으로 직접 사용할 수도 있음.
-
 	void SetStat(const std::string& statName, float newVal) {
 		float* valPtr = GetFieldPtr(value, statName);
 		float* prevPtr = GetFieldPtr(prevValue, statName);
@@ -74,13 +81,13 @@ public:
 		return ptr ? *ptr : 0.f;
 	}
 
-	void TakeDamage(const std::string& statName, float val)
+	void DecreaseAbility(const std::string& statName, float val)
 	{
 		float result = std::max<float>(0, GetStat(statName) - val);
 		SetStat(statName, result);
 	}
 
-	void Heal(const std::string& statMAXName, const std::string& statName , float val)
+	void IncreaseAbility(const std::string& statMAXName, const std::string& statName , float val)
 	{
 		float result = std::min<float>(GetStat(statMAXName), GetStat(statName) + val);
 		SetStat(statName, result);

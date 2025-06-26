@@ -83,13 +83,6 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_d2dBitmapTarget.GetAddressOf());
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
 
-	// Image
-	// Create WIC factory
-	hr = CoCreateInstance(CLSID_WICImagingFactory,
-		NULL, CLSCTX_INPROC_SERVER,
-		__uuidof(m_wicImagingFactory),
-		(void**)m_wicImagingFactory.GetAddressOf());
-
 	// DirectWrite 팩터리를 만듭니다.
 	DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
@@ -99,11 +92,6 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	// 4. D2D 타겟 비트맵 및 SetTarget
 	CreateSwapChainAndD2DTarget();
 
-	// 5. WIC Imaging Factory 생성
-	hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
-		IID_PPV_ARGS(&m_wicImagingFactory));
-	assert(SUCCEEDED(hr));
-
 	// 7. SpriteBatch 생성
 	hr = m_d2dDeviceContext->CreateSpriteBatch(g_spriteBatch.GetAddressOf());
 	assert(SUCCEEDED(hr));
@@ -111,8 +99,6 @@ void D2DRenderManager::Initialize(HWND hwnd)
 
 void D2DRenderManager::UnInitialize()
 {
-	m_wicImagingFactory = nullptr;
-
 	m_d3dDevice = nullptr;
 	m_dxgiSwapChain = nullptr;
 	m_d2dDeviceContext = nullptr;
@@ -120,9 +106,6 @@ void D2DRenderManager::UnInitialize()
 
 	// For DrawText
 	m_dWriteFactory = nullptr;
-
-	// For ImageDraw
-	m_wicImagingFactory = nullptr;
 
 	g_spriteBatch = nullptr;
 }
@@ -183,47 +166,6 @@ void D2DRenderManager::GetApplicationSize(int& width, int& height)
 	GetClientRect(m_hwnd, &rc);
 	width = rc.right - rc.left;
 	height = rc.bottom - rc.top;
-}
-
-HRESULT D2DRenderManager::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap)
-{
-	ComPtr<IWICBitmapDecoder>     decoder;
-	ComPtr<IWICBitmapFrameDecode> frame;
-	ComPtr<IWICFormatConverter>   converter;
-
-	// ① 디코더 생성
-	HRESULT hr = m_wicImagingFactory->CreateDecoderFromFilename(
-		path, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
-	if (FAILED(hr)) return hr;
-
-	// ② 첫 프레임 얻기
-	hr = decoder->GetFrame(0, &frame);
-	if (FAILED(hr)) return hr;
-
-	// ③ 포맷 변환기 생성
-	hr = m_wicImagingFactory->CreateFormatConverter(&converter);
-	if (FAILED(hr)) return hr;
-
-	// ④ GUID_WICPixelFormat32bppPBGRA로 변환
-	hr = converter->Initialize(
-		frame.Get(),
-		GUID_WICPixelFormat32bppPBGRA,
-		WICBitmapDitherTypeNone,
-		nullptr,
-		0.0f,
-		WICBitmapPaletteTypeCustom
-	);
-	if (FAILED(hr)) return hr;
-
-	// ⑤ Direct2D 비트맵 속성 (premultiplied alpha, B8G8R8A8_UNORM)
-	D2D1_BITMAP_PROPERTIES1 bmpProps = D2D1::BitmapProperties1(
-		D2D1_BITMAP_OPTIONS_NONE,
-		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
-	);
-
-	// ⑥ DeviceContext에서 WIC 비트맵으로부터 D2D1Bitmap1 생성
-	hr = m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, outBitmap);
-	return hr;
 }
 
 void D2DRenderManager::CreateSwapChainAndD2DTarget()

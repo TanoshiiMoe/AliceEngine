@@ -1,6 +1,5 @@
 #pragma once
 #include <Scene/Scene.h>
-
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 #include <Component/StatComponent.h>
@@ -30,18 +29,21 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
+	void yuukaInput();
+	void aru2Input();
+
 	void aruInput();
 	void CameraInput();
 
 	gameObject* m_yuuka;
 
 	gameObject* m_aru;
+	gameObject* m_aru2;
 	StatComponent<MyStat>* m_aruStat;
+	StatComponent<MyStat>* m_aru2Stat;
 	StatComponent<>* m_aruDefaultStat;
-	TextRenderComponent* m_aruNameText;
-	TextRenderComponent* m_aruStatText;
-	TextRenderComponent* m_aruStatText2;
-	TextRenderComponent* m_aruStatText3;
+	std::vector<TextRenderComponent*> m_aruNameTexts;
+	std::vector<TextRenderComponent*> m_aru2NameTexts;
 	gameObject* m_tree;
 	gameObject* m_widget;
 	gameObject* m_widget2;

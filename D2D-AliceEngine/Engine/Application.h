@@ -8,6 +8,7 @@
 #include "Scene/Scene.h"
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
+#include <Manager/PackageResourceManager.h>
 
 using namespace Microsoft::WRL;
 
@@ -26,11 +27,12 @@ public:
 	virtual void Uninitialize();
 
 	D2DRenderManager* m_pD2DRenderManager;
+	PackageResourceManager* m_pPackageResourceManager;
+	SceneManager* m_pSceneManager;
 	RenderSystem* m_pRenderSystem;
 	ScriptSystem* m_pScriptSystem;
 	InputSystem* m_pInputSystem;
 	TransformSystem* m_pTransformSystem;
-	SceneManager* m_pSceneManager;
 
 protected:
 	HWND m_hwnd = nullptr;
@@ -46,5 +48,6 @@ protected:
 
 public:
 	void MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	void GetApplicationSize(int& width, int& height);
 };
 #define GetApplication() Application::Get()

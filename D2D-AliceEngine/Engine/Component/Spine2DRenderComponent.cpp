@@ -4,6 +4,7 @@
 #include "Spine2DRenderComponent.h"
 #include "Manager/D2DRenderManager.h"
 #include <spine/Spine2DTextureLoader.h>
+#include <Manager/PackageResourceManager.h>
 
 using namespace spine;
 
@@ -25,8 +26,8 @@ void Spine2DRenderComponent::ReleaseFrames()
 
 void Spine2DRenderComponent::LoadData(const std::wstring& path)
 {
-	ID2D1Bitmap1* _bitmap = nullptr;
-	D2DRenderManager::Get().CreateBitmapFromFile(path.c_str(), &_bitmap);
+	//ID2D1Bitmap1* _bitmap = nullptr;
+	//PackageResourceManager::Get().CreateBitmapFromFile(path.c_str(), &_bitmap);
 	//D2DSpine2DTextureLoader* textureLoader = new D2DSpine2DTextureLoader(_bitmap);
 	// 1. Atlas ·Îµå
 	//Atlas* atlas = new Atlas("Resource\\yuuka_spr\\yuuka_spr.atlas", textureLoader);

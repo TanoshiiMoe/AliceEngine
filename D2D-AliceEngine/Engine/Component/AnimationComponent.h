@@ -18,10 +18,6 @@ public:
 	AnimationComponent() {}
 	~AnimationComponent() 
 	{
-		for (auto m_bitmap : m_bitmaps)
-		{
-			m_bitmap = nullptr; 
-		}
 		files.clear();
 		m_bitmaps.clear();
 	}
@@ -39,13 +35,18 @@ public:
 	{
 		if (m_bitmaps.empty() == false)
 		{
-			D2D1_SIZE_U bmpSize = m_bitmaps[0]->GetPixelSize();
-			return FVector2(bmpSize.width, bmpSize.height);
+			ComPtr<ID2D1Bitmap1> bitmapStrong;
+			if (m_bitmaps[0].lock())
+			{
+				D2D1_SIZE_U bmpSize = m_bitmaps[0].lock()->GetPixelSize();
+				return FVector2(bmpSize.width, bmpSize.height);
+			}
+			return FVector2(0,0);
 		}
 		return FVector2();
 	}
 	std::vector<std::wstring> files;
-	std::vector<ComPtr<ID2D1Bitmap1>> m_bitmaps; // BitmapImage 컴포넌트
+	std::vector<std::weak_ptr<ID2D1Bitmap1>> m_bitmaps; // BitmapImage 컴포넌트
 	const size_t cacheSize = 2; // 캐시할 프레임 수
 
 	void Play() { bPlay = true; }

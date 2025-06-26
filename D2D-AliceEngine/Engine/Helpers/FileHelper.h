@@ -160,5 +160,63 @@ public:
 		bool result = CopyDirectoryRecursive(sourcePath, targetPath);
 		assert(result && L"Resource 복사 실패");
 	}
+
+
+	// 재귀적으로 파일 경로를 수집하는 함수
+	static void CollectFilePathsRecursive(const std::wstring& directory, std::vector<std::wstring>& outFiles)
+	{
+		WIN32_FIND_DATAW findData;
+		std::wstring searchPath = directory + L"\\*";
+		HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findData);
+		if (hFind == INVALID_HANDLE_VALUE) {
+			// 폴더가 없거나 비어있음
+			return;
+		}
+
+		do {
+			const std::wstring fileName = findData.cFileName;
+			if (fileName == L"." || fileName == L"..") continue;
+
+			std::wstring fullPath = directory + L"\\" + fileName;
+
+			if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+				// 하위 폴더 재귀 탐색
+				CollectFilePathsRecursive(fullPath, outFiles);
+			}
+			else {
+				// 파일 경로 저장
+				outFiles.push_back(fullPath);
+			}
+		} while (FindNextFileW(hFind, &findData) != 0);
+
+		FindClose(hFind);
+	}
+
+	static void ResourceFilesInBuildPath(const std::wstring& _str, std::vector<std::wstring>& filesPaths)
+	{
+		std::wstring path = ToAbsolutePath(L"") + _str;
+		CollectFilePathsRecursive(path, filesPaths);
+		//assert(result && L"Resource 탐색 실패")	;
+	}
+
+	// 파일 이름과 확장자를 추출하는 함수
+	// 반환값: {파일이름, 확장자}
+	static std::pair<std::wstring, std::wstring> ExtractFileNameAndExtension(const std::wstring& absPath)
+	{
+		// 마지막 경로 구분자 위치
+		size_t lastSlash = absPath.find_last_of(L"\\/");
+		std::wstring fileNameWithExt = (lastSlash == std::wstring::npos) ? absPath : absPath.substr(lastSlash + 1);
+
+		// 마지막 점(.) 위치
+		size_t lastDot = fileNameWithExt.find_last_of(L'.');
+		if (lastDot == std::wstring::npos) {
+			// 확장자가 없는 경우
+			return { fileNameWithExt, L"" };
+		}
+
+		std::wstring fileName = fileNameWithExt.substr(0, lastDot);
+		std::wstring extension = fileNameWithExt.substr(lastDot + 1);
+		return { fileName, extension };
+	}
 };
 

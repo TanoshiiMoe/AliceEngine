@@ -9,6 +9,7 @@ public:
 	{
 		m_localTransform = new Transform();
 		m_worldTransform = new Transform();
+		SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.0f));
 	}
 	~TransformComponent() 
 	{
@@ -52,6 +53,12 @@ public:
 		SetDirty();
 	}
 
+	inline void SetPosition(const float& _x)
+	{
+		m_localTransform->SetPosition(_x, _x);
+		SetDirty();
+	}
+
 	inline void SetRotation(const float& _val)
 	{
 		m_localTransform->SetRotation(_val);
@@ -61,6 +68,12 @@ public:
 	inline void SetScale(const float& _x, const float& _y)
 	{
 		m_localTransform->SetScale(_x, _y);
+		SetDirty();
+	}
+
+	inline void SetScale(const float& _x)
+	{
+		m_localTransform->SetScale(_x, _x);
 		SetDirty();
 	}
 

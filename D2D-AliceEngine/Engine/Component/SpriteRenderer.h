@@ -10,7 +10,7 @@ class SpriteRenderer : public RenderComponent
 {
 public:
 	SpriteRenderer() {}
-	~SpriteRenderer() { m_bitmap = nullptr; }
+	~SpriteRenderer() {}
 
 	void Initialize() override;
 	void LoadData(const std::wstring& path);
@@ -19,9 +19,9 @@ public:
 
 	FVector2 GetSize()
 	{
-		D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
+		D2D1_SIZE_U bmpSize = m_weakBitmap.lock()->GetPixelSize();
 		return FVector2(bmpSize.width, bmpSize.height);
 	}
 
-	ComPtr<ID2D1Bitmap1> m_bitmap; // BitmapImage ÄÄÆ÷³ÍÆ®
+	std::weak_ptr<ID2D1Bitmap1> m_weakBitmap;
 };

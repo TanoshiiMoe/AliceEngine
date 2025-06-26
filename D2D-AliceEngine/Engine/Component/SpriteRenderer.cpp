@@ -10,10 +10,8 @@ void SpriteRenderer::Initialize()
 
 void SpriteRenderer::LoadData(const std::wstring& path)
 {
-	if (m_bitmap) m_bitmap = nullptr;
-	HRESULT hr = D2DRenderManager::Get().CreateBitmapFromFile(
-		(Define::BASE_RESOURCE_PATH + path).c_str(), &m_bitmap);
-	assert(SUCCEEDED(hr));
+	m_weakBitmap = PackageResourceManager::Get().CreateBitmapFromFile(
+		(Define::BASE_RESOURCE_PATH + path).c_str());
 }
 
 void SpriteRenderer::Release()
@@ -29,12 +27,10 @@ void SpriteRenderer::Release()
 
 void SpriteRenderer::Render()
 {
-	if (!m_bitmap)
-		return;
-
+	if (m_weakBitmap.lock() == nullptr) return;
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
-	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
+	D2D1_SIZE_U bmpSize = m_weakBitmap.lock()->GetPixelSize(); // 비트맵 크기 및 피벗
 	D2D1_POINT_2F pivotOffset = {
 		bmpSize.width * m_pivot->x,
 		bmpSize.height * m_pivot->y
@@ -61,5 +57,5 @@ void SpriteRenderer::Render()
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
-	context->DrawBitmap(m_bitmap.Get());
+	context->DrawBitmap(m_weakBitmap.lock().get());
 }

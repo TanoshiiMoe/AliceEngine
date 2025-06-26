@@ -37,9 +37,9 @@ void Scene::Release()
 void Scene::Update()
 {
 	RenderSystem::Get().Update();
+	InputSystem::Get().Update();
 	TransformSystem::Get().Update();
 	ScriptSystem::Get().Update();
-	InputSystem::Get().Update();
 }
 
 void Scene::OnEnter()
