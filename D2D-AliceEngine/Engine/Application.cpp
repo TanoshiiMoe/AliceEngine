@@ -11,6 +11,7 @@ Application::Application()
 	m_hwnd = nullptr;
 	m_hInstance = nullptr;
 	FileHelper::CopyFilesToBuildPath(L"Resource");
+	FileHelper::CopyFilesToBuildPath(L"Extension");
 }
 
 Application::~Application()
@@ -109,7 +110,6 @@ void Application::Initialize()
 
 	m_pPackageResourceManager = new PackageResourceManager();
 	PackageResourceManager::Get().Initialize();
-	//FileHelper::CopyFilesToBuildPath(L"Extension");
 }
 
 void Application::Run()

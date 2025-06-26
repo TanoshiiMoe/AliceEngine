@@ -55,8 +55,6 @@ public:
 		Context.TickGroup = Define::ETickingGroup::TG_PrePhysics;
 		Context.DeltaSeconds = InDeltaSeconds;
 		Context.World = InWorld;
-
-
 	}
 };
 
