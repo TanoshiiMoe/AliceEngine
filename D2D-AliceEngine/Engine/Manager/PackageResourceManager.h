@@ -46,6 +46,7 @@ public:
 	~PackageResourceManager();
 
 	void Initialize();
+	void UnloadData();
 	// For ImageDraw
 	ComPtr<IWICImagingFactory> m_wicImagingFactory;
 

@@ -261,10 +261,10 @@ void DemoScene::CameraInput()
 	}
 	if (Input::IsKeyPressed(VK_1))
 	{
-		D2DRenderManager::Get().SwitchTransformType(ETransformType::D2D);
+		D2DRenderManager::GetInstance().SwitchTransformType(ETransformType::D2D);
 	}
 	if (Input::IsKeyPressed(VK_2))
 	{
-		D2DRenderManager::Get().SwitchTransformType(ETransformType::Unity);
+		D2DRenderManager::GetInstance().SwitchTransformType(ETransformType::Unity);
 	}
 }

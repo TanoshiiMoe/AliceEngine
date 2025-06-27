@@ -3,7 +3,7 @@
 
 void RenderComponent::Initialize()
 {
-	RenderSystem::Get().Regist(this->weak_from_this());
+	RenderSystem::GetInstance().Regist(this->weak_from_this());
 }
 
 void RenderComponent::Update()

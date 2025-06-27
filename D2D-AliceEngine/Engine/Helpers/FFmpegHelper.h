@@ -48,7 +48,7 @@ public:
 		}
 
 		int x = 0, y = 0;
-		D2DRenderManager::Get().GetApplicationSize(x,y);
+		D2DRenderManager::GetInstance().GetApplicationSize(x,y);
 		std::wstring ffmpegPath = Define::BASE_EXTENSION_PATH + L"FFmpeg\\ffmpeg.exe";
 		std::wstring command = ffmpegPath + L" -y -i \"" + inputPath + L"\" -vf fps=" + std::to_wstring(fps) +
 			L",scale=" + std::to_wstring(x) + L":" + std::to_wstring(y) +
@@ -69,7 +69,7 @@ public:
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 
-		PackageResourceManager::Get().Initialize();
+		PackageResourceManager::GetInstance().Initialize();
 
 		return FileHelper::GetFilesWithPattern(outputDir, prefixBuffer + std::wstring(L"_*."+ extension));
 	}

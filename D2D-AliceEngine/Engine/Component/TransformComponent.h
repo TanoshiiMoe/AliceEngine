@@ -13,7 +13,7 @@ public:
 	}
 	~TransformComponent() 
 	{
-		TransformSystem::Get().UnRegist(this->weak_from_this());
+		TransformSystem::GetInstance().UnRegist(this->weak_from_this());
 		delete m_localTransform;
 		delete m_worldTransform;
 		m_localTransform = nullptr;

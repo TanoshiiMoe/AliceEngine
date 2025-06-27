@@ -3,7 +3,8 @@
 #include <queue>
 #include <cstdint>
 #include <core/Singleton.h>
-class Object;
+
+class UObject;
 struct ObjectHandle {
 	uint32_t index = 0;
 	uint32_t generation = 0;
@@ -17,22 +18,22 @@ private:
 	ObjectHandler() = default;
 	~ObjectHandler() = default;
 
-	std::vector<Object*> objects;      // 생성된 인스턴스 주소 저장
+	std::vector<UObject*> objects;      // 생성된 인스턴스 주소 저장
 	std::vector<uint32_t> generations;     // 각 객체의 Generation
 	std::queue<uint32_t> freeIndexes;          // 파괴된 객체의 index를 재사용
 public:
 	template<typename T>
 	T* GetTypePtr(const ObjectHandle& h) {
-		Object* base = GetObjectPtr(h);
+		UObject* base = GetObjectPtr(h);
 		return dynamic_cast<T*>(base);  // typeid 기반 RTTI 다운캐스팅
 	}
 
-	Object* GetObjectPtr(const ObjectHandle& h) {
+	UObject* GetObjectPtr(const ObjectHandle& h) {
 		if (h.index >= objects.size() || !objects[h.index]) return nullptr;
 		if (generations[h.index] != h.generation) return nullptr;
 		return objects[h.index];
 	}
-	ObjectHandle CreateHandle(Object* allocated) {
+	ObjectHandle CreateHandle(UObject* allocated) {
 		uint32_t index = 0;
 		if (freeIndexes.empty()) {	//재활용 가능한 인덱스가 없다면
 			index = static_cast<uint32_t>(objects.size());// 추가전 사이즈가 인덱스가됨.
@@ -63,7 +64,7 @@ public:
 	}
 
 	// 오브젝트 포인터 얻기
-	Object* Get(const ObjectHandle& h) {
+	UObject* Get(const ObjectHandle& h) {
 		if (IsValid(h)) return objects[h.index];
 		return nullptr;
 	}

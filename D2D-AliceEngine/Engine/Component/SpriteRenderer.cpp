@@ -10,7 +10,7 @@ void SpriteRenderer::Initialize()
 
 void SpriteRenderer::LoadData(const std::wstring& path)
 {
-	m_weakBitmap = PackageResourceManager::Get().CreateBitmapFromFile(
+	m_weakBitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str());
 }
 
@@ -40,7 +40,7 @@ void SpriteRenderer::Render()
 	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
-	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity;
 	}
@@ -50,7 +50,7 @@ void SpriteRenderer::Render()
 	view = view * world * cameraInv;
 
 	// Unity 좌표계면 변환 추가
-	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}

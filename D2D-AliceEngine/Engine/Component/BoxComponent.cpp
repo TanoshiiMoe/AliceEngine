@@ -32,7 +32,7 @@ void BoxComponent::Render()
 	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
-	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity;
 	}
@@ -40,7 +40,7 @@ void BoxComponent::Render()
 	cameraInv.Invert();
 	view = view * world * cameraInv;
 
-	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}
@@ -53,5 +53,5 @@ void BoxComponent::SetColor(const FColor& color)
 {
 	m_color = color;
 	m_pBrush = nullptr;
-	D2DRenderManager::Get().m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(m_color.r, m_color.g, m_color.b, m_color.a), m_pBrush.GetAddressOf());
+	D2DRenderManager::GetInstance().m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(m_color.r, m_color.g, m_color.b, m_color.a), m_pBrush.GetAddressOf());
 }

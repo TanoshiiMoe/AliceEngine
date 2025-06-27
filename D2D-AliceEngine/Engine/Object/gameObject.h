@@ -64,7 +64,7 @@ public:
 		if (auto renderComp = std::dynamic_pointer_cast<RenderComponent>(createdComp))
 		{
 			std::weak_ptr<RenderComponent> weakRender = renderComp;
-			D2DRenderManager::Get().AddRenderer(weakRender);
+			D2DRenderManager::GetInstance().AddRenderer(weakRender);
 			weakRender.lock()->m_pTransform = m_transformComponent.lock()->m_worldTransform;
 			weakRender.lock()->m_pivot = &m_transformComponent.lock()->m_pivot;
 		}
@@ -131,7 +131,7 @@ public:
 		if (auto renderComp = std::dynamic_pointer_cast<RenderComponent>(createdComp))
 		{
 			std::weak_ptr<RenderComponent> weakRender = renderComp;
-			D2DRenderManager::Get().AddRenderer(weakRender);
+			D2DRenderManager::GetInstance().AddRenderer(weakRender);
 			weakRender.lock()->m_pTransform = m_transformComponent.lock()->m_worldTransform;
 			weakRender.lock()->m_pivot = &m_transformComponent.lock()->m_pivot;
 		}

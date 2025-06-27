@@ -5,6 +5,7 @@
 #include <Core/Input.h>
 #include <Core/Time.h>
 #include <Helpers/FileHelper.h>
+#include <Core/ObjectHandler.h>
 
 Application::Application()
 {
@@ -16,12 +17,13 @@ Application::Application()
 
 Application::~Application()
 {
-	delete m_pD2DRenderManager;
-	delete m_pRenderSystem;
-	delete m_pScriptSystem;
-	delete m_pInputSystem;
-	delete m_pTransformSystem;
-	delete m_pSceneManager;
+	ObjectHandler::Destroy();
+	D2DRenderManager::Destroy();
+	RenderSystem::Destroy();
+	ScriptSystem::Destroy();
+	InputSystem::Destroy();
+	TransformSystem::Destroy();
+	SceneManager::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -51,12 +53,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Application::Initialize()
 {
-	m_pD2DRenderManager = new D2DRenderManager();
-	m_pRenderSystem = new RenderSystem();
-	m_pScriptSystem = new ScriptSystem();
-	m_pInputSystem = new InputSystem();
-	m_pTransformSystem = new TransformSystem();
-	m_pSceneManager = new SceneManager();
+	ObjectHandler::Create();
+	D2DRenderManager::Create();
+	RenderSystem::Create();
+	ScriptSystem::Create();
+	InputSystem::Create();
+	TransformSystem::Create();
+	SceneManager::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -103,13 +106,13 @@ void Application::Initialize()
 
 	CoInitialize(nullptr);
 
-	D2DRenderManager::Get().Initialize(m_hwnd);
+	D2DRenderManager::GetInstance().Initialize(m_hwnd);
 
 	Input::Initialize(m_hwnd);
 	Time::Initialize();
 
-	m_pPackageResourceManager = new PackageResourceManager();
-	PackageResourceManager::Get().Initialize();
+	PackageResourceManager::Create();
+	PackageResourceManager::GetInstance().Initialize();
 }
 
 void Application::Run()
@@ -119,8 +122,8 @@ void Application::Run()
 
 void Application::Update()
 {
-	SceneManager::Get().Update();
-	D2DRenderManager::Get().Update();
+	SceneManager::GetInstance().Update();
+	D2DRenderManager::GetInstance().Update();
 	Time::UpdateTime();
 	Input::Update();
 }
@@ -132,18 +135,18 @@ void Application::Input()
 
 void Application::Render()
 {
-	D2DRenderManager::Get().Render();
+	D2DRenderManager::GetInstance().Render();
 }
 
 void Application::Uninitialize()
 {
-	m_pRenderSystem->UnInitialize();
-	m_pInputSystem->UnRegistAll();
-	m_pTransformSystem->UnRegistAll();
-	m_pScriptSystem->UnRegistAll();
-	m_pD2DRenderManager->UnInitialize();
-	m_pD2DRenderManager = nullptr;
-	m_pSceneManager->UnInitialize();
+	D2DRenderManager::GetInstance().UnInitialize();
+	SceneManager::GetInstance().UnInitialize();
+
+	RenderSystem::GetInstance().UnInitialize();
+	ScriptSystem::GetInstance().UnRegistAll();
+	InputSystem::GetInstance().UnRegistAll();
+	TransformSystem::GetInstance().UnRegistAll();
 	CoUninitialize();
 }
 

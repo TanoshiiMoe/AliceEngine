@@ -7,7 +7,7 @@
 
 Scene::Scene()
 {
-	RenderSystem::Get().Initialize();
+	RenderSystem::GetInstance().Initialize();
 	for (auto& object : m_objects)
 	{
 		object.second.get()->Initialize();
@@ -38,13 +38,14 @@ void Scene::Release()
 
 void Scene::Update()
 {
-	RenderSystem::Get().Update();
-	InputSystem::Get().Update();
-	TransformSystem::Get().Update();
-	ScriptSystem::Get().Update();
+	RenderSystem::GetInstance().Update();
+	InputSystem::GetInstance().Update();
+	TransformSystem::GetInstance().Update();
+	ScriptSystem::GetInstance().Update();
 
-	FMemoryInfo info = PackageResourceManager::Get().GetMemoryInfo();
+	FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetText(L"VRAM : " + info.VRAMUssage + L"\n"+ L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
+	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetColor(FColor(200, 0, 0, 255));
 }
 
 void Scene::OnEnter()
@@ -58,7 +59,7 @@ void Scene::OnEnter()
 	m_sysinfoWidget->AddComponent<TextRenderComponent>();
 
 	int x = 0, y = 0;
-	D2DRenderManager::Get().GetApplicationSize(x, y);
+	D2DRenderManager::GetInstance().GetApplicationSize(x, y);
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(x * 0.7, y * 0.1));
 }
 
@@ -68,5 +69,6 @@ void Scene::OnExit()
 	{
 		it->second->OnEnd();
 	}
+	D2DRenderManager::GetInstance().m_dxgiDevice->Trim();
 }
 

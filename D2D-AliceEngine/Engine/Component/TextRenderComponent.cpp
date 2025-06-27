@@ -97,7 +97,7 @@ void TextRenderComponent::Render()
 
 void TextRenderComponent::InitializeFormat()
 {
-	IDWriteFactory* m_dWriteFactory = D2DRenderManager::Get().m_dWriteFactory.Get();
+	IDWriteFactory* m_dWriteFactory = D2DRenderManager::GetInstance().m_dWriteFactory.Get();
 
 	m_dWriteFactory->CreateTextFormat(
 		m_font.c_str(), // FontName    제어판-모든제어판-항목-글꼴-클릭 으로 글꼴이름 확인가능
@@ -117,7 +117,7 @@ void TextRenderComponent::InitializeFormat()
 
 void TextRenderComponent::InitializeColor()
 {
-	ID2D1DeviceContext7* d2dDeviceContext = D2DRenderManager::Get().m_d2dDeviceContext.Get();
+	ID2D1DeviceContext7* d2dDeviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext.Get();
 	m_pBrush = nullptr;
 	d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(m_color.r, m_color.g, m_color.b, m_color.a), m_pBrush.GetAddressOf());
 }
@@ -125,7 +125,7 @@ void TextRenderComponent::InitializeColor()
 void TextRenderComponent::InitializeLayout()
 {
 	m_layout = nullptr;
-	HRESULT hr = D2DRenderManager::Get().m_dWriteFactory->CreateTextLayout(
+	HRESULT hr = D2DRenderManager::GetInstance().m_dWriteFactory->CreateTextLayout(
 		m_content.c_str(),
 		static_cast<UINT32>(m_content.length()),
 		m_dWriteTextFormat.Get(),

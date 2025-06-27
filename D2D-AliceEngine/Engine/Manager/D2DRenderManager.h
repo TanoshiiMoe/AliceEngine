@@ -44,7 +44,7 @@ public:
 
 	inline static ID2D1DeviceContext7* GetD2DDevice()
 	{
-		return Get().m_d2dDeviceContext.Get();
+		return GetInstance().m_d2dDeviceContext.Get();
 	}
 
 private:

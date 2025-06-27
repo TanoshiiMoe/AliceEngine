@@ -15,11 +15,11 @@ public:
 	InputComponent() { }
 	~InputComponent() 
 	{ 
-		InputSystem::Get().UnRegist(this->weak_from_this()); 
+		InputSystem::GetInstance().UnRegist(this->weak_from_this()); 
 		actions.clear();
 	}
 public:
-	virtual void Initialize() { InputSystem::Get().Regist(this->weak_from_this()); }
+	virtual void Initialize() { InputSystem::GetInstance().Regist(this->weak_from_this()); }
 	virtual void Update() 
 	{ 
 		for (auto action : actions)

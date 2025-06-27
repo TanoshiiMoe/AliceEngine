@@ -5,9 +5,9 @@
 class ScriptComponent : public Component
 {
 	ScriptComponent() {}
-	~ScriptComponent() { ScriptSystem::Get().UnRegist(this->weak_from_this()); }
+	~ScriptComponent() { ScriptSystem::GetInstance().UnRegist(this->weak_from_this()); }
 public:
-	void Initialize() override { ScriptSystem::Get().Regist(this->weak_from_this()); }
+	void Initialize() override { ScriptSystem::GetInstance().Regist(this->weak_from_this()); }
 	void Release() override {  }
 
 	virtual void Update() = 0;

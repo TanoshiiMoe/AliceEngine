@@ -3,7 +3,7 @@
 
 void TransformComponent::Initialize()
 {
-	TransformSystem::Get().Regist(this->weak_from_this());
+	TransformSystem::GetInstance().Regist(this->weak_from_this());
 }
 
 void TransformComponent::Release()

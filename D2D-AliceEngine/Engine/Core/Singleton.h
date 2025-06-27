@@ -16,13 +16,25 @@ public:
 
 	virtual ~Singleton() = default;
 
+	static void Create()
+	{
+		if (!s_instance)
+			s_instance = new T();
+	}
+	// 명시적인 인스턴스 파괴
+	static void Destroy()
+	{
+		delete s_instance;
+		s_instance = nullptr;
+	}
+
 	// 복사 및 이동 금지
 	Singleton(const Singleton&) = delete;
 	Singleton& operator=(const Singleton&) = delete;
 	Singleton(Singleton&&) = delete;
 	Singleton& operator=(Singleton&&) = delete;
 
-	static T& Get()
+	static T& GetInstance()
 	{
 		assert(s_instance != nullptr && "Singleton instance not created!");
 		return *s_instance;

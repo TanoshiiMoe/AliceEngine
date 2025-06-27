@@ -75,7 +75,7 @@ void AnimationComponent::LoadData(const std::wstring& path, const int& fps)
 	m_bitmaps.resize(m_maxClipSize + 1);
 	for (size_t i = 0 ; i < m_maxClipSize; i++)
 	{
-		m_bitmaps[i] = PackageResourceManager::Get().CreateBitmapFromFile(files[i].c_str());
+		m_bitmaps[i] = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[i].c_str());
 	}
 }
 
@@ -84,7 +84,7 @@ void AnimationComponent::LoadFrame(size_t frameIndex) {
 	//{
 	//	m_bitmaps.resize(frameIndex + 1);
 	//}
-	m_bitmaps[frameIndex] = PackageResourceManager::Get().CreateBitmapFromFile(files[frameIndex].c_str());
+	m_bitmaps[frameIndex] = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[frameIndex].c_str());
 }
 
 void AnimationComponent::Release()
@@ -126,7 +126,7 @@ void AnimationComponent::Render()
 	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
-	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity;
 	}
@@ -136,7 +136,7 @@ void AnimationComponent::Render()
 	view = view * world * cameraInv;
 
 	// Unity 좌표계면 변환 추가
-	if (D2DRenderManager::Get().m_eTransformType == ETransformType::Unity)
+	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
 	{
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}

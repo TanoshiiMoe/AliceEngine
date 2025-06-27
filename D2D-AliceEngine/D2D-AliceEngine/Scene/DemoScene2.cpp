@@ -178,7 +178,7 @@ void DemoScene2::OnEnter()
 	m_aruNameTexts[3]->SetTextFormat(L"최대 체력 : ", m_aruStat->GetStat("MAXHP"));
 	m_aruNameTexts[4]->SetTextFormat(L"마나 : ", m_aruStat->GetStat("MP"));
 
-	m_aruStat->OnChangeStatMap["HP"].Add(nullptr, [this](float oldVal, float newVal)
+	m_aruStat->OnChangeStatMap["HP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
 		if (newVal <= 0)	// 죽는 시점
 		{
@@ -192,17 +192,16 @@ void DemoScene2::OnEnter()
 			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
 			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
 		}
-
 		m_aruNameTexts[1]->SetTextFormat(L"직전 체력 : ", oldVal);
 		m_aruNameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);
 	});;
 
-	m_aruStat->OnChangeStatMap["MAXHP"].Add(nullptr, [this](float oldVal, float newVal)
+	m_aruStat->OnChangeStatMap["MAXHP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
 		m_aruNameTexts[3]->SetTextFormat(L"최대 체력 : ", newVal);
 	});;
 
-	m_aruStat->OnChangeStatMap["MP"].Add(nullptr, [this](float oldVal, float newVal)
+	m_aruStat->OnChangeStatMap["MP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 		{
 			m_aruNameTexts[4]->SetTextFormat(L"마나 : ", newVal);
 		});;
@@ -217,7 +216,7 @@ void DemoScene2::OnEnter()
 	m_aru2NameTexts[3]->SetTextFormat(L"최대 체력 : ", m_aru2Stat->GetStat("MAXHP"));
 	m_aru2NameTexts[4]->SetTextFormat(L"마나 : ", m_aru2Stat->GetStat("MP"));
 
-	m_aru2Stat->OnChangeStatMap["HP"].Add(nullptr, [this](float oldVal, float newVal)
+	m_aru2Stat->OnChangeStatMap["HP"].Add(m_aru2->GetHandle(), [this](float oldVal, float newVal)
 		{
 			if (newVal <= 0)	// 죽는 시점
 			{
@@ -236,12 +235,12 @@ void DemoScene2::OnEnter()
 			m_aru2NameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);
 		});;
 
-	m_aru2Stat->OnChangeStatMap["MAXHP"].Add(nullptr, [this](float oldVal, float newVal)
+	m_aru2Stat->OnChangeStatMap["MAXHP"].Add(m_aru2->GetHandle(), [this](float oldVal, float newVal)
 		{
 			m_aru2NameTexts[3]->SetTextFormat(L"최대 체력 : ", newVal);
 		});;
 
-	m_aru2Stat->OnChangeStatMap["MP"].Add(nullptr, [this](float oldVal, float newVal)
+	m_aru2Stat->OnChangeStatMap["MP"].Add(m_aru2->GetHandle(), [this](float oldVal, float newVal)
 		{
 			m_aru2NameTexts[4]->SetTextFormat(L"마나 : ", newVal);
 		});;
@@ -402,10 +401,10 @@ void DemoScene2::CameraInput()
 	}
 	if (Input::IsKeyPressed(VK_1))
 	{
-		D2DRenderManager::Get().SwitchTransformType(ETransformType::D2D);
+		D2DRenderManager::GetInstance().SwitchTransformType(ETransformType::D2D);
 	}
 	if (Input::IsKeyPressed(VK_2))
 	{
-		D2DRenderManager::Get().SwitchTransformType(ETransformType::Unity);
+		D2DRenderManager::GetInstance().SwitchTransformType(ETransformType::Unity);
 	}
 }

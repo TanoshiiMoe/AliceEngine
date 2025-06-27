@@ -39,6 +39,11 @@ void PackageResourceManager::Initialize()
 	}
 }
 
+void PackageResourceManager::UnloadData()
+{
+	m_loadedBitmaps.clear();
+}
+
 std::weak_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const wchar_t* path)
 {
 	// 해당 경로가 존재한다면
@@ -98,7 +103,7 @@ std::weak_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const w
 
 			// ⑥ DeviceContext에서 WIC 비트맵으로부터 D2D1Bitmap1 생성
 			ComPtr<ID2D1Bitmap1> comPtrBitmap;
-			hr = D2DRenderManager::Get().m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, &comPtrBitmap);
+			hr = D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, &comPtrBitmap);
 
 			if (SUCCEEDED(hr)) {
 				// 커스텀 삭제자로 COM 객체 래핑
@@ -152,7 +157,7 @@ std::wstring PackageResourceManager::FormAtBytes(UINT64 bytes)
 FMemoryInfo PackageResourceManager::GetMemoryInfo()
 {
 	DXGI_QUERY_VIDEO_MEMORY_INFO memInfo = {};
-	D2DRenderManager::Get().m_dxgiAdapter->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo);
+	D2DRenderManager::GetInstance().m_dxgiAdapter->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo);
 
 	HANDLE hProcess = GetCurrentProcess();
 	PROCESS_MEMORY_COUNTERS_EX pmc;

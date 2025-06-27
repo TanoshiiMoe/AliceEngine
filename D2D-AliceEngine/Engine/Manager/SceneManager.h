@@ -29,9 +29,9 @@ public:
 
 	static Camera* GetCamera()
 	{
-		if (Get().m_currentScene.lock())
+		if (GetInstance().m_currentScene.lock())
 		{
-			return Get().m_currentScene.lock()->GetCamera();
+			return GetInstance().m_currentScene.lock()->GetCamera();
 		}
 		return nullptr;
 	}
@@ -45,7 +45,7 @@ public:
 		createdObj->SetName(NewobjectName);
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
 
-		auto result = Get().m_scenes.emplace(createdObj->GetUUID(), createdObj);
+		auto result = GetInstance().m_scenes.emplace(createdObj->GetUUID(), createdObj);
 
 		return createdObj.get();
 	}
@@ -53,7 +53,7 @@ public:
 	static std::weak_ptr<Scene> GetUUIDFromObjectName(const std::wstring& name)
 	{
 		// 이름 기준으로 찾기
-		for (auto& scenePair : Get().m_scenes)
+		for (auto& scenePair : GetInstance().m_scenes)
 		{
 			std::weak_ptr<Scene> scene = scenePair.second;
 			if (scene.lock()->GetName() == name)
@@ -74,18 +74,18 @@ public:
 			{
 				m_currentScene.lock()->OnExit();
 				m_currentScene.lock()->Release();
-				SceneManager::Get().GetCamera()->Release();
+				SceneManager::GetInstance().GetCamera()->Release();
 			}
 			searchedScene.lock()->Initialize();
 			searchedScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
 			m_currentScene = searchedScene;
-			SceneManager::Get().GetCamera()->Initialize();
+			SceneManager::GetInstance().GetCamera()->Initialize();
 		}
 	}
 
 	static void ChangeScene(const std::wstring& NewobjectName)
 	{
-		Get().m_nextSceneName = NewobjectName;
+		GetInstance().m_nextSceneName = NewobjectName;
 	}
 
 private:

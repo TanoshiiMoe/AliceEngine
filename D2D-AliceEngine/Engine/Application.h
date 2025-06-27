@@ -26,14 +26,6 @@ public:
 	virtual void Input();
 	virtual void Uninitialize();
 
-	D2DRenderManager* m_pD2DRenderManager;
-	PackageResourceManager* m_pPackageResourceManager;
-	SceneManager* m_pSceneManager;
-	RenderSystem* m_pRenderSystem;
-	ScriptSystem* m_pScriptSystem;
-	InputSystem* m_pInputSystem;
-	TransformSystem* m_pTransformSystem;
-
 protected:
 	HWND m_hwnd = nullptr;
 	HINSTANCE m_hInstance;
