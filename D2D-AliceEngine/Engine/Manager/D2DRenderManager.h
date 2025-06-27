@@ -66,6 +66,10 @@ public:
 	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext;
 	ComPtr<ID2D1Bitmap1> m_d2dBitmapTarget;
 
+	// For MemoryInfo
+	ComPtr<IDXGIAdapter3> m_dxgiAdapter;
+	ComPtr<IDXGIDevice3> m_dxgiDevice;
+
 	// For DrawText
 	ComPtr<IDWriteFactory> m_dWriteFactory;
 	// SpriteBatch

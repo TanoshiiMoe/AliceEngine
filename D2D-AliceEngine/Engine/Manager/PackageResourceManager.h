@@ -1,7 +1,7 @@
 #pragma once
 #include <Core/Singleton.h>
-#include <unordered_map>
 #include <Core/ObjectHandler.h>
+#include <unordered_map>
 
 /*
 *  @brief : 패키지 리소스 관리 클래스
@@ -31,6 +31,14 @@ struct FPacakageInfo
 	}
 };
 
+struct FMemoryInfo
+{
+	std::wstring VRAMUssage;
+	std::wstring DRAMUssage;
+	std::wstring PageFile;
+	FMemoryInfo() : VRAMUssage(L""), DRAMUssage(L""), PageFile(L"") {}
+};
+
 class PackageResourceManager : public Singleton<PackageResourceManager>
 {
 public:
@@ -42,6 +50,9 @@ public:
 	ComPtr<IWICImagingFactory> m_wicImagingFactory;
 
 	std::weak_ptr<ID2D1Bitmap1> CreateBitmapFromFile(const wchar_t* path);
+
+	std::wstring FormAtBytes(UINT64 bytes);
+	FMemoryInfo GetMemoryInfo();
 
 	/*
 	* key 값으로는 Resource에 대한 절대 경로를 사용합니다.

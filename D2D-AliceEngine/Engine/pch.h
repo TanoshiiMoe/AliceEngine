@@ -31,6 +31,10 @@
 
 #include <d2d1effects_2.h>
 #pragma comment(lib, "dxguid.lib")
+
+#include <psapi.h>                // GetProcessMemoryInfo, PROCESS_MEMORY_COUNTERS_EX
+#pragma comment(lib, "psapi.lib")
+
 #include <string>
 #include <comdef.h>
 #include <Define/Define.h>

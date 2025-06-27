@@ -88,6 +88,7 @@ public:
 
 
 private:
+	gameObject* m_sysinfoWidget;
 	std::unordered_map<std::wstring, std::shared_ptr<gameObject>> m_objects;
 };
 

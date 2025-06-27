@@ -5,6 +5,7 @@
 #include <System/RenderSystem.h>
 #include <Object/UObject.h>
 #include <Component/TransformComponent.h>
+#include <Manager/D2DRenderManager.h>
 
 /*
 * @brief Object Å¬·¡½º.

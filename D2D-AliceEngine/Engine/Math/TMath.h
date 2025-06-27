@@ -87,7 +87,6 @@ public:
 	{
 		return x * x + y * y;
 	}
-
 };
 
 namespace Math

@@ -315,7 +315,7 @@ void DemoScene2::aruInput()
 		else
 			m_aru->GetComponent<TextRenderComponent>()->SetText(L"aru");
 	}
-	if (Input::IsKeyPressed(VK_5))
+	if (Input::IsKeyDown(VK_5))
 	{
 		//for (int i = 0; i < 2; i++)
 		//{
@@ -334,11 +334,11 @@ void DemoScene2::aruInput()
 		//gun->transform()->SetPivot(0.5f);
 		//gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
 	}
-	if (Input::IsKeyPressed(VK_6))
+	if (Input::IsKeyDown(VK_6))
 	{
 		RemoveObjectByName(L"gun");
 	}
-	if (Input::IsKeyPressed(VK_7))
+	if (Input::IsKeyDown(VK_7))
 	{
 		gameObject* wallet = NewObject<gameObject>(L"wallet");
 		wallet->Initialize(FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
@@ -348,7 +348,7 @@ void DemoScene2::aruInput()
 		//wallet->transform()->SetPivot(0.5f);
 		wallet->AddComponent<SpriteRenderer>()->LoadData(L"wallet.png");
 	}
-	if (Input::IsKeyPressed(VK_8))
+	if (Input::IsKeyDown(VK_8))
 	{
 		RemoveObjectByName(L"wallet");
 	}

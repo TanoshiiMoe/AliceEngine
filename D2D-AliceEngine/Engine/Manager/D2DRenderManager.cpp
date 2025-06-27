@@ -41,6 +41,13 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	ComPtr<IDXGIDevice> dxgiDevice;
 	m_d3dDevice.As(&dxgiDevice);
 
+	ComPtr<IDXGIAdapter> dxgiAdapter;
+	m_d3dDevice.As(&m_dxgiDevice);
+	m_dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf());
+	dxgiAdapter.As(&m_dxgiAdapter);
+
+	m_d3dDevice.As(&m_dxgiDevice);
+
 	ComPtr<ID2D1Device7> d2dDevice;
 	hr = d2dFactory->CreateDevice(dxgiDevice.Get(), d2dDevice.GetAddressOf());
 	assert(SUCCEEDED(hr));

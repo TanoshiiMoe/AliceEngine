@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "PackageResourceManager.h"
 #include "D2DRenderManager.h"
-
 #include <Helpers/FileHelper.h>
+
 PackageResourceManager::PackageResourceManager()
 {
 	// Image
@@ -16,6 +16,7 @@ PackageResourceManager::PackageResourceManager()
 	hr = CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
 		IID_PPV_ARGS(&m_wicImagingFactory));
 	assert(SUCCEEDED(hr));
+
 }
 
 PackageResourceManager::~PackageResourceManager()
@@ -125,4 +126,44 @@ std::weak_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const w
 		return std::weak_ptr<ID2D1Bitmap1>();
 	}
 	return std::weak_ptr<ID2D1Bitmap1>();
+}
+
+std::wstring PackageResourceManager::FormAtBytes(UINT64 bytes)
+{
+	constexpr double KB = 1024.0;
+	constexpr double MB = KB * 1024.0;
+	constexpr double GB = MB * 1024.0;
+
+	std::wostringstream oss;
+	oss << std::fixed << std::setprecision(2);
+
+	if (bytes >= static_cast<UINT64>(GB))
+		oss << (bytes / GB) << L" GB";
+	else if (bytes >= static_cast<UINT64>(MB))
+		oss << (bytes / MB) << L" MB";
+	else if (bytes >= static_cast<UINT64>(KB))
+		oss << (bytes / KB) << L" KB";
+	else
+		oss << bytes << " B";
+
+	return oss.str();
+}
+
+FMemoryInfo PackageResourceManager::GetMemoryInfo()
+{
+	DXGI_QUERY_VIDEO_MEMORY_INFO memInfo = {};
+	D2DRenderManager::Get().m_dxgiAdapter->QueryVideoMemoryInfo(0, DXGI_MEMORY_SEGMENT_GROUP_LOCAL, &memInfo);
+
+	HANDLE hProcess = GetCurrentProcess();
+	PROCESS_MEMORY_COUNTERS_EX pmc;
+	pmc.cb = sizeof(PROCESS_MEMORY_COUNTERS_EX);
+
+	// 현재 프로세스의 메모리 사용 정보 조회
+	GetProcessMemoryInfo(hProcess, (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
+
+	FMemoryInfo info;
+	info.VRAMUssage = FormAtBytes(memInfo.CurrentUsage);
+	info.DRAMUssage = FormAtBytes(pmc.WorkingSetSize);
+	info.PageFile = FormAtBytes(pmc.PagefileUsage);
+	return info;
 }
