@@ -1,21 +1,30 @@
 #pragma once
 #include "pch.h"
 #include "Application.h"
-#include "D2DRenderer.h"
+#include "Manager/D2DRenderManager.h"
+#include <Core/Input.h>
+#include <Core/Time.h>
+#include <Helpers/FileHelper.h>
+#include <Core/ObjectHandler.h>
 
 Application::Application()
 {
 	m_hwnd = nullptr;
 	m_hInstance = nullptr;
-	m_pInstance = this;
+	FileHelper::CopyFilesToBuildPath(L"Resource");
+	FileHelper::CopyFilesToBuildPath(L"Extension");
 }
 
 Application::~Application()
 {
-
+	ObjectHandler::Destroy();
+	D2DRenderManager::Destroy();
+	RenderSystem::Destroy();
+	ScriptSystem::Destroy();
+	InputSystem::Destroy();
+	TransformSystem::Destroy();
+	SceneManager::Destroy();
 }
-
-Application* Application::m_pInstance = nullptr;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -44,7 +53,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Application::Initialize()
 {
-	m_pD2DRenderer = new D2DRenderer();
+	ObjectHandler::Create();
+	D2DRenderManager::Create();
+	RenderSystem::Create();
+	ScriptSystem::Create();
+	InputSystem::Create();
+	TransformSystem::Create();
+	SceneManager::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -91,6 +106,13 @@ void Application::Initialize()
 
 	CoInitialize(nullptr);
 
+	D2DRenderManager::GetInstance().Initialize(m_hwnd);
+
+	Input::Initialize(m_hwnd);
+	Time::Initialize();
+
+	PackageResourceManager::Create();
+	PackageResourceManager::GetInstance().Initialize();
 }
 
 void Application::Run()
@@ -98,11 +120,35 @@ void Application::Run()
 
 }
 
-void Application::Uninitialize()
+void Application::Update()
+{
+	SceneManager::GetInstance().Update();
+	D2DRenderManager::GetInstance().Update();
+	Time::UpdateTime();
+	Input::Update();
+}
+
+void Application::Input()
 {
 
 }
 
+void Application::Render()
+{
+	D2DRenderManager::GetInstance().Render();
+}
+
+void Application::Uninitialize()
+{
+	D2DRenderManager::GetInstance().UnInitialize();
+	SceneManager::GetInstance().UnInitialize();
+
+	RenderSystem::GetInstance().UnInitialize();
+	ScriptSystem::GetInstance().UnRegistAll();
+	InputSystem::GetInstance().UnRegistAll();
+	TransformSystem::GetInstance().UnRegistAll();
+	CoUninitialize();
+}
 
 void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -111,12 +157,6 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
-
-	case WM_KEYDOWN:
-		if (wParam == VK_SPACE)
-			m_pD2DRenderer->m_useScreenEffect = !m_pD2DRenderer->m_useScreenEffect;
-		break;
-
 	case WM_SIZE:
 	{
 		if (wParam == SIZE_MINIMIZED)
@@ -132,14 +172,15 @@ void Application::MessageProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 		}
 	}
 	break;
-	case WM_EXITSIZEMOVE:
-		if (m_resized)
-		{
-			m_pD2DRenderer->Uninitialize();
-			m_pD2DRenderer->Initialize(hwnd);
-		}
-		break;
 	default:
 		break;
 	}
+}
+
+void Application::GetApplicationSize(int& width, int& height)
+{
+	RECT rc = {};
+	GetClientRect(m_hwnd, &rc);
+	width = rc.right - rc.left;
+	height = rc.bottom - rc.top;
 }

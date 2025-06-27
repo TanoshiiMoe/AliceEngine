@@ -31,7 +31,25 @@
 
 #include <d2d1effects_2.h>
 #pragma comment(lib, "dxguid.lib")
+
+#include <psapi.h>                // GetProcessMemoryInfo, PROCESS_MEMORY_COUNTERS_EX
+#pragma comment(lib, "psapi.lib")
+
 #include <string>
 #include <comdef.h>
+#include <Define/Define.h>
+#include <vector>
+#include <memory>
+#include <math.h>
+#include <cmath>
+#include <map>
+#include <unordered_map>
+#include <sstream>
+#include <iomanip>
+#include <iostream>
+
+#include <Math/TMath.h>
+
+using namespace Microsoft::WRL;
 
 #endif //PCH_H

@@ -78,6 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Spine2D\3.8.\include;$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -112,6 +113,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Spine2D\3.8.\include;$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -139,23 +141,98 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\AnimationComponent.h" />
     <ClInclude Include="Application.h" />
-    <ClInclude Include="D2DRenderer.h" />
+    <ClInclude Include="Component\BoxComponent.h" />
+    <ClInclude Include="Component\TextRenderComponent.h" />
+    <ClInclude Include="Component\SpriteRenderer.h" />
+    <ClInclude Include="Core\Input.h" />
+    <ClInclude Include="Component\Spine2DRenderComponent.h" />
+    <ClInclude Include="Core\Delegate.h" />
+    <ClInclude Include="Helpers\FileHelper.h" />
+    <ClInclude Include="Helpers\FFmpegHelper.h" />
+    <ClInclude Include="Core\ObjectHandler.h" />
+    <ClInclude Include="Object\Camera.h" />
+    <ClInclude Include="Component\RenderComponent.h" />
+    <ClInclude Include="Component\ScriptComponent.h" />
+    <ClInclude Include="Component\InputComponent.h" />
+    <ClInclude Include="Component\StatComponent.h" />
+    <ClInclude Include="Core\StatTraits.h" />
+    <ClInclude Include="Manager\PackageResourceManager.h" />
+    <ClInclude Include="System\InputSystem.h" />
+    <ClInclude Include="System\ScriptSystem.h" />
+    <ClInclude Include="System\RenderSystem.h" />
+    <ClInclude Include="Manager\D2DRenderManager.h" />
+    <ClInclude Include="Define\Define.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Object\UObject.h" />
+    <ClInclude Include="Component\Component.h" />
+    <ClInclude Include="System\SystemBase.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Manager\SceneManager.h" />
+    <ClInclude Include="Helpers\StringHelper.h" />
+    <ClInclude Include="Math\TMath.h" />
+    <ClInclude Include="Object\gameObject.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Core\Singleton.h" />
+    <ClInclude Include="Math\Transform.h" />
+    <ClInclude Include="Component\TransformComponent.h" />
+    <ClInclude Include="System\TransformSystem.h" />
+    <ClInclude Include="Math\TColor.h" />
+    <ClInclude Include="Core\Time.h" />
+    <ClInclude Include="Manager\UpdateTaskManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\AnimationComponent.cpp" />
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="D2DRenderer.cpp" />
+    <ClCompile Include="Component\BoxComponent.cpp" />
+    <ClCompile Include="Component\TextRenderComponent.cpp" />
+    <ClCompile Include="Component\SpriteRenderer.cpp" />
+    <ClCompile Include="Core\Input.cpp" />
+    <ClCompile Include="Component\Spine2DRenderComponent.cpp" />
+    <ClCompile Include="Core\Delegate.cpp" />
+    <ClCompile Include="Helpers\FileHelper.cpp" />
+    <ClCompile Include="Helpers\FFmpegHelper.cpp" />
+    <ClCompile Include="Core\ObjectHandler.cpp" />
+    <ClCompile Include="Object\Camera.cpp" />
+    <ClCompile Include="Component\RenderComponent.cpp" />
+    <ClCompile Include="Component\ScriptComponent.cpp" />
+    <ClCompile Include="Component\InputComponent.cpp" />
+    <ClCompile Include="Component\StatComponent.cpp" />
+    <ClCompile Include="Core\StatTraits.cpp" />
+    <ClCompile Include="Manager\PackageResourceManager.cpp" />
+    <ClCompile Include="System\InputSystem.cpp" />
+    <ClCompile Include="System\ScriptSystem.cpp" />
+    <ClCompile Include="System\RenderSystem.cpp" />
+    <ClCompile Include="Manager\D2DRenderManager.cpp" />
+    <ClCompile Include="Define\Define.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Object\UObject.cpp" />
+    <ClCompile Include="Component\Component.cpp" />
+    <ClCompile Include="System\SystemBase.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Manager\SceneManager.cpp" />
+    <ClCompile Include="Helpers\StringHelper.cpp" />
+    <ClCompile Include="Math\TMath.cpp" />
+    <ClCompile Include="Object\gameObject.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="Core\Singleton.cpp" />
+    <ClCompile Include="Math\Transform.cpp" />
+    <ClCompile Include="Component\TransformComponent.cpp" />
+    <ClCompile Include="System\TransformSystem.cpp" />
+    <ClCompile Include="Math\TColor.cpp" />
+    <ClCompile Include="Core\Time.cpp" />
+    <ClCompile Include="Manager\UpdateTaskManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spine2D\Spine2D.vcxproj">
+      <Project>{74f27329-c132-4642-b878-fdcd108ea6b2}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

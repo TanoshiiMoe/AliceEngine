@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{74f27329-c132-4642-b878-fdcd108ea6b2}</ProjectGuid>
+    <RootNamespace>Spine2D</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Spine2D\3.8.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Spine2D\3.8.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="3.8\include\spine\Animation.h" />
+    <ClInclude Include="3.8\include\spine\AnimationState.h" />
+    <ClInclude Include="3.8\include\spine\AnimationStateData.h" />
+    <ClInclude Include="3.8\include\spine\Atlas.h" />
+    <ClInclude Include="3.8\include\spine\AtlasAttachmentLoader.h" />
+    <ClInclude Include="3.8\include\spine\Attachment.h" />
+    <ClInclude Include="3.8\include\spine\AttachmentLoader.h" />
+    <ClInclude Include="3.8\include\spine\AttachmentTimeline.h" />
+    <ClInclude Include="3.8\include\spine\AttachmentType.h" />
+    <ClInclude Include="3.8\include\spine\BlendMode.h" />
+    <ClInclude Include="3.8\include\spine\Bone.h" />
+    <ClInclude Include="3.8\include\spine\BoneData.h" />
+    <ClInclude Include="3.8\include\spine\BoundingBoxAttachment.h" />
+    <ClInclude Include="3.8\include\spine\ClippingAttachment.h" />
+    <ClInclude Include="3.8\include\spine\Color.h" />
+    <ClInclude Include="3.8\include\spine\ColorTimeline.h" />
+    <ClInclude Include="3.8\include\spine\ConstraintData.h" />
+    <ClInclude Include="3.8\include\spine\ContainerUtil.h" />
+    <ClInclude Include="3.8\include\spine\CurveTimeline.h" />
+    <ClInclude Include="3.8\include\spine\Debug.h" />
+    <ClInclude Include="3.8\include\spine\DeformTimeline.h" />
+    <ClInclude Include="3.8\include\spine\dll.h" />
+    <ClInclude Include="3.8\include\spine\DrawOrderTimeline.h" />
+    <ClInclude Include="3.8\include\spine\Event.h" />
+    <ClInclude Include="3.8\include\spine\EventData.h" />
+    <ClInclude Include="3.8\include\spine\EventTimeline.h" />
+    <ClInclude Include="3.8\include\spine\Extension.h" />
+    <ClInclude Include="3.8\include\spine\HashMap.h" />
+    <ClInclude Include="3.8\include\spine\HasRendererObject.h" />
+    <ClInclude Include="3.8\include\spine\IkConstraint.h" />
+    <ClInclude Include="3.8\include\spine\IkConstraintData.h" />
+    <ClInclude Include="3.8\include\spine\IkConstraintTimeline.h" />
+    <ClInclude Include="3.8\include\spine\Json.h" />
+    <ClInclude Include="3.8\include\spine\LinkedMesh.h" />
+    <ClInclude Include="3.8\include\spine\MathUtil.h" />
+    <ClInclude Include="3.8\include\spine\MeshAttachment.h" />
+    <ClInclude Include="3.8\include\spine\MixBlend.h" />
+    <ClInclude Include="3.8\include\spine\MixDirection.h" />
+    <ClInclude Include="3.8\include\spine\PathAttachment.h" />
+    <ClInclude Include="3.8\include\spine\PathConstraint.h" />
+    <ClInclude Include="3.8\include\spine\PathConstraintData.h" />
+    <ClInclude Include="3.8\include\spine\PathConstraintMixTimeline.h" />
+    <ClInclude Include="3.8\include\spine\PathConstraintPositionTimeline.h" />
+    <ClInclude Include="3.8\include\spine\PathConstraintSpacingTimeline.h" />
+    <ClInclude Include="3.8\include\spine\PointAttachment.h" />
+    <ClInclude Include="3.8\include\spine\Pool.h" />
+    <ClInclude Include="3.8\include\spine\PositionMode.h" />
+    <ClInclude Include="3.8\include\spine\RegionAttachment.h" />
+    <ClInclude Include="3.8\include\spine\RotateMode.h" />
+    <ClInclude Include="3.8\include\spine\RotateTimeline.h" />
+    <ClInclude Include="3.8\include\spine\RTTI.h" />
+    <ClInclude Include="3.8\include\spine\ScaleTimeline.h" />
+    <ClInclude Include="3.8\include\spine\ShearTimeline.h" />
+    <ClInclude Include="3.8\include\spine\Skeleton.h" />
+    <ClInclude Include="3.8\include\spine\SkeletonBinary.h" />
+    <ClInclude Include="3.8\include\spine\SkeletonBounds.h" />
+    <ClInclude Include="3.8\include\spine\SkeletonClipping.h" />
+    <ClInclude Include="3.8\include\spine\SkeletonData.h" />
+    <ClInclude Include="3.8\include\spine\SkeletonJson.h" />
+    <ClInclude Include="3.8\include\spine\Skin.h" />
+    <ClInclude Include="3.8\include\spine\Slot.h" />
+    <ClInclude Include="3.8\include\spine\SlotData.h" />
+    <ClInclude Include="3.8\include\spine\SpacingMode.h" />
+    <ClInclude Include="3.8\include\spine\spine-alice.h" />
+    <ClInclude Include="3.8\include\spine\spine.h" />
+    <ClInclude Include="3.8\include\spine\SpineObject.h" />
+    <ClInclude Include="3.8\include\spine\SpineString.h" />
+    <ClInclude Include="3.8\include\spine\TextureLoader.h" />
+    <ClInclude Include="3.8\include\spine\Timeline.h" />
+    <ClInclude Include="3.8\include\spine\TimelineType.h" />
+    <ClInclude Include="3.8\include\spine\TransformConstraint.h" />
+    <ClInclude Include="3.8\include\spine\TransformConstraintData.h" />
+    <ClInclude Include="3.8\include\spine\TransformConstraintTimeline.h" />
+    <ClInclude Include="3.8\include\spine\TransformMode.h" />
+    <ClInclude Include="3.8\include\spine\TranslateTimeline.h" />
+    <ClInclude Include="3.8\include\spine\Triangulator.h" />
+    <ClInclude Include="3.8\include\spine\TwoColorTimeline.h" />
+    <ClInclude Include="3.8\include\spine\Updatable.h" />
+    <ClInclude Include="3.8\include\spine\Vector.h" />
+    <ClInclude Include="3.8\include\spine\VertexAttachment.h" />
+    <ClInclude Include="3.8\include\spine\VertexEffect.h" />
+    <ClInclude Include="3.8\include\spine\Vertices.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="3.8\include\spine\Spine2DTextureLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="3.8\src\spine\Animation.cpp" />
+    <ClCompile Include="3.8\src\spine\AnimationState.cpp" />
+    <ClCompile Include="3.8\src\spine\AnimationStateData.cpp" />
+    <ClCompile Include="3.8\src\spine\Atlas.cpp" />
+    <ClCompile Include="3.8\src\spine\AtlasAttachmentLoader.cpp" />
+    <ClCompile Include="3.8\src\spine\Attachment.cpp" />
+    <ClCompile Include="3.8\src\spine\AttachmentLoader.cpp" />
+    <ClCompile Include="3.8\src\spine\AttachmentTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\Bone.cpp" />
+    <ClCompile Include="3.8\src\spine\BoneData.cpp" />
+    <ClCompile Include="3.8\src\spine\BoundingBoxAttachment.cpp" />
+    <ClCompile Include="3.8\src\spine\ClippingAttachment.cpp" />
+    <ClCompile Include="3.8\src\spine\ColorTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\ConstraintData.cpp" />
+    <ClCompile Include="3.8\src\spine\CurveTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\DeformTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\DrawOrderTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\Event.cpp" />
+    <ClCompile Include="3.8\src\spine\EventData.cpp" />
+    <ClCompile Include="3.8\src\spine\EventTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\Extension.cpp" />
+    <ClCompile Include="3.8\src\spine\IkConstraint.cpp" />
+    <ClCompile Include="3.8\src\spine\IkConstraintData.cpp" />
+    <ClCompile Include="3.8\src\spine\IkConstraintTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\Json.cpp" />
+    <ClCompile Include="3.8\src\spine\LinkedMesh.cpp" />
+    <ClCompile Include="3.8\src\spine\MathUtil.cpp" />
+    <ClCompile Include="3.8\src\spine\MeshAttachment.cpp" />
+    <ClCompile Include="3.8\src\spine\PathAttachment.cpp" />
+    <ClCompile Include="3.8\src\spine\PathConstraint.cpp" />
+    <ClCompile Include="3.8\src\spine\PathConstraintData.cpp" />
+    <ClCompile Include="3.8\src\spine\PathConstraintMixTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\PathConstraintPositionTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\PathConstraintSpacingTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\PointAttachment.cpp" />
+    <ClCompile Include="3.8\src\spine\RegionAttachment.cpp" />
+    <ClCompile Include="3.8\src\spine\RotateTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\RTTI.cpp" />
+    <ClCompile Include="3.8\src\spine\ScaleTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\ShearTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\Skeleton.cpp" />
+    <ClCompile Include="3.8\src\spine\SkeletonBinary.cpp" />
+    <ClCompile Include="3.8\src\spine\SkeletonBounds.cpp" />
+    <ClCompile Include="3.8\src\spine\SkeletonClipping.cpp" />
+    <ClCompile Include="3.8\src\spine\SkeletonData.cpp" />
+    <ClCompile Include="3.8\src\spine\SkeletonJson.cpp" />
+    <ClCompile Include="3.8\src\spine\Skin.cpp" />
+    <ClCompile Include="3.8\src\spine\Slot.cpp" />
+    <ClCompile Include="3.8\src\spine\SlotData.cpp" />
+    <ClCompile Include="3.8\src\spine\spine-alice.cpp" />
+    <ClCompile Include="3.8\src\spine\SpineObject.cpp" />
+    <ClCompile Include="3.8\src\spine\TextureLoader.cpp" />
+    <ClCompile Include="3.8\src\spine\Timeline.cpp" />
+    <ClCompile Include="3.8\src\spine\TransformConstraint.cpp" />
+    <ClCompile Include="3.8\src\spine\TransformConstraintData.cpp" />
+    <ClCompile Include="3.8\src\spine\TransformConstraintTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\TranslateTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\Triangulator.cpp" />
+    <ClCompile Include="3.8\src\spine\TwoColorTimeline.cpp" />
+    <ClCompile Include="3.8\src\spine\Updatable.cpp" />
+    <ClCompile Include="3.8\src\spine\VertexAttachment.cpp" />
+    <ClCompile Include="3.8\src\spine\VertexEffect.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Spine2D.cpp" />
+    <ClCompile Include="3.8\src\spine\Spine2DTextureLoader.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

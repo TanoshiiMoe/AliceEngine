@@ -16,4 +16,6 @@
 #pragma comment(lib,"windowscodecs.lib")
 #include <string>
 
-#include "../Engine/Application.h"
+#include <Application.h>
+#include <Object/gameObject.h>
+#include <Math/Transform.h>
