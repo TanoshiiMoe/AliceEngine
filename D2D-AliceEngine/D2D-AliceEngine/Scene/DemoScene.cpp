@@ -45,7 +45,7 @@ void DemoScene::OnEnter()
 	m_yuuka->transform()->SetRotation(0);
 	m_yuuka->transform()->SetScale(1.0f, 1.0f);
 	m_yuuka->transform()->SetPivot(0.5f);
-	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 60);
+	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 30);
 	m_yuuka->GetComponent<AnimationComponent>()->Play();
 
 	m_sun = NewObject<gameObject>(L"Sun");
