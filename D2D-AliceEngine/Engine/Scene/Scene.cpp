@@ -70,5 +70,5 @@ void Scene::OnExit()
 		it->second->OnEnd();
 	}
 	D2DRenderManager::GetInstance().m_dxgiDevice->Trim();
+	PackageResourceManager::GetInstance().UnloadData();
 }
-

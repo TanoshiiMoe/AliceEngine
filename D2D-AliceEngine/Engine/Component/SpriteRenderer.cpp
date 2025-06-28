@@ -1,7 +1,14 @@
 #include "pch.h"
 #include "SpriteRenderer.h"
 #include "Manager/D2DRenderManager.h"
-#include "Application.h"
+#include <Manager/PackageResourceManager.h>
+#include <Manager/SceneManager.h>
+#include <Helpers/FileHelper.h>
+
+SpriteRenderer::~SpriteRenderer()
+{
+	PackageResourceManager::GetInstance().UnloadData(filePath); // 비트맵 언로드
+}
 
 void SpriteRenderer::Initialize()
 {
@@ -10,7 +17,8 @@ void SpriteRenderer::Initialize()
 
 void SpriteRenderer::LoadData(const std::wstring& path)
 {
-	m_weakBitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
+	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str());
 }
 
@@ -27,10 +35,10 @@ void SpriteRenderer::Release()
 
 void SpriteRenderer::Render()
 {
-	if (m_weakBitmap.lock() == nullptr) return;
+	if (m_bitmap == nullptr) return;
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
-	D2D1_SIZE_U bmpSize = m_weakBitmap.lock()->GetPixelSize(); // 비트맵 크기 및 피벗
+	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
 	D2D1_POINT_2F pivotOffset = {
 		bmpSize.width * m_pivot->x,
 		bmpSize.height * m_pivot->y
@@ -57,5 +65,5 @@ void SpriteRenderer::Render()
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
-	context->DrawBitmap(m_weakBitmap.lock().get());
+	context->DrawBitmap(m_bitmap.get());
 }

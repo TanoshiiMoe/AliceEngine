@@ -16,11 +16,7 @@ class AnimationComponent : public RenderComponent
 {
 public:
 	AnimationComponent() {}
-	~AnimationComponent() 
-	{
-		files.clear();
-		m_bitmaps.clear();
-	}
+	~AnimationComponent();
 
 	void Initialize() override;
 	void Update() override;
@@ -36,9 +32,9 @@ public:
 		if (m_bitmaps.empty() == false)
 		{
 			ComPtr<ID2D1Bitmap1> bitmapStrong;
-			if (m_bitmaps[0].lock())
+			if (m_bitmaps[0])
 			{
-				D2D1_SIZE_U bmpSize = m_bitmaps[0].lock()->GetPixelSize();
+				D2D1_SIZE_U bmpSize = m_bitmaps[0]->GetPixelSize();
 				return FVector2(bmpSize.width, bmpSize.height);
 			}
 			return FVector2(0,0);
@@ -46,7 +42,8 @@ public:
 		return FVector2();
 	}
 	std::vector<std::wstring> files;
-	std::vector<std::weak_ptr<ID2D1Bitmap1>> m_bitmaps; // BitmapImage 컴포넌트
+	std::wstring fileDirPath; // 비디오 파일 경로
+	std::vector<std::shared_ptr<ID2D1Bitmap1>> m_bitmaps; // BitmapImage 컴포넌트
 	const size_t cacheSize = 2; // 캐시할 프레임 수
 
 	void Play() { bPlay = true; }

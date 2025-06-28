@@ -10,7 +10,7 @@ class SpriteRenderer : public RenderComponent
 {
 public:
 	SpriteRenderer() {}
-	~SpriteRenderer() {}
+	~SpriteRenderer();
 
 	void Initialize() override;
 	void LoadData(const std::wstring& path);
@@ -19,9 +19,10 @@ public:
 
 	FVector2 GetSize()
 	{
-		D2D1_SIZE_U bmpSize = m_weakBitmap.lock()->GetPixelSize();
+		D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 		return FVector2(bmpSize.width, bmpSize.height);
 	}
 
-	std::weak_ptr<ID2D1Bitmap1> m_weakBitmap;
+	std::wstring filePath; // 파일의 경로
+	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 };

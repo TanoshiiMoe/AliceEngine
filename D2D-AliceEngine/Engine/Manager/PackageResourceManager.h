@@ -21,6 +21,7 @@ struct FPacakageInfo
 	std::wstring fileExtension; // 파일 확장자
 	std::wstring uuid; // 고유 식별자
 	bool bIsLoaded = false; // 로드 여부
+	int useCount = 0;
 	FPacakageInfo()
 		: resourceType(EResourceSpecifier::Max), name(L""), fileExtension(L""), uuid(L""), bIsLoaded(false)
 	{
@@ -47,10 +48,12 @@ public:
 
 	void Initialize();
 	void UnloadData();
+	void UnloadData(std::wstring& path);
+	void UnloadDataDir(std::wstring& path);
 	// For ImageDraw
 	ComPtr<IWICImagingFactory> m_wicImagingFactory;
 
-	std::weak_ptr<ID2D1Bitmap1> CreateBitmapFromFile(const wchar_t* path);
+	std::shared_ptr<ID2D1Bitmap1> CreateBitmapFromFile(const wchar_t* path);
 
 	std::wstring FormAtBytes(UINT64 bytes);
 	FMemoryInfo GetMemoryInfo();
@@ -61,5 +64,5 @@ public:
 	 std::unordered_map<std::wstring, FPacakageInfo> m_preloadedPaths; // 미리 로드된 비트맵 캐시
 
 	 // key 값은 FPacakageInfo에 있는 uuid 입니다.
-	 std::unordered_map<std::wstring, std::shared_ptr<ID2D1Bitmap1>> m_loadedBitmaps; // 로드된 비트맵 캐시
+	 std::unordered_map<std::wstring, std::weak_ptr<ID2D1Bitmap1>> m_loadedBitmaps; // 로드된 비트맵 캐시
 };
