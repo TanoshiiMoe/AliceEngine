@@ -1,10 +1,9 @@
 #pragma once
-#include "../pch.h"
-#include "System/RenderSystem.h"
 #include "Component/RenderComponent.h"
-#include <Math/TColor.h>
 #include <Math/TMath.h>
+#include <Math/TColor.h>
 #include <Math/Transform.h>
+#include <Define/Define.h>
 #include <sstream>
 
 using namespace Define;
@@ -18,8 +17,7 @@ public:
 	void Initialize() override;
 	void Update() override;
 	void Release() override;
-
-	void Render();
+	void Render() override;
 
 	ComPtr<IDWriteTextLayout> m_layout;
 	ComPtr<IDWriteTextFormat> m_dWriteTextFormat;
@@ -56,7 +54,7 @@ public:
 	ETransformType m_eTransformType = ETransformType::D2D;
 	Transform m_transform;
 	std::wstring m_content = L"";
-	FColor m_color = FColor::Black;
+	FColor m_color;
 	std::wstring m_font = L"Consolas";
 	float m_fontSize = 24.0f;
 };

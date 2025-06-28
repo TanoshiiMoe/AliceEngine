@@ -5,6 +5,13 @@
 #include "Application.h"
 #include <Helpers/FFmpegHelper.h>
 #include <Core/Time.h>
+#include <Math/Transform.h>
+#include <Component/TransformComponent.h>
+#include <System/RenderSystem.h>
+#include <Component/RenderComponent.h>
+#include <Object/gameObject.h>
+#include <Object/Camera.h>
+#include <Manager/SceneManager.h>
 
 AnimationComponent::~AnimationComponent()
 {
@@ -61,10 +68,10 @@ void AnimationComponent::ReleaseFrames()
 	}
 }
 
-void AnimationComponent::LoadData(const std::wstring& path, const int& fps)
+void AnimationComponent::LoadData(const std::wstring& path, const int& fps, const std::wstring& extension, const int& quality)
 {
 	fileDirPath = FileHelper::get_folder_path(Define::BASE_RESOURCE_PATH + path); // 비디오 파일 경로 저장
-	files = FFmpegHelper::GetFramesFromVideo(Define::BASE_RESOURCE_PATH + path, 8);
+	files = FFmpegHelper::GetFramesFromVideo(Define::BASE_RESOURCE_PATH + path, 12, extension, quality);
 	if (files.empty()) return;
 
 	m_fFPSTime = 1.0f / fps;
@@ -96,6 +103,7 @@ void AnimationComponent::Release()
 
 void AnimationComponent::Render()
 {
+	__super::Render();
 	if (files.empty()) return;
 	if (m_bitmaps.size() <= m_curClip) 
 	{
@@ -109,12 +117,12 @@ void AnimationComponent::Render()
 	Camera* camera = SceneManager::GetCamera();
 	D2D1_SIZE_U bmpSize = m_bitmaps[m_curClip]->GetPixelSize(); // 비트맵 크기 및 피벗
 	D2D1_POINT_2F pivotOffset = {
-		bmpSize.width * m_pivot->x,
-		bmpSize.height * m_pivot->y
+		bmpSize.width * GetPivot()->x,
+		bmpSize.height * GetPivot()->y
 	};
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -135,4 +143,19 @@ void AnimationComponent::Render()
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
 	context->DrawBitmap(m_bitmaps[m_curClip].get());
+}
+
+FVector2 AnimationComponent::GetSize()
+{
+	if (m_bitmaps.empty() == false)
+	{
+		ComPtr<ID2D1Bitmap1> bitmapStrong;
+		if (m_bitmaps[0])
+		{
+			D2D1_SIZE_U bmpSize = m_bitmaps[0]->GetPixelSize();
+			return FVector2(bmpSize.width, bmpSize.height);
+		}
+		return FVector2(0, 0);
+	}
+	return FVector2();
 }

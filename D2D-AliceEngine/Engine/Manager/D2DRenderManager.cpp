@@ -5,7 +5,7 @@
 
 D2DRenderManager::D2DRenderManager()
 {
-	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<std::weak_ptr<RenderComponent>>());
+	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<std::weak_ptr<Component>>());
 }
 
 D2DRenderManager::~D2DRenderManager()
@@ -121,7 +121,7 @@ void D2DRenderManager::Update()
 {
 	for (auto& pair : m_renderers)
 	{
-		const std::vector<std::weak_ptr<RenderComponent>>& renderList = pair;
+		const std::vector<std::weak_ptr<Component>>& renderList = pair;
 		for (const auto& obj : renderList)
 		{
 			if (auto locked = obj.lock())
@@ -149,7 +149,7 @@ void D2DRenderManager::Render()
 
 	for (auto& pair : m_renderers)
 	{
-		const std::vector<std::weak_ptr<RenderComponent>>& renderList = pair;
+		const std::vector<std::weak_ptr<Component>>& renderList = pair;
 		for (const auto& obj : renderList)
 		{
 			if (auto locked = obj.lock())

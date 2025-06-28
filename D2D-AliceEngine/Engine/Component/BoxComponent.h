@@ -1,13 +1,14 @@
 #pragma once
 #include "Component/RenderComponent.h"
-#include "Math/TMath.h"
 #include <Math/TColor.h>
+#include <Math/TMath.h>
+
 class BoxComponent : public RenderComponent
 {
 public:
-	BoxComponent() {}
+	BoxComponent();
 	BoxComponent(const FVector2& _size, const FColor& color);
-	~BoxComponent() {}
+	~BoxComponent();
 
 	void Initialize() override;
 	void Release() override;
@@ -22,7 +23,7 @@ public:
 	FColor GetColor() { return m_color; }
 
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
-	FColor m_color = FColor::Black;
+	FColor m_color;
 	FVector2 m_size;
 };
 

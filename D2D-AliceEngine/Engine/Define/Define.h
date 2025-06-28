@@ -1,6 +1,4 @@
 #pragma once
-#include "pch.h"
-
 /*
 * @brief Define 네임스페이스.
 * @details 이 네임스페이스는 게임 엔진의 전역 상수 및 설정을 정의합니다.

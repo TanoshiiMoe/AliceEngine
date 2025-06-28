@@ -5,6 +5,7 @@
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
 #include <Core/Input.h>
+#include <Math/TColor.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 weak_ptr를 반환합니다.
@@ -36,7 +37,7 @@ void DemoScene2::OnEnter()
 	m_yuuka->transform()->SetRotation(0);
 	m_yuuka->transform()->SetScale(1.0f, 1.0f);
 	m_yuuka->transform()->SetPivot(0.5f);
-	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\YuukaBottle.mp4", 24);
+	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\YuukaBottle.mp4", 30);
 	m_yuuka->GetComponent<AnimationComponent>()->Play();
 
 	m_widget = NewObject<gameObject>(L"widget");

@@ -1,9 +1,13 @@
 #include "pch.h"
 #include "SpriteRenderer.h"
-#include "Manager/D2DRenderManager.h"
+#include <Component/Component.h>
+#include <Manager/D2DRenderManager.h>
 #include <Manager/PackageResourceManager.h>
 #include <Manager/SceneManager.h>
 #include <Helpers/FileHelper.h>
+#include <Math/Transform.h>
+#include <System/RenderSystem.h>
+#include <Component/TransformComponent.h>
 
 SpriteRenderer::~SpriteRenderer()
 {
@@ -35,17 +39,18 @@ void SpriteRenderer::Release()
 
 void SpriteRenderer::Render()
 {
+	__super::Render();
 	if (m_bitmap == nullptr) return;
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
 	D2D1_POINT_2F pivotOffset = {
-		bmpSize.width * m_pivot->x,
-		bmpSize.height * m_pivot->y
+		bmpSize.width * GetPivot()->x,
+		bmpSize.height * GetPivot()->y
 	};
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -66,4 +71,10 @@ void SpriteRenderer::Render()
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
 	context->DrawBitmap(m_bitmap.get());
+}
+
+FVector2 SpriteRenderer::GetSize()
+{
+	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
+	return FVector2(bmpSize.width, bmpSize.height);
 }

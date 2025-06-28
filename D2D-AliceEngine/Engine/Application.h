@@ -1,14 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "Manager/D2DRenderManager.h"
-#include "System/RenderSystem.h"
-#include "Manager/SceneManager.h"
 #include <Core/Singleton.h>
-#include <Object/Camera.h>
-#include "Scene/Scene.h"
-#include <System/InputSystem.h>
-#include <System/ScriptSystem.h>
-#include <Manager/PackageResourceManager.h>
 
 using namespace Microsoft::WRL;
 

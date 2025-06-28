@@ -1,11 +1,8 @@
 #pragma once
-#include "pch.h"
-#include <Math/Transform.h>
-#include "System/RenderSystem.h"
-#include "Component/RenderComponent.h"
+#include <Component/RenderComponent.h>
 
 using namespace Microsoft::WRL;
-
+class ID2D1Bitmap1;
 class SpriteRenderer : public RenderComponent
 {
 public:
@@ -17,11 +14,7 @@ public:
 	void Release() override;
 	void Render() override;
 
-	FVector2 GetSize()
-	{
-		D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-		return FVector2(bmpSize.width, bmpSize.height);
-	}
+	FVector2 GetSize();
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
