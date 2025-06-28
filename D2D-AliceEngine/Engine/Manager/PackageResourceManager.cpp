@@ -33,7 +33,7 @@ void PackageResourceManager::Initialize()
 	{
 		if (m_preloadedPaths.find(path) != m_preloadedPaths.end())continue;
 		std::pair<std::wstring, std::wstring> nameInfo = FileHelper::ExtractFileNameAndExtension(path);
-		std::wstring uuid = path + std::to_wstring(FRandom::GetRandomInRange(0, 10000));
+		std::wstring uuid = path;
 		FPacakageInfo info(EResourceSpecifier::Max, nameInfo.first, nameInfo.second, uuid);
 		m_preloadedPaths[path] = info;
 	}
@@ -41,10 +41,39 @@ void PackageResourceManager::Initialize()
 
 void PackageResourceManager::UnloadData()
 {
+	for (auto& m_preloadedPath : m_preloadedPaths)
+	{
+		m_preloadedPath.second.bIsLoaded = false; // 모든 비트맵을 언로드 상태로 설정
+	}
 	m_loadedBitmaps.clear();
 }
 
-std::weak_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const wchar_t* path)
+// 해당 경로의 모든 자식을 재귀로 돌면서 bIsLoaded를 false로 설정합니다.
+void PackageResourceManager::UnloadData(std::wstring& path)
+{
+	if (m_preloadedPaths.find(path) != m_preloadedPaths.end())
+	{
+		m_preloadedPaths[path].bIsLoaded = false; // 해당 경로의 비트맵 언로드
+		m_preloadedPaths[path].useCount--; //카운트 1 감소
+
+		if (m_preloadedPaths[path].useCount <= 0)
+		{
+			m_loadedBitmaps.erase(path); // 사용 카운트가 0 이하인 경우 캐시 제거
+		}
+	}
+}
+
+void PackageResourceManager::UnloadDataDir(std::wstring& dirPath)
+{
+	std::vector<std::wstring> filesPaths;
+	FileHelper::ResourceFilesInBuildPath(dirPath, filesPaths);
+	for (auto& filesPath : filesPaths)
+	{
+		UnloadData(filesPath);
+	}
+}
+
+std::shared_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const wchar_t* path)
 {
 	// 해당 경로가 존재한다면
 	std::wstring absolutePath = FileHelper::ToAbsolutePath(path);
@@ -53,20 +82,21 @@ std::weak_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const w
 		if (m_preloadedPaths[absolutePath].bIsLoaded)
 		{
 			// 캐시에서 비트맵을 가져옵니다.
-			auto it = m_loadedBitmaps.find(m_preloadedPaths[absolutePath].uuid);
-			if (it != m_loadedBitmaps.end())
+			if (m_loadedBitmaps.find(absolutePath) != m_loadedBitmaps.end())
 			{
-				return it->second;
+				m_preloadedPaths[absolutePath].useCount++;
+				return m_loadedBitmaps[absolutePath].lock();
 			}
 			else
 			{
-				return std::weak_ptr<ID2D1Bitmap1>();
 				// 기존에 사용한 적은 있지만 비트맵이 로드되지 않은 경우
+				return nullptr;
 				assert(SUCCEEDED(E_FAIL));
 			}
 		}
 		else
 		{
+			// 처음 로드하는 경우
 			ComPtr<IWICBitmapDecoder>     decoder;
 			ComPtr<IWICBitmapFrameDecode> frame;
 			ComPtr<IWICFormatConverter>   converter;
@@ -115,8 +145,9 @@ std::weak_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const w
 				std::shared_ptr<ID2D1Bitmap1> sharedBitmap(rawBitmap, deleter);
 
 				m_preloadedPaths[absolutePath].bIsLoaded = true; // 비트맵이 로드되었음을 표시
+				m_preloadedPaths[absolutePath].useCount++;
 				m_loadedBitmaps[m_preloadedPaths[absolutePath].uuid] = sharedBitmap;
-				return sharedBitmap;
+				return std::move(sharedBitmap);
 			}
 			else
 			{
@@ -128,9 +159,8 @@ std::weak_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const w
 	{
 		// 경로 혹은 파일이 존재하지 않음.
 		//assert(SUCCEEDED(E_FAIL));
-		return std::weak_ptr<ID2D1Bitmap1>();
+		return nullptr;
 	}
-	return std::weak_ptr<ID2D1Bitmap1>();
 }
 
 std::wstring PackageResourceManager::FormAtBytes(UINT64 bytes)

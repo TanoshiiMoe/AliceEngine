@@ -1,11 +1,16 @@
 #include "pch.h"
 #include "TextRenderComponent.h"
 #include <Manager/D2DRenderManager.h>
-#include <Object/Camera.h>
 #include <Manager/SceneManager.h>
+#include <Object/Camera.h>
+#include <System/RenderSystem.h>
+#include <Math/TColor.h>
+#include <Math/TMath.h>
+#include <Math/Transform.h>
 
 TextRenderComponent::TextRenderComponent()
 {
+	m_color = FColor::Black;
 	InitializeFormat();
 	InitializeColor();
 	InitializeLayout();
@@ -28,19 +33,22 @@ TextRenderComponent::~TextRenderComponent()
 
 void TextRenderComponent::Initialize()
 {
-
+	__super::Initialize();
 }
 
 void TextRenderComponent::Update()
 {
+	__super::Update();
 }
 
 void TextRenderComponent::Release()
 {
+	__super::Release();
 }
 
 void TextRenderComponent::Render()
 {
+	__super::Render();
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	if (!context || m_content.empty()) return;
 
@@ -52,8 +60,8 @@ void TextRenderComponent::Render()
 
 	// ÇÇ¹þ º¸Á¤
 	D2D1_POINT_2F pivotOffset = {
-		metrics.width * m_pivot->x,
-		metrics.height * m_pivot->y
+		metrics.width * GetPivot()->x,
+		metrics.height * GetPivot()->y
 	};
 	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
 
@@ -68,18 +76,18 @@ void TextRenderComponent::Render()
 	if (m_eTransformType == ETransformType::Unity)
 	{
 		D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-		D2D1::Matrix3x2F world = m_pTransform ? m_pTransform->ToMatrix() : D2D1::Matrix3x2F::Identity();
+		D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 
 		Camera* camera = SceneManager::GetCamera();
 		D2D1::Matrix3x2F cameraInv = camera ? camera->m_transform->ToMatrix() : D2D1::Matrix3x2F::Identity();
 		cameraInv.Invert();
 
 		view = unity * world * cameraInv;
-		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
+		view = view * unity * D2D1::Matrix3x2F::Translation(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
 	}
 	else
 	{
-		view = m_pTransform ? m_pTransform->ToMatrix() : D2D1::Matrix3x2F::Identity();
+		view = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	}
 
 	D2D1::Matrix3x2F finalTransform = pivotAdjust * localTransform * view;

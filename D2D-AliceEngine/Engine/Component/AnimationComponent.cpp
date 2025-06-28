@@ -5,6 +5,20 @@
 #include "Application.h"
 #include <Helpers/FFmpegHelper.h>
 #include <Core/Time.h>
+#include <Math/Transform.h>
+#include <Component/TransformComponent.h>
+#include <System/RenderSystem.h>
+#include <Component/RenderComponent.h>
+#include <Object/gameObject.h>
+#include <Object/Camera.h>
+#include <Manager/SceneManager.h>
+
+AnimationComponent::~AnimationComponent()
+{
+	files.clear();
+	m_bitmaps.clear();
+	PackageResourceManager::GetInstance().UnloadDataDir(fileDirPath); // 비디오 파일 언로드
+}
 
 void AnimationComponent::Initialize()
 {
@@ -15,7 +29,7 @@ void AnimationComponent::Update()
 {
 	__super::Update();
 
-	//ReleaseFrames();
+	ReleaseFrames();
 	UpdateFrames();
 }
 
@@ -28,10 +42,11 @@ void AnimationComponent::UpdateFrames()
 		{
 			if (m_maxClipSize != 0)
 			{
-				//if (m_curClip + 1 >= m_maxClipSize)
-				//{
-				//	m_bitmaps.clear();
-				//}
+				if (m_curClip + 1 >= m_maxClipSize)
+				{
+					PackageResourceManager::GetInstance().UnloadDataDir(fileDirPath);
+					m_bitmaps.clear();
+				}
 				m_curClip = (m_curClip + 1) % m_maxClipSize;
 			}
 			m_fcountOneSecond = Time::GetTotalTime();
@@ -47,44 +62,32 @@ void AnimationComponent::ReleaseFrames()
 
 	for (size_t i = 0; i < m_bitmaps.size(); ++i) {
 		if (i < start || i > end) {
-			if (m_bitmaps[i].lock())
-			{
-				//m_bitmaps[i].reset();
-			}
-			//HRESULT hr = m_bitmaps[i]->lock();
-			//if (SUCCEEDED(hr) && bitmapStrong) {
-			//	// bitmapStrong을 안전하게 사용
-			//	m_bitmaps[i]->Reset(); // 사용하지 않는 프레임 해제
-			//}
-			//else {
-			//	// 이미 해제함 (nullptr)
-			//}
+			PackageResourceManager::GetInstance().UnloadData(files[i]); // 해당 프레임 언로드
+			m_bitmaps[i].reset(); // 사용하지 않는 프레임 해제
 		}
 	}
 }
 
-void AnimationComponent::LoadData(const std::wstring& path, const int& fps)
+void AnimationComponent::LoadData(const std::wstring& path, const int& fps, const std::wstring& extension, const int& quality)
 {
-	files = FFmpegHelper::GetFramesFromVideo(L"Resource\\" + path, 8);
+	fileDirPath = FileHelper::get_folder_path(Define::BASE_RESOURCE_PATH + path); // 비디오 파일 경로 저장
+	files = FFmpegHelper::GetFramesFromVideo(Define::BASE_RESOURCE_PATH + path, 12, extension, quality);
 	if (files.empty()) return;
 
 	m_fFPSTime = 1.0f / fps;
 	m_maxClipSize = files.size();
 	m_curClip = 0;
 	m_bitmaps.clear();
-	m_bitmaps.resize(m_maxClipSize + 1);
-	for (size_t i = 0 ; i < m_maxClipSize; i++)
-	{
-		m_bitmaps[i] = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[i].c_str());
-	}
 }
 
-void AnimationComponent::LoadFrame(size_t frameIndex) {
-	//if (m_bitmaps.size() <= frameIndex) 
-	//{
-	//	m_bitmaps.resize(frameIndex + 1);
-	//}
-	m_bitmaps[frameIndex] = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[frameIndex].c_str());
+void AnimationComponent::LoadFrame(size_t frameIndex)
+{
+	std::shared_ptr<ID2D1Bitmap1> temp = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[frameIndex].c_str());
+	if (m_bitmaps.size() <= frameIndex)
+	{
+		m_bitmaps.resize(frameIndex + 1);
+	}
+	m_bitmaps[frameIndex] = temp;
 }
 
 void AnimationComponent::Release()
@@ -100,30 +103,26 @@ void AnimationComponent::Release()
 
 void AnimationComponent::Render()
 {
+	__super::Render();
 	if (files.empty()) return;
-	//if (m_bitmaps.size() <= m_curClip) 
-	//{
-	//	// 필요한 프레임만 로딩
-	//	LoadFrame(m_curClip);
-	//}
+	if (m_bitmaps.size() <= m_curClip) 
+	{
+		// 필요한 프레임만 로딩
+		LoadFrame(m_curClip);
+	}
 	if (m_bitmaps.empty()) return;
-	//if (m_bitmaps[m_curClip].lock() == nullptr)
-	//{
-	//	// 현재 프레임이 로드되지 않은 경우
-	//	LoadFrame(m_curClip);
-	//	return;
-	//}
+	if (m_bitmaps[m_curClip] == nullptr) return;
 
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
-	D2D1_SIZE_U bmpSize = m_bitmaps[m_curClip].lock()->GetPixelSize(); // 비트맵 크기 및 피벗
+	D2D1_SIZE_U bmpSize = m_bitmaps[m_curClip]->GetPixelSize(); // 비트맵 크기 및 피벗
 	D2D1_POINT_2F pivotOffset = {
-		bmpSize.width * m_pivot->x,
-		bmpSize.height * m_pivot->y
+		bmpSize.width * GetPivot()->x,
+		bmpSize.height * GetPivot()->y
 	};
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -143,5 +142,20 @@ void AnimationComponent::Render()
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
-	context->DrawBitmap(m_bitmaps[m_curClip].lock().get());
+	context->DrawBitmap(m_bitmaps[m_curClip].get());
+}
+
+FVector2 AnimationComponent::GetSize()
+{
+	if (m_bitmaps.empty() == false)
+	{
+		ComPtr<ID2D1Bitmap1> bitmapStrong;
+		if (m_bitmaps[0])
+		{
+			D2D1_SIZE_U bmpSize = m_bitmaps[0]->GetPixelSize();
+			return FVector2(bmpSize.width, bmpSize.height);
+		}
+		return FVector2(0, 0);
+	}
+	return FVector2();
 }

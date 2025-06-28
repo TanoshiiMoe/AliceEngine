@@ -55,20 +55,8 @@ public:
 	T* AddComponent(Args&&... args)
 	{	
 		std::shared_ptr<T> createdComp = std::make_shared<T>(std::forward<Args>(args)...);
-
 		createdComp->Initialize();
 		createdComp->SetOwner(this->weak_from_this());
-		createdComp->SetOwnerName(GetName());
-		createdComp->SetUUID(StringHelper::MakeUniqueName());
-
-		if (auto renderComp = std::dynamic_pointer_cast<RenderComponent>(createdComp))
-		{
-			std::weak_ptr<RenderComponent> weakRender = renderComp;
-			D2DRenderManager::GetInstance().AddRenderer(weakRender);
-			weakRender.lock()->m_pTransform = m_transformComponent.lock()->m_worldTransform;
-			weakRender.lock()->m_pivot = &m_transformComponent.lock()->m_pivot;
-		}
-
 		m_Components.emplace_back(createdComp);
 
 		return createdComp.get();
@@ -122,20 +110,8 @@ public:
 	std::weak_ptr<T> AddComponentByWeak(Args&&... args)
 	{
 		std::shared_ptr<T> createdComp = std::make_shared<T>(std::forward<Args>(args)...);
-
 		createdComp->Initialize();
 		createdComp->SetOwner(this->weak_from_this());
-		createdComp->SetOwnerName(GetName());
-		createdComp->SetUUID(StringHelper::MakeUniqueName());
-
-		if (auto renderComp = std::dynamic_pointer_cast<RenderComponent>(createdComp))
-		{
-			std::weak_ptr<RenderComponent> weakRender = renderComp;
-			D2DRenderManager::GetInstance().AddRenderer(weakRender);
-			weakRender.lock()->m_pTransform = m_transformComponent.lock()->m_worldTransform;
-			weakRender.lock()->m_pivot = &m_transformComponent.lock()->m_pivot;
-		}
-
 		m_Components.emplace_back(createdComp);
 
 		return std::dynamic_pointer_cast<T>(createdComp);

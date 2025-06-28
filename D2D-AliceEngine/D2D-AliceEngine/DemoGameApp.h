@@ -1,6 +1,5 @@
 #pragma once
-#include "stdafx.h"
-#include "Object/gameObject.h"
+#include <Application.h>
 
 class DemoGameApp : public Application
 {

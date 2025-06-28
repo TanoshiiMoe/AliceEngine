@@ -2,6 +2,13 @@
 #include "BoxComponent.h"
 #include "Manager/D2DRenderManager.h"
 #include <Manager/SceneManager.h>
+#include "Math/TMath.h"
+#include <Math/TColor.h>
+
+BoxComponent::BoxComponent()
+{
+	m_color = FColor::Black;
+}
 
 BoxComponent::BoxComponent(const FVector2& _size = FVector2(50,50), const FColor& color = FColor::Black)
 {
@@ -9,27 +16,34 @@ BoxComponent::BoxComponent(const FVector2& _size = FVector2(50,50), const FColor
 	SetColor(color);
 }
 
+BoxComponent::~BoxComponent()
+{
+}
+
 void BoxComponent::Initialize()
 {
+	__super::Initialize();
 }
 
 void BoxComponent::Release()
 {
+	__super::Initialize();
 }
 
 void BoxComponent::Render()
 {
+	__super::Render();
 	if (GetOwner() == nullptr) return;
 
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
 	D2D1_POINT_2F pivotOffset = {
-		m_size.x * m_pivot->x,
-		m_size.y * m_pivot->y
+		m_size.x * GetPivot()->x,
+		m_size.y * GetPivot()->y
 	};
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = m_pTransform->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)

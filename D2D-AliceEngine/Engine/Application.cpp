@@ -1,11 +1,20 @@
 #pragma once
 #include "pch.h"
 #include "Application.h"
-#include "Manager/D2DRenderManager.h"
 #include <Core/Input.h>
 #include <Core/Time.h>
-#include <Helpers/FileHelper.h>
 #include <Core/ObjectHandler.h>
+#include <Helpers/FileHelper.h>
+#include <Manager/D2DRenderManager.h>
+#include <Manager/SceneManager.h>
+#include <Manager/PackageResourceManager.h>
+#include <System/InputSystem.h>
+#include <System/ScriptSystem.h>
+#include <System/RenderSystem.h>
+#include <System/TransformSystem.h>
+#include <Scene/Scene.h>
+#include <Object/Camera.h>
+
 
 Application::Application()
 {
@@ -143,7 +152,7 @@ void Application::Uninitialize()
 	D2DRenderManager::GetInstance().UnInitialize();
 	SceneManager::GetInstance().UnInitialize();
 
-	RenderSystem::GetInstance().UnInitialize();
+	RenderSystem::GetInstance().UnRegistAll();
 	ScriptSystem::GetInstance().UnRegistAll();
 	InputSystem::GetInstance().UnRegistAll();
 	TransformSystem::GetInstance().UnRegistAll();

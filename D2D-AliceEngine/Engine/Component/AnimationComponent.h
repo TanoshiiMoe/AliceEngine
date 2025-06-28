@@ -1,8 +1,5 @@
 #pragma once
-#include "pch.h"
-#include <Math/Transform.h>
-#include "System/RenderSystem.h"
-#include "Component/RenderComponent.h"
+#include <Component/RenderComponent.h>
 
 /*
 *	@briefs : 애니메이션 컴포넌트입니다. 
@@ -16,37 +13,24 @@ class AnimationComponent : public RenderComponent
 {
 public:
 	AnimationComponent() {}
-	~AnimationComponent() 
-	{
-		files.clear();
-		m_bitmaps.clear();
-	}
+	~AnimationComponent();
 
 	void Initialize() override;
 	void Update() override;
 	void UpdateFrames();
 	void ReleaseFrames();
-	void LoadData(const std::wstring& path, const int& fps);
+	// quality :
+	//  png 일때는 압축률
+	//  jpg 일때는 품질
+	void LoadData(const std::wstring& path, const int& fps, const std::wstring& extension = L"jpg", const int& quality = 95);
 	void LoadFrame(size_t frameIndex);
 	void Release() override;
 	void Render() override;
 
-	FVector2 GetSize()
-	{
-		if (m_bitmaps.empty() == false)
-		{
-			ComPtr<ID2D1Bitmap1> bitmapStrong;
-			if (m_bitmaps[0].lock())
-			{
-				D2D1_SIZE_U bmpSize = m_bitmaps[0].lock()->GetPixelSize();
-				return FVector2(bmpSize.width, bmpSize.height);
-			}
-			return FVector2(0,0);
-		}
-		return FVector2();
-	}
+	FVector2 GetSize();
 	std::vector<std::wstring> files;
-	std::vector<std::weak_ptr<ID2D1Bitmap1>> m_bitmaps; // BitmapImage 컴포넌트
+	std::wstring fileDirPath; // 비디오 파일 경로
+	std::vector<std::shared_ptr<ID2D1Bitmap1>> m_bitmaps; // BitmapImage 컴포넌트
 	const size_t cacheSize = 2; // 캐시할 프레임 수
 
 	void Play() { bPlay = true; }

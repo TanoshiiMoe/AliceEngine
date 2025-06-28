@@ -1,5 +1,23 @@
 #include "pch.h"
 #include "TransformComponent.h"
+#include <System/TransformSystem.h>
+#include <Math/Transform.h>
+
+TransformComponent::TransformComponent()
+{
+	m_localTransform = new Transform();
+	m_worldTransform = new Transform();
+	SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.0f));
+}
+
+TransformComponent::~TransformComponent()
+{
+	TransformSystem::GetInstance().UnRegist(this->weak_from_this());
+	delete m_localTransform;
+	delete m_worldTransform;
+	m_localTransform = nullptr;
+	m_worldTransform = nullptr;
+}
 
 void TransformComponent::Initialize()
 {
@@ -47,4 +65,86 @@ void TransformComponent::SetTransform(const FVector2& position, const float& rot
 	m_localTransform->SetRotation(rotation);
 	m_localTransform->SetScale(scale.x, scale.y);
 	SetPivot(pivot.x, pivot.y);
+}
+
+void TransformComponent::AddChildObject(std::weak_ptr<TransformComponent> child)
+{
+	auto childPtr = child.lock();
+	if (!childPtr) return; // nullptr üũ
+
+	auto self = std::dynamic_pointer_cast<TransformComponent>(this->weak_from_this().lock());
+	std::weak_ptr<TransformComponent> weakSelf = self;
+
+	childPtr->parent = weakSelf;
+	children.push_back(childPtr);
+}
+
+void TransformComponent::SetPosition(const float& _x, const float& _y)
+{
+	m_localTransform->SetPosition(_x, _y);
+	SetDirty();
+}
+
+void TransformComponent::SetPosition(const float& _x)
+{
+	m_localTransform->SetPosition(_x, _x);
+	SetDirty();
+}
+
+void TransformComponent::SetRotation(const float& _val)
+{
+	m_localTransform->SetRotation(_val);
+	SetDirty();
+}
+
+void TransformComponent::SetScale(const float& _x, const float& _y)
+{
+	m_localTransform->SetScale(_x, _y);
+	SetDirty();
+}
+
+void TransformComponent::SetScale(const float& _x)
+{
+	m_localTransform->SetScale(_x, _x);
+	SetDirty();
+}
+
+void TransformComponent::AddRotation(const float& _val)
+{
+	m_localTransform->SetRotation(m_localTransform->GetRotation() + _val);
+	SetDirty();
+}
+
+void TransformComponent::AddPosition(const float& _x, const float& _y)
+{
+	m_localTransform->SetPosition(m_localTransform->GetPosition().x + _x, m_localTransform->GetPosition().y + _y);
+	SetDirty();
+}
+
+void TransformComponent::SetPivot(const float& _x, const float& _y)
+{
+	m_pivot.x = _x;
+	m_pivot.y = _y;
+}
+
+void TransformComponent::SetPivot(const float& _x)
+{
+	m_pivot.x = _x;
+	m_pivot.y = _x;
+}
+
+FVector2* TransformComponent::GetPivot()
+{
+	return &m_pivot;
+}
+
+void TransformComponent::SetDirty()
+{
+	m_localTransform->dirty = true;
+	m_worldTransform->dirty = true;
+	for (auto& child : children)
+	{
+		if (auto c = child.lock())
+			c->SetDirty();
+	}
 }

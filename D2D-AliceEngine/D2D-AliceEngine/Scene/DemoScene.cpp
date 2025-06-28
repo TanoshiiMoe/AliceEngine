@@ -7,6 +7,7 @@
 #include <Core/Input.h>
 #include <Component/AnimationComponent.h>
 #include <Component/Spine2DRenderComponent.h>
+#include <Math/TColor.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 weak_ptr를 반환합니다.
@@ -44,7 +45,7 @@ void DemoScene::OnEnter()
 	m_yuuka->transform()->SetRotation(0);
 	m_yuuka->transform()->SetScale(1.0f, 1.0f);
 	m_yuuka->transform()->SetPivot(0.5f);
-	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 24);
+	m_yuuka->AddComponent<AnimationComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 60);
 	m_yuuka->GetComponent<AnimationComponent>()->Play();
 
 	m_sun = NewObject<gameObject>(L"Sun");

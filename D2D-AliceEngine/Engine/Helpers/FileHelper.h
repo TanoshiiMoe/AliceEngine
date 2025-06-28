@@ -196,7 +196,7 @@ public:
 	{
 		std::wstring path = ToAbsolutePath(L"") + _str;
 		CollectFilePathsRecursive(path, filesPaths);
-		//assert(result && L"Resource 탐색 실패")	;
+		//assert(result && L"Resource 탐색 실패");
 	}
 
 	// 파일 이름과 확장자를 추출하는 함수
@@ -217,6 +217,16 @@ public:
 		std::wstring fileName = fileNameWithExt.substr(0, lastDot);
 		std::wstring extension = fileNameWithExt.substr(lastDot + 1);
 		return { fileName, extension };
+	}
+
+
+	// 파일 경로에서 해당 폴더만 가져오는 함수 (std::wstring 버전)
+	// "\\Resource\\content\\video\\aru.mp4" -> "\\Resource\\content\\video"
+	static std::wstring get_folder_path(const std::wstring& filepath) {
+		std::size_t last_slash = filepath.find_last_of(L"\\/");
+		if (last_slash == std::wstring::npos)
+			return filepath; // 슬래시가 없으면 전체가 폴더로 간주
+		return filepath.substr(0, last_slash);
 	}
 };
 

@@ -15,9 +15,9 @@ public:
 	~D2DRenderManager();
 
 	// 렌더링 대기열
-	std::vector<std::vector<std::weak_ptr<RenderComponent>>> m_renderers;
+	std::vector<std::vector<std::weak_ptr<Component>>> m_renderers;
 
-	inline void AddRenderer(std::weak_ptr<RenderComponent> renderer)
+	inline void AddRenderer(std::weak_ptr<Component> renderer)
 	{
 		if (!renderer.expired())
 		{

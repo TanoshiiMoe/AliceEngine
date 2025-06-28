@@ -1,26 +1,14 @@
 #pragma once
 #include "Component.h"
-#include <System/TransformSystem.h>
-#include <Math/Transform.h>
+
+class Transform;
 class TransformComponent : public Component
 {
 public:
-	TransformComponent() 
-	{
-		m_localTransform = new Transform();
-		m_worldTransform = new Transform();
-		SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.0f));
-	}
-	~TransformComponent() 
-	{
-		TransformSystem::GetInstance().UnRegist(this->weak_from_this());
-		delete m_localTransform;
-		delete m_worldTransform;
-		m_localTransform = nullptr;
-		m_worldTransform = nullptr;
-	}
+	TransformComponent();
+	~TransformComponent();
 public:
-	void Initialize() override; 
+	void Initialize() override;
 	void Release() override;
 	void Update() override;
 
@@ -31,84 +19,26 @@ public:
 	std::weak_ptr<TransformComponent> parent;
 	std::vector<std::weak_ptr<TransformComponent>> children;
 
-	inline void AddChildObject(std::weak_ptr<TransformComponent> child)
-	{
-		auto childPtr = child.lock();
-		if (!childPtr) return; // nullptr Ã¼Å©
-
-		auto self = std::dynamic_pointer_cast<TransformComponent>(this->weak_from_this().lock());
-		std::weak_ptr<TransformComponent> weakSelf = self;
-
-		childPtr->parent = weakSelf;
-		children.push_back(childPtr);
-	}
+	void AddChildObject(std::weak_ptr<TransformComponent> child);
 
 	FVector2 m_pivot{ 0,0 }; // ÁÂÇ¥ Áß½ÉÁ¡
 	Transform* m_localTransform; // Transform ÄÄÆ÷³ÍÆ®
 	Transform* m_worldTransform; // Transform ÄÄÆ÷³ÍÆ®
 
-	inline void SetPosition(const float& _x, const float& _y)
-	{
-		m_localTransform->SetPosition(_x, _y);
-		SetDirty();
-	}
+	void SetPosition(const float& _x, const float& _y);
+	void SetPosition(const float& _x);
+	void SetRotation(const float& _val);
 
-	inline void SetPosition(const float& _x)
-	{
-		m_localTransform->SetPosition(_x, _x);
-		SetDirty();
-	}
+	void SetScale(const float& _x, const float& _y);
+	void SetScale(const float& _x);
 
-	inline void SetRotation(const float& _val)
-	{
-		m_localTransform->SetRotation(_val);
-		SetDirty();
-	}
+	void AddRotation(const float& _val);
+	void AddPosition(const float& _x, const float& _y);
 
-	inline void SetScale(const float& _x, const float& _y)
-	{
-		m_localTransform->SetScale(_x, _y);
-		SetDirty();
-	}
+	void SetPivot(const float& _x, const float& _y);
+	void SetPivot(const float& _x);
 
-	inline void SetScale(const float& _x)
-	{
-		m_localTransform->SetScale(_x, _x);
-		SetDirty();
-	}
+	FVector2* GetPivot();
 
-	inline void AddRotation(const float& _val)
-	{
-		m_localTransform->SetRotation(m_localTransform->GetRotation() + _val);
-		SetDirty();
-	}
-
-	inline void AddPosition(const float& _x, const float& _y)
-	{
-		m_localTransform->SetPosition(m_localTransform->GetPosition().x + _x, m_localTransform->GetPosition().y + _y);
-		SetDirty();
-	}
-
-	inline void SetPivot(const float& _x, const float& _y)
-	{
-		m_pivot.x = _x;
-		m_pivot.y = _y;
-	}
-	inline void SetPivot(const float& _x)
-	{
-		m_pivot.x = _x;
-		m_pivot.y = _x;
-	}
-
-	inline void SetDirty()
-	{
-		m_localTransform->dirty = true;
-		m_worldTransform->dirty = true;
-		for (auto& child : children)
-		{
-			if (auto c = child.lock())
-				c->SetDirty();
-		}
-	}
+	void SetDirty();
 };
-

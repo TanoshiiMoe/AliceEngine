@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "Scene.h"
 #include <System/InputSystem.h>
+#include <System/TransformSystem.h>
 #include <System/ScriptSystem.h>
 #include <Component/TextRenderComponent.h>
 #include <Manager/PackageResourceManager.h>
+#include <Math/TColor.h>
+#include <Math/TMath.h>
 
 Scene::Scene()
 {
@@ -70,5 +73,5 @@ void Scene::OnExit()
 		it->second->OnEnd();
 	}
 	D2DRenderManager::GetInstance().m_dxgiDevice->Trim();
+	PackageResourceManager::GetInstance().UnloadData();
 }
-

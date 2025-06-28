@@ -1,11 +1,13 @@
 #pragma once
 #include "Object/UObject.h"
-#include <Math/Transform.h>
 
 /*
 * @brief 카메라 클래스. 
 * @details 현재는 Object를 상속받아 기본적인 기능만 구현되어 있습니다.
 */
+class Transform;
+class gameObject;
+
 class Camera : public UObject
 {
 public:
@@ -16,39 +18,16 @@ public:
 	void Update();
 	void Release();
 
-	inline void SetPosition(const float& _x, const float& _y)
-	{
-		m_transform->SetPosition(_x, _y);
-	}
+	void SetPosition(const float& _x, const float& _y);
+	FVector2 GetPosition();
 
-	inline FVector2 GetPosition()
-	{
-		return FVector2(m_transform->GetPosition().x, m_transform->GetPosition().y);
-	}
+	void SetRotation(const float& _val);
 
-	inline void SetRotation(const float& _val)
-	{
-		m_transform->SetRotation(_val);
-	}
+	void AddRotation(const float& _val);
+	void AddPosition(const float& _x, const float& _y);
 
-	inline void AddRotation(const float& _val)
-	{
-		m_transform->SetRotation(m_transform->GetRotation() + _val);
-	}
-
-	inline void AddPosition(const float& _x, const float& _y)
-	{
-		m_transform->SetPosition(m_transform->GetPosition().x + _x, m_transform->GetPosition().y + _y);
-	}
-
-	inline void SetOwner(gameObject* obj)
-	{
-		owner = obj;
-	}
-	inline void ClearOwner()
-	{
-		owner = nullptr;
-	}
+	void SetOwner(gameObject* obj);
+	void ClearOwner();
 	gameObject* owner = nullptr;
 	std::shared_ptr<Transform> m_transform;
 };
