@@ -10,21 +10,17 @@ C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커
 
 엔진의 아키텍처와 클래스 구조를 한눈에 볼 수 있도록 UML 다이어그램을 제공합니다.
 
-> 개발 중
-> 1. ScriptComponent
-> 2. TickGroupManager
-
 <p align="center">
   <img src="https://github.com/user-attachments/assets/da2f5c4f-b14e-4564-94b6-bb285df8a903" width="400"/>
 </p>
 
-![image](https://github.com/user-attachments/assets/38456185-abd0-4543-80ca-355a588c4e8e)
+![image](https://github.com/user-attachments/assets/3405a7e5-54dc-401f-a6cc-332329632433)
 ![image](https://github.com/user-attachments/assets/f3a342da-d389-45ad-94e2-387659bc446f)
-![image](https://github.com/user-attachments/assets/8cc22111-d59f-4af0-b251-530910ed8f16)
+![image](https://github.com/user-attachments/assets/adefb651-0331-4c36-9417-ca77cbda4b49)
 
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/ee48043a-44b9-404d-8ca1-612e554bc243" width="300"/>
+  <img src="https://github.com/user-attachments/assets/c663a7db-3fdc-40b1-8366-047120595ef0" width="500"/>
 </p>
 
 ## 빌드 및 실행
