@@ -14,13 +14,7 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
-	void yuukaInput();
-
-	void SunInput();
-	void MoonInput();
-	void EarthInput();
-	void CameraInput();
-
+	gameObject* m_camera;
 	gameObject* m_yuuka;
 	gameObject* m_spineTest;
 

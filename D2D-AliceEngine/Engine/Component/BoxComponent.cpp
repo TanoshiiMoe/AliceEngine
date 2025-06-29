@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "BoxComponent.h"
-#include "Manager/D2DRenderManager.h"
+#include <Manager/D2DRenderManager.h>
 #include <Manager/SceneManager.h>
-#include "Math/TMath.h"
+#include <Manager/UpdateTaskManager.h>
+#include <Math/TMath.h>
 #include <Math/TColor.h>
+#include <Math/Transform.h>
 
 BoxComponent::BoxComponent()
 {
@@ -23,6 +25,23 @@ BoxComponent::~BoxComponent()
 void BoxComponent::Initialize()
 {
 	__super::Initialize();
+
+	UpdateTaskManager::GetInstance().Enque(
+		weak_from_this(),
+		Define::ETickingGroup::TG_PostPhysics,
+		[weak = weak_from_this()](const float& dt)
+		{
+			if (auto sp = weak.lock())
+			{
+				sp->Update(dt);
+			}
+		}
+	);
+}
+
+void BoxComponent::Update(const float& deltaSeconds)
+{
+	__super::Update(deltaSeconds);
 }
 
 void BoxComponent::Release()

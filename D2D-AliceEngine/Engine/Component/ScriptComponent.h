@@ -1,15 +1,24 @@
 #pragma once
 #include "Component.h"
-#include "../System/ScriptSystem.h"
 
+class Scene;
 class ScriptComponent : public Component
 {
-	ScriptComponent() {}
-	~ScriptComponent() { ScriptSystem::GetInstance().UnRegist(this->weak_from_this()); }
 public:
-	void Initialize() override { ScriptSystem::GetInstance().Regist(this->weak_from_this()); }
-	void Release() override {  }
+	ScriptComponent();
+	~ScriptComponent();
+public:
+	void Initialize() override;
+	void FixedUpdate(const float& deltaSeconds);
+	void Update(const float& deltaSeconds) override;
+	void LateUpdate(const float& deltaSeconds);
+	void Release() override;
 
-	virtual void Update() = 0;
-	virtual void OnStart() = 0;
+	virtual void Awake() override;
+	virtual void OnStart() override;
+	virtual void OnEnd() override;
+	virtual void OnDestroy() override;
+
+public:
+	Scene* GetWorld();
 };

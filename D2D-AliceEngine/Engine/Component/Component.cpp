@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Component.h"
+#include <Component/TransformComponent.h>
 #include <Object/gameObject.h>
 #include <Helpers/StringHelper.h>
 #include <Math/Transform.h>
@@ -14,6 +15,11 @@ Component::Component(const std::wstring& name)
 {
 	SetName(name);
 	SetUUID(StringHelper::MakeUniqueName());
+}
+
+void Component::Update(const float& deltaSeconds)
+{
+
 }
 
 const std::wstring& Component::GetOwnerName()

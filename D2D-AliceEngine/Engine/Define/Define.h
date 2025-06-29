@@ -69,6 +69,14 @@ namespace Define
 		TG_MAX,
 	};
 
+	enum class EScriptGroup
+	{
+		SG_Awake,
+		SG_OnStart,
+		SG_OnEnd,
+		SG_OnDestroy,
+		SG_MAX,
+	};
 };
 
 #define VK_A 0x41  // 'A'

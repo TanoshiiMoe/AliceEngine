@@ -12,25 +12,12 @@
 class InputComponent : public Component
 {
 public:
-	InputComponent() { }
-	~InputComponent() 
-	{ 
-		InputSystem::GetInstance().UnRegist(this->weak_from_this()); 
-		actions.clear();
-	}
+	InputComponent();
+	~InputComponent();
 public:
-	virtual void Initialize() { InputSystem::GetInstance().Regist(this->weak_from_this()); }
-	virtual void Update() 
-	{ 
-		for (auto action : actions)
-		{
-			action();
-		}
-	}
-	virtual void Release() 
-	{ 
-		actions.clear(); 
-	}
+	virtual void Initialize();
+	void Update(const float& deltaSeconds) override;
+	virtual void Release();
 	
 	template<typename F>
 	void SetAction(F&& action)

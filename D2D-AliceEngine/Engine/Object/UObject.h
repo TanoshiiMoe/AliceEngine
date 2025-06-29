@@ -1,29 +1,24 @@
 #pragma once
+#include <string>
 #include <Core/ObjectHandler.h>
 #include <Core/Singleton.h>
 class UObject
 {
 	ObjectHandle m_handle;
 public:
-	UObject()
-	{
-		m_handle = ObjectHandler::GetInstance().CreateHandle(this);
-	}
-	virtual ~UObject()
-	{
-		ObjectHandler::GetInstance().DestroyHandle(m_handle);
-	}
+	UObject();
+	virtual ~UObject();
 	virtual void Initialize() = 0;
 	virtual void Update() = 0;
 	virtual void Release() = 0;
 
 public:
-	inline std::wstring& GetName() { return m_objectName; }
-	inline void SetName(const std::wstring& value) { m_objectName = value; }
+	std::wstring& GetName();
+	void SetName(const std::wstring& value);
 
-	inline std::wstring& GetUUID() { return m_uuid; }
-	inline void SetUUID(const std::wstring& value) { m_uuid = value; }
-	ObjectHandle GetHandle() { return m_handle; }
+	std::wstring& GetUUID();
+	void SetUUID(const std::wstring& value);
+	ObjectHandle GetHandle();
 
 protected:
 	std::wstring m_objectName;

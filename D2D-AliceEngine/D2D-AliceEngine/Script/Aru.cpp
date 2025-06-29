@@ -1,0 +1,154 @@
+#include "Aru.h"
+#include <Core/Input.h>
+#include <Math/Transform.h>
+#include <Object/gameObject.h>
+#include <Component/TransformComponent.h>
+#include <Component/TextRenderComponent.h>
+#include <Component/SpriteRenderer.h>
+#include <Component/BoxComponent.h>
+#include <Component/InputComponent.h>
+#include <Component/StatComponent.h>
+#include <System/ScriptSystem.h>
+
+void Aru::Initialize()
+{
+	__super::Initialize();
+	(void)StatTraits<AruStat>::GetOffsetMap();
+	REGISTER_SCRIPT_METHOD(OnStart);
+	REGISTER_SCRIPT_METHOD(OnEnd);
+	REGISTER_SCRIPT_METHOD(OnDestroy);
+}
+
+
+void Aru::FixedUpdate(const float& deltaSeconds)
+{
+	__super::FixedUpdate(deltaSeconds);
+	// 여기에 FixedUpdate에 대한 로직 작성
+
+}
+
+void Aru::Update(const float& deltaSeconds)
+{
+	__super::Update(deltaSeconds);
+	// 여기에 Update에 대한 로직 작성
+
+}
+
+void Aru::LateUpdate(const float& deltaSeconds)
+{
+	__super::LateUpdate(deltaSeconds);
+	// 여기에 LateUpdate에 대한 로직 작성
+
+}
+
+void Aru::OnStart()
+{
+	// 여기에 OnStart에 대한 로직 작성
+	m_aru = GetOwner();
+	m_aru->transform()->SetPosition(0, 0);
+	m_aru->transform()->SetRotation(0);
+	m_aru->transform()->SetScale(0.3f, 0.3f);
+	m_aru->transform()->SetPivot(0.5f);
+	m_aru->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
+	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
+
+	/*
+	* 게임오브젝트에 TextRenderComponent를 붙이는 예시
+	*/
+
+	TextRenderComponent* m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
+	m_aruTextCmp->SetText(m_aru->GetName());
+	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_aruTextCmp->SetScale(FVector2(3, 3));
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.5f));
+	m_aruNameTexts.push_back(m_aruTextCmp);
+
+	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
+	m_aruTextCmp->SetText(L"test");
+	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_aruTextCmp->SetScale(FVector2(3, 3));
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.2f));
+	m_aruNameTexts.push_back(m_aruTextCmp);
+
+	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
+	m_aruTextCmp->SetText(L"test");
+	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_aruTextCmp->SetScale(FVector2(3, 3));
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.3f));
+	m_aruNameTexts.push_back(m_aruTextCmp);
+
+	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
+	m_aruTextCmp->SetText(L"test");
+	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_aruTextCmp->SetScale(FVector2(3, 3));
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.4f));
+	m_aruNameTexts.push_back(m_aruTextCmp);
+
+	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
+	m_aruTextCmp->SetText(L"test");
+	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_aruTextCmp->SetScale(FVector2(3, 3));
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.1f));
+	m_aruNameTexts.push_back(m_aruTextCmp);
+
+
+	/*
+	* 커스텀 구조체로 델리게이트를 바인딩 하는 예제
+	*/
+	m_aruStat = m_aru->AddComponent<StatComponent<AruStat>>();
+	m_aruStat->SetStat("HP", 30);
+	m_aruStat->SetStat("MAXHP", 30);
+	m_aruStat->SetStat("MP", 200);
+	m_aruNameTexts[1]->SetTextFormat(L"직전 체력 : ", m_aruStat->GetStat("HP"));
+	m_aruNameTexts[2]->SetTextFormat(L"현재 체력 : ", m_aruStat->GetStat("HP"));
+	m_aruNameTexts[3]->SetTextFormat(L"최대 체력 : ", m_aruStat->GetStat("MAXHP"));
+	m_aruNameTexts[4]->SetTextFormat(L"마나 : ", m_aruStat->GetStat("MP"));
+
+	m_aruStat->OnChangeStatMap["HP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
+	{
+		if (newVal <= 0)	// 죽는 시점
+		{
+			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
+			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"dead.png");
+			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
+		}
+		else if (oldVal <= 0)	// 부활하는 시점
+		{
+			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
+			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
+			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
+		}
+		m_aruNameTexts[1]->SetTextFormat(L"직전 체력 : ", oldVal);
+		m_aruNameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);
+	});;
+
+	m_aruStat->OnChangeStatMap["MAXHP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
+	{
+		m_aruNameTexts[3]->SetTextFormat(L"최대 체력 : ", newVal);
+	});;
+
+	m_aruStat->OnChangeStatMap["MP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
+	{
+		m_aruNameTexts[4]->SetTextFormat(L"마나 : ", newVal);
+	});;
+}
+
+void Aru::OnEnd()
+{
+	// 여기에 OnEnd에 대한 로직 작성
+}
+
+void Aru::OnDestroy()
+{
+	m_aruNameTexts.clear();
+}
+
+void Aru::Input()
+{
+	// 여기에 Input에 대한 로직 작성
+}

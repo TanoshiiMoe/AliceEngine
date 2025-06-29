@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TransformComponent.h"
 #include <System/TransformSystem.h>
+#include <Manager/UpdateTaskManager.h>
 #include <Math/Transform.h>
 
 TransformComponent::TransformComponent()
@@ -22,6 +23,17 @@ TransformComponent::~TransformComponent()
 void TransformComponent::Initialize()
 {
 	TransformSystem::GetInstance().Regist(this->weak_from_this());
+	UpdateTaskManager::GetInstance().Enque(
+		weak_from_this(),
+		Define::ETickingGroup::TG_EndPhysics,
+		[weak = weak_from_this()](const float& dt)
+	{
+		if (auto sp = weak.lock())
+		{
+			sp->Update(dt);
+		}
+	}
+	);
 }
 
 void TransformComponent::Release()
@@ -35,8 +47,9 @@ void TransformComponent::Release()
 	}
 }
 
-void TransformComponent::Update()
+void TransformComponent::Update(const float& deltaSeconds)
 {
+	__super::Update(deltaSeconds);
 	D2D1::Matrix3x2F mat;
 
 	if (parent.lock())
@@ -54,7 +67,7 @@ void TransformComponent::Update()
 	{
 		if (child.lock())
 		{
-			child.lock()->Update();
+			child.lock()->Update(deltaSeconds);
 		}
 	}
 }

@@ -19,6 +19,11 @@ void SpriteRenderer::Initialize()
 	__super::Initialize();
 }
 
+void SpriteRenderer::Update(const float& deltaSeconds)
+{
+	__super::Update(deltaSeconds);
+}
+
 void SpriteRenderer::LoadData(const std::wstring& path)
 {
 	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
@@ -75,6 +80,7 @@ void SpriteRenderer::Render()
 
 FVector2 SpriteRenderer::GetSize()
 {
+	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return FVector2(bmpSize.width, bmpSize.height);
 }

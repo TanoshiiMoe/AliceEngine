@@ -1,7 +1,7 @@
 #pragma once
-#include "pch.h"
 #include <Object/gameObject.h>
 #include <Object/Camera.h>
+#include <Helpers/StringHelper.h>
 
 class Scene : public UObject
 {

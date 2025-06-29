@@ -12,7 +12,7 @@ void Spine2DRenderComponent::Initialize()
 {
 }
 
-void Spine2DRenderComponent::Update()
+void Spine2DRenderComponent::Update(const float& deltaSeconds)
 {
 }
 

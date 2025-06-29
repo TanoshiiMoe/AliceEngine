@@ -8,7 +8,7 @@ public:
 	~RenderComponent();
 public:
 	void Initialize() override;
-	void Update() override;
+	void Update(const float& deltaSeconds) override;
 	void Release() override;
 
 	virtual void Render() override;

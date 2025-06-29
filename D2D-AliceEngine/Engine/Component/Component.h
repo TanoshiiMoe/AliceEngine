@@ -1,8 +1,13 @@
 #pragma once
 
+#include <string>
+#include <memory>
+#include <Math/TMath.h>
+#include <Core/Tickable.h>
+
 class gameObject;
 class Transform;
-class Component : public std::enable_shared_from_this<Component>
+class Component : public ITickable, public std::enable_shared_from_this<Component>
 {
 public:
 	Component();
@@ -10,12 +15,13 @@ public:
 	virtual ~Component() {};
 public:
 	virtual void Initialize() = 0;
-	virtual void Update() = 0;
+	virtual void Update(const float& deltaSeconds) override;
 	virtual void Release() = 0;
 
 	// Render가 필요없는 Component도 있음
 	virtual void Render() {};
 
+	virtual void Awake() {};
 	virtual void OnStart() {}
 	virtual void OnEnd() {}
 	virtual void OnCreate() {}

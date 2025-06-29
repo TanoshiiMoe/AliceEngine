@@ -43,7 +43,7 @@ void PackageResourceManager::UnloadData()
 {
 	for (auto& m_preloadedPath : m_preloadedPaths)
 	{
-		m_preloadedPath.second.bIsLoaded = false; // 모든 비트맵을 언로드 상태로 설정
+		m_preloadedPath.second.loadCount = 0; // 모든 비트맵을 언로드 상태로 설정
 	}
 	m_loadedBitmaps.clear();
 }
@@ -53,10 +53,9 @@ void PackageResourceManager::UnloadData(std::wstring& path)
 {
 	if (m_preloadedPaths.find(path) != m_preloadedPaths.end())
 	{
-		m_preloadedPaths[path].bIsLoaded = false; // 해당 경로의 비트맵 언로드
-		m_preloadedPaths[path].useCount--; //카운트 1 감소
+		m_preloadedPaths[path].loadCount--; //카운트 1 감소
 
-		if (m_preloadedPaths[path].useCount <= 0)
+		if (m_preloadedPaths[path].loadCount <= 0)
 		{
 			m_loadedBitmaps.erase(path); // 사용 카운트가 0 이하인 경우 캐시 제거
 		}
@@ -79,12 +78,12 @@ std::shared_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const
 	std::wstring absolutePath = FileHelper::ToAbsolutePath(path);
 	if (m_preloadedPaths.find(absolutePath) != m_preloadedPaths.end())
 	{
-		if (m_preloadedPaths[absolutePath].bIsLoaded)
+		if (!m_loadedBitmaps[absolutePath].expired())
 		{
 			// 캐시에서 비트맵을 가져옵니다.
 			if (m_loadedBitmaps.find(absolutePath) != m_loadedBitmaps.end())
 			{
-				m_preloadedPaths[absolutePath].useCount++;
+				m_preloadedPaths[absolutePath].loadCount++;
 				return m_loadedBitmaps[absolutePath].lock();
 			}
 			else
@@ -144,8 +143,7 @@ std::shared_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const
 				ID2D1Bitmap1* rawBitmap = comPtrBitmap.Detach(); // 소유권 이전
 				std::shared_ptr<ID2D1Bitmap1> sharedBitmap(rawBitmap, deleter);
 
-				m_preloadedPaths[absolutePath].bIsLoaded = true; // 비트맵이 로드되었음을 표시
-				m_preloadedPaths[absolutePath].useCount++;
+				m_preloadedPaths[absolutePath].loadCount++;
 				m_loadedBitmaps[m_preloadedPaths[absolutePath].uuid] = sharedBitmap;
 				return std::move(sharedBitmap);
 			}

@@ -1,8 +1,10 @@
 #pragma once
 #include "Object/gameObject.h"
-#include "Scene/Scene.h"
 #include <Core/Singleton.h>
+#include <Helpers/StringHelper.h>
+#include <Scene/Scene.h>
 
+class Camera;
 class SceneManager : public Singleton<SceneManager>
 {
 public:
@@ -15,26 +17,9 @@ public:
 
 	std::weak_ptr<Scene> m_currentScene;	// 현재 씬
 
-	Scene* GetCurrentScene()
-	{
-		if (std::shared_ptr<Scene> sharedScene = m_currentScene.lock())
-		{
-			return sharedScene.get();
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
+	Scene* GetWorld();
+	static Camera* GetCamera();
 
-	static Camera* GetCamera()
-	{
-		if (GetInstance().m_currentScene.lock())
-		{
-			return GetInstance().m_currentScene.lock()->GetCamera();
-		}
-		return nullptr;
-	}
 	template<class T>
 	static T* AddScene(const std::wstring& NewobjectName)
 	{
@@ -76,9 +61,9 @@ public:
 				m_currentScene.lock()->Release();
 				SceneManager::GetInstance().GetCamera()->Release();
 			}
-			searchedScene.lock()->Initialize();
-			searchedScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
 			m_currentScene = searchedScene;
+			m_currentScene.lock()->Initialize();
+			m_currentScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
 			SceneManager::GetInstance().GetCamera()->Initialize();
 		}
 	}

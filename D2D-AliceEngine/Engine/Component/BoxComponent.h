@@ -11,6 +11,7 @@ public:
 	~BoxComponent();
 
 	void Initialize() override;
+	void Update(const float& deltaSeconds) override;
 	void Release() override;
 	void Render() override;
 
