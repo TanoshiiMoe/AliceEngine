@@ -14,8 +14,10 @@ public:
 	void LateUpdate(const float& deltaSeconds);
 	void Release() override;
 
+	virtual void Awake() override;
 	virtual void OnStart() override;
 	virtual void OnEnd() override;
+	virtual void OnDestroy() override;
 
 public:
 	Scene* GetWorld();

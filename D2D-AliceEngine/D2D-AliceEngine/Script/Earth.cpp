@@ -7,15 +7,18 @@
 #include <Component/BoxComponent.h>
 #include <Core/Input.h>
 #include <Component/InputComponent.h>
+#include <System/ScriptSystem.h>
 
 void Earth::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void Earth::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	m_earth->transform()->AddRotation(0.5f); // 지구 자전
 }
 
 void Earth::OnStart()

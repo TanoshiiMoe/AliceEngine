@@ -10,10 +10,12 @@
 #include <Component/AnimationComponent.h>
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
+#include <System/ScriptSystem.h>
 
 void CameraController::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void CameraController::Update(const float& deltaSeconds)

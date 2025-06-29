@@ -9,12 +9,16 @@
 #include <Component/InputComponent.h>
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
+#include <Component/ScriptComponent.cpp>
 
 void ScriptExample::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(Awake);
+	REGISTER_SCRIPT_METHOD(OnStart);
+	REGISTER_SCRIPT_METHOD(OnEnd);
+	REGISTER_SCRIPT_METHOD(OnDestroy);
 }
-
 
 void ScriptExample::FixedUpdate(const float& deltaSeconds)
 {
@@ -37,6 +41,10 @@ void ScriptExample::LateUpdate(const float& deltaSeconds)
 
 }
 
+void ScriptExample::Awake()
+{
+}
+
 void ScriptExample::OnStart()
 {
 	// 여기에 OnStart에 대한 로직 작성
@@ -47,6 +55,10 @@ void ScriptExample::OnStart()
 void ScriptExample::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+}
+
+void ScriptExample::OnDestroy()
+{
 }
 
 void ScriptExample::Input()

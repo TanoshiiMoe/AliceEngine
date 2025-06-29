@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Script\Aru2.h" />
     <ClInclude Include="Script\Example\ScriptExample.h" />
     <ClInclude Include="Script\CameraController.h" />
     <ClInclude Include="Script\BackGroundImage.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Script\YuukaVideo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Script\Aru2.cpp" />
     <ClCompile Include="Script\Example\ScriptExample.cpp" />
     <ClCompile Include="Script\CameraController.cpp" />
     <ClCompile Include="Script\BackGroundImage.cpp" />

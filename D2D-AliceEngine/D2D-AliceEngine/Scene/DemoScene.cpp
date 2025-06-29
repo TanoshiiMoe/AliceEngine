@@ -17,12 +17,28 @@
 #include "../Script/CameraController.h"
 
 /*
-*	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 weak_ptr를 반환합니다.
+*	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
 *	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : 좌표, 회전, 스케일, 피봇을 지정합니다.
 */
 
 void DemoScene::Initialize()
 {
+}
+
+void DemoScene::Release()
+{
+	__super::Release();
+}
+
+void DemoScene::Update()
+{
+	__super::Update();
+}
+
+void DemoScene::OnEnter()
+{
+	__super::OnEnter();
+
 	m_camera = NewObject<gameObject>(L"Camera");
 	m_camera->AddComponent<CameraController>();
 
@@ -46,30 +62,11 @@ void DemoScene::Initialize()
 
 	m_widget3 = NewObject<gameObject>(L"widget3");
 	m_widget3->transform()->SetPosition(0, 0);
-}
-
-void DemoScene::Release()
-{
-	__super::Release();
-}
-
-void DemoScene::Update()
-{
-	__super::Update();
-	m_earth->transform()->AddRotation(0.5f); // 지구 자전
-	m_moon->transform()->AddRotation(2.0f); // 달 자전
-	m_sun->transform()->AddRotation(0.2f);
-}
-
-void DemoScene::OnEnter()
-{
-	__super::OnEnter();
 
 	// spine2D 테스트
 	//m_spineTest = NewObject<gameObject>(L"m_spineTest");
 	//m_spineTest->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
 	//m_spineTest->AddComponent<Spine2DRenderComponent>()->LoadData(L"Resource\\yuuka_spr\\yuuka_spr");
-	
 
 	m_sun->AddChildObject(m_earth);
 	m_earth->AddChildObject(m_moon);

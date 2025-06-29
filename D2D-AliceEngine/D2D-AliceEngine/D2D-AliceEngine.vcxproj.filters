@@ -65,6 +65,9 @@
     <ClInclude Include="Script\Example\ScriptExample.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Script\Aru2.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -88,6 +91,7 @@
     <ClCompile Include="Script\YuukaVideo.cpp" />
     <ClCompile Include="Script\CameraController.cpp" />
     <ClCompile Include="Script\Example\ScriptExample.cpp" />
+    <ClCompile Include="Script\Aru2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D2D-AliceEngine.rc">

@@ -80,6 +80,7 @@ void SpriteRenderer::Render()
 
 FVector2 SpriteRenderer::GetSize()
 {
+	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return FVector2(bmpSize.width, bmpSize.height);
 }

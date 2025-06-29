@@ -8,12 +8,13 @@
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Component/AnimationComponent.h>
+#include <System/ScriptSystem.h>
 
 void BackGroundImage::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(OnStart);
 }
-
 
 void BackGroundImage::FixedUpdate(const float& deltaSeconds)
 {
@@ -60,9 +61,12 @@ void BackGroundImage::Input()
 
 	if (Input::IsKeyPressed(VK_P))
 	{
-		if (m_owner->GetComponent<AnimationComponent>()->bPlay == true)
-			m_owner->GetComponent<AnimationComponent>()->Stop();
-		else
-			m_owner->GetComponent<AnimationComponent>()->Play();
+		if (m_owner->GetComponent<AnimationComponent>())
+		{
+			if (m_owner->GetComponent<AnimationComponent>()->bPlay == true)
+				m_owner->GetComponent<AnimationComponent>()->Stop();
+			else
+				m_owner->GetComponent<AnimationComponent>()->Play();
+		}
 	}
 }

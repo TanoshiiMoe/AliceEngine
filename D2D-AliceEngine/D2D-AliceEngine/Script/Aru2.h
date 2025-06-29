@@ -3,7 +3,7 @@
 #include <Core/StatTraits.h>
 #include <Component/StatComponent.h>
 
-struct AruStat {
+struct AruStat2 {
 	float HP = 100.f;
 	float MAXHP = 100.0f;
 	float MP = 50.f;
@@ -12,11 +12,11 @@ struct AruStat {
 	float INT = 30.f;
 };
 
-DEFINE_STAT_TRAITS_6(AruStat, HP, MAXHP, MP, STR, DEX, INT)
+DEFINE_STAT_TRAITS_6(AruStat2, HP, MAXHP, MP, STR, DEX, INT)
 
 class gameObject;
 class TextRenderComponent;
-class Aru : public ScriptComponent
+class Aru2 : public ScriptComponent
 {
 public:
 	void Initialize() override;
@@ -31,8 +31,8 @@ public:
 
 	void Input();
 
-	gameObject* m_aru;
-	std::vector<TextRenderComponent*> m_aruNameTexts;
-	StatComponent<AruStat>* m_aruStat;
+	gameObject* m_aru2;
+	std::vector<TextRenderComponent*> m_aru2NameTexts;
+	StatComponent<AruStat2>* m_aru2Stat;
 };
 

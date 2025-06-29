@@ -18,6 +18,7 @@ ScriptComponent::~ScriptComponent()
 void ScriptComponent::Initialize()
 {
 	ScriptSystem::GetInstance().Regist(this->weak_from_this());
+
 	UpdateTaskManager::GetInstance().Enque(
 		weak_from_this(),
 		Define::ETickingGroup::TG_PostPhysics,
@@ -81,11 +82,19 @@ void ScriptComponent::Release()
 	
 }
 
+void ScriptComponent::Awake()
+{
+}
+
 void ScriptComponent::OnStart()
 {
 }
 
 void ScriptComponent::OnEnd()
+{
+}
+
+void ScriptComponent::OnDestroy()
 {
 }
 

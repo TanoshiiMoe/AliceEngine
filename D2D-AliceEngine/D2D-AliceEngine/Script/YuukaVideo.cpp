@@ -8,10 +8,12 @@
 #include <Component/InputComponent.h>
 #include <Core/Input.h>
 #include <Component/AnimationComponent.h>
+#include <System/ScriptSystem.h>
 
 void YuukaVideo::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void YuukaVideo::Update(const float& deltaSeconds)

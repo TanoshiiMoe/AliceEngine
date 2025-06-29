@@ -7,15 +7,18 @@
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Core/Input.h>
+#include <System/ScriptSystem.h>
 
 void Moon::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void Moon::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	m_moon->transform()->AddRotation(2.0f); // ´Ş ÀÚÀü
 }
 
 void Moon::OnStart()

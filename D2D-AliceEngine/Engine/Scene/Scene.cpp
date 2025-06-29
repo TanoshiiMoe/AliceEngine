@@ -43,13 +43,18 @@ void Scene::Release()
 	UpdateTaskManager::GetInstance().ClearWorld();
 }
 
+// 첫 프레임에서 ScriptSystem의 Start를 call
 void Scene::Update()
 {
+	ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_Awake);
+	ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_OnStart);
 	UpdateTaskManager::GetInstance().TickAll();
 
 	FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetText(L"VRAM : " + info.VRAMUssage + L"\n"+ L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetColor(FColor(200, 0, 0, 255));
+
+	ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_OnEnd);
 }
 
 void Scene::OnEnter()

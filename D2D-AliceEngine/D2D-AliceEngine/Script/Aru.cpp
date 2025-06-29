@@ -8,10 +8,15 @@
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Component/StatComponent.h>
+#include <System/ScriptSystem.h>
 
 void Aru::Initialize()
 {
 	__super::Initialize();
+	(void)StatTraits<AruStat>::GetOffsetMap();
+	REGISTER_SCRIPT_METHOD(OnStart);
+	REGISTER_SCRIPT_METHOD(OnEnd);
+	REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
 
@@ -95,7 +100,7 @@ void Aru::OnStart()
 	/*
 	* 커스텀 구조체로 델리게이트를 바인딩 하는 예제
 	*/
-	m_aruStat = m_aru->AddComponent<StatComponent<MyStat>>();
+	m_aruStat = m_aru->AddComponent<StatComponent<AruStat>>();
 	m_aruStat->SetStat("HP", 30);
 	m_aruStat->SetStat("MAXHP", 30);
 	m_aruStat->SetStat("MP", 200);
@@ -136,6 +141,10 @@ void Aru::OnStart()
 void Aru::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+}
+
+void Aru::OnDestroy()
+{
 	m_aruNameTexts.clear();
 }
 

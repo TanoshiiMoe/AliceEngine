@@ -21,6 +21,7 @@ public:
 	// Render가 필요없는 Component도 있음
 	virtual void Render() {};
 
+	virtual void Awake() {};
 	virtual void OnStart() {}
 	virtual void OnEnd() {}
 	virtual void OnCreate() {}

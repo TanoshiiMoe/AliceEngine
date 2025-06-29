@@ -8,14 +8,18 @@
 #include <Component/InputComponent.h>
 #include <Core/Input.h>
 #include <Manager/SceneManager.h>
+#include <System/ScriptSystem.h>
+
 void Sun::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void Sun::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	m_sun->transform()->AddRotation(0.2f);
 }
 
 void Sun::OnStart()
