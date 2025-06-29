@@ -19,6 +19,11 @@ void SpriteRenderer::Initialize()
 	__super::Initialize();
 }
 
+void SpriteRenderer::Update(const float& deltaSeconds)
+{
+	__super::Update(deltaSeconds);
+}
+
 void SpriteRenderer::LoadData(const std::wstring& path)
 {
 	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장

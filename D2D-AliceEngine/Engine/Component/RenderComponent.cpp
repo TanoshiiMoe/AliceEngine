@@ -18,8 +18,9 @@ void RenderComponent::Initialize()
 	D2DRenderManager::GetInstance().AddRenderer(this->weak_from_this());
 }
 
-void RenderComponent::Update()
+void RenderComponent::Update(const float& deltaSeconds)
 {
+	__super::Update(deltaSeconds);
 }
 
 void RenderComponent::Release()

@@ -15,7 +15,7 @@ public:
 	~TextRenderComponent();
 
 	void Initialize() override;
-	void Update() override;
+	void Update(const float& deltaSeconds) override;
 	void Release() override;
 	void Render() override;
 

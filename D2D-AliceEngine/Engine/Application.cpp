@@ -2,12 +2,13 @@
 #include "pch.h"
 #include "Application.h"
 #include <Core/Input.h>
-#include <Core/Time.h>
 #include <Core/ObjectHandler.h>
 #include <Helpers/FileHelper.h>
 #include <Manager/D2DRenderManager.h>
 #include <Manager/SceneManager.h>
 #include <Manager/PackageResourceManager.h>
+#include <Manager/UpdateTaskManager.h>
+#include <Manager/TimerManager.h>
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
@@ -63,12 +64,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void Application::Initialize()
 {
 	ObjectHandler::Create();
-	D2DRenderManager::Create();
 	RenderSystem::Create();
 	ScriptSystem::Create();
 	InputSystem::Create();
 	TransformSystem::Create();
+	D2DRenderManager::Create();
 	SceneManager::Create();
+	UpdateTaskManager::Create();
+	TimerManager::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -118,7 +121,7 @@ void Application::Initialize()
 	D2DRenderManager::GetInstance().Initialize(m_hwnd);
 
 	Input::Initialize(m_hwnd);
-	Time::Initialize();
+	TimerManager::GetInstance().Initialize();
 
 	PackageResourceManager::Create();
 	PackageResourceManager::GetInstance().Initialize();
@@ -132,8 +135,7 @@ void Application::Run()
 void Application::Update()
 {
 	SceneManager::GetInstance().Update();
-	D2DRenderManager::GetInstance().Update();
-	Time::UpdateTime();
+	TimerManager::GetInstance().UpdateTime();
 	Input::Update();
 }
 

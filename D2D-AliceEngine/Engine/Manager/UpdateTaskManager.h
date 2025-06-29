@@ -29,6 +29,7 @@ struct FTickContext
 {
 	/** Update 되고 있는 동안 가지고 있을 씬 */
 	Scene* World;
+	// 현재 Update중인 Group이 무엇인지 알려주는 변수
 	Define::ETickingGroup TickGroup;
 	/** Update에 대한 deltatime */
 	float DeltaSeconds;
@@ -48,11 +49,11 @@ struct FTickContext
 
 struct UpdateWrapper
 {
-	Define::ETickingGroup Group;
 	std::weak_ptr<ITickable> Target;
+	std::function<void(const float&)> TickFunc;
 
-	UpdateWrapper(Define::ETickingGroup InGroup, std::weak_ptr<ITickable> InTarget)
-		: Group(InGroup), Target(InTarget)
+	UpdateWrapper(std::weak_ptr<ITickable> _Target, std::function<void(const float&)> _TickFunc)
+		: Target(_Target), TickFunc(_TickFunc)
 	{
 	}
 };
@@ -63,16 +64,18 @@ public:
 	std::unordered_map<Define::ETickingGroup, std::vector<UpdateWrapper>> m_TickLists;
 	FTickContext Context;
 
-	void Enque(std::weak_ptr<ITickable> InTarget, Define::ETickingGroup InGroup)
+	void Enque(std::weak_ptr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc)
 	{
-		m_TickLists[InGroup].emplace_back(InGroup, InTarget);
+		m_TickLists[InGroup].emplace_back(InTarget, TickFunc);
 	}
 
-	void StartFrame(Scene* InWorld, float InDeltaSeconds)
+	void StartFrame(float InDeltaSeconds)
 	{
-		Context.World = InWorld;
 		Context.DeltaSeconds = InDeltaSeconds;
 	}
+	
+	void SetWorld();
+	void ClearWorld();
 
 	void TickAll()
 	{

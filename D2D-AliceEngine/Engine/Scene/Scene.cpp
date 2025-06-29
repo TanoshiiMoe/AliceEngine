@@ -7,6 +7,7 @@
 #include <Component/TextRenderComponent.h>
 #include <Manager/PackageResourceManager.h>
 #include <Manager/D2DRenderManager.h>
+#include <Manager/UpdateTaskManager.h>
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 
@@ -29,7 +30,7 @@ Scene::~Scene()
 
 void Scene::Initialize()
 {
-	
+	UpdateTaskManager::GetInstance().SetWorld();
 }
 
 void Scene::Release()
@@ -39,14 +40,12 @@ void Scene::Release()
 		it->second.reset();
 	}
 	m_objects.clear();
+	UpdateTaskManager::GetInstance().ClearWorld();
 }
 
 void Scene::Update()
 {
-	RenderSystem::GetInstance().Update();
-	InputSystem::GetInstance().Update();
-	TransformSystem::GetInstance().Update();
-	ScriptSystem::GetInstance().Update();
+	UpdateTaskManager::GetInstance().TickAll();
 
 	FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetText(L"VRAM : " + info.VRAMUssage + L"\n"+ L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");

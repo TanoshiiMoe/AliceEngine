@@ -150,21 +150,6 @@ void D2DRenderManager::UnInitialize()
 	g_spriteBatch = nullptr;
 }
 
-void D2DRenderManager::Update()
-{
-	for (auto& pair : m_renderers)
-	{
-		const std::vector<std::weak_ptr<Component>>& renderList = pair;
-		for (const auto& obj : renderList)
-		{
-			if (auto locked = obj.lock())
-			{
-				locked->Update();
-			}
-		}
-	}
-}
-
 void D2DRenderManager::Render()
 {
 	m_d2dDeviceContext->BeginDraw();

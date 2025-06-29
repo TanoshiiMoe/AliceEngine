@@ -4,14 +4,15 @@
 #include "Manager/D2DRenderManager.h"
 #include "Application.h"
 #include <Helpers/FFmpegHelper.h>
-#include <Core/Time.h>
 #include <Math/Transform.h>
 #include <Component/TransformComponent.h>
-#include <System/RenderSystem.h>
 #include <Component/RenderComponent.h>
+#include <Manager/SceneManager.h>
+#include <Manager/UpdateTaskManager.h>
+#include <Manager/TimerManager.h>
+#include <System/RenderSystem.h>
 #include <Object/gameObject.h>
 #include <Object/Camera.h>
-#include <Manager/SceneManager.h>
 
 AnimationComponent::~AnimationComponent()
 {
@@ -23,11 +24,22 @@ AnimationComponent::~AnimationComponent()
 void AnimationComponent::Initialize()
 {
 	__super::Initialize();
+	UpdateTaskManager::GetInstance().Enque(
+		weak_from_this(),
+		Define::ETickingGroup::TG_PostPhysics,
+		[weak = weak_from_this()](const float& dt)
+		{
+			if (auto sp = weak.lock())
+			{
+				sp->Update(dt);
+			}
+		}
+	);
 }
 
-void AnimationComponent::Update()
+void AnimationComponent::Update(const float& deltaSeconds)
 {
-	__super::Update();
+	__super::Update(deltaSeconds);
 
 	ReleaseFrames();
 	UpdateFrames();
@@ -37,7 +49,7 @@ void AnimationComponent::UpdateFrames()
 {
 	if (bPlay)	// 플레이 가능할 때만 플레이
 	{
-		m_fFPSLastTime = Time::GetTotalTime() - m_fcountOneSecond;
+		m_fFPSLastTime = TimerManager::GetInstance().GetTotalTime() - m_fcountOneSecond;
 		if (m_fFPSLastTime >= m_fFPSTime)	// 1/60 초에 한 번씩
 		{
 			if (m_maxClipSize != 0)
@@ -49,7 +61,7 @@ void AnimationComponent::UpdateFrames()
 				}
 				m_curClip = (m_curClip + 1) % m_maxClipSize;
 			}
-			m_fcountOneSecond = Time::GetTotalTime();
+			m_fcountOneSecond = TimerManager::GetInstance().GetTotalTime();
 		}
 	}
 }

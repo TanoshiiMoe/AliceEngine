@@ -142,19 +142,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Script\Example\ScriptExample.h" />
+    <ClInclude Include="Script\CameraController.h" />
+    <ClInclude Include="Script\BackGroundImage.h" />
+    <ClInclude Include="Script\BackGroundVideo.h" />
+    <ClInclude Include="Script\Aru.h" />
+    <ClInclude Include="Script\Moon.h" />
+    <ClInclude Include="Script\Earth.h" />
     <ClInclude Include="Scene\DemoScene2.h" />
     <ClInclude Include="Scene\DemoScene.h" />
     <ClInclude Include="DemoGameApp.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Script\Sun.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Script\YuukaVideo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Script\Example\ScriptExample.cpp" />
+    <ClCompile Include="Script\CameraController.cpp" />
+    <ClCompile Include="Script\BackGroundImage.cpp" />
+    <ClCompile Include="Script\BackGroundVideo.cpp" />
+    <ClCompile Include="Script\Aru.cpp" />
+    <ClCompile Include="Script\Moon.cpp" />
+    <ClCompile Include="Script\Earth.cpp" />
     <ClCompile Include="Scene\DemoScene2.cpp" />
     <ClCompile Include="Scene\DemoScene.cpp" />
     <ClCompile Include="DemoGameApp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Script\Sun.cpp" />
+    <ClCompile Include="Script\YuukaVideo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D2D-AliceEngine.rc" />

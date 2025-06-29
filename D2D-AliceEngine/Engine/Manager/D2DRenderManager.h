@@ -22,7 +22,6 @@ private:
 public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
-	void Update();
 	void Render();
 
 	void GetApplicationSize(int& width, int& height);

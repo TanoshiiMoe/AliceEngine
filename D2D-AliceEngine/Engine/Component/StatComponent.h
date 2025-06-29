@@ -58,7 +58,7 @@ public:
 	std::unordered_map<std::string, MultiDelegate<float, float>> OnChangeStatMap;
 
 	virtual void Initialize() override {}
-	virtual void Update()  override {}
+	virtual void Update(const float& deltaSeconds)  override { __super::Update(deltaSeconds); }
 	virtual void Release()  override {}
 
 	// Get, Set으로 직접 사용할 수도 있음.

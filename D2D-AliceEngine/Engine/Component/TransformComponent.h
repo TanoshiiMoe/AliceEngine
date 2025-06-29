@@ -10,8 +10,7 @@ public:
 public:
 	void Initialize() override;
 	void Release() override;
-	void Update() override;
-
+	void Update(const float& deltaSeconds) override;
 	void SetTransform(const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot);
 
 public:

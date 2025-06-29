@@ -2,6 +2,7 @@
 #include "TextRenderComponent.h"
 #include <Manager/D2DRenderManager.h>
 #include <Manager/SceneManager.h>
+#include <Manager/UpdateTaskManager.h>
 #include <Object/Camera.h>
 #include <System/RenderSystem.h>
 #include <Math/TColor.h>
@@ -34,11 +35,22 @@ TextRenderComponent::~TextRenderComponent()
 void TextRenderComponent::Initialize()
 {
 	__super::Initialize();
+	UpdateTaskManager::GetInstance().Enque(
+		weak_from_this(),
+		Define::ETickingGroup::TG_PostUpdateWork,
+		[weak = weak_from_this()](const float& dt)
+	{
+		if (auto sp = weak.lock())
+		{
+			sp->Update(dt);
+		}
+	}
+	);
 }
 
-void TextRenderComponent::Update()
+void TextRenderComponent::Update(const float& deltaSeconds)
 {
-	__super::Update();
+	__super::Update(deltaSeconds);
 }
 
 void TextRenderComponent::Release()

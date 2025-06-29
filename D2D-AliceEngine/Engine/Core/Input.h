@@ -1,4 +1,5 @@
 #pragma once
+#include <Windows.h>
 namespace Input
 {
 	void Initialize(HWND hwnd);

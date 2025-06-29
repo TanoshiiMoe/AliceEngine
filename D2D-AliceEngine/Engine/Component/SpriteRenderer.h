@@ -10,6 +10,7 @@ public:
 	~SpriteRenderer();
 
 	void Initialize() override;
+	void Update(const float& deltaSeconds) override;
 	void LoadData(const std::wstring& path);
 	void Release() override;
 	void Render() override;

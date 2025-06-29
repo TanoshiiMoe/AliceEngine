@@ -26,7 +26,7 @@ public:
 	}
 
 	void Initialize() override;
-	void Update() override;
+	void Update(const float& deltaSeconds) override;
 	void UpdateFrames();
 	void ReleaseFrames();
 	void LoadData(const std::wstring& path);

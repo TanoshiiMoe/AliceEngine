@@ -38,6 +38,33 @@
     <ClInclude Include="Scene\DemoScene2.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Script\Sun.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Earth.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Moon.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Aru.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\BackGroundVideo.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\BackGroundImage.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\YuukaVideo.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\CameraController.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Example\ScriptExample.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -52,6 +79,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="Script\Sun.cpp" />
+    <ClCompile Include="Script\Earth.cpp" />
+    <ClCompile Include="Script\Moon.cpp" />
+    <ClCompile Include="Script\Aru.cpp" />
+    <ClCompile Include="Script\BackGroundVideo.cpp" />
+    <ClCompile Include="Script\BackGroundImage.cpp" />
+    <ClCompile Include="Script\YuukaVideo.cpp" />
+    <ClCompile Include="Script\CameraController.cpp" />
+    <ClCompile Include="Script\Example\ScriptExample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="D2D-AliceEngine.rc">

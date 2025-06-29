@@ -20,14 +20,13 @@ struct FPacakageInfo
 	std::wstring name; // 리소스 이름
 	std::wstring fileExtension; // 파일 확장자
 	std::wstring uuid; // 고유 식별자
-	bool bIsLoaded = false; // 로드 여부
-	int useCount = 0;
+	int loadCount = 0;
 	FPacakageInfo()
-		: resourceType(EResourceSpecifier::Max), name(L""), fileExtension(L""), uuid(L""), bIsLoaded(false)
+		: resourceType(EResourceSpecifier::Max), name(L""), fileExtension(L""), uuid(L"")
 	{
 	}
 	FPacakageInfo(const EResourceSpecifier& _resourceType, const std::wstring& name, const std::wstring& extension, const std::wstring& uuid)
-		: resourceType(_resourceType), name(name), fileExtension(extension), uuid(uuid), bIsLoaded(false)
+		: resourceType(_resourceType), name(name), fileExtension(extension), uuid(uuid)
 	{
 	}
 };

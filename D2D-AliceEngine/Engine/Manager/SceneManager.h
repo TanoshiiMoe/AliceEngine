@@ -61,9 +61,9 @@ public:
 				m_currentScene.lock()->Release();
 				SceneManager::GetInstance().GetCamera()->Release();
 			}
-			searchedScene.lock()->Initialize();
-			searchedScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
 			m_currentScene = searchedScene;
+			m_currentScene.lock()->Initialize();
+			m_currentScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
 			SceneManager::GetInstance().GetCamera()->Initialize();
 		}
 	}

@@ -126,9 +126,6 @@
     <ClInclude Include="Component\StatComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Time.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Component\SpriteRenderer.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -155,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="Core\Tickable.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\TimerManager.h">
+      <Filter>Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,9 +254,6 @@
     <ClCompile Include="Component\StatComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Time.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Define\Define.cpp">
       <Filter>Define</Filter>
     </ClCompile>
@@ -280,6 +277,9 @@
     </ClCompile>
     <ClCompile Include="Core\Tickable.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\TimerManager.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

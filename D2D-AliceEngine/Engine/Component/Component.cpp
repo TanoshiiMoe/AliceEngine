@@ -17,6 +17,11 @@ Component::Component(const std::wstring& name)
 	SetUUID(StringHelper::MakeUniqueName());
 }
 
+void Component::Update(const float& deltaSeconds)
+{
+
+}
+
 const std::wstring& Component::GetOwnerName()
 {
 	// TODO: 여기에 return 문을 삽입합니다.
