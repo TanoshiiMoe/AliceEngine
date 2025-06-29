@@ -181,6 +181,7 @@
     <ClInclude Include="Math\TColor.h" />
     <ClInclude Include="Core\Time.h" />
     <ClInclude Include="Manager\UpdateTaskManager.h" />
+    <ClInclude Include="Core\Tickable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\AnimationComponent.cpp" />
@@ -228,6 +229,7 @@
     <ClCompile Include="Math\TColor.cpp" />
     <ClCompile Include="Core\Time.cpp" />
     <ClCompile Include="Manager\UpdateTaskManager.cpp" />
+    <ClCompile Include="Core\Tickable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spine2D\Spine2D.vcxproj">

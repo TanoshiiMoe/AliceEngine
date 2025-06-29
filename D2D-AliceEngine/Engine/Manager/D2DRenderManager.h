@@ -1,12 +1,8 @@
 #pragma once
-
 #include "pch.h"
-#include "Component/RenderComponent.h"
-#include "Component/TextRenderComponent.h"
-#include "Component/BoxComponent.h"
-#include "Object/gameObject.h"
-#include <Component/AnimationComponent.h>
+#include <Core/Singleton.h>
 
+class Component;
 using namespace Define;
 class D2DRenderManager : public Singleton<D2DRenderManager>
 {
@@ -17,35 +13,9 @@ public:
 	// 렌더링 대기열
 	std::vector<std::vector<std::weak_ptr<Component>>> m_renderers;
 
-	inline void AddRenderer(std::weak_ptr<Component> renderer)
-	{
-		if (!renderer.expired())
-		{
-			auto sharedRenderer = renderer.lock();
+	void AddRenderer(std::weak_ptr<Component> renderer);
 
-			if (std::dynamic_pointer_cast<SpriteRenderer>(sharedRenderer))
-			{
-				m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
-			}
-			else if (std::dynamic_pointer_cast<AnimationComponent>(sharedRenderer))
-			{
-				m_renderers[static_cast<int>(ERenderLayer::AnimationComponent)].push_back(renderer);
-			}
-			else if (std::dynamic_pointer_cast<BoxComponent>(sharedRenderer))
-			{
-				m_renderers[static_cast<int>(ERenderLayer::BoxComponent)].push_back(renderer);
-			}
-			else if (std::dynamic_pointer_cast<TextRenderComponent>(sharedRenderer))
-			{
-				m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
-			}
-		}
-	}
-
-	inline static ID2D1DeviceContext7* GetD2DDevice()
-	{
-		return GetInstance().m_d2dDeviceContext.Get();
-	}
+	static ID2D1DeviceContext7* GetD2DDevice();
 
 private:
 	HWND m_hwnd = nullptr;

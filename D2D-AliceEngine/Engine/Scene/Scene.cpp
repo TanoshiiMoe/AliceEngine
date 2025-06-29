@@ -3,8 +3,10 @@
 #include <System/InputSystem.h>
 #include <System/TransformSystem.h>
 #include <System/ScriptSystem.h>
+#include <System/RenderSystem.h>
 #include <Component/TextRenderComponent.h>
 #include <Manager/PackageResourceManager.h>
+#include <Manager/D2DRenderManager.h>
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 

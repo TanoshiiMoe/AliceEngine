@@ -1,50 +1,25 @@
 #pragma once
-#include "../pch.h"
-#include <Math/Transform.h>
-#include <Component/SpriteRenderer.h>
-#include <System/RenderSystem.h>
 #include <Object/UObject.h>
-#include <Component/TransformComponent.h>
-#include <Manager/D2DRenderManager.h>
+#include <Component/Component.h>
+#include <memory>
+#include <Math/TMath.h>
 
 /*
 * @brief Object 클래스.
 * @details 이미지와 좌표를 관리하는 BitmapRenderer 컴포넌트를 포함합니다.
 */
 
+class TransformComponent;
 class D2DRenderManager;
 class gameObject : public UObject, public std::enable_shared_from_this<gameObject>
 {
 public:
 	gameObject() { Initialize(); }
-	gameObject(const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot);
-	
-	virtual ~gameObject()
-	{
-		for (std::weak_ptr<Component>&& comp : m_Components) 
-		{
-			comp.lock()->OnDestroy();
-		}
-		m_Components.clear();
-	}
+	gameObject(const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot);	
+	virtual ~gameObject();
 
-	virtual void OnStart()
-	{
-		for (std::weak_ptr<Component>&& comp : m_Components)
-		{
-			comp.lock()->OnStart();
-		}
-	}
-
-	virtual void OnEnd()
-	{
-		for (std::weak_ptr<Component>&& comp : m_Components)
-		{
-			comp.lock()->OnEnd();
-		}
-		m_Components.clear();
-	}
-
+	virtual void OnStart();
+	virtual void OnEnd();
 	/*
 	* @ Component를 관리하는 로직입니다.
 	*/
@@ -139,11 +114,7 @@ public:
 	void Initialize(const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot);
 
 	TransformComponent* transform() const { return m_transformComponent.lock().get(); }
-
-	void AddChildObject(const gameObject* obj)
-	{
-		this->transform()->AddChildObject(obj->m_transformComponent);
-	}
+	void AddChildObject(const gameObject* obj);
 
 public:
 	std::weak_ptr<TransformComponent> m_transformComponent;

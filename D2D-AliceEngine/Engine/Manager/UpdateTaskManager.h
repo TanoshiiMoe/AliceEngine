@@ -4,6 +4,8 @@
 #include <vector>
 #include <functional>
 #include <Scene/Scene.h>
+#include <unordered_map>
+#include <Core/Tickable.h>
 
 /*
 * @brief : Update()안에서의 순서를 정하기 위한 매니저입니다
@@ -44,17 +46,57 @@ struct FTickContext
 	FTickContext& operator=(const FTickContext& In) = default;
 };
 
+struct UpdateWrapper
+{
+	Define::ETickingGroup Group;
+	std::weak_ptr<ITickable> Target;
+
+	UpdateWrapper(Define::ETickingGroup InGroup, std::weak_ptr<ITickable> InTarget)
+		: Group(InGroup), Target(InTarget)
+	{
+	}
+};
+
 class UpdateTaskManager : public Singleton<UpdateTaskManager>
 {
 public: 
-	std::function<void()> AllTickFunctions;
+	std::unordered_map<Define::ETickingGroup, std::vector<UpdateWrapper>> m_TickLists;
 	FTickContext Context;
+
+	void Enque(std::weak_ptr<ITickable> InTarget, Define::ETickingGroup InGroup)
+	{
+		m_TickLists[InGroup].emplace_back(InGroup, InTarget);
+	}
 
 	void StartFrame(Scene* InWorld, float InDeltaSeconds)
 	{
-		Context.TickGroup = Define::ETickingGroup::TG_PrePhysics;
-		Context.DeltaSeconds = InDeltaSeconds;
 		Context.World = InWorld;
+		Context.DeltaSeconds = InDeltaSeconds;
+	}
+
+	void TickAll()
+	{
+		for (int group = 0; group < static_cast<int>(Define::ETickingGroup::TG_MAX); ++group)
+		{
+			Context.TickGroup = static_cast<Define::ETickingGroup>(group);
+			auto& TickList = m_TickLists[Context.TickGroup];
+
+			// 소멸된 객체면 TickList를 삭제하고 it는 그 자리에 그대로 있는다
+			// 아니라면 it는 계속 탐색.
+			// swap-and-pop을 고려하고 만든 코드
+			for (auto it = TickList.begin(); it != TickList.end(); )
+			{
+				if (auto sp = it->Target.lock())
+				{
+					sp->Update(Context.DeltaSeconds);
+					++it;
+				}
+				else
+				{
+					it = TickList.erase(it); // 소멸된 객체 제거
+				}
+			}
+		}
 	}
 };
 

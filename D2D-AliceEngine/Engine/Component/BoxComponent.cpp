@@ -1,9 +1,10 @@
 #include "pch.h"
 #include "BoxComponent.h"
-#include "Manager/D2DRenderManager.h"
+#include <Manager/D2DRenderManager.h>
 #include <Manager/SceneManager.h>
-#include "Math/TMath.h"
+#include <Math/TMath.h>
 #include <Math/TColor.h>
+#include <Math/Transform.h>
 
 BoxComponent::BoxComponent()
 {

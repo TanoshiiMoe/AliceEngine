@@ -1,261 +1,285 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Component">
+      <UniqueIdentifier>{0ed821fc-4498-448a-aa50-3ec4e11ffcd4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="System">
+      <UniqueIdentifier>{1f32b681-37d4-45f4-8f4a-fe0c1789075a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Object">
+      <UniqueIdentifier>{4200bd17-5bee-4f4f-984c-09ad0011a388}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{0920d86b-9393-4702-b908-80ed1dccfe0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{4582e54d-f7cb-4227-9301-a0917e6c1eb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{4e233e06-d4cc-4b97-bdd6-59c2451789e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper">
+      <UniqueIdentifier>{e041ee66-c8da-42a4-8a6f-da992711288d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Define">
+      <UniqueIdentifier>{5d768a4b-3498-443d-b0f4-e2651bda92fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{4fa6549e-bc3b-47a5-91e1-d057ad6b8ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Application">
+      <UniqueIdentifier>{267b2be8-916b-48eb-9ed8-8bb8784d1a93}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager\D2DRenderManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Application.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Singleton.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Transform.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\Camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\gameObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Define\Define.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\Component.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\SpriteRenderer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\TMath.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\Scene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Object\UObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\StringHelper.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\RenderComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager\SceneManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="System\SystemBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="System\RenderSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\ScriptComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="System\ScriptSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="System\InputSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\InputComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\TransformComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="System\TransformSystem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\TextRenderComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\TColor.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Component\AnimationComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\BoxComponent.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Input.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Component\InputComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Time.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Component\RenderComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Helpers\FFmpegHelper.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\AnimationComponent.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers\FileHelper.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager\UpdateTaskManager.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Component\ScriptComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\Spine2DRenderComponent.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Delegate.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Component\TextRenderComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Component\StatComponent.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Component\TransformComponent.h">
+      <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Core\StatTraits.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Component\Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="System\InputSystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\RenderSystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SystemBase.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\TransformSystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\UObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\gameObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Camera.h">
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Manager\PackageResourceManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\D2DRenderManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\UpdateTaskManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\SceneManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\TColor.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\TMath.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Transform.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\FFmpegHelper.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\StringHelper.h">
+      <Filter>Helper</Filter>
     </ClInclude>
     <ClInclude Include="Core\ObjectHandler.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Delegate.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Input.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Singleton.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\StatTraits.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\StatComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Time.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SpriteRenderer.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Define\Define.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\FileHelper.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="System\ScriptSystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Core\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Tickable.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Manager\D2DRenderManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Application.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\Singleton.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Transform.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Camera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\gameObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Define\Define.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\Component.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\SpriteRenderer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\TMath.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\Scene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\UObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Helpers\StringHelper.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\RenderComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Manager\SceneManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="System\SystemBase.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="System\RenderSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\ScriptComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="System\ScriptSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="System\InputSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\InputComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\TransformComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="System\TransformSystem.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\TextRenderComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\TColor.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\AnimationComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\BoxComponent.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Input.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\Component.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Time.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\InputComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Helpers\FFmpegHelper.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\RenderComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Component\AnimationComponent.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Helpers\FileHelper.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Manager\UpdateTaskManager.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\ScriptComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\Spine2DRenderComponent.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Delegate.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\SpriteRenderer.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Component\StatComponent.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\TextRenderComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Core\StatTraits.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Component\TransformComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="System\InputSystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\RenderSystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\ScriptSystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\TransformSystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\UObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\gameObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Camera.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Manager\PackageResourceManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\D2DRenderManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\UpdateTaskManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\SceneManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\TMath.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\TColor.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Transform.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\FFmpegHelper.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\StringHelper.cpp">
+      <Filter>Helper</Filter>
     </ClCompile>
     <ClCompile Include="Core\ObjectHandler.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\StatTraits.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Delegate.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Singleton.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\StatComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Time.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Define\Define.cpp">
+      <Filter>Define</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\FileHelper.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SystemBase.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Core\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Tickable.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

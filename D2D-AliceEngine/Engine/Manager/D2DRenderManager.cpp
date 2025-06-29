@@ -2,6 +2,9 @@
 #include "pch.h"
 #include "D2DRenderManager.h"
 #include "Component/TextRenderComponent.h"
+#include <Component/SpriteRenderer.h>
+#include <Component/AnimationComponent.h>
+#include <Component/BoxComponent.h>
 
 D2DRenderManager::D2DRenderManager()
 {
@@ -11,6 +14,36 @@ D2DRenderManager::D2DRenderManager()
 D2DRenderManager::~D2DRenderManager()
 {
 	m_renderers.clear();
+}
+
+void D2DRenderManager::AddRenderer(std::weak_ptr<Component> renderer)
+{
+	if (!renderer.expired())
+	{
+		auto sharedRenderer = renderer.lock();
+
+		if (std::dynamic_pointer_cast<SpriteRenderer>(sharedRenderer))
+		{
+			m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
+		}
+		else if (std::dynamic_pointer_cast<AnimationComponent>(sharedRenderer))
+		{
+			m_renderers[static_cast<int>(ERenderLayer::AnimationComponent)].push_back(renderer);
+		}
+		else if (std::dynamic_pointer_cast<BoxComponent>(sharedRenderer))
+		{
+			m_renderers[static_cast<int>(ERenderLayer::BoxComponent)].push_back(renderer);
+		}
+		else if (std::dynamic_pointer_cast<TextRenderComponent>(sharedRenderer))
+		{
+			m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
+		}
+	}
+}
+
+ID2D1DeviceContext7* D2DRenderManager::GetD2DDevice()
+{
+	return GetInstance().m_d2dDeviceContext.Get();
 }
 
 void D2DRenderManager::Initialize(HWND hwnd)

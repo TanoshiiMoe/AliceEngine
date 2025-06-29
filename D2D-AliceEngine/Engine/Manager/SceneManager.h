@@ -1,8 +1,10 @@
 #pragma once
 #include "Object/gameObject.h"
-#include "Scene/Scene.h"
 #include <Core/Singleton.h>
+#include <Helpers/StringHelper.h>
+#include <Scene/Scene.h>
 
+class Camera;
 class SceneManager : public Singleton<SceneManager>
 {
 public:
@@ -15,26 +17,9 @@ public:
 
 	std::weak_ptr<Scene> m_currentScene;	// ÇöÀç ¾À
 
-	Scene* GetCurrentScene()
-	{
-		if (std::shared_ptr<Scene> sharedScene = m_currentScene.lock())
-		{
-			return sharedScene.get();
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
+	Scene* GetWorld();
+	static Camera* GetCamera();
 
-	static Camera* GetCamera()
-	{
-		if (GetInstance().m_currentScene.lock())
-		{
-			return GetInstance().m_currentScene.lock()->GetCamera();
-		}
-		return nullptr;
-	}
 	template<class T>
 	static T* AddScene(const std::wstring& NewobjectName)
 	{

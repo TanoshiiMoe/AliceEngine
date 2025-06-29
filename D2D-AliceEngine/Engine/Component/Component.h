@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+#include <memory>
+#include <Math/TMath.h>
+
 class gameObject;
 class Transform;
 class Component : public std::enable_shared_from_this<Component>

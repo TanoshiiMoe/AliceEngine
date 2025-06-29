@@ -1,9 +1,13 @@
 #include "DemoScene2.h"
-#include <Component/InputComponent.h>
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
+#include <Component/InputComponent.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
+#include <Component/SpriteRenderer.h>
+#include <Component/TransformComponent.h>
+#include <Component/AnimationComponent.h>
+#include <Object/gameObject.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
 
