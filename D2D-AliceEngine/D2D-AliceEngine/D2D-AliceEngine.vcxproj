@@ -177,13 +177,6 @@
     <ClCompile Include="Script\YuukaVideo.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="D2D-AliceEngine.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="D2D-AliceEngine.ico" />
-    <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{ff21bb58-7919-4e53-a917-2a8af0469c81}</Project>
     </ProjectReference>

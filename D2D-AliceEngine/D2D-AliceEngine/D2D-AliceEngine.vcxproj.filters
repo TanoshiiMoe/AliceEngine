@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Application">
       <UniqueIdentifier>{61aa0688-eb74-4a29-b931-1b45b6ad7c2c}</UniqueIdentifier>
     </Filter>
@@ -15,11 +11,14 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{84e0738f-dc97-4a97-9607-94bd3b577f5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\ScriptExample">
+      <UniqueIdentifier>{3125c470-3da7-4543-86a7-200687e56296}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
@@ -41,32 +40,35 @@
     <ClInclude Include="Script\Sun.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="Script\Earth.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\Moon.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
     <ClInclude Include="Script\Aru.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\BackGroundVideo.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\BackGroundImage.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\YuukaVideo.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\CameraController.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\Example\ScriptExample.h">
-      <Filter>PreCompiledHeader</Filter>
+      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Script\Aru2.h">
-      <Filter>PreCompiledHeader</Filter>
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\BackGroundImage.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\BackGroundVideo.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\CameraController.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Earth.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Moon.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\YuukaVideo.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Example\ScriptExample.h">
+      <Filter>Scripts\ScriptExample</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -82,28 +84,35 @@
     <ClCompile Include="main.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="Script\Sun.cpp" />
-    <ClCompile Include="Script\Earth.cpp" />
-    <ClCompile Include="Script\Moon.cpp" />
-    <ClCompile Include="Script\Aru.cpp" />
-    <ClCompile Include="Script\BackGroundVideo.cpp" />
-    <ClCompile Include="Script\BackGroundImage.cpp" />
-    <ClCompile Include="Script\YuukaVideo.cpp" />
-    <ClCompile Include="Script\CameraController.cpp" />
-    <ClCompile Include="Script\Example\ScriptExample.cpp" />
-    <ClCompile Include="Script\Aru2.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="D2D-AliceEngine.rc">
-      <Filter>리소스 파일</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
-    <Image Include="D2D-AliceEngine.ico">
-      <Filter>리소스 파일</Filter>
-    </Image>
+    <ClCompile Include="Script\Aru.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\Aru2.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\BackGroundImage.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\BackGroundVideo.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\CameraController.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\Earth.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\Moon.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\Sun.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\YuukaVideo.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\Example\ScriptExample.cpp">
+      <Filter>Scripts\ScriptExample</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
