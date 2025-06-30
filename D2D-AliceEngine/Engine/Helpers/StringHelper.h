@@ -1,5 +1,6 @@
 #pragma once
 #include "pch.h"
+#include <codecvt>
 
 class StringHelper
 {
@@ -21,6 +22,18 @@ public:
 			<< std::setw(3) << st.wMilliseconds;
 
 		return wss.str();
+	}
+
+	static std::string wstring_to_string(const std::wstring& wstr) 
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+		return conv.to_bytes(wstr);
+	}
+
+	static std::wstring string_to_wstring(const std::string& str)
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+		return conv.from_bytes(str);
 	}
 };
 

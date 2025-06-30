@@ -44,6 +44,7 @@ namespace Define
 		SpriteComponent,
 		BoxComponent,
 		TextRenderComponent,
+		Animator,
 		Max
 	};
 

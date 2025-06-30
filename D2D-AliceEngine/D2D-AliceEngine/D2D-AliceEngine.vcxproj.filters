@@ -37,38 +37,41 @@
     <ClInclude Include="Scene\DemoScene2.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Script\Sun.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Script\Aru.h">
+    <ClInclude Include="Scripts\Aru.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\Aru2.h">
+    <ClInclude Include="Scripts\Aru2.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\BackGroundImage.h">
+    <ClInclude Include="Scripts\BackGroundImage.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\BackGroundVideo.h">
+    <ClInclude Include="Scripts\BackGroundVideo.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\CameraController.h">
+    <ClInclude Include="Scripts\CameraController.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\Earth.h">
+    <ClInclude Include="Scripts\Earth.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\Moon.h">
+    <ClInclude Include="Scripts\Moon.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\YuukaVideo.h">
+    <ClInclude Include="Scripts\YuukaVideo.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Script\Example\ScriptExample.h">
+    <ClInclude Include="Scripts\Example\ScriptExample.h">
       <Filter>Scripts\ScriptExample</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Sun.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Animation.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -84,35 +87,38 @@
     <ClCompile Include="main.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="Script\Aru.cpp">
+    <ClCompile Include="Scripts\Aru.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\Aru2.cpp">
+    <ClCompile Include="Scripts\Aru2.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\BackGroundImage.cpp">
+    <ClCompile Include="Scripts\BackGroundImage.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\BackGroundVideo.cpp">
+    <ClCompile Include="Scripts\BackGroundVideo.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\CameraController.cpp">
+    <ClCompile Include="Scripts\CameraController.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\Earth.cpp">
+    <ClCompile Include="Scripts\Earth.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\Moon.cpp">
+    <ClCompile Include="Scripts\Moon.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\Sun.cpp">
+    <ClCompile Include="Scripts\Sun.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\YuukaVideo.cpp">
+    <ClCompile Include="Scripts\YuukaVideo.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Script\Example\ScriptExample.cpp">
+    <ClCompile Include="Scripts\Example\ScriptExample.cpp">
       <Filter>Scripts\ScriptExample</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Animation.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

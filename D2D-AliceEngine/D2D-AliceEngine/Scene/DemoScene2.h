@@ -21,6 +21,7 @@ public:
 	void CameraInput();
 
 	gameObject* m_backgroundImage;
+	gameObject* m_spriteAnimationTest;
 
 	gameObject* m_aru;
 	gameObject* m_aru2;

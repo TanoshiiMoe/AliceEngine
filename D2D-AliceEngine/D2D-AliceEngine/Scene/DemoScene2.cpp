@@ -10,9 +10,10 @@
 #include <Object/gameObject.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
-#include "../Script/BackGroundImage.h"
-#include "../Script/Aru.h"
-#include "../Script/Aru2.h"
+#include "../Scripts/BackGroundImage.h"
+#include "../Scripts/Aru.h"
+#include "../Scripts/Aru2.h"
+#include "../Scripts/Animation.h"
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -65,6 +66,9 @@ void DemoScene2::OnEnter()
 
 	m_aru2 = NewObject<gameObject>(L"aru2");
 	m_aru2->AddComponent<Aru2>();
+
+	m_spriteAnimationTest = NewObject<gameObject>(L"animation");
+	m_spriteAnimationTest->AddComponent<Animation>();
 	
 	m_aru->AddComponent<InputComponent>()->SetAction([this]() { aruInput(); });
 	m_aru2->AddComponent<InputComponent>()->SetAction([this]() { aru2Input(); });

@@ -31,6 +31,12 @@
     <Filter Include="Core\Application">
       <UniqueIdentifier>{267b2be8-916b-48eb-9ed8-8bb8784d1a93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Extension">
+      <UniqueIdentifier>{751103b2-3d64-4210-bdc0-d58cabfa0b25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{75817a4b-d3fa-47aa-b202-aa3ae781c851}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -156,6 +162,18 @@
     <ClInclude Include="Manager\TimerManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Helpers\TextureLoader.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Extension\json.hpp">
+      <Filter>Extension</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\AnimationController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Animator.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -280,6 +298,15 @@
     </ClCompile>
     <ClCompile Include="Manager\TimerManager.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\TextureLoader.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\AnimationController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Animator.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@
 #include <Component/InputComponent.h>
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
-#include <Component/ScriptComponent.cpp>
+#include <System/ScriptSystem.h>
 
 void ScriptExample::Initialize()
 {

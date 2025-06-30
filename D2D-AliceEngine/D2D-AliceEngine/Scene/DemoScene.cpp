@@ -10,11 +10,11 @@
 #include <Component/TransformComponent.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
-#include "../Script/Sun.h"
-#include "../Script/Moon.h"
-#include "../Script/Earth.h"
-#include "../Script/YuukaVideo.h"
-#include "../Script/CameraController.h"
+#include "../Scripts/Sun.h"
+#include "../Scripts/Moon.h"
+#include "../Scripts/Earth.h"
+#include "../Scripts/YuukaVideo.h"
+#include "../Scripts/CameraController.h"
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.

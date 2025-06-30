@@ -141,6 +141,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Controller\AnimationController.h" />
+    <ClInclude Include="Component\Animator.h" />
     <ClInclude Include="Component\VideoComponent.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Component\BoxComponent.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="Core\Input.h" />
     <ClInclude Include="Component\Spine2DRenderComponent.h" />
     <ClInclude Include="Core\Delegate.h" />
+    <ClInclude Include="Extension\json.hpp" />
     <ClInclude Include="Helpers\FileHelper.h" />
     <ClInclude Include="Helpers\FFmpegHelper.h" />
     <ClInclude Include="Core\ObjectHandler.h" />
@@ -182,8 +185,11 @@
     <ClInclude Include="Manager\UpdateTaskManager.h" />
     <ClInclude Include="Core\Tickable.h" />
     <ClInclude Include="Manager\TimerManager.h" />
+    <ClInclude Include="Helpers\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Controller\AnimationController.cpp" />
+    <ClCompile Include="Component\Animator.cpp" />
     <ClCompile Include="Component\VideoComponent.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Component\BoxComponent.cpp" />
@@ -230,6 +236,7 @@
     <ClCompile Include="Manager\UpdateTaskManager.cpp" />
     <ClCompile Include="Core\Tickable.cpp" />
     <ClCompile Include="Manager\TimerManager.cpp" />
+    <ClCompile Include="Helpers\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spine2D\Spine2D.vcxproj">

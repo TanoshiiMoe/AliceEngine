@@ -17,7 +17,7 @@ public:
 
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;
-	void UpdateFrames();
+	void UpdateFrames(const float& deltaSeconds);
 	void ReleaseFrames();
 	// quality :
 	//  png 일때는 압축률

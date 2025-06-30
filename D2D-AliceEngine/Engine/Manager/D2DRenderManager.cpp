@@ -5,6 +5,7 @@
 #include <Component/SpriteRenderer.h>
 #include <Component/VideoComponent.h>
 #include <Component/BoxComponent.h>
+#include <Component/Animator.h>
 
 D2DRenderManager::D2DRenderManager()
 {
@@ -37,6 +38,10 @@ void D2DRenderManager::AddRenderer(std::weak_ptr<Component> renderer)
 		else if (std::dynamic_pointer_cast<TextRenderComponent>(sharedRenderer))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
+		}
+		else if (std::dynamic_pointer_cast<Animator>(sharedRenderer))
+		{
+			m_renderers[static_cast<int>(ERenderLayer::Animator)].push_back(renderer);
 		}
 	}
 }
