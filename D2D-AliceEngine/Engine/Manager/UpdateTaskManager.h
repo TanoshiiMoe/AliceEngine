@@ -69,10 +69,8 @@ public:
 		m_TickLists[InGroup].emplace_back(InTarget, TickFunc);
 	}
 
-	void StartFrame(float InDeltaSeconds)
-	{
-		Context.DeltaSeconds = InDeltaSeconds;
-	}
+	void StartFrame();
+	void EndFrame();
 	
 	void SetWorld();
 	void ClearWorld();

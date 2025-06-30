@@ -18,6 +18,8 @@ public:
 	virtual void OnEnter();
 	virtual void OnExit();
 
+	void VisibleMemoryInfo();
+
 	Camera* GetCamera()
 	{
 		return m_mainCamera;
