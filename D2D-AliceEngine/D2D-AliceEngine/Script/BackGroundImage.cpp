@@ -7,7 +7,7 @@
 #include <Component/SpriteRenderer.h>
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
-#include <Component/AnimationComponent.h>
+#include <Component/VideoComponent.h>
 #include <System/ScriptSystem.h>
 
 void BackGroundImage::Initialize()
@@ -61,12 +61,12 @@ void BackGroundImage::Input()
 
 	if (Input::IsKeyPressed(VK_P))
 	{
-		if (m_owner->GetComponent<AnimationComponent>())
+		if (m_owner->GetComponent<VideoComponent>())
 		{
-			if (m_owner->GetComponent<AnimationComponent>()->bPlay == true)
-				m_owner->GetComponent<AnimationComponent>()->Stop();
+			if (m_owner->GetComponent<VideoComponent>()->bPlay == true)
+				m_owner->GetComponent<VideoComponent>()->Stop();
 			else
-				m_owner->GetComponent<AnimationComponent>()->Play();
+				m_owner->GetComponent<VideoComponent>()->Play();
 		}
 	}
 }

@@ -9,11 +9,11 @@
 */
 
 using namespace Microsoft::WRL;
-class AnimationComponent : public RenderComponent
+class VideoComponent : public RenderComponent
 {
 public:
-	AnimationComponent() {}
-	~AnimationComponent();
+	VideoComponent() {}
+	~VideoComponent();
 
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;

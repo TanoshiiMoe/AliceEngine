@@ -6,7 +6,7 @@
 #include <Component/BoxComponent.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/TransformComponent.h>
-#include <Component/AnimationComponent.h>
+#include <Component/VideoComponent.h>
 #include <Object/gameObject.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
@@ -15,7 +15,7 @@
 #include "../Script/Aru2.h"
 
 /*
-*	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 weak_ptr를 반환합니다.
+*	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
 *	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : 좌표, 회전, 스케일, 피봇을 지정합니다.
 */
 

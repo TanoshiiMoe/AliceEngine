@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "AnimationComponent.h"
+#include "VideoComponent.h"
 #include "SpriteRenderer.h"
 #include "Manager/D2DRenderManager.h"
 #include "Application.h"
@@ -14,14 +14,14 @@
 #include <Object/gameObject.h>
 #include <Object/Camera.h>
 
-AnimationComponent::~AnimationComponent()
+VideoComponent::~VideoComponent()
 {
 	files.clear();
 	m_bitmaps.clear();
 	PackageResourceManager::GetInstance().UnloadDataDir(fileDirPath); // 비디오 파일 언로드
 }
 
-void AnimationComponent::Initialize()
+void VideoComponent::Initialize()
 {
 	__super::Initialize();
 	UpdateTaskManager::GetInstance().Enque(
@@ -37,7 +37,7 @@ void AnimationComponent::Initialize()
 	);
 }
 
-void AnimationComponent::Update(const float& deltaSeconds)
+void VideoComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
@@ -45,7 +45,7 @@ void AnimationComponent::Update(const float& deltaSeconds)
 	UpdateFrames();
 }
 
-void AnimationComponent::UpdateFrames()
+void VideoComponent::UpdateFrames()
 {
 	if (bPlay)	// 플레이 가능할 때만 플레이
 	{
@@ -66,7 +66,7 @@ void AnimationComponent::UpdateFrames()
 	}
 }
 
-void AnimationComponent::ReleaseFrames()
+void VideoComponent::ReleaseFrames()
 {
 	// 현재 프레임 주변만 캐시 유지
 	size_t start = (m_curClip > cacheSize) ? m_curClip - cacheSize : 0;
@@ -80,7 +80,7 @@ void AnimationComponent::ReleaseFrames()
 	}
 }
 
-void AnimationComponent::LoadData(const std::wstring& path, const int& fps, const std::wstring& extension, const int& quality)
+void VideoComponent::LoadData(const std::wstring& path, const int& fps, const std::wstring& extension, const int& quality)
 {
 	fileDirPath = FileHelper::get_folder_path(Define::BASE_RESOURCE_PATH + path); // 비디오 파일 경로 저장
 	files = FFmpegHelper::GetFramesFromVideo(Define::BASE_RESOURCE_PATH + path, 12, extension, quality);
@@ -92,7 +92,7 @@ void AnimationComponent::LoadData(const std::wstring& path, const int& fps, cons
 	m_bitmaps.clear();
 }
 
-void AnimationComponent::LoadFrame(size_t frameIndex)
+void VideoComponent::LoadFrame(size_t frameIndex)
 {
 	std::shared_ptr<ID2D1Bitmap1> temp = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[frameIndex].c_str());
 	if (m_bitmaps.size() <= frameIndex)
@@ -102,7 +102,7 @@ void AnimationComponent::LoadFrame(size_t frameIndex)
 	m_bitmaps[frameIndex] = temp;
 }
 
-void AnimationComponent::Release()
+void VideoComponent::Release()
 {
 	__super::Release();
 }
@@ -113,7 +113,7 @@ void AnimationComponent::Release()
 *	ETransformType : 좌표계 구분
 */
 
-void AnimationComponent::Render()
+void VideoComponent::Render()
 {
 	__super::Render();
 	if (files.empty()) return;
@@ -157,7 +157,7 @@ void AnimationComponent::Render()
 	context->DrawBitmap(m_bitmaps[m_curClip].get());
 }
 
-FVector2 AnimationComponent::GetSize()
+FVector2 VideoComponent::GetSize()
 {
 	if (m_bitmaps.empty() == false)
 	{

@@ -7,7 +7,7 @@
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Core/Input.h>
-#include <Component/AnimationComponent.h>
+#include <Component/VideoComponent.h>
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <System/ScriptSystem.h>

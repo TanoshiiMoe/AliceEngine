@@ -141,7 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Component\AnimationComponent.h" />
+    <ClInclude Include="Component\VideoComponent.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="Component\BoxComponent.h" />
     <ClInclude Include="Component\TextRenderComponent.h" />
@@ -184,7 +184,7 @@
     <ClInclude Include="Manager\TimerManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Component\AnimationComponent.cpp" />
+    <ClCompile Include="Component\VideoComponent.cpp" />
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Component\BoxComponent.cpp" />
     <ClCompile Include="Component\TextRenderComponent.cpp" />

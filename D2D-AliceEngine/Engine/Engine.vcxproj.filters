@@ -33,7 +33,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component\AnimationComponent.h">
+    <ClInclude Include="Component\VideoComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\BoxComponent.h">
@@ -158,7 +158,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Component\AnimationComponent.cpp">
+    <ClCompile Include="Component\VideoComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\BoxComponent.cpp">
