@@ -35,7 +35,6 @@ public:
 
 	size_t m_curClip = 0;
 	bool bPlay = false;
-	float m_fFPSTime = 1.0f / 18.0f;
+	float m_fFPSTime = 1 / 12.0f;
 	float m_fFPSLastTime = 0;
-	float m_fcountOneSecond = 0;
 };

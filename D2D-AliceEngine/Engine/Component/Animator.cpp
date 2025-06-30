@@ -8,17 +8,29 @@
 
 Animator::Animator()
 {
-	pAnimationClip = new AnimationClip();
+
 }
 
 Animator::~Animator()
 {
-	delete pAnimationClip;
+
 }
 
 void Animator::Initialize()
 {
 	__super::Initialize();
+
+	UpdateTaskManager::GetInstance().Enque(
+		weak_from_this(),
+		Define::ETickingGroup::TG_PostPhysics,
+		[weak = weak_from_this()](const float& dt)
+	{
+		if (auto sp = weak.lock())
+		{
+			sp->Update(dt);
+		}
+	}
+	);
 }
 
 void Animator::Update(const float& deltaSeconds)
@@ -26,14 +38,14 @@ void Animator::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	if (bPlay)	// 플레이 가능할 때만 플레이
 	{
-		m_fFPSLastTime = deltaSeconds - m_fcountOneSecond;
-		if (m_fFPSLastTime >= m_fFPSTime)	// 1/60 초에 한 번씩
+		m_fFPSLastTime += deltaSeconds;
+		if (m_fFPSLastTime >= m_fFPSTime)	// 1/12 초에 한 번씩
 		{
 			if (pAnimationClip->frames.size() != 0)
 			{
 				m_curClip = (m_curClip + 1) % pAnimationClip->frames.size();
 			}
-			m_fcountOneSecond = deltaSeconds;
+			m_fFPSLastTime = 0;
 		}
 	}
 }
@@ -53,18 +65,17 @@ void Animator::Render()
 	Camera* camera = SceneManager::GetCamera();
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
 
-	ComPtr<ID2D1Effect> cropEffect;
-	context->CreateEffect(CLSID_D2D1Crop, &cropEffect);
-	cropEffect->SetInput(0, m_bitmap.get());
-	cropEffect->SetValue(D2D1_CROP_PROP_RECT, D2D1::RectF(sheet.lock()->sprites[m_curClip].x, sheet.lock()->sprites[m_curClip].y, sheet.lock()->sprites[m_curClip].width, sheet.lock()->sprites[m_curClip].height));
-	D2D1_POINT_2F pivotOffset = {
-		sheet.lock()->sprites[m_curClip].width * sheet.lock()->sprites[m_curClip].pivotX,
-		sheet.lock()->sprites[m_curClip].height * sheet.lock()->sprites[m_curClip].pivotY
-	};
-	//pivotOffset = { 0,0 };
+	auto& sprite = sheet.lock()->sprites[pAnimationClip->frames[m_curClip].spriteSheetIndex];
+
+	float ScaleX = bmpSize.width / sheet.lock()->textureWidth;
+	float ScaleY = bmpSize.height / sheet.lock()->textureHeight;
+	float x = sprite.x * ScaleX;
+	float y = bmpSize.height - sprite.y * ScaleY;
+	float width = sprite.width * ScaleX;
+	float height = sprite.height * ScaleY;
 
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
+	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
@@ -84,17 +95,18 @@ void Animator::Render()
 	}
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
-	context->SetTransform(view);
 
-	D2D1_VECTOR_2F SrcPos = { 0, 0 };
-	D2D1_RECT_F SrcRect = { SrcPos.x, SrcPos.y, SrcPos.x + bmpSize.width, SrcPos.y + bmpSize.height };
-	
-	SrcPos = { sheet.lock()->sprites[m_curClip].x, sheet.lock()->sprites[m_curClip].y };
-	//SrcRect = { SrcPos.x, SrcPos.y, SrcPos.x + spriteInfo.width, SrcPos.y + spriteInfo.height };
-	//SrcRect = { SrcPos.x, SrcPos.y, SrcPos.x + sheet.lock()->sprites[m_curClip].width, SrcPos.y + sheet.lock()->sprites[m_curClip].height };
-	SrcRect = { SrcPos.x, SrcPos.y, SrcPos.x + 160, SrcPos.y + 160 };
-	context->DrawBitmap(m_bitmap.get(), nullptr, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
-	//context->DrawImage(cropEffect.Get());
+	D2D1_RECT_F SrcRect = {
+		x,
+		y - height,
+		x + width,
+		y
+	};
+
+	D2D1_RECT_F destRect = { -width * sprite.pivotX, -height * sprite.pivotY,  -width * sprite.pivotX + width,  -height * sprite.pivotY + height };
+
+	context->SetTransform(view);
+	context->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
 }
 
 void Animator::SetAnimationClip(AnimationClip* clip)

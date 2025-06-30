@@ -41,8 +41,8 @@ void DemoScene2::OnEnter()
 	m_widget2 = NewObject<gameObject>(L"widget2");
 	m_widget3 = NewObject<gameObject>(L"widget3");
 
-	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [Q] : 카메라를 아루에게 붙이기 \n [E] : 카메라를 떼기 \n * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n\n <배경 실행> \n [P] : 배경 실행, 중지 \n\n <아루> \n [5,6] : 무기 스폰, 무기 파괴 \n [7,8] : 지갑 스폰, 지갑 파괴 \n [W,A,S,D] : 이동 \n [4] : 아루 이름 한영 전환 \n\n ::Delegate \n [T] 아루가 아루2에게 데미지 주기 \n [Y] : 아루 5 회복하기 \n [U] : 아루 최대체력 10 늘리기 \n\n [G] 아루2가 아루에게 데미지 주기 \n [H] : 아루2 7 회복하기 \n [J] : 아루 최대체력 15 늘리기");
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 70));
+	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n [Q] : 카메라를 아루에게 붙이기 \n [E] : 카메라를 떼기 \n * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n\n <배경 실행> \n [P] : 배경 실행, 중지 \n\n <켄 애니메이션> \n [C] : 애니메이션 전환 \n\n <아루> \n [5,6] : 무기 스폰, 무기 파괴 \n [7,8] : 지갑 스폰, 지갑 파괴 \n [W,A,S,D] : 이동 \n [4] : 아루 이름 한영 전환 \n ::Delegate \n [T] 아루가 아루2에게 데미지 주기 \n [Y] : 아루 5 회복하기 \n [U] : 아루 최대체력 10 늘리기 \n\n [G] 아루2가 아루에게 데미지 주기 \n [H] : 아루2 7 회복하기 \n [J] : 아루 최대체력 15 늘리기");
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 50));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 

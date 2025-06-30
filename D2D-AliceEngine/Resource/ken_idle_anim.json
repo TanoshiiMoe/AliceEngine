@@ -1,0 +1,44 @@
+{
+    "clipName": "ken_idle",
+    "loop": false,
+    "texturePath": "ken.png",
+    "duration": 0.75,
+    "frames": [
+        {
+            "sprite": "ken_idle_116",
+            "time": 0.0
+        },
+        {
+            "sprite": "ken_idle_117",
+            "time": 0.0833333358168602
+        },
+        {
+            "sprite": "ken_idle_118",
+            "time": 0.1666666716337204
+        },
+        {
+            "sprite": "ken_idle_119",
+            "time": 0.25
+        },
+        {
+            "sprite": "ken_idle_120",
+            "time": 0.3333333432674408
+        },
+        {
+            "sprite": "ken_idle_121",
+            "time": 0.4166666865348816
+        },
+        {
+            "sprite": "ken_idle_122",
+            "time": 0.5
+        },
+        {
+            "sprite": "ken_idle_123",
+            "time": 0.5833333730697632
+        },
+        {
+            "sprite": "ken_idle_124",
+            "time": 0.6666666865348816
+        }
+    ]
+}

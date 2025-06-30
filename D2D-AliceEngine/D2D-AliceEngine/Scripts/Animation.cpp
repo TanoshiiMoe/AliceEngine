@@ -57,16 +57,19 @@ void Animation::OnStart()
 
 	Animator::LoadSpriteSheet("ken_sprites.json", Texture);
 	Animator::LoadAnimationClip("ken_kick_anim.json", kick, Texture);
+	Animator::LoadAnimationClip("ken_idle_anim.json", idle, Texture);
 
-	m_owner->transform()->SetPosition(50, 50);
+	m_owner->transform()->SetPosition(-100, 100);
 	m_owner->transform()->SetRotation(0);
 	m_owner->transform()->SetScale(1.0f, 1.0f);
 	m_owner->transform()->SetPivot(0.5f);
 
 	m_animator = m_owner->AddComponent<Animator>();
-	m_animator->SetAnimationClip(kick.get());
+	m_animator->SetAnimationClip(idle.get());
 	m_animator->LoadSpriteRenderer(Texture);
 	m_animator->Play();
+
+	m_owner->AddComponent<InputComponent>()->SetAction([this]() { Input(); });
 }
 
 void Animation::OnEnd()
@@ -81,4 +84,21 @@ void Animation::OnDestroy()
 void Animation::Input()
 {
 	// 여기에 Input에 대한 로직 작성
+
+	if (Input::IsKeyDown(VK_C))
+	{
+		m_animator->Stop();
+		m_animator = m_owner->GetComponent<Animator>();
+		m_animator->SetAnimationClip(kick.get());
+		m_animator->LoadSpriteRenderer(Texture);
+		m_animator->Play();
+	}
+	//if (Input::IsKeyDown(VK_V))
+	//{
+	//	m_animator->Stop();
+	//	m_animator = m_owner->GetComponent<Animator>();
+	//	m_animator->SetAnimationClip(idle.get());
+	//	m_animator->LoadSpriteRenderer(Texture);
+	//	m_animator->Play();
+	//}
 }

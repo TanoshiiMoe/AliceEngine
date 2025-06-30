@@ -49,7 +49,7 @@ void VideoComponent::UpdateFrames(const float& deltaSeconds)
 {
 	if (bPlay)	// 플레이 가능할 때만 플레이
 	{
-		m_fFPSLastTime = deltaSeconds - m_fcountOneSecond;
+		m_fFPSLastTime += deltaSeconds;
 		if (m_fFPSLastTime >= m_fFPSTime)	// 1/60 초에 한 번씩
 		{
 			if (m_maxClipSize != 0)
@@ -61,7 +61,7 @@ void VideoComponent::UpdateFrames(const float& deltaSeconds)
 				}
 				m_curClip = (m_curClip + 1) % m_maxClipSize;
 			}
-			m_fcountOneSecond = deltaSeconds;
+			m_fFPSLastTime = 0;
 		}
 	}
 }

@@ -41,6 +41,5 @@ public:
 	bool bPlay = false;
 	float m_fFPSTime = 1.0f / 18.0f;
 	float m_fFPSLastTime = 0;
-	float m_fcountOneSecond = 0;
 };
 
