@@ -62,9 +62,6 @@ void DemoScene3::OnEnter()
 	m_backgroundImage = NewObject<gameObject>(L"sky");
 	m_backgroundImage->AddComponent<BackGroundImage>();
 
-	m_player = NewObject<gameObject>(L"Player");
-	m_player->AddComponent<Player>();
-
 	for (int i = 0; i < enemyMax; i++)
 	{
 		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
@@ -72,6 +69,8 @@ void DemoScene3::OnEnter()
 		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
 	}
 
+	m_player = NewObject<gameObject>(L"Player");
+	m_player->AddComponent<Player>();
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 }
 

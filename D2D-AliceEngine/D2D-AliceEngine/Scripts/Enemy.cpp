@@ -53,9 +53,9 @@ void Enemy::OnStart()
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
 
-	m_owner->transform()->SetPosition(FVector2(FRandom::GetRandomInRange(-512, 512)));
+	m_owner->transform()->SetPosition(FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)));
 	m_owner->transform()->SetRotation(0);
-	m_owner->transform()->SetScale(FRandom::GetRandomInRange(1, 1.5f));
+	m_owner->transform()->SetScale(FRandom::GetRandomInRange(0.3, 0.9f));
 	m_owner->transform()->SetPivot(0.5f);
 
 	Texture = std::make_shared<SpriteSheet>();
@@ -80,8 +80,6 @@ void Enemy::OnStart()
 	m_owner->stateMachine->CreateState(L"Idle", idleState);
 	m_owner->stateMachine->CreateState(L"Attack", attackState);
 	m_owner->stateMachine->SetNextState(L"Idle");
-
-	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 }
 
 void Enemy::OnEnd()
@@ -96,13 +94,4 @@ void Enemy::OnDestroy()
 void Enemy::Input()
 {
 	// 여기에 Input에 대한 로직 작성
-
-	if (Input::IsKeyDown(VK_C))
-	{
-		m_owner->stateMachine->SetNextState(L"Idle");
-	}
-	if (Input::IsKeyDown(VK_Z))
-	{
-		m_owner->stateMachine->SetNextState(L"Attack");
-	}
 }

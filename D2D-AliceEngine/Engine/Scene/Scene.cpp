@@ -16,7 +16,7 @@ Scene::Scene()
 	RenderSystem::GetInstance().Initialize();
 	for (auto& object : m_objects)
 	{
-		object.get()->Initialize();
+		object.second.get()->Initialize();
 	}
 	m_mainCamera = nullptr;
 	m_mainCamera = new Camera();
@@ -35,6 +35,10 @@ void Scene::Initialize()
 
 void Scene::Release()
 {
+	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+	{
+		it->second.reset();
+	}
 	m_objects.clear();
 	UpdateTaskManager::GetInstance().ClearWorld();
 }
@@ -49,7 +53,7 @@ void Scene::Update()
 
 	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 	{
-		it->get()->Update();
+		it->second->Update();
 	}
 
 	UpdateTaskManager::GetInstance().EndFrame();
@@ -59,7 +63,7 @@ void Scene::OnEnter()
 {
 	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 	{
-		it->get()->OnStart();
+		it->second->OnStart();
 	}
 
 	m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
@@ -74,7 +78,7 @@ void Scene::OnExit()
 {
 	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 	{
-		it->get()->OnEnd();
+		it->second->OnEnd();
 	}
 	D2DRenderManager::GetInstance().m_dxgiDevice->Trim();
 	PackageResourceManager::GetInstance().UnloadData();

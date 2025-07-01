@@ -162,16 +162,25 @@ void Aru::Input()
 		else
 			m_aru->GetComponent<TextRenderComponent>()->SetText(L"aru");
 	}
+	if (Input::IsKeyPressed(VK_9))
+	{
+		//for (int i = 0; i < 20000; i++)
+		//{
+		//	GetWorld()->RemoveObjectByName(L"gun");
+		//}
+		GetWorld()->RemoveAllObjectsByName(L"gun");
+	}
+	if (Input::IsKeyPressed(VK_0))
+	{
+		for (int i = 0; i < 5000; i++)
+		{
+			gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
+			gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
+		}
+	}
 	if (Input::IsKeyDown(VK_5))
 	{
-		//for (int i = 0; i < 2; i++)
-		//{
-		//	gameObject* gun = NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		//	gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
-		//}
-
 		// 생성자로 넣을 수도 있음
-		
 		gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
 		gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
 

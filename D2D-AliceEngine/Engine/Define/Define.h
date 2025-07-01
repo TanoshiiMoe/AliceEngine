@@ -42,9 +42,9 @@ namespace Define
 	{
 		AnimationComponent,
 		SpriteComponent,
+		Animator,
 		BoxComponent,
 		TextRenderComponent,
-		Animator,
 		Max
 	};
 

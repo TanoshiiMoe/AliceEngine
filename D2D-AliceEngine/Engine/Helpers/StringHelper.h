@@ -6,6 +6,7 @@ class StringHelper
 {
 public:
 	static std::wstring MakeUniqueName() {
+		static std::atomic<uint64_t> s_counter = 0;
 		SYSTEMTIME st;
 		GetLocalTime(&st);
 
@@ -19,7 +20,8 @@ public:
 			<< std::setw(2) << st.wMinute
 			<< std::setw(2) << st.wSecond
 			<< L"_"
-			<< std::setw(3) << st.wMilliseconds;
+			<< std::setw(3) << st.wMilliseconds
+			<< L"_" << s_counter++;
 
 		return wss.str();
 	}
