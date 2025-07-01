@@ -62,6 +62,7 @@ public:
 	void SetLooping(const bool& loop) { bLoopping = loop; }
 	bool IsLooping() { return bLoopping; }
 	void ChangeAnimation(const std::string& _key, bool _loop = true);
+	void SetFlip(const bool& _flip) { bFlip = _flip; }
 
 	float time = -1;
 	AnimationClip* pAnimationClip;
@@ -70,6 +71,7 @@ public:
 
 	size_t m_curTime = 0;
 	size_t m_curFrame = 0;
+	bool bFlip = false;
 	bool bPlay = false;
 	bool bLoopping = false;
 	float m_accumTime = 0;

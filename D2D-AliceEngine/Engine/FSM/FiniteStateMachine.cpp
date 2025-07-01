@@ -44,3 +44,8 @@ void FiniteStateMachine::CreateState(const std::wstring& _stateName, FSMState* _
 	m_StateContiner[_stateName] = _state;
 	_state->SetStateMachine(this);
 }
+
+FSMState* FiniteStateMachine::GetCurrentState()
+{
+	return m_pCurState;
+}

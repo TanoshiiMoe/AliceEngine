@@ -39,10 +39,12 @@ void Player::Update(const float& deltaSeconds)
 	if (Input::IsKeyDown(VK_RIGHT))
 	{
 		m_owner->transform()->AddPosition(55.0f * deltaSeconds, 0);
+		m_animator->SetFlip(true);
 	}
 	if (Input::IsKeyDown(VK_LEFT))
 	{
 		m_owner->transform()->AddPosition(-55.0f * deltaSeconds, 0);
+		m_animator->SetFlip(false);
 	}
 	if (Input::IsKeyDown(VK_DOWN))
 	{
@@ -77,11 +79,15 @@ void Player::OnStart()
 
 	Texture = std::make_shared<SpriteSheet>();
 	idle = std::make_shared<AnimationClip>();
-	kick = std::make_shared<AnimationClip>();
+	attack = std::make_shared<AnimationClip>();
 
-	Animator::LoadSpriteSheet("ken_sprites.json", Texture);
+	/*Animator::LoadSpriteSheet("ken_sprites.json", Texture);
 	Animator::LoadAnimationClip("ken_kick_anim.json", kick, Texture);
-	Animator::LoadAnimationClip("ken_idle_anim.json", idle, Texture);
+	Animator::LoadAnimationClip("ken_idle_anim.json", idle, Texture);*/
+
+	Animator::LoadSpriteSheet("Zero\\Zero_sprites.json", Texture);
+	Animator::LoadAnimationClip("Zero\\Zero_attack_anim.json", attack, Texture);
+	Animator::LoadAnimationClip("Zero\\Zero_idle_anim.json", idle, Texture);
 
 	m_animator = m_owner->AddComponent<Animator>();
 	m_animator->LoadSpriteRenderer(Texture);
@@ -92,7 +98,7 @@ void Player::OnStart()
 	idleState->SetAnimator(m_animator);
 	attackState->SetAnimator(m_animator);
 	idleState->SetAnimationClip(idle.get());
-	attackState->SetAnimationClip(kick.get());
+	attackState->SetAnimationClip(attack.get());
 
 	m_owner->stateMachine->CreateState(L"Idle", idleState);
 	m_owner->stateMachine->CreateState(L"Attack", attackState);

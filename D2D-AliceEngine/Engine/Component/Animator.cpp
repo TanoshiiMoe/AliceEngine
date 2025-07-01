@@ -94,6 +94,12 @@ void Animator::Render()
 	D2D1_RECT_F SrcRect = { x, y - height, x + width, y };
 	D2D1_RECT_F destRect = { -width * sprite.pivotX, -height * sprite.pivotY,  -width * sprite.pivotX + width,  -height * sprite.pivotY + height };
 
+	if (bFlip)
+	{
+		D2D1::Matrix3x2F flipX =
+			D2D1::Matrix3x2F::Scale(-1.f, 1.f);
+		view = flipX * view;
+	}
 	context->SetTransform(view);
 	context->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
 }

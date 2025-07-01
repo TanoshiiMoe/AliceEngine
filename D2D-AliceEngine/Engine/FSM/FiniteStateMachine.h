@@ -16,4 +16,5 @@ public:
 	void Update();
 	void SetNextState(const std::wstring& _stateName);
 	void CreateState(const std::wstring& _stateName, FSMState* _state);
+	FSMState* GetCurrentState();
 };
