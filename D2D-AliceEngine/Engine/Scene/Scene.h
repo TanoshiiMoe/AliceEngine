@@ -87,6 +87,21 @@ public:
 		return false;
 	}
 
+	template<class TReturnType, typename... Args>
+	std::weak_ptr<TReturnType> NewObjectByWeak(const std::wstring& NewobjectName, Args&&... args)
+	{
+		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
+
+		std::shared_ptr<TReturnType> createdObj = std::make_shared<TReturnType>(std::forward<Args>(args)...);
+
+		createdObj->SetName(NewobjectName);
+		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
+
+		auto result = m_objects.emplace(createdObj->GetUUID(), createdObj);
+		auto iter = result.first;
+
+		return std::dynamic_pointer_cast<TReturnType>(createdObj);
+	}
 
 private:
 	gameObject* m_sysinfoWidget;

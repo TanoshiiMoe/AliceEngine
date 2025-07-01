@@ -1,4 +1,4 @@
-#include "Animation.h"
+#include "Player.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -15,7 +15,7 @@
 #include "../FSMState/IdleState.h"
 #include "../FSMState/AttackState.h"
 
-void Animation::Initialize()
+void Player::Initialize()
 {
 	__super::Initialize();
 	REGISTER_SCRIPT_METHOD(Awake);
@@ -24,40 +24,55 @@ void Animation::Initialize()
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
-void Animation::FixedUpdate(const float& deltaSeconds)
+void Player::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
 	// 여기에 FixedUpdate에 대한 로직 작성
 
 }
 
-void Animation::Update(const float& deltaSeconds)
+void Player::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
-
+	if (Input::IsKeyDown(VK_RIGHT))
+	{
+		m_owner->transform()->AddPosition(55.0f * deltaSeconds, 0);
+	}
+	if (Input::IsKeyDown(VK_LEFT))
+	{
+		m_owner->transform()->AddPosition(-55.0f * deltaSeconds, 0);
+	}
+	if (Input::IsKeyDown(VK_DOWN))
+	{
+		m_owner->transform()->AddPosition(0, -55.0f * deltaSeconds);
+	}
+	if (Input::IsKeyDown(VK_UP))
+	{
+		m_owner->transform()->AddPosition(0, 55.0f * deltaSeconds);
+	}
 }
 
-void Animation::LateUpdate(const float& deltaSeconds)
+void Player::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
 	// 여기에 LateUpdate에 대한 로직 작성
 
 }
 
-void Animation::Awake()
+void Player::Awake()
 {
 }
 
-void Animation::OnStart()
+void Player::OnStart()
 {
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
 
-	m_owner->transform()->SetPosition(-100, 100);
+	m_owner->transform()->SetPosition(0, 0);
 	m_owner->transform()->SetRotation(0);
-	m_owner->transform()->SetScale(1.0f, 1.0f);
+	m_owner->transform()->SetScale(1.5f, 1.5f);
 	m_owner->transform()->SetPivot(0.5f);
 
 	Texture = std::make_shared<SpriteSheet>();
@@ -83,19 +98,19 @@ void Animation::OnStart()
 	m_owner->stateMachine->CreateState(L"Attack", attackState);
 	m_owner->stateMachine->SetNextState(L"Idle");
 
-	m_owner->AddComponent<InputComponent>()->SetAction([this]() { Input(); });
+	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 }
 
-void Animation::OnEnd()
+void Player::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
 }
 
-void Animation::OnDestroy()
+void Player::OnDestroy()
 {
 }
 
-void Animation::Input()
+void Player::Input()
 {
 	// 여기에 Input에 대한 로직 작성
 
@@ -103,7 +118,7 @@ void Animation::Input()
 	{
 		m_owner->stateMachine->SetNextState(L"Idle");
 	}
-	if (Input::IsKeyDown(VK_V))
+	if (Input::IsKeyDown(VK_Z))
 	{
 		m_owner->stateMachine->SetNextState(L"Attack");
 	}

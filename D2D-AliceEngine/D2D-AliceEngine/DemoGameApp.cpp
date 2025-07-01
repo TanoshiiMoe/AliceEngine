@@ -3,6 +3,7 @@
 #include "DemoGameApp.h"
 #include "Scene/DemoScene.h"
 #include "Scene/DemoScene2.h"
+#include "Scene/DemoScene3.h"
 
 DemoGameApp::DemoGameApp()
 {
@@ -19,8 +20,9 @@ void DemoGameApp::Initialize()
 	__super::Initialize();
 
 	SceneManager::AddScene<DemoScene2>(L"aruScene");
+	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	DemoScene* SolarSystemScene = SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
-	SceneManager::ChangeScene(L"aruScene");
+	SceneManager::ChangeScene(L"FSMScene");
 }
 
 void DemoGameApp::Run()

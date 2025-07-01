@@ -7,7 +7,7 @@ class IdleState;
 class AttackState;
 struct SpriteSheet;
 struct AnimationClip;
-class Animation : public ScriptComponent
+class Enemy : public ScriptComponent
 {
 public:
 	void Initialize() override;

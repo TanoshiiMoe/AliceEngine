@@ -13,7 +13,8 @@
 #include "../Scripts/BackGroundImage.h"
 #include "../Scripts/Aru.h"
 #include "../Scripts/Aru2.h"
-#include "../Scripts/Animation.h"
+#include "../Scripts/Player.h"
+#include "../Scripts/CameraController.h"
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -36,6 +37,9 @@ void DemoScene2::Update()
 void DemoScene2::OnEnter()
 {
 	__super::OnEnter();
+
+	m_camera = NewObject<gameObject>(L"Camera");
+	m_camera->AddComponent<CameraController>();
 
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget2 = NewObject<gameObject>(L"widget2");
@@ -66,13 +70,9 @@ void DemoScene2::OnEnter()
 
 	m_aru2 = NewObject<gameObject>(L"aru2");
 	m_aru2->AddComponent<Aru2>();
-
-	m_spriteAnimationTest = NewObject<gameObject>(L"animation");
-	m_spriteAnimationTest->AddComponent<Animation>();
 	
-	m_aru->AddComponent<InputComponent>()->SetAction([this]() { aruInput(); });
-	m_aru2->AddComponent<InputComponent>()->SetAction([this]() { aru2Input(); });
-	m_aru->AddComponent<InputComponent>()->SetAction([this]() { CameraInput(); });
+	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { aruInput(); });
+	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2->GetHandle(),[this]() { aru2Input(); });
 }
 
 void DemoScene2::OnExit()
@@ -99,6 +99,14 @@ void DemoScene2::aru2Input()
 
 void DemoScene2::aruInput()
 {
+	if (Input::IsKeyPressed(VK_Q))
+	{
+		SceneManager::GetCamera()->SetOwner(m_aru);
+	}
+	if (Input::IsKeyPressed(VK_E))
+	{
+		SceneManager::GetCamera()->ClearOwner();
+	}
 	if (Input::IsKeyPressed(VK_T))
 	{
 		m_aru2->GetComponent<Aru2>()->m_aru2Stat->DecreaseAbility("HP", 10);
@@ -111,105 +119,5 @@ void DemoScene2::aruInput()
 	if (Input::IsKeyPressed(VK_U))
 	{
 		m_aru->GetComponent<Aru>()->m_aruStat->SetStat("MAXHP", m_aru->GetComponent<Aru>()->m_aruStat->GetStat("MAXHP")+10);
-	}
-	if (Input::IsKeyPressed(VK_4))
-	{
-		if (m_aru->GetComponent<TextRenderComponent>()->GetText() == L"aru")
-			m_aru->GetComponent<TextRenderComponent>()->SetText(L"아루");
-		else
-			m_aru->GetComponent<TextRenderComponent>()->SetText(L"aru");
-	}
-	if (Input::IsKeyDown(VK_5))
-	{
-		//for (int i = 0; i < 2; i++)
-		//{
-		//	gameObject* gun = NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		//	gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
-		//}
-
-		// 주석된 예시는 transform을 하나씩 set하는 방법
-		// 생성자로 넣을 수도 있음
-		gameObject* gun = NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
-		//gameObject* gun = NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		//gun->transform()->SetPosition(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512));
-		//gun->transform()->SetRotation(FRandom::GetRandomInRange(0, 90));
-		//gun->transform()->SetScale(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f));
-		//gun->transform()->SetPivot(0.5f);
-		//gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
-	}
-	if (Input::IsKeyDown(VK_6))
-	{
-		RemoveObjectByName(L"gun");
-	}
-	if (Input::IsKeyDown(VK_7))
-	{
-		gameObject* wallet = NewObject<gameObject>(L"wallet");
-		wallet->Initialize(FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		//wallet->transform()->SetPosition(FRandom::GetRandomInRange(-512, 512));
-		//wallet->transform()->SetRotation(FRandom::GetRandomInRange(0, 90));
-		//wallet->transform()->SetScale(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f));
-		//wallet->transform()->SetPivot(0.5f);
-		wallet->AddComponent<SpriteRenderer>()->LoadData(L"wallet.png");
-	}
-	if (Input::IsKeyDown(VK_8))
-	{
-		RemoveObjectByName(L"wallet");
-	}
-	if (Input::IsKeyPressed(VK_3))
-	{
-		SceneManager::ChangeScene(L"SolarSystemScene");
-	}
-	if (Input::IsKeyDown(VK_D))
-	{
-		m_aru->transform()->AddPosition(5.0f, 0);
-	}
-	if (Input::IsKeyDown(VK_A))
-	{
-		m_aru->transform()->AddPosition(-5.0f, 0);
-	}
-	if (Input::IsKeyDown(VK_S))
-	{
-		m_aru->transform()->AddPosition(0, -5.0f);
-	}
-	if (Input::IsKeyDown(VK_W))
-	{
-		m_aru->transform()->AddPosition(0, 5.0f);
-	}
-}
-
-void DemoScene2::CameraInput()
-{
-	if (Input::IsKeyPressed(VK_Q))
-	{
-		SceneManager::GetCamera()->SetOwner(m_aru);
-	}
-	if (Input::IsKeyPressed(VK_E))
-	{
-		SceneManager::GetCamera()->ClearOwner();
-	}
-	if (Input::IsKeyDown(VK_RIGHT))
-	{
-		SceneManager::GetCamera()->AddPosition(5.0f, 0);
-	}
-	if (Input::IsKeyDown(VK_LEFT))
-	{
-		SceneManager::GetCamera()->AddPosition(-5.0f, 0);
-	}
-	if (Input::IsKeyDown(VK_UP))
-	{
-		SceneManager::GetCamera()->AddPosition(0, 5.0f);
-	}
-	if (Input::IsKeyDown(VK_DOWN))
-	{
-		SceneManager::GetCamera()->AddPosition(0, -5.0f);
-	}
-	if (Input::IsKeyPressed(VK_1))
-	{
-		D2DRenderManager::GetInstance().SwitchTransformType(ETransformType::D2D);
-	}
-	if (Input::IsKeyPressed(VK_2))
-	{
-		D2DRenderManager::GetInstance().SwitchTransformType(ETransformType::Unity);
 	}
 }

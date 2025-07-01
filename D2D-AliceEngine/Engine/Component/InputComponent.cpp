@@ -9,7 +9,7 @@ InputComponent::InputComponent()
 InputComponent::~InputComponent()
 {
 	InputSystem::GetInstance().UnRegist(this->weak_from_this());
-	actions.clear();
+	slots.clear();
 }
 
 void InputComponent::Initialize()
@@ -32,13 +32,16 @@ void InputComponent::Initialize()
 void InputComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	for (auto action : actions)
+	for (auto action : slots)
 	{
-		action();
+		if (ObjectHandler::GetInstance().IsValid(action.handle))
+		{
+			action.func();
+		}
 	}
 }
 
 void InputComponent::Release()
 {
-	actions.clear();
+	slots.clear();
 }

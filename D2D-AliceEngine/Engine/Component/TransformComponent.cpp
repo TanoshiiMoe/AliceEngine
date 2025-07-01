@@ -104,6 +104,12 @@ void TransformComponent::SetPosition(const float& _x)
 	SetDirty();
 }
 
+void TransformComponent::SetPosition(const FVector2& _v)
+{
+	m_localTransform->SetPosition(_v.x, _v.y);
+	SetDirty();
+}
+
 void TransformComponent::SetRotation(const float& _val)
 {
 	m_localTransform->SetRotation(_val);

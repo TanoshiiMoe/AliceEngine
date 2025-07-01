@@ -7,6 +7,7 @@
 */
 class Animator;
 class AnimationClip;
+class FiniteStateMachine;
 class FSMState : public UObjectBase
 {
 public:
@@ -18,9 +19,12 @@ public:
 
 	void SetAnimator(Animator* _animator);
 	void SetAnimationClip(AnimationClip* _motion);
+	void SetStateMachine(FiniteStateMachine* _owner);
+	FiniteStateMachine* GetStateMachine();
 
-private:
+protected:
 	Animator* animator;
 	AnimationClip* motion;
+	FiniteStateMachine* owner;
 };
 

@@ -2,11 +2,11 @@
 #include <Scene/Scene.h>
 
 class TextRenderComponent;
-class DemoScene2 : public Scene
+class DemoScene3 : public Scene
 {
 public:
-	DemoScene2() {}
-	~DemoScene2() {}
+	DemoScene3() {}
+	~DemoScene3() {}
 
 	void Initialize() override;
 	void Release() override;
@@ -15,16 +15,16 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
-	void aru2Input();
+	void PlayerInput();
+	void EnemyInput();
 
-	void aruInput();
-	void CameraInput();
-
-	gameObject* m_camera;
 	gameObject* m_backgroundImage;
+	gameObject* m_spriteAnimationTest;
 
-	gameObject* m_aru;
-	gameObject* m_aru2;
+	gameObject* m_player;
+	//std::vector<std::weak_ptr<gameObject>> m_enemies;
+	std::vector<gameObject*> m_enemies;
+	int enemyMax = 20;
 	gameObject* m_widget;
 	gameObject* m_widget2;
 	gameObject* m_widget3;

@@ -5,6 +5,8 @@
 FiniteStateMachine::FiniteStateMachine()
 {
 	SetName(L"FiniteStateMachine");
+	m_pCurState = nullptr;
+	m_pNextState = nullptr;
 }
 
 FiniteStateMachine::~FiniteStateMachine()
@@ -40,4 +42,5 @@ void FiniteStateMachine::SetNextState(const std::wstring& _stateName)
 void FiniteStateMachine::CreateState(const std::wstring& _stateName, FSMState* _state)
 {
 	m_StateContiner[_stateName] = _state;
+	_state->SetStateMachine(this);
 }

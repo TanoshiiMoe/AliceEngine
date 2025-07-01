@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "FSMState.h"
 #include <Component/Animator.h>
+#include "FiniteStateMachine.h"
 
 FSMState::FSMState()
 {
@@ -38,4 +39,14 @@ void FSMState::SetAnimator(Animator* _animator)
 void FSMState::SetAnimationClip(AnimationClip* _motion)
 {
 	motion = _motion;
+}
+
+void FSMState::SetStateMachine(FiniteStateMachine* _owner)
+{
+	owner = _owner;
+}
+
+FiniteStateMachine* FSMState::GetStateMachine()
+{
+	return owner;
 }

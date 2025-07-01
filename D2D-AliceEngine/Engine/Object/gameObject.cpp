@@ -51,6 +51,8 @@ void gameObject::Initialize(const FVector2& position = FVector2(0.0f), const flo
 {
 	m_transformComponent = AddComponentByWeak<TransformComponent>();
 	m_transformComponent.lock()->SetTransform(position, rotation, scale, pivot);
+
+	stateMachine = new FiniteStateMachine();
 }
 
 void gameObject::AddChildObject(const gameObject* obj)

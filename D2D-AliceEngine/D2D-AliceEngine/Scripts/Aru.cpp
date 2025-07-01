@@ -9,6 +9,7 @@
 #include <Component/InputComponent.h>
 #include <Component/StatComponent.h>
 #include <System/ScriptSystem.h>
+#include <Manager/SceneManager.h>
 
 void Aru::Initialize()
 {
@@ -136,6 +137,8 @@ void Aru::OnStart()
 	{
 		m_aruNameTexts[4]->SetTextFormat(L"마나 : ", newVal);
 	});;
+
+	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { Input(); });
 }
 
 void Aru::OnEnd()
@@ -151,4 +154,70 @@ void Aru::OnDestroy()
 void Aru::Input()
 {
 	// 여기에 Input에 대한 로직 작성
+
+	if (Input::IsKeyPressed(VK_4))
+	{
+		if (m_aru->GetComponent<TextRenderComponent>()->GetText() == L"aru")
+			m_aru->GetComponent<TextRenderComponent>()->SetText(L"아루");
+		else
+			m_aru->GetComponent<TextRenderComponent>()->SetText(L"aru");
+	}
+	if (Input::IsKeyDown(VK_5))
+	{
+		//for (int i = 0; i < 2; i++)
+		//{
+		//	gameObject* gun = NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
+		//	gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
+		//}
+
+		// 생성자로 넣을 수도 있음
+		
+		gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
+		gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
+
+		// 주석된 예시는 transform을 하나씩 set하는 방법
+		//gameObject* gun = NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
+		//gun->transform()->SetPosition(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512));
+		//gun->transform()->SetRotation(FRandom::GetRandomInRange(0, 90));
+		//gun->transform()->SetScale(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f));
+		//gun->transform()->SetPivot(0.5f);
+		//gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
+	}
+	if (Input::IsKeyDown(VK_6))
+	{
+		GetWorld()->RemoveObjectByName(L"gun");
+	}
+	if (Input::IsKeyDown(VK_7))
+	{
+		gameObject* wallet = GetWorld()->NewObject<gameObject>(L"wallet", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
+		wallet->AddComponent<SpriteRenderer>()->LoadData(L"wallet.png");
+		//wallet->transform()->SetPosition(FRandom::GetRandomInRange(-512, 512));
+		//wallet->transform()->SetRotation(FRandom::GetRandomInRange(0, 90));
+		//wallet->transform()->SetScale(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f));
+		//wallet->transform()->SetPivot(0.5f);
+	}
+	if (Input::IsKeyDown(VK_8))
+	{
+		GetWorld()->RemoveObjectByName(L"wallet");
+	}
+	if (Input::IsKeyPressed(VK_3))
+	{
+		SceneManager::ChangeScene(L"SolarSystemScene");
+	}
+	if (Input::IsKeyDown(VK_D))
+	{
+		m_aru->transform()->AddPosition(5.0f, 0);
+	}
+	if (Input::IsKeyDown(VK_A))
+	{
+		m_aru->transform()->AddPosition(-5.0f, 0);
+	}
+	if (Input::IsKeyDown(VK_S))
+	{
+		m_aru->transform()->AddPosition(0, -5.0f);
+	}
+	if (Input::IsKeyDown(VK_W))
+	{
+		m_aru->transform()->AddPosition(0, 5.0f);
+	}
 }

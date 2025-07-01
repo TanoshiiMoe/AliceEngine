@@ -17,6 +17,9 @@
     <Filter Include="Scripts\ScriptExample">
       <UniqueIdentifier>{3125c470-3da7-4543-86a7-200687e56296}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FSM">
+      <UniqueIdentifier>{6d2a4f93-a0b6-4eec-b326-c35242554d13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -70,14 +73,20 @@
     <ClInclude Include="Scripts\Sun.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Animation.h">
+    <ClInclude Include="Scripts\Player.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="FSMState\IdleState.h">
-      <Filter>PreCompiledHeader</Filter>
+      <Filter>FSM</Filter>
     </ClInclude>
     <ClInclude Include="FSMState\AttackState.h">
-      <Filter>PreCompiledHeader</Filter>
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\DemoScene3.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -123,10 +132,20 @@
     <ClCompile Include="Scripts\Example\ScriptExample.cpp">
       <Filter>Scripts\ScriptExample</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Animation.cpp">
+    <ClCompile Include="Scripts\Player.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="FSMState\IdleState.cpp" />
-    <ClCompile Include="FSMState\AttackState.cpp" />
+    <ClCompile Include="Scripts\Enemy.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMState\IdleState.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMState\AttackState.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\DemoScene3.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

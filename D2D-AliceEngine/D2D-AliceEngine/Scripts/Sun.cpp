@@ -35,7 +35,7 @@ void Sun::OnStart()
 	m_sun->AddComponent<BoxComponent>(m_sun->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
 	m_sun->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_sun->GetComponent<SpriteRenderer>()->GetSize().y * 0.7f));
 
-	m_sun->AddComponent<InputComponent>()->SetAction([this]() { Input(); });
+	m_sun->AddComponent<InputComponent>()->SetAction(m_sun->GetHandle(),[this]() { Input(); });
 }
 
 void Sun::OnEnd()
@@ -46,7 +46,7 @@ void Sun::Input()
 {
 	if (Input::IsKeyPressed(VK_3))
 	{
-		SceneManager::ChangeScene(L"aruScene");
+		SceneManager::ChangeScene(L"FSMScene");
 	}
 	if (Input::IsKeyPressed(VK_4))
 	{

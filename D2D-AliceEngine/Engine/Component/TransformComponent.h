@@ -26,6 +26,7 @@ public:
 
 	void SetPosition(const float& _x, const float& _y);
 	void SetPosition(const float& _x);
+	void SetPosition(const FVector2& _v);
 	void SetRotation(const float& _val);
 
 	void SetScale(const float& _x, const float& _y);

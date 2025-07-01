@@ -26,7 +26,7 @@ void CameraController::Update(const float& deltaSeconds)
 void CameraController::OnStart()
 {
 	m_camera = GetOwner();
-	m_camera->AddComponent<InputComponent>()->SetAction([this]() { Input(); });
+	m_camera->AddComponent<InputComponent>()->SetAction(m_camera->GetHandle(), [this]() { Input(); });
 }
 
 void CameraController::OnEnd()
