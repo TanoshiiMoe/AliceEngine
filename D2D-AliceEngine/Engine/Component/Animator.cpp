@@ -36,17 +36,15 @@ void Animator::Initialize()
 void Animator::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	if (bPlay)	// 플레이 가능할 때만 플레이
+	if (!bPlay) return;	// 플레이 가능할 때만 플레이
+	if (!pAnimationClip || pAnimationClip->frames.empty()) return;
+	if (IsEnd() && !bLoopping) return; // 프레임의 끝에서 반복할지 말지 판단
+
+	m_accumTime += deltaSeconds;
+	if (m_accumTime >= pAnimationClip->frames[m_curFrame].duration)
 	{
-		m_fFPSLastTime += deltaSeconds;
-		if (m_fFPSLastTime >= m_fFPSTime)	// 1/12 초에 한 번씩
-		{
-			if (pAnimationClip->frames.size() != 0)
-			{
-				m_curClip = (m_curClip + 1) % pAnimationClip->frames.size();
-			}
-			m_fFPSLastTime = 0;
-		}
+		m_accumTime = pAnimationClip->frames[m_curFrame].duration;
+		m_curFrame = (m_curFrame + 1) % pAnimationClip->frames.size();
 	}
 }
 
@@ -64,15 +62,7 @@ void Animator::Render()
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
-
-	auto& sprite = sheet.lock()->sprites[pAnimationClip->frames[m_curClip].spriteSheetIndex];
-
-	float ScaleX = bmpSize.width / sheet.lock()->textureWidth;
-	float ScaleY = bmpSize.height / sheet.lock()->textureHeight;
-	float x = sprite.x * ScaleX;
-	float y = bmpSize.height - sprite.y * ScaleY;
-	float width = sprite.width * ScaleX;
-	float height = sprite.height * ScaleY;
+	auto& sprite = sheet.lock()->sprites[pAnimationClip->frames[m_curFrame].spriteSheetIndex];
 
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
@@ -95,14 +85,13 @@ void Animator::Render()
 	}
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
-
-	D2D1_RECT_F SrcRect = {
-		x,
-		y - height,
-		x + width,
-		y
-	};
-
+	float ScaleX = bmpSize.width / sheet.lock()->textureWidth;
+	float ScaleY = bmpSize.height / sheet.lock()->textureHeight;
+	float x = sprite.x * ScaleX;
+	float y = bmpSize.height - sprite.y * ScaleY;
+	float width = sprite.width * ScaleX;
+	float height = sprite.height * ScaleY;
+	D2D1_RECT_F SrcRect = { x, y - height, x + width, y };
 	D2D1_RECT_F destRect = { -width * sprite.pivotX, -height * sprite.pivotY,  -width * sprite.pivotX + width,  -height * sprite.pivotY + height };
 
 	context->SetTransform(view);
@@ -139,17 +128,52 @@ void Animator::LoadAnimationClip(const std::string& filePath, std::weak_ptr<Anim
 
 void Animator::LoadSpriteRenderer(std::weak_ptr<SpriteSheet> _sheet)
 {
-	const std::wstring path = StringHelper::string_to_wstring(StringHelper::wstring_to_string(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(pAnimationClip->texturePath))));
+	//const std::wstring path = StringHelper::string_to_wstring(StringHelper::wstring_to_string(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(pAnimationClip->texturePath))));
+	const std::wstring path = StringHelper::string_to_wstring(StringHelper::wstring_to_string(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(_sheet.lock()->texture))));
 	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(path.c_str());
 	sheet = _sheet;
 }
 
 void Animator::Play()
 {
+	if (!pAnimationClip) return;
 	bPlay = true;
 }
 
 void Animator::Stop()
 {
+	if (!pAnimationClip) return;
+	m_curFrame = 0;
 	bPlay = false;
+}
+
+void Animator::PlayAtFrame(const size_t& _frame)
+{
+	if (!pAnimationClip) return;
+	m_curFrame = _frame;
+	bPlay = true;
+}
+
+void Animator::PlayAtStart()
+{
+	if (!pAnimationClip) return;
+	m_curFrame = 0;
+	bPlay = true;
+}
+
+void Animator::StopAndResetFrame()
+{
+	if (!pAnimationClip) return;
+	bPlay = false;
+}
+
+bool Animator::IsEnd()
+{
+	if (!pAnimationClip) return false;
+	return m_curFrame >= pAnimationClip->frames.size() - 1;
+}
+
+void Animator::ChangeAnimation(const std::string& _key, bool _loop)
+{
+
 }

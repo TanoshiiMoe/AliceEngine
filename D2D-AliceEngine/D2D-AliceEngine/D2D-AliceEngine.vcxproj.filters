@@ -73,6 +73,12 @@
     <ClInclude Include="Scripts\Animation.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="FSMState\IdleState.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMState\AttackState.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -120,5 +126,7 @@
     <ClCompile Include="Scripts\Animation.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="FSMState\IdleState.cpp" />
+    <ClCompile Include="FSMState\AttackState.cpp" />
   </ItemGroup>
 </Project>

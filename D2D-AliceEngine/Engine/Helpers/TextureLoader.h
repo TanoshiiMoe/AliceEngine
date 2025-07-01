@@ -20,12 +20,19 @@ struct FrameInfo	// 애니메이션의 프레임은 sprite뿐만 아니라 다른 정보도 포함될 �
 	float duration; // 프레임 지속 시간	
 };
 
+struct EventInfo {
+	std::string function; // 호출할 함수 이름
+	std::string parameter; // 문자열 파라미터
+	float time; // 이벤트가 발생하는 시간 (초 단위)
+};
+
 struct AnimationClip {
 	std::string clipName; // 애니메이션 클립 이름
 	std::string texturePath;// 애니메이션 클립에 사용되는 텍스처 경로
 	bool loop; // 애니메이션이 반복되는지 여부
 	float duration; // 전체
 	std::vector<FrameInfo> frames; // 프레임 데이터
+	std::vector<EventInfo> events; // 이벤트 데이터
 };
 
 struct SpriteSheet {
@@ -62,3 +69,7 @@ void to_json(nlohmann::json& j, const AnimationClip& clip);
 // SpriteSheet
 void from_json(const nlohmann::json& j, SpriteSheet& sheet);
 void to_json(nlohmann::json& j, const SpriteSheet& sheet);
+
+// EventInfo
+void from_json(const nlohmann::json& j, EventInfo& event);
+void to_json(nlohmann::json& j, const EventInfo& event);

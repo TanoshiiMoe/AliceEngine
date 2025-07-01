@@ -85,7 +85,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\include;$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,7 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\include;$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,6 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FSMState\AttackState.h" />
+    <ClInclude Include="FSMState\IdleState.h" />
     <ClInclude Include="Scripts\Animation.h" />
     <ClInclude Include="Scripts\Aru2.h" />
     <ClInclude Include="Scripts\Example\ScriptExample.h" />
@@ -162,6 +164,8 @@
     <ClInclude Include="Scripts\YuukaVideo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FSMState\AttackState.cpp" />
+    <ClCompile Include="FSMState\IdleState.cpp" />
     <ClCompile Include="Scripts\Animation.cpp" />
     <ClCompile Include="Scripts\Aru2.cpp" />
     <ClCompile Include="Scripts\Example\ScriptExample.cpp" />
@@ -181,9 +185,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{ff21bb58-7919-4e53-a917-2a8af0469c81}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Spine2D\Spine2D.vcxproj">
-      <Project>{74f27329-c132-4642-b878-fdcd108ea6b2}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

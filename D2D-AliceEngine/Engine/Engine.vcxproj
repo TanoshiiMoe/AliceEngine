@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Spine2D\3.8.\include;$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -113,7 +113,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Spine2D\3.8.\src;$(SolutionDir)Spine2D\3.8.\include;$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -149,9 +149,10 @@
     <ClInclude Include="Component\TextRenderComponent.h" />
     <ClInclude Include="Component\SpriteRenderer.h" />
     <ClInclude Include="Core\Input.h" />
-    <ClInclude Include="Component\Spine2DRenderComponent.h" />
     <ClInclude Include="Core\Delegate.h" />
     <ClInclude Include="Extension\json.hpp" />
+    <ClInclude Include="FSM\FiniteStateMachine.h" />
+    <ClInclude Include="FSM\FSMState.h" />
     <ClInclude Include="Helpers\FileHelper.h" />
     <ClInclude Include="Helpers\FFmpegHelper.h" />
     <ClInclude Include="Core\ObjectHandler.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Core\Tickable.h" />
     <ClInclude Include="Manager\TimerManager.h" />
     <ClInclude Include="Helpers\TextureLoader.h" />
+    <ClInclude Include="Object\UObjectBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Controller\AnimationController.cpp" />
@@ -196,8 +198,9 @@
     <ClCompile Include="Component\TextRenderComponent.cpp" />
     <ClCompile Include="Component\SpriteRenderer.cpp" />
     <ClCompile Include="Core\Input.cpp" />
-    <ClCompile Include="Component\Spine2DRenderComponent.cpp" />
     <ClCompile Include="Core\Delegate.cpp" />
+    <ClCompile Include="FSM\FiniteStateMachine.cpp" />
+    <ClCompile Include="FSM\FSMState.cpp" />
     <ClCompile Include="Helpers\FileHelper.cpp" />
     <ClCompile Include="Helpers\FFmpegHelper.cpp" />
     <ClCompile Include="Core\ObjectHandler.cpp" />
@@ -237,11 +240,7 @@
     <ClCompile Include="Core\Tickable.cpp" />
     <ClCompile Include="Manager\TimerManager.cpp" />
     <ClCompile Include="Helpers\TextureLoader.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Spine2D\Spine2D.vcxproj">
-      <Project>{74f27329-c132-4642-b878-fdcd108ea6b2}</Project>
-    </ProjectReference>
+    <ClCompile Include="Object\UObjectBase.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

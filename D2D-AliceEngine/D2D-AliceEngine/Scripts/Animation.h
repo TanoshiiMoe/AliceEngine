@@ -3,6 +3,8 @@
 
 class gameObject;
 class Animator;
+class IdleState;
+class AttackState;
 struct SpriteSheet;
 struct AnimationClip;
 class Animation : public ScriptComponent
@@ -24,6 +26,8 @@ public:
 	gameObject* m_owner;
 
 	Animator* m_animator;
+	IdleState* idleState;
+	AttackState* attackState;
 
 	std::shared_ptr<SpriteSheet> Texture;
 	std::shared_ptr<AnimationClip> idle;

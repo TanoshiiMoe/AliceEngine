@@ -10,6 +10,10 @@
 
 #include <Helpers/TextureLoader.h>
 #include <Component/Animator.h>
+#include <FSM/FiniteStateMachine.h>
+#include <fsm/FSMState.h>
+#include "../FSMState/IdleState.h"
+#include "../FSMState/AttackState.h"
 
 void Animation::Initialize()
 {
@@ -51,6 +55,11 @@ void Animation::OnStart()
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
 
+	m_owner->transform()->SetPosition(-100, 100);
+	m_owner->transform()->SetRotation(0);
+	m_owner->transform()->SetScale(1.0f, 1.0f);
+	m_owner->transform()->SetPivot(0.5f);
+
 	Texture = std::make_shared<SpriteSheet>();
 	idle = std::make_shared<AnimationClip>();
 	kick = std::make_shared<AnimationClip>();
@@ -59,15 +68,20 @@ void Animation::OnStart()
 	Animator::LoadAnimationClip("ken_kick_anim.json", kick, Texture);
 	Animator::LoadAnimationClip("ken_idle_anim.json", idle, Texture);
 
-	m_owner->transform()->SetPosition(-100, 100);
-	m_owner->transform()->SetRotation(0);
-	m_owner->transform()->SetScale(1.0f, 1.0f);
-	m_owner->transform()->SetPivot(0.5f);
-
 	m_animator = m_owner->AddComponent<Animator>();
-	m_animator->SetAnimationClip(idle.get());
 	m_animator->LoadSpriteRenderer(Texture);
-	m_animator->Play();
+	m_animator->SetLooping(true);
+
+	idleState = new IdleState();
+	attackState = new AttackState();
+	idleState->SetAnimator(m_animator);
+	attackState->SetAnimator(m_animator);
+	idleState->SetAnimationClip(idle.get());
+	attackState->SetAnimationClip(kick.get());
+
+	m_owner->stateMachine->CreateState(L"Idle", idleState);
+	m_owner->stateMachine->CreateState(L"Attack", attackState);
+	m_owner->stateMachine->SetNextState(L"Idle");
 
 	m_owner->AddComponent<InputComponent>()->SetAction([this]() { Input(); });
 }
@@ -87,18 +101,10 @@ void Animation::Input()
 
 	if (Input::IsKeyDown(VK_C))
 	{
-		m_animator->Stop();
-		m_animator = m_owner->GetComponent<Animator>();
-		m_animator->SetAnimationClip(kick.get());
-		m_animator->LoadSpriteRenderer(Texture);
-		m_animator->Play();
+		m_owner->stateMachine->SetNextState(L"Idle");
 	}
-	//if (Input::IsKeyDown(VK_V))
-	//{
-	//	m_animator->Stop();
-	//	m_animator = m_owner->GetComponent<Animator>();
-	//	m_animator->SetAnimationClip(idle.get());
-	//	m_animator->LoadSpriteRenderer(Texture);
-	//	m_animator->Play();
-	//}
+	if (Input::IsKeyDown(VK_V))
+	{
+		m_owner->stateMachine->SetNextState(L"Attack");
+	}
 }

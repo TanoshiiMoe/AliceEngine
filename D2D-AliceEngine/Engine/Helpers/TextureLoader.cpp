@@ -53,6 +53,7 @@ void TextureLoader::LoadAnimationClip(const std::string& filePath, AnimationClip
 		clip.loop = j["loop"];
 		clip.duration = j["duration"];
 		clip.frames = j["frames"].get<std::vector<FrameInfo>>();
+		clip.events = j["events"].get<std::vector<EventInfo>>();
 
 		// 프레임의 sprite 이름을 인덱스로 변환
 		for (auto& frame : clip.frames) {
@@ -112,6 +113,7 @@ void from_json(const nlohmann::json& j, AnimationClip& clip)
 	j.at("loop").get_to(clip.loop);
 	j.at("duration").get_to(clip.duration);
 	j.at("frames").get_to(clip.frames);
+	j.at("events").get_to(clip.events);
 }
 void to_json(nlohmann::json& j, const AnimationClip& clip)
 {
@@ -138,4 +140,18 @@ void to_json(nlohmann::json& j, const SpriteSheet& sheet)
 	j["textureHeight"] = sheet.textureHeight;
 	j["sprites"] = sheet.sprites;
 	// spriteIndexMap은 보통 직렬화하지 않음
+}
+
+// SpriteSheet
+void from_json(const nlohmann::json& j, EventInfo& event)
+{
+	j.at("function").get_to(event.function);
+	j.at("parameter").get_to(event.parameter);
+	j.at("time").get_to(event.time);
+}
+void to_json(nlohmann::json& j, const EventInfo& event)
+{
+	j["function"] = event.function;
+	j["parameter"] = event.parameter;
+	j["time"] = event.time;
 }

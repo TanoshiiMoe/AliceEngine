@@ -51,6 +51,11 @@ void Scene::Update()
 
 	VisibleMemoryInfo();
 
+	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+	{
+		it->second->Update();
+	}
+
 	UpdateTaskManager::GetInstance().EndFrame();
 }
 

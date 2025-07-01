@@ -40,5 +40,12 @@
             "sprite": "ken_idle_124",
             "time": 0.6666666865348816
         }
+    ],
+    "events": [
+        {
+            "function": "test",
+            "parameter": "",
+            "time": 0.25
+        }
     ]
 }

@@ -37,6 +37,9 @@
     <Filter Include="Controller">
       <UniqueIdentifier>{75817a4b-d3fa-47aa-b202-aa3ae781c851}</UniqueIdentifier>
     </Filter>
+    <Filter Include="FSM">
+      <UniqueIdentifier>{d7958793-ddf1-43ef-800e-063b48c49da1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -52,9 +55,6 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\ScriptComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\Spine2DRenderComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\TextRenderComponent.h">
@@ -174,6 +174,15 @@
     <ClInclude Include="Component\Animator.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="FSM\FSMState.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM\FiniteStateMachine.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\UObjectBase.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -192,9 +201,6 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\ScriptComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\Spine2DRenderComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\SpriteRenderer.cpp">
@@ -307,6 +313,15 @@
     </ClCompile>
     <ClCompile Include="Component\Animator.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="FSM\FiniteStateMachine.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="FSM\FSMState.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\UObjectBase.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -46,7 +46,7 @@ void BackGroundImage::OnStart()
 	m_owner->transform()->SetScale(1.5f, 2.0f);
 	m_owner->transform()->SetPivot(0.5f);
 	m_owner->AddComponent<SpriteRenderer>()->LoadData(L"cloud.jpg");
-
+	
 	m_owner->AddComponent<InputComponent>()->SetAction([this]() { Input(); });
 }
 

@@ -49,6 +49,7 @@
 #include <iostream>
 
 #include <Math/TMath.h>
+#include <Helpers/TextureLoader.h>
 
 using namespace Microsoft::WRL;
 
