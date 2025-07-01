@@ -65,15 +65,12 @@ void DemoScene3::OnEnter()
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
 
-	//for (int i = 0; i < enemyMax; i++)
-	//{
-	//	m_enemies.push_back(NewObjectByWeak<gameObject>(L"enemy"));
-	//	m_enemies[i].lock()->AddComponent<Enemy>();
-	//	m_enemies[i].lock()->AddComponent<InputComponent>()->SetAction(m_enemies[i].lock()->GetHandle(), [this]() { EnemyInput(); });
-	//}
-	m_enemies.push_back(NewObject<gameObject>(L"enemy"));
-	m_enemies[0]->AddComponent<Enemy>();
-	m_enemies[0]->AddComponent<InputComponent>()->SetAction(m_enemies[0]->GetHandle(), [this]() { EnemyInput(); });
+	for (int i = 0; i < enemyMax; i++)
+	{
+		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
+		m_enemies[i]->AddComponent<Enemy>();
+		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
+	}
 
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 }
@@ -81,6 +78,7 @@ void DemoScene3::OnEnter()
 void DemoScene3::OnExit()
 {
 	__super::OnExit();
+	m_enemies.clear();
 }
 
 void DemoScene3::EnemyInput()

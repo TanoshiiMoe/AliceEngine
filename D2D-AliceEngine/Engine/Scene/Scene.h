@@ -35,7 +35,7 @@ public:
 
 		createdObj->SetName(NewobjectName);
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
-		m_objects.emplace(createdObj->GetUUID(), createdObj);
+		m_objects.push_back(createdObj);
 
 		return dynamic_cast<TReturnType*>(createdObj.get());
 	}
@@ -47,7 +47,6 @@ public:
 		{
 			if (*it == targetObj)
 			{
-				it->second.reset();
 				m_objects.erase(it);
 				return true;
 			}
@@ -60,9 +59,8 @@ public:
 		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 		{
 			// 키 값이 objectName과 같으면 삭제 (UUID로 저장되어 있다면 GetName() 비교)
-			if (it->second && it->second->GetName() == objectName)
+			if (it->get() && it->get()->GetName() == objectName)
 			{
-				it->second.reset();
 				m_objects.erase(it);
 				return true;
 			}
@@ -75,9 +73,8 @@ public:
 	{
 		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 		{
-			if (it->second && it->second == typeid(T))
+			if (it->get() && it->get() == typeid(T))
 			{
-				it->second.reset();
 				m_objects.erase(it);
 				return true;
 			}
@@ -103,6 +100,6 @@ public:
 
 private:
 	gameObject* m_sysinfoWidget;
-	std::unordered_map<std::wstring, std::shared_ptr<gameObject>> m_objects;
+	std::vector<std::shared_ptr<gameObject>> m_objects;
 };
 
