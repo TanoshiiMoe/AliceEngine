@@ -35,9 +35,7 @@ public:
 
 		createdObj->SetName(NewobjectName);
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
-
-		auto result = m_objects.emplace(createdObj->GetUUID(), createdObj);
-		auto iter = result.first;
+		m_objects.emplace(createdObj->GetUUID(), createdObj);
 
 		return dynamic_cast<TReturnType*>(createdObj.get());
 	}
