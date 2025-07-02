@@ -104,7 +104,7 @@ void Player::OnStart()
 	m_owner->stateMachine->CreateState(L"Attack", attackState);
 	m_owner->stateMachine->SetNextState(L"Idle");
 
-	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
+	m_owner->AddComponent<InputComponent>()->SetAction(m_owner, [this]() { Input(); });
 }
 
 void Player::OnEnd()

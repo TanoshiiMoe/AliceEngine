@@ -31,7 +31,7 @@ void YuukaVideo::OnStart()
 	m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 30);
 	m_yuuka->GetComponent<VideoComponent>()->Play();
 
-	m_yuuka->AddComponent<InputComponent>()->SetAction(m_yuuka->GetHandle(),[this]() { Input(); });
+	m_yuuka->AddComponent<InputComponent>()->SetAction(m_yuuka,[this]() { Input(); });
 }
 
 void YuukaVideo::OnEnd()

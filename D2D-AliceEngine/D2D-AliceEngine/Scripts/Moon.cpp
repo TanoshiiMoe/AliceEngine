@@ -35,7 +35,7 @@ void Moon::OnStart()
 	m_moon->GetComponent<TextRenderComponent>()->SetScale(FVector2(4, 4));
 	m_moon->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_moon->GetComponent<SpriteRenderer>()->GetSize().y * 0.7f));
 
-	m_moon->AddComponent<InputComponent>()->SetAction(m_moon->GetHandle(),[this]() { Input(); });
+	m_moon->AddComponent<InputComponent>()->SetAction(m_moon,[this]() { Input(); });
 }
 
 void Moon::OnEnd()

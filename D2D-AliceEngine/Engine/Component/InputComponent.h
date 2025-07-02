@@ -20,14 +20,14 @@ public:
 	virtual void Release();
 	
 	template<typename F>
-	void SetAction(ObjectHandle handle, F&& action)
+	void SetAction(UObject* handle, F&& action)
 	{
 		slots.push_back({ handle, action });
 	}
 
 private:
 	struct Slot {
-		ObjectHandle handle; // 콜백 구분용 포인터(주로 this)
+		UObject* handle; // 콜백 구분용 포인터(주로 this)
 		std::function<void()> func;
 	};
 	std::vector<Slot> slots;
