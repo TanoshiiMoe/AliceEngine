@@ -68,7 +68,6 @@ public:
 	AnimationClip* pAnimationClip;
 	std::weak_ptr<SpriteSheet> sheet;
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
-
 	size_t m_curTime = 0;
 	size_t m_curFrame = 0;
 	bool bFlip = false;

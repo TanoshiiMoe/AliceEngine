@@ -92,6 +92,12 @@ void TransformComponent::AddChildObject(std::weak_ptr<TransformComponent> child)
 	children.push_back(childPtr);
 }
 
+FVector2 TransformComponent::GetPosition() const
+{
+	const D2D1_VECTOR_2F& pos = m_worldTransform->GetPosition();
+	return FVector2(pos.x, pos.y);
+}
+
 void TransformComponent::SetPosition(const float& _x, const float& _y)
 {
 	m_localTransform->SetPosition(_x, _y);

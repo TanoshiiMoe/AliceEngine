@@ -90,13 +90,16 @@ void Player::OnStart()
 	Animator::LoadAnimationClip("Zero\\Zero_idle_anim.json", idle, Texture);
 
 	m_animator = m_owner->AddComponent<Animator>();
+	m_animator->m_layer = 3;
 	m_animator->LoadSpriteRenderer(Texture);
 	m_animator->SetLooping(true);
 
 	idleState = new IdleState();
 	attackState = new AttackState();
+
 	idleState->SetAnimator(m_animator);
 	attackState->SetAnimator(m_animator);
+
 	idleState->SetAnimationClip(idle.get());
 	attackState->SetAnimationClip(attack.get());
 

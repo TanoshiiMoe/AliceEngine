@@ -140,6 +140,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	// 7. SpriteBatch »ý¼º
 	hr = m_d2dDeviceContext->CreateSpriteBatch(g_spriteBatch.GetAddressOf());
 	assert(SUCCEEDED(hr));
+
+	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
 }
 
 void D2DRenderManager::UnInitialize()
@@ -167,17 +169,22 @@ void D2DRenderManager::Render()
 	}
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
-
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-	for (auto& pair : m_renderers)
+	for (int i = 0 ; i < static_cast<int>(Define::ERenderLayer::Max); i++)
 	{
-		const std::vector<std::weak_ptr<Component>>& renderList = pair;
-		for (const auto& obj : renderList)
+		if (m_renderers[i].empty()) continue;
+		sort(m_renderers[i].begin(), m_renderers[i].end(), &D2DRenderManager::RenderSortCompare);
+		for(auto it = m_renderers[i].begin(); it != m_renderers[i].end(); )
 		{
-			if (auto locked = obj.lock())
+			if ((*it).expired())
 			{
-				locked->Render();
+				m_renderers[i].erase(it);
+			}
+			else
+			{
+				(*it).lock()->Render();
+				++it;
 			}
 		}
 	}
@@ -188,6 +195,13 @@ void D2DRenderManager::Render()
 	}
 
 	m_dxgiSwapChain->Present(1, 0);
+}
+
+bool D2DRenderManager::RenderSortCompare(const std::weak_ptr<Component>& a, const std::weak_ptr<Component>& b)
+{
+	if (a.expired()) return false;
+	if (b.expired()) return false;
+	return std::dynamic_pointer_cast<RenderComponent>(a.lock())->m_layer < std::dynamic_pointer_cast<RenderComponent>(b.lock())->m_layer;
 }
 
 void D2DRenderManager::GetApplicationSize(int& width, int& height)
@@ -251,4 +265,10 @@ void D2DRenderManager::OutputError(HRESULT hr)
 {
 	_com_error err(hr);
 	OutputDebugString(err.ErrorMessage());
+}
+
+void D2DRenderManager::DrawDebugBox(const float& startPosX, const float& startPosY, const float& ensPosX, const float& ensPosY, const float& r, const float& g, const float& b, const float& a)
+{
+	m_pBrush->SetColor(D2D1::ColorF(r, g, b, a));
+	m_d2dDeviceContext->DrawRectangle(D2D1::RectF(startPosX, startPosY, ensPosX, ensPosY), m_pBrush.Get(), 3.0f);
 }

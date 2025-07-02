@@ -12,5 +12,7 @@ public:
 	void Release() override;
 
 	virtual void Render() override;
+
+	int m_layer = -1;
 };
 

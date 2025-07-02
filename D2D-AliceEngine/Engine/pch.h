@@ -47,8 +47,11 @@
 #include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <algorithm>
 
 #include <Math/TMath.h>
+#include <Math/Transform.h>
+#include <Math/TColor.h>
 #include <Helpers/TextureLoader.h>
 
 using namespace Microsoft::WRL;

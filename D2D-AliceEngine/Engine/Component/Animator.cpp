@@ -5,10 +5,10 @@
 #include <Component/SpriteRenderer.h>
 #include <Helpers/StringHelper.h>
 #include <Application.cpp>
+#include <Math/TColor.h>
 
 Animator::Animator()
 {
-
 }
 
 Animator::~Animator()
@@ -102,6 +102,7 @@ void Animator::Render()
 	}
 	context->SetTransform(view);
 	context->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
+	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 }
 
 void Animator::SetAnimationClip(AnimationClip* clip)

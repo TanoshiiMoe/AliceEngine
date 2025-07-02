@@ -53,11 +53,6 @@ void Enemy::OnStart()
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
 
-	m_owner->transform()->SetPosition(FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)));
-	m_owner->transform()->SetRotation(0);
-	m_owner->transform()->SetScale(FRandom::GetRandomInRange(0.3, 0.9f));
-	m_owner->transform()->SetPivot(0.5f);
-
 	Texture = std::make_shared<SpriteSheet>();
 	idle = std::make_shared<AnimationClip>();
 	kick = std::make_shared<AnimationClip>();

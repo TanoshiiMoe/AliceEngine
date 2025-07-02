@@ -28,5 +28,6 @@ public:
 	gameObject* m_widget;
 	gameObject* m_widget2;
 	gameObject* m_widget3;
+	gameObject* m_widget4;
 };
 

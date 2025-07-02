@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <random>
+#include <Define/Define.h>
 
 template<typename T>
 class TVector2
@@ -103,7 +104,19 @@ namespace Math
 			std::uniform_real_distribution<T> dis(Min, Max);
 			return dis(gen);
 		}
+
+		[[nodiscard]] static TVector2<T> GetRandomPointInTorus2D(const T& centerX, const T& centerY, const T& innerRadius, const T& outerRadius)
+		{
+			static std::mt19937 gen(rd());
+			std::uniform_real_distribution<T>  angleRandom(0, 2 * static_cast<T>(Define::PI));
+			std::uniform_real_distribution<T>  radiusRandom(innerRadius * innerRadius, outerRadius * outerRadius);
+
+			T theta = angleRandom(gen);
+			T newRadius = std::sqrt(radiusRandom(gen));
+			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
+		}
 	};
+	
 }
 
 using FVector2 = TVector2<float>;

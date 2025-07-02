@@ -5,6 +5,7 @@
 #include <System/RenderSystem.h>
 #include <Component/TransformComponent.h>
 #include <FSM/FiniteStateMachine.h>
+#include <Manager/D2DRenderManager.h>
 
 gameObject::gameObject(const FVector2& position = FVector2(0.0f), const float& rotation = 0.0f, const FVector2& scale = FVector2(1.0f), const FVector2& pivot = FVector2(0.0f))
 {
