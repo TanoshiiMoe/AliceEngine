@@ -155,6 +155,8 @@ void D2DRenderManager::UnInitialize()
 	m_dWriteFactory = nullptr;
 
 	g_spriteBatch = nullptr;
+
+	m_renderers.clear();
 }
 
 void D2DRenderManager::Render()
@@ -177,13 +179,13 @@ void D2DRenderManager::Render()
 		sort(m_renderers[i].begin(), m_renderers[i].end(), &D2DRenderManager::RenderSortCompare);
 		for(auto it = m_renderers[i].begin(); it != m_renderers[i].end(); )
 		{
-			if ((*it).expired())
+			if (it->expired())
 			{
-				m_renderers[i].erase(it);
+				it = m_renderers[i].erase(it);
 			}
 			else
 			{
-				(*it).lock()->Render();
+				it->lock()->Render();
 				++it;
 			}
 		}
