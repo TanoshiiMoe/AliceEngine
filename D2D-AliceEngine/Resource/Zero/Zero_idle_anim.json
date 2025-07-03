@@ -1,7 +1,7 @@
 {
     "clipName": "Zero_idle",
     "loop": false,
-    "texturePath": "Zero\\Zero.png",
+    "texturePath": "Assets/Character/Sprites/Zero.png",
     "duration": 0.4166666865348816,
     "frames": [
         {
