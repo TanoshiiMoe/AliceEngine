@@ -17,9 +17,6 @@
     <Filter Include="Scripts\ScriptExample">
       <UniqueIdentifier>{3125c470-3da7-4543-86a7-200687e56296}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FSM">
-      <UniqueIdentifier>{6d2a4f93-a0b6-4eec-b326-c35242554d13}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Animation">
       <UniqueIdentifier>{6735e23e-4016-460b-aa08-747af64548ac}</UniqueIdentifier>
     </Filter>
@@ -79,28 +76,13 @@
     <ClInclude Include="Scripts\Player.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="FSMState\IdleState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
-    <ClInclude Include="FSMState\AttackState.h">
-      <Filter>FSM</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\DemoScene3.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Enemy.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Animation\AnimatorInstance.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="FSMState\AnimatorInstance.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation\IdleState.h">
-      <Filter>Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Animation\AttackState.h">
+    <ClInclude Include="Animation\PlayerAnimatorInstance.h">
       <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
@@ -153,24 +135,11 @@
     <ClCompile Include="Scripts\Enemy.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="FSMState\IdleState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
-    <ClCompile Include="FSMState\AttackState.cpp">
-      <Filter>FSM</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\DemoScene3.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="FSMState\AnimatorInstance.cpp">
+    <ClCompile Include="Animation\PlayerAnimatorInstance.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
-    <ClCompile Include="Animation\AttackState.cpp">
-      <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation\IdleState.cpp">
-      <Filter>Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Animation\AnimatorInstance.cpp" />
   </ItemGroup>
 </Project>

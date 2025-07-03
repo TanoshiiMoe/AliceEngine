@@ -3,8 +3,12 @@
 #include <Math/Transform.h>
 #include <Animation/TextureLoader.h>
 #include <Component/SpriteRenderer.h>
+#include <Manager/D2DRenderManager.h>
+#include <Manager/UpdateTaskManager.h>
+#include <Manager/SceneManager.h>
+#include <Manager/PackageResourceManager.h>
 #include <Helpers/StringHelper.h>
-#include <Application.cpp>
+#include <Helpers/FileHelper.h>
 #include <Math/TColor.h>
 
 Animator::Animator()
@@ -131,7 +135,7 @@ void Animator::LoadAnimationClip(const std::string& filePath)
 	{
 		std::unique_ptr<AnimationClip> clip = std::make_unique<AnimationClip>();
 		TextureLoader::LoadAnimationClip(StringHelper::wstring_to_string(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(filePath))), *clip.get(), *sheet.get());
-		animationClips.emplace(clip->clipName, clip);
+		animationClips.emplace(clip->clipName, std::move(clip));
 	}
 }
 
@@ -170,7 +174,7 @@ void Animator::StopAndResetFrame()
 
 bool Animator::IsEnd()
 {
-	if (!CheckAnimationClip()) return;
+	if (!CheckAnimationClip()) return false;
 	return m_curFrame >= animationClips[curAnimationClip]->frames.size() - 1;
 }
 

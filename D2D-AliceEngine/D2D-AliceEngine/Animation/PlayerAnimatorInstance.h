@@ -1,5 +1,6 @@
 #pragma once
 #include <Component/Animator.h>
+
 class IStateNotify
 {
 public:

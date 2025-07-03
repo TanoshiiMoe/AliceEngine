@@ -161,12 +161,12 @@ void PlayerAnimatorInstance::SetAnimatorController(AnimatorController* controlle
 	{
 		m_StateNotifiers.push_back(nullptr);
 	}
-
+	
 	LoadSpriteSheet("Zero\\Zero_sprites.json");
 	LoadAnimationClip("Zero\\Zero_idle_anim.json");
 	LoadAnimationClip("Zero\\Zero_attack_anim.json");
 	SetLooping(true);
-
+	
 	// ToDo: 전체 State를 순회하면서 사용하는 AnimaitionClip의 길이를 가져와 
 	// State의 clipLength에 저장해야 한다.
 	for (auto& state : m_Controller->states)

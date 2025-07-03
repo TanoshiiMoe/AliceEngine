@@ -21,7 +21,7 @@ void FSMState::Update()
 void FSMState::Enter()
 {
 	if (!animator) return;
-	animator->SetAnimationClip(motion);
+	//animator->SetAnimationClip(motion);
 	animator->Play();
 }
 

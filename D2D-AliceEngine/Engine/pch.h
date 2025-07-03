@@ -52,7 +52,7 @@
 #include <Math/TMath.h>
 #include <Math/Transform.h>
 #include <Math/TColor.h>
-#include <Helpers/TextureLoader.h>
+#include <Animation/TextureLoader.h>
 
 using namespace Microsoft::WRL;
 

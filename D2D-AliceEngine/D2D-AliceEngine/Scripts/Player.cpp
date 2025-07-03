@@ -11,12 +11,10 @@
 #include <Component/Animator.h>
 
 #include <Animation/TextureLoader.h>
-#include <FSM/FiniteStateMachine.h>
-#include <fsm/FSMState.h>
 #include <Animation/AnimationController.h>
 #include "../Animation/PlayerAnimatorInstance.h"
-#include "../Animation/FSMState/IdleState.h"
-#include "../Animation/FSMState/AttackState.h"
+//#include "../Animation/FSMState/IdleState.h"
+//#include "../Animation/FSMState/AttackState.h"
 
 void Player::Initialize()
 {
@@ -86,10 +84,10 @@ void Player::OnStart()
 
 	AnimatorController animController;
 	AnimatorController::LoadAnimatorController("Zero/Zero_AnimController.json", animController);
-
-	animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
-	animInstance->m_layer = 3;
-	animInstance->SetAnimatorController(&animController);
+	//
+	//animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
+	//animInstance->m_layer = 3;
+	//animInstance->SetAnimatorController(&animController);
 
 	//idleState = new IdleState();
 	//attackState = new AttackState();
@@ -122,10 +120,10 @@ void Player::Input()
 
 	if (Input::IsKeyDown(VK_C))
 	{
-		m_owner->stateMachine->SetNextState(L"Idle");
+		//m_owner->stateMachine->SetNextState(L"Idle");
 	}
 	if (Input::IsKeyDown(VK_Z))
 	{
-		m_owner->stateMachine->SetNextState(L"Attack");
+		//m_owner->stateMachine->SetNextState(L"Attack");
 	}
 }

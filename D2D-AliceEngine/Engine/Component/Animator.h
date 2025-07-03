@@ -1,5 +1,7 @@
 #pragma once
 #include <Component/RenderComponent.h>
+#include <unordered_map>
+#include <memory>
 
 /*
 * @briefs :
