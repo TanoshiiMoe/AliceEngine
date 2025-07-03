@@ -20,6 +20,9 @@
     <Filter Include="FSM">
       <UniqueIdentifier>{6d2a4f93-a0b6-4eec-b326-c35242554d13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{6735e23e-4016-460b-aa08-747af64548ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -88,6 +91,18 @@
     <ClInclude Include="Scripts\Enemy.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\AnimatorInstance.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMState\AnimatorInstance.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\IdleState.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AttackState.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -147,5 +162,15 @@
     <ClCompile Include="Scene\DemoScene3.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="FSMState\AnimatorInstance.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AttackState.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\IdleState.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimatorInstance.cpp" />
   </ItemGroup>
 </Project>

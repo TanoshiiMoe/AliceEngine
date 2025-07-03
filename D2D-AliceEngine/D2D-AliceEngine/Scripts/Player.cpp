@@ -6,14 +6,17 @@
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
+#include <Component/RenderComponent.h>
 #include <System/ScriptSystem.h>
-
-#include <Helpers/TextureLoader.h>
 #include <Component/Animator.h>
+
+#include <Animation/TextureLoader.h>
 #include <FSM/FiniteStateMachine.h>
 #include <fsm/FSMState.h>
-#include "../FSMState/IdleState.h"
-#include "../FSMState/AttackState.h"
+#include <Animation/AnimationController.h>
+#include "../Animation/PlayerAnimatorInstance.h"
+#include "../Animation/FSMState/IdleState.h"
+#include "../Animation/FSMState/AttackState.h"
 
 void Player::Initialize()
 {
@@ -39,12 +42,12 @@ void Player::Update(const float& deltaSeconds)
 	if (Input::IsKeyDown(VK_RIGHT))
 	{
 		m_owner->transform()->AddPosition(55.0f * deltaSeconds, 0);
-		m_animator->SetFlip(true);
+		//m_animator->SetFlip(true);
 	}
 	if (Input::IsKeyDown(VK_LEFT))
 	{
 		m_owner->transform()->AddPosition(-55.0f * deltaSeconds, 0);
-		m_animator->SetFlip(false);
+		//m_animator->SetFlip(false);
 	}
 	if (Input::IsKeyDown(VK_DOWN))
 	{
@@ -77,35 +80,29 @@ void Player::OnStart()
 	m_owner->transform()->SetScale(1.5f, 1.5f);
 	m_owner->transform()->SetPivot(0.5f);
 
-	Texture = std::make_shared<SpriteSheet>();
-	idle = std::make_shared<AnimationClip>();
-	attack = std::make_shared<AnimationClip>();
-
 	/*Animator::LoadSpriteSheet("ken_sprites.json", Texture);
 	Animator::LoadAnimationClip("ken_kick_anim.json", kick, Texture);
 	Animator::LoadAnimationClip("ken_idle_anim.json", idle, Texture);*/
 
-	Animator::LoadSpriteSheet("Zero\\Zero_sprites.json", Texture);
-	Animator::LoadAnimationClip("Zero\\Zero_attack_anim.json", attack, Texture);
-	Animator::LoadAnimationClip("Zero\\Zero_idle_anim.json", idle, Texture);
+	AnimatorController animController;
+	AnimatorController::LoadAnimatorController("Zero/Zero_AnimController.json", animController);
 
-	m_animator = m_owner->AddComponent<Animator>();
-	m_animator->m_layer = 3;
-	m_animator->LoadSpriteRenderer(Texture);
-	m_animator->SetLooping(true);
+	animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
+	animInstance->m_layer = 3;
+	animInstance->SetAnimatorController(&animController);
 
-	idleState = new IdleState();
-	attackState = new AttackState();
-
-	idleState->SetAnimator(m_animator);
-	attackState->SetAnimator(m_animator);
-
-	idleState->SetAnimationClip(idle.get());
-	attackState->SetAnimationClip(attack.get());
-
-	m_owner->stateMachine->CreateState(L"Idle", idleState);
-	m_owner->stateMachine->CreateState(L"Attack", attackState);
-	m_owner->stateMachine->SetNextState(L"Idle");
+	//idleState = new IdleState();
+	//attackState = new AttackState();
+	//
+	//idleState->SetAnimator(animInstance);
+	//attackState->SetAnimator(animInstance);
+	//
+	//idleState->SetAnimationClip(idle.get());
+	//attackState->SetAnimationClip(attack.get());
+	//
+	//m_owner->stateMachine->CreateState(L"Idle", idleState);
+	//m_owner->stateMachine->CreateState(L"Attack", attackState);
+	//m_owner->stateMachine->SetNextState(L"Idle");
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner, [this]() { Input(); });
 }

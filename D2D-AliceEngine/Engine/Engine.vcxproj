@@ -141,7 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Controller\AnimationController.h" />
+    <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Component\Animator.h" />
     <ClInclude Include="Component\VideoComponent.h" />
     <ClInclude Include="Application.h" />
@@ -186,11 +186,11 @@
     <ClInclude Include="Manager\UpdateTaskManager.h" />
     <ClInclude Include="Core\Tickable.h" />
     <ClInclude Include="Manager\TimerManager.h" />
-    <ClInclude Include="Helpers\TextureLoader.h" />
+    <ClInclude Include="Animation\TextureLoader.h" />
     <ClInclude Include="Object\UObjectBase.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Controller\AnimationController.cpp" />
+    <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="Component\Animator.cpp" />
     <ClCompile Include="Component\VideoComponent.cpp" />
     <ClCompile Include="Application.cpp" />
@@ -239,7 +239,7 @@
     <ClCompile Include="Manager\UpdateTaskManager.cpp" />
     <ClCompile Include="Core\Tickable.cpp" />
     <ClCompile Include="Manager\TimerManager.cpp" />
-    <ClCompile Include="Helpers\TextureLoader.cpp" />
+    <ClCompile Include="Animation\TextureLoader.cpp" />
     <ClCompile Include="Object\UObjectBase.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

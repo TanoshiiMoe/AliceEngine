@@ -45,12 +45,9 @@ public:
 	virtual void Render() override;
 
 	// 애니메이션 사전 준비 함수
-	void SetAnimationClip(AnimationClip* clip);
 	void PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<AnimationClip> clip);
-	void LoadSpriteData(const std::string& filePath);
-	static void LoadSpriteSheet(const std::string& filePath, std::weak_ptr<SpriteSheet> spriteSheet);
-	static void LoadAnimationClip(const std::string& filePath, std::weak_ptr<AnimationClip> clip, const std::weak_ptr<SpriteSheet> spriteSheet);
-	void LoadSpriteRenderer(std::weak_ptr<SpriteSheet> sheet);
+	void LoadSpriteSheet(const std::string& filePath);
+	void LoadAnimationClip(const std::string& filePath);
 
 	// 애니메이션 실행, 중지, 변경 등의 함수
 	void Play();
@@ -61,12 +58,15 @@ public:
 	bool IsEnd();
 	void SetLooping(const bool& loop) { bLoopping = loop; }
 	bool IsLooping() { return bLoopping; }
-	void ChangeAnimation(const std::string& _key, bool _loop = true);
 	void SetFlip(const bool& _flip) { bFlip = _flip; }
 
+	bool CheckAnimationClip();
+
 	float time = -1;
-	AnimationClip* pAnimationClip;
-	std::weak_ptr<SpriteSheet> sheet;
+	std::string curAnimationClip;
+	std::string nextAnimationClip;
+	std::unique_ptr<SpriteSheet> sheet;
+	std::unordered_map<std::string, std::unique_ptr<AnimationClip>> animationClips;
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 	size_t m_curTime = 0;
 	size_t m_curFrame = 0;

@@ -34,11 +34,11 @@
     <Filter Include="Extension">
       <UniqueIdentifier>{751103b2-3d64-4210-bdc0-d58cabfa0b25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Controller">
-      <UniqueIdentifier>{75817a4b-d3fa-47aa-b202-aa3ae781c851}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FSM">
       <UniqueIdentifier>{d7958793-ddf1-43ef-800e-063b48c49da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{a280a50e-1364-4b47-8e1f-7c01d3862342}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,14 +162,8 @@
     <ClInclude Include="Manager\TimerManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Helpers\TextureLoader.h">
-      <Filter>Helper</Filter>
-    </ClInclude>
     <ClInclude Include="Extension\json.hpp">
       <Filter>Extension</Filter>
-    </ClInclude>
-    <ClInclude Include="Controller\AnimationController.h">
-      <Filter>Controller</Filter>
     </ClInclude>
     <ClInclude Include="Component\Animator.h">
       <Filter>Component</Filter>
@@ -182,6 +176,12 @@
     </ClInclude>
     <ClInclude Include="Object\UObjectBase.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\TextureLoader.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationController.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -305,12 +305,6 @@
     <ClCompile Include="Manager\TimerManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Helpers\TextureLoader.cpp">
-      <Filter>Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="Controller\AnimationController.cpp">
-      <Filter>Controller</Filter>
-    </ClCompile>
     <ClCompile Include="Component\Animator.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -322,6 +316,12 @@
     </ClCompile>
     <ClCompile Include="Object\UObjectBase.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\TextureLoader.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationController.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

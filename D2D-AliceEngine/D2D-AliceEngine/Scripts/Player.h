@@ -2,7 +2,7 @@
 #include <Component/ScriptComponent.h>
 
 class gameObject;
-class Animator;
+class PlayerAnimatorInstance;
 class IdleState;
 class AttackState;
 struct SpriteSheet;
@@ -25,12 +25,8 @@ public:
 
 	gameObject* m_owner;
 
-	Animator* m_animator;
+	PlayerAnimatorInstance* animInstance;
 	IdleState* idleState;
 	AttackState* attackState;
-
-	std::shared_ptr<SpriteSheet> Texture;
-	std::shared_ptr<AnimationClip> idle;
-	std::shared_ptr<AnimationClip> attack;
 };
 
