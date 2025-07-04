@@ -8,18 +8,18 @@ class Delegate
 template<typename... Args>
 class MultiDelegate {
 	struct Slot {
-		ObjectHandle handle; // 콜백 구분용 포인터(주로 this)
+		UObject* handle; // 콜백 구분용 포인터(주로 this)
 		std::function<void(Args...)> func;
 	};
 	std::vector<Slot> slots;
 
 public:
 	// Handle을 같이 받는다.
-	void Add(ObjectHandle handle, const std::function<void(Args...)>& f) {
+	void Add(UObject* handle, const std::function<void(Args...)>& f) {
 		slots.push_back({ handle, f });
 	}
 	// tag(포인터)로 삭제
-	void Remove(ObjectHandle handle) {
+	void Remove(UObject* handle) {
 		slots.erase(
 			std::remove_if(slots.begin(), slots.end(),
 				[handle](const Slot& s) { return s.handle == handle; }),

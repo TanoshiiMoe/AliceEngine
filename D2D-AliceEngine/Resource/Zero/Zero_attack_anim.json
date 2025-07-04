@@ -1,0 +1,61 @@
+{
+    "clipName": "Zero_attack",
+    "loop": false,
+    "texturePath": "Zero/Zero.png",
+    "duration": 1.0833333730697632,
+    "frames": [
+        {
+            "sprite": "Zero_attack_212",
+            "time": 0.0
+        },
+        {
+            "sprite": "Zero_attack_214",
+            "time": 0.0833333358168602
+        },
+        {
+            "sprite": "Zero_attack_215",
+            "time": 0.1666666716337204
+        },
+        {
+            "sprite": "Zero_attack_216",
+            "time": 0.25
+        },
+        {
+            "sprite": "Zero_attack_217",
+            "time": 0.3333333432674408
+        },
+        {
+            "sprite": "Zero_attack_218",
+            "time": 0.4166666567325592
+        },
+        {
+            "sprite": "Zero_attack_219",
+            "time": 0.5
+        },
+        {
+            "sprite": "Zero_attack_220",
+            "time": 0.5833333134651184
+        },
+        {
+            "sprite": "Zero_attack_221",
+            "time": 0.6666666865348816
+        },
+        {
+            "sprite": "Zero_attack_222",
+            "time": 0.75
+        },
+        {
+            "sprite": "Zero_attack_223",
+            "time": 0.8333333134651184
+        },
+        {
+            "sprite": "Zero_attack_224",
+            "time": 0.9166666865348816
+        },
+        {
+            "sprite": "Zero_attack_225",
+            "time": 1.0
+        }
+    ],
+    "events": []
+}

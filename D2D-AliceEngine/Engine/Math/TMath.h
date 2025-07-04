@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <random>
+#include <Define/Define.h>
 
 template<typename T>
 class TVector2
@@ -93,17 +94,31 @@ namespace Math
 {
 	static std::random_device rd;
 
-	// 두 수 사이의 랜덤한 수를 반환. 반환값이 없으면 오류.
+	
 	template<typename T>
 	struct TRandom
 	{
+		// 두 수 사이의 랜덤한 수를 반환. 반환값이 없으면 오류.
 		[[nodiscard]] static float GetRandomInRange(T Min, T Max)
 		{
 			static std::mt19937 gen(rd());
 			std::uniform_real_distribution<T> dis(Min, Max);
 			return dis(gen);
 		}
+
+		// 도넛 모양의 구간에 임의의 점을 반환하는 함수.
+		[[nodiscard]] static TVector2<T> GetRandomPointInTorus2D(const T& centerX, const T& centerY, const T& innerRadius, const T& outerRadius)
+		{
+			static std::mt19937 gen(rd());
+			std::uniform_real_distribution<T>  angleRandom(0, 2 * static_cast<T>(Define::PI));
+			std::uniform_real_distribution<T>  radiusRandom(innerRadius * innerRadius, outerRadius * outerRadius);
+
+			T theta = angleRandom(gen);
+			T newRadius = std::sqrt(radiusRandom(gen));
+			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
+		}
 	};
+	
 }
 
 using FVector2 = TVector2<float>;

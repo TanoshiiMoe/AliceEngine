@@ -1,0 +1,81 @@
+{
+    "clipName": "Zero_walk",
+    "loop": false,
+    "texturePath": "Zero/Zero.png",
+    "duration": 1.5000001192092896,
+    "frames": [
+        {
+            "sprite": "Zero_walk_75",
+            "time": 0.0
+        },
+        {
+            "sprite": "Zero_walk_76",
+            "time": 0.0833333358168602
+        },
+        {
+            "sprite": "Zero_walk_77",
+            "time": 0.1666666716337204
+        },
+        {
+            "sprite": "Zero_walk_78",
+            "time": 0.25
+        },
+        {
+            "sprite": "Zero_walk_79",
+            "time": 0.3333333432674408
+        },
+        {
+            "sprite": "Zero_walk_80",
+            "time": 0.4166666865348816
+        },
+        {
+            "sprite": "Zero_walk_81",
+            "time": 0.5
+        },
+        {
+            "sprite": "Zero_walk_82",
+            "time": 0.5833333730697632
+        },
+        {
+            "sprite": "Zero_walk_84",
+            "time": 0.6666666865348816
+        },
+        {
+            "sprite": "Zero_walk_86",
+            "time": 0.75
+        },
+        {
+            "sprite": "Zero_walk_87",
+            "time": 0.8333333730697632
+        },
+        {
+            "sprite": "Zero_walk_89",
+            "time": 0.9166666865348816
+        },
+        {
+            "sprite": "Zero_walk_91",
+            "time": 1.0
+        },
+        {
+            "sprite": "Zero_walk_92",
+            "time": 1.0833333730697632
+        },
+        {
+            "sprite": "Zero_walk_93",
+            "time": 1.1666667461395264
+        },
+        {
+            "sprite": "Zero_walk_94",
+            "time": 1.25
+        },
+        {
+            "sprite": "Zero_walk_95",
+            "time": 1.3333333730697632
+        },
+        {
+            "sprite": "Zero_walk_96",
+            "time": 1.4166667461395264
+        }
+    ],
+    "events": []
+}

@@ -4,17 +4,17 @@
 #include <Component/InputComponent.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
-#include <Component/AnimationComponent.h>
+#include <Component/VideoComponent.h>
 #include <Component/Spine2DRenderComponent.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/TransformComponent.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
-#include "../Script/Sun.h"
-#include "../Script/Moon.h"
-#include "../Script/Earth.h"
-#include "../Script/YuukaVideo.h"
-#include "../Script/CameraController.h"
+#include "../Scripts/Sun.h"
+#include "../Scripts/Moon.h"
+#include "../Scripts/Earth.h"
+#include "../Scripts/YuukaVideo.h"
+#include "../Scripts/CameraController.h"
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -55,18 +55,36 @@ void DemoScene::OnEnter()
 	m_moon->AddComponent<Moon>();
 
 	m_widget = NewObject<gameObject>(L"widget");
-	m_widget->AddComponent<TextRenderComponent>()->SetText(L" <카메라> \n [화살표 상,하] : 카메라 위,아래 이동 \n [화살표 좌/우] : 카메라 좌,우 이동 \n [1/2] : D2D, Unity 좌표계 \n\n <태양, 지구, 달> \n [z,c] : 태양 회전 \n [w,s] : 태양 상하 이동 \n [a,d] : 태양 좌우 이동 \n [4] : 태양 이름 한영 전환 \n [b,m] : 지구 회전 \n [y,h] : 지구 상하 이동 \n [g,j] : 지구 좌우 이동 \n [9,0] : 달 회전 \n [o,l] : 달 상하 이동 \n [k.;] : 달 좌우 이동 \n\n <배경 실행> \n [P] : 배경 실행, 중지 \n\n <애니메이션> \n [5,6] : 아스나, 유우카 전환");
+	m_widget->AddComponent<TextRenderComponent>()->SetText(
+		L" <카메라> \n"
+		L" [화살표 상,하] : 카메라 위,아래 이동 \n"
+		L" [화살표 좌/우] : 카메라 좌,우 이동 \n"
+		L" [1/2] : D2D, Unity 좌표계 \n"
+		L"\n"
+		L" <태양, 지구, 달> \n"
+		L" [z,c] : 태양 회전 \n"
+		L" [w,s] : 태양 상하 이동 \n"
+		L" [a,d] : 태양 좌우 이동 \n"
+		L" [4] : 태양 이름 한영 전환 \n"
+		L" [b,m] : 지구 회전 \n"
+		L" [y,h] : 지구 상하 이동 \n"
+		L" [g,j] : 지구 좌우 이동 \n"
+		L" [9,0] : 달 회전 \n"
+		L" [o,l] : 달 상하 이동 \n"
+		L" [k,;] : 달 좌우 이동 \n"
+		L"\n"
+		L" <배경 실행> \n"
+		L" [P] : 배경 실행, 중지 \n"
+		L"\n"
+		L" <애니메이션> \n"
+		L" [5,6] : 아스나, 유우카 전환"
+	);
 
 	m_widget2 = NewObject<gameObject>(L"widget2");
 	m_widget2->transform()->SetPosition(0, 0);
 
 	m_widget3 = NewObject<gameObject>(L"widget3");
 	m_widget3->transform()->SetPosition(0, 0);
-
-	// spine2D 테스트
-	//m_spineTest = NewObject<gameObject>(L"m_spineTest");
-	//m_spineTest->Initialize(FVector2(0, 0), 0.0f, FVector2(0.8f, 0.8f), FVector2(0.5f));
-	//m_spineTest->AddComponent<Spine2DRenderComponent>()->LoadData(L"Resource\\yuuka_spr\\yuuka_spr");
 
 	m_sun->AddChildObject(m_earth);
 	m_earth->AddChildObject(m_moon);

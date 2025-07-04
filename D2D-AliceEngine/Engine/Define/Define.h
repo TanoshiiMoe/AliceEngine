@@ -17,7 +17,7 @@ namespace Define
 
 	static const std::wstring BASE_RESOURCE_PATH = L"Resource\\";
 	static const std::wstring BASE_EXTENSION_PATH = L"Extension\\";
-	static const float PI = 3.14159265f;
+	static const float PI = 3.14159265358979323846264f;
 
 	enum class ETextFormat
 	{
@@ -42,6 +42,7 @@ namespace Define
 	{
 		AnimationComponent,
 		SpriteComponent,
+		Animator,
 		BoxComponent,
 		TextRenderComponent,
 		Max
@@ -77,6 +78,8 @@ namespace Define
 		SG_OnDestroy,
 		SG_MAX,
 	};
+
+	enum class ParameterType { Int, Float, Bool, Trigger };
 };
 
 #define VK_A 0x41  // 'A'

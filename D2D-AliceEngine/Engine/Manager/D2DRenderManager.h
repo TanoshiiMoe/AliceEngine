@@ -24,10 +24,13 @@ public:
 	void UnInitialize();
 	void Render();
 
-	void GetApplicationSize(int& width, int& height);
+	static bool RenderSortCompare(const std::weak_ptr<Component>& a, const std::weak_ptr<Component>& b);
 
+	void GetApplicationSize(int& width, int& height);
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수
 	void OutputError(HRESULT hr);
+
+	void DrawDebugBox(const float& startPosX, const float& startPosY, const float& ensPosX, const float& ensPosY, const float& r, const float& g, const float& b, const float& a);
 
 	// D2D variable
 	ComPtr<ID3D11Device> m_d3dDevice;
@@ -44,6 +47,9 @@ public:
 	// SpriteBatch
 	ComPtr<ID2D1SpriteBatch>    g_spriteBatch;
 	bool m_resizePending = false;
+
+	// Debug용 box
+	ComPtr<ID2D1SolidColorBrush> m_pBrush;
 
 	// Transform Type
 	ETransformType m_eTransformType = ETransformType::Unity;

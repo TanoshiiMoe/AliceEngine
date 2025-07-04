@@ -3,8 +3,9 @@
 #include "D2DRenderManager.h"
 #include "Component/TextRenderComponent.h"
 #include <Component/SpriteRenderer.h>
-#include <Component/AnimationComponent.h>
+#include <Component/VideoComponent.h>
 #include <Component/BoxComponent.h>
+#include <Component/Animator.h>
 
 D2DRenderManager::D2DRenderManager()
 {
@@ -26,7 +27,7 @@ void D2DRenderManager::AddRenderer(std::weak_ptr<Component> renderer)
 		{
 			m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<AnimationComponent>(sharedRenderer))
+		else if (std::dynamic_pointer_cast<VideoComponent>(sharedRenderer))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::AnimationComponent)].push_back(renderer);
 		}
@@ -37,6 +38,10 @@ void D2DRenderManager::AddRenderer(std::weak_ptr<Component> renderer)
 		else if (std::dynamic_pointer_cast<TextRenderComponent>(sharedRenderer))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
+		}
+		else if (std::dynamic_pointer_cast<Animator>(sharedRenderer))
+		{
+			m_renderers[static_cast<int>(ERenderLayer::Animator)].push_back(renderer);
 		}
 	}
 }
@@ -135,6 +140,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	// 7. SpriteBatch »ý¼º
 	hr = m_d2dDeviceContext->CreateSpriteBatch(g_spriteBatch.GetAddressOf());
 	assert(SUCCEEDED(hr));
+
+	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
 }
 
 void D2DRenderManager::UnInitialize()
@@ -148,6 +155,8 @@ void D2DRenderManager::UnInitialize()
 	m_dWriteFactory = nullptr;
 
 	g_spriteBatch = nullptr;
+
+	m_renderers.clear();
 }
 
 void D2DRenderManager::Render()
@@ -162,18 +171,40 @@ void D2DRenderManager::Render()
 	}
 	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
-
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-	for (auto& pair : m_renderers)
+	std::vector<std::weak_ptr<Component>> collectedComponents;
+	for (int i = 0 ; i < static_cast<int>(Define::ERenderLayer::Max); i++)
 	{
-		const std::vector<std::weak_ptr<Component>>& renderList = pair;
-		for (const auto& obj : renderList)
+		if (m_renderers[i].empty()) continue;
+		sort(m_renderers[i].begin(), m_renderers[i].end(), &D2DRenderManager::RenderSortCompare);
+		for(auto it = m_renderers[i].begin(); it != m_renderers[i].end(); )
 		{
-			if (auto locked = obj.lock())
+			if (it->expired())
 			{
-				locked->Render();
+				it = m_renderers[i].erase(it);
 			}
+			else
+			{
+				if (std::dynamic_pointer_cast<RenderComponent>(it->lock())->m_layer != -999)
+				{
+					it->lock()->Render();
+				}
+				else
+				{
+					collectedComponents.push_back(*it);
+				}
+				//it->lock()->Render();
+				++it;
+			}
+		}
+	}
+	sort(collectedComponents.begin(), collectedComponents.end(), &D2DRenderManager::RenderSortCompare);
+	for (auto it = collectedComponents.begin(); it != collectedComponents.end(); ++it)
+	{
+		if (!it->expired())
+		{
+			it->lock()->Render();
 		}
 	}
 
@@ -183,6 +214,13 @@ void D2DRenderManager::Render()
 	}
 
 	m_dxgiSwapChain->Present(1, 0);
+}
+
+bool D2DRenderManager::RenderSortCompare(const std::weak_ptr<Component>& a, const std::weak_ptr<Component>& b)
+{
+	if (a.expired()) return false;
+	if (b.expired()) return false;
+	return std::dynamic_pointer_cast<RenderComponent>(a.lock())->m_layer < std::dynamic_pointer_cast<RenderComponent>(b.lock())->m_layer;
 }
 
 void D2DRenderManager::GetApplicationSize(int& width, int& height)
@@ -246,4 +284,10 @@ void D2DRenderManager::OutputError(HRESULT hr)
 {
 	_com_error err(hr);
 	OutputDebugString(err.ErrorMessage());
+}
+
+void D2DRenderManager::DrawDebugBox(const float& startPosX, const float& startPosY, const float& ensPosX, const float& ensPosY, const float& r, const float& g, const float& b, const float& a)
+{
+	m_pBrush->SetColor(D2D1::ColorF(r, g, b, a));
+	m_d2dDeviceContext->DrawRectangle(D2D1::RectF(startPosX, startPosY, ensPosX, ensPosY), m_pBrush.Get(), 3.0f);
 }

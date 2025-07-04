@@ -20,6 +20,7 @@ public:
 	void aruInput();
 	void CameraInput();
 
+	gameObject* m_camera;
 	gameObject* m_backgroundImage;
 
 	gameObject* m_aru;
