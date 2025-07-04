@@ -45,9 +45,9 @@ struct SpriteSheet {
 class TextureLoader
 {
 public:
-	static void LoadSpriteSheetAndAnimationClip(const std::string& filePath, AnimationClip& clip, SpriteSheet& SpriteSheet);
-	static void LoadSpriteSheet(const std::string& filePath, SpriteSheet& spriteSheet);
-	static void LoadAnimationClip(const std::string& filePath, AnimationClip& clip, const SpriteSheet& spriteSheet);
+	static void LoadSpriteSheetAndAnimationClip(const std::wstring& filePath, AnimationClip& clip, SpriteSheet& SpriteSheet);
+	static void LoadSpriteSheet(const std::wstring& filePath, SpriteSheet& spriteSheet);
+	static void LoadAnimationClip(const std::wstring& filePath, AnimationClip& clip, const SpriteSheet& spriteSheet);
 };
 
 /*

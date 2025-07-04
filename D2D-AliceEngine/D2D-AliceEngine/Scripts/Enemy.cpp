@@ -12,8 +12,6 @@
 #include <Component/Animator.h>
 #include <FSM/FiniteStateMachine.h>
 #include <fsm/FSMState.h>
-//#include "../FSMState/IdleState.h"
-//#include "../FSMState/AttackState.h"
 
 void Enemy::Initialize()
 {
@@ -53,28 +51,12 @@ void Enemy::OnStart()
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
 
-	//Texture = std::make_shared<SpriteSheet>();
-	//idle = std::make_shared<AnimationClip>();
-	//kick = std::make_shared<AnimationClip>();
-	//
-	//Animator::LoadSpriteSheet("ken_sprites.json", Texture);
-	//Animator::LoadAnimationClip("ken_kick_anim.json", kick, Texture);
-	//Animator::LoadAnimationClip("ken_idle_anim.json", idle, Texture);
-	//
-	//m_animator = m_owner->AddComponent<Animator>();
-	//m_animator->LoadSpriteRenderer(Texture);
-	//m_animator->SetLooping(true);
-	//
-	//idleState = new IdleState();
-	//attackState = new AttackState();
-	//idleState->SetAnimator(m_animator);
-	//attackState->SetAnimator(m_animator);
-	//idleState->SetAnimationClip(idle.get());
-	//attackState->SetAnimationClip(kick.get());
-	//
-	//m_owner->stateMachine->CreateState(L"Idle", idleState);
-	//m_owner->stateMachine->CreateState(L"Attack", attackState);
-	//m_owner->stateMachine->SetNextState(L"Idle");
+	AnimatorController::LoadAnimatorController(L"Ken_AnimController.json", animController);
+	animInstance = m_owner->AddComponent<EnemyAnimatorInstance>();
+	animInstance->m_layer = 3;
+	animInstance->SetAnimatorController(&animController);
+
+	animInstance->OnStart();
 }
 
 void Enemy::OnEnd()

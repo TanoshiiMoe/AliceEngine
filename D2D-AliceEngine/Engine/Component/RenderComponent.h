@@ -13,6 +13,6 @@ public:
 
 	virtual void Render() override;
 
-	int m_layer = -1;
+	int m_layer = -999;
 };
 

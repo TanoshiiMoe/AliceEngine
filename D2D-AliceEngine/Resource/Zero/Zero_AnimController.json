@@ -16,111 +16,100 @@
             "defaultBool": false
         }
     ],
-    "layers": [
+    "defaultState": "Idle",
+    "states": [
         {
-            "layerName": "Base Layer",
-            "defaultState": "Idle",
-            "states": [
+            "name": "Idle",
+            "motionName": "Zero_idle",
+            "clipLength": 0.4166666865348816,
+            "loop": false,
+            "transitions": [
                 {
-                    "name": "Idle",
-                    "motionName": "Zero_idle",
-                    "transitions": [
+                    "fromState": "Idle",
+                    "toState": "Walk",
+                    "exitTime": 0.40000003576278689,
+                    "hasExitTime": true,
+                    "conditions": [
                         {
-                            "fromState": "Idle",
-                            "toState": "Walk",
-                            "conditionParameter": "speed",
-                            "conditionMode": "Greater",
-                            "threshold": 0.0,
-                            "exitTime": 0.40000003576278689,
-                            "duration": 0.25,
-                            "hasExitTime": true
-                        },
-                        {
-                            "fromState": "Idle",
-                            "toState": "Attack",
-                            "conditionParameter": "attack",
-                            "conditionMode": "If",
-                            "threshold": 0.0,
-                            "exitTime": 0.40000003576278689,
-                            "duration": 0.25,
-                            "hasExitTime": true
-                        }
-                    ]
-                },
-                {
-                    "name": "Attack",
-                    "motionName": "Zero_attack",
-                    "transitions": [
-                        {
-                            "fromState": "Attack",
-                            "toState": "Walk",
-                            "conditionParameter": "attack",
-                            "conditionMode": "IfNot",
-                            "threshold": 0.0,
-                            "exitTime": 0.800000011920929,
-                            "duration": 0.25,
-                            "hasExitTime": true
-                        },
-                        {
-                            "fromState": "Attack",
-                            "toState": "Walk",
-                            "conditionParameter": "speed",
-                            "conditionMode": "Greater",
-                            "threshold": 0.0,
-                            "exitTime": 0.800000011920929,
-                            "duration": 0.25,
-                            "hasExitTime": true
-                        },
-                        {
-                            "fromState": "Attack",
-                            "toState": "Idle",
-                            "conditionParameter": "attack",
-                            "conditionMode": "IfNot",
-                            "threshold": 0.0,
-                            "exitTime": 0.800000011920929,
-                            "duration": 0.25,
-                            "hasExitTime": true
-                        },
-                        {
-                            "fromState": "Attack",
-                            "toState": "Idle",
-                            "conditionParameter": "speed",
-                            "conditionMode": "Less",
-                            "threshold": 0.009999999776482582,
-                            "exitTime": 0.800000011920929,
-                            "duration": 0.25,
-                            "hasExitTime": true
-                        }
-                    ]
-                },
-                {
-                    "name": "Walk",
-                    "motionName": "Zero_walk",
-                    "transitions": [
-                        {
-                            "fromState": "Walk",
-                            "toState": "Attack",
-                            "conditionParameter": "attack",
-                            "conditionMode": "If",
-                            "threshold": 0.0,
-                            "exitTime": 0.8333333730697632,
-                            "duration": 0.25,
-                            "hasExitTime": true
-                        },
-                        {
-                            "fromState": "Walk",
-                            "toState": "Idle",
-                            "conditionParameter": "speed",
-                            "conditionMode": "Less",
-                            "threshold": 0.009999999776482582,
-                            "exitTime": 0.8333333730697632,
-                            "duration": 0.25,
-                            "hasExitTime": true
+                            "parameter": "speed",
+                            "mode": "Greater",
+                            "threshold": 0.009999999776482582
                         }
                     ]
                 }
-            ],
-            "anyStateTransitions": []
+            ]
+        },
+        {
+            "name": "Attack",
+            "motionName": "Zero_attack",
+            "clipLength": 1.0833333730697632,
+            "loop": false,
+            "transitions": [
+                {
+                    "fromState": "Attack",
+                    "toState": "Walk",
+                    "exitTime": 0.800000011920929,
+                    "hasExitTime": true,
+                    "conditions": [
+                        {
+                            "parameter": "attack",
+                            "mode": "IfNot",
+                            "threshold": 0.0
+                        },
+                        {
+                            "parameter": "speed",
+                            "mode": "Greater",
+                            "threshold": 0.0
+                        }
+                    ]
+                },
+                {
+                    "fromState": "Attack",
+                    "toState": "Idle",
+                    "exitTime": 0.800000011920929,
+                    "hasExitTime": true,
+                    "conditions": [
+                        {
+                            "parameter": "attack",
+                            "mode": "IfNot",
+                            "threshold": 0.0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Walk",
+            "motionName": "Zero_walk",
+            "clipLength": 1.5000001192092896,
+            "loop": false,
+            "transitions": [
+                {
+                    "fromState": "Walk",
+                    "toState": "Idle",
+                    "exitTime": 0.9022513628005981,
+                    "hasExitTime": true,
+                    "conditions": [
+                        {
+                            "parameter": "speed",
+                            "mode": "Less",
+                            "threshold": 0.009999999776482582
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "anyStateTransitions": [
+        {
+            "toState": "Attack",
+            "conditions": [
+                {
+                    "parameter": "attack",
+                    "mode": "If",
+                    "threshold": 0.0
+                }
+            ]
         }
     ]
 }

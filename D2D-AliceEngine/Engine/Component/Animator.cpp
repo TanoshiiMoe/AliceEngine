@@ -41,13 +41,15 @@ void Animator::Initialize()
 void Animator::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	if (!bPlay) return;	// 플레이 가능할 때만 플레이
-	if (IsEnd() && !bLoopping) return; // 프레임의 끝에서 반복할지 말지 판단
 	if (curAnimationClip != nextAnimationClip)
 	{
 		curAnimationClip = nextAnimationClip;
+		m_curFrame = 0;
 		return;
 	}
+	if (!bPlay) return;	// 플레이 가능할 때만 플레이
+	//if (IsEnd()) return; // 프레임의 끝에서 반복할지 말지 판단
+	//if (IsEnd() && !bLoopping) return; // 프레임의 끝에서 반복할지 말지 판단
 
 	m_accumTime += deltaSeconds;
 	if (m_accumTime >= animationClips[curAnimationClip]->frames[m_curFrame].duration)
@@ -119,66 +121,55 @@ void Animator::PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<Ani
 
 }
 
-void Animator::LoadSpriteSheet(const std::string& filePath)
+void Animator::LoadSpriteSheet(const std::wstring& filePath)
 {
 	if (sheet.get())
 	{
-		TextureLoader::LoadSpriteSheet(StringHelper::wstring_to_string(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(filePath))), *sheet.get());
-		const std::wstring path = StringHelper::string_to_wstring(StringHelper::wstring_to_string(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(sheet.get()->texture))));
+		TextureLoader::LoadSpriteSheet(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath), *sheet.get());
+		const std::wstring path = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(sheet.get()->texture));
 		m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(path.c_str());
 	}
 }
 
-void Animator::LoadAnimationClip(const std::string& filePath)
+void Animator::LoadAnimationClip(const std::wstring& filePath)
 {
 	if (sheet.get())
 	{
 		std::unique_ptr<AnimationClip> clip = std::make_unique<AnimationClip>();
-		TextureLoader::LoadAnimationClip(StringHelper::wstring_to_string(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(filePath))), *clip.get(), *sheet.get());
+		TextureLoader::LoadAnimationClip(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath), *clip.get(), *sheet.get());
 		animationClips.emplace(clip->clipName, std::move(clip));
 	}
 }
 
 void Animator::Play()
 {
-	if (!CheckAnimationClip()) return;
 	bPlay = true;
 }
 
 void Animator::Stop()
 {
-	if (!CheckAnimationClip()) return;
 	m_curFrame = 0;
 	bPlay = false;
 }
 
 void Animator::PlayAtFrame(const size_t& _frame)
 {
-	if (!CheckAnimationClip()) return;
 	m_curFrame = _frame;
 	bPlay = true;
 }
 
 void Animator::PlayAtStart()
 {
-	if (!CheckAnimationClip()) return;
 	m_curFrame = 0;
 	bPlay = true;
 }
 
 void Animator::StopAndResetFrame()
 {
-	if (!CheckAnimationClip()) return;
 	bPlay = false;
 }
 
 bool Animator::IsEnd()
 {
-	if (!CheckAnimationClip()) return false;
 	return m_curFrame >= animationClips[curAnimationClip]->frames.size() - 1;
-}
-
-bool Animator::CheckAnimationClip()
-{
-	return curAnimationClip.empty() == false;
 }

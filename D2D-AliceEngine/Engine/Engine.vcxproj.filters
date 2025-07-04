@@ -183,6 +183,9 @@
     <ClInclude Include="Animation\AnimationController.h">
       <Filter>Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Animation\AnimatorInstance.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -321,6 +324,9 @@
       <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="Animation\AnimationController.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimatorInstance.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>

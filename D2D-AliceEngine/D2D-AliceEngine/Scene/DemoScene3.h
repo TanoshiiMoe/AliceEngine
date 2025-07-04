@@ -20,9 +20,7 @@ public:
 
 	gameObject* m_backgroundImage;
 	gameObject* m_spriteAnimationTest;
-
 	gameObject* m_player;
-	//std::vector<std::weak_ptr<gameObject>> m_enemies;
 	std::vector<gameObject*> m_enemies;
 	int enemyMax = 20;
 	gameObject* m_widget;

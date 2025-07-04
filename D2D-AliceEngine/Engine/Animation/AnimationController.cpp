@@ -4,10 +4,21 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <Helpers/FileHelper.h>
+#include <Helpers/StringHelper.h>
 
-void AnimatorController::LoadAnimatorController(const std::string& filePath, AnimatorController& out)
+Define::ParameterType AnimatorController::StringToParameterType(const std::string& type)
 {
-	std::ifstream file(filePath);
+	if (type == "Int") return Define::ParameterType::Int;
+	else if (type == "Float") return Define::ParameterType::Float;
+	else if (type == "Bool") return Define::ParameterType::Bool;
+	else if (type == "Trigger") return Define::ParameterType::Trigger;
+	return Define::ParameterType::Int; // 기본값
+}
+
+void AnimatorController::LoadAnimatorController(const std::wstring& filePath, AnimatorController& out)
+{
+	std::ifstream file(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH) + filePath);
 	if (file.is_open()) // ifstream으로 파일 읽기
 	{
 		json input;
@@ -16,9 +27,14 @@ void AnimatorController::LoadAnimatorController(const std::string& filePath, Ani
 		out.controllerName = input["controllerName"];
 		out.parameters = input["parameters"].get<std::vector<Parameter>>();
 
-		out.defaultState = input["defaultState"];
+		for (const auto& param : out.parameters) 
+{
+			// key:파라메터이름, value: type  추가 
+			out.paramTypes[param.name] = StringToParameterType(param.type);
+		}
 
-		if (input.contains("states"))
+		out.defaultState = input["defaultState"];
+		if (input.contains("states")) 
 		{
 			out.states = input["states"].get<std::vector<State>>();
 		}
@@ -27,15 +43,29 @@ void AnimatorController::LoadAnimatorController(const std::string& filePath, Ani
 		{
 			out.stateNameToIndex[out.states[i].name] = i;
 			out.states[i].index = i; // 상태 인덱스 설정
+
+			for (auto& trans : out.states[i].transitions) {
+				for (auto& condi : trans.conditions) {
+					// 파라메터이름 -> type 변환
+					condi.type = out.paramTypes[condi.parameter];
+				}
+			}
 		}
 
 		if (input.contains("anyStateTransitions")) 
 		{
 			out.anyStateTransitions = input["anyStateTransitions"].get<std::vector<AnyStateTransition>>();
+
+			for (auto& trans : out.anyStateTransitions) {
+				for (auto& condi : trans.conditions) {
+					// 파라메터이름 -> type 변환
+					condi.type = out.paramTypes[condi.parameter];
+				}
+			}
 		}
 	}
 	else {
-		throw std::runtime_error("Failed to open animation clip file: " + filePath);
+		throw std::runtime_error("Failed to open animation clip file: " + StringHelper::wstring_to_string(filePath));
 	}
 }
 

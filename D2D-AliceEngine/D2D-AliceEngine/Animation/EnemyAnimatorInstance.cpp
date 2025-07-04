@@ -1,45 +1,45 @@
 #include "pch.h"
-#include "PlayerAnimatorInstance.h"
+#include "EnemyAnimatorInstance.h"
 #include <Animation/AnimationController.h>
 
-PlayerAnimatorInstance::PlayerAnimatorInstance()
+EnemyAnimatorInstance::EnemyAnimatorInstance()
 {
 }
 
-PlayerAnimatorInstance::~PlayerAnimatorInstance()
+EnemyAnimatorInstance::~EnemyAnimatorInstance()
 {
 }
 
-void PlayerAnimatorInstance::Initialize()
+void EnemyAnimatorInstance::Initialize()
 {
 	__super::Initialize();
 }
 
-void PlayerAnimatorInstance::Update(const float& deltaSeconds)
+void EnemyAnimatorInstance::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 }
 
-void PlayerAnimatorInstance::Release()
+void EnemyAnimatorInstance::Release()
 {
 	__super::Release();
 }
 
-void PlayerAnimatorInstance::Render()
+void EnemyAnimatorInstance::Render()
 {
 	__super::Render();
 }
 
-void PlayerAnimatorInstance::SetAnimatorController(AnimatorController* controller)
+void EnemyAnimatorInstance::SetAnimatorController(AnimatorController* controller)
 {
 	__super::SetAnimatorController(controller);
 
-	LoadSpriteSheet(L"Zero\\Zero_sprites.json");
-	LoadAnimationClip(L"Zero\\Zero_idle_anim.json");
-	LoadAnimationClip(L"Zero\\Zero_attack_anim.json");
-	LoadAnimationClip(L"Zero\\Zero_walk_anim.json");
+	LoadSpriteSheet(L"ken_sprites.json");
+	LoadAnimationClip(L"ken_kick_anim.json");
+	LoadAnimationClip(L"ken_idle_anim.json");
 	//SetLooping(true);
 	Play();
+
 
 	// 전체 State를 순회하면서 사용하는 AnimaitionClip의 길이를 가져와 State의 clipLength에 저장하기
 	for (auto& state : m_Controller->states)
@@ -48,7 +48,7 @@ void PlayerAnimatorInstance::SetAnimatorController(AnimatorController* controlle
 	}
 }
 
-void PlayerAnimatorInstance::ChangeState(const std::string& stateName)
+void EnemyAnimatorInstance::ChangeState(const std::string& stateName)
 {
 	__super::ChangeState(stateName);
 	// 모션이름으로 현재 사용할 Animation Clip 연결. 
@@ -57,12 +57,12 @@ void PlayerAnimatorInstance::ChangeState(const std::string& stateName)
 	nextAnimationClip = m_Controller->states[m_CurrentStateIndex].motionName;
 }
 
-void PlayerAnimatorInstance::OnStart()
+void EnemyAnimatorInstance::OnStart()
 {
 	__super::OnStart();
 }
 
-void PlayerAnimatorInstance::OnExit()
+void EnemyAnimatorInstance::OnExit()
 {
 
 }

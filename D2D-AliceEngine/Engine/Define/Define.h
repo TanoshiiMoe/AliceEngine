@@ -78,6 +78,8 @@ namespace Define
 		SG_OnDestroy,
 		SG_MAX,
 	};
+
+	enum class ParameterType { Int, Float, Bool, Trigger };
 };
 
 #define VK_A 0x41  // 'A'

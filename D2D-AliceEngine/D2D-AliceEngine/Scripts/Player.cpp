@@ -7,14 +7,12 @@
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Component/RenderComponent.h>
-#include <System/ScriptSystem.h>
 #include <Component/Animator.h>
+#include <System/ScriptSystem.h>
 
 #include <Animation/TextureLoader.h>
 #include <Animation/AnimationController.h>
 #include "../Animation/PlayerAnimatorInstance.h"
-//#include "../Animation/FSMState/IdleState.h"
-//#include "../Animation/FSMState/AttackState.h"
 
 void Player::Initialize()
 {
@@ -37,15 +35,22 @@ void Player::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
+	float speed = 55.0f * deltaSeconds;
+	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
+	{
+		animInstance->SetFloat("speed", 0);
+	}
 	if (Input::IsKeyDown(VK_RIGHT))
 	{
-		m_owner->transform()->AddPosition(55.0f * deltaSeconds, 0);
-		//m_animator->SetFlip(true);
+		m_owner->transform()->AddPosition(speed, 0);
+		animInstance->SetFlip(true);
+		animInstance->SetFloat("speed", speed);
 	}
 	if (Input::IsKeyDown(VK_LEFT))
 	{
-		m_owner->transform()->AddPosition(-55.0f * deltaSeconds, 0);
-		//m_animator->SetFlip(false);
+		m_owner->transform()->AddPosition(-speed, 0);
+		animInstance->SetFlip(false);
+		animInstance->SetFloat("speed", speed);
 	}
 	if (Input::IsKeyDown(VK_DOWN))
 	{
@@ -77,30 +82,13 @@ void Player::OnStart()
 	m_owner->transform()->SetRotation(0);
 	m_owner->transform()->SetScale(1.5f, 1.5f);
 	m_owner->transform()->SetPivot(0.5f);
+	
+	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
+	animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
+	animInstance->m_layer = 5;
+	animInstance->SetAnimatorController(&animController);
 
-	/*Animator::LoadSpriteSheet("ken_sprites.json", Texture);
-	Animator::LoadAnimationClip("ken_kick_anim.json", kick, Texture);
-	Animator::LoadAnimationClip("ken_idle_anim.json", idle, Texture);*/
-
-	AnimatorController animController;
-	AnimatorController::LoadAnimatorController("Zero/Zero_AnimController.json", animController);
-	//
-	//animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
-	//animInstance->m_layer = 3;
-	//animInstance->SetAnimatorController(&animController);
-
-	//idleState = new IdleState();
-	//attackState = new AttackState();
-	//
-	//idleState->SetAnimator(animInstance);
-	//attackState->SetAnimator(animInstance);
-	//
-	//idleState->SetAnimationClip(idle.get());
-	//attackState->SetAnimationClip(attack.get());
-	//
-	//m_owner->stateMachine->CreateState(L"Idle", idleState);
-	//m_owner->stateMachine->CreateState(L"Attack", attackState);
-	//m_owner->stateMachine->SetNextState(L"Idle");
+	animInstance->OnStart();
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner, [this]() { Input(); });
 }
@@ -124,6 +112,10 @@ void Player::Input()
 	}
 	if (Input::IsKeyDown(VK_Z))
 	{
-		//m_owner->stateMachine->SetNextState(L"Attack");
+		animInstance->SetBool("attack", true);
+	}
+	else
+	{
+		animInstance->SetBool("attack", false);
 	}
 }

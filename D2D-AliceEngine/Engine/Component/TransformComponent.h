@@ -30,6 +30,8 @@ public:
 	void SetPosition(const FVector2& _v);
 	void SetRotation(const float& _val);
 
+	float GetRotation();
+	FVector2 GetScale();
 	void SetScale(const float& _x, const float& _y);
 	void SetScale(const float& _x);
 

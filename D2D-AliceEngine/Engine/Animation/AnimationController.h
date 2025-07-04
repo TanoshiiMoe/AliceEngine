@@ -1,6 +1,11 @@
 #pragma once
+#include <Define/Define.h>
 #include <Extension/json.hpp>
 using json = nlohmann::json;
+
+/*
+* @brief : 애니메이션 컨트롤러에 대한 구조체가 모여있는 파일입니다.
+*/
 
 struct Parameter
 {
@@ -15,6 +20,7 @@ struct Condition
 {
 	std::string parameter; // 조건 파라미터 이름
 	std::string mode; // 조건 모드 (예: Greater, IfNot 등)
+	Define::ParameterType type;
 	float threshold = 0.0f; // 조건 임계값
 };
 
@@ -47,6 +53,7 @@ struct AnimatorController
 {
 	std::string controllerName; // 컨트롤러 이름
 	std::vector<Parameter> parameters; // 컨트롤러 파라미터 목록
+	std::unordered_map<std::string, Define::ParameterType> paramTypes; // 타입매핑
 
 	std::string defaultState; // 기본 상태 이름	
 	std::vector<State> states;
@@ -61,7 +68,8 @@ struct AnimatorController
 		}
 		return nullptr; // 상태가 존재하지 않으면 nullptr 반환
 	}
-	static void LoadAnimatorController(const std::string& filePath, AnimatorController& out);
+	static Define::ParameterType StringToParameterType(const std::string& type);
+	static void LoadAnimatorController(const std::wstring& filePath, AnimatorController& out);
 };
 
 void from_json(const nlohmann::json& in, Parameter& out);

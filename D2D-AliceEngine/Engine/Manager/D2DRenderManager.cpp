@@ -173,6 +173,7 @@ void D2DRenderManager::Render()
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
+	std::vector<std::weak_ptr<Component>> collectedComponents;
 	for (int i = 0 ; i < static_cast<int>(Define::ERenderLayer::Max); i++)
 	{
 		if (m_renderers[i].empty()) continue;
@@ -185,9 +186,25 @@ void D2DRenderManager::Render()
 			}
 			else
 			{
-				it->lock()->Render();
+				if (std::dynamic_pointer_cast<RenderComponent>(it->lock())->m_layer != -999)
+				{
+					it->lock()->Render();
+				}
+				else
+				{
+					collectedComponents.push_back(*it);
+				}
+				//it->lock()->Render();
 				++it;
 			}
+		}
+	}
+	sort(collectedComponents.begin(), collectedComponents.end(), &D2DRenderManager::RenderSortCompare);
+	for (auto it = collectedComponents.begin(); it != collectedComponents.end(); ++it)
+	{
+		if (!it->expired())
+		{
+			it->lock()->Render();
 		}
 	}
 

@@ -122,6 +122,16 @@ void TransformComponent::SetRotation(const float& _val)
 	SetDirty();
 }
 
+float TransformComponent::GetRotation()
+{
+	return m_localTransform->GetRotation();
+}
+
+FVector2 TransformComponent::GetScale()
+{
+	return FVector2(m_localTransform->GetScale().x, m_localTransform->GetScale().y);
+}
+
 void TransformComponent::SetScale(const float& _x, const float& _y)
 {
 	m_localTransform->SetScale(_x, _y);

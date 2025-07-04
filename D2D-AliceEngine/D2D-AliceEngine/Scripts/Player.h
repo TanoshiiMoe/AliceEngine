@@ -1,5 +1,6 @@
 #pragma once
 #include <Component/ScriptComponent.h>
+#include <Animation/AnimationController.h>
 
 class gameObject;
 class PlayerAnimatorInstance;
@@ -26,7 +27,6 @@ public:
 	gameObject* m_owner;
 
 	PlayerAnimatorInstance* animInstance;
-	IdleState* idleState;
-	AttackState* attackState;
+	AnimatorController animController;
 };
 

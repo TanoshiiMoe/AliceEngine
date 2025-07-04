@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation\AnimationController.h" />
+    <ClInclude Include="Animation\AnimatorInstance.h" />
     <ClInclude Include="Component\Animator.h" />
     <ClInclude Include="Component\VideoComponent.h" />
     <ClInclude Include="Application.h" />
@@ -191,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation\AnimationController.cpp" />
+    <ClCompile Include="Animation\AnimatorInstance.cpp" />
     <ClCompile Include="Component\Animator.cpp" />
     <ClCompile Include="Component\VideoComponent.cpp" />
     <ClCompile Include="Application.cpp" />

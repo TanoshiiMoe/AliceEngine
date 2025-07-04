@@ -94,10 +94,11 @@ namespace Math
 {
 	static std::random_device rd;
 
-	// 두 수 사이의 랜덤한 수를 반환. 반환값이 없으면 오류.
+	
 	template<typename T>
 	struct TRandom
 	{
+		// 두 수 사이의 랜덤한 수를 반환. 반환값이 없으면 오류.
 		[[nodiscard]] static float GetRandomInRange(T Min, T Max)
 		{
 			static std::mt19937 gen(rd());
@@ -105,6 +106,7 @@ namespace Math
 			return dis(gen);
 		}
 
+		// 도넛 모양의 구간에 임의의 점을 반환하는 함수.
 		[[nodiscard]] static TVector2<T> GetRandomPointInTorus2D(const T& centerX, const T& centerY, const T& innerRadius, const T& outerRadius)
 		{
 			static std::mt19937 gen(rd());

@@ -1,11 +1,11 @@
 #pragma once
 #include <Animation/AnimatorInstance.h>
 
-class PlayerAnimatorInstance : public AnimatorInstance
+class EnemyAnimatorInstance : public AnimatorInstance
 {
 public:
-	PlayerAnimatorInstance();
-	~PlayerAnimatorInstance();
+	EnemyAnimatorInstance();
+	~EnemyAnimatorInstance();
 	virtual void Initialize() override;
 	virtual void Update(const float& deltaSeconds) override;
 	virtual void Release() override;

@@ -33,12 +33,24 @@ void DemoScene3::Update()
 {
 	__super::Update();
 	FVector2 pos = m_player->transform()->GetPosition();
+	float rotation = m_player->transform()->GetRotation();
+	FVector2 scale = m_player->transform()->GetScale();
 	m_widget4->GetComponent<TextRenderComponent>()->SetText(
 		L" [info] \n"
 		L" player Position : ("
 		+ std::to_wstring(pos.x)
 		+ L", "
 		+ std::to_wstring(pos.y)
+		+ L")"
+		L"\n"
+		L" player Rotation : ("
+		+ std::to_wstring(rotation)
+		+ L")"
+		L"\n"
+		L" player Scale : ("
+		+ std::to_wstring(scale.x)
+		+ L", "
+		+ std::to_wstring(scale.y)
 		+ L")"
 	);
 }
@@ -64,7 +76,7 @@ void DemoScene3::OnEnter()
 		L" [E] : 카메라를 떼기 \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 50));
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 100));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
@@ -119,10 +131,6 @@ void DemoScene3::OnExit()
 
 void DemoScene3::EnemyInput()
 {
-	if (Input::IsKeyPressed(VK_G))
-	{
-		m_player->GetComponent<Aru>()->m_aruStat->DecreaseAbility("HP", 5);
-	}
 }
 
 void DemoScene3::PlayerInput()
@@ -135,27 +143,6 @@ void DemoScene3::PlayerInput()
 	{
 		SceneManager::GetCamera()->ClearOwner();
 	}
-	if (Input::IsKeyPressed(VK_T))
-	{
-		//m_enemy->GetComponent<Aru2>()->m_aru2Stat->DecreaseAbility("HP", 10);
-		m_player->GetComponent<Aru>()->m_aruStat->DecreaseAbility("MP", 5);
-	}
-	if (Input::IsKeyPressed(VK_Y))
-	{
-		m_player->GetComponent<Aru>()->m_aruStat->IncreaseAbility("MAXHP", "HP", 5);
-	}
-	if (Input::IsKeyPressed(VK_U))
-	{
-		m_player->GetComponent<Aru>()->m_aruStat->SetStat("MAXHP", m_player->GetComponent<Aru>()->m_aruStat->GetStat("MAXHP") + 10);
-	}
-	if (Input::IsKeyPressed(VK_4))
-	{
-		if (m_player->GetComponent<TextRenderComponent>()->GetText() == L"aru")
-			m_player->GetComponent<TextRenderComponent>()->SetText(L"아루");
-		else
-			m_player->GetComponent<TextRenderComponent>()->SetText(L"aru");
-	}
-
 	if (Input::IsKeyPressed(VK_3))
 	{
 		SceneManager::ChangeScene(L"aruScene");

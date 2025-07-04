@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <stdexcept>
+#include <Helpers/StringHelper.h>
 
 /*
 from_json은 JSON 데이터를 C++ 객체(Sprite)로 역으로 주입하는 매핑 함수
@@ -11,13 +12,13 @@ nlohmann::json::get<T>() 호출 시 자동으로 사용됨
 반대로 JSON으로 직렬화하려면 to_json(json&, const Sprite&)도 필요
 */
 
-void TextureLoader::LoadSpriteSheetAndAnimationClip(const std::string& filePath, AnimationClip& clip, SpriteSheet& SpriteSheet)
+void TextureLoader::LoadSpriteSheetAndAnimationClip(const std::wstring& filePath, AnimationClip& clip, SpriteSheet& SpriteSheet)
 {
 	LoadSpriteSheet(filePath, SpriteSheet);
 	LoadAnimationClip(filePath, clip, SpriteSheet);
 }
 
-void TextureLoader::LoadSpriteSheet(const std::string& filePath, SpriteSheet& spriteSheet)
+void TextureLoader::LoadSpriteSheet(const std::wstring& filePath, SpriteSheet& spriteSheet)
 {
 	std::ifstream inFile(filePath);
 	if (inFile.is_open()) {
@@ -36,11 +37,11 @@ void TextureLoader::LoadSpriteSheet(const std::string& filePath, SpriteSheet& sp
 		}
 	}
 	else {
-		throw std::runtime_error("Failed to open animation clip file: " + filePath);
+		throw std::runtime_error("Failed to open animation clip file: " + StringHelper::wstring_to_string(filePath));
 	}
 }
 
-void TextureLoader::LoadAnimationClip(const std::string& filePath, AnimationClip& clip, const SpriteSheet& SpriteSheet)
+void TextureLoader::LoadAnimationClip(const std::wstring& filePath, AnimationClip& clip, const SpriteSheet& SpriteSheet)
 {
 	std::ifstream inFile(filePath);
 	if (inFile.is_open()) {
@@ -67,7 +68,7 @@ void TextureLoader::LoadAnimationClip(const std::string& filePath, AnimationClip
 		}
 	}
 	else {
-		throw std::runtime_error("Failed to open animation clip file: " + filePath);
+		throw std::runtime_error("Failed to open animation clip file: " + StringHelper::wstring_to_string(filePath));
 	}
 }
 // SpriteInfo

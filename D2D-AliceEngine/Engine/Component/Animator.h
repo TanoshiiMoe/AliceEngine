@@ -5,11 +5,21 @@
 
 /*
 * @briefs :
-*	Sprite Animation을 실행하기 위한 Animator입니다.
-*	비트맵을 json에 명세되어 있는 크기로 잘라서 그립니다.
+	Sprite Animation을 실행하기 위한 Animator입니다.
+	비트맵을 json에 명세되어 있는 크기로 잘라서 그립니다.
+	연습을 위해 Bitmap을 새로 만들어 Render 함수를 다시 만들어 보았습니다.
+	더 쉽게 만들고 싶다면 Render() 함수를 빼고 SpriteRenderer*를 선언하고 LoadData(L"") 함수를 사용해야합니다.
 * @details :
+	// AnimatorInstance를 상속받고 사용할 MyAnimatorInstance를 새로 만들 경우의 사용법은 다음과 같습니다.
 
-	사용법은 다음과 같습니다. 
+	// 1. AnimatorController 정보를 불러옵니다.
+	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
+	// 2. 상속받아 새로 만든 PlayerAnimatorInstance를 컴포넌트로 추가합니다.
+	animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
+	animInstance->m_layer = 3;
+	animInstance->SetAnimatorController(&animController);
+
+	// FSM - state를 사용하는 경우의 사용법은 다음과 같습니다. 
 	1. SpriteSheet와 AnimationClip 오브젝트를 생성합니다. 
 	(예시에서는 std::shared_ptr을 사용했지만 관리를 잘할 자신이 있다면 rawPointer로도 가능합니다.)
 Texture = std::make_shared<SpriteSheet>();
@@ -48,8 +58,8 @@ public:
 
 	// 애니메이션 사전 준비 함수
 	void PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<AnimationClip> clip);
-	void LoadSpriteSheet(const std::string& filePath);
-	void LoadAnimationClip(const std::string& filePath);
+	void LoadSpriteSheet(const std::wstring& filePath);
+	void LoadAnimationClip(const std::wstring& filePath);
 
 	// 애니메이션 실행, 중지, 변경 등의 함수
 	void Play();
@@ -61,8 +71,6 @@ public:
 	void SetLooping(const bool& loop) { bLoopping = loop; }
 	bool IsLooping() { return bLoopping; }
 	void SetFlip(const bool& _flip) { bFlip = _flip; }
-
-	bool CheckAnimationClip();
 
 	float time = -1;
 	std::string curAnimationClip;
