@@ -15,8 +15,9 @@ C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커
 </p>
 
 ![image](https://github.com/user-attachments/assets/3405a7e5-54dc-401f-a6cc-332329632433)
-![image](https://github.com/user-attachments/assets/f3a342da-d389-45ad-94e2-387659bc446f)
+![image](https://github.com/user-attachments/assets/7b016298-4ba1-409f-8c67-23d452366220)
 ![image](https://github.com/user-attachments/assets/adefb651-0331-4c36-9417-ca77cbda4b49)
+![image](https://github.com/user-attachments/assets/6a816bf3-ec0b-491b-81b1-396e09048ab6)
 
 
 <p align="center">
