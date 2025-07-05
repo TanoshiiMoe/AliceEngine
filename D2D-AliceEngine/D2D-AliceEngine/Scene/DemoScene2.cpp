@@ -148,10 +148,4 @@ void DemoScene2::aruInput()
 	{
 		m_aru->GetComponent<Aru>()->m_aruStat->SetStat("MAXHP", m_aru->GetComponent<Aru>()->m_aruStat->GetStat("MAXHP")+10);
 	}
-
-	if (Input::IsKeyPressed(VK_V))
-	{
-		//m_aru->RemoveComponent<Aru>(m_aru->GetComponent<Aru>());
-		RemoveObject(m_aru);
-	}
 }
