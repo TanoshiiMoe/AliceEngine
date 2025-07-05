@@ -4,22 +4,21 @@
 
 InputComponent::InputComponent()
 {
+	InputSystem::GetInstance().Regist(WeakFromThis<Component>());
 }
 
 InputComponent::~InputComponent()
 {
-	InputSystem::GetInstance().UnRegist(this->weak_from_this());
+	InputSystem::GetInstance().UnRegist(WeakFromThis<Component>());
 	slots.clear();
 }
 
 void InputComponent::Initialize()
 {
-	InputSystem::GetInstance().Regist(this->weak_from_this());
-
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PrePhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 	{
 		if (auto sp = weak.lock())
 		{
@@ -32,11 +31,16 @@ void InputComponent::Initialize()
 void InputComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	for (auto action : slots)
+	for(auto it = slots.begin(); it != slots.end();)
 	{
-		if (ObjectHandler::GetInstance().IsValid(action.handle))
+		if (ObjectHandler::GetInstance().IsValid(it->handle))
 		{
-			action.func();
+			it->func();
+			it++;
+		}
+		else
+		{
+			it = slots.erase(it);
 		}
 	}
 }

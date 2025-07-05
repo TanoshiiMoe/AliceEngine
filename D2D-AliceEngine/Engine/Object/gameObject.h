@@ -11,7 +11,7 @@
 
 class TransformComponent;
 class D2DRenderManager;
-class gameObject : public UObject, public std::enable_shared_from_this<gameObject>
+class gameObject : public UObject
 {
 public:
 	gameObject() { Initialize(); }
@@ -24,17 +24,18 @@ public:
 	* @ Component를 관리하는 로직입니다.
 	*/
 
-	std::vector<std::shared_ptr<Component>> m_Components;
+	std::vector<std::unique_ptr<Component>> m_Components;
 
 	template<class T, typename... Args>
 	T* AddComponent(Args&&... args)
 	{	
-		std::shared_ptr<T> createdComp = std::make_shared<T>(std::forward<Args>(args)...);
+		std::unique_ptr<T> createdComp = std::make_unique<T>(std::forward<Args>(args)...);
 		createdComp->Initialize();
-		createdComp->SetOwner(this->weak_from_this());
-		m_Components.emplace_back(createdComp);
+		createdComp->SetOwner(WeakFromThis<gameObject>());
+		T* rawPtr = createdComp.get();
+		m_Components.emplace_back(std::move(createdComp));
 
-		return createdComp.get();
+		return rawPtr;
 	}
 
 	template<class T>
@@ -43,7 +44,7 @@ public:
 		std::vector<T*> container;
 		for (auto component : m_Components)
 		{
-			if (auto castedComponent = std::dynamic_pointer_cast<T>(component.get()))
+			if (auto castedComponent = dynamic_cast<T*>(component.get()))
 			{
 				container.push_back(castedComponent);
 			}
@@ -57,9 +58,9 @@ public:
 		for (auto& comp : m_Components)
 		{
 			// shared_ptr<Component> → shared_ptr<T>로 캐스팅
-			if (auto casted = std::dynamic_pointer_cast<T>(comp))
+			if (auto casted = dynamic_cast<T*>(comp.get()))
 			{
-				return casted.get(); // raw pointer 반환
+				return casted; // raw pointer 반환
 			}
 		}
 		return nullptr;
@@ -82,30 +83,28 @@ public:
 	}
 
 	template<class T, typename... Args>
-	std::weak_ptr<T> AddComponentByWeak(Args&&... args)
+	WeakObjectPtr<T> AddComponentByWeak(Args&&... args)
 	{
-		std::shared_ptr<T> createdComp = std::make_shared<T>(std::forward<Args>(args)...);
+		std::unique_ptr<T> createdComp = std::make_unique<T>(std::forward<Args>(args)...);
 		createdComp->Initialize();
-		createdComp->SetOwner(this->weak_from_this());
-		m_Components.emplace_back(createdComp);
-
-		return std::dynamic_pointer_cast<T>(createdComp);
+		createdComp->SetOwner(WeakFromThis<gameObject>());
+		T* rawPtr = createdComp.get();
+		m_Components.emplace_back(std::move(createdComp));
+		
+		return WeakObjectPtr<T>(rawPtr);
 	}
 
 	template<class T>
-	std::weak_ptr<T> GetComponentByWeak()
+	WeakObjectPtr<T> GetComponentByWeak()
 	{
 		for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
 		{
-			if ((*it).get())
+			if (T* component = dynamic_cast<T*>((*it).get()))
 			{
-				if (auto component = std::dynamic_pointer_cast<T>((*it).get()))
-				{
-					return component;
-				}
+				return WeakObjectPtr<T>(component);
 			}
 		}
-		return std::weak_ptr<T>();
+		return nullptr;
 	}
 	
 	void Initialize() override;
@@ -113,9 +112,9 @@ public:
 	void Release() override;
 	void Initialize(const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot);
 
-	TransformComponent* transform() const { return m_transformComponent.lock().get(); }
+	TransformComponent* transform() const { return m_transformComponent.lock(); }
 	void AddChildObject(const gameObject* obj);
 
 public:
-	std::weak_ptr<TransformComponent> m_transformComponent;
+	WeakObjectPtr<TransformComponent> m_transformComponent;
 };

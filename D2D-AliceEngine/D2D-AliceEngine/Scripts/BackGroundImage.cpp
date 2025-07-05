@@ -48,7 +48,7 @@ void BackGroundImage::OnStart()
 	m_owner->AddComponent<SpriteRenderer>()->LoadData(L"cloud.jpg");
 	m_owner->GetComponent<SpriteRenderer>()->m_layer = -1;
 	
-	m_owner->AddComponent<InputComponent>()->SetAction(m_owner, [this]() { Input(); });
+	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 }
 
 void BackGroundImage::OnEnd()

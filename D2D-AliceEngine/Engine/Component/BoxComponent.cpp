@@ -27,9 +27,9 @@ void BoxComponent::Initialize()
 	__super::Initialize();
 
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PostPhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 		{
 			if (auto sp = weak.lock())
 			{

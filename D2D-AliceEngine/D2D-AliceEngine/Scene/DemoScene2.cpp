@@ -57,9 +57,6 @@ void DemoScene2::OnEnter()
 		L" <배경 실행> \n"
 		L" [P] : 배경 실행, 중지 \n"
 		L"\n"
-		L" <켄 애니메이션> \n"
-		L" [C] : 애니메이션 전환 \n"
-		L"\n"
 		L" <아루> \n"
 		L" [5,6] : 무기 스폰, 무기 파괴 \n"
 		L" [7,8] : 지갑 스폰, 지갑 파괴 \n"
@@ -99,8 +96,8 @@ void DemoScene2::OnEnter()
 	m_aru2 = NewObject<gameObject>(L"aru2");
 	m_aru2->AddComponent<Aru2>();
 	
-	m_aru->AddComponent<InputComponent>()->SetAction(m_aru, [this]() { aruInput(); });
-	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2, [this]() { aru2Input(); });
+	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { aruInput(); });
+	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2->GetHandle(), [this]() { aru2Input(); });
 }
 
 void DemoScene2::OnExit()

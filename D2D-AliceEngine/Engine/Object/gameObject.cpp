@@ -14,26 +14,29 @@ gameObject::gameObject(const FVector2& position = FVector2(0.0f), const float& r
 
 gameObject::~gameObject()
 {
-	for (std::weak_ptr<Component>&& comp : m_Components)
+	for (auto& component : m_Components)
 	{
-		comp.lock()->OnDestroy();
+		if(WeakObjectPtr<Component> comp = component.get())
+			comp.lock()->OnDestroy();
 	}
 	m_Components.clear();
 }
 
 void gameObject::OnStart()
 {
-	for (std::weak_ptr<Component>&& comp : m_Components)
+	for (auto& component : m_Components)
 	{
-		comp.lock()->OnStart();
+		if (WeakObjectPtr<Component> comp = component.get())
+			comp.lock()->OnStart();
 	}
 }
 
 void gameObject::OnEnd()
 {
-	for (std::weak_ptr<Component>&& comp : m_Components)
+	for (auto& component : m_Components)
 	{
-		comp.lock()->OnEnd();
+		if (WeakObjectPtr<Component> comp = component.get())
+			comp.lock()->OnEnd();
 	}
 	m_Components.clear();
 }

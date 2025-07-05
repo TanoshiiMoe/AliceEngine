@@ -35,7 +35,7 @@ void Earth::OnStart()
 	m_earth->GetComponent<TextRenderComponent>()->SetScale(FVector2(3, 3));
 	m_earth->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_earth->GetComponent<SpriteRenderer>()->GetSize().y * 0.7f));
 
-	m_earth->AddComponent<InputComponent>()->SetAction(m_earth,[this]() { Input(); });
+	m_earth->AddComponent<InputComponent>()->SetAction(m_earth->GetHandle(),[this]() { Input(); });
 }
 
 void Earth::OnEnd()

@@ -90,7 +90,7 @@ void Player::OnStart()
 
 	animInstance->OnStart();
 
-	m_owner->AddComponent<InputComponent>()->SetAction(m_owner, [this]() { Input(); });
+	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 }
 
 void Player::OnEnd()

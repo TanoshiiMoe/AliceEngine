@@ -5,20 +5,21 @@
 #include <queue>
 #include <memory>
 #include <functional>
+#include <Core/ObjectHandler.h>
 
 #define REGISTER_SCRIPT_METHOD(Method) \
-	ScriptSystem::GetInstance().Enque(weak_from_this(), Define::EScriptGroup::SG_##Method, \
-		[weak = weak_from_this()]() { \
+	ScriptSystem::GetInstance().Enque(WeakFromThis<Component>(), Define::EScriptGroup::SG_##Method, \
+		[weak = WeakFromThis<Component>()]() { \
 			if (auto sp = weak.lock()) \
-			{ std::static_pointer_cast<std::remove_pointer<decltype(this)>::type>(sp)->Method(); } \
+			{ static_cast<std::remove_pointer<decltype(this)>::type*>(sp)->Method(); } \
 		})
 
 struct ScriptWrapper
 {
-	std::weak_ptr<Component> Target;
+	WeakObjectPtr<Component> Target;
 	std::function<void()> TickFunc;
 
-	ScriptWrapper(std::weak_ptr<Component> _Target, std::function<void()> _TickFunc)
+	ScriptWrapper(WeakObjectPtr<Component> _Target, std::function<void()> _TickFunc)
 		: Target(_Target), TickFunc(_TickFunc)
 	{
 	}
@@ -30,7 +31,7 @@ public:
 	Define::EScriptGroup currnetGroup;
 	std::unordered_map<Define::EScriptGroup, std::queue<ScriptWrapper>> m_scriptQueues;
 
-	void Enque(std::weak_ptr<Component> InTarget, Define::EScriptGroup InGroup, std::function<void()> TickFunc)
+	void Enque(WeakObjectPtr<Component> InTarget, Define::EScriptGroup InGroup, std::function<void()> TickFunc)
 	{
 		m_scriptQueues[InGroup].emplace(InTarget, TickFunc);
 	}

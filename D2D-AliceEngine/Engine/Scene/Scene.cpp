@@ -16,7 +16,10 @@ Scene::Scene()
 	RenderSystem::GetInstance().Initialize();
 	for (auto& object : m_objects)
 	{
-		object.second.get()->Initialize();
+		if (WeakObjectPtr<gameObject> weak = object.second.get())
+		{
+			weak->Initialize();
+		}
 	}
 	m_mainCamera = nullptr;
 	m_mainCamera = new Camera();

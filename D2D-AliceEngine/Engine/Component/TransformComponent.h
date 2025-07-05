@@ -15,10 +15,10 @@ public:
 
 public:
 	// 계층구조 관리
-	std::weak_ptr<TransformComponent> parent;
-	std::vector<std::weak_ptr<TransformComponent>> children;
+	WeakObjectPtr<TransformComponent> parent;
+	std::vector<WeakObjectPtr<TransformComponent>> children;
 
-	void AddChildObject(std::weak_ptr<TransformComponent> child);
+	void AddChildObject(WeakObjectPtr<TransformComponent> child);
 
 	FVector2 m_pivot{ 0,0 }; // 좌표 중심점
 	Transform* m_localTransform; // Transform 컴포넌트

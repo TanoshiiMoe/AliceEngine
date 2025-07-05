@@ -35,7 +35,7 @@ void Sun::OnStart()
 	m_sun->AddComponent<BoxComponent>(m_sun->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
 	m_sun->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_sun->GetComponent<SpriteRenderer>()->GetSize().y * 0.7f));
 
-	m_sun->AddComponent<InputComponent>()->SetAction(m_sun,[this]() { Input(); });
+	m_sun->AddComponent<InputComponent>()->SetAction(m_sun->GetHandle(),[this]() { Input(); });
 }
 
 void Sun::OnEnd()

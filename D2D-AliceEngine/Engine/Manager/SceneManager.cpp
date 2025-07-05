@@ -29,7 +29,7 @@ void SceneManager::Update()
         m_nextSceneName.clear();
     }
 
-    if (auto scene = m_currentScene.lock())
+    if (WeakObjectPtr<Scene> scene = m_currentScene)
         scene->Update();
 
     GetCamera()->Update();
@@ -37,9 +37,9 @@ void SceneManager::Update()
 
 Scene* SceneManager::GetWorld()
 {
-    if (std::shared_ptr<Scene> sharedScene = m_currentScene.lock())
+    if (WeakObjectPtr<Scene> scene = m_currentScene)
     {
-        return sharedScene.get();
+        return scene.Get();
     }
     else
     {
@@ -49,9 +49,9 @@ Scene* SceneManager::GetWorld()
 
 Camera* SceneManager::GetCamera()
 {
-    if (GetInstance().m_currentScene.lock())
+    if (WeakObjectPtr<Scene> scene = GetInstance().m_currentScene)
     {
-        return GetInstance().m_currentScene.lock()->GetCamera();
+        return scene->GetCamera();
     }
     return nullptr;
 }

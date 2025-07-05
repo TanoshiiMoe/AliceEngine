@@ -31,18 +31,19 @@ public:
 	TReturnType* NewObject(const std::wstring& NewobjectName, Args&&... args)
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
-		std::shared_ptr<TReturnType> createdObj = std::make_shared<TReturnType>(std::forward<Args>(args)...);
+		std::unique_ptr<TReturnType> createdObj = std::make_unique<TReturnType>(std::forward<Args>(args)...);
 
 		createdObj->SetName(NewobjectName);
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
-		m_objects[createdObj->GetUUID()] = createdObj;
 		m_nameToUUIDs[NewobjectName].insert(createdObj->GetUUID());
+		TReturnType* rawPtr = createdObj.get();
+		m_objects[createdObj->GetUUID()] = std::move(createdObj);
 
-		return dynamic_cast<TReturnType*>(createdObj.get());
+		return rawPtr;
 	}
 
 	template<class T>
-	void RemoveObject(std::weak_ptr<T>& targetObj)
+	void RemoveObject(T& targetObj)
 	{
 		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 		{
@@ -104,24 +105,20 @@ public:
 	}
 
 	template<class TReturnType, typename... Args>
-	std::weak_ptr<TReturnType> NewObjectByWeak(const std::wstring& NewobjectName, Args&&... args)
+	WeakObjectPtr<TReturnType> NewObjectByWeak(const std::wstring& NewobjectName, Args&&... args)
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
-
-		std::shared_ptr<TReturnType> createdObj = std::make_shared<TReturnType>(std::forward<Args>(args)...);
-
+		TReturnType* createdObj = new TReturnType(std::forward<Args>(args)...);
 		createdObj->SetName(NewobjectName);
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
+		m_objects.emplace(createdObj->GetUUID(), createdObj);
 
-		auto result = m_objects.emplace(createdObj->GetUUID(), createdObj);
-		auto iter = result.first;
-
-		return std::dynamic_pointer_cast<TReturnType>(createdObj);
+		return WeakObjectPtr<TReturnType>(createdObj);
 	}
 
 private:
 	gameObject* m_sysinfoWidget;
-	std::unordered_map<std::wstring, std::shared_ptr<gameObject>> m_objects;
+	std::unordered_map<std::wstring, std::unique_ptr<gameObject>> m_objects;
 	std::unordered_map<std::wstring, std::unordered_set<std::wstring>> m_nameToUUIDs;
 };
 

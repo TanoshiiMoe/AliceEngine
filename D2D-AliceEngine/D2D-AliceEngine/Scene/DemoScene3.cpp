@@ -103,13 +103,13 @@ void DemoScene3::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
-	m_player->AddComponent<InputComponent>()->SetAction(m_player, [this]() { PlayerInput(); });
+	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 
 	for (int i = 0; i < enemyMax; i++)
 	{
 		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
 		m_enemies[i]->AddComponent<Enemy>();
-		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i], [this]() { EnemyInput(); });
+		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
 
 		m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInTorus2D(

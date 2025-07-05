@@ -49,10 +49,10 @@ struct FTickContext
 
 struct UpdateWrapper
 {
-	std::weak_ptr<ITickable> Target;
+	WeakObjectPtr<ITickable> Target;
 	std::function<void(const float&)> TickFunc;
 
-	UpdateWrapper(std::weak_ptr<ITickable> _Target, std::function<void(const float&)> _TickFunc)
+	UpdateWrapper(WeakObjectPtr<ITickable> _Target, std::function<void(const float&)> _TickFunc)
 		: Target(_Target), TickFunc(_TickFunc)
 	{
 	}
@@ -64,7 +64,7 @@ public:
 	std::unordered_map<Define::ETickingGroup, std::vector<UpdateWrapper>> m_TickLists;
 	FTickContext Context;
 
-	void Enque(std::weak_ptr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc)
+	void Enque(WeakObjectPtr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc)
 	{
 		m_TickLists[InGroup].emplace_back(InTarget, TickFunc);
 	}

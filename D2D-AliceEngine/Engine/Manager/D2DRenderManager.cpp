@@ -9,7 +9,7 @@
 
 D2DRenderManager::D2DRenderManager()
 {
-	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<std::weak_ptr<Component>>());
+	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<WeakObjectPtr<RenderComponent>>());
 }
 
 D2DRenderManager::~D2DRenderManager()
@@ -17,29 +17,29 @@ D2DRenderManager::~D2DRenderManager()
 	m_renderers.clear();
 }
 
-void D2DRenderManager::AddRenderer(std::weak_ptr<Component> renderer)
+void D2DRenderManager::AddRenderer(WeakObjectPtr<RenderComponent> renderer)
 {
 	if (!renderer.expired())
 	{
-		auto sharedRenderer = renderer.lock();
+		auto ptr = renderer.lock(); // raw pointer ¹ÝÈ¯
 
-		if (std::dynamic_pointer_cast<SpriteRenderer>(sharedRenderer))
+		if (dynamic_cast<SpriteRenderer*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<VideoComponent>(sharedRenderer))
+		else if (dynamic_cast<VideoComponent*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::AnimationComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<BoxComponent>(sharedRenderer))
+		else if (dynamic_cast<BoxComponent*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::BoxComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<TextRenderComponent>(sharedRenderer))
+		else if (dynamic_cast<TextRenderComponent*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<Animator>(sharedRenderer))
+		else if (dynamic_cast<Animator*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::Animator)].push_back(renderer);
 		}
@@ -173,7 +173,7 @@ void D2DRenderManager::Render()
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-	std::vector<std::weak_ptr<Component>> collectedComponents;
+	std::vector<WeakObjectPtr<RenderComponent>> collectedComponents;
 	for (int i = 0 ; i < static_cast<int>(Define::ERenderLayer::Max); i++)
 	{
 		if (m_renderers[i].empty()) continue;
@@ -186,13 +186,14 @@ void D2DRenderManager::Render()
 			}
 			else
 			{
-				if (std::dynamic_pointer_cast<RenderComponent>(it->lock())->m_layer != -999)
+				auto renderer = dynamic_cast<RenderComponent*>(it->lock());
+				if (renderer->m_layer != -999)
 				{
 					it->lock()->Render();
 				}
 				else
 				{
-					collectedComponents.push_back(*it);
+					collectedComponents.push_back(renderer);
 				}
 				//it->lock()->Render();
 				++it;
@@ -216,11 +217,11 @@ void D2DRenderManager::Render()
 	m_dxgiSwapChain->Present(1, 0);
 }
 
-bool D2DRenderManager::RenderSortCompare(const std::weak_ptr<Component>& a, const std::weak_ptr<Component>& b)
+bool D2DRenderManager::RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b)
 {
 	if (a.expired()) return false;
 	if (b.expired()) return false;
-	return std::dynamic_pointer_cast<RenderComponent>(a.lock())->m_layer < std::dynamic_pointer_cast<RenderComponent>(b.lock())->m_layer;
+	return a->m_layer < b->m_layer;
 }
 
 void D2DRenderManager::GetApplicationSize(int& width, int& height)

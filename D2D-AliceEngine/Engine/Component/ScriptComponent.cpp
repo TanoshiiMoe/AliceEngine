@@ -12,17 +12,17 @@ ScriptComponent::ScriptComponent()
 
 ScriptComponent::~ScriptComponent()
 {
-	ScriptSystem::GetInstance().UnRegist(this->weak_from_this());
+	ScriptSystem::GetInstance().UnRegist(WeakFromThis<Component>());
 }
 
 void ScriptComponent::Initialize()
 {
-	ScriptSystem::GetInstance().Regist(this->weak_from_this());
+	ScriptSystem::GetInstance().Regist(WeakFromThis<Component>());
 
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PostPhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 	{
 		if (auto sp = weak.lock())
 		{
@@ -32,13 +32,13 @@ void ScriptComponent::Initialize()
 	);
 
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_DuringPhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 	{
 		if (auto sp = weak.lock())
 		{
-			if (auto script = std::dynamic_pointer_cast<ScriptComponent>(sp))
+			if (auto script = dynamic_cast<ScriptComponent*>(sp))
 			{
 				script->FixedUpdate(dt);
 			}
@@ -47,13 +47,13 @@ void ScriptComponent::Initialize()
 	);
 
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PostUpdateWork,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 	{
 		if (auto sp = weak.lock())
 		{
-			if (auto script = std::dynamic_pointer_cast<ScriptComponent>(sp))
+			if (auto script = dynamic_cast<ScriptComponent*>(sp))
 			{
 				script->LateUpdate(dt);
 			}
