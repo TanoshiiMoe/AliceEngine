@@ -11,7 +11,6 @@
 
 class TransformComponent;
 class D2DRenderManager;
-class FiniteStateMachine;
 class gameObject : public UObject, public std::enable_shared_from_this<gameObject>
 {
 public:
@@ -119,5 +118,4 @@ public:
 
 public:
 	std::weak_ptr<TransformComponent> m_transformComponent;
-	FiniteStateMachine* stateMachine;
 };

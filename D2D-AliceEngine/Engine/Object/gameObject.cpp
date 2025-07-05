@@ -19,7 +19,6 @@ gameObject::~gameObject()
 		comp.lock()->OnDestroy();
 	}
 	m_Components.clear();
-	delete stateMachine;
 }
 
 void gameObject::OnStart()
@@ -43,16 +42,12 @@ void gameObject::Initialize()
 {
 	m_transformComponent = AddComponentByWeak<TransformComponent>();
 	m_transformComponent.lock()->SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.0f));
-
-	stateMachine = new FiniteStateMachine();
 }
 
 void gameObject::Initialize(const FVector2& position = FVector2(0.0f), const float& rotation = 0.0f, const FVector2& scale = FVector2(1.0f), const FVector2& pivot = FVector2(0.0f))
 {
 	m_transformComponent = AddComponentByWeak<TransformComponent>();
 	m_transformComponent.lock()->SetTransform(position, rotation, scale, pivot);
-
-	stateMachine = new FiniteStateMachine();
 }
 
 void gameObject::AddChildObject(const gameObject* obj)
@@ -62,7 +57,7 @@ void gameObject::AddChildObject(const gameObject* obj)
 
 void gameObject::Update()
 {
-	stateMachine->Update();
+
 }
 
 void gameObject::Release()
