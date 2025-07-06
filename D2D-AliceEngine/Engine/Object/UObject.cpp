@@ -3,10 +3,10 @@
 
 UObject::UObject()
 {
-	ObjectHandler::GetInstance().Register(this);
+	objectHandle = ObjectHandler::GetInstance().CreateHandle(this);
 }
 
 UObject::~UObject()
 {
-	ObjectHandler::GetInstance().Unregister(this);
+	ObjectHandler::GetInstance().DestroyHandle(objectHandle);
 }

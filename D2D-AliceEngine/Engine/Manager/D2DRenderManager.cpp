@@ -6,10 +6,12 @@
 #include <Component/VideoComponent.h>
 #include <Component/BoxComponent.h>
 #include <Component/Animator.h>
+#include <Manager/SceneManager.h>
+#include <Define/Define.h>
 
 D2DRenderManager::D2DRenderManager()
 {
-	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<std::weak_ptr<Component>>());
+	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<WeakObjectPtr<RenderComponent>>());
 }
 
 D2DRenderManager::~D2DRenderManager()
@@ -17,29 +19,29 @@ D2DRenderManager::~D2DRenderManager()
 	m_renderers.clear();
 }
 
-void D2DRenderManager::AddRenderer(std::weak_ptr<Component> renderer)
+void D2DRenderManager::AddRenderer(WeakObjectPtr<RenderComponent> renderer)
 {
 	if (!renderer.expired())
 	{
-		auto sharedRenderer = renderer.lock();
+		auto ptr = renderer.lock(); // raw pointer 반환
 
-		if (std::dynamic_pointer_cast<SpriteRenderer>(sharedRenderer))
+		if (dynamic_cast<SpriteRenderer*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<VideoComponent>(sharedRenderer))
+		else if (dynamic_cast<VideoComponent*>(ptr))
 		{
-			m_renderers[static_cast<int>(ERenderLayer::AnimationComponent)].push_back(renderer);
+			m_renderers[static_cast<int>(ERenderLayer::VideoComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<BoxComponent>(sharedRenderer))
+		else if (dynamic_cast<BoxComponent*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::BoxComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<TextRenderComponent>(sharedRenderer))
+		else if (dynamic_cast<TextRenderComponent*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
 		}
-		else if (std::dynamic_pointer_cast<Animator>(sharedRenderer))
+		else if (dynamic_cast<Animator*>(ptr))
 		{
 			m_renderers[static_cast<int>(ERenderLayer::Animator)].push_back(renderer);
 		}
@@ -153,9 +155,7 @@ void D2DRenderManager::UnInitialize()
 
 	// For DrawText
 	m_dWriteFactory = nullptr;
-
 	g_spriteBatch = nullptr;
-
 	m_renderers.clear();
 }
 
@@ -163,7 +163,6 @@ void D2DRenderManager::Render()
 {
 	m_d2dDeviceContext->BeginDraw();
 	m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
-
 	if (m_resizePending)
 	{
 		CreateSwapChainAndD2DTarget();
@@ -173,30 +172,35 @@ void D2DRenderManager::Render()
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-	std::vector<std::weak_ptr<Component>> collectedComponents;
+	ViewRect view = GetCameraView();
+	std::vector<WeakObjectPtr<RenderComponent>> collectedComponents;
 	for (int i = 0 ; i < static_cast<int>(Define::ERenderLayer::Max); i++)
 	{
 		if (m_renderers[i].empty()) continue;
+
 		sort(m_renderers[i].begin(), m_renderers[i].end(), &D2DRenderManager::RenderSortCompare);
+
 		for(auto it = m_renderers[i].begin(); it != m_renderers[i].end(); )
 		{
 			if (it->expired())
 			{
 				it = m_renderers[i].erase(it);
+				continue;
+			}
+			if (it->lock()->drawType == Define::EDrawType::WorldSpace && CheckCameraCulling(*it, view)) {
+				++it;
+				continue;
+			}
+			auto renderer = dynamic_cast<RenderComponent*>(it->lock());
+			if (renderer->m_layer == -999)
+			{
+				collectedComponents.push_back(renderer); 
 			}
 			else
 			{
-				if (std::dynamic_pointer_cast<RenderComponent>(it->lock())->m_layer != -999)
-				{
-					it->lock()->Render();
-				}
-				else
-				{
-					collectedComponents.push_back(*it);
-				}
-				//it->lock()->Render();
-				++it;
+				it->lock()->Render();
 			}
+			++it;
 		}
 	}
 	sort(collectedComponents.begin(), collectedComponents.end(), &D2DRenderManager::RenderSortCompare);
@@ -216,11 +220,64 @@ void D2DRenderManager::Render()
 	m_dxgiSwapChain->Present(1, 0);
 }
 
-bool D2DRenderManager::RenderSortCompare(const std::weak_ptr<Component>& a, const std::weak_ptr<Component>& b)
+ViewRect D2DRenderManager::GetCameraView()
+{
+	const float camX = SceneManager::GetCamera()->GetPositionX();
+	const float camY = SceneManager::GetCamera()->GetPositionY();
+	const float fov = SceneManager::GetCamera()->fieldOfView;
+	FVector2 scale = SceneManager::GetCamera()->GetScale();
+	if (scale.x == 0.0f) scale.x = 1.0f;
+	if (scale.y == 0.0f) scale.y = 1.0f;
+	int screenWidth = 0, screenHeight = 0;
+	D2DRenderManager::GetApplicationSize(screenWidth, screenHeight);
+	const float halfWidth = (screenWidth * 0.5f * fov) * scale.x;
+	const float halfHeight = (screenHeight * 0.5f * fov) * scale.y;
+	return ViewRect {camX - halfWidth, camX + halfWidth, camY - halfHeight, camY + halfHeight};
+}
+
+// 컬링이 되는걸 확실하게 보려면 주석처리 된 부분을 사용
+bool D2DRenderManager::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view)
+{
+	auto* transform = renderer->GetTransform();
+	const auto pos = transform ? transform->GetPosition() : D2D1_VECTOR_2F{ 0, 0 };
+	const auto scale = transform ? transform->GetScale() : D2D1_VECTOR_2F{ 1, 1 };
+
+	/*const float shrinkRatio = 0.5;
+    const float halfW = renderer->GetSizeX() * 0.5f * scale.x * shrinkRatio;
+    const float halfH = renderer->GetSizeY() * 0.5f * scale.y * shrinkRatio;*/
+	const float halfW = renderer->GetSizeX() * 0.5f * scale.x;
+	const float halfH = renderer->GetSizeY() * 0.5f * scale.y;
+
+	const float left = pos.x - halfW;
+	const float right = pos.x + halfW;
+	const float bottom = pos.y - halfH;
+	const float top = pos.y + halfH;
+
+	// margin 비율 (예: 0.1f = 10% 여유)
+	/*const float marginRatio = 0.01f;
+	const float marginX = (view.maxX - view.minX) * marginRatio;
+	const float marginY = (view.maxY - view.minY) * marginRatio;
+	const float minX = view.minX - marginX;
+	const float maxX = view.maxX + marginX;
+	const float minY = view.minY - marginY;
+	const float maxY = view.maxY + marginY;*/
+	const float marginX = (view.maxX - view.minX);
+	const float marginY = (view.maxY - view.minY);
+	const float minX = view.minX;
+	const float maxX = view.maxX;
+	const float minY = view.minY;
+	const float maxY = view.maxY;
+
+	// 카메라 뷰 안에만 보이게 (여유 포함)
+	return (right < minX || left > maxX ||
+		top < minY || bottom > maxY);
+}
+
+bool D2DRenderManager::RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b)
 {
 	if (a.expired()) return false;
 	if (b.expired()) return false;
-	return std::dynamic_pointer_cast<RenderComponent>(a.lock())->m_layer < std::dynamic_pointer_cast<RenderComponent>(b.lock())->m_layer;
+	return a->m_layer < b->m_layer;
 }
 
 void D2DRenderManager::GetApplicationSize(int& width, int& height)

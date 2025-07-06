@@ -50,15 +50,10 @@ void DemoScene2::OnEnter()
 		L" [화살표 상,하] : 카메라 위,아래 이동 \n"
 		L" [화살표 좌/우] : 카메라 좌,우 이동 \n"
 		L" [1/2] : D2D, Unity 좌표계 \n"
+		L" [ [ / ] ] : 카메라 축소, 확대\n"
 		L" [Q] : 카메라를 아루에게 붙이기 \n"
 		L" [E] : 카메라를 떼기 \n"
 		L" * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n"
-		L"\n"
-		L" <배경 실행> \n"
-		L" [P] : 배경 실행, 중지 \n"
-		L"\n"
-		L" <켄 애니메이션> \n"
-		L" [C] : 애니메이션 전환 \n"
 		L"\n"
 		L" <아루> \n"
 		L" [5,6] : 무기 스폰, 무기 파괴 \n"
@@ -75,7 +70,7 @@ void DemoScene2::OnEnter()
 		L" [J] : 아루 최대체력 15 늘리기"
 	);
 	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 50));
-	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
 	m_widget2->transform()->SetPosition(0, 0);
@@ -99,8 +94,8 @@ void DemoScene2::OnEnter()
 	m_aru2 = NewObject<gameObject>(L"aru2");
 	m_aru2->AddComponent<Aru2>();
 	
-	m_aru->AddComponent<InputComponent>()->SetAction(m_aru, [this]() { aruInput(); });
-	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2, [this]() { aru2Input(); });
+	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { aruInput(); });
+	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2->GetHandle(), [this]() { aru2Input(); });
 }
 
 void DemoScene2::OnExit()

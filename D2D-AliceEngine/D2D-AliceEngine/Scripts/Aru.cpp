@@ -110,7 +110,7 @@ void Aru::OnStart()
 	m_aruNameTexts[3]->SetTextFormat(L"최대 체력 : ", m_aruStat->GetStat("MAXHP"));
 	m_aruNameTexts[4]->SetTextFormat(L"마나 : ", m_aruStat->GetStat("MP"));
 
-	m_aruStat->OnChangeStatMap["HP"].Add(m_aru, [this](float oldVal, float newVal)
+	m_aruStat->OnChangeStatMap["HP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
 		if (newVal <= 0)	// 죽는 시점
 		{
@@ -128,17 +128,17 @@ void Aru::OnStart()
 		m_aruNameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);
 	});;
 
-	m_aruStat->OnChangeStatMap["MAXHP"].Add(m_aru, [this](float oldVal, float newVal)
+	m_aruStat->OnChangeStatMap["MAXHP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
 		m_aruNameTexts[3]->SetTextFormat(L"최대 체력 : ", newVal);
 	});;
 
-	m_aruStat->OnChangeStatMap["MP"].Add(m_aru, [this](float oldVal, float newVal)
+	m_aruStat->OnChangeStatMap["MP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
 		m_aruNameTexts[4]->SetTextFormat(L"마나 : ", newVal);
 	});;
 
-	m_aru->AddComponent<InputComponent>()->SetAction(m_aru, [this]() { Input(); });
+	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { Input(); });
 }
 
 void Aru::OnEnd()
@@ -164,7 +164,7 @@ void Aru::Input()
 	}
 	if (Input::IsKeyPressed(VK_9))
 	{
-		//for (int i = 0; i < 20000; i++)
+		//for (int i = 0; i < 5000; i++)
 		//{
 		//	GetWorld()->RemoveObjectByName(L"gun");
 		//}
@@ -174,7 +174,7 @@ void Aru::Input()
 	{
 		for (int i = 0; i < 5000; i++)
 		{
-			gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
+			gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.1f, 0.5f), FRandom::GetRandomInRange(0.1f, 0.5f)), FVector2(0.5f));
 			gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
 		}
 	}

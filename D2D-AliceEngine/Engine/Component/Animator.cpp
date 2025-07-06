@@ -26,9 +26,9 @@ void Animator::Initialize()
 	__super::Initialize();
 
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PostPhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 	{
 		if (auto sp = weak.lock())
 		{
@@ -77,7 +77,7 @@ void Animator::Render()
 
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
-	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -114,6 +114,20 @@ void Animator::Render()
 	context->SetTransform(view);
 	context->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
 	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
+}
+
+float Animator::GetSizeX()
+{
+	if (!m_bitmap.get()) return 0;
+	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
+	return bmpSize.width;
+}
+
+float Animator::GetSizeY()
+{
+	if (!m_bitmap.get()) return 0;
+	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
+	return bmpSize.height;
 }
 
 void Animator::PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<AnimationClip> clip)

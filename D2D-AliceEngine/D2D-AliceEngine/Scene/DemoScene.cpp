@@ -59,6 +59,7 @@ void DemoScene::OnEnter()
 		L" <카메라> \n"
 		L" [화살표 상,하] : 카메라 위,아래 이동 \n"
 		L" [화살표 좌/우] : 카메라 좌,우 이동 \n"
+		L" [ [ / ] ] : 카메라 축소, 확대\n"
 		L" [1/2] : D2D, Unity 좌표계 \n"
 		L"\n"
 		L" <태양, 지구, 달> \n"
@@ -91,8 +92,8 @@ void DemoScene::OnEnter()
 	/*
 	* UI는 gameObject와 별개로 분리해서 만들어야함. 이후에 예정 
 	*/
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 120));
-	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 80));
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <씬> \n [3] : 씬 전환");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);

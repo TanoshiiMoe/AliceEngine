@@ -76,7 +76,7 @@ void DemoScene3::OnEnter()
 		L" [E] : 카메라를 떼기 \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 100));
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 100));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
@@ -94,7 +94,7 @@ void DemoScene3::OnEnter()
 
 	m_widget4->transform()->SetPosition(0, 0);
 	m_widget4->AddComponent<TextRenderComponent>()->SetText(L" test");
-	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
 	m_widget4->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 600));
 	m_widget4->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
@@ -103,13 +103,13 @@ void DemoScene3::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
-	m_player->AddComponent<InputComponent>()->SetAction(m_player, [this]() { PlayerInput(); });
+	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 
 	for (int i = 0; i < enemyMax; i++)
 	{
 		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
 		m_enemies[i]->AddComponent<Enemy>();
-		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i], [this]() { EnemyInput(); });
+		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
 
 		m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInTorus2D(

@@ -16,6 +16,10 @@
 VideoComponent::~VideoComponent()
 {
 	files.clear();
+	for (auto& m_bitmap : m_bitmaps)
+	{
+		m_bitmap.reset();
+	}
 	m_bitmaps.clear();
 	PackageResourceManager::GetInstance().UnloadDataDir(fileDirPath); // 비디오 파일 언로드
 }
@@ -24,9 +28,9 @@ void VideoComponent::Initialize()
 {
 	__super::Initialize();
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PostPhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 		{
 			if (auto sp = weak.lock())
 			{
@@ -114,7 +118,7 @@ void VideoComponent::Release()
 
 void VideoComponent::Render()
 {
-	__super::Render();
+ 	__super::Render();
 	if (files.empty()) return;
 	if (m_bitmaps.size() <= m_curClip) 
 	{
@@ -126,14 +130,20 @@ void VideoComponent::Render()
 
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
-	D2D1_SIZE_U bmpSize = m_bitmaps[m_curClip]->GetPixelSize(); // 비트맵 크기 및 피벗
+	bmpSize = m_bitmaps[m_curClip]->GetPixelSize(); // 비트맵 크기 및 피벗
 	D2D1_POINT_2F pivotOffset = {
-		bmpSize.width * GetPivot()->x,
-		bmpSize.height * GetPivot()->y
+		bmpSize.width * 0.5f,
+		bmpSize.height * 0.5f
 	};
+	if (auto pivot = GetPivot()) {
+		pivotOffset = {
+			bmpSize.width * pivot->x,
+			bmpSize.height * pivot->y
+		};
+	}
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -156,17 +166,32 @@ void VideoComponent::Render()
 	context->DrawBitmap(m_bitmaps[m_curClip].get());
 }
 
+float VideoComponent::GetSizeX()
+{
+	if (m_bitmaps.empty() == false)
+	{
+		return bmpSize.width;
+	}
+	return 0;
+}
+
+float VideoComponent::GetSizeY()
+{
+	if (m_bitmaps.empty() == false)
+	{
+		return bmpSize.height;
+	}
+	return 0;
+}
+
 FVector2 VideoComponent::GetSize()
 {
 	if (m_bitmaps.empty() == false)
 	{
-		ComPtr<ID2D1Bitmap1> bitmapStrong;
-		if (m_bitmaps[0])
+		if (m_bitmaps[m_curClip])
 		{
-			D2D1_SIZE_U bmpSize = m_bitmaps[0]->GetPixelSize();
 			return FVector2(bmpSize.width, bmpSize.height);
 		}
-		return FVector2(0, 0);
 	}
 	return FVector2();
 }

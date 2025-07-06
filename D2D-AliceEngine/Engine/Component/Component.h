@@ -8,7 +8,7 @@
 
 class gameObject;
 class Transform;
-class Component : public UObject, public ITickable, public std::enable_shared_from_this<Component>
+class Component : public UObject, public ITickable
 {
 public:
 	Component();
@@ -30,12 +30,12 @@ public:
 	virtual void OnDestroy() {}
 
 public:
-	inline void SetOwner(std::weak_ptr<gameObject> object) { owner = object.lock(); }
-	inline gameObject* GetOwner() { return owner.lock().get(); }
+	inline void SetOwner(WeakObjectPtr<gameObject> object) { owner = object; }
+	inline gameObject* GetOwner() { return owner.Get(); }
 	const std::wstring& GetOwnerName();
 	Transform* GetTransform() const;
 	FVector2* GetPivot() const;
 
 protected:
-	std::weak_ptr<gameObject> owner;
+	WeakObjectPtr<gameObject> owner;
 };

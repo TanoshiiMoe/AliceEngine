@@ -20,6 +20,7 @@ BoxComponent::BoxComponent(const FVector2& _size = FVector2(50,50), const FColor
 
 BoxComponent::~BoxComponent()
 {
+	m_pBrush = nullptr;
 }
 
 void BoxComponent::Initialize()
@@ -27,9 +28,9 @@ void BoxComponent::Initialize()
 	__super::Initialize();
 
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PostPhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 		{
 			if (auto sp = weak.lock())
 			{
@@ -57,12 +58,18 @@ void BoxComponent::Render()
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
 	D2D1_POINT_2F pivotOffset = {
-		m_size.x * GetPivot()->x,
-		m_size.y * GetPivot()->y
+		m_size.x * 0.5f,
+		m_size.y * 0.5f
 	};
+	if (auto pivot = GetPivot()) {
+		pivotOffset = {
+			m_size.x * pivot->x,
+			m_size.y * pivot->y
+		};
+	}
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -80,6 +87,16 @@ void BoxComponent::Render()
 
 	context->SetTransform(view);
 	context->DrawRectangle(D2D1::RectF(0, 0, m_size.x, m_size.y), m_pBrush.Get(), 5.0f);
+}
+
+float BoxComponent::GetSizeX()
+{
+	return m_size.x;
+}
+
+float BoxComponent::GetSizeY()
+{
+	return m_size.y;
 }
 
 void BoxComponent::SetColor(const FColor& color)

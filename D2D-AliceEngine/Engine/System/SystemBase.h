@@ -9,12 +9,12 @@ public:
 	~SystemBase() {}
 
 public:
-	void Regist(const std::weak_ptr<Component>& _component)
+	void Regist(const WeakObjectPtr<Component>& _component)
 	{
 		m_Components.emplace_back(_component);
 	}
 
-	void UnRegist(std::weak_ptr<Component>&& _component)
+	void UnRegist(WeakObjectPtr<Component>&& _component)
 	{
 		for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
 		{
@@ -35,6 +35,6 @@ public:
 	}
 
 protected:
-	std::vector<std::weak_ptr<Component>> m_Components;
+	std::vector<WeakObjectPtr<Component>> m_Components;
 };
 

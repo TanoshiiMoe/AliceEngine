@@ -15,7 +15,7 @@ public:
 	virtual void UnInitialize();
 	virtual void Update();
 
-	std::weak_ptr<Scene> m_currentScene;	// 현재 씬
+	Scene* m_currentScene;	// 현재 씬
 
 	Scene* GetWorld();
 	static Camera* GetCamera();
@@ -25,45 +25,45 @@ public:
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
 
-		std::shared_ptr<T> createdObj = std::make_shared<T>();
+		std::unique_ptr<T> createdObj = std::make_unique<T>();
 
 		createdObj->SetName(NewobjectName);
 		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
+		T* rawPointer = createdObj.get();
+		GetInstance().m_scenes.emplace(createdObj->GetUUID(), std::move(createdObj));
 
-		auto result = GetInstance().m_scenes.emplace(createdObj->GetUUID(), createdObj);
-
-		return createdObj.get();
+		return rawPointer;
 	}
 
-	static std::weak_ptr<Scene> GetUUIDFromObjectName(const std::wstring& name)
+	static WeakObjectPtr<Scene> GetUUIDFromObjectName(const std::wstring& name)
 	{
 		// 이름 기준으로 찾기
 		for (auto& scenePair : GetInstance().m_scenes)
 		{
-			std::weak_ptr<Scene> scene = scenePair.second;
-			if (scene.lock()->GetName() == name)
+			if (WeakObjectPtr<Scene> sceneWeak = scenePair.second.get())
 			{
-				return scene;
+				if (sceneWeak->GetName() == name)
+				{
+					return sceneWeak;
+				}
 			}
 		}
-		return std::weak_ptr<Scene>();
+		return nullptr;
 	}
 
 	void PerformSceneChange(const std::wstring& NewobjectName)
 	{
-		std::weak_ptr<Scene> searchedScene = GetUUIDFromObjectName(NewobjectName);
-
-		if (searchedScene.lock())
+		if (WeakObjectPtr<Scene> searchedScene = GetUUIDFromObjectName(NewobjectName))
 		{
-			if (m_currentScene.lock())	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
+			if (WeakObjectPtr<Scene> weak = m_currentScene)	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
 			{
-				m_currentScene.lock()->OnExit();
-				m_currentScene.lock()->Release();
+				weak->OnExit();
+				weak->Release();
 				SceneManager::GetInstance().GetCamera()->Release();
 			}
-			m_currentScene = searchedScene;
-			m_currentScene.lock()->Initialize();
-			m_currentScene.lock()->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
+			m_currentScene = searchedScene.Get();
+			m_currentScene->Initialize();
+			m_currentScene->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
 			SceneManager::GetInstance().GetCamera()->Initialize();
 		}
 	}
@@ -74,6 +74,6 @@ public:
 	}
 
 private:
-	std::unordered_map<std::wstring, std::shared_ptr<Scene>> m_scenes;
+	std::unordered_map<std::wstring, std::unique_ptr<Scene>> m_scenes;
 	std::wstring m_nextSceneName;
 };

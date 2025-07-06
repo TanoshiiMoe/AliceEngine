@@ -2,7 +2,9 @@
 #include "pch.h"
 #include <Core/Singleton.h>
 
-class Component;
+struct ViewRect { float minX, maxX, minY, maxY; };
+
+class RenderComponent;
 using namespace Define;
 class D2DRenderManager : public Singleton<D2DRenderManager>
 {
@@ -11,9 +13,9 @@ public:
 	~D2DRenderManager();
 
 	// 렌더링 대기열
-	std::vector<std::vector<std::weak_ptr<Component>>> m_renderers;
+	std::vector<std::vector<WeakObjectPtr<RenderComponent>>> m_renderers;
 
-	void AddRenderer(std::weak_ptr<Component> renderer);
+	void AddRenderer(WeakObjectPtr<RenderComponent> renderer);
 
 	static ID2D1DeviceContext7* GetD2DDevice();
 
@@ -23,8 +25,10 @@ public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
 	void Render();
+	ViewRect GetCameraView();
+	bool CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view);
 
-	static bool RenderSortCompare(const std::weak_ptr<Component>& a, const std::weak_ptr<Component>& b);
+	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
 
 	void GetApplicationSize(int& width, int& height);
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수

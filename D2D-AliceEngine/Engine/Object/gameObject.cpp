@@ -14,45 +14,50 @@ gameObject::gameObject(const FVector2& position = FVector2(0.0f), const float& r
 
 gameObject::~gameObject()
 {
-	for (std::weak_ptr<Component>&& comp : m_Components)
+	for (auto& component : m_components)
 	{
-		comp.lock()->OnDestroy();
+		if (WeakObjectPtr<Component> comp = component)
+		{
+			comp.lock()->OnDestroy();
+			delete component;
+		}
 	}
-	m_Components.clear();
-	delete stateMachine;
+	m_components.clear();
+	m_transformComponent.reset();
 }
 
 void gameObject::OnStart()
 {
-	for (std::weak_ptr<Component>&& comp : m_Components)
+	for (auto& component : m_components)
 	{
-		comp.lock()->OnStart();
+		if (WeakObjectPtr<Component> comp = component)
+			comp.lock()->OnStart();
 	}
 }
 
 void gameObject::OnEnd()
 {
-	for (std::weak_ptr<Component>&& comp : m_Components)
+	for (auto& component : m_components)
 	{
-		comp.lock()->OnEnd();
+		if (WeakObjectPtr<Component> comp = component)
+		{
+			comp.lock()->OnEnd();
+		}
+		delete component;
 	}
-	m_Components.clear();
+	m_components.clear();
 }
 
 void gameObject::Initialize()
 {
 	m_transformComponent = AddComponentByWeak<TransformComponent>();
 	m_transformComponent.lock()->SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.0f));
-
-	stateMachine = new FiniteStateMachine();
 }
 
 void gameObject::Initialize(const FVector2& position = FVector2(0.0f), const float& rotation = 0.0f, const FVector2& scale = FVector2(1.0f), const FVector2& pivot = FVector2(0.0f))
 {
 	m_transformComponent = AddComponentByWeak<TransformComponent>();
 	m_transformComponent.lock()->SetTransform(position, rotation, scale, pivot);
-
-	stateMachine = new FiniteStateMachine();
 }
 
 void gameObject::AddChildObject(const gameObject* obj)
@@ -62,7 +67,7 @@ void gameObject::AddChildObject(const gameObject* obj)
 
 void gameObject::Update()
 {
-	stateMachine->Update();
+
 }
 
 void gameObject::Release()

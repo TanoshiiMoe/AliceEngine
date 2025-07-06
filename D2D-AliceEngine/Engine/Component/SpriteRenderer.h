@@ -17,6 +17,9 @@ public:
 	void Release() override;
 	void Render() override;
 
+	virtual float GetSizeX() override;
+	virtual float GetSizeY() override;
+
 	FVector2 GetSize();
 
 	std::wstring filePath; // 파일의 경로

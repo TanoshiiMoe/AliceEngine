@@ -19,6 +19,9 @@ public:
 	void Release() override;
 	void Render() override;
 
+	virtual float GetSizeX() override;
+	virtual float GetSizeY() override;
+
 	ComPtr<IDWriteTextLayout> m_layout;
 	ComPtr<IDWriteTextFormat> m_dWriteTextFormat;
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
@@ -26,6 +29,7 @@ public:
 	void InitializeFormat();
 	void InitializeColor();
 	void InitializeLayout();
+
 	void SetTextAlignment(ETextFormat format);
 	inline std::wstring& GetText() { return m_content; }
 	void SetText(const std::wstring& content);
@@ -57,5 +61,8 @@ public:
 	FColor m_color;
 	std::wstring m_font = L"Consolas";
 	float m_fontSize = 24.0f;
+
+	DWRITE_TEXT_METRICS m_metrics{};
+	bool m_metricsDirty = true;
 };
 

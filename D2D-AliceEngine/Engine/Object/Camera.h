@@ -18,8 +18,13 @@ public:
 	void Update();
 	void Release();
 
+	FVector2 GetScale();
+	void SetScale(const FVector2& scale);
+
 	void SetPosition(const float& _x, const float& _y);
 	FVector2 GetPosition();
+	float GetPositionX();
+	float GetPositionY();
 
 	void SetRotation(const float& _val);
 
@@ -28,7 +33,10 @@ public:
 
 	void SetOwner(gameObject* obj);
 	void ClearOwner();
+
+	void SetFieldOfView(float& InFieldOfView) { fieldOfView = InFieldOfView; }
+	float fieldOfView = 1.0f;
 	gameObject* owner = nullptr;
-	std::shared_ptr<Transform> m_transform;
+	std::unique_ptr<Transform> m_transform;
 };
 

@@ -16,7 +16,10 @@ Scene::Scene()
 	RenderSystem::GetInstance().Initialize();
 	for (auto& object : m_objects)
 	{
-		object.second.get()->Initialize();
+		if (WeakObjectPtr<gameObject> weak = object.second.get())
+		{
+			weak->Initialize();
+		}
 	}
 	m_mainCamera = nullptr;
 	m_mainCamera = new Camera();
@@ -37,6 +40,7 @@ void Scene::Release()
 {
 	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 	{
+		it->second.get()->Release();
 		it->second.reset();
 	}
 	m_objects.clear();
@@ -48,14 +52,7 @@ void Scene::Update()
 {
 	UpdateTaskManager::GetInstance().StartFrame();
 	UpdateTaskManager::GetInstance().TickAll();
-
 	VisibleMemoryInfo();
-
-	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
-	{
-		it->second->Update();
-	}
-
 	UpdateTaskManager::GetInstance().EndFrame();
 }
 

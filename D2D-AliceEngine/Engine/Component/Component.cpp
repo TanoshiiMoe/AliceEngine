@@ -34,12 +34,12 @@ Transform* Component::GetTransform() const
 {
 	if (!owner.expired()) 
 		return owner.lock()->transform()->m_worldTransform;
-	return new Transform();
+	return nullptr;
 }
 
 FVector2* Component::GetPivot() const
 {
 	if (!owner.expired())
 		return owner.lock()->transform()->GetPivot();
-	return new FVector2();
+	return nullptr;
 }

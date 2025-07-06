@@ -49,10 +49,10 @@ struct FTickContext
 
 struct UpdateWrapper
 {
-	std::weak_ptr<ITickable> Target;
+	WeakObjectPtr<ITickable> Target;
 	std::function<void(const float&)> TickFunc;
 
-	UpdateWrapper(std::weak_ptr<ITickable> _Target, std::function<void(const float&)> _TickFunc)
+	UpdateWrapper(WeakObjectPtr<ITickable> _Target, std::function<void(const float&)> _TickFunc)
 		: Target(_Target), TickFunc(_TickFunc)
 	{
 	}
@@ -64,7 +64,7 @@ public:
 	std::unordered_map<Define::ETickingGroup, std::vector<UpdateWrapper>> m_TickLists;
 	FTickContext Context;
 
-	void Enque(std::weak_ptr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc)
+	void Enque(WeakObjectPtr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc)
 	{
 		m_TickLists[InGroup].emplace_back(InTarget, TickFunc);
 	}
@@ -80,12 +80,11 @@ public:
 		for (int group = 0; group < static_cast<int>(Define::ETickingGroup::TG_MAX); ++group)
 		{
 			Context.TickGroup = static_cast<Define::ETickingGroup>(group);
-			auto& TickList = m_TickLists[Context.TickGroup];
 
 			// 소멸된 객체면 TickList를 삭제하고 it는 그 자리에 그대로 있는다
 			// 아니라면 it는 계속 탐색.
 			// swap-and-pop을 고려하고 만든 코드
-			for (auto it = TickList.begin(); it != TickList.end(); )
+			for (auto it = m_TickLists[Context.TickGroup].begin(); it != m_TickLists[Context.TickGroup].end(); )
 			{
 				if (auto sp = it->Target.lock())
 				{
@@ -94,7 +93,7 @@ public:
 				}
 				else
 				{
-					it = TickList.erase(it); // 소멸된 객체 제거
+					it = m_TickLists[Context.TickGroup].erase(it); // 소멸된 객체 제거
 				}
 			}
 		}

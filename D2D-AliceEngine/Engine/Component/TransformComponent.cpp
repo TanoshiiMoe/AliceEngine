@@ -13,7 +13,7 @@ TransformComponent::TransformComponent()
 
 TransformComponent::~TransformComponent()
 {
-	TransformSystem::GetInstance().UnRegist(this->weak_from_this());
+	TransformSystem::GetInstance().UnRegist(WeakFromThis<Component>());
 	delete m_localTransform;
 	delete m_worldTransform;
 	m_localTransform = nullptr;
@@ -22,11 +22,11 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	TransformSystem::GetInstance().Regist(this->weak_from_this());
+	TransformSystem::GetInstance().Regist(WeakFromThis<Component>());
 	UpdateTaskManager::GetInstance().Enque(
-		weak_from_this(),
+		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_EndPhysics,
-		[weak = weak_from_this()](const float& dt)
+		[weak = WeakFromThis<ITickable>()](const float& dt)
 	{
 		if (auto sp = weak.lock())
 		{
@@ -80,15 +80,12 @@ void TransformComponent::SetTransform(const FVector2& position, const float& rot
 	SetPivot(pivot.x, pivot.y);
 }
 
-void TransformComponent::AddChildObject(std::weak_ptr<TransformComponent> child)
+void TransformComponent::AddChildObject(WeakObjectPtr<TransformComponent> child)
 {
 	auto childPtr = child.lock();
-	if (!childPtr) return; // nullptr üũ
-
-	auto self = std::dynamic_pointer_cast<TransformComponent>(this->weak_from_this().lock());
-	std::weak_ptr<TransformComponent> weakSelf = self;
-
-	childPtr->parent = weakSelf;
+	if (!childPtr) return; // nullptr
+	
+	childPtr->parent = WeakFromThis<TransformComponent>();
 	children.push_back(childPtr);
 }
 

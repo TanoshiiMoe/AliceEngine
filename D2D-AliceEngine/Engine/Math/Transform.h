@@ -23,6 +23,7 @@ public:
 	bool dirty = true;
 
 	Transform() : Translation{ 0.0f, 0.0f }, Rotation(0.0f), Scale{ 1.0f,1.0f } {}
+	~Transform() {}
 
 	D2D1_VECTOR_2F GetPosition() const
 	{

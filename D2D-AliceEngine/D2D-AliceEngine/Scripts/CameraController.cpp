@@ -21,12 +21,30 @@ void CameraController::Initialize()
 void CameraController::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	if (Input::IsKeyDown(VK_OEM_4))
+	{
+		//float fov = SceneManager::GetCamera()->fieldOfView;
+		//fov -= 5.0f * deltaSeconds;
+		//SceneManager::GetCamera()->SetFieldOfView(fov);
+
+		FVector2 pos = SceneManager::GetCamera()->GetScale() + 1.1 * deltaSeconds;
+		SceneManager::GetCamera()->SetScale(pos);
+	}
+	if (Input::IsKeyDown(VK_OEM_6))
+	{
+		//float fov = SceneManager::GetCamera()->fieldOfView;
+		//fov += 5.0f * deltaSeconds;
+		//SceneManager::GetCamera()->SetFieldOfView(fov);
+
+		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1 * deltaSeconds;
+		SceneManager::GetCamera()->SetScale(pos);
+	}
 }
 
 void CameraController::OnStart()
 {
 	m_camera = GetOwner();
-	m_camera->AddComponent<InputComponent>()->SetAction(m_camera, [this]() { Input(); });
+	m_camera->AddComponent<InputComponent>()->SetAction(m_camera->GetHandle(), [this]() { Input(); });
 }
 
 void CameraController::OnEnd()
