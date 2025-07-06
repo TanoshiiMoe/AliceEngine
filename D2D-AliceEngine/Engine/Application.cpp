@@ -64,7 +64,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void Application::Initialize()
 {
 	ObjectHandler::Create();
-	RenderSystem::Create();
 	ScriptSystem::Create();
 	InputSystem::Create();
 	TransformSystem::Create();
@@ -72,6 +71,7 @@ void Application::Initialize()
 	SceneManager::Create();
 	UpdateTaskManager::Create();
 	TimerManager::Create();
+	RenderSystem::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -146,7 +146,7 @@ void Application::Input()
 
 void Application::Render()
 {
-	D2DRenderManager::GetInstance().Render();
+	RenderSystem::GetInstance().Render();
 }
 
 void Application::Uninitialize()
