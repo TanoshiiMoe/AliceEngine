@@ -14,31 +14,38 @@ gameObject::gameObject(const FVector2& position = FVector2(0.0f), const float& r
 
 gameObject::~gameObject()
 {
-	for (auto& component : m_Components)
+	for (auto& component : m_components)
 	{
-		if(WeakObjectPtr<Component> comp = component.get())
+		if (WeakObjectPtr<Component> comp = component)
+		{
 			comp.lock()->OnDestroy();
+			delete component;
+		}
 	}
-	m_Components.clear();
+	m_components.clear();
+	m_transformComponent.reset();
 }
 
 void gameObject::OnStart()
 {
-	for (auto& component : m_Components)
+	for (auto& component : m_components)
 	{
-		if (WeakObjectPtr<Component> comp = component.get())
+		if (WeakObjectPtr<Component> comp = component)
 			comp.lock()->OnStart();
 	}
 }
 
 void gameObject::OnEnd()
 {
-	for (auto& component : m_Components)
+	for (auto& component : m_components)
 	{
-		if (WeakObjectPtr<Component> comp = component.get())
+		if (WeakObjectPtr<Component> comp = component)
+		{
 			comp.lock()->OnEnd();
+		}
+		delete component;
 	}
-	m_Components.clear();
+	m_components.clear();
 }
 
 void gameObject::Initialize()

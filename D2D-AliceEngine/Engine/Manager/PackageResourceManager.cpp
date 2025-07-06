@@ -48,7 +48,6 @@ void PackageResourceManager::UnloadData()
 	m_loadedBitmaps.clear();
 }
 
-// 해당 경로의 모든 자식을 재귀로 돌면서 bIsLoaded를 false로 설정합니다.
 void PackageResourceManager::UnloadData(std::wstring& path)
 {
 	if (m_preloadedPaths.find(path) != m_preloadedPaths.end())

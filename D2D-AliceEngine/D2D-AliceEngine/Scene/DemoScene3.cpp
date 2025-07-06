@@ -94,7 +94,7 @@ void DemoScene3::OnEnter()
 
 	m_widget4->transform()->SetPosition(0, 0);
 	m_widget4->AddComponent<TextRenderComponent>()->SetText(L" test");
-	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
 	m_widget4->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 600));
 	m_widget4->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 

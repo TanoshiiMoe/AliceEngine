@@ -2,6 +2,8 @@
 #include "pch.h"
 #include <Core/Singleton.h>
 
+struct ViewRect { float minX, maxX, minY, maxY; };
+
 class RenderComponent;
 using namespace Define;
 class D2DRenderManager : public Singleton<D2DRenderManager>
@@ -23,6 +25,8 @@ public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
 	void Render();
+	ViewRect GetCameraView();
+	bool CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view);
 
 	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
 

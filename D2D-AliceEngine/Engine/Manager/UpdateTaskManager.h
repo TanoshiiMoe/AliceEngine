@@ -80,12 +80,11 @@ public:
 		for (int group = 0; group < static_cast<int>(Define::ETickingGroup::TG_MAX); ++group)
 		{
 			Context.TickGroup = static_cast<Define::ETickingGroup>(group);
-			auto& TickList = m_TickLists[Context.TickGroup];
 
 			// 소멸된 객체면 TickList를 삭제하고 it는 그 자리에 그대로 있는다
 			// 아니라면 it는 계속 탐색.
 			// swap-and-pop을 고려하고 만든 코드
-			for (auto it = TickList.begin(); it != TickList.end(); )
+			for (auto it = m_TickLists[Context.TickGroup].begin(); it != m_TickLists[Context.TickGroup].end(); )
 			{
 				if (auto sp = it->Target.lock())
 				{
@@ -94,7 +93,7 @@ public:
 				}
 				else
 				{
-					it = TickList.erase(it); // 소멸된 객체 제거
+					it = m_TickLists[Context.TickGroup].erase(it); // 소멸된 객체 제거
 				}
 			}
 		}

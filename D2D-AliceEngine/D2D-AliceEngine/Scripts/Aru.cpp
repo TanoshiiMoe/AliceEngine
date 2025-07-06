@@ -164,7 +164,7 @@ void Aru::Input()
 	}
 	if (Input::IsKeyPressed(VK_9))
 	{
-		//for (int i = 0; i < 20000; i++)
+		//for (int i = 0; i < 5000; i++)
 		//{
 		//	GetWorld()->RemoveObjectByName(L"gun");
 		//}
@@ -174,7 +174,7 @@ void Aru::Input()
 	{
 		for (int i = 0; i < 5000; i++)
 		{
-			gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
+			gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.1f, 0.5f), FRandom::GetRandomInRange(0.1f, 0.5f)), FVector2(0.5f));
 			gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
 		}
 	}

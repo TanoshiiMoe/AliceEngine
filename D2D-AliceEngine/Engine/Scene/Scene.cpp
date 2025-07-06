@@ -40,6 +40,7 @@ void Scene::Release()
 {
 	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 	{
+		it->second.get()->Release();
 		it->second.reset();
 	}
 	m_objects.clear();

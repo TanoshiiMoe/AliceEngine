@@ -15,6 +15,9 @@ public:
 	void Release() override;
 	void Render() override;
 
+	virtual float GetSizeX() override;
+	virtual float GetSizeY() override;
+
 	void SetSize(const FVector2& _size)
 	{
 		m_size = _size;		

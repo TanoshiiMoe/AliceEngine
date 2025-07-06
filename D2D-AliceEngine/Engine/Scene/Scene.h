@@ -60,7 +60,8 @@ public:
 	bool RemoveObjectByName(const std::wstring& objectName)
 	{
 		auto it = m_nameToUUIDs.find(objectName);
-		if (it != m_nameToUUIDs.end()) {
+		if (it != m_nameToUUIDs.end()) 
+		{
 			// 예: 첫번째 UUID 삭제 (다른 방식도 가능)
 			auto uuidIt = it->second.begin();
 			m_objects.erase(*uuidIt);
@@ -72,11 +73,15 @@ public:
 		return false;
 	}
 
-	bool RemoveAllObjectsByName(const std::wstring& name) {
+	bool RemoveAllObjectsByName(const std::wstring& name) 
+	{
 		auto it = m_nameToUUIDs.find(name);
-		if (it != m_nameToUUIDs.end()) {
+		if (it != m_nameToUUIDs.end()) 
+		{
 			for (const auto& uuid : it->second)
+			{
 				m_objects.erase(uuid);
+			}
 			m_nameToUUIDs.erase(it);
 			return true;
 		}

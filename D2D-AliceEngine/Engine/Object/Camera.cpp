@@ -6,7 +6,7 @@
 
 void Camera::Initialize()
 {
-	m_transform = std::make_shared<Transform>();
+	m_transform = std::make_unique<Transform>();
 }
 
 void Camera::Update()
@@ -16,8 +16,7 @@ void Camera::Update()
 		SetPosition(
 			owner->transform()->m_localTransform->GetPosition().x,
 			owner->transform()->m_localTransform->GetPosition().y
-		)
-;
+		);
 	}
 }
 
@@ -25,6 +24,19 @@ void Camera::Release()
 {
 	m_transform = nullptr;
 	ClearOwner();
+}
+
+FVector2 Camera::GetScale()
+{
+	return FVector2(m_transform->GetScale().x, m_transform->GetScale().y);
+}
+
+void Camera::SetScale(const FVector2& scale)
+{
+	// 0 이하 값은 0.0001로 고정 (또는 0으로 고정해도 됨)
+	float safeX = scale.x > 0.0f ? scale.x : 0.0001f;
+	float safeY = scale.y > 0.0f ? scale.y : 0.0001f;
+	m_transform->SetScale(safeX, safeY);
 }
 
 void Camera::SetPosition(const float& _x, const float& _y)
@@ -35,6 +47,16 @@ void Camera::SetPosition(const float& _x, const float& _y)
 FVector2 Camera::GetPosition()
 {
 	return FVector2(m_transform->GetPosition().x, m_transform->GetPosition().y);
+}
+
+float Camera::GetPositionX()
+{
+	return m_transform->GetPosition().x;
+}
+
+float Camera::GetPositionY()
+{
+	return m_transform->GetPosition().y;
 }
 
 void Camera::SetRotation(const float& _val)

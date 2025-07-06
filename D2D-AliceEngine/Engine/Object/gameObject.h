@@ -24,25 +24,24 @@ public:
 	* @ Component를 관리하는 로직입니다.
 	*/
 
-	std::vector<std::unique_ptr<Component>> m_Components;
+	std::vector<Component*> m_components;
 
 	template<class T, typename... Args>
 	T* AddComponent(Args&&... args)
 	{	
-		std::unique_ptr<T> createdComp = std::make_unique<T>(std::forward<Args>(args)...);
+		T* createdComp = new T(std::forward<Args>(args)...);
 		createdComp->Initialize();
 		createdComp->SetOwner(WeakFromThis<gameObject>());
-		T* rawPtr = createdComp.get();
-		m_Components.emplace_back(std::move(createdComp));
+		m_components.emplace_back(createdComp);
 
-		return rawPtr;
+		return createdComp;
 	}
 
 	template<class T>
 	std::vector<T*> GetComponents()
 	{
 		std::vector<T*> container;
-		for (auto component : m_Components)
+		for (auto component : m_components)
 		{
 			if (auto castedComponent = dynamic_cast<T*>(component.get()))
 			{
@@ -55,10 +54,10 @@ public:
 	template<class T>
 	T* GetComponent()
 	{
-		for (auto& comp : m_Components)
+		for (auto& comp : m_components)
 		{
 			// shared_ptr<Component> → shared_ptr<T>로 캐스팅
-			if (auto casted = dynamic_cast<T*>(comp.get()))
+			if (auto casted = dynamic_cast<T*>(comp))
 			{
 				return casted; // raw pointer 반환
 			}
@@ -70,12 +69,13 @@ public:
 	template<class T>
 	bool RemoveComponent(T* targetComponent)
 	{
-		for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
+		for (auto it = m_components.begin(); it != m_components.end(); ++it)
 		{
-			if ((*it).get() == targetComponent)
+			if ((*it) == targetComponent)
 			{
 				(*it)->OnDestroy();
-				m_Components.erase(it);
+				m_components.erase(it);
+				delete targetComponent;
 				return true;
 			}
 		}
@@ -85,19 +85,17 @@ public:
 	template<class T, typename... Args>
 	WeakObjectPtr<T> AddComponentByWeak(Args&&... args)
 	{
-		std::unique_ptr<T> createdComp = std::make_unique<T>(std::forward<Args>(args)...);
+		T* createdComp = new T(std::forward<Args>(args)...);
 		createdComp->Initialize();
 		createdComp->SetOwner(WeakFromThis<gameObject>());
-		T* rawPtr = createdComp.get();
-		m_Components.emplace_back(std::move(createdComp));
-		
-		return WeakObjectPtr<T>(rawPtr);
+		m_components.emplace_back(createdComp);
+		return WeakObjectPtr<T>(createdComp);
 	}
 
 	template<class T>
 	WeakObjectPtr<T> GetComponentByWeak()
 	{
-		for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
+		for (auto it = m_components.begin(); it != m_components.end(); ++it)
 		{
 			if (T* component = dynamic_cast<T*>((*it).get()))
 			{

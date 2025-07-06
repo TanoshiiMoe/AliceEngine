@@ -19,6 +19,13 @@ namespace Define
 	static const std::wstring BASE_EXTENSION_PATH = L"Extension\\";
 	static const float PI = 3.14159265358979323846264f;
 
+	enum class EDrawType
+	{
+		ScreenSpace,
+		WorldSpace,
+		Max
+	};
+
 	enum class ETextFormat
 	{
 		TopLeft,
@@ -40,7 +47,7 @@ namespace Define
 	};
 	enum class ERenderLayer
 	{
-		AnimationComponent,
+		VideoComponent,
 		SpriteComponent,
 		Animator,
 		BoxComponent,
@@ -118,3 +125,6 @@ namespace Define
 #define VK_7 0x37
 #define VK_8 0x38
 #define VK_9 0x39 
+
+#define VK_OEM_4 0xDB  // [
+#define VK_OEM_6 0xDD  // ]

@@ -15,6 +15,7 @@ TextRenderComponent::TextRenderComponent()
 	InitializeFormat();
 	InitializeColor();
 	InitializeLayout();
+	drawType = EDrawType::ScreenSpace;
 }
 
 TextRenderComponent::TextRenderComponent(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
@@ -63,18 +64,21 @@ void TextRenderComponent::Render()
 	__super::Render();
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	if (!context || m_content.empty()) return;
-
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
 
-	// 텍스트 크기 측정
-	DWRITE_TEXT_METRICS metrics{};
-	m_layout->GetMetrics(&metrics);
-
+	InitializeLayout();
 	// 피벗 보정
 	D2D1_POINT_2F pivotOffset = {
-		metrics.width * GetPivot()->x,
-		metrics.height * GetPivot()->y
+		m_metrics.width * 0.5f,
+		m_metrics.height * 0.5f
 	};
+	if (auto pivot = GetPivot()) {
+		pivotOffset = {
+			m_metrics.width * pivot->x,
+			m_metrics.height * pivot->y
+		};
+	}
+
 	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
 
 	// 로컬 변환 먼저 적용 (내부 transform + pivotAdjust)
@@ -110,9 +114,21 @@ void TextRenderComponent::Render()
 		m_content.c_str(),
 		static_cast<UINT32>(m_content.length()),
 		m_dWriteTextFormat.Get(),
-		D2D1::RectF(0, 0, metrics.width, metrics.height),
+		D2D1::RectF(0, 0, m_metrics.width, m_metrics.height),
 		m_pBrush.Get()
 	);
+}
+
+float TextRenderComponent::GetSizeX()
+{
+	InitializeLayout();
+	return m_metrics.width;
+}
+
+float TextRenderComponent::GetSizeY()
+{
+	InitializeLayout();
+	return m_metrics.height;
 }
 
 void TextRenderComponent::InitializeFormat()
@@ -144,15 +160,19 @@ void TextRenderComponent::InitializeColor()
 
 void TextRenderComponent::InitializeLayout()
 {
-	m_layout = nullptr;
-	HRESULT hr = D2DRenderManager::GetInstance().m_dWriteFactory->CreateTextLayout(
-		m_content.c_str(),
-		static_cast<UINT32>(m_content.length()),
-		m_dWriteTextFormat.Get(),
-		FLT_MAX, FLT_MAX,
-		&m_layout
-	);
-	if (FAILED(hr)) return;
+	if (m_metricsDirty) {
+		m_layout = nullptr;
+		HRESULT hr = D2DRenderManager::GetInstance().m_dWriteFactory->CreateTextLayout(
+			m_content.c_str(),
+			static_cast<UINT32>(m_content.length()),
+			m_dWriteTextFormat.Get(),
+			FLT_MAX, FLT_MAX,
+			&m_layout
+		);
+		m_layout->GetMetrics(&m_metrics);
+		m_metricsDirty = false;
+		if (FAILED(hr)) return;
+	}
 }
 
 void TextRenderComponent::SetTextAlignment(ETextFormat format)
@@ -215,25 +235,25 @@ void TextRenderComponent::SetTextAlignment(ETextFormat format)
 void TextRenderComponent::SetText(const std::wstring& content)
 {
 	m_content = content;
-	InitializeLayout();
+	m_metricsDirty = true;
 }
 
 void TextRenderComponent::SetText(const float& val)
 {
 	m_content = std::to_wstring(val);
-	InitializeLayout();
+	m_metricsDirty = true;
 }
 
 void TextRenderComponent::SetColor(const FColor& color)
 {
 	m_color = color;
-	InitializeColor();
+	m_metricsDirty = true;
 }
 
 void TextRenderComponent::SetFontSize(const float& _size)
 {
 	m_fontSize = _size;
-	InitializeFormat();
+	m_metricsDirty = true;
 }
 
 void TextRenderComponent::SetPosition(const FVector2& pos)

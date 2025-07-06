@@ -56,6 +56,9 @@ public:
 	virtual void Release() override;
 	virtual void Render() override;
 
+	virtual float GetSizeX() override;
+	virtual float GetSizeY() override;
+
 	// 애니메이션 사전 준비 함수
 	void PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<AnimationClip> clip);
 	void LoadSpriteSheet(const std::wstring& filePath);

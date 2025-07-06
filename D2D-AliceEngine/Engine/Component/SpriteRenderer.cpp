@@ -49,13 +49,20 @@ void SpriteRenderer::Render()
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	Camera* camera = SceneManager::GetCamera();
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
+
 	D2D1_POINT_2F pivotOffset = {
-		bmpSize.width * GetPivot()->x,
-		bmpSize.height * GetPivot()->y
+		bmpSize.width * 0.5f,
+		bmpSize.height * 0.5f
 	};
+	if (auto pivot = GetPivot()) {
+		pivotOffset = {
+			bmpSize.width * pivot->x,
+			bmpSize.height * pivot->y
+		};
+	}
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = GetTransform()->ToMatrix();
+	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -76,6 +83,20 @@ void SpriteRenderer::Render()
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
 	context->DrawBitmap(m_bitmap.get());
+}
+
+float SpriteRenderer::GetSizeX()
+{
+	if (!m_bitmap.get()) return 0;
+	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
+	return bmpSize.width;
+}
+
+float SpriteRenderer::GetSizeY()
+{
+	if (!m_bitmap.get()) return 0;
+	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
+	return bmpSize.height;
 }
 
 FVector2 SpriteRenderer::GetSize()
