@@ -50,13 +50,10 @@ void DemoScene2::OnEnter()
 		L" [화살표 상,하] : 카메라 위,아래 이동 \n"
 		L" [화살표 좌/우] : 카메라 좌,우 이동 \n"
 		L" [1/2] : D2D, Unity 좌표계 \n"
-		L" [[/]] : 카메라 축소, 확대\n"
+		L" [ [ / ] ] : 카메라 축소, 확대\n"
 		L" [Q] : 카메라를 아루에게 붙이기 \n"
 		L" [E] : 카메라를 떼기 \n"
 		L" * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n"
-		L"\n"
-		L" <배경 실행> \n"
-		L" [P] : 배경 실행, 중지 \n"
 		L"\n"
 		L" <아루> \n"
 		L" [5,6] : 무기 스폰, 무기 파괴 \n"
@@ -67,12 +64,13 @@ void DemoScene2::OnEnter()
 		L" [T] : 아루가 아루2에게 데미지 주기 \n"
 		L" [Y] : 아루 5 회복하기 \n"
 		L" [U] : 아루 최대체력 10 늘리기 \n"
+		L"\n"
 		L" [G] : 아루2가 아루에게 데미지 주기 \n"
 		L" [H] : 아루2 7 회복하기 \n"
 		L" [J] : 아루 최대체력 15 늘리기"
 	);
 	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 50));
-	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
 	m_widget2->transform()->SetPosition(0, 0);

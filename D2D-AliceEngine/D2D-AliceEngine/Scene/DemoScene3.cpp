@@ -76,7 +76,7 @@ void DemoScene3::OnEnter()
 		L" [E] : 카메라를 떼기 \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 100));
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 100));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 

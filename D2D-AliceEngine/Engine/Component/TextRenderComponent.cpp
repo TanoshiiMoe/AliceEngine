@@ -254,6 +254,7 @@ void TextRenderComponent::SetFontSize(const float& _size)
 {
 	m_fontSize = _size;
 	m_metricsDirty = true;
+	InitializeFormat();
 }
 
 void TextRenderComponent::SetPosition(const FVector2& pos)
