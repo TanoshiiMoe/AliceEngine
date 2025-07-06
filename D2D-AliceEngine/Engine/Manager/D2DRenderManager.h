@@ -2,6 +2,12 @@
 #include "pch.h"
 #include <Core/Singleton.h>
 
+/*
+* @briefs : 
+	렌더에 필요한 변수와 함수들이 모여있는 싱글톤 매니저입니다.
+	RenderSystem에서 렌더링합니다.
+*/
+
 using namespace Define;
 class D2DRenderManager : public Singleton<D2DRenderManager>
 {
