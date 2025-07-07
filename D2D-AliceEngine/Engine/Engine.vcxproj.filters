@@ -75,9 +75,6 @@
     <ClInclude Include="System\SystemBase.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="System\TransformSystem.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="Object\UObject.h">
       <Filter>Object</Filter>
     </ClInclude>
@@ -222,9 +219,6 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="System\ScriptSystem.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\TransformSystem.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Object\UObject.cpp">

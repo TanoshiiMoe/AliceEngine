@@ -12,7 +12,6 @@
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
-#include <System/TransformSystem.h>
 #include <Scene/Scene.h>
 #include <Object/Camera.h>
 
@@ -32,7 +31,6 @@ Application::~Application()
 	RenderSystem::Destroy();
 	ScriptSystem::Destroy();
 	InputSystem::Destroy();
-	TransformSystem::Destroy();
 	SceneManager::Destroy();
 }
 
@@ -66,7 +64,6 @@ void Application::Initialize()
 	ObjectHandler::Create();
 	ScriptSystem::Create();
 	InputSystem::Create();
-	TransformSystem::Create();
 	D2DRenderManager::Create();
 	SceneManager::Create();
 	UpdateTaskManager::Create();
@@ -157,7 +154,6 @@ void Application::Uninitialize()
 	RenderSystem::GetInstance().UnRegistAll();
 	ScriptSystem::GetInstance().UnRegistAll();
 	InputSystem::GetInstance().UnRegistAll();
-	TransformSystem::GetInstance().UnRegistAll();
 	CoUninitialize();
 }
 

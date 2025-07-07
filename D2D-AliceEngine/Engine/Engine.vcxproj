@@ -182,7 +182,6 @@
     <ClInclude Include="Core\Singleton.h" />
     <ClInclude Include="Math\Transform.h" />
     <ClInclude Include="Component\TransformComponent.h" />
-    <ClInclude Include="System\TransformSystem.h" />
     <ClInclude Include="Math\TColor.h" />
     <ClInclude Include="Manager\UpdateTaskManager.h" />
     <ClInclude Include="Core\Tickable.h" />
@@ -236,7 +235,6 @@
     <ClCompile Include="Core\Singleton.cpp" />
     <ClCompile Include="Math\Transform.cpp" />
     <ClCompile Include="Component\TransformComponent.cpp" />
-    <ClCompile Include="System\TransformSystem.cpp" />
     <ClCompile Include="Math\TColor.cpp" />
     <ClCompile Include="Manager\UpdateTaskManager.cpp" />
     <ClCompile Include="Core\Tickable.cpp" />

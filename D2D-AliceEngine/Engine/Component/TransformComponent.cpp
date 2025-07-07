@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "TransformComponent.h"
-#include <System/TransformSystem.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Math/Transform.h>
 
@@ -13,7 +12,6 @@ TransformComponent::TransformComponent()
 
 TransformComponent::~TransformComponent()
 {
-	TransformSystem::GetInstance().UnRegist(WeakFromThis<Component>());
 	delete m_localTransform;
 	delete m_worldTransform;
 	m_localTransform = nullptr;
@@ -22,7 +20,6 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	TransformSystem::GetInstance().Regist(WeakFromThis<Component>());
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_EndPhysics,
