@@ -4,7 +4,7 @@
 
 using namespace Microsoft::WRL;
 
-class ID2D1Bitmap1;
+struct ID2D1Bitmap1;
 class SpriteRenderer : public RenderComponent
 {
 public:

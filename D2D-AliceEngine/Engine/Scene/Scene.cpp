@@ -68,7 +68,7 @@ void Scene::OnEnter()
 
 	int x = 0, y = 0;
 	D2DRenderManager::GetInstance().GetApplicationSize(x, y);
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(x * 0.7, y * 0.1));
+	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(x * 0.7f, y * 0.1f));
 }
 
 void Scene::OnExit()

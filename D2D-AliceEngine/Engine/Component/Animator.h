@@ -41,10 +41,10 @@ m_animator->Play();
 * 
 */
 
-struct SpriteRenderer;
 struct AnimationClip;
 struct SpriteSheet;
-class ID2D1Bitmap1;
+class SpriteRenderer;
+struct ID2D1Bitmap1;
 class Animator : public RenderComponent
 {
 public:

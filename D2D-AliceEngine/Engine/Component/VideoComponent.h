@@ -12,7 +12,7 @@ using namespace Microsoft::WRL;
 class VideoComponent : public RenderComponent
 {
 public:
-	VideoComponent() {}
+	VideoComponent();
 	~VideoComponent();
 
 	void Initialize() override;

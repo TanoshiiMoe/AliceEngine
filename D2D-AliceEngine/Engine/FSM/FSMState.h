@@ -6,7 +6,7 @@
 * @brief : 이 클래스를 상속받아서 IdleState, AttackState등의 원하는 이름의 스테이트를 만듭니다.
 */
 class Animator;
-class AnimationClip;
+struct AnimationClip;
 class FiniteStateMachine;
 class FSMState : public UObjectBase
 {
@@ -23,8 +23,8 @@ public:
 	FiniteStateMachine* GetStateMachine();
 
 protected:
-	Animator* animator;
-	AnimationClip* motion;
-	FiniteStateMachine* owner;
+	Animator* animator = nullptr;
+	AnimationClip* motion = nullptr;
+	FiniteStateMachine* owner = nullptr;
 };
 

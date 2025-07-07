@@ -28,7 +28,7 @@
     <ClInclude Include="Resource.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="d2dengine_pch.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="DemoGameApp.h">
@@ -147,5 +147,6 @@
     <ClCompile Include="Animation\EnemyAnimatorInstance.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
+    <ClCompile Include="d2dengine_pch.cpp" />
   </ItemGroup>
 </Project>

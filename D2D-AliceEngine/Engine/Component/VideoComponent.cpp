@@ -13,6 +13,10 @@
 #include <Object/gameObject.h>
 #include <Object/Camera.h>
 
+VideoComponent::VideoComponent()
+{
+}
+
 VideoComponent::~VideoComponent()
 {
 	files.clear();
@@ -86,7 +90,7 @@ void VideoComponent::ReleaseFrames()
 void VideoComponent::LoadData(const std::wstring& path, const int& fps, const std::wstring& extension, const int& quality)
 {
 	fileDirPath = FileHelper::get_folder_path(Define::BASE_RESOURCE_PATH + path); // 비디오 파일 경로 저장
-	files = FFmpegHelper::GetFramesFromVideo(Define::BASE_RESOURCE_PATH + path, 12, extension, quality);
+	files = FFmpegHelper::GetFramesFromVideo(Define::BASE_RESOURCE_PATH + path, 12, extension, static_cast<float>(quality));
 	if (files.empty()) return;
 
 	m_fFPSTime = 1.0f / fps;
@@ -170,7 +174,7 @@ float VideoComponent::GetSizeX()
 {
 	if (m_bitmaps.empty() == false)
 	{
-		return bmpSize.width;
+		return static_cast<float>(bmpSize.width);
 	}
 	return 0;
 }
@@ -179,7 +183,7 @@ float VideoComponent::GetSizeY()
 {
 	if (m_bitmaps.empty() == false)
 	{
-		return bmpSize.height;
+		return static_cast<float>(bmpSize.height);
 	}
 	return 0;
 }
@@ -190,7 +194,7 @@ FVector2 VideoComponent::GetSize()
 	{
 		if (m_bitmaps[m_curClip])
 		{
-			return FVector2(bmpSize.width, bmpSize.height);
+			return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
 		}
 	}
 	return FVector2();

@@ -1,9 +1,9 @@
 #pragma once
-#include "stdafx.h"
 #include "DemoGameApp.h"
 #include "Scene/DemoScene.h"
 #include "Scene/DemoScene2.h"
 #include "Scene/DemoScene3.h"
+#include <Manager/SceneManager.h>
 
 DemoGameApp::DemoGameApp()
 {
