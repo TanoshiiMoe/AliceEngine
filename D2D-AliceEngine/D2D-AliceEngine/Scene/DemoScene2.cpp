@@ -144,3 +144,7 @@ void DemoScene2::aruInput()
 		m_aru->GetComponent<Aru>()->m_aruStat->SetStat("MAXHP", m_aru->GetComponent<Aru>()->m_aruStat->GetStat("MAXHP")+10);
 	}
 }
+
+void DemoScene2::CameraInput()
+{
+}
