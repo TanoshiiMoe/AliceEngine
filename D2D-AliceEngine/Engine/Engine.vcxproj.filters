@@ -40,6 +40,15 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{a280a50e-1364-4b47-8e1f-7c01d3862342}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Experimental">
+      <UniqueIdentifier>{4f196776-6856-486e-aad9-f6cc7c016d1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Experimental\Physics">
+      <UniqueIdentifier>{0dec12fa-a27a-4bb7-91e2-8b12eff0ec29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Experimental\Physics\Collission">
+      <UniqueIdentifier>{ca4d7bbf-2055-43a8-81dc-f789295092ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -183,6 +192,16 @@
     <ClInclude Include="Animation\AnimatorInstance.h">
       <Filter>Animation</Filter>
     </ClInclude>
+    <ClInclude Include="System\PhysicsSystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Experimental\Physics\AABB.h">
+      <Filter>Experimental\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Experimental\Physics\Collision\CollisionDetector.h">
+      <Filter>Experimental\Physics\Collission</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Collider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -323,5 +342,15 @@
     <ClCompile Include="Animation\AnimatorInstance.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
+    <ClCompile Include="System\PhysicsSystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Experimental\Physics\AABB.cpp">
+      <Filter>Experimental\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Experimental\Physics\Collision\CollisionDetector.cpp">
+      <Filter>Experimental\Physics\Collission</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Collider.cpp" />
   </ItemGroup>
 </Project>
