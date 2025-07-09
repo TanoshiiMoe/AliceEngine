@@ -4,11 +4,12 @@
 #include <Manager/D2DRenderManager.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Component/TransformComponent.h>
+#include <Component/BoxComponent.h>
 #include <Object/gameObject.h>
 
 Collider::Collider()
 {
-	
+
 }
 
 Collider::~Collider()
@@ -22,53 +23,58 @@ void Collider::Initialize()
 
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_DuringPhysics,
+		Define::ETickingGroup::TG_PrePhysics,
 		[weak = WeakFromThis<ITickable>()](const float& dt)
+	{
+		if (auto sp = weak.lock())
 		{
-			if (auto sp = weak.lock())
-			{
-				sp->Update(dt);
-			}
+			sp->Update(dt);
 		}
+	}
 	);
 }
 
 void Collider::Update(const float& deltaSeconds)
 {
-	if (bShowColliderBox == false) return;
-
-	DrawDebugAABBBox();
+	if (gameObject* owner = GetOwner())
+	{
+		FVector2 pos = owner->transform()->GetPosition();
+		if (WeakObjectPtr<BoxComponent> comp = boxComponent)
+		{
+			aabb.minVector.x = pos.x - comp->GetSizeX() / 2;
+			aabb.minVector.y = pos.y - comp->GetSizeY() / 2;
+			aabb.maxVector.x = pos.x + comp->GetSizeX() / 2;
+			aabb.maxVector.y = pos.y + comp->GetSizeY() / 2;
+		}
+	}
+	if (dirty)
+	{
+		dirty = false;
+	}
 }
 
 void Collider::Release()
 {
 }
 
-void Collider::SetAABBBoxSize(const FVector2& minVector, const FVector2& maxVector)
+void Collider::SetBoxSize(const FVector2& _size)
 {
-	aabb.minVector = minVector;
-	aabb.maxVector = maxVector;
-}
+	WeakObjectPtr<BoxComponent> comp = boxComponent;
+	if (comp.expired())
+	{
+		boxComponent = GetOwner()->AddComponent<BoxComponent>();
+		boxComponent->SetBoxType(Define::EBoxType::ColliderDebugBox);
+	}
+	boxComponent->SetColor(FColor::Red);
+	boxComponent->SetSize(_size);
+	boxComponent->SetThickness(3.0f);
 
-// Update때 박스 그려서 보여주기
-void Collider::DrawDebugAABBBox()
-{
 	if (gameObject* owner = GetOwner())
 	{
 		FVector2 pos = owner->transform()->GetPosition();
-		FVector2 size = aabb.GetSize() / 2;
-		const float startPosX = pos.x - size.x;
-		const float startPosY = pos.y - size.y;
-		const float ensPosX = pos.x + size.x;
-		const float ensPosY = pos.y + size.y;
-		D2DRenderManager::GetInstance().DrawDebugBox(startPosX, startPosY, ensPosX, ensPosY);
-	}
-}
-
-bool Collider::IsOverlap(Collider* other)
-{
-	if (WeakObjectPtr<Collider> otherWeak = other)
-	{
-
+		aabb.minVector.x = pos.x - _size.x / 2;
+		aabb.minVector.y = pos.y - _size.y / 2;
+		aabb.maxVector.x = pos.x + _size.x / 2;
+		aabb.maxVector.y = pos.y + _size.y / 2;
 	}
 }

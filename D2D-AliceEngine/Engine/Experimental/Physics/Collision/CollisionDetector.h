@@ -11,7 +11,9 @@ namespace Physics
 		FCollisionDetector() {};
 		~FCollisionDetector() {};
 
-		static bool BruteForceOverlapCheck(const std::vector<WeakObjectPtr<Collider>>& objects);
+		static void BruteForceOverlapCheck(const std::vector<WeakObjectPtr<Collider>>& objects);
+		static bool IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
+		static void PushOverlappedArea(Collider* a, Collider* b);
 	};
 
 	struct NodeEntry

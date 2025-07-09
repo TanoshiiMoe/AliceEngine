@@ -13,6 +13,7 @@
 #include <Animation/TextureLoader.h>
 #include <Animation/AnimationController.h>
 #include "../Animation/PlayerAnimatorInstance.h"
+#include <Component/Collider.h>
 
 void Player::Initialize()
 {
@@ -87,8 +88,9 @@ void Player::OnStart()
 	animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
 	animInstance->m_layer = 5;
 	animInstance->SetAnimatorController(&animController);
-
 	animInstance->OnStart();
+
+	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35,60));
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 }

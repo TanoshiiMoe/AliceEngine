@@ -12,6 +12,7 @@
 #include <Component/Animator.h>
 #include <FSM/FiniteStateMachine.h>
 #include <fsm/FSMState.h>
+#include <Component/Collider.h>
 
 void Enemy::Initialize()
 {
@@ -55,8 +56,9 @@ void Enemy::OnStart()
 	animInstance = m_owner->AddComponent<EnemyAnimatorInstance>();
 	animInstance->m_layer = 3;
 	animInstance->SetAnimatorController(&animController);
-
 	animInstance->OnStart();
+
+	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(50, 80));
 }
 
 void Enemy::OnEnd()

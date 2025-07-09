@@ -6,7 +6,7 @@
 *	@brief : 충돌을 감지하는 컴포넌트입니다.
 *	@details : SetAABBBoxSize() 함수를 실행해주어야 크기에 맞는 AABB 박스가 생깁니다.
 */
-
+class BoxComponent;
 class Collider : public Component
 {
 public:
@@ -17,8 +17,10 @@ public:
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
 
-	void SetAABBBoxSize(const FVector2& minVector, const FVector2& maxVector);
+	void SetBoxSize(const FVector2& _size);
 
-	bool bShowColliderBox = false;
 	FAABB aabb;
+	BoxComponent* boxComponent;
+
+	bool dirty = true;
 };

@@ -12,6 +12,7 @@
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
+#include <System/PhysicsSystem.h>
 #include <Scene/Scene.h>
 #include <Object/Camera.h>
 
@@ -32,6 +33,7 @@ Application::~Application()
 	ScriptSystem::Destroy();
 	InputSystem::Destroy();
 	SceneManager::Destroy();
+	PhysicsSystem::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -69,6 +71,7 @@ void Application::Initialize()
 	UpdateTaskManager::Create();
 	TimerManager::Create();
 	RenderSystem::Create();
+	PhysicsSystem::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로

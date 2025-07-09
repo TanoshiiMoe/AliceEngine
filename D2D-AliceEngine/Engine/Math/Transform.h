@@ -103,5 +103,17 @@ public:
 		float radians = std::atan2(mat.m12, mat.m11);
 		Rotation = radians * (180.0f / Define::PI);
 	}
+
+	D2D1::Matrix3x2F ToMatrixWithOutScale()
+	{
+		if (dirty)
+		{
+			D2D1::Matrix3x2F rotation = D2D1::Matrix3x2F::Rotation(Rotation);
+			D2D1::Matrix3x2F translation = D2D1::Matrix3x2F::Translation(Translation.x, Translation.y);
+			cachedMatrix = rotation * translation;
+			dirty = false;
+		}
+		return cachedMatrix;
+	}
 };
 
