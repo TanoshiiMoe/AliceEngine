@@ -14,15 +14,16 @@ C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커
   <img src="https://github.com/user-attachments/assets/da2f5c4f-b14e-4564-94b6-bb285df8a903" width="400"/>
 </p>
 
-![image](https://github.com/user-attachments/assets/3405a7e5-54dc-401f-a6cc-332329632433)
-![image](https://github.com/user-attachments/assets/7b016298-4ba1-409f-8c67-23d452366220)
-![image](https://github.com/user-attachments/assets/adefb651-0331-4c36-9417-ca77cbda4b49)
-![image](https://github.com/user-attachments/assets/6a816bf3-ec0b-491b-81b1-396e09048ab6)
-
-
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/c663a7db-3fdc-40b1-8366-047120595ef0" width="500"/>
+  <img src="https://github.com/user-attachments/assets/ff437a5f-cc4d-4de5-852c-52ffc3be20bb" width="500"/>
 </p>
+
+![image](https://github.com/user-attachments/assets/a5d5a4bc-5844-4a9d-9515-8609e8be56fa)
+![image](https://github.com/user-attachments/assets/4eed35f8-791a-41d5-ba9f-167964154676)
+![image](https://github.com/user-attachments/assets/b642a239-cc2b-49e3-a39d-7dd101f49d3a)
+![image](https://github.com/user-attachments/assets/3ba63e7f-b3b9-4d83-a0e0-b80878f3dca6)
+![image](https://github.com/user-attachments/assets/260f4579-27f2-4a43-a752-69909bf1edaa)
+
 
 ## 빌드 및 실행
 
