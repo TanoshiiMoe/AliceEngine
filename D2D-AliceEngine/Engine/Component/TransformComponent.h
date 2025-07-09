@@ -21,8 +21,8 @@ public:
 	void AddChildObject(WeakObjectPtr<TransformComponent> child);
 
 	FVector2 m_pivot{ 0,0 }; // 좌표 중심점
-	Transform* m_localTransform; // Transform 컴포넌트
-	Transform* m_worldTransform; // Transform 컴포넌트
+	Transform m_localTransform; // Transform 컴포넌트
+	Transform m_worldTransform; // Transform 컴포넌트
 
 	FVector2 GetPosition() const;
 	void SetPosition(const float& _x, const float& _y);
