@@ -7,7 +7,7 @@
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <System/ScriptSystem.h>
-
+#include <Animation/AnimatorInstance.h>
 #include <Animation/TextureLoader.h>
 #include <Component/Animator.h>
 #include <FSM/FiniteStateMachine.h>
@@ -53,9 +53,15 @@ void Enemy::OnStart()
 	m_owner = GetOwner();
 
 	AnimatorController::LoadAnimatorController(L"Ken_AnimController.json", animController);
-	animInstance = m_owner->AddComponent<EnemyAnimatorInstance>();
-	animInstance->m_layer = 3;
+	animInstance = m_owner->AddComponent<AnimatorInstance>();
 	animInstance->SetAnimatorController(&animController);
+	animInstance->LoadSpriteSheet(L"ken_sprites.json");
+	animInstance->LoadAnimationClip(L"ken_kick_anim.json");
+	animInstance->LoadAnimationClip(L"ken_idle_anim.json");
+	animInstance->ApplyClipDurationsToStates();
+	//animInstance->SetLooping(true);
+	animInstance->Play();
+	animInstance->m_layer = 3;
 	animInstance->OnStart();
 
 	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(50, 80));

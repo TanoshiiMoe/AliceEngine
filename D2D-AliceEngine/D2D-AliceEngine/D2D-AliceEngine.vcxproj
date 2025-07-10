@@ -146,8 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Animation\PlayerAnimatorInstance.h" />
-    <ClInclude Include="Animation\EnemyAnimatorInstance.h" />
     <ClInclude Include="Scripts\Enemy.h" />
     <ClInclude Include="Scene\DemoScene3.h" />
     <ClInclude Include="Scripts\Player.h" />
@@ -170,8 +168,6 @@
     <ClInclude Include="Scripts\YuukaVideo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Animation\PlayerAnimatorInstance.cpp" />
-    <ClCompile Include="Animation\EnemyAnimatorInstance.cpp" />
     <ClCompile Include="d2dengine_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

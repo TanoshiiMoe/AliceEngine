@@ -329,6 +329,14 @@ void AnimatorInstance::ChangeState(const std::string& stateName)
 	nextAnimationClip = m_Controller->states[m_CurrentStateIndex].motionName;
 }
 
+void AnimatorInstance::ApplyClipDurationsToStates()
+{
+	for (auto& state : m_Controller->states)
+	{
+		state.clipLength = animationClips[state.motionName]->duration;
+	}
+}
+
 void AnimatorInstance::OnStart()
 {
 	if (m_Controller)
