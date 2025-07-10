@@ -147,6 +147,21 @@ void DemoScene2::aruInput()
 	{
 		m_aruClone = Instantiate(m_aru);
 	}
+
+	if (Input::IsKeyDown(VK_B))
+	{
+		FVector2 scale = m_aru->transform()->GetScale() * 0.8f;
+		m_aru->transform()->SetScale(scale.x, scale.y);
+	}
+	if (Input::IsKeyDown(VK_N))
+	{
+		FVector2 scale = m_aru->transform()->GetScale() * 1.3f;
+		m_aru->transform()->SetScale(scale.x, scale.y);
+	}
+	if (Input::IsKeyDown(VK_R))
+	{
+		m_aru->transform()->SetRotation(m_aru->transform()->GetRotation() + 5.0f);
+	}
 }
 
 void DemoScene2::CameraInput()
