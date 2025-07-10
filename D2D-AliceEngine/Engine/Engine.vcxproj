@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\Rigidbody2D.h" />
     <ClInclude Include="Manager\ClassManager.h" />
     <ClInclude Include="Component\Collider.h" />
     <ClInclude Include="Experimental\Collision\CollisionDetector.h" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Component\StatComponent.h" />
     <ClInclude Include="Core\StatTraits.h" />
     <ClInclude Include="Manager\PackageResourceManager.h" />
+    <ClInclude Include="System\PhysicsSystem.h" />
     <ClInclude Include="System\CollisionSystem.h" />
     <ClInclude Include="System\InputSystem.h" />
     <ClInclude Include="System\ScriptSystem.h" />
@@ -195,6 +197,7 @@
     <ClInclude Include="Object\UObjectBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\Rigidbody2D.cpp" />
     <ClCompile Include="Manager\ClassManager.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
     <ClCompile Include="Experimental\Collision\CollisionDetector.cpp" />
@@ -221,6 +224,7 @@
     <ClCompile Include="Component\StatComponent.cpp" />
     <ClCompile Include="Core\StatTraits.cpp" />
     <ClCompile Include="Manager\PackageResourceManager.cpp" />
+    <ClCompile Include="System\PhysicsSystem.cpp" />
     <ClCompile Include="System\CollisionSystem.cpp" />
     <ClCompile Include="System\InputSystem.cpp" />
     <ClCompile Include="System\ScriptSystem.cpp" />

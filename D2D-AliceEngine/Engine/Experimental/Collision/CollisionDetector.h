@@ -1,7 +1,9 @@
 #pragma once
+#include <Core/ObjectHandler.h>
 #include <Experimental/Physics/AABB.h>
+#include <Component/Collider.h>
+#include <Component/Rigidbody2D.h>
 
-class Collider;
 namespace Physics
 {
 	// 충돌 검사 스태틱 함수들이 모여있는 클래스.
@@ -12,7 +14,7 @@ namespace Physics
 		~FCollisionDetector() {};
 
 		static void BruteForceOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects);
-		static void SweepAndPruneOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects);
+		static std::unordered_set<Rigidbody2D*> SweepAndPruneOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects);
 		static bool CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
 		static bool IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
 		static void PushOverlappedArea(Collider* a, Collider* b);

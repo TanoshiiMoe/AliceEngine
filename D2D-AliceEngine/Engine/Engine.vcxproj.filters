@@ -207,6 +207,12 @@
     <ClInclude Include="Component\Collider.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="System\PhysicsSystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Rigidbody2D.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -360,6 +366,12 @@
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="Component\Collider.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="System\PhysicsSystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Rigidbody2D.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>

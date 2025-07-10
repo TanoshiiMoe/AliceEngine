@@ -4,6 +4,7 @@
 #include <Object/gameObject.h>
 #include <Math/Transform.h>
 #include <Component/TransformComponent.h>
+#include <Component/Rigidbody2D.h>
 
 void Physics::FCollisionDetector::BruteForceOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects)
 {
@@ -24,11 +25,12 @@ void Physics::FCollisionDetector::BruteForceOverlapCheck(std::vector<WeakObjectP
 	}
 }
 
-void Physics::FCollisionDetector::SweepAndPruneOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects)
+std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects)
 {
     // Sweep and Prune을 위한 정렬
     std::sort(objects.begin(), objects.end(), &FCollisionDetector::CompareColliderMinX);
     
+    std::unordered_set<Rigidbody2D*> ovelappedRigdBodies;
     for (size_t i = 0; i < objects.size(); ++i)
     {
         if (objects[i]->dirty) continue;
@@ -46,10 +48,13 @@ void Physics::FCollisionDetector::SweepAndPruneOverlapCheck(std::vector<WeakObje
             if (IsOverlapped(src, tar))
             {
                 PushOverlappedArea(src.Get(), tar.Get());
+                if (Rigidbody2D* rb = src->GetOwner()->GetComponent<Rigidbody2D>()) ovelappedRigdBodies.insert(rb);
+                if (Rigidbody2D* rb = tar->GetOwner()->GetComponent<Rigidbody2D>()) ovelappedRigdBodies.insert(rb);
                 std::wcout << L"[충돌] " << src->GetName() << L" " << tar->GetName() << L" 겹침\n";
             }
         }
     }
+    return ovelappedRigdBodies;
 }
 
 bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)

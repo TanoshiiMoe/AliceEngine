@@ -4,6 +4,8 @@
 #include <Core/Tickable.h>
 #include <Core/ObjectHandler.h>
 #include <Experimental/Collision/CollisionDetector.h>
+#include <System/PhysicsSystem.h>
+#include <Component/Rigidbody2D.h>
 
 CollisionSystem::CollisionSystem()
 {
@@ -44,7 +46,7 @@ void CollisionSystem::UnRegistAll()
 
 void CollisionSystem::Update(const float& deltaSeconds)
 {
-	Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_AABBs);
+	PhysicsSystem::GetInstance().collidedBodies = Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_AABBs);
 	//Physics::FCollisionDetector::BruteForceOverlapCheck(m_AABBs);
 }
 
@@ -52,7 +54,7 @@ void CollisionSystem::Initialize()
 {
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_DuringPhysics,
+		Define::ETickingGroup::TG_StartPhysics,
 		[weak = WeakFromThis<ITickable>()](const float& dt)
 	{
 		if (auto sp = weak.lock())
