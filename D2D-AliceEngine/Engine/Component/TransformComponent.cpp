@@ -90,18 +90,21 @@ void TransformComponent::SetPosition(const float& _x, const float& _y)
 {
 	m_localTransform.SetPosition(_x, _y);
 	SetDirty();
+	bMoved = true;
 }
 
 void TransformComponent::SetPosition(const float& _x)
 {
 	m_localTransform.SetPosition(_x, _x);
 	SetDirty();
+	bMoved = true;
 }
 
 void TransformComponent::SetPosition(const FVector2& _v)
 {
 	m_localTransform.SetPosition(_v.x, _v.y);
 	SetDirty();
+	bMoved = true;
 }
 
 void TransformComponent::SetRotation(const float& _val)

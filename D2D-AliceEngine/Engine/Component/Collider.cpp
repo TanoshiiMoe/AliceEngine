@@ -36,6 +36,16 @@ void Collider::Initialize()
 
 void Collider::Update(const float& deltaSeconds)
 {
+	if (collisionDelay > 0)
+	{
+		collisionDelay -= deltaSeconds;
+		return;
+	}
+	else if (dirty)
+	{
+		dirty = false;
+	}
+
 	if (gameObject* owner = GetOwner())
 	{
 		FVector2 pos = owner->transform()->GetPosition();
@@ -46,10 +56,6 @@ void Collider::Update(const float& deltaSeconds)
 			aabb.maxVector.x = pos.x + comp->GetSizeX() / 2;
 			aabb.maxVector.y = pos.y + comp->GetSizeY() / 2;
 		}
-	}
-	if (dirty)
-	{
-		dirty = false;
 	}
 }
 

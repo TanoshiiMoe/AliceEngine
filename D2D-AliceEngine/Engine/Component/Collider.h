@@ -23,4 +23,5 @@ public:
 	BoxComponent* boxComponent;
 
 	bool dirty = true;
+	float collisionDelay = 0.1f;
 };

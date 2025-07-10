@@ -36,8 +36,8 @@ void Physics::FCollisionDetector::SweepAndPruneOverlapCheck(std::vector<WeakObje
 
         for (size_t j = i + 1; j < objects.size(); ++j)
         {
+            if (objects[j]->dirty) continue;
             auto& tar = objects[j];
-
             // Prune: ´õ ÀÌ»ó °ãÄ¥ ¼ö ¾øÀ¸¸é break
             if (tar->aabb.minVector.x > src->aabb.maxVector.x)
                 break;

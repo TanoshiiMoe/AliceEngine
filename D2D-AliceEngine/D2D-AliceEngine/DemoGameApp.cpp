@@ -22,7 +22,7 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene2>(L"aruScene");
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
-	SceneManager::ChangeScene(L"aruScene");
+	SceneManager::ChangeScene(L"FSMScene");
 }
 
 void DemoGameApp::Run()

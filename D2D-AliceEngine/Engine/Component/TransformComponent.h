@@ -24,6 +24,7 @@ public:
 	FVector2 m_pivot{ 0,0 }; // 좌표 중심점
 	Transform m_localTransform; // Transform 컴포넌트
 	Transform m_worldTransform; // Transform 컴포넌트
+	bool bMoved = false; // 최초 Collision에 쓰이는 변수
 
 	FVector2 GetPosition() const;
 	void SetPosition(const float& _x, const float& _y);
