@@ -97,7 +97,6 @@ public:
 		std::string className = typeid(UObject).name();
 		REGISTER_MEMBER(allMemberInfos[className], UObject, m_name);
 		REGISTER_MEMBER(allMemberInfos[className], UObject, m_uuid);
-
 		// ==============================RenderComponent==============================
 		className = typeid(RenderComponent).name();
 		REGISTER_MEMBER(allMemberInfos[className], RenderComponent, m_layer);

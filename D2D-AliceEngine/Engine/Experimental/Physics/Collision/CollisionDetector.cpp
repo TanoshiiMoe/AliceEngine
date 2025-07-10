@@ -5,7 +5,7 @@
 #include <Math/Transform.h>
 #include <Component/TransformComponent.h>
 
-void Physics::FCollisionDetector::BruteForceOverlapCheck(const std::vector<WeakObjectPtr<Collider>>& objects)
+void Physics::FCollisionDetector::BruteForceOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects)
 {
 	for (size_t i = 0; i < objects.size(); ++i)
 	{
@@ -22,6 +22,39 @@ void Physics::FCollisionDetector::BruteForceOverlapCheck(const std::vector<WeakO
 			}
 		}
 	}
+}
+
+void Physics::FCollisionDetector::SweepAndPruneOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects)
+{
+    // Sweep and Prune을 위한 정렬
+    std::sort(objects.begin(), objects.end(), &FCollisionDetector::CompareColliderMinX);
+    
+    for (size_t i = 0; i < objects.size(); ++i)
+    {
+        if (objects[i]->dirty) continue;
+        auto& src = objects[i];
+
+        for (size_t j = i + 1; j < objects.size(); ++j)
+        {
+            auto& tar = objects[j];
+
+            // Prune: 더 이상 겹칠 수 없으면 break
+            if (tar->aabb.minVector.x > src->aabb.maxVector.x)
+                break;
+
+            // 실제 충돌 검사
+            if (IsOverlapped(src, tar))
+            {
+                PushOverlappedArea(src.Get(), tar.Get());
+                std::wcout << L"[충돌] " << src->GetName() << L" " << tar->GetName() << L" 겹침\n";
+            }
+        }
+    }
+}
+
+bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
+{
+    return a->aabb.minVector.x < b->aabb.minVector.x;
 }
 
 bool Physics::FCollisionDetector::IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)

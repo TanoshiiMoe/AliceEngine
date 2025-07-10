@@ -54,19 +54,19 @@ void CameraController::OnEnd()
 
 void CameraController::Input()
 {
-	if(Input::IsKeyDown(VK_RIGHT))
+	if(Input::IsKeyDown(VK_D))
 	{
 		SceneManager::GetCamera()->AddPosition(5.0f, 0);
 	}
-	if (Input::IsKeyDown(VK_LEFT))
+	if (Input::IsKeyDown(VK_A))
 	{
 		SceneManager::GetCamera()->AddPosition(-5.0f, 0);
 	}
-	if (Input::IsKeyDown(VK_UP))
+	if (Input::IsKeyDown(VK_W))
 	{
 		SceneManager::GetCamera()->AddPosition(0, 5.0f);
 	}
-	if (Input::IsKeyDown(VK_DOWN))
+	if (Input::IsKeyDown(VK_S))
 	{
 		SceneManager::GetCamera()->AddPosition(0, -5.0f);
 	}

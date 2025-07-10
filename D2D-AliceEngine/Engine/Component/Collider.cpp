@@ -14,12 +14,12 @@ Collider::Collider()
 
 Collider::~Collider()
 {
-	PhysicsSystem::GetInstance().UnRegist(WeakFromThis<Collider>());
+	CollisionSystem::GetInstance().UnRegist(WeakFromThis<Collider>());
 }
 
 void Collider::Initialize()
 {
-	PhysicsSystem::GetInstance().Regist(WeakFromThis<Collider>());
+	CollisionSystem::GetInstance().Regist(WeakFromThis<Collider>());
 
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),

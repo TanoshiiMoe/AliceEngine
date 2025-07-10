@@ -23,10 +23,12 @@
 
 void DemoScene2::Initialize()
 {
+	__super::Initialize();
 }
 
 void DemoScene2::Release()
 {
+	__super::Release();
 }
 
 void DemoScene2::Update()
@@ -47,8 +49,7 @@ void DemoScene2::OnEnter()
 
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
 		L" <카메라> \n"
-		L" [화살표 상,하] : 카메라 위,아래 이동 \n"
-		L" [화살표 좌/우] : 카메라 좌,우 이동 \n"
+		L" [W,A,S,D]  : 카메라 상,하,좌,우 이동 \n"
 		L" [1/2] : D2D, Unity 좌표계 \n"
 		L" [ [ / ] ] : 카메라 축소, 확대\n"
 		L" [Q] : 카메라를 아루에게 붙이기 \n"
@@ -56,9 +57,12 @@ void DemoScene2::OnEnter()
 		L" * 카메라를 붙이면 화살표로 카메라를 이동할 수 없습니다. \n"
 		L"\n"
 		L" <아루> \n"
+		L" [화살표 상/하/좌/우] : 상,하,좌,우 이동 \n"
+		L" [C] : 아루 복제 \n"
+		L" [B/N] : 아루 스케일 변환 \n"
+		L" [R] : 아루 회전 변환 \n"
 		L" [5,6] : 무기 스폰, 무기 파괴 \n"
 		L" [7,8] : 지갑 스폰, 지갑 파괴 \n"
-		L" [W,A,S,D] : 이동 \n"
 		L" [4] : 아루 이름 한영 전환 \n"
 		L" ::Delegate \n"
 		L" [T] : 아루가 아루2에게 데미지 주기 \n"

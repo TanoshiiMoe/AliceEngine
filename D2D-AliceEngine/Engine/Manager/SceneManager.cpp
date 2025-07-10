@@ -55,3 +55,25 @@ Camera* SceneManager::GetCamera()
     }
     return nullptr;
 }
+
+void SceneManager::PerformSceneChange(const std::wstring& NewobjectName)
+{
+    if (WeakObjectPtr<Scene> searchedScene = GetUUIDFromObjectName(NewobjectName))
+    {
+        if (WeakObjectPtr<Scene> weak = m_currentScene)	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
+        {
+            weak->OnExit();
+            weak->Release();
+            SceneManager::GetInstance().GetCamera()->Release();
+        }
+        m_currentScene = searchedScene.Get();
+        m_currentScene->Initialize();
+        m_currentScene->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
+        SceneManager::GetInstance().GetCamera()->Initialize();
+    }
+}
+
+void SceneManager::ChangeScene(const std::wstring& NewobjectName)
+{
+    GetInstance().m_nextSceneName = NewobjectName;
+}

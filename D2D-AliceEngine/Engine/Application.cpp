@@ -34,7 +34,7 @@ Application::~Application()
 	ScriptSystem::Destroy();
 	InputSystem::Destroy();
 	SceneManager::Destroy();
-	PhysicsSystem::Destroy();
+	CollisionSystem::Destroy();
 	ClassManager::Destroy();
 }
 
@@ -73,7 +73,7 @@ void Application::Initialize()
 	UpdateTaskManager::Create();
 	TimerManager::Create();
 	RenderSystem::Create();
-	PhysicsSystem::Create();
+	CollisionSystem::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로

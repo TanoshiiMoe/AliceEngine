@@ -5,26 +5,16 @@
 #include <Core/ObjectHandler.h>
 #include <Experimental/Physics/Collision/CollisionDetector.h>
 
-PhysicsSystem::PhysicsSystem()
+CollisionSystem::CollisionSystem()
 {
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_DuringPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	
 }
 
-PhysicsSystem::~PhysicsSystem()
+CollisionSystem::~CollisionSystem()
 {
 }
 
-void PhysicsSystem::Regist(const WeakObjectPtr<Collider>& _component)
+void CollisionSystem::Regist(const WeakObjectPtr<Collider>& _component)
 {
 	if (!_component.expired())
 	{
@@ -32,7 +22,7 @@ void PhysicsSystem::Regist(const WeakObjectPtr<Collider>& _component)
 	}
 }
 
-void PhysicsSystem::UnRegist(WeakObjectPtr<Collider>&& _component)
+void CollisionSystem::UnRegist(WeakObjectPtr<Collider>&& _component)
 {
 	for (auto it = m_AABBs.begin(); it != m_AABBs.end(); ++it)
 	{
@@ -47,24 +37,36 @@ void PhysicsSystem::UnRegist(WeakObjectPtr<Collider>&& _component)
 	}
 }
 
-void PhysicsSystem::UnRegistAll()
+void CollisionSystem::UnRegistAll()
 {
 	m_AABBs.clear();
 }
 
-void PhysicsSystem::Update(const float& deltaSeconds)
+void CollisionSystem::Update(const float& deltaSeconds)
 {
-	Physics::FCollisionDetector::BruteForceOverlapCheck(m_AABBs);
+	Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_AABBs);
+	//Physics::FCollisionDetector::BruteForceOverlapCheck(m_AABBs);
 }
 
-void PhysicsSystem::Initialize()
+void CollisionSystem::Initialize()
+{
+	UpdateTaskManager::GetInstance().Enque(
+		WeakFromThis<ITickable>(),
+		Define::ETickingGroup::TG_DuringPhysics,
+		[weak = WeakFromThis<ITickable>()](const float& dt)
+	{
+		if (auto sp = weak.lock())
+		{
+			sp->Update(dt);
+		}
+	}
+	);
+}
+
+void CollisionSystem::Update()
 {
 }
 
-void PhysicsSystem::Update()
-{
-}
-
-void PhysicsSystem::Release()
+void CollisionSystem::Release()
 {
 }

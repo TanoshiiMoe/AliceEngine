@@ -63,19 +63,19 @@ void Sun::Input()
 	{
 		m_sun->transform()->AddRotation(-5.0f);
 	}
-	if (Input::IsKeyDown(VK_D))
+	if (Input::IsKeyDown(VK_RIGHT))
 	{
 		m_sun->transform()->AddPosition(5.0f, 0);
 	}
-	if (Input::IsKeyDown(VK_A))
+	if (Input::IsKeyDown(VK_LEFT))
 	{
 		m_sun->transform()->AddPosition(-5.0f, 0);
 	}
-	if (Input::IsKeyDown(VK_W))
+	if (Input::IsKeyDown(VK_UP))
 	{
 		m_sun->transform()->AddPosition(0, 5.0f);
 	}
-	if (Input::IsKeyDown(VK_S))
+	if (Input::IsKeyDown(VK_DOWN))
 	{
 		m_sun->transform()->AddPosition(0, -5.0f);
 	}

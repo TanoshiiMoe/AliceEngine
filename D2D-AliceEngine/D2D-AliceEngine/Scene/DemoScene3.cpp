@@ -23,10 +23,12 @@
 
 void DemoScene3::Initialize()
 {
+	__super::Initialize();
 }
 
 void DemoScene3::Release()
 {
+	__super::Release();
 }
 
 void DemoScene3::Update()
