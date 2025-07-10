@@ -192,7 +192,7 @@
     <ClInclude Include="Animation\AnimatorInstance.h">
       <Filter>Animation</Filter>
     </ClInclude>
-    <ClInclude Include="System\PhysicsSystem.h">
+    <ClInclude Include="System\CollisionSystem.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Experimental\Physics\AABB.h">
@@ -347,7 +347,7 @@
     <ClCompile Include="Animation\AnimatorInstance.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
-    <ClCompile Include="System\PhysicsSystem.cpp">
+    <ClCompile Include="System\CollisionSystem.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Experimental\Physics\AABB.cpp">

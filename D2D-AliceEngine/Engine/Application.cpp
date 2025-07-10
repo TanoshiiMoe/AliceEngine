@@ -13,7 +13,7 @@
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
-#include <System/PhysicsSystem.h>
+#include <System/CollisionSystem.h>
 #include <Scene/Scene.h>
 #include <Object/Camera.h>
 
