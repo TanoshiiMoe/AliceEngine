@@ -143,6 +143,10 @@ void DemoScene2::aruInput()
 	{
 		m_aru->GetComponent<Aru>()->m_aruStat->SetStat("MAXHP", m_aru->GetComponent<Aru>()->m_aruStat->GetStat("MAXHP")+10);
 	}
+	if (Input::IsKeyPressed(VK_C))
+	{
+		m_aruClone = Instantiate(m_aru);
+	}
 }
 
 void DemoScene2::CameraInput()

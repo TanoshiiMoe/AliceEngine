@@ -9,7 +9,7 @@
 
 BoxComponent::BoxComponent()
 {
-	m_color = FColor::Black;
+	SetColor(FColor::Black);
 }
 
 BoxComponent::BoxComponent(const FVector2& _size = FVector2(50,50), const FColor& color = FColor::Black)

@@ -23,6 +23,5 @@ public:
 	FVector2 GetSize();
 
 	std::wstring filePath; // 파일의 경로
-	SpriteInfo spriteInfo;
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 };

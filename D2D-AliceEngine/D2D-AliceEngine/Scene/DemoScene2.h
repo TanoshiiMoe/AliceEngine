@@ -24,6 +24,7 @@ public:
 	gameObject* m_backgroundImage;
 
 	gameObject* m_aru;
+	gameObject* m_aruClone;
 	gameObject* m_aru2;
 	gameObject* m_widget;
 	gameObject* m_widget2;

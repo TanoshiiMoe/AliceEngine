@@ -201,6 +201,9 @@
     <ClInclude Include="Experimental\Physics\Collision\CollisionDetector.h">
       <Filter>Experimental\Physics\Collission</Filter>
     </ClInclude>
+    <ClInclude Include="Manager\ClassManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
     <ClInclude Include="Component\Collider.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -352,6 +355,9 @@
     </ClCompile>
     <ClCompile Include="Experimental\Physics\Collision\CollisionDetector.cpp">
       <Filter>Experimental\Physics\Collission</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\ClassManager.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="Component\Collider.cpp">
       <Filter>Component</Filter>

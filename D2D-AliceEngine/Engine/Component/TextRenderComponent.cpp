@@ -12,10 +12,10 @@
 TextRenderComponent::TextRenderComponent()
 {
 	m_color = FColor::Black;
-	InitializeFormat();
-	InitializeColor();
-	InitializeLayout();
 	drawType = EDrawType::ScreenSpace;
+	//InitializeFormat();
+	//InitializeColor();
+	//InitializeLayout();
 }
 
 TextRenderComponent::TextRenderComponent(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
@@ -36,6 +36,11 @@ TextRenderComponent::~TextRenderComponent()
 void TextRenderComponent::Initialize()
 {
 	__super::Initialize();
+
+	InitializeFormat();
+	InitializeColor();
+	InitializeLayout();
+
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),
 		Define::ETickingGroup::TG_PostUpdateWork,

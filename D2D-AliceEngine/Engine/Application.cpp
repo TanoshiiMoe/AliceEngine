@@ -9,6 +9,7 @@
 #include <Manager/PackageResourceManager.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Manager/TimerManager.h>
+#include <Manager/ClassManager.h>
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
@@ -34,6 +35,7 @@ Application::~Application()
 	InputSystem::Destroy();
 	SceneManager::Destroy();
 	PhysicsSystem::Destroy();
+	ClassManager::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -125,6 +127,8 @@ void Application::Initialize()
 
 	PackageResourceManager::Create();
 	PackageResourceManager::GetInstance().Initialize();
+	ClassManager::Create();
+	ClassManager::GetInstance().RegisterClassInfo();
 }
 
 void Application::Run()

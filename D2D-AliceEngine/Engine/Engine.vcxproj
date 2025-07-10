@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Manager\ClassManager.h" />
     <ClInclude Include="Component\Collider.h" />
     <ClInclude Include="Experimental\Physics\Collision\CollisionDetector.h" />
     <ClInclude Include="Experimental\Physics\AABB.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Object\UObjectBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Manager\ClassManager.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
     <ClCompile Include="Experimental\Physics\Collision\CollisionDetector.cpp" />
     <ClCompile Include="Experimental\Physics\AABB.cpp" />

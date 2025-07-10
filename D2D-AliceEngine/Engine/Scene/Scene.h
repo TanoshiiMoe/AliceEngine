@@ -121,6 +121,8 @@ public:
 		return WeakObjectPtr<TReturnType>(createdObj);
 	}
 
+	gameObject* Instantiate(gameObject* obj);
+
 private:
 	gameObject* m_sysinfoWidget;
 	std::unordered_map<std::wstring, std::unique_ptr<gameObject>> m_objects;
