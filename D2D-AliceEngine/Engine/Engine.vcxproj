@@ -143,7 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Manager\ClassManager.h" />
     <ClInclude Include="Component\Collider.h" />
-    <ClInclude Include="Experimental\Physics\Collision\CollisionDetector.h" />
+    <ClInclude Include="Experimental\Collision\CollisionDetector.h" />
     <ClInclude Include="Experimental\Physics\AABB.h" />
     <ClInclude Include="Animation\AnimationController.h" />
     <ClInclude Include="Animation\AnimatorInstance.h" />
@@ -197,7 +197,7 @@
   <ItemGroup>
     <ClCompile Include="Manager\ClassManager.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
-    <ClCompile Include="Experimental\Physics\Collision\CollisionDetector.cpp" />
+    <ClCompile Include="Experimental\Collision\CollisionDetector.cpp" />
     <ClCompile Include="Experimental\Physics\AABB.cpp" />
     <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="Animation\AnimatorInstance.cpp" />

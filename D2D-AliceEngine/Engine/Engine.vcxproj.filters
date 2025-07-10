@@ -46,7 +46,7 @@
     <Filter Include="Experimental\Physics">
       <UniqueIdentifier>{0dec12fa-a27a-4bb7-91e2-8b12eff0ec29}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Experimental\Physics\Collission">
+    <Filter Include="Experimental\Collission">
       <UniqueIdentifier>{ca4d7bbf-2055-43a8-81dc-f789295092ed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -198,8 +198,8 @@
     <ClInclude Include="Experimental\Physics\AABB.h">
       <Filter>Experimental\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Experimental\Physics\Collision\CollisionDetector.h">
-      <Filter>Experimental\Physics\Collission</Filter>
+    <ClInclude Include="Experimental\Collision\CollisionDetector.h">
+      <Filter>Experimental\Collission</Filter>
     </ClInclude>
     <ClInclude Include="Manager\ClassManager.h">
       <Filter>Manager</Filter>
@@ -353,8 +353,8 @@
     <ClCompile Include="Experimental\Physics\AABB.cpp">
       <Filter>Experimental\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Experimental\Physics\Collision\CollisionDetector.cpp">
-      <Filter>Experimental\Physics\Collission</Filter>
+    <ClCompile Include="Experimental\Collision\CollisionDetector.cpp">
+      <Filter>Experimental\Collission</Filter>
     </ClCompile>
     <ClCompile Include="Manager\ClassManager.cpp">
       <Filter>Manager</Filter>

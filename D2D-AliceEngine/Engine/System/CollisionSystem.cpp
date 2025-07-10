@@ -3,7 +3,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Core/Tickable.h>
 #include <Core/ObjectHandler.h>
-#include <Experimental/Physics/Collision/CollisionDetector.h>
+#include <Experimental/Collision/CollisionDetector.h>
 
 CollisionSystem::CollisionSystem()
 {
