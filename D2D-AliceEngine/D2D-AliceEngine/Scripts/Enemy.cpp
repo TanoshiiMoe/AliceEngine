@@ -69,7 +69,7 @@ void Enemy::OnStart()
 	m_owner->AddComponent<Rigidbody2D>();
 	m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
 	m_owner->GetComponent<Rigidbody2D>()->gravityScale = 1;
-	m_owner->GetComponent<Rigidbody2D>()->mass = 60;
+	m_owner->GetComponent<Rigidbody2D>()->mass = 10;
 }
 
 void Enemy::OnEnd()

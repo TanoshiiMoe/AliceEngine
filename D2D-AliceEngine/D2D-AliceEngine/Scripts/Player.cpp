@@ -37,7 +37,7 @@ void Player::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
-	float speed = 55.0f * deltaSeconds;
+	float speed = 125.0f * deltaSeconds;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
 	{
 		animInstance->SetFloat("speed", 0);
@@ -100,9 +100,13 @@ void Player::OnStart()
 
 	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35,60));
 	m_owner->AddComponent<Rigidbody2D>();
-	m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-	m_owner->GetComponent<Rigidbody2D>()->gravityScale = 1;
-	m_owner->GetComponent<Rigidbody2D>()->mass = 300;
+	auto rb = m_owner->GetComponent<Rigidbody2D>();
+	rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+	rb->gravityScale = 11;
+	rb->fallMultiplier = 4;
+	rb->mass = 10;
+	rb->drag = 0.5;
+	//rb->angularDrag = 0;
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 }
@@ -134,6 +138,7 @@ void Player::Input()
 	}
 	if (Input::IsKeyPressed(VK_SPACE))
 	{
- 		m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 20);
+		m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 200);
+		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
 	}
 }

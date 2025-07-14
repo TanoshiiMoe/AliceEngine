@@ -6,14 +6,14 @@ namespace Physics
 	template<typename T>
 	struct TAABB
 	{
-		FVector2 minVector = FVector2(FLT_MAX, FLT_MAX);
-		FVector2 maxVector = FVector2(FLT_MIN, FLT_MIN);
+		TVector2<T> minVector = TVector2<T>(FLT_MAX, FLT_MAX);
+		TVector2<T> maxVector = TVector2<T>(FLT_MIN, FLT_MIN);
 
 		//float x, y;
 		inline TAABB() : minVector(FLT_MAX), maxVector(FLT_MIN) {}
-		inline TAABB(std::vector<FVector2>& _vertices)
+		inline TAABB(std::vector<TVector2<T>>& _vertices)
 		{
-			for (const FVector2& vertex : _vertices)
+			for (const TVector2<T>& vertex : _vertices)
 			{
 				minVector.x = min(minVector.x, vertex.x);
 				minVector.y = min(minVector.y, vertex.y);
@@ -41,9 +41,9 @@ namespace Physics
 			return true;
 		}
 
-		FVector2 GetSize()
+		TVector2<T> GetSize()
 		{
-			return FVector2(maxVector.x - minVector.x, maxVector.y - minVector.y);
+			return TVector2<T>(maxVector.x - minVector.x, maxVector.y - minVector.y);
 		}
 	};
 }

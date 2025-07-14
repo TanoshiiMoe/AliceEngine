@@ -29,6 +29,6 @@ public:
 	virtual void Update() override;
 	virtual void Release() override;
 
-protected:
-	std::vector<WeakObjectPtr<Collider>> m_AABBs;
+public:
+	std::vector<WeakObjectPtr<Collider>> m_colliders;
 };

@@ -3,6 +3,8 @@
 #include <Component/TransformComponent.h>
 #include <Object/gameObject.h>
 #include <System/PhysicsSystem.h>
+#include <Component/Collider.h>
+#include <System/CollisionSystem.h>
 
 Rigidbody2D::Rigidbody2D()
 {
@@ -21,37 +23,85 @@ void Rigidbody2D::Initialize()
 
 void Rigidbody2D::Update(const float& deltaSeconds)
 {
-	//FVector2 pos = owner->transform()->GetPosition();
-	// 1. 중력 적용 (isGrounded가 아니면)
-	if (!isGrounded && m_eRigidBodyType != Define::ERigidBodyType::Static)
-	{
-		// F = m * a, 중력가속도는 대략 9.8, 여기선 -12로 가정
-		FVector2 gravityForce(0, -9.8f * gravityScale * mass);
-		force += gravityForce;
-	}
+	float substep = 0.016f;
+	float remaining = deltaSeconds;
+	while (remaining > 0.0f) {
+		float dt = min(substep, remaining);
 
-	// 2. 가속도 계산 (a = F/m)
-	FVector2 acceleration = force / mass;
+		if (m_eRigidBodyType != Define::ERigidBodyType::Static)
+		{
+			FVector2 gravityForce(0, -9.8f * gravityScale * mass);
+			if (velocity.y < 0) gravityForce *= fallMultiplier;
+			force += gravityForce;
+		}
 
-	// 3. 속도 업데이트 (v = v0 + at)
-	velocity += acceleration * deltaSeconds;
+		FVector2 acceleration = force / mass;
+		velocity += acceleration * dt;
 
-	// 4. 감쇠 적용
-	velocity -= velocity * drag * deltaSeconds;
-	angularVelocity -= angularVelocity * angularDrag * deltaSeconds;
+		velocity.x *= (1.0f - drag * dt);
+		velocity.y *= (1.0f - drag * dt);
+		angularVelocity *= (1.0f - angularDrag * dt);
 
-	// 5. 위치, 회전 업데이트
-	owner->transform()->AddPosition(velocity.x * deltaSeconds, velocity.y * deltaSeconds);
-	owner->transform()->AddRotation(angularVelocity * deltaSeconds);
+		FVector2 moveDelta(velocity.x * dt, velocity.y * dt);
+		FVector2 curPos = owner->transform()->GetPosition();
+		FVector2 nextPos = curPos + moveDelta;
 
-	// 6. 힘/토크 초기화 (프레임마다)
-	force = FVector2(0.0f, 0.0f);
-	torque = 0.0f;
+		bool xBisection = false, yBisection = false;
+		float newX = nextPos.x;
+		float newY = nextPos.y;
+		const float minStep = 0.01f;
 
-	// 7. 충돌 처리: 땅에 닿았으면 y속도 0, isGrounded true
-	if (isGrounded)
-	{
-		velocity.y = 0.0f;
+		// y축 이분법 (바닥 y=0)
+		if (moveDelta.y < 0 && nextPos.y < 0) {
+			float left = curPos.y;
+			float right = nextPos.y;
+			float mid = 0.0f;
+			for (int i = 0; i < 10; ++i) {
+				mid = (left + right) * 0.5f;
+				if (mid < 0) right = mid;
+				else left = mid;
+				if (fabs(right - left) < minStep) break;
+			}
+			newY = 0.0f;
+			yBisection = true;
+		}
+		// x축 이분법 (왼쪽 벽 x=0)
+		if (moveDelta.x < 0 && nextPos.x < 0) {
+			float left = curPos.x;
+			float right = nextPos.x;
+			float mid = 0.0f;
+			for (int i = 0; i < 10; ++i) {
+				mid = (left + right) * 0.5f;
+				if (mid < 0) right = mid;
+				else left = mid;
+				if (fabs(right - left) < minStep) break;
+			}
+			newX = 0.0f;
+			xBisection = true;
+		}
+		// (오른쪽/위쪽 경계 필요시 여기에 추가)
+
+		if (xBisection || yBisection) {
+			owner->transform()->SetPosition(newX, newY);
+			if (yBisection) {
+				isGrounded = true;
+				velocity.y = 0.0f;
+			}
+			if (xBisection) {
+				velocity.x = 0.0f;
+			}
+		} else {
+			owner->transform()->SetPosition(nextPos.x, nextPos.y);
+		}
+		owner->transform()->AddRotation(angularVelocity * dt);
+
+		force = FVector2(0.0f, 0.0f);
+		torque = 0.0f;
+
+		if (isGrounded) 
+			velocity.y = 0.0f;
+
+		remaining -= dt;
 	}
 }
 
@@ -61,6 +111,7 @@ void Rigidbody2D::Release()
 
 void Rigidbody2D::AddForce(const float& _x, const float& _y)
 {
-	force.x = _x;
-	force.y = _y;
+	isGrounded = false;
+    velocity.x += _x;
+    velocity.y += _y;
 }

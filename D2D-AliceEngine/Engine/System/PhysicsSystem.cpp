@@ -46,7 +46,7 @@ void PhysicsSystem::Update(const float& deltaSeconds)
 			// 부딪쳤다면
 			if (collidedBodies.find(rb) != collidedBodies.end())
 			{
-
+				rb->isGrounded = true;
 			}
 			// 부딪치지 않았다면
 			else

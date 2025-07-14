@@ -72,65 +72,47 @@ bool Physics::FCollisionDetector::IsOverlapped(const WeakObjectPtr<Collider>& a,
 
 void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 {
-	// aabb 정보 가져오기
-	const auto& aabb_a = a->aabb;
-	const auto& aabb_b = b->aabb;
+	FAABB& aabb_a = a->aabb;
+	FAABB& aabb_b = b->aabb;
 
-	// Rigidbody2D 얻기
 	Rigidbody2D* rbA = a->GetOwner()->GetComponent<Rigidbody2D>();
 	Rigidbody2D* rbB = b->GetOwner()->GetComponent<Rigidbody2D>();
-	if (rbA == nullptr || rbB == nullptr) return;
 
-	// 질량 계산 (없으면 무한대로 간주)
-	float massA = rbA ? rbA->mass : FLT_MAX;
-	float massB = rbB ? rbB->mass : FLT_MAX;
-	float totalMass = massA + massB;
+	auto typeA = rbA ? rbA->m_eRigidBodyType : Define::ERigidBodyType::Static;
+	auto typeB = rbB ? rbB->m_eRigidBodyType : Define::ERigidBodyType::Static;
 
 	// 겹친 거리 계산
 	float overlap_x = min(aabb_a.maxVector.x, aabb_b.maxVector.x) - max(aabb_a.minVector.x, aabb_b.minVector.x);
 	float overlap_y = min(aabb_a.maxVector.y, aabb_b.maxVector.y) - max(aabb_a.minVector.y, aabb_b.minVector.y);
 
-	// 각 오브젝트가 움직일 비율
-	float ratioA = (massB) / totalMass;
-	float ratioB = (massA) / totalMass;
-
-	const float pushMargin = 1.1f; // 10% 더 밀기
-
-	if (overlap_x < overlap_y)
-	{
-		float push = overlap_x * pushMargin; // 여유를 더함
-		float moveA = -push * ratioA;
-		float moveB = push * ratioB;
-
-		if (aabb_a.minVector.x < aabb_b.minVector.x)
-		{
-			a->GetOwner()->transform()->AddPosition(moveA, 0);
-			b->GetOwner()->transform()->AddPosition(moveB, 0);
-		}
-		else
-		{
-			a->GetOwner()->transform()->AddPosition(moveB, 0);
-			b->GetOwner()->transform()->AddPosition(moveA, 0);
-		}
+	// 밀림 방향 결정
+	float pushX = 0, pushY = 0;
+	if (overlap_x < overlap_y) 
+    {
+		pushX = (aabb_a.minVector.x < aabb_b.minVector.x) ? -overlap_x : overlap_x;
 	}
-	else
-	{
-		float push = overlap_y * pushMargin; // 여유를 더함
-		float moveA = -push * ratioA;
-		float moveB = push * ratioB;
-
-		if (aabb_a.minVector.y < aabb_b.minVector.y)
-		{
-			a->GetOwner()->transform()->AddPosition(0, moveA);
-			b->GetOwner()->transform()->AddPosition(0, moveB);
-		}
-		else
-		{
-			a->GetOwner()->transform()->AddPosition(0, moveB);
-			b->GetOwner()->transform()->AddPosition(0, moveA);
-		}
+    else 
+    {
+		pushY = (aabb_a.minVector.y < aabb_b.minVector.y) ? -overlap_y : overlap_y;
 	}
 
+	if (typeA == Define::ERigidBodyType::Dynamic && typeB == Define::ERigidBodyType::Dynamic) {
+		// 둘 다 밀림 (질량 비율)
+		float totalMass = rbA->mass + rbB->mass;
+		float ratioA = rbB->mass / totalMass;
+		float ratioB = rbA->mass / totalMass;
+		a->GetOwner()->transform()->AddPosition(pushX * ratioA, pushY * ratioA);
+		b->GetOwner()->transform()->AddPosition(-pushX * ratioB, -pushY * ratioB);
+	}
+	else if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic)) {
+		// A만 밀림
+		a->GetOwner()->transform()->AddPosition(pushX, pushY);
+	}
+	else if ((typeA == Define::ERigidBodyType::Static || typeA == Define::ERigidBodyType::Kinematic) && typeB == Define::ERigidBodyType::Dynamic) {
+		// B만 밀림
+		b->GetOwner()->transform()->AddPosition(-pushX, -pushY);
+	}
+	// 나머지(Static-Static, Kinematic-Kinematic, Static-Kinematic): 아무것도 안 함
 }
 
 void Physics::FCollisionDetector::PushOverlappedAreaNoMass(Collider* a, Collider* b)
