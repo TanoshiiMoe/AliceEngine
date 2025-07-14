@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "Scene.h"
 #include <System/InputSystem.h>
-#include <System/TransformSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
+#include <System/CollisionSystem.h>
+#include <System/PhysicsSystem.h>
 #include <Component/TextRenderComponent.h>
 #include <Manager/PackageResourceManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Manager/UpdateTaskManager.h>
+#include <Manager/ClassManager.h>
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 
@@ -33,6 +35,8 @@ Scene::~Scene()
 
 void Scene::Initialize()
 {
+	CollisionSystem::GetInstance().Initialize();
+	PhysicsSystem::GetInstance().Initialize();
 	UpdateTaskManager::GetInstance().SetWorld();
 }
 
@@ -68,7 +72,7 @@ void Scene::OnEnter()
 
 	int x = 0, y = 0;
 	D2DRenderManager::GetInstance().GetApplicationSize(x, y);
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(x * 0.7, y * 0.1));
+	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(x * 0.7f, y * 0.1f));
 }
 
 void Scene::OnExit()
@@ -86,4 +90,34 @@ void Scene::VisibleMemoryInfo()
 	FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetText(L"VRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetColor(FColor(200, 0, 0, 255));
+}
+
+gameObject* Scene::Instantiate(gameObject* obj)
+{
+	gameObject* target = NewObject<gameObject>(obj->GetName());
+	//gameObject* target = NewObject<gameObject>(L"replicated name");
+	for (UObject* objComp : obj->m_components)
+	{
+		UObject* createdobj = ClassManager::GetInstance().CreateClass(objComp);
+		if (Component* createdComp = dynamic_cast<Component*>(createdobj))
+		{
+			if (createdComp && objComp)
+			{
+				if (dynamic_cast<TransformComponent*>(createdComp))
+				{
+					ClassManager::GetInstance().ReplicateAllMembers(target->m_transformComponent.Get(), objComp);
+				}
+				else
+				{
+					ClassManager::GetInstance().ReplicateAllMembers(createdComp, objComp);
+				}
+				// AddComponent의 로직을 여기에 넣으면 됩니다.
+				createdComp->Initialize();
+				createdComp->SetOwner(target);
+				target->m_components.push_back(createdComp);
+			}
+		}
+	}
+	target->transform()->SetDirty();
+	return target;
 }

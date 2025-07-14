@@ -7,8 +7,7 @@
 class FFmpegHelper
 {
 public:
-
-	static std::vector<std::wstring> GetFramesFromVideo(const std::wstring& baseDir, const int& fps, const std::wstring& extension, const float& quality) {
+	static std::vector<std::wstring> GetFramesFromVideo(const std::wstring& baseDir, const int& fps, const std::wstring& extension, const float& quality, bool bIsBackGround) {
 		// 결과 파일 경로를 배열에 저장
 		std::vector<std::wstring> frameFiles;
 		WCHAR folderNameBuffer[100] = L"frames";
@@ -60,16 +59,23 @@ public:
 			options = L"-q:v " + std::to_wstring(mappedQuality);
 		}
 
-		int x = 0, y = 0;
-		D2DRenderManager::GetInstance().GetApplicationSize(x,y);
 		std::wstring ffmpegPath = Define::BASE_EXTENSION_PATH + L"FFmpeg\\ffmpeg.exe";
-		std::wstring command = ffmpegPath + L" -y -i \"" + inputPath + L"\" -vf fps=" + std::to_wstring(fps) +
-			L",scale=" + std::to_wstring(x) + L":" + std::to_wstring(y) + L" " +
+		int x = 0, y = 0;
+		std::wstring vfOption;
+		if (bIsBackGround) {
+			D2DRenderManager::GetInstance().GetApplicationSize(x, y);
+			vfOption = L"fps=" + std::to_wstring(fps) + L",scale=" + std::to_wstring(x) + L":" + std::to_wstring(y);
+		}
+		else {
+			vfOption = L"fps=" + std::to_wstring(fps);
+			// scale 옵션 생략
+		}
+
+		std::wstring command = ffmpegPath + L" -y -i \"" + inputPath + L"\" -vf " + vfOption + L" " +
 			options + L" \"" + outputDir + L"\\" + prefixBuffer + L"_%04d." + extension + L"\"";
 
 		STARTUPINFOW si = { sizeof(si) };
 		PROCESS_INFORMATION pi;
-
 
 		// ffmpeg 실행
 		if (!CreateProcessW(nullptr, &command[0], nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi)) 

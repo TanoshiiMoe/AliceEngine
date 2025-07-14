@@ -9,10 +9,12 @@
 #include <Manager/PackageResourceManager.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Manager/TimerManager.h>
+#include <Manager/ClassManager.h>
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
-#include <System/TransformSystem.h>
+#include <System/CollisionSystem.h>
+#include <System/PhysicsSystem.h>
 #include <Scene/Scene.h>
 #include <Object/Camera.h>
 
@@ -32,8 +34,10 @@ Application::~Application()
 	RenderSystem::Destroy();
 	ScriptSystem::Destroy();
 	InputSystem::Destroy();
-	TransformSystem::Destroy();
 	SceneManager::Destroy();
+	CollisionSystem::Destroy();
+	ClassManager::Destroy();
+	PhysicsSystem::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -64,14 +68,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void Application::Initialize()
 {
 	ObjectHandler::Create();
-	RenderSystem::Create();
 	ScriptSystem::Create();
 	InputSystem::Create();
-	TransformSystem::Create();
 	D2DRenderManager::Create();
 	SceneManager::Create();
 	UpdateTaskManager::Create();
 	TimerManager::Create();
+	RenderSystem::Create();
+	CollisionSystem::Create();
+	PhysicsSystem::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -122,9 +127,11 @@ void Application::Initialize()
 
 	Input::Initialize(m_hwnd);
 	TimerManager::GetInstance().Initialize();
-
+	TimerManager::GetInstance().UpdateTime();
 	PackageResourceManager::Create();
 	PackageResourceManager::GetInstance().Initialize();
+	ClassManager::Create();
+	ClassManager::GetInstance().RegisterClassInfo();
 }
 
 void Application::Run()
@@ -134,8 +141,8 @@ void Application::Run()
 
 void Application::Update()
 {
-	SceneManager::GetInstance().Update();
 	TimerManager::GetInstance().UpdateTime();
+	SceneManager::GetInstance().Update();
 	Input::Update();
 }
 
@@ -146,7 +153,7 @@ void Application::Input()
 
 void Application::Render()
 {
-	D2DRenderManager::GetInstance().Render();
+	RenderSystem::GetInstance().Render();
 }
 
 void Application::Uninitialize()
@@ -157,7 +164,8 @@ void Application::Uninitialize()
 	RenderSystem::GetInstance().UnRegistAll();
 	ScriptSystem::GetInstance().UnRegistAll();
 	InputSystem::GetInstance().UnRegistAll();
-	TransformSystem::GetInstance().UnRegistAll();
+	CollisionSystem::GetInstance().UnRegistAll();
+	PhysicsSystem::GetInstance().UnRegistAll();
 	CoUninitialize();
 }
 

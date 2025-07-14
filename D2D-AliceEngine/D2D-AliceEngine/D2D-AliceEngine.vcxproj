@@ -85,7 +85,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>d2dengine_pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -115,7 +117,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>d2dengine_pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,8 +146,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Animation\PlayerAnimatorInstance.h" />
-    <ClInclude Include="Animation\EnemyAnimatorInstance.h" />
     <ClInclude Include="Scripts\Enemy.h" />
     <ClInclude Include="Scene\DemoScene3.h" />
     <ClInclude Include="Scripts\Player.h" />
@@ -161,13 +163,15 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scripts\Sun.h" />
-    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="d2dengine_pch.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\YuukaVideo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Animation\PlayerAnimatorInstance.cpp" />
-    <ClCompile Include="Animation\EnemyAnimatorInstance.cpp" />
+    <ClCompile Include="d2dengine_pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Scripts\Enemy.cpp" />
     <ClCompile Include="Scene\DemoScene3.cpp" />
     <ClCompile Include="Scripts\Player.cpp" />

@@ -4,7 +4,7 @@
 
 using namespace Microsoft::WRL;
 
-class ID2D1Bitmap1;
+struct ID2D1Bitmap1;
 class SpriteRenderer : public RenderComponent
 {
 public:
@@ -23,6 +23,5 @@ public:
 	FVector2 GetSize();
 
 	std::wstring filePath; // 파일의 경로
-	SpriteInfo spriteInfo;
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 };

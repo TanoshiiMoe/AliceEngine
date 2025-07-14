@@ -213,19 +213,19 @@ void Aru::Input()
 	{
 		SceneManager::ChangeScene(L"SolarSystemScene");
 	}
-	if (Input::IsKeyDown(VK_D))
+	if (Input::IsKeyDown(VK_RIGHT))
 	{
 		m_aru->transform()->AddPosition(5.0f, 0);
 	}
-	if (Input::IsKeyDown(VK_A))
+	if (Input::IsKeyDown(VK_LEFT))
 	{
 		m_aru->transform()->AddPosition(-5.0f, 0);
 	}
-	if (Input::IsKeyDown(VK_S))
+	if (Input::IsKeyDown(VK_DOWN))
 	{
 		m_aru->transform()->AddPosition(0, -5.0f);
 	}
-	if (Input::IsKeyDown(VK_W))
+	if (Input::IsKeyDown(VK_UP))
 	{
 		m_aru->transform()->AddPosition(0, 5.0f);
 	}

@@ -2,20 +2,18 @@
 #include "pch.h"
 #include <Core/Singleton.h>
 
-struct ViewRect { float minX, maxX, minY, maxY; };
+/*
+* @briefs : 
+	렌더에 필요한 변수와 함수들이 모여있는 싱글톤 매니저입니다.
+	RenderSystem에서 렌더링합니다.
+*/
 
-class RenderComponent;
 using namespace Define;
 class D2DRenderManager : public Singleton<D2DRenderManager>
 {
 public:
 	D2DRenderManager();
 	~D2DRenderManager();
-
-	// 렌더링 대기열
-	std::vector<std::vector<WeakObjectPtr<RenderComponent>>> m_renderers;
-
-	void AddRenderer(WeakObjectPtr<RenderComponent> renderer);
 
 	static ID2D1DeviceContext7* GetD2DDevice();
 
@@ -24,16 +22,10 @@ private:
 public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
-	void Render();
-	ViewRect GetCameraView();
-	bool CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view);
-
-	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
 
 	void GetApplicationSize(int& width, int& height);
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수
 	void OutputError(HRESULT hr);
-
 	void DrawDebugBox(const float& startPosX, const float& startPosY, const float& ensPosX, const float& ensPosY, const float& r, const float& g, const float& b, const float& a);
 
 	// D2D variable

@@ -9,7 +9,7 @@
 
 BoxComponent::BoxComponent()
 {
-	m_color = FColor::Black;
+	SetColor(FColor::Black);
 }
 
 BoxComponent::BoxComponent(const FVector2& _size = FVector2(50,50), const FColor& color = FColor::Black)
@@ -69,8 +69,22 @@ void BoxComponent::Render()
 	}
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F world = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
+
+	switch (eboxtype)
+	{
+	case Define::EBoxType::RenderDebugBox:
+		if (GetTransform()) world = GetTransform()->ToMatrix();
+		break;
+	case Define::EBoxType::ColliderDebugBox:
+		world = GetTransform()->ToMatrixWithOutScale();
+		break;
+	case Define::EBoxType::Max:
+		break;
+	default:
+		break;
+	}
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
 	{
@@ -86,7 +100,7 @@ void BoxComponent::Render()
 	}
 
 	context->SetTransform(view);
-	context->DrawRectangle(D2D1::RectF(0, 0, m_size.x, m_size.y), m_pBrush.Get(), 5.0f);
+	context->DrawRectangle(D2D1::RectF(0, 0, m_size.x, m_size.y), m_pBrush.Get(), thickness);
 }
 
 float BoxComponent::GetSizeX()

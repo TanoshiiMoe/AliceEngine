@@ -3,7 +3,7 @@
 #include <Animation/AnimationController.h>
 
 class gameObject;
-class PlayerAnimatorInstance;
+class AnimatorInstance;
 class IdleState;
 class AttackState;
 struct SpriteSheet;
@@ -26,7 +26,7 @@ public:
 
 	gameObject* m_owner;
 
-	PlayerAnimatorInstance* animInstance;
+	AnimatorInstance* animInstance;
 	AnimatorController animController;
 };
 

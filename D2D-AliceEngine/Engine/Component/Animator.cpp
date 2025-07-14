@@ -120,14 +120,14 @@ float Animator::GetSizeX()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-	return bmpSize.width;
+	return static_cast<float>(bmpSize.width);
 }
 
 float Animator::GetSizeY()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-	return bmpSize.height;
+	return static_cast<float>(bmpSize.height);
 }
 
 void Animator::PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<AnimationClip> clip)

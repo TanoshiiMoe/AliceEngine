@@ -12,7 +12,9 @@
 
 #include <Animation/TextureLoader.h>
 #include <Animation/AnimationController.h>
-#include "../Animation/PlayerAnimatorInstance.h"
+#include <Animation/AnimatorInstance.h>
+#include <Component/Collider.h>
+#include <Component/Rigidbody2D.h>
 
 void Player::Initialize()
 {
@@ -84,11 +86,23 @@ void Player::OnStart()
 	m_owner->transform()->SetPivot(0.5f);
 	
 	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
-	animInstance = m_owner->AddComponent<PlayerAnimatorInstance>();
-	animInstance->m_layer = 5;
+	animInstance = m_owner->AddComponent<AnimatorInstance>();
 	animInstance->SetAnimatorController(&animController);
-
+	animInstance->LoadSpriteSheet(L"Zero\\Zero_sprites.json");
+	animInstance->LoadAnimationClip(L"Zero\\Zero_idle_anim.json");
+	animInstance->LoadAnimationClip(L"Zero\\Zero_attack_anim.json");
+	animInstance->LoadAnimationClip(L"Zero\\Zero_walk_anim.json");
+	animInstance->ApplyClipDurationsToStates();
+	//animInstance->SetLooping(true);
+	animInstance->Play();
+	animInstance->m_layer = 5;
 	animInstance->OnStart();
+
+	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35,60));
+	m_owner->AddComponent<Rigidbody2D>();
+	m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+	m_owner->GetComponent<Rigidbody2D>()->gravityScale = 1;
+	m_owner->GetComponent<Rigidbody2D>()->mass = 300;
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 }
@@ -117,5 +131,9 @@ void Player::Input()
 	else
 	{
 		animInstance->SetBool("attack", false);
+	}
+	if (Input::IsKeyPressed(VK_SPACE))
+	{
+ 		m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 20);
 	}
 }

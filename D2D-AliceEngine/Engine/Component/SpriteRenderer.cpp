@@ -89,19 +89,19 @@ float SpriteRenderer::GetSizeX()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-	return bmpSize.width;
+	return static_cast<float>(bmpSize.width);
 }
 
 float SpriteRenderer::GetSizeY()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-	return bmpSize.height;
+	return static_cast<float>(bmpSize.height);
 }
 
 FVector2 SpriteRenderer::GetSize()
 {
 	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-	return FVector2(bmpSize.width, bmpSize.height);
+	return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
 }

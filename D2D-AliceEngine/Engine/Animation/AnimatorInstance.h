@@ -64,6 +64,8 @@ public:
 	virtual void SetAnimatorController(AnimatorController* controller);
 	virtual void ChangeState(const std::string& stateName);
 
+	void ApplyClipDurationsToStates();
+
 	virtual void OnStart();
 	void OnExit();
 };

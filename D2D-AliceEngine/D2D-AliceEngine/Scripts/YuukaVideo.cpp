@@ -28,7 +28,7 @@ void YuukaVideo::OnStart()
 	m_yuuka->transform()->SetRotation(0);
 	m_yuuka->transform()->SetScale(1.0f, 1.0f);
 	m_yuuka->transform()->SetPivot(0.5f);
-	m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 30);
+	m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 30, L"jpg", 95, true);
 	m_yuuka->GetComponent<VideoComponent>()->Play();
 
 	m_yuuka->AddComponent<InputComponent>()->SetAction(m_yuuka->GetHandle(),[this]() { Input(); });
@@ -53,14 +53,14 @@ void YuukaVideo::Input()
 	{
 		m_yuuka->GetComponent<VideoComponent>()->Stop();
 		m_yuuka->RemoveComponent<VideoComponent>(m_yuuka->GetComponent<VideoComponent>());
-		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\asna.mp4", 30);
+		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\asna.mp4", 30, L"jpg", 95, true);
 		m_yuuka->GetComponent<VideoComponent>()->Play();
 	}
 	if (Input::IsKeyPressed(VK_6))
 	{
 		m_yuuka->GetComponent<VideoComponent>()->Stop();
 		m_yuuka->RemoveComponent<VideoComponent>(m_yuuka->GetComponent<VideoComponent>());
-		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 30);
+		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 30, L"jpg", 95, true);
 		m_yuuka->GetComponent<VideoComponent>()->Play();
 	}
 }

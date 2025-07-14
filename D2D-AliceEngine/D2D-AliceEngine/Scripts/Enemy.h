@@ -1,12 +1,12 @@
 #pragma once
 #include <Component/ScriptComponent.h>
 #include <Animation/AnimationController.h>
-#include "../Animation/EnemyAnimatorInstance.h"
 
 class gameObject;
 class Animator;
 class IdleState;
 class AttackState;
+class AnimatorInstance;
 struct SpriteSheet;
 struct AnimationClip;
 class Enemy : public ScriptComponent
@@ -27,7 +27,7 @@ public:
 
 	gameObject* m_owner;
 
-	EnemyAnimatorInstance* animInstance;
+	AnimatorInstance* animInstance;
 	AnimatorController animController;
 
 	std::shared_ptr<SpriteSheet> Texture;

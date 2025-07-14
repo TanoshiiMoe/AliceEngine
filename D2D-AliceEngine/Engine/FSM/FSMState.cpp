@@ -6,7 +6,6 @@
 FSMState::FSMState()
 {
 	SetName(L"FSMState");
-	animator = nullptr;
 }
 
 FSMState::~FSMState()
@@ -34,6 +33,11 @@ void FSMState::Exit()
 void FSMState::SetAnimator(Animator* _animator)
 {
 	animator = _animator;
+}
+
+void FSMState::SetAnimationClip(AnimationClip* _motion)
+{
+	motion = _motion;
 }
 
 void FSMState::SetStateMachine(FiniteStateMachine* _owner)

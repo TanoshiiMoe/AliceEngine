@@ -5,17 +5,16 @@
 
 RenderComponent::RenderComponent()
 {
-	RenderSystem::GetInstance().Regist(WeakFromThis<Component>());
 }
 
 RenderComponent::~RenderComponent()
 {
-	RenderSystem::GetInstance().UnRegist(WeakFromThis<Component>());
+	RenderSystem::GetInstance().UnRegist(WeakFromThis<RenderComponent>());
 }
 
 void RenderComponent::Initialize()
 {
-	D2DRenderManager::GetInstance().AddRenderer(WeakFromThis<RenderComponent>());
+	RenderSystem::GetInstance().Regist(WeakFromThis<RenderComponent>());
 }
 
 void RenderComponent::Update(const float& deltaSeconds)

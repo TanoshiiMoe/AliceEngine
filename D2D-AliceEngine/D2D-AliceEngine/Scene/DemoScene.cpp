@@ -23,6 +23,7 @@
 
 void DemoScene::Initialize()
 {
+	__super::Initialize();
 }
 
 void DemoScene::Release()
@@ -57,15 +58,15 @@ void DemoScene::OnEnter()
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
 		L" <카메라> \n"
-		L" [화살표 상,하] : 카메라 위,아래 이동 \n"
-		L" [화살표 좌/우] : 카메라 좌,우 이동 \n"
+		L" [w,s] : 카메라 상하 이동 \n"
+		L" [a,d] : 카메라 좌우 이동 \n"
 		L" [ [ / ] ] : 카메라 축소, 확대\n"
 		L" [1/2] : D2D, Unity 좌표계 \n"
 		L"\n"
 		L" <태양, 지구, 달> \n"
 		L" [z,c] : 태양 회전 \n"
-		L" [w,s] : 태양 상하 이동 \n"
-		L" [a,d] : 태양 좌우 이동 \n"
+		L" [화살표 상,하] : 태양 상하 이동 \n"
+		L" [화살표 좌/우] : 태양 좌우 이동 \n"
 		L" [4] : 태양 이름 한영 전환 \n"
 		L" [b,m] : 지구 회전 \n"
 		L" [y,h] : 지구 상하 이동 \n"

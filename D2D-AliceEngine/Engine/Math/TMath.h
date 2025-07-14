@@ -4,6 +4,11 @@
 #include <random>
 #include <Define/Define.h>
 
+/*
+* 수학관련입니다. 
+* nodiscard는 반환값을 강제로 사용하도록 하는 키워드입니다.
+*/
+
 template<typename T>
 class TVector2
 {
@@ -90,11 +95,42 @@ public:
 	}
 };
 
+template<typename T>
+struct TBox2
+{
+public:
+	TVector2<T> Min;
+	TVector2<T> Max;
+
+	TBox2<T>()
+	{
+
+	}
+
+	TBox2<T>(const T& minx, const T& miny, const T& maxx, const T& maxy)
+	{
+		Min.x = minx;
+		Min.y = miny;
+		Max.x = maxx;
+		Max.y = maxy;
+	}
+
+	TBox2<T>(const TBox2<T>& inbox)
+	{
+		Min = inbox.Min;
+		Max = inbox.Max;
+	}
+
+	TVector2<T> GetCenter()
+	{
+		return TVector2<T>((Min + Max) * 0.5f);
+	}
+};
+
 namespace Math
 {
 	static std::random_device rd;
 
-	
 	template<typename T>
 	struct TRandom
 	{
@@ -117,9 +153,21 @@ namespace Math
 			T newRadius = std::sqrt(radiusRandom(gen));
 			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
 		}
+
+		// 원 모양의 구간에 임의의 점을 반환하는 함수.
+		[[nodiscard]] static TVector2<T> GetRandomPointInCircle2D(const T& centerX, const T& centerY, const T& radius)
+		{
+			static std::mt19937 gen(rd());
+			std::uniform_real_distribution<T>  angleRandom(0, 2 * static_cast<T>(Define::PI));
+			std::uniform_real_distribution<T>  radiusRandom(1, radius*radius);
+
+			T theta = angleRandom(gen);
+			T newRadius = std::sqrt(radiusRandom(gen));
+			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
+		}
 	};
-	
 }
 
 using FVector2 = TVector2<float>;
+using FBox = TBox2<float>;
 using FRandom = Math::TRandom<float>;

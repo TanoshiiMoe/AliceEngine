@@ -6,12 +6,15 @@ class SystemBase
 {
 public:
 	SystemBase() {}
-	~SystemBase() {}
+	virtual ~SystemBase() {}
 
 public:
 	void Regist(const WeakObjectPtr<Component>& _component)
 	{
-		m_Components.emplace_back(_component);
+		if (!_component.expired())
+		{
+			m_Components.emplace_back(_component);
+		}
 	}
 
 	void UnRegist(WeakObjectPtr<Component>&& _component)

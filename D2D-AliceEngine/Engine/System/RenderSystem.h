@@ -4,28 +4,27 @@
 #include <Core/Singleton.h>
 #include "../System/SystemBase.h"
 
-class RenderSystem : public SystemBase, public Singleton<RenderSystem>
+class RenderComponent;
+struct ViewRect { float minX, maxX, minY, maxY; };
+class RenderSystem : public Singleton<RenderSystem>
 {
 public:
-	void Initialize() 
-	{
-		for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
-		{
-			if ((*it).lock())
-			{
-				(*it).lock()->Initialize();
-			}
-		}
-	}
-	void UnInitialize()
-	{
-		for (auto it = m_Components.begin(); it != m_Components.end(); ++it)
-		{
-			if ((*it).lock())
-			{
-				(*it).lock()->Release();
-			}
-		}
-		UnRegistAll();
-	}
+	RenderSystem();
+	~RenderSystem();
+
+public:
+	void Regist(WeakObjectPtr<RenderComponent>&& renderer);
+	void UnRegist(WeakObjectPtr<RenderComponent>&& renderer);
+	void UnRegistAll();
+
+	void Initialize();
+	void UnInitialize();
+
+	// 렌더링 대기열
+	std::vector<std::vector<WeakObjectPtr<RenderComponent>>> m_renderers;
+
+	void Render();
+	ViewRect GetCameraView();
+	bool CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view);
+	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
 };
