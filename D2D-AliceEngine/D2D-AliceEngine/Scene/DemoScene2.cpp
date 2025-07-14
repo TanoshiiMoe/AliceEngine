@@ -92,6 +92,14 @@ void DemoScene2::OnEnter()
 	m_backgroundImage = NewObject<gameObject>(L"yuuka");
 	m_backgroundImage->AddComponent<BackGroundImage>();
 
+	//m_alice = NewObject<gameObject>(L"alice");
+	//m_alice->transform()->SetPosition(-300, 0);
+	//m_alice->transform()->SetRotation(0);
+	//m_alice->transform()->SetScale(0.3f, 0.3f);
+	//m_alice->transform()->SetPivot(0.5f);
+	//m_alice->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Alice.webm", 30, L"jpg", 95, false);
+	//m_alice->GetComponent<VideoComponent>()->Play();
+
 	m_aru = NewObject<gameObject>(L"aru");
 	m_aru->AddComponent<Aru>();
 

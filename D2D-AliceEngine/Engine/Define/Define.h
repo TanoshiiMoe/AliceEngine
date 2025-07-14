@@ -89,6 +89,8 @@ namespace Define
 	enum class ParameterType { Int, Float, Bool, Trigger };
 
 	enum class EBoxType { RenderDebugBox, ColliderDebugBox, Max };
+
+	enum class ERigidBodyType { Dynamic, Kinematic, Static, Max };
 };
 
 #define VK_A 0x41  // 'A'

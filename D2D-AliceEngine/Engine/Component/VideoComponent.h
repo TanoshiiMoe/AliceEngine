@@ -22,7 +22,7 @@ public:
 	// quality :
 	//  png 일때는 압축률
 	//  jpg 일때는 품질
-	void LoadData(const std::wstring& path, const int& fps, const std::wstring& extension = L"jpg", const int& quality = 95);
+	void LoadData(const std::wstring& path, const int& fps, const std::wstring& extension = L"jpg", const int& quality = 95, const bool& bIsBackGround = false);
 	void LoadFrame(size_t frameIndex);
 	void Release() override;
 	void Render() override;

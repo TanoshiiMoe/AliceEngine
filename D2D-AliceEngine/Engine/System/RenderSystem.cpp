@@ -152,7 +152,7 @@ void RenderSystem::Render()
 				continue;
 			}
 			auto renderer = dynamic_cast<RenderComponent*>(it->lock());
-			if (renderer->m_layer == -999)
+			if (renderer->m_layer != -999)
 			{
 				collectedComponents.push_back(renderer);
 			}
