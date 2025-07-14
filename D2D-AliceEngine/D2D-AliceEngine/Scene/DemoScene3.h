@@ -21,6 +21,7 @@ public:
 	gameObject* m_backgroundImage;
 	gameObject* m_spriteAnimationTest;
 	gameObject* m_player;
+	gameObject* m_wall;
 	std::vector<gameObject*> m_enemies;
 	int enemyMax = 20;
 	gameObject* m_widget;

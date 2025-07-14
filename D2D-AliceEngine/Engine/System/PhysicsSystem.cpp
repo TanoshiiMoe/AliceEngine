@@ -14,7 +14,7 @@ PhysicsSystem::~PhysicsSystem()
 {
 }
 
-void PhysicsSystem::Regist(const WeakObjectPtr<RigidBody2D>& _component)
+void PhysicsSystem::Regist(const WeakObjectPtr<Rigidbody2D>& _component)
 {
 	if (!_component.expired())
 	{
@@ -22,7 +22,7 @@ void PhysicsSystem::Regist(const WeakObjectPtr<RigidBody2D>& _component)
 	}
 }
 
-void PhysicsSystem::UnRegist(WeakObjectPtr<RigidBody2D>&& _component)
+void PhysicsSystem::UnRegist(WeakObjectPtr<Rigidbody2D>&& _component)
 {
 	m_rigidBodies.clear();
 }
@@ -34,7 +34,28 @@ void PhysicsSystem::UnRegistAll()
 
 void PhysicsSystem::Update(const float& deltaSeconds)
 {
+	for (auto it = m_rigidBodies.begin(); it != m_rigidBodies.end(); )
+	{
+		if (it->expired())
+		{
+			it = m_rigidBodies.erase(it);
+		}
+		else
+		{
+			Rigidbody2D* rb = it->Get();
+			// ºÎµúÃÆ´Ù¸é
+			if (collidedBodies.find(rb) != collidedBodies.end())
+			{
 
+			}
+			// ºÎµúÄ¡Áö ¾Ê¾Ò´Ù¸é
+			else
+			{
+				rb->Update(deltaSeconds);
+			}
+			it++;
+		}
+	}
 }
 
 void PhysicsSystem::Initialize()

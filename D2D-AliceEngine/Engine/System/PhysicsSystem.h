@@ -8,7 +8,6 @@
 * @details :
 */
 
-class RigidBody2D;
 class PhysicsSystem : public ITickable, public UObject, public Singleton<PhysicsSystem>
 {
 public:
@@ -16,8 +15,8 @@ public:
 	~PhysicsSystem();
 
 public:
-	void Regist(const WeakObjectPtr<RigidBody2D>& _component);
-	void UnRegist(WeakObjectPtr<RigidBody2D>&& _component);
+	void Regist(const WeakObjectPtr<Rigidbody2D>& _component);
+	void UnRegist(WeakObjectPtr<Rigidbody2D>&& _component);
 	void UnRegistAll();
 	virtual void Update(const float& deltaSeconds) override;
 
@@ -27,5 +26,5 @@ public:
 
 	std::unordered_set<Rigidbody2D*> collidedBodies;
 protected:
-	std::vector<WeakObjectPtr<RigidBody2D>> m_rigidBodies;
+	std::vector<WeakObjectPtr<Rigidbody2D>> m_rigidBodies;
 };

@@ -15,6 +15,7 @@
 #include "../Scripts/Aru2.h"
 #include "../Scripts/Player.h"
 #include "../Scripts/Enemy.h"
+#include <Component/Collider.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -112,17 +113,31 @@ void DemoScene3::OnEnter()
 		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
 		m_enemies[i]->AddComponent<Enemy>();
 		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
-
-		m_enemies[i]->transform()->SetPosition(
+	
+		// 플레이어보다 조금 떨어진 위치에서 생성되게하는 로직
+		/*m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInTorus2D(
 				m_player->transform()->GetPosition().x,
 				m_player->transform()->GetPosition().y,
-				300.0f,
-				512.0f));
+				200.0f,
+				412.0f));*/
+		// 특정 지점에서 원 모양이내에 랜덤판 위치에서 생성되게하는 로직
+		m_enemies[i]->transform()->SetPosition(
+			FRandom::GetRandomPointInCircle2D(
+				400,
+				300,
+				300.0f
+			));
+	
 		m_enemies[i]->transform()->SetRotation(0);
 		m_enemies[i]->transform()->SetScale(FRandom::GetRandomInRange(0.3, 0.9f));
 		m_enemies[i]->transform()->SetPivot(0.5f);
 	}
+
+	m_wall = NewObject<gameObject>(L"wall");
+	m_wall->transform()->SetPivot(0.5f);
+	m_wall->transform()->SetPosition(0, -200);
+	m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 }
 
 void DemoScene3::OnExit()

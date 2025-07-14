@@ -76,12 +76,8 @@ void Collider::SetBoxSize(const FVector2& _size)
 	boxComponent->SetThickness(3.0f);
 	boxComponent->m_layer = 999; // 디버그용 맨 뒤에 그려지도록. 999
 
-	if (gameObject* owner = GetOwner())
-	{
-		FVector2 pos = owner->transform()->GetPosition();
-		aabb.minVector.x = pos.x - _size.x / 2;
-		aabb.minVector.y = pos.y - _size.y / 2;
-		aabb.maxVector.x = pos.x + _size.x / 2;
-		aabb.maxVector.y = pos.y + _size.y / 2;
-	}
+	aabb.minVector.x = -_size.x / 2;
+	aabb.minVector.y = -_size.y / 2;
+	aabb.maxVector.x = _size.x / 2;
+	aabb.maxVector.y = _size.y / 2;
 }

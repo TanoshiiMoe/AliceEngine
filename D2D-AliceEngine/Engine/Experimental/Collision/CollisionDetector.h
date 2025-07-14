@@ -18,6 +18,7 @@ namespace Physics
 		static bool CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
 		static bool IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
 		static void PushOverlappedArea(Collider* a, Collider* b);
+		static void PushOverlappedAreaNoMass(Collider* a, Collider* b);
 	};
 
 	struct NodeEntry

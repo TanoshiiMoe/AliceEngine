@@ -127,7 +127,7 @@ void Application::Initialize()
 
 	Input::Initialize(m_hwnd);
 	TimerManager::GetInstance().Initialize();
-
+	TimerManager::GetInstance().UpdateTime();
 	PackageResourceManager::Create();
 	PackageResourceManager::GetInstance().Initialize();
 	ClassManager::Create();
@@ -141,8 +141,8 @@ void Application::Run()
 
 void Application::Update()
 {
-	SceneManager::GetInstance().Update();
 	TimerManager::GetInstance().UpdateTime();
+	SceneManager::GetInstance().Update();
 	Input::Update();
 }
 

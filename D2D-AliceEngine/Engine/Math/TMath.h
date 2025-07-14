@@ -153,6 +153,18 @@ namespace Math
 			T newRadius = std::sqrt(radiusRandom(gen));
 			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
 		}
+
+		// 원 모양의 구간에 임의의 점을 반환하는 함수.
+		[[nodiscard]] static TVector2<T> GetRandomPointInCircle2D(const T& centerX, const T& centerY, const T& radius)
+		{
+			static std::mt19937 gen(rd());
+			std::uniform_real_distribution<T>  angleRandom(0, 2 * static_cast<T>(Define::PI));
+			std::uniform_real_distribution<T>  radiusRandom(1, radius*radius);
+
+			T theta = angleRandom(gen);
+			T newRadius = std::sqrt(radiusRandom(gen));
+			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
+		}
 	};
 }
 
