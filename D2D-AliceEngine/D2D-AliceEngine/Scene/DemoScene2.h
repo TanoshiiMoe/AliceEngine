@@ -1,7 +1,6 @@
 #pragma once
 #include <Scene/Scene.h>
 
-class TextRenderComponent;
 class DemoScene2 : public Scene
 {
 public:
