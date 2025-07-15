@@ -92,6 +92,8 @@ namespace Define
 	enum class EBoxType { RenderDebugBox, ColliderDebugBox, Max };
 
 	enum class ERigidBodyType { Dynamic, Kinematic, Static, Max };
+
+	enum class ERigidBodyState { Space, Ground, OnRigidBody, Max};
 };
 
 #define VK_A 0x41  // 'A'

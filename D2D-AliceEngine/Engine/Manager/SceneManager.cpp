@@ -58,7 +58,7 @@ Camera* SceneManager::GetCamera()
 
 void SceneManager::PerformSceneChange(const std::wstring& NewobjectName)
 {
-    if (WeakObjectPtr<Scene> searchedScene = GetUUIDFromObjectName(NewobjectName))
+    if (WeakObjectPtr<Scene> searchedScene = GetWeakPtrFromObjectName(NewobjectName))
     {
         if (WeakObjectPtr<Scene> weak = m_currentScene)	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
         {
@@ -73,7 +73,28 @@ void SceneManager::PerformSceneChange(const std::wstring& NewobjectName)
     }
 }
 
+WeakObjectPtr<Scene> SceneManager::GetWeakPtrFromObjectName(const std::wstring& name)
+{
+	// 이름 기준으로 찾기
+	for (auto& scenePair : GetInstance().m_scenes)
+	{
+		if (WeakObjectPtr<Scene> sceneWeak = scenePair.second.get())
+		{
+			if (sceneWeak->GetName() == name)
+			{
+				return sceneWeak;
+			}
+		}
+	}
+	return nullptr;
+}
+
 void SceneManager::ChangeScene(const std::wstring& NewobjectName)
 {
     GetInstance().m_nextSceneName = NewobjectName;
+}
+
+void SceneManager::RestartScene()
+{
+    GetInstance().m_nextSceneName = GetInstance().m_currentScene->GetName();
 }

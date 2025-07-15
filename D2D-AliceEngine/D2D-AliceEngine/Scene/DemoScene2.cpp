@@ -48,6 +48,7 @@ void DemoScene2::OnEnter()
 	m_widget3 = NewObject<gameObject>(L"widget3");
 
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
+		L"\n"
 		L" <카메라> \n"
 		L" [W,A,S,D]  : 카메라 상,하,좌,우 이동 \n"
 		L" [1/2] : D2D, Unity 좌표계 \n"
@@ -64,6 +65,7 @@ void DemoScene2::OnEnter()
 		L" [5,6] : 무기 스폰, 무기 파괴 \n"
 		L" [7,8] : 지갑 스폰, 지갑 파괴 \n"
 		L" [4] : 아루 이름 한영 전환 \n"
+		L"\n"
 		L" ::Delegate \n"
 		L" [T] : 아루가 아루2에게 데미지 주기 \n"
 		L" [Y] : 아루 5 회복하기 \n"

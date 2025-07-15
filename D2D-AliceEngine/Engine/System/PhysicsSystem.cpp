@@ -46,7 +46,7 @@ void PhysicsSystem::Update(const float& deltaSeconds)
 			// 부딪치지 않았다면 물리 시뮬레이션 함
 			if (collidedBodies.find(rb) == collidedBodies.end())
 			{
-				rb->isGrounded = false;
+				rb->m_eRigidBodyState = Define::ERigidBodyState::Space;
 			}
 			rb->Update(deltaSeconds);
 			it++;

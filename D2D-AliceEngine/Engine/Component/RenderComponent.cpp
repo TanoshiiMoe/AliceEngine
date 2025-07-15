@@ -54,5 +54,9 @@ void RenderComponent::Render()
 	{
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}
+	if (bFlip)
+	{
+		view = D2D1::Matrix3x2F::Scale(-1.f, 1.f) * view;
+	}
 	context->SetTransform(view);
 }

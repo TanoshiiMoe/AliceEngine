@@ -78,9 +78,10 @@ void DemoScene3::OnEnter()
 		L" [1/2] : D2D, Unity 좌표계 \n"
 		L" [Q] : 카메라를 플레이어에게 붙이기 \n"
 		L" [E] : 카메라를 떼기 \n"
+		L" [R] : Scene 재시작 \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 100));
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 80));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
@@ -144,7 +145,7 @@ void DemoScene3::OnEnter()
 
 	m_wall = NewObject<gameObject>(L"wall");
 	m_wall->transform()->SetPivot(0.5f);
-	m_wall->transform()->SetPosition(0, -200);
+	m_wall->transform()->SetPosition(0, -300);
 	m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 }
 
@@ -171,5 +172,9 @@ void DemoScene3::PlayerInput()
 	if (Input::IsKeyPressed(VK_3))
 	{
 		SceneManager::ChangeScene(L"aruScene");
+	}
+	if (Input::IsKeyPressed(VK_R))
+	{
+		SceneManager::RestartScene();
 	}
 }

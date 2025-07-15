@@ -111,40 +111,97 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 	float ratioA = massA / totalMass;
 	float ratioB = massB / totalMass;
 
-    float weight = 1.05f;
-	pushX *= weight;
-	pushY *= weight;
-
 	if (typeA == Define::ERigidBodyType::Dynamic && typeB == Define::ERigidBodyType::Dynamic)
     {
 		// 둘 다 밀림 (질량 비율)
 		a->GetOwner()->transform()->AddPosition(pushX * ratioA, pushY * ratioA);
 		b->GetOwner()->transform()->AddPosition(-pushX * ratioB, -pushY * ratioB);
+
+
+        // 공중에서 부딪칠 때와 바닥에서 부딪칠 때
+        //if (!rbA->isGrounded && rbB->isGrounded)
+        //{
+        //    rbA->isGrounded = true;
+        //}
+		//else if (rbA->isGrounded && !rbB->isGrounded)
+		//{
+        //    rbB->isGrounded = true;
+		//}
+
+        switch (rbA->m_eRigidBodyState)
+        {
+            case Define::ERigidBodyState::Space:
+				switch (rbB->m_eRigidBodyState)
+				{
+				case Define::ERigidBodyState::Space:
+					break;
+				case Define::ERigidBodyState::Ground:
+                    rbA->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
+					break;
+                case Define::ERigidBodyState::OnRigidBody:
+                    rbA->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
+                    break;
+				}
+                break;
+            case Define::ERigidBodyState::Ground:
+				switch (rbB->m_eRigidBodyState)
+				{
+				case Define::ERigidBodyState::Space:
+                    rbB->m_eRigidBodyState = Define::ERigidBodyState::Ground;
+					break;
+				case Define::ERigidBodyState::Ground:
+					break;
+				case Define::ERigidBodyState::OnRigidBody:
+					break;
+				}
+                break;
+            case Define::ERigidBodyState::OnRigidBody:
+				switch (rbB->m_eRigidBodyState)
+				{
+				case Define::ERigidBodyState::Space:
+					rbB->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
+					break;
+				case Define::ERigidBodyState::Ground:
+					break;
+				case Define::ERigidBodyState::OnRigidBody:
+                    rbA->m_eRigidBodyState = Define::ERigidBodyState::Space;
+                    rbB->m_eRigidBodyState = Define::ERigidBodyState::Space;
+					break;
+				}
+				break;
+        }
+       
 	}
 	else if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic)) 
     {
 		// A만 밀림
 		a->GetOwner()->transform()->AddPosition(pushX, pushY);
-        if (a->GetOwner()->transform()->GetPosition().y >= aabb_b.maxVector.y)
+		//if (a->GetOwner()->transform()->GetPosition().y >= aabb_b.maxVector.y)
+		if (aabb_a.minVector.y <= aabb_b.maxVector.y)
         {
-            rbA->isGrounded = true;
+            //rbA->isGrounded = true;
+            rbA->m_eRigidBodyState != Define::ERigidBodyState::Ground;
         }
-        else
-        {
-            rbA->isGrounded = false;
-        }
+		else
+		{
+            rbA->m_eRigidBodyState != Define::ERigidBodyState::Space;
+			//rbA->isGrounded = false;
+		}
 	}
 	else if ((typeA == Define::ERigidBodyType::Static || typeA == Define::ERigidBodyType::Kinematic) && typeB == Define::ERigidBodyType::Dynamic) 
     {
 		// B만 밀림
 		b->GetOwner()->transform()->AddPosition(-pushX, -pushY);
-		if (b->GetOwner()->transform()->GetPosition().y >= aabb_a.maxVector.y)
+		//if (b->GetOwner()->transform()->GetPosition().y >= aabb_a.maxVector.y)
+		if (aabb_b.minVector.y <= aabb_a.maxVector.y)
 		{
-			rbB->isGrounded = true;
+			//rbB->isGrounded = true;
+            rbB->m_eRigidBodyState != Define::ERigidBodyState::Ground;
 		}
 		else
 		{
-			rbA->isGrounded = false;
+			//rbB->isGrounded = false;
+            rbB->m_eRigidBodyState != Define::ERigidBodyState::Space;
 		}
 	}
 	// 나머지(Static-Static, Kinematic-Kinematic, Static-Kinematic): 아무것도 안 함

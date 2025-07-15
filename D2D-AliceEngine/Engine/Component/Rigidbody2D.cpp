@@ -49,8 +49,10 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 		force = FVector2(0.0f, 0.0f);
 		torque = 0.0f;
 
-		if (isGrounded)
+		if (m_eRigidBodyState != Define::ERigidBodyState::Space)
+		{
 			velocity.y = 0.0f;
+		}
 
 		remaining -= dt;
 	}
@@ -84,7 +86,7 @@ void Rigidbody2D::Release()
 
 void Rigidbody2D::AddForce(const float& _x, const float& _y)
 {
-	isGrounded = false;
+	m_eRigidBodyState = Define::ERigidBodyState::Space;
    /* velocity.x += _x;
     velocity.y += _y;*/
 	force.x += _x * 1000;
