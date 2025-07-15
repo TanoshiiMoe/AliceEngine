@@ -25,6 +25,7 @@ public:
 	FVector2 force = FVector2(0.0f, 0.0f);              // 누적 힘
 	float torque = 0.0f;                              // 누적 토크
 	float gravityScale = 1.0f;                        // 중력 영향 배수 (빠른 낙하)
+	//bool isGround = false;
 	Define::ERigidBodyState m_eRigidBodyState = Define::ERigidBodyState::Space; // 땅에 닿았는지 여부
 	Define::ERigidBodyType m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
 
