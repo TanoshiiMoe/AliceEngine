@@ -63,4 +63,25 @@ void YuukaVideo::Input()
 		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Yuuka3.mp4", 30, L"jpg", 95, true);
 		m_yuuka->GetComponent<VideoComponent>()->Play();
 	}
+	if (Input::IsKeyPressed(VK_7))
+	{
+		m_yuuka->GetComponent<VideoComponent>()->Stop();
+		m_yuuka->RemoveComponent<VideoComponent>(m_yuuka->GetComponent<VideoComponent>());
+		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Aru_NewYear.webm", 30, L"jpg", 95, true);
+		m_yuuka->GetComponent<VideoComponent>()->Play();
+	}
+	if (Input::IsKeyPressed(VK_8))
+	{
+		m_yuuka->GetComponent<VideoComponent>()->Stop();
+		m_yuuka->RemoveComponent<VideoComponent>(m_yuuka->GetComponent<VideoComponent>());
+		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\AruDress.webm", 30, L"jpg", 95, true);
+		m_yuuka->GetComponent<VideoComponent>()->Play();
+	}
+	if (Input::IsKeyPressed(VK_9))
+	{
+		m_yuuka->GetComponent<VideoComponent>()->Stop();
+		m_yuuka->RemoveComponent<VideoComponent>(m_yuuka->GetComponent<VideoComponent>());
+		m_yuuka->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Alice.webm", 30, L"jpg", 95, true);
+		m_yuuka->GetComponent<VideoComponent>()->Play();
+	}
 }
