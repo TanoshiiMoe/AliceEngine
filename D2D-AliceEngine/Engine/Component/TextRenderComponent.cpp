@@ -66,7 +66,6 @@ void TextRenderComponent::Release()
 
 void TextRenderComponent::Render()
 {
-	__super::Render();
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	if (!context || m_content.empty()) return;
 	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
@@ -74,16 +73,9 @@ void TextRenderComponent::Render()
 	InitializeLayout();
 	// 피벗 보정
 	D2D1_POINT_2F pivotOffset = {
-		m_metrics.width * 0.5f,
-		m_metrics.height * 0.5f
+		m_metrics.width * GetPivot()->x,
+		m_metrics.height * GetPivot()->y
 	};
-	if (auto pivot = GetPivot()) {
-		pivotOffset = {
-			m_metrics.width * pivot->x,
-			m_metrics.height * pivot->y
-		};
-	}
-
 	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
 
 	// 로컬 변환 먼저 적용 (내부 transform + pivotAdjust)

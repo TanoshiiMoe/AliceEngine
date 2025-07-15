@@ -16,7 +16,12 @@ public:
 	virtual float GetSizeY() = 0;
 	virtual void Render() override;
 
+	void SetFlip(const bool& _flip) { bFlip = _flip; }
+
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	int m_layer = -999;
+	bool bFlip = false;
+protected:
+	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
 };
 

@@ -64,12 +64,6 @@ void Enemy::OnStart()
 	animInstance->Play();
 	animInstance->m_layer = 3;
 	animInstance->OnStart();
-
-	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(50, 80));
-	m_owner->AddComponent<Rigidbody2D>();
-	m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-	m_owner->GetComponent<Rigidbody2D>()->gravityScale = 1;
-	m_owner->GetComponent<Rigidbody2D>()->mass = 60;
 }
 
 void Enemy::OnEnd()

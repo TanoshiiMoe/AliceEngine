@@ -20,6 +20,7 @@ public:
 	TVector2(T _x) : x(_x), y(_x) {}
 
 	TVector2(const TVector2<T>& left) { x = left.x; y = left.y; }
+	TVector2(TVector2<T>& left) { x = left.x; y = left.y; }
 	~TVector2() {}
 
 	TVector2 operator*(const float& value)
@@ -40,6 +41,7 @@ public:
 	{
 		return TVector2(x - rhs.x, y - rhs.y);
 	}
+
 	bool operator!=(const TVector2& rhs)
 	{
 		return x != rhs.x && y != rhs.y;
@@ -68,7 +70,6 @@ public:
 		x = rhs.x;
 		y = rhs.y;
 	}
-
 	bool IsZero()
 	{
 		return x == 0 && y == 0;
@@ -94,6 +95,18 @@ public:
 		return x * x + y * y;
 	}
 };
+
+template<typename T>
+TVector2<T> operator-(const TVector2<T>& lhs, const TVector2<T>& rhs)
+{
+	return TVector2<T>(lhs.x - rhs.x, lhs.y - rhs.y);
+}
+
+template<typename T>
+TVector2<T> operator+(const TVector2<T>& lhs, const TVector2<T>& rhs)
+{
+	return TVector2<T>(lhs.x + rhs.x, lhs.y + rhs.y);
+}
 
 template<typename T>
 struct TBox2

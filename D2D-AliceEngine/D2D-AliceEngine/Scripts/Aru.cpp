@@ -48,7 +48,7 @@ void Aru::OnStart()
 	m_aru = GetOwner();
 	m_aru->transform()->SetPosition(0, 0);
 	m_aru->transform()->SetRotation(0);
-	m_aru->transform()->SetScale(0.3f, 0.3f);
+	m_aru->transform()->SetScale(0.25f, 0.25f);
 	m_aru->transform()->SetPivot(0.5f);
 	m_aru->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
 	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
@@ -215,10 +215,12 @@ void Aru::Input()
 	}
 	if (Input::IsKeyDown(VK_RIGHT))
 	{
+		m_aru->GetComponent<SpriteRenderer>()->SetFlip(true);
 		m_aru->transform()->AddPosition(5.0f, 0);
 	}
 	if (Input::IsKeyDown(VK_LEFT))
 	{
+		m_aru->GetComponent<SpriteRenderer>()->SetFlip(false);
 		m_aru->transform()->AddPosition(-5.0f, 0);
 	}
 	if (Input::IsKeyDown(VK_DOWN))

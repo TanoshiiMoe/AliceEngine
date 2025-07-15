@@ -46,6 +46,11 @@ void Collider::Update(const float& deltaSeconds)
 		dirty = false;
 	}
 
+	UpdateAABB();
+}
+
+void Collider::UpdateAABB()
+{
 	if (gameObject* owner = GetOwner())
 	{
 		FVector2 pos = owner->transform()->GetPosition();
@@ -69,15 +74,20 @@ void Collider::SetBoxSize(const FVector2& _size)
 	if (comp.expired())
 	{
 		boxComponent = GetOwner()->AddComponent<BoxComponent>();
-		boxComponent->SetBoxType(Define::EBoxType::ColliderDebugBox);
+		boxComponent->SetIgnoreOwnerScale(true);
 	}
 	boxComponent->SetColor(FColor::Red);
 	boxComponent->SetSize(_size);
 	boxComponent->SetThickness(3.0f);
 	boxComponent->m_layer = 999; // 디버그용 맨 뒤에 그려지도록. 999
 
-	aabb.minVector.x = -_size.x / 2;
-	aabb.minVector.y = -_size.y / 2;
-	aabb.maxVector.x = _size.x / 2;
-	aabb.maxVector.y = _size.y / 2;
+	UpdateAABB();
+}
+
+void Collider::SetBoxColor(const FColor _color)
+{
+	if (boxComponent)
+	{
+		boxComponent->SetColor(_color);
+	}
 }

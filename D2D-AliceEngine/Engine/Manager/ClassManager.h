@@ -101,6 +101,7 @@ public:
 		className = typeid(RenderComponent).name();
 		REGISTER_MEMBER(allMemberInfos[className], RenderComponent, m_layer);
 		REGISTER_MEMBER(allMemberInfos[className], RenderComponent, drawType);
+		REGISTER_MEMBER(allMemberInfos[className], RenderComponent, bFlip);
 		className = typeid(SpriteRenderer).name();
 		REGISTER_MEMBER(allMemberInfos[className], SpriteRenderer, filePath);
 		REGISTER_MEMBER(allMemberInfos[className], SpriteRenderer, m_bitmap);
@@ -109,7 +110,6 @@ public:
 		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, m_color);
 		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, thickness);
 		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, m_size);
-		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, eboxtype);
 		className = typeid(TextRenderComponent).name();
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_layout);
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_dWriteTextFormat);
@@ -148,7 +148,6 @@ public:
 		REGISTER_MEMBER(allMemberInfos[className], Animator, m_bitmap);
 		REGISTER_MEMBER(allMemberInfos[className], Animator, m_curTime);
 		REGISTER_MEMBER(allMemberInfos[className], Animator, m_curFrame);
-		REGISTER_MEMBER(allMemberInfos[className], Animator, bFlip);
 		REGISTER_MEMBER(allMemberInfos[className], Animator, bPlay);
 		REGISTER_MEMBER(allMemberInfos[className], Animator, bLoopping);
 		REGISTER_MEMBER(allMemberInfos[className], Animator, m_accumTime);

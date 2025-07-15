@@ -20,19 +20,19 @@ void CollisionSystem::Regist(const WeakObjectPtr<Collider>& _component)
 {
 	if (!_component.expired())
 	{
-		m_AABBs.emplace_back(_component);
+		m_colliders.emplace_back(_component);
 	}
 }
 
 void CollisionSystem::UnRegist(WeakObjectPtr<Collider>&& _component)
 {
-	for (auto it = m_AABBs.begin(); it != m_AABBs.end(); ++it)
+	for (auto it = m_colliders.begin(); it != m_colliders.end(); ++it)
 	{
 		if ((*it).lock() && _component.lock())
 		{
 			if ((*it).lock() == _component.lock())
 			{
-				m_AABBs.erase(it);
+				m_colliders.erase(it);
 				return;
 			}
 		}
@@ -41,13 +41,12 @@ void CollisionSystem::UnRegist(WeakObjectPtr<Collider>&& _component)
 
 void CollisionSystem::UnRegistAll()
 {
-	m_AABBs.clear();
+	m_colliders.clear();
 }
 
 void CollisionSystem::Update(const float& deltaSeconds)
 {
-	PhysicsSystem::GetInstance().collidedBodies = Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_AABBs);
-	//Physics::FCollisionDetector::BruteForceOverlapCheck(m_AABBs);
+	PhysicsSystem::GetInstance().collidedBodies = Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_colliders);
 }
 
 void CollisionSystem::Initialize()

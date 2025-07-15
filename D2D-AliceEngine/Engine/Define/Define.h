@@ -18,6 +18,7 @@ namespace Define
 	static const std::wstring BASE_RESOURCE_PATH = L"Resource\\";
 	static const std::wstring BASE_EXTENSION_PATH = L"Extension\\";
 	static const float PI = 3.14159265358979323846264f;
+	static const float GRAVITYCONSTANT = 9.8f;
 
 	enum class EDrawType
 	{
@@ -91,6 +92,8 @@ namespace Define
 	enum class EBoxType { RenderDebugBox, ColliderDebugBox, Max };
 
 	enum class ERigidBodyType { Dynamic, Kinematic, Static, Max };
+
+	enum class ERigidBodyState { Space, Ground, OnRigidBody, Max};
 };
 
 #define VK_A 0x41  // 'A'

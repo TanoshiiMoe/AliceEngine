@@ -35,24 +35,10 @@ public:
 		return rawPointer;
 	}
 
-	static WeakObjectPtr<Scene> GetUUIDFromObjectName(const std::wstring& name)
-	{
-		// 이름 기준으로 찾기
-		for (auto& scenePair : GetInstance().m_scenes)
-		{
-			if (WeakObjectPtr<Scene> sceneWeak = scenePair.second.get())
-			{
-				if (sceneWeak->GetName() == name)
-				{
-					return sceneWeak;
-				}
-			}
-		}
-		return nullptr;
-	}
-
 	void PerformSceneChange(const std::wstring& NewobjectName);
+	static WeakObjectPtr<Scene> GetWeakPtrFromObjectName(const std::wstring& name);
 	static void ChangeScene(const std::wstring& NewobjectName);
+	static void RestartScene();
 
 private:
 	std::unordered_map<std::wstring, std::unique_ptr<Scene>> m_scenes;

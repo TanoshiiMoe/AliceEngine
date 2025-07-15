@@ -18,6 +18,8 @@ public:
 	void Release() override;
 
 	void SetBoxSize(const FVector2& _size);
+	void SetBoxColor(const FColor _color);
+	void UpdateAABB();
 
 	FAABB aabb;
 	BoxComponent* boxComponent;

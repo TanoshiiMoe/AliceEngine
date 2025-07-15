@@ -4,10 +4,6 @@
 
 class gameObject;
 class AnimatorInstance;
-class IdleState;
-class AttackState;
-struct SpriteSheet;
-struct AnimationClip;
 class Player : public ScriptComponent
 {
 public:
@@ -25,6 +21,13 @@ public:
 	void Input();
 
 	gameObject* m_owner;
+	int jumpCount = 0;
+	int maxJumpCount = 2;
+	int prevGroundState = 0;
+
+	float walkSpeed = 120;
+
+	bool bMoveRigidBody = true;
 
 	AnimatorInstance* animInstance;
 	AnimatorController animController;

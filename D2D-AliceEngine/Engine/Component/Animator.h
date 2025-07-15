@@ -73,7 +73,6 @@ public:
 	bool IsEnd();
 	void SetLooping(const bool& loop) { bLoopping = loop; }
 	bool IsLooping() { return bLoopping; }
-	void SetFlip(const bool& _flip) { bFlip = _flip; }
 
 	float time = -1;
 	std::string curAnimationClip;
@@ -83,7 +82,6 @@ public:
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 	size_t m_curTime = 0;
 	size_t m_curFrame = 0;
-	bool bFlip = false;
 	bool bPlay = false;
 	bool bLoopping = false;
 	float m_accumTime = 0;

@@ -21,7 +21,7 @@ public:
 
 	void AddChildObject(WeakObjectPtr<TransformComponent> child);
 
-	FVector2 m_pivot{ 0,0 }; // 좌표 중심점
+	FVector2 m_pivot{ 0.5f,0.5f }; // 좌표 중심점
 	Transform m_localTransform; // Transform 컴포넌트
 	Transform m_worldTransform; // Transform 컴포넌트
 	bool bMoved = false; // 최초 Collision에 쓰이는 변수

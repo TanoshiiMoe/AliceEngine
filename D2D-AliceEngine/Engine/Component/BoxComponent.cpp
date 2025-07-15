@@ -6,6 +6,7 @@
 #include <Math/TMath.h>
 #include <Math/TColor.h>
 #include <Math/Transform.h>
+#include <Component/TransformComponent.h>
 
 BoxComponent::BoxComponent()
 {
@@ -52,55 +53,29 @@ void BoxComponent::Release()
 
 void BoxComponent::Render()
 {
-	__super::Render();
 	if (GetOwner() == nullptr) return;
 
-	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	Camera* camera = SceneManager::GetCamera();
-	D2D1_POINT_2F pivotOffset = {
-		m_size.x * 0.5f,
-		m_size.y * 0.5f
+	__super::Render();
+
+	FVector2 scale(1.0f, 1.0f);
+	if (bIgnoreOwnerScale) {
+		if (auto transformComp = GetOwner()->transform())
+			scale = transformComp->GetScale();
+	}
+	// 스케일 무시 모드면 scale은 (1,1) 유지
+
+	float drawWidth = m_size.x / (scale.x != 0 ? scale.x : 1.0f);
+	float drawHeight = m_size.y / (scale.y != 0 ? scale.y : 1.0f);
+
+	D2D1_POINT_2F pivot = 
+	{
+		drawWidth * GetPivot()->x,
+		drawHeight * GetPivot()->y
 	};
-	if (auto pivot = GetPivot()) {
-		pivotOffset = {
-			m_size.x * pivot->x,
-			m_size.y * pivot->y
-		};
-	}
-	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = D2D1::Matrix3x2F::Identity();
-	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
-
-	switch (eboxtype)
-	{
-	case Define::EBoxType::RenderDebugBox:
-		if (GetTransform()) world = GetTransform()->ToMatrix();
-		break;
-	case Define::EBoxType::ColliderDebugBox:
-		world = GetTransform()->ToMatrixWithOutScale();
-		break;
-	case Define::EBoxType::Max:
-		break;
-	default:
-		break;
-	}
-
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity;
-	}
-
-	cameraInv.Invert();
-	view = view * world * cameraInv;
-
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
-	}
-
-	context->SetTransform(view);
-	context->DrawRectangle(D2D1::RectF(0, 0, m_size.x, m_size.y), m_pBrush.Get(), thickness);
+	D2DRenderManager::GetD2DDevice()->DrawRectangle(
+		D2D1::RectF(-pivot.x, -pivot.y, pivot.x, pivot.y),
+		m_pBrush.Get(), thickness
+	);
 }
 
 float BoxComponent::GetSizeX()

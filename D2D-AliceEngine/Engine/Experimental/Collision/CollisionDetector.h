@@ -19,6 +19,7 @@ namespace Physics
 		static bool IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
 		static void PushOverlappedArea(Collider* a, Collider* b);
 		static void PushOverlappedAreaNoMass(Collider* a, Collider* b);
+		static bool LineAABBIntersect(const FVector2& p0, const FVector2& p1, const FAABB& aabb, FVector2& outHitPos);
 	};
 
 	struct NodeEntry

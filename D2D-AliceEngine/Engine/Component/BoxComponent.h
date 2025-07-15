@@ -19,18 +19,20 @@ public:
 	virtual float GetSizeX() override;
 	virtual float GetSizeY() override;
 
-	void SetSize(const FVector2& _size){m_size = _size;}
+	void SetSize(const FVector2& _size){ m_size = _size; }
 	void SetColor(const FColor& color);
 	FColor GetColor() { return m_color; }
 	void SetThickness(const float& _thickness) { thickness = _thickness; }
 	float GetThickness() { return thickness; }
-	void SetBoxType(Define::EBoxType boxtype) { eboxtype = boxtype; }
-	Define::EBoxType GetBoxType() { return eboxtype; }
+
+	void SetIgnoreOwnerScale(bool ignore) { bIgnoreOwnerScale = ignore; }
+	bool GetIgnoreOwnerScale() const { return bIgnoreOwnerScale; }
 
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
 	FColor m_color;
 	float thickness = 5.0f;
 	FVector2 m_size;
-	Define::EBoxType eboxtype = Define::EBoxType::RenderDebugBox;
+private:
+	bool bIgnoreOwnerScale = false;
 };
 
