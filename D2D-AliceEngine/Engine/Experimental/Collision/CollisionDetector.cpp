@@ -68,7 +68,18 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
 
 bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
 {
-    return a->aabb.minVector.x < b->aabb.minVector.x;
+    if (a->aabb.minVector.x < b->aabb.minVector.x)
+    {
+        return true;
+    }
+    else if (a->aabb.minVector.x > b->aabb.minVector.x)
+    {
+        return false;
+    }
+    else
+    {
+        return a->aabb.minVector.y < b->aabb.minVector.y;
+    }
 }
 
 bool Physics::FCollisionDetector::IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
@@ -79,6 +90,12 @@ bool Physics::FCollisionDetector::IsOverlapped(const WeakObjectPtr<Collider>& a,
 		a.Get()->aabb.maxVector.y < b.Get()->aabb.minVector.y);
 }
 
+// 충돌을 감지하고 AABB 오버랩 된 부분을 밀어내는 로직입니다.
+// 각 상태를 나누어 관리합니다. 
+// 1. 땅 위
+// 2. 땅 위에 있는 오브젝트의 위
+// 3. 공기 중
+//
 void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 {
 	FAABB& aabb_a = a->aabb;
@@ -107,102 +124,104 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 		pushY = (aabb_a.minVector.y < aabb_b.minVector.y) ? -overlap_y : overlap_y;
 	}
 
+    float weight = 1.1f;
+    pushX *= weight;
+    pushY *= weight;
+
 	float totalMass = massA + massB;
 	float ratioA = massA / totalMass;
 	float ratioB = massB / totalMass;
 
 	if (typeA == Define::ERigidBodyType::Dynamic && typeB == Define::ERigidBodyType::Dynamic)
     {
-		// 둘 다 밀림 (질량 비율)
-		a->GetOwner()->transform()->AddPosition(pushX * ratioA, pushY * ratioA);
-		b->GetOwner()->transform()->AddPosition(-pushX * ratioB, -pushY * ratioB);
+        // 중심점 계산
+        float centerA_y = (aabb_a.minVector.y + aabb_a.maxVector.y) * 0.5f;
+        float centerB_y = (aabb_b.minVector.y + aabb_b.maxVector.y) * 0.5f;
 
+        Rigidbody2D* upper = nullptr;
+        Rigidbody2D* lower = nullptr;
 
-        // 공중에서 부딪칠 때와 바닥에서 부딪칠 때
-        //if (!rbA->isGrounded && rbB->isGrounded)
-        //{
-        //    rbA->isGrounded = true;
-        //}
-		//else if (rbA->isGrounded && !rbB->isGrounded)
-		//{
-        //    rbB->isGrounded = true;
-		//}
+        // y축 기준 위/아래 판별
+        if (centerA_y > centerB_y) {
+            upper = rbA;
+            lower = rbB;
+        }
+        else {
+            upper = rbB;
+            lower = rbA;
+        }
 
-        switch (rbA->m_eRigidBodyState)
+        // upper(위에 있는 오브젝트) 상태 전이
+        // y축 기준이니까 위에 있는 오브젝트, 아래에 있는 오브젝트를 나누자.
+        // 무조건 위에 있는 오브젝트를 기준으로 상태를 나누자.
+        switch (upper->m_eRigidBodyState)
         {
+        case Define::ERigidBodyState::Space:
+            switch (lower->m_eRigidBodyState)
+            {
             case Define::ERigidBodyState::Space:
-				switch (rbB->m_eRigidBodyState)
-				{
-				case Define::ERigidBodyState::Space:
-					break;
-				case Define::ERigidBodyState::Ground:
-                    rbA->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
-					break;
-                case Define::ERigidBodyState::OnRigidBody:
-                    rbA->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
-                    break;
-				}
+                // 둘 다 공중: 변화 없음
                 break;
             case Define::ERigidBodyState::Ground:
-				switch (rbB->m_eRigidBodyState)
-				{
-				case Define::ERigidBodyState::Space:
-                    rbB->m_eRigidBodyState = Define::ERigidBodyState::Ground;
-					break;
-				case Define::ERigidBodyState::Ground:
-					break;
-				case Define::ERigidBodyState::OnRigidBody:
-					break;
-				}
+                upper->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
                 break;
             case Define::ERigidBodyState::OnRigidBody:
-				switch (rbB->m_eRigidBodyState)
-				{
-				case Define::ERigidBodyState::Space:
-					rbB->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
-					break;
-				case Define::ERigidBodyState::Ground:
-					break;
-				case Define::ERigidBodyState::OnRigidBody:
-                    rbA->m_eRigidBodyState = Define::ERigidBodyState::Space;
-                    rbB->m_eRigidBodyState = Define::ERigidBodyState::Space;
-					break;
-				}
-				break;
+                upper->m_eRigidBodyState = Define::ERigidBodyState::OnRigidBody;
+                break;
+            }
+            break;
+        case Define::ERigidBodyState::Ground:
+            // 위에 있는 애가 Ground일 수는 거의 없음(특수상황)
+            break;
+        case Define::ERigidBodyState::OnRigidBody:
+            switch (lower->m_eRigidBodyState)
+            {
+            case Define::ERigidBodyState::Space:
+                upper->m_eRigidBodyState = Define::ERigidBodyState::Space;
+                break;
+            case Define::ERigidBodyState::Ground:
+                // 아래가 Ground면 위는 OnRigidBody 유지
+                break;
+            case Define::ERigidBodyState::OnRigidBody:
+                break;
+            }
+            break;
         }
-       
+
+        // 둘 다 밀림 (질량 비율)
+        a->GetOwner()->transform()->AddPosition(pushX * ratioA, pushY * ratioA);
+        b->GetOwner()->transform()->AddPosition(-pushX * ratioB, -pushY * ratioB);
 	}
 	else if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic)) 
     {
 		// A만 밀림
-		a->GetOwner()->transform()->AddPosition(pushX, pushY);
-		//if (a->GetOwner()->transform()->GetPosition().y >= aabb_b.maxVector.y)
 		if (aabb_a.minVector.y <= aabb_b.maxVector.y)
         {
             //rbA->isGrounded = true;
-            rbA->m_eRigidBodyState != Define::ERigidBodyState::Ground;
+            // 정확하게 위에 있을때만, 이건 x축의 벽에 부딪치는 경우.
+            if(!(aabb_a.minVector.x > aabb_b.maxVector.x - 20 || aabb_a.maxVector.x < aabb_b.minVector.x + 20))
+                rbA->m_eRigidBodyState = Define::ERigidBodyState::Ground;
         }
 		else
 		{
-            rbA->m_eRigidBodyState != Define::ERigidBodyState::Space;
+            rbA->m_eRigidBodyState = Define::ERigidBodyState::Space;
 			//rbA->isGrounded = false;
 		}
+		a->GetOwner()->transform()->AddPosition(pushX * 1.6f, pushY);
 	}
 	else if ((typeA == Define::ERigidBodyType::Static || typeA == Define::ERigidBodyType::Kinematic) && typeB == Define::ERigidBodyType::Dynamic) 
     {
 		// B만 밀림
-		b->GetOwner()->transform()->AddPosition(-pushX, -pushY);
-		//if (b->GetOwner()->transform()->GetPosition().y >= aabb_a.maxVector.y)
 		if (aabb_b.minVector.y <= aabb_a.maxVector.y)
 		{
-			//rbB->isGrounded = true;
-            rbB->m_eRigidBodyState != Define::ERigidBodyState::Ground;
+            if (!(aabb_b.minVector.x > aabb_a.maxVector.x - 20 || aabb_b.maxVector.x < aabb_a.minVector.x + 20))
+                rbB->m_eRigidBodyState = Define::ERigidBodyState::Ground;
 		}
 		else
 		{
-			//rbB->isGrounded = false;
-            rbB->m_eRigidBodyState != Define::ERigidBodyState::Space;
+            rbB->m_eRigidBodyState = Define::ERigidBodyState::Space;
 		}
+		b->GetOwner()->transform()->AddPosition(-pushX * 1.6f, -pushY);
 	}
 	// 나머지(Static-Static, Kinematic-Kinematic, Static-Kinematic): 아무것도 안 함
 }
@@ -245,4 +264,41 @@ void Physics::FCollisionDetector::PushOverlappedAreaNoMass(Collider* a, Collider
             b->GetOwner()->transform()->AddPosition(0, -push);
         }
     }
+}
+
+bool Physics::FCollisionDetector::LineAABBIntersect(const FVector2& p0, const FVector2& p1, const FAABB& aabb, FVector2& outHitPos)
+{
+    float tmin = 0.0f;
+    float tmax = 1.0f;
+
+    FVector2 d = p1 - p0;
+
+    for (int axis = 0; axis < 2; ++axis)
+    {
+        float p = (axis == 0) ? d.x : d.y;
+        float minVal = (axis == 0) ? aabb.minVector.x : aabb.minVector.y;
+        float maxVal = (axis == 0) ? aabb.maxVector.x : aabb.maxVector.y;
+        float p0val = (axis == 0) ? p0.x : p0.y;
+
+        if (fabs(p) < 1e-6f) // 이동량이 거의 없는 경우
+        {
+            if (p0val < minVal || p0val > maxVal)
+                return false; // 해당 축 범위를 벗어남
+        }
+        else
+        {
+            float t1 = (minVal - p0val) / p;
+            float t2 = (maxVal - p0val) / p;
+
+            if (t1 > t2) std::swap(t1, t2);
+            tmin = max(tmin, t1);
+            tmax = min(tmax, t2);
+            if (tmin > tmax)
+                return false;
+        }
+    }
+    // 교차 지점 = p0 + (p1-p0) * tmin
+    outHitPos = p0 + d * tmin;
+    // (추가로 tmin이 0~1 구간 안에 있어야 함: 이미 위에서 보장)
+    return true;
 }

@@ -25,6 +25,5 @@ public:
 	virtual void Release() override;
 
 	std::unordered_set<Rigidbody2D*> collidedBodies;
-protected:
 	std::vector<WeakObjectPtr<Rigidbody2D>> m_rigidBodies;
 };

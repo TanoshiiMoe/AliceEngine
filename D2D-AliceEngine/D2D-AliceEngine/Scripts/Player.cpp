@@ -37,7 +37,7 @@ void Player::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
-	float speed = 125.0f * deltaSeconds;
+	float speed = walkSpeed * deltaSeconds;
 	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
 	{
@@ -45,28 +45,44 @@ void Player::Update(const float& deltaSeconds)
 	}
 	if (Input::IsKeyDown(VK_RIGHT))
 	{
-		m_owner->transform()->AddPosition(speed, 0);
-		//m_owner->GetComponent<Rigidbody2D>()->AddForce(speed, 0);
+		if (bMoveRigidBody)
+			m_owner->GetComponent<Rigidbody2D>()->AddForce(speed, 0);
+		else
+			m_owner->transform()->AddPosition(speed, 0);
 		animInstance->SetFlip(true);
 		animInstance->SetFloat("speed", speed);
 	}
 	if (Input::IsKeyDown(VK_LEFT))
 	{
-		m_owner->transform()->AddPosition(-speed, 0);
-		//m_owner->GetComponent<Rigidbody2D>()->AddForce(-speed, 0);
+		if (bMoveRigidBody)
+			m_owner->GetComponent<Rigidbody2D>()->AddForce(-speed, 0);
+		else
+			m_owner->transform()->AddPosition(-speed, 0);
 		animInstance->SetFlip(false);
 		animInstance->SetFloat("speed", speed);
 	}
 	if (Input::IsKeyDown(VK_DOWN))
 	{
-		//m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
-		m_owner->transform()->AddPosition(0, -speed);
+		if (bMoveRigidBody)
+			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
+		else
+			m_owner->transform()->AddPosition(0, -speed);
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
-		//m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
-		m_owner->transform()->AddPosition(0, speed);
+		if (bMoveRigidBody)
+			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
+		else
+			m_owner->transform()->AddPosition(0, speed);
 	}
+	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
+	auto rb = m_owner->GetComponent<Rigidbody2D>();
+	bool isGround = (rb->m_eRigidBodyState == Define::ERigidBodyState::Ground ||
+					 rb->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody);
+	if (isGround && prevGroundState == 0) {
+		jumpCount = 0; // 땅에 처음 닿았을 때만 리셋
+	}
+	prevGroundState = isGround ? 1 : 0;
 }
 
 void Player::LateUpdate(const float& deltaSeconds)
@@ -107,9 +123,9 @@ void Player::OnStart()
 	m_owner->AddComponent<Rigidbody2D>();
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
 	rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-	rb->gravityScale = 3;
-	rb->mass = 30;
-	rb->drag = 0.5;
+	rb->gravityScale = 60;
+	rb->mass = 20;
+	rb->drag = 0.6;
 	//rb->angularDrag = 0;
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
@@ -142,7 +158,11 @@ void Player::Input()
 	}
 	if (Input::IsKeyPressed(VK_SPACE))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 400);
+		if (jumpCount < maxJumpCount)
+		{
+			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 800);
+			jumpCount++;
+		}
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
 	}
 }

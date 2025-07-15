@@ -43,11 +43,11 @@ void PhysicsSystem::Update(const float& deltaSeconds)
 		else
 		{
 			Rigidbody2D* rb = it->Get();
-			// 부딪치지 않았다면 물리 시뮬레이션 함
 			if (collidedBodies.find(rb) == collidedBodies.end())
 			{
 				rb->m_eRigidBodyState = Define::ERigidBodyState::Space;
 			}
+			// 부딪치지 않았다면 물리 시뮬레이션 함
 			rb->Update(deltaSeconds);
 			it++;
 		}

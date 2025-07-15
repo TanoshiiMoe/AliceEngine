@@ -74,6 +74,7 @@ void Collider::SetBoxSize(const FVector2& _size)
 	if (comp.expired())
 	{
 		boxComponent = GetOwner()->AddComponent<BoxComponent>();
+		boxComponent->SetIgnoreOwnerScale(true);
 	}
 	boxComponent->SetColor(FColor::Red);
 	boxComponent->SetSize(_size);
@@ -81,4 +82,12 @@ void Collider::SetBoxSize(const FVector2& _size)
 	boxComponent->m_layer = 999; // 디버그용 맨 뒤에 그려지도록. 999
 
 	UpdateAABB();
+}
+
+void Collider::SetBoxColor(const FColor _color)
+{
+	if (boxComponent)
+	{
+		boxComponent->SetColor(_color);
+	}
 }

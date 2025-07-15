@@ -47,7 +47,6 @@ void CollisionSystem::UnRegistAll()
 void CollisionSystem::Update(const float& deltaSeconds)
 {
 	PhysicsSystem::GetInstance().collidedBodies = Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_colliders);
-	//Physics::FCollisionDetector::BruteForceOverlapCheck(m_AABBs);
 }
 
 void CollisionSystem::Initialize()

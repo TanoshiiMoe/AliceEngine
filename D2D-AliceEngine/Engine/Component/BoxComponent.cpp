@@ -6,6 +6,7 @@
 #include <Math/TMath.h>
 #include <Math/TColor.h>
 #include <Math/Transform.h>
+#include <Component/TransformComponent.h>
 
 BoxComponent::BoxComponent()
 {
@@ -56,12 +57,25 @@ void BoxComponent::Render()
 
 	__super::Render();
 
+	FVector2 scale(1.0f, 1.0f);
+	if (bIgnoreOwnerScale) {
+		if (auto transformComp = GetOwner()->transform())
+			scale = transformComp->GetScale();
+	}
+	// 스케일 무시 모드면 scale은 (1,1) 유지
+
+	float drawWidth = m_size.x / (scale.x != 0 ? scale.x : 1.0f);
+	float drawHeight = m_size.y / (scale.y != 0 ? scale.y : 1.0f);
+
 	D2D1_POINT_2F pivot = 
 	{
-		m_size.x * GetPivot()->x,
-		m_size.y * GetPivot()->y
+		drawWidth * GetPivot()->x,
+		drawHeight * GetPivot()->y
 	};
-	D2DRenderManager::GetD2DDevice()->DrawRectangle(D2D1::RectF(-pivot.x, -pivot.y, pivot.x, pivot.y), m_pBrush.Get(), thickness);
+	D2DRenderManager::GetD2DDevice()->DrawRectangle(
+		D2D1::RectF(-pivot.x, -pivot.y, pivot.x, pivot.y),
+		m_pBrush.Get(), thickness
+	);
 }
 
 float BoxComponent::GetSizeX()

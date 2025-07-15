@@ -16,6 +16,7 @@ public:
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
 
+	bool AABBSweep(const FAABB& boxStart, const FAABB& boxEnd, const FAABB& target, float& outT, FVector2& outHitPos);
 	// 물리 속성 변수들
 	FVector2 velocity = FVector2(0.0f, 0.0f);           // 선속도
 	float angularVelocity = 0.0f;                     // 각속도

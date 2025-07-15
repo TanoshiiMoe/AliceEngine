@@ -25,9 +25,14 @@ public:
 	void SetThickness(const float& _thickness) { thickness = _thickness; }
 	float GetThickness() { return thickness; }
 
+	void SetIgnoreOwnerScale(bool ignore) { bIgnoreOwnerScale = ignore; }
+	bool GetIgnoreOwnerScale() const { return bIgnoreOwnerScale; }
+
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
 	FColor m_color;
 	float thickness = 5.0f;
 	FVector2 m_size;
+private:
+	bool bIgnoreOwnerScale = false;
 };
 
