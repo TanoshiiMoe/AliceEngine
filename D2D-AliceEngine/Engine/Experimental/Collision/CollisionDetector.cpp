@@ -30,7 +30,7 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
     // Sweep and Prune을 위한 정렬
     std::sort(objects.begin(), objects.end(), &FCollisionDetector::CompareColliderMinX);
     
-    std::unordered_set<Rigidbody2D*> ovelappedRigdBodies;
+    std::unordered_set<Rigidbody2D*> overlappedRigdBodies;
     for (size_t i = 0; i < objects.size(); ++i)
     {
         if (objects[i]->dirty) continue;
@@ -48,13 +48,22 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
             if (IsOverlapped(src, tar))
             {
                 PushOverlappedArea(src.Get(), tar.Get());
-                if (Rigidbody2D* rb = src->GetOwner()->GetComponent<Rigidbody2D>()) ovelappedRigdBodies.insert(rb);
-                if (Rigidbody2D* rb = tar->GetOwner()->GetComponent<Rigidbody2D>()) ovelappedRigdBodies.insert(rb);
-                std::wcout << L"[충돌] " << src->GetName() << L" " << tar->GetName() << L" 겹침\n";
+				if (Rigidbody2D* rbA = src->GetOwner()->GetComponent<Rigidbody2D>()) overlappedRigdBodies.insert(rbA);
+				if (Rigidbody2D* rbB = tar->GetOwner()->GetComponent<Rigidbody2D>()) overlappedRigdBodies.insert(rbB);
+
+                /*auto typeA = rbA ? rbA->m_eRigidBodyType : Define::ERigidBodyType::Static;
+                auto typeB = rbB ? rbB->m_eRigidBodyType : Define::ERigidBodyType::Static;*/
+
+                //// Dynamic-Static(또는 Kinematic) 충돌만 set에 추가
+                //if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic))
+                //    ovelappedRigdBodies.insert(rbA);
+                //if ((typeA == Define::ERigidBodyType::Static || typeA == Define::ERigidBodyType::Kinematic) && typeB == Define::ERigidBodyType::Dynamic)
+                //    ovelappedRigdBodies.insert(rbB);
+                //// Dynamic-Dynamic끼리는 넣지 않음!
             }
         }
     }
-    return ovelappedRigdBodies;
+    return overlappedRigdBodies;
 }
 
 bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
@@ -78,12 +87,14 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 	Rigidbody2D* rbA = a->GetOwner()->GetComponent<Rigidbody2D>();
 	Rigidbody2D* rbB = b->GetOwner()->GetComponent<Rigidbody2D>();
 
+	auto massA = rbA ? rbA->mass : FLT_MAX;
+	auto massB = rbB ? rbB->mass : FLT_MAX;
 	auto typeA = rbA ? rbA->m_eRigidBodyType : Define::ERigidBodyType::Static;
 	auto typeB = rbB ? rbB->m_eRigidBodyType : Define::ERigidBodyType::Static;
 
 	// 겹친 거리 계산
 	float overlap_x = min(aabb_a.maxVector.x, aabb_b.maxVector.x) - max(aabb_a.minVector.x, aabb_b.minVector.x);
-	float overlap_y = min(aabb_a.maxVector.y, aabb_b.maxVector.y) - max(aabb_a.minVector.y, aabb_b.minVector.y);
+    float overlap_y = min(aabb_a.maxVector.y, aabb_b.maxVector.y) - max(aabb_a.minVector.y, aabb_b.minVector.y);
 
 	// 밀림 방향 결정
 	float pushX = 0, pushY = 0;
@@ -96,21 +107,45 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 		pushY = (aabb_a.minVector.y < aabb_b.minVector.y) ? -overlap_y : overlap_y;
 	}
 
-	if (typeA == Define::ERigidBodyType::Dynamic && typeB == Define::ERigidBodyType::Dynamic) {
+	float totalMass = massA + massB;
+	float ratioA = massA / totalMass;
+	float ratioB = massB / totalMass;
+
+    float weight = 1.05f;
+	pushX *= weight;
+	pushY *= weight;
+
+	if (typeA == Define::ERigidBodyType::Dynamic && typeB == Define::ERigidBodyType::Dynamic)
+    {
 		// 둘 다 밀림 (질량 비율)
-		float totalMass = rbA->mass + rbB->mass;
-		float ratioA = rbB->mass / totalMass;
-		float ratioB = rbA->mass / totalMass;
 		a->GetOwner()->transform()->AddPosition(pushX * ratioA, pushY * ratioA);
 		b->GetOwner()->transform()->AddPosition(-pushX * ratioB, -pushY * ratioB);
 	}
-	else if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic)) {
+	else if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic)) 
+    {
 		// A만 밀림
 		a->GetOwner()->transform()->AddPosition(pushX, pushY);
+        if (a->GetOwner()->transform()->GetPosition().y >= aabb_b.maxVector.y)
+        {
+            rbA->isGrounded = true;
+        }
+        else
+        {
+            rbA->isGrounded = false;
+        }
 	}
-	else if ((typeA == Define::ERigidBodyType::Static || typeA == Define::ERigidBodyType::Kinematic) && typeB == Define::ERigidBodyType::Dynamic) {
+	else if ((typeA == Define::ERigidBodyType::Static || typeA == Define::ERigidBodyType::Kinematic) && typeB == Define::ERigidBodyType::Dynamic) 
+    {
 		// B만 밀림
 		b->GetOwner()->transform()->AddPosition(-pushX, -pushY);
+		if (b->GetOwner()->transform()->GetPosition().y >= aabb_a.maxVector.y)
+		{
+			rbB->isGrounded = true;
+		}
+		else
+		{
+			rbA->isGrounded = false;
+		}
 	}
 	// 나머지(Static-Static, Kinematic-Kinematic, Static-Kinematic): 아무것도 안 함
 }

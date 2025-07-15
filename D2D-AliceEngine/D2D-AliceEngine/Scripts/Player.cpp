@@ -38,6 +38,7 @@ void Player::Update(const float& deltaSeconds)
 	// 여기에 Update에 대한 로직 작성
 
 	float speed = 125.0f * deltaSeconds;
+	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
 	{
 		animInstance->SetFloat("speed", 0);
@@ -45,22 +46,26 @@ void Player::Update(const float& deltaSeconds)
 	if (Input::IsKeyDown(VK_RIGHT))
 	{
 		m_owner->transform()->AddPosition(speed, 0);
+		//m_owner->GetComponent<Rigidbody2D>()->AddForce(speed, 0);
 		animInstance->SetFlip(true);
 		animInstance->SetFloat("speed", speed);
 	}
 	if (Input::IsKeyDown(VK_LEFT))
 	{
 		m_owner->transform()->AddPosition(-speed, 0);
+		//m_owner->GetComponent<Rigidbody2D>()->AddForce(-speed, 0);
 		animInstance->SetFlip(false);
 		animInstance->SetFloat("speed", speed);
 	}
 	if (Input::IsKeyDown(VK_DOWN))
 	{
-		m_owner->transform()->AddPosition(0, -55.0f * deltaSeconds);
+		//m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
+		m_owner->transform()->AddPosition(0, -speed);
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
-		m_owner->transform()->AddPosition(0, 55.0f * deltaSeconds);
+		//m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
+		m_owner->transform()->AddPosition(0, speed);
 	}
 }
 
@@ -102,9 +107,8 @@ void Player::OnStart()
 	m_owner->AddComponent<Rigidbody2D>();
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
 	rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-	rb->gravityScale = 11;
-	rb->fallMultiplier = 4;
-	rb->mass = 10;
+	rb->gravityScale = 3;
+	rb->mass = 30;
 	rb->drag = 0.5;
 	//rb->angularDrag = 0;
 
@@ -138,7 +142,7 @@ void Player::Input()
 	}
 	if (Input::IsKeyPressed(VK_SPACE))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 200);
+		m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 400);
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
 	}
 }

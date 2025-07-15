@@ -16,6 +16,7 @@
 #include "../Scripts/Player.h"
 #include "../Scripts/Enemy.h"
 #include <Component/Collider.h>
+#include <Component/Rigidbody2D.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -113,7 +114,7 @@ void DemoScene3::OnEnter()
 		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
 		m_enemies[i]->AddComponent<Enemy>();
 		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
-	
+
 		// 플레이어보다 조금 떨어진 위치에서 생성되게하는 로직
 		/*m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInTorus2D(
@@ -121,17 +122,24 @@ void DemoScene3::OnEnter()
 				m_player->transform()->GetPosition().y,
 				200.0f,
 				412.0f));*/
-		// 특정 지점에서 원 모양이내에 랜덤판 위치에서 생성되게하는 로직
+				// 특정 지점에서 원 모양이내에 랜덤판 위치에서 생성되게하는 로직
 		m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInCircle2D(
 				400,
 				300,
-				300.0f
+				200.0f
 			));
-	
+
 		m_enemies[i]->transform()->SetRotation(0);
 		m_enemies[i]->transform()->SetScale(FRandom::GetRandomInRange(0.3, 0.9f));
 		m_enemies[i]->transform()->SetPivot(0.5f);
+
+		//m_enemies[i]->AddComponent<Collider>()->SetBoxSize(FVector2(50, 80));
+		m_enemies[i]->AddComponent<Collider>()->SetBoxSize(FVector2(FRandom::GetRandomInRange(20, 60), FRandom::GetRandomInRange(60, 100)));
+		m_enemies[i]->AddComponent<Rigidbody2D>();
+		m_enemies[i]->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+		m_enemies[i]->GetComponent<Rigidbody2D>()->gravityScale = 6;
+		m_enemies[i]->GetComponent<Rigidbody2D>()->mass = 10;
 	}
 
 	m_wall = NewObject<gameObject>(L"wall");

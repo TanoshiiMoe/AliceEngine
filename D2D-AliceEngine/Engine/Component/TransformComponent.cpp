@@ -5,7 +5,7 @@
 
 TransformComponent::TransformComponent()
 {
-	SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.0f));
+	SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.5f));
 }
 
 TransformComponent::~TransformComponent()

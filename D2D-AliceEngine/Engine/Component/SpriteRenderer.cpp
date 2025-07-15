@@ -44,45 +44,17 @@ void SpriteRenderer::Release()
 
 void SpriteRenderer::Render()
 {
-	__super::Render();
 	if (m_bitmap == nullptr) return;
-	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	Camera* camera = SceneManager::GetCamera();
-	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
-
-	D2D1_POINT_2F pivotOffset = {
-		bmpSize.width * 0.5f,
-		bmpSize.height * 0.5f
-	};
-	if (auto pivot = GetPivot()) {
-		pivotOffset = {
-			bmpSize.width * pivot->x,
-			bmpSize.height * pivot->y
-		};
-	}
-	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
-
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity;
-	}
-
-	// 로컬 피벗 기준 월드 변환, 카메라 역행렬 적용
-	cameraInv.Invert();
-	view = view * world * cameraInv;
-
-	// Unity 좌표계면 변환 추가
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
-	}
+	__super::Render();
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
-	context->SetTransform(view);
-	context->DrawBitmap(m_bitmap.get());
+	D2D1_POINT_2F m_pivot =
+	{
+		GetSizeX() * GetPivot()->x,
+		GetSizeY() * GetPivot()->y
+	};
+	D2D1_RECT_F destRect = { -m_pivot.x, -m_pivot.y,  m_pivot.x,  m_pivot.y };
+	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
 }
 
 float SpriteRenderer::GetSizeX()

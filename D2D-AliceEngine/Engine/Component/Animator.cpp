@@ -66,40 +66,16 @@ void Animator::Release()
 
 void Animator::Render()
 {
-	__super::Render();
 	if (sheet.get() == nullptr) return;
 	if (m_bitmap == nullptr) return;
 	if (curAnimationClip != nextAnimationClip) return;
-	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	Camera* camera = SceneManager::GetCamera();
-	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize(); // 비트맵 크기 및 피벗
 	auto& sprite = sheet.get()->sprites[animationClips[curAnimationClip]->frames[m_curFrame].spriteSheetIndex];
 
-	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
-	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
-
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity;
-	}
-
-	// 로컬 피벗 기준 월드 변환, 카메라 역행렬 적용
-	cameraInv.Invert();
-	view = view * world * cameraInv;
-
-	// Unity 좌표계면 변환 추가
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
-	}
-
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
-	float ScaleX = bmpSize.width / sheet.get()->textureWidth;
-	float ScaleY = bmpSize.height / sheet.get()->textureHeight;
+	float ScaleX = GetSizeX() / sheet.get()->textureWidth;
+	float ScaleY = GetSizeY() / sheet.get()->textureHeight;
 	float x = sprite.x * ScaleX;
-	float y = bmpSize.height - sprite.y * ScaleY;
+	float y = GetSizeY() - sprite.y * ScaleY;
 	float width = sprite.width * ScaleX;
 	float height = sprite.height * ScaleY;
 	D2D1_RECT_F SrcRect = { x, y - height, x + width, y };
@@ -107,12 +83,12 @@ void Animator::Render()
 
 	if (bFlip)
 	{
-		D2D1::Matrix3x2F flipX =
-			D2D1::Matrix3x2F::Scale(-1.f, 1.f);
-		view = flipX * view;
+		view = D2D1::Matrix3x2F::Scale(-1.f, 1.f) * view;
 	}
-	context->SetTransform(view);
-	context->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
+
+	__super::Render();
+
+	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
 	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 }
 

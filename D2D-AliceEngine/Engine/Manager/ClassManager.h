@@ -109,7 +109,6 @@ public:
 		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, m_color);
 		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, thickness);
 		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, m_size);
-		REGISTER_MEMBER(allMemberInfos[className], BoxComponent, eboxtype);
 		className = typeid(TextRenderComponent).name();
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_layout);
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_dWriteTextFormat);
