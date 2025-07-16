@@ -1,6 +1,37 @@
-# D2D-AliceEngine
-**D2D 기반으로 개발 중인 게임 엔진입니다.**  
+# AliceEngine
+**D2D 기반으로 개발 중인 2D 게임 엔진입니다.**  
 C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커니즘(충돌처리, 리소스매니저, 컴포넌트, 씬)을 지원합니다.
+
+
+## 팀원
+
+<div align="center">
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Chang-Jin-Lee">
+        <img src="https://github.com/Chang-Jin-Lee.png" width="120" height="120" style="border-radius:50%;object-fit:cover;border:2px solid #bbb;" alt="Chang-Jin-Lee 프로필"/><br>
+        <b>Chang-Jin-Lee</b><br>
+        <sub>Engine Developer</sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/OrangeSnack">
+        <img src="https://github.com/OrangeSnack.png" width="120" height="120" style="border-radius:50%;object-fit:cover;border:2px solid #bbb;" alt="OrangeSnack 프로필"/><br>
+        <b>OrangeSnack</b><br>
+        <sub>Game Contents Developer</sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/hth-hiro">
+        <img src="https://github.com/hth-hiro.png" width="120" height="120" style="border-radius:50%;object-fit:cover;border:2px solid #bbb;" alt="hth-hiro 프로필"/><br>
+        <b>hth-hiro</b><br>
+        <sub>Game Contents Developer</sub>
+      </a>
+    </td>
+  </tr>
+</table>
+</div>
 
 ## 프로젝트 구조
 - `Engine/` : 엔진 핵심 모듈
@@ -41,4 +72,4 @@ C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커
 
 ## 문의
 
-- 개발자: [이창진]
+- 개발자: [이창진, 강성근, 황태현]
