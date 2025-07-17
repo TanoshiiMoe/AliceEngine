@@ -18,6 +18,16 @@ public:
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
 
+	virtual void OnCollisionEnter2D(Collision2D* collider) override;
+	virtual void OnCollisionStay2D(Collision2D* collider) override;
+	virtual void OnCollisionExit2D(Collision2D* collider) override;
+	virtual void OnTriggerEnter2D(Collider* collider) override;
+	virtual void OnTriggerStay2D(Collider* collider) override;
+	virtual void OnTriggerExit2D(Collider* collider) override;
+
+	int EnterIndex = 0;
+	int ExitIndex = 0;
+
 	void Input();
 
 	gameObject* m_owner;
@@ -25,7 +35,7 @@ public:
 	int maxJumpCount = 2;
 	int prevGroundState = 0;
 
-	float walkSpeed = 120;
+	float walkSpeed = 10;
 
 	bool bMoveRigidBody = true;
 

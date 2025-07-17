@@ -30,5 +30,7 @@ public:
 	Define::ERigidBodyState m_eRigidBodyState = Define::ERigidBodyState::Space; // ¶¥¿¡ ´ê¾Ò´ÂÁö ¿©ºÎ
 	Define::ERigidBodyType m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
 
+	FVector2 collisionPush;
+
 	void AddForce(const float& _x, const float& _y);
 };
