@@ -241,8 +241,8 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 		}
 
 		// 둘 다 밀림 (질량 비율)
-		if (rbA) rbA->collisionPush += FVector2(pushX * ratioA, pushY * ratioA);
-		if (rbB) rbB->collisionPush += FVector2(-pushX * ratioB, -pushY * ratioB);
+		if (rbA) rbA->collisionPush += FVector2(pushX * ratioA * 1.2f, pushY * ratioA);
+		if (rbB) rbB->collisionPush += FVector2(-pushX * ratioB * 1.2f, -pushY * ratioB);
 	}
 	else if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic))
 	{

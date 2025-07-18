@@ -35,9 +35,9 @@ public:
 	int maxJumpCount = 2;
 	int prevGroundState = 0;
 
-	float walkSpeed = 10;
+	float walkSpeed = 100;
 
-	bool bMoveRigidBody = true;
+	bool bMoveRigidBody = false;
 
 	AnimatorInstance* animInstance;
 	AnimatorController animController;

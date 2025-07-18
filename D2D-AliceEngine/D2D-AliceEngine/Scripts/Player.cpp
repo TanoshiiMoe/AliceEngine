@@ -162,7 +162,7 @@ void Player::Input()
 	{
 		if (jumpCount < maxJumpCount)
 		{
-			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 420);
+			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 720);
 			jumpCount++;
 		}
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
