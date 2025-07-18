@@ -20,6 +20,14 @@ namespace Physics
 		static void PushOverlappedArea(Collider* a, Collider* b);
 		static void PushOverlappedAreaNoMass(Collider* a, Collider* b);
 		static bool LineAABBIntersect(const FVector2& p0, const FVector2& p1, const FAABB& aabb, FVector2& outHitPos);
+
+		static float CalcXOverlap(const FAABB& a, const FAABB& b);
+		// y축 겹침 길이 계산
+		static float CalcYOverlap(const FAABB& a, const FAABB& b);
+		// aabb 전체 width
+		static float Width(const FAABB& box);
+		// Ground 상태 판정
+		static bool IsOnGround(const FAABB& above, const FAABB& below, float threshold = 0.3f);
 	};
 
 	struct NodeEntry
