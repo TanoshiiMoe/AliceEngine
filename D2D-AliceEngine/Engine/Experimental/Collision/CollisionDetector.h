@@ -15,6 +15,8 @@ namespace Physics
 
 		static void BruteForceOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects);
 		static std::unordered_set<Rigidbody2D*> SweepAndPruneOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects);
+		static bool CheckCollisionCondition(WeakObjectPtr<Collider>& _object);
+		static void LoadPreviousCollisions();
 		static bool CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
 		static bool IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b);
 		static void PushOverlappedArea(Collider* a, Collider* b);
@@ -28,6 +30,7 @@ namespace Physics
 		static float Width(const FAABB& box);
 		// Ground 상태 판정
 		static bool IsOnGround(const FAABB& above, const FAABB& below, float threshold = 0.3f);
+		static void SavePreviousCollisionData(Collider* src, Collider* tar, std::unordered_set<Rigidbody2D*>& overlappedRigdBodies);
 	};
 
 	struct NodeEntry

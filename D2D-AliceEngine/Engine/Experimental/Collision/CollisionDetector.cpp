@@ -38,16 +38,12 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
     for (size_t i = 0; i < objects.size(); ++i)
     {
         auto src = objects[i];
-		if (!src) continue;
-        if (src->dirty) continue;
-		if (src->GetOwner()->transform()->bMoved == false) continue;
+		if (CheckCollisionCondition(src)) continue;
 
         for (size_t j = i + 1; j < objects.size(); ++j)
         {
 			auto tar = objects[j];
-			if (!tar) continue;
-			if (tar->dirty) continue;
-			if (tar->GetOwner()->transform()->bMoved == false) continue;
+			if (CheckCollisionCondition(tar)) continue;
 
             // Prune: 더 이상 겹칠 수 없으면 break
             if (tar->aabb.minVector.x > src->aabb.maxVector.x)
@@ -56,46 +52,28 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
             // 실제 충돌 검사
             if (IsOverlapped(src, tar))
             {
+				if (src.expired() || tar.expired()) continue;
                 PushOverlappedArea(src.Get(), tar.Get());
-
-                // 사용할 변수들 선언부터 해주자.
-				Collider* a = src.Get();
-				Collider* b = tar.Get();
-				Rigidbody2D* rbA = src->GetOwner()->GetComponent<Rigidbody2D>();
-				Rigidbody2D* rbB = tar->GetOwner()->GetComponent<Rigidbody2D>();
-				std::vector<ScriptComponent*> scA = a->GetOwner()->GetComponents<ScriptComponent>();
-				std::vector<ScriptComponent*> scB = b->GetOwner()->GetComponents<ScriptComponent>();
-
-				auto pair = std::minmax(a, b);
-                CollisionSystem::GetInstance().currentCollisions.insert(pair);
-
-				if (rbA) overlappedRigdBodies.insert(rbA);
-				if (rbB) overlappedRigdBodies.insert(rbB);
-
-                // 충돌이 일어난 정보를 담아서 건내주자.
-				Collision2D collision2D;
-				collision2D.collider = a;
-				collision2D.otherCollider = b;
-				collision2D.rigidbody = rbA;
-				collision2D.otherRigidbody = rbB;
-				collision2D.transform = a->GetTransform();
-
-                // 이전 충돌정보와 비교해서 Enter인지 Stay인지 검증하자.
-				if (CollisionSystem::GetInstance().previousCollisions.find(pair) == CollisionSystem::GetInstance().previousCollisions.end())
-				{
-					for (auto sc : scA) sc->OnCollisionEnter2D(&collision2D);
-					for (auto sc : scB) sc->OnCollisionEnter2D(&collision2D);
-				}
-				else
-				{
-					for (auto sc : scA) sc->OnCollisionStay2D(&collision2D);
-					for (auto sc : scB) sc->OnCollisionStay2D(&collision2D);
-				}
+				SavePreviousCollisionData(src.Get(), tar.Get(), overlappedRigdBodies);
             }
         }
     }
+	LoadPreviousCollisions();
 
-    // 이전 충돌 정보를 전부 검사하면서 현재 충돌정보에 없다면 그건 Exit이다.
+    return overlappedRigdBodies;
+}
+
+bool Physics::FCollisionDetector::CheckCollisionCondition(WeakObjectPtr<Collider>& _object)
+{
+	if (!_object) return true;
+	if (_object->dirty) return true;
+	if (_object->GetOwner()->transform()->bMoved == false) return true;
+	return false;
+}
+
+void Physics::FCollisionDetector::LoadPreviousCollisions()
+{
+	// 이전 충돌 정보를 전부 검사하면서 현재 충돌정보에 없다면 그건 Exit이다.
 	for (const auto& pair : CollisionSystem::GetInstance().previousCollisions)
 	{
 		if (CollisionSystem::GetInstance().currentCollisions.find(pair) == CollisionSystem::GetInstance().currentCollisions.end())
@@ -105,20 +83,55 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
 			Collision2D collision2D;
 			collision2D.collider = a;
 			collision2D.otherCollider = b;
-            if(a->GetOwner()) collision2D.rigidbody = a->GetOwner()->GetComponent<Rigidbody2D>();
-			if(b->GetOwner()) collision2D.otherRigidbody = b->GetOwner()->GetComponent<Rigidbody2D>();
+			if (a->GetOwner()) collision2D.rigidbody = a->GetOwner()->GetComponent<Rigidbody2D>();
+			if (b->GetOwner()) collision2D.otherRigidbody = b->GetOwner()->GetComponent<Rigidbody2D>();
 			collision2D.transform = a->GetTransform();
 
-            std::vector<ScriptComponent*> scA, scB;
-            if (a->GetOwner()) scA = a->GetOwner()->GetComponents<ScriptComponent>();
-            if (b->GetOwner()) scB = b->GetOwner()->GetComponents<ScriptComponent>();
+			std::vector<ScriptComponent*> scA, scB;
+			if (a->GetOwner()) scA = a->GetOwner()->GetComponents<ScriptComponent>();
+			if (b->GetOwner()) scB = b->GetOwner()->GetComponents<ScriptComponent>();
 			for (auto sc : scA) sc->OnCollisionExit2D(&collision2D);
 			for (auto sc : scB) sc->OnCollisionExit2D(&collision2D);
 		}
 	}
-    CollisionSystem::GetInstance().previousCollisions = CollisionSystem::GetInstance().currentCollisions;
+	CollisionSystem::GetInstance().previousCollisions = CollisionSystem::GetInstance().currentCollisions;
+}
 
-    return overlappedRigdBodies;
+void Physics::FCollisionDetector::SavePreviousCollisionData(Collider* src, Collider* tar, std::unordered_set<Rigidbody2D*>& overlappedRigdBodies)
+{
+	// 사용할 변수들 선언부터 해주자.
+	Collider* a = src;
+	Collider* b = tar;
+	Rigidbody2D* rbA = src->GetOwner()->GetComponent<Rigidbody2D>();
+	Rigidbody2D* rbB = tar->GetOwner()->GetComponent<Rigidbody2D>();
+	std::vector<ScriptComponent*> scA = a->GetOwner()->GetComponents<ScriptComponent>();
+	std::vector<ScriptComponent*> scB = b->GetOwner()->GetComponents<ScriptComponent>();
+
+	auto pair = std::minmax(a, b);
+	CollisionSystem::GetInstance().currentCollisions.insert(pair);
+
+	if (rbA) overlappedRigdBodies.insert(rbA);
+	if (rbB) overlappedRigdBodies.insert(rbB);
+
+	// 충돌이 일어난 정보를 담아서 건내주자.
+	Collision2D collision2D;
+	collision2D.collider = a;
+	collision2D.otherCollider = b;
+	collision2D.rigidbody = rbA;
+	collision2D.otherRigidbody = rbB;
+	collision2D.transform = a->GetTransform();
+
+	// 이전 충돌정보와 비교해서 Enter인지 Stay인지 검증하자.
+	if (CollisionSystem::GetInstance().previousCollisions.find(pair) == CollisionSystem::GetInstance().previousCollisions.end())
+	{
+		for (auto sc : scA) sc->OnCollisionEnter2D(&collision2D);
+		for (auto sc : scB) sc->OnCollisionEnter2D(&collision2D);
+	}
+	else
+	{
+		for (auto sc : scA) sc->OnCollisionStay2D(&collision2D);
+		for (auto sc : scB) sc->OnCollisionStay2D(&collision2D);
+	}
 }
 
 bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
