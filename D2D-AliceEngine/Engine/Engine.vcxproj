@@ -113,7 +113,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -141,8 +141,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\AudioComponent.h" />
     <ClInclude Include="Experimental\Collision\Collision2D.h" />
     <ClInclude Include="Component\Rigidbody2D.h" />
+    <ClInclude Include="Manager\AudioManager.h" />
     <ClInclude Include="Manager\ClassManager.h" />
     <ClInclude Include="Component\Collider.h" />
     <ClInclude Include="Experimental\Collision\CollisionDetector.h" />
@@ -198,8 +200,10 @@
     <ClInclude Include="Object\UObjectBase.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\AudioComponent.cpp" />
     <ClCompile Include="Experimental\Collision\Collision2D.cpp" />
     <ClCompile Include="Component\Rigidbody2D.cpp" />
+    <ClCompile Include="Manager\AudioManager.cpp" />
     <ClCompile Include="Manager\ClassManager.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
     <ClCompile Include="Experimental\Collision\CollisionDetector.cpp" />

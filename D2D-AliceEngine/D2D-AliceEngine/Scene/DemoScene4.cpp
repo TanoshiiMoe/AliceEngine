@@ -40,7 +40,6 @@ void DemoScene4::OnEnter()
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
-
 }
 
 void DemoScene4::OnExit()
