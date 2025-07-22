@@ -49,6 +49,8 @@ void Scene::Release()
 	}
 	m_objects.clear();
 	UpdateTaskManager::GetInstance().ClearWorld();
+	CollisionSystem::GetInstance().Release();
+	PhysicsSystem::GetInstance().Release();
 }
 
 // 첫 프레임에서 ScriptSystem의 Start를 call
