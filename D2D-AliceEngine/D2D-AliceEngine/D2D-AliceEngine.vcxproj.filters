@@ -17,6 +17,9 @@
     <Filter Include="Scripts\ScriptExample">
       <UniqueIdentifier>{3125c470-3da7-4543-86a7-200687e56296}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\ExampleScene">
+      <UniqueIdentifier>{622f0825-07bc-42f4-bcc6-b92d5fc1e316}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -79,6 +82,9 @@
     <ClInclude Include="Scripts\Enemy.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\ExampleScene\ExampleScene.h">
+      <Filter>Scene\ExampleScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -134,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="d2dengine_pch.cpp">
       <Filter>PreCompiledHeader</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ExampleScene\ExampleScene.cpp">
+      <Filter>Scene\ExampleScene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
