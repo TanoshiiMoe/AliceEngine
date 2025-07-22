@@ -75,4 +75,5 @@ void PhysicsSystem::Update()
 
 void PhysicsSystem::Release()
 {
+	m_rigidBodies.clear();
 }

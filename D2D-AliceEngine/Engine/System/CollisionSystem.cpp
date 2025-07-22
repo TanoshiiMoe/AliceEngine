@@ -72,4 +72,7 @@ void CollisionSystem::Update()
 
 void CollisionSystem::Release()
 {
+	m_colliders.clear();
+	previousCollisions.clear();
+	currentCollisions.clear();
 }
