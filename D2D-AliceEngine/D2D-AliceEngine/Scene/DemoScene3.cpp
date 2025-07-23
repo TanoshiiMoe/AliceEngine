@@ -164,6 +164,10 @@ void DemoScene3::OnEnter()
 		L" [i] : Rigidbody를 Kinematic으로 전환\n"
 		L" [o] : Rigidbody를 Dynamic으로 전환\n"
 		L" [p] : Rigidbody를 Static으로 전환\n"
+		L" [t] : Rigidbody2D 제거\n"
+		L" [y] : Rigidbody2D 부착\n"
+		L" [8] : Collider 제거\n"
+		L" [9] : Collider 부착\n"
 		L"\n"
 		L" <플레이어 상태>\n"
 		L" Box 색상 : 초록색 - 땅 위에 있음\n"
@@ -179,8 +183,8 @@ void DemoScene3::OnEnter()
 		L" [R] : Scene 재시작 \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 60));
-	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 45));
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
 
@@ -322,9 +326,31 @@ void DemoScene3::PlayerInput()
 		m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Static;
 	}
 
+	if (Input::IsKeyDown(VK_T))
+	{
+		m_player->RemoveComponent<Rigidbody2D>(m_player->GetComponent<Rigidbody2D>());
+	}
 	if (Input::IsKeyDown(VK_Y))
 	{
-		//m_player->RemoveComponent<Collider>(m_player->GetComponent<Collider>());
-		m_player->RemoveComponent<Rigidbody2D>(m_player->GetComponent<Rigidbody2D>());
+		if (m_player->GetComponent<Rigidbody2D>() == nullptr)
+		{
+			m_player->AddComponent<Rigidbody2D>();
+			if (auto rb = m_player->GetComponent<Rigidbody2D>())
+			{
+				rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+				rb->gravityScale = 60;
+				rb->mass = 20;
+				rb->drag = 0.6;
+			}
+		}
+	}
+	if (Input::IsKeyDown(VK_8))
+	{
+		m_player->RemoveComponent<Collider>(m_player->GetComponent<Collider>());
+	}
+	if (Input::IsKeyDown(VK_9))
+	{
+		if(m_player->GetComponent<Collider>() == nullptr)
+			m_player->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
 	}
 }
