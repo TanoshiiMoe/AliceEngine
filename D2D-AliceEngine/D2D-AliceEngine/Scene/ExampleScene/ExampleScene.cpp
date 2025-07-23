@@ -25,7 +25,9 @@
 *	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : 좌표, 회전, 스케일, 피봇을 지정합니다.
 *
 *   Update() 함수에 if문으로 인풋을 넣을 수 도 있습니다. 혹은 Enter() 에서 InputComponent에 SetAction으로 인풋을 등록할 수 있습니다.
-*
+* 
+*	player->GetComponent<Rigidbody2D>()->m_eRigidBodyState 처럼 컴포넌트에 있는 변수 사용할때 nullptr 체크 꼭 할것.
+*	if(player->GetComponent<Rigidbody2D>()) player->GetComponent<Rigidbody2D>()->m_eRigidBodyState;
 */
 
 void ExampleScene::Initialize()
@@ -50,22 +52,33 @@ void ExampleScene::Update()
 	// 땅에 있는면 Collider의 색을 초록색으로, 아니면 빨간색으로 바꾸는 로직
 	for (int i = 0; i < enemyMax; i++)
 	{
-		if (m_enemies[i]->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
+		if (m_enemies[i]->GetComponent<Rigidbody2D>())
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Green);
+			if (m_enemies[i]->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
+			{
+				if (m_enemies[i]->GetComponent<Collider>())
+					m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Green);
+			}
+			else
+			{
+				if (m_enemies[i]->GetComponent<Collider>())
+					m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Red);
+			}
+		}
+		
+	}
+	if (m_player->GetComponent<Rigidbody2D>())
+	{
+		if (m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
+		{
+			if (m_player->GetComponent<Collider>())
+				m_player->GetComponent<Collider>()->SetBoxColor(FColor::Green);
 		}
 		else
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Red);
+			if (m_player->GetComponent<Collider>())
+				m_player->GetComponent<Collider>()->SetBoxColor(FColor::Red);
 		}
-	}
-	if (m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
-	{
-		m_player->GetComponent<Collider>()->SetBoxColor(FColor::Green);
-	}
-	else
-	{
-		m_player->GetComponent<Collider>()->SetBoxColor(FColor::Red);
 	}
 }
 
@@ -167,22 +180,27 @@ void ExampleScene::PlayerInput()
 	}
 	if (Input::IsKeyDown(VK_K))
 	{
-		m_player->GetComponent<Player>()->walkSpeed += 5;
+		if(m_player->GetComponent<Player>())
+			m_player->GetComponent<Player>()->walkSpeed += 5;
 	}
 	if (Input::IsKeyDown(VK_L))
 	{
-		m_player->GetComponent<Player>()->walkSpeed -= 5;
+		if(m_player->GetComponent<Player>())
+			m_player->GetComponent<Player>()->walkSpeed -= 5;
 	}
 	if (Input::IsKeyDown(VK_G))
 	{
-		m_player->GetComponent<Rigidbody2D>()->gravityScale += 0.1;
+		if(m_player->GetComponent<Rigidbody2D>())
+			m_player->GetComponent<Rigidbody2D>()->gravityScale += 0.1;
 	}
 	if (Input::IsKeyDown(VK_H))
 	{
-		m_player->GetComponent<Rigidbody2D>()->gravityScale -= 0.1;
+		if(m_player->GetComponent<Rigidbody2D>())
+			m_player->GetComponent<Rigidbody2D>()->gravityScale -= 0.1;
 	}
 	if (Input::IsKeyPressed(VK_U))
 	{
-		m_player->GetComponent<Player>()->bMoveRigidBody = !m_player->GetComponent<Player>()->bMoveRigidBody;
+		if(m_player->GetComponent<Player>())
+			m_player->GetComponent<Player>()->bMoveRigidBody = !m_player->GetComponent<Player>()->bMoveRigidBody;
 	}
 }

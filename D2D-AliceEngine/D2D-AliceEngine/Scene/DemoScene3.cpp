@@ -110,18 +110,20 @@ void DemoScene3::Update()
 	);
 	for (int i = 0; i < enemyMax; i++)
 	{
-		//m_enemies[i]->AddComponent<Collider>()->SetBoxSize(FVector2(50, 80));
 		if (m_enemies[i]->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Green);
+			if(m_enemies[i]->GetComponent<Collider>())
+				m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Green);
 		}
 		else if (m_enemies[i]->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody)
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Blue);
+			if(m_enemies[i]->GetComponent<Collider>())
+				m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Blue);
 		}
 		else
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Red);
+			if(m_enemies[i]->GetComponent<Collider>())
+				m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Red);
 		}
 	}
 	if (m_player->GetComponent<Rigidbody2D>())
