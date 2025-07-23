@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Application">
@@ -16,6 +16,9 @@
     </Filter>
     <Filter Include="Scripts\ScriptExample">
       <UniqueIdentifier>{3125c470-3da7-4543-86a7-200687e56296}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\ExampleScene">
+      <UniqueIdentifier>{622f0825-07bc-42f4-bcc6-b92d5fc1e316}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +91,9 @@
     <ClInclude Include="Scripts\Audio.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\ExampleScene\ExampleScene.h">
+      <Filter>Scene\ExampleScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -149,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="Scripts\Audio.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\ExampleScene\ExampleScene.cpp">
+      <Filter>Scene\ExampleScene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

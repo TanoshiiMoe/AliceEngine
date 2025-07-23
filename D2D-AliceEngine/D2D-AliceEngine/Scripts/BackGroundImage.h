@@ -17,6 +17,6 @@ public:
 
 	void Input();
 
-	gameObject* m_owner;
+	gameObject* m_owner = nullptr;
 };
 

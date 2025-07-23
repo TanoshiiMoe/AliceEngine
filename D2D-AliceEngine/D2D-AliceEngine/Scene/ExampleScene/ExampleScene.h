@@ -1,12 +1,16 @@
 #pragma once
 #include <Scene/Scene.h>
 
+/*
+*  @briefs : 씬 예시입니다.
+*/
+
 class TextRenderComponent;
-class DemoScene3 : public Scene
+class ExampleScene : public Scene
 {
 public:
-	DemoScene3() {}
-	~DemoScene3() {}
+	ExampleScene() {}
+	~ExampleScene() {}
 
 	void Initialize() override;
 	void Release() override;
@@ -22,13 +26,8 @@ public:
 	gameObject* m_spriteAnimationTest = nullptr;
 	gameObject* m_player = nullptr;
 	gameObject* m_wall = nullptr;
-	gameObject* m_wall2 = nullptr;
-	gameObject* m_wall3 = nullptr;
 	std::vector<gameObject*> m_enemies;
 	int enemyMax = 20;
 	gameObject* m_widget = nullptr;
-	gameObject* m_widget2 = nullptr;
-	gameObject* m_widget3 = nullptr;
-	gameObject* m_widget4 = nullptr;
 };
 

@@ -25,9 +25,9 @@ public:
 
 	void Input();
 
-	gameObject* m_owner;
+	gameObject* m_owner = nullptr;
 
-	AnimatorInstance* animInstance;
+	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
 
 	std::shared_ptr<SpriteSheet> Texture;

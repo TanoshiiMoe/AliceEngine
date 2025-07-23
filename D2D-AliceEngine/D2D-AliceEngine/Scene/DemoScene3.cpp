@@ -36,28 +36,45 @@ void DemoScene3::Release()
 void DemoScene3::Update()
 {
 	__super::Update();
-	auto rigidType = m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType;
+	Define::ERigidBodyType rigidType = Define::ERigidBodyType::Max;
 	std::wstring rigidTypeStr = L"";
-	switch (rigidType)
+	if (m_player->GetComponent<Rigidbody2D>())
 	{
-	case Define::ERigidBodyType::Static:
-		rigidTypeStr = L"Static";
-		break;
-	case Define::ERigidBodyType::Kinematic:
-		rigidTypeStr = L"Kinematic";
-		break;
-	case Define::ERigidBodyType::Dynamic:
-		rigidTypeStr = L"Dynamic";
-		break;
-	default:
-		rigidTypeStr = L"Unknown";
-		break;
+		switch (rigidType)
+		{
+		case Define::ERigidBodyType::Static:
+			rigidTypeStr = L"Static";
+			break;
+		case Define::ERigidBodyType::Kinematic:
+			rigidTypeStr = L"Kinematic";
+			break;
+		case Define::ERigidBodyType::Dynamic:
+			rigidTypeStr = L"Dynamic";
+			break;
+		default:
+			rigidTypeStr = L"Unknown";
+			break;
+		}
 	}
-
 
 	FVector2 pos = m_player->transform()->GetPosition();
 	float rotation = m_player->transform()->GetRotation();
 	FVector2 scale = m_player->transform()->GetScale();
+	std::wstring playerMovement = L"nullptr";
+	if (m_player->GetComponent<Player>())
+	{
+		playerMovement = m_player->GetComponent<Player>()->bMoveRigidBody ? L"RigidBody AddForce" : L"Transform SetTransform";
+	}
+	std::wstring playerSpeed = L"nullptr";
+	if (m_player->GetComponent<Player>())
+	{
+		playerSpeed = std::to_wstring(m_player->GetComponent<Player>()->walkSpeed);
+	}
+	std::wstring playerGravity = L"nullptr";
+	if (m_player->GetComponent<Rigidbody2D>())
+	{
+		playerGravity = std::to_wstring(m_player->GetComponent<Rigidbody2D>()->gravityScale);
+	}
 	m_widget4->GetComponent<TextRenderComponent>()->SetText(
 		L" [info] \n"
 		L" player Position : ("
@@ -77,15 +94,15 @@ void DemoScene3::Update()
 		+ L")"
 		L"\n"
 		L" player movement : ("
-		+ (m_player->GetComponent<Player>()->bMoveRigidBody ? L"RigidBody AddForce" : L"Transform SetTransform")
+		+ playerMovement
 		+ L")"
 		L"\n"
 		L" player Speed : ("
-		+ std::to_wstring(m_player->GetComponent<Player>()->walkSpeed)
+		+ playerSpeed
 		+ L")"
 		L"\n"
 		L" player Gravity : ( -9.8 * "
-		+ std::to_wstring(m_player->GetComponent<Rigidbody2D>()->gravityScale)
+		+ playerGravity
 		+ L")"
 		L"\n"
 		L" Rigidbody Type : "
@@ -93,27 +110,34 @@ void DemoScene3::Update()
 	);
 	for (int i = 0; i < enemyMax; i++)
 	{
-		//m_enemies[i]->AddComponent<Collider>()->SetBoxSize(FVector2(50, 80));
 		if (m_enemies[i]->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Green);
+			if(m_enemies[i]->GetComponent<Collider>())
+				m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Green);
 		}
 		else if (m_enemies[i]->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody)
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Blue);
+			if(m_enemies[i]->GetComponent<Collider>())
+				m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Blue);
 		}
 		else
 		{
-			m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Red);
+			if(m_enemies[i]->GetComponent<Collider>())
+				m_enemies[i]->GetComponent<Collider>()->SetBoxColor(FColor::Red);
 		}
 	}
-	if (m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
+	if (m_player->GetComponent<Rigidbody2D>())
 	{
-		m_player->GetComponent<Collider>()->SetBoxColor(FColor::Green);
-	}
-	else
-	{
-		m_player->GetComponent<Collider>()->SetBoxColor(FColor::Red);
+		if (m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyState == Define::ERigidBodyState::Ground)
+		{
+			if(m_player->GetComponent<Collider>())
+				m_player->GetComponent<Collider>()->SetBoxColor(FColor::Green);
+		}
+		else
+		{
+			if(m_player->GetComponent<Collider>())
+				m_player->GetComponent<Collider>()->SetBoxColor(FColor::Red);
+		}
 	}
 }
 
@@ -140,6 +164,10 @@ void DemoScene3::OnEnter()
 		L" [i] : Rigidbody를 Kinematic으로 전환\n"
 		L" [o] : Rigidbody를 Dynamic으로 전환\n"
 		L" [p] : Rigidbody를 Static으로 전환\n"
+		L" [t] : Rigidbody2D 제거\n"
+		L" [y] : Rigidbody2D 부착\n"
+		L" [8] : Collider 제거\n"
+		L" [9] : Collider 부착\n"
 		L"\n"
 		L" <플레이어 상태>\n"
 		L" Box 색상 : 초록색 - 땅 위에 있음\n"
@@ -155,8 +183,8 @@ void DemoScene3::OnEnter()
 		L" [R] : Scene 재시작 \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 60));
-	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 45));
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
 
@@ -210,7 +238,7 @@ void DemoScene3::OnEnter()
 			));
 
 		m_enemies[i]->transform()->SetRotation(0);
-		m_enemies[i]->transform()->SetScale(FRandom::GetRandomInRange(0.3, 0.9f));
+		m_enemies[i]->transform()->SetScale(FRandom::GetRandomInRange(0.3f, 0.9f));
 		m_enemies[i]->transform()->SetPivot(0.5f);
 
 		//m_enemies[i]->AddComponent<Collider>()->SetBoxSize(FVector2(50, 80));
@@ -267,19 +295,19 @@ void DemoScene3::PlayerInput()
 	}
 	if (Input::IsKeyDown(VK_K))
 	{
-		m_player->GetComponent<Player>()->walkSpeed += 5;
+		m_player->GetComponent<Player>()->walkSpeed += 5.0f;
 	}
 	if (Input::IsKeyDown(VK_L))
 	{
-		m_player->GetComponent<Player>()->walkSpeed -= 5;
+		m_player->GetComponent<Player>()->walkSpeed -= 5.0f;
 	}
 	if (Input::IsKeyDown(VK_G))
 	{
-		m_player->GetComponent<Rigidbody2D>()->gravityScale += 0.1;
+		m_player->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
 	}
 	if (Input::IsKeyDown(VK_H))
 	{
-		m_player->GetComponent<Rigidbody2D>()->gravityScale -= 0.1;
+		m_player->GetComponent<Rigidbody2D>()->gravityScale -= 0.1f;
 	}
 	if (Input::IsKeyPressed(VK_U))
 	{
@@ -296,5 +324,33 @@ void DemoScene3::PlayerInput()
 	if (Input::IsKeyPressed(VK_P))
 	{
 		m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Static;
+	}
+
+	if (Input::IsKeyDown(VK_T))
+	{
+		m_player->RemoveComponent<Rigidbody2D>(m_player->GetComponent<Rigidbody2D>());
+	}
+	if (Input::IsKeyDown(VK_Y))
+	{
+		if (m_player->GetComponent<Rigidbody2D>() == nullptr)
+		{
+			m_player->AddComponent<Rigidbody2D>();
+			if (auto rb = m_player->GetComponent<Rigidbody2D>())
+			{
+				rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+				rb->gravityScale = 60.0f;
+				rb->mass = 20.0f;
+				rb->drag = 0.6f;
+			}
+		}
+	}
+	if (Input::IsKeyDown(VK_8))
+	{
+		m_player->RemoveComponent<Collider>(m_player->GetComponent<Collider>());
+	}
+	if (Input::IsKeyDown(VK_9))
+	{
+		if(m_player->GetComponent<Collider>() == nullptr)
+			m_player->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
 	}
 }

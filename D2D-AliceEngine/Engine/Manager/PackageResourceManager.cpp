@@ -144,7 +144,7 @@ std::shared_ptr<ID2D1Bitmap1> PackageResourceManager::CreateBitmapFromFile(const
 
 				m_preloadedPaths[absolutePath].loadCount++;
 				m_loadedBitmaps[m_preloadedPaths[absolutePath].uuid] = sharedBitmap;
-				return std::move(sharedBitmap);
+				return sharedBitmap;
 			}
 			else
 			{

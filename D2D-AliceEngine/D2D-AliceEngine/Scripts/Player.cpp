@@ -77,12 +77,16 @@ void Player::Update(const float& deltaSeconds)
 	}
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
-	bool isGround = (rb->m_eRigidBodyState == Define::ERigidBodyState::Ground ||
-					 rb->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody);
-	if (isGround && prevGroundState == 0) {
+	if (rb)
+	{
+		bool isGround = (rb->m_eRigidBodyState == Define::ERigidBodyState::Ground ||
+			rb->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody);
+		if (isGround && prevGroundState == 0)
+		{
 			jumpCount = 0; // 땅에 처음 닿았을 때만 리셋
 		}
-	prevGroundState = isGround ? 1 : 0;
+		prevGroundState = isGround ? 1 : 0;
+	}
 }
 
 void Player::LateUpdate(const float& deltaSeconds)
@@ -124,9 +128,9 @@ void Player::OnStart()
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
 		rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-		rb->gravityScale = 60;
-		rb->mass = 20;
-		rb->drag = 0.6;
+		rb->gravityScale = 60.0f;
+		rb->mass = 20.0f;
+		rb->drag = 0.6f;
 		//rb->angularDrag = 0;
 	}
 
@@ -162,7 +166,8 @@ void Player::Input()
 	{
 		if (jumpCount < maxJumpCount)
 		{
-			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 720);
+			if(m_owner->GetComponent<Rigidbody2D>())
+				m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 720);
 			jumpCount++;
 		}
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
