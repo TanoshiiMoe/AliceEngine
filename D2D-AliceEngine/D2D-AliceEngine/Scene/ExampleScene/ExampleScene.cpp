@@ -133,7 +133,7 @@ void ExampleScene::OnEnter()
 			));
 
 		m_enemies[i]->transform()->SetRotation(0);
-		m_enemies[i]->transform()->SetScale(FRandom::GetRandomInRange(0.3, 0.9f));
+		m_enemies[i]->transform()->SetScale(FRandom::GetRandomInRange(0.3f, 0.9f));
 		m_enemies[i]->transform()->SetPivot(0.5f);
 
 		m_enemies[i]->AddComponent<Collider>()->SetBoxSize(FVector2(FRandom::GetRandomInRange(10, 50), FRandom::GetRandomInRange(30, 100)));
@@ -181,22 +181,22 @@ void ExampleScene::PlayerInput()
 	if (Input::IsKeyDown(VK_K))
 	{
 		if(m_player->GetComponent<Player>())
-			m_player->GetComponent<Player>()->walkSpeed += 5;
+			m_player->GetComponent<Player>()->walkSpeed += 5.0f;
 	}
 	if (Input::IsKeyDown(VK_L))
 	{
 		if(m_player->GetComponent<Player>())
-			m_player->GetComponent<Player>()->walkSpeed -= 5;
+			m_player->GetComponent<Player>()->walkSpeed -= 5.0f;
 	}
 	if (Input::IsKeyDown(VK_G))
 	{
 		if(m_player->GetComponent<Rigidbody2D>())
-			m_player->GetComponent<Rigidbody2D>()->gravityScale += 0.1;
+			m_player->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
 	}
 	if (Input::IsKeyDown(VK_H))
 	{
 		if(m_player->GetComponent<Rigidbody2D>())
-			m_player->GetComponent<Rigidbody2D>()->gravityScale -= 0.1;
+			m_player->GetComponent<Rigidbody2D>()->gravityScale -= 0.1f;
 	}
 	if (Input::IsKeyPressed(VK_U))
 	{

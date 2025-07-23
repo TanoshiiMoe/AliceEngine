@@ -27,7 +27,7 @@ void CameraController::Update(const float& deltaSeconds)
 		//fov -= 5.0f * deltaSeconds;
 		//SceneManager::GetCamera()->SetFieldOfView(fov);
 
-		FVector2 pos = SceneManager::GetCamera()->GetScale() + 1.1 * deltaSeconds;
+		FVector2 pos = SceneManager::GetCamera()->GetScale() + 1.1f * deltaSeconds;
 		SceneManager::GetCamera()->SetScale(pos);
 	}
 	if (Input::IsKeyDown(VK_OEM_6))
@@ -36,7 +36,7 @@ void CameraController::Update(const float& deltaSeconds)
 		//fov += 5.0f * deltaSeconds;
 		//SceneManager::GetCamera()->SetFieldOfView(fov);
 
-		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1 * deltaSeconds;
+		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1f * deltaSeconds;
 		SceneManager::GetCamera()->SetScale(pos);
 	}
 }

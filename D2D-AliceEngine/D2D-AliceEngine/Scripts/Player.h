@@ -30,7 +30,7 @@ public:
 
 	void Input();
 
-	gameObject* m_owner;
+	gameObject* m_owner = nullptr;
 	int jumpCount = 0;
 	int maxJumpCount = 2;
 	int prevGroundState = 0;
@@ -39,7 +39,7 @@ public:
 
 	bool bMoveRigidBody = false;
 
-	AnimatorInstance* animInstance;
+	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
 };
 
