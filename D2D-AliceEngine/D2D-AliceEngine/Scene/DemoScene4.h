@@ -19,9 +19,11 @@ public:
 	void PlayerInput();
 	void EnemyInput();
 
+	gameObject* m_player;
+	gameObject* m_sound;
+
 	//gameObject* m_backgroundImage;
 	//gameObject* m_spriteAnimationTest;
-	gameObject* m_player;
 	//gameObject* m_wall;
 	//gameObject* m_wall2;
 	//gameObject* m_wall3;

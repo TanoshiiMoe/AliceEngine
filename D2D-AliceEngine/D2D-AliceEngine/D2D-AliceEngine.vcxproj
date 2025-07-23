@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Audio.h" />
     <ClInclude Include="DemoScene4.h" />
     <ClInclude Include="Scene\DemoScene4.h" />
     <ClInclude Include="Scripts\Enemy.h" />
@@ -171,11 +172,11 @@
     <ClInclude Include="Scripts\YuukaVideo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Audio.cpp" />
     <ClCompile Include="d2dengine_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="DemoScene4.cpp" />
     <ClCompile Include="Scene\DemoScene4.cpp" />
     <ClCompile Include="Scripts\Enemy.cpp" />
     <ClCompile Include="Scene\DemoScene3.cpp" />

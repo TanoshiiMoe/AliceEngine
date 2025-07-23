@@ -7,6 +7,7 @@
 #include <Component/SpriteRenderer.h>
 #include <Component/TransformComponent.h>
 #include <Component/VideoComponent.h>
+#include <Component/AudioComponent.h>
 #include <Object/gameObject.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
@@ -15,6 +16,7 @@
 #include "../Scripts/Aru2.h"
 #include "../Scripts/Player.h"
 #include "../Scripts/Enemy.h"
+#include "../Scripts/Audio.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 
@@ -40,6 +42,10 @@ void DemoScene4::OnEnter()
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
+
+	// 오디오 추가, 오디오 관련 스크립트 넣기
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<Audio>();
 }
 
 void DemoScene4::OnExit()

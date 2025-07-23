@@ -85,6 +85,9 @@
     <ClInclude Include="Scene\DemoScene4.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Audio.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -141,9 +144,11 @@
     <ClCompile Include="d2dengine_pch.cpp">
       <Filter>PreCompiledHeader</Filter>
     </ClCompile>
-    <ClCompile Include="DemoScene4.cpp" />
     <ClCompile Include="Scene\DemoScene4.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Audio.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #pragma once
 #include <Component/Component.h>
+#include <Manager/AudioManager.h>
 
 /*
 *	오디오 컴포넌트 입니다.
@@ -13,8 +14,30 @@ public:
 	~AudioComponent();
 
 	void Initialize() override;
-	void Update() override;
-	void Update(const float& deltaSeconds) override;
 
+	void Load(
+		const char* audioPath,
+		AudioMode audioMode);
+
+	void Play(
+		float volume = 1.0f,
+		bool paused = false);
+
+	void SetVolume(float volume);
+
+	bool IsPlaying() const;
+
+	void Pause(bool paused = true);
+
+	void Resume();
+
+	void Stop();
+
+	float GetPlayTime() const;
+
+private:
+	FMOD::Sound* m_Sound = nullptr;
+	FMOD::Channel* m_Channel = nullptr;
+	bool isLoaded = false;
 };
 
