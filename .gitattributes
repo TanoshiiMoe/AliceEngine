@@ -1,0 +1,3 @@
+# Visual Studio 프로젝트 파일 충돌 시 둘 다 살림
+*.vcxproj merge=union
+*.vcxproj.filters merge=union
