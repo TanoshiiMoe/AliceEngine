@@ -128,9 +128,9 @@ void Player::OnStart()
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
 		rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-		rb->gravityScale = 60;
-		rb->mass = 20;
-		rb->drag = 0.6;
+		rb->gravityScale = 60.0f;
+		rb->mass = 20.0f;
+		rb->drag = 0.6f;
 		//rb->angularDrag = 0;
 	}
 
