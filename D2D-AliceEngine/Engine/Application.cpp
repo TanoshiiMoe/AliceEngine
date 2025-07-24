@@ -11,6 +11,7 @@
 #include <Manager/TimerManager.h>
 #include <Manager/ClassManager.h>
 #include <Manager/AudioManager.h>
+#include <Manager/UIManager.h>
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
@@ -39,6 +40,8 @@ Application::~Application()
 	CollisionSystem::Destroy();
 	ClassManager::Destroy();
 	PhysicsSystem::Destroy();
+	AudioManager::Destroy();
+	UIManager::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -68,17 +71,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Application::Initialize()
 {
-	ObjectHandler::Create();
-	ScriptSystem::Create();
-	InputSystem::Create();
-	D2DRenderManager::Create();
-	SceneManager::Create();
-	UpdateTaskManager::Create();
-	TimerManager::Create();
-	RenderSystem::Create();
-	CollisionSystem::Create();
-	PhysicsSystem::Create();
-	AudioManager::Create();
+	ObjectHandler			::Create();
+	ScriptSystem			::Create();
+	InputSystem				::Create();
+	D2DRenderManager		::Create();
+	SceneManager			::Create();
+	UpdateTaskManager		::Create();
+	TimerManager			::Create();
+	RenderSystem			::Create();
+	CollisionSystem			::Create();
+	PhysicsSystem			::Create();
+	AudioManager			::Create();
+	UIManager				::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로

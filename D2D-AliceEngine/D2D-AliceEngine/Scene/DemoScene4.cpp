@@ -43,6 +43,9 @@ void DemoScene4::OnEnter()
 	m_player->AddComponent<Player>();
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 
+	m_mouseinput = NewObject<gameObject>(L"MouseInput");
+	m_mouseinput->AddComponent<InputComponent>();
+
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
