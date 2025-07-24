@@ -45,6 +45,9 @@ void gameObject::OnEnd()
 		{
 			comp.lock()->OnEnd();
 		}
+	}
+	for (auto& component : m_components)
+	{
 		delete component;
 	}
 	m_components.clear();
@@ -74,5 +77,5 @@ void gameObject::Update()
 
 void gameObject::Release()
 {
-	
+	//RemoveComponent<TransformComponent>(m_transformComponent.Get());
 }
