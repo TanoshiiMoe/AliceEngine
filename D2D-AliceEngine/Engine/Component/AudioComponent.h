@@ -20,7 +20,7 @@ public:
 		AudioMode audioMode);
 
 	void Play(
-		float volume = 1.0f,
+		float volume = 0.3f,
 		bool paused = false);
 
 	void SetVolume(float volume);

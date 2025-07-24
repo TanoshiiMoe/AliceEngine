@@ -35,8 +35,10 @@ void Audio::Awake()
 void Audio::OnStart()
 {
 	m_sound = GetOwner();
-	m_sound->AddComponent<AudioComponent>()->Load(L"audio.mp3",AudioMode::Memory);
+	m_sound->AddComponent<AudioComponent>()->Load(L"../Resource/Sound/idol.mp3", AudioMode::Stream);
 	m_sound->GetComponent<AudioComponent>()->Play();
+	// 음량 조절
+	//m_sound->GetComponent<AudioComponent>()->SetVolume(0.3f);
 }
 
 void Audio::OnEnd()
