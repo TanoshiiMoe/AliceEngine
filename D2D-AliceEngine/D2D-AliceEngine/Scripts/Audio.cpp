@@ -35,7 +35,7 @@ void Audio::Awake()
 void Audio::OnStart()
 {
 	m_sound = GetOwner();
-	m_sound->AddComponent<AudioComponent>()->Load("audio.mp3",AudioMode::Memory);
+	m_sound->AddComponent<AudioComponent>()->Load(L"audio.mp3",AudioMode::Memory);
 	m_sound->GetComponent<AudioComponent>()->Play();
 }
 

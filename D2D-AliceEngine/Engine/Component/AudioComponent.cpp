@@ -17,7 +17,7 @@ void AudioComponent::Initialize()
 	m_Channel = nullptr;
 }
 
-void AudioComponent::Load(const char* audioPath, AudioMode audioMode)
+void AudioComponent::Load(const std::wstring& audioPath, AudioMode audioMode)
 {
 	AudioManager::GetInstance().LoadSound(audioPath, audioMode, &m_Sound);
 }

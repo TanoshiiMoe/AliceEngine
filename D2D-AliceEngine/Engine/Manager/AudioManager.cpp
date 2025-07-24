@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "AudioManager.h"
+#include <Helpers/StringHelper.h>
 
 AudioManager::AudioManager()
 {
@@ -41,9 +42,11 @@ void AudioManager::Update()
 	m_System->update();
 }
 
-void AudioManager::LoadSound(const char* path, AudioMode audioMode, FMOD::Sound** sound)
+void AudioManager::LoadSound(const std::wstring& path, AudioMode audioMode, FMOD::Sound** sound)
 {
-	auto it = m_SoundMap.find(path);
+	std::string ss = StringHelper::wstring_to_string(path);
+
+	auto it = m_SoundMap.find(ss);
 	if (it != m_SoundMap.end())
 	{
 		*sound = it->second;
@@ -52,15 +55,16 @@ void AudioManager::LoadSound(const char* path, AudioMode audioMode, FMOD::Sound*
 
 	FMOD::Sound* newSound = nullptr;
 
-	FMOD_RESULT fr = m_System->createSound(path, static_cast<FMOD_MODE>(audioMode), nullptr, &newSound);
+	FMOD_RESULT fr = m_System->createSound(ss.c_str(), static_cast<FMOD_MODE>(audioMode), nullptr, &newSound);
 	if (fr != FMOD_OK)
 	{
 		return;
 	}
 
-	m_SoundMap[path] = newSound;
+	m_SoundMap[ss] = newSound;
 
 	*sound = newSound;
+
 }
 
 void AudioManager::PlaySound(FMOD::Sound* sound, FMOD::Channel** channel, float volume, bool paused)

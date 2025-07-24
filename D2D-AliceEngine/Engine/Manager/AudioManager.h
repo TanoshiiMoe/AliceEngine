@@ -25,7 +25,7 @@ public:
 	void Update();
 
 	// 비디오 컴포넌트랑 동일하게 Extension에서 파일 복사해서 dll 옮길 예정
-	void LoadSound(const char* path, AudioMode audioMode,FMOD::Sound** sound);
+	void LoadSound(const std::wstring& path, AudioMode audioMode,FMOD::Sound** sound);
 
 	void PlaySound(
 		FMOD::Sound* sound,
