@@ -10,6 +10,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Manager/TimerManager.h>
 #include <Manager/ClassManager.h>
+#include <Manager/AudioManager.h>
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
@@ -77,6 +78,7 @@ void Application::Initialize()
 	RenderSystem::Create();
 	CollisionSystem::Create();
 	PhysicsSystem::Create();
+	AudioManager::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로

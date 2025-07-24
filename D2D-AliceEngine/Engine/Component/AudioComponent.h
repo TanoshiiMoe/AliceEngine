@@ -16,7 +16,7 @@ public:
 	void Initialize() override;
 
 	void Load(
-		const std::wstring& path audioPath,
+		const std::wstring& audioPath,
 		AudioMode audioMode);
 
 	void Play(
