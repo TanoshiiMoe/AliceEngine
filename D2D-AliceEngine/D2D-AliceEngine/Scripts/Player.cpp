@@ -145,6 +145,7 @@ void Player::OnStart()
 void Player::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+	m_owner->GetComponent<Collider>()->SetBoxSize(FVector2(55, 90));
 }
 
 void Player::OnDestroy()
