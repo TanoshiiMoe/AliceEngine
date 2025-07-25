@@ -2,7 +2,7 @@
 #include <Component/ScriptComponent.h>
 
 class gameObject;
-class Audio : public ScriptComponent
+class UI_Image : public ScriptComponent
 {
 public:
 	void Initialize() override;
@@ -15,3 +15,4 @@ public:
 
 	gameObject* m_owner;
 };
+

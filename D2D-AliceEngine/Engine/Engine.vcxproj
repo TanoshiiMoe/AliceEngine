@@ -199,6 +199,8 @@
     <ClInclude Include="Animation\TextureLoader.h" />
     <ClInclude Include="Object\UObjectBase.h" />
     <ClInclude Include="Manager\UIManager.h" />
+    <ClInclude Include="Component\UIComponent.h" />
+    <ClInclude Include="UI\UIImage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\AudioComponent.cpp" />
@@ -263,6 +265,8 @@
     <ClCompile Include="Animation\TextureLoader.cpp" />
     <ClCompile Include="Object\UObjectBase.cpp" />
     <ClCompile Include="Manager\UIManager.cpp" />
+    <ClCompile Include="Component\UIComponent.cpp" />
+    <ClCompile Include="UI\UIImage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,7 +21,7 @@ public:
 
 	gameObject* m_player;
 	gameObject* m_sound;
-	gameObject* m_mouseinput;
+	gameObject* m_uiImage;
 
 	//gameObject* m_backgroundImage;
 	//gameObject* m_spriteAnimationTest;

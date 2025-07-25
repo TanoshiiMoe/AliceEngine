@@ -1,4 +1,4 @@
-#include "Audio.h"
+#include "UI_Image.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -6,13 +6,13 @@
 #include <Component/TextRenderComponent.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/BoxComponent.h>
-#include <Component/InputComponent.h>
-#include <Component/AudioComponent.h>
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
+#include <Component/UIComponent.h>
+#include <UI/UIImage.h>
 
-void Audio::Initialize()
+void UI_Image::Initialize()
 {
 	__super::Initialize();
 	REGISTER_SCRIPT_METHOD(Awake);
@@ -21,31 +21,29 @@ void Audio::Initialize()
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
-void Audio::Update(const float& deltaSeconds)
+void UI_Image::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 }
 
-void Audio::Awake()
+void UI_Image::Awake()
 {
 }
 
-void Audio::OnStart()
+void UI_Image::OnStart()
 {
 	m_owner = GetOwner();
-	m_owner->AddComponent<AudioComponent>()->Load(L"../Resource/Sound/idol.mp3", AudioMode::Stream);
-	m_owner->GetComponent<AudioComponent>()->Play();
-	// 음량 조절
-	//m_owner->GetComponent<AudioComponent>()->SetVolume(0.3f);
+	m_owner->AddComponent<UIImage>()->LoadData(L"Sun.png");
+	//m_owner->transform()->SetPosition(50, 50);
 }
 
-void Audio::OnEnd()
+void UI_Image::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
-	m_owner->GetComponent<AudioComponent>()->Stop();
 }
 
-void Audio::OnDestroy()
+void UI_Image::OnDestroy()
 {
+
 }

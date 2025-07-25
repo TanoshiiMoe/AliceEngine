@@ -94,6 +94,9 @@
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h">
       <Filter>Scene\ExampleScene</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\UI_Image.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -159,5 +162,6 @@
     <ClCompile Include="Scene\ExampleScene\ExampleScene.cpp">
       <Filter>Scene\ExampleScene</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\UI_Image.cpp" />
   </ItemGroup>
 </Project>
