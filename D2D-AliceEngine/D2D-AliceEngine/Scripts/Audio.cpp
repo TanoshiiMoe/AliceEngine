@@ -44,6 +44,7 @@ void Audio::OnStart()
 void Audio::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+	m_sound->GetComponent<AudioComponent>()->Stop();
 }
 
 void Audio::OnDestroy()

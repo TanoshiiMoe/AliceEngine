@@ -37,11 +37,6 @@ void Player::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
-	if (Input::IsKeyPressed())
-	{
-
-	}
-
 	float speed = walkSpeed * deltaSeconds;
 	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
