@@ -2,7 +2,7 @@
 #include <Component/ScriptComponent.h>
 
 class gameObject;
-class UI_Image : public ScriptComponent
+class UI_Script : public ScriptComponent
 {
 public:
 	void Initialize() override;

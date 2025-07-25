@@ -200,6 +200,7 @@
     <ClInclude Include="Object\UObjectBase.h" />
     <ClInclude Include="Manager\UIManager.h" />
     <ClInclude Include="Component\UIComponent.h" />
+    <ClInclude Include="UI\UIText.h" />
     <ClInclude Include="UI\UIImage.h" />
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +267,7 @@
     <ClCompile Include="Object\UObjectBase.cpp" />
     <ClCompile Include="Manager\UIManager.cpp" />
     <ClCompile Include="Component\UIComponent.cpp" />
+    <ClCompile Include="UI\UIText.cpp" />
     <ClCompile Include="UI\UIImage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

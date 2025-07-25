@@ -17,7 +17,7 @@
 #include "../Scripts/Player.h"
 #include "../Scripts/Enemy.h"
 #include "../Scripts/Audio.h"
-#include "../Scripts/UI_Image.h"
+#include "../Scripts/UI_Script.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <UI/UIImage.h>
@@ -49,8 +49,9 @@ void DemoScene4::OnEnter()
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
-	m_uiImage = NewObject<gameObject>(L"UI_Image");
-	m_uiImage->AddComponent<UI_Image>();
+	// UI Ãß°¡
+	m_UIobj = NewObject<gameObject>(L"UIobjects");
+	m_UIobj->AddComponent<UI_Script>();
 }
 
 void DemoScene4::OnExit()

@@ -19,7 +19,7 @@ public:
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
-	void Render() override;
+	virtual void Render() override;
 
 	virtual float GetSizeX() override;
 	virtual float GetSizeY() override;

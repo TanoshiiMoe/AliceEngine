@@ -44,7 +44,7 @@ void UIComponent::Render()
 	
 	// 좌표계는 유니티 좌표계가 아닌 D2D기반, 뒤 숫자는 크기 (이거 래핑해서 생성할때 크기 정해두고 띄우면 될듯)
 	// 제가 만든 버튼도 이런식이었던거긴해요
-	D2D1_RECT_F destRect = { 0, 0, 100, 100};
+	D2D1_RECT_F destRect = { 0, 0, GetSizeX(), GetSizeY()};
 
 	D2D1::Matrix3x2F mat =
 		D2D1::Matrix3x2F::Scale(transform->GetScale().x, transform->GetScale().y) *

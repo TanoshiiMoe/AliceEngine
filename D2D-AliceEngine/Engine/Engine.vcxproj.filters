@@ -234,6 +234,9 @@
     <ClInclude Include="UI\UIImage.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="UI\UIText.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -411,6 +414,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="UI\UIImage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIText.cpp">
       <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
