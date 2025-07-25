@@ -13,7 +13,7 @@ void UpdateTaskManager::StartFrame()
 
 void UpdateTaskManager::EndFrame()
 {
-	ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_OnEnd);
+	//ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_OnEnd);
 }
 
 void UpdateTaskManager::SetWorld()
