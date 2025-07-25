@@ -11,15 +11,9 @@ public:
 	UIImage();
 	virtual ~UIImage();
 
-	void Initialize() override;
-	void Update(const float& deltaSeconds) override;
 	void LoadData(const std::wstring& path);
-	void Release() override;
-	void Render() override;
 
 private:
-	std::wstring filePath; // 파일의 경로
-	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 
 	/*	보류
 	float m_opacity = 1.0f;      // 예: 페이드 효과

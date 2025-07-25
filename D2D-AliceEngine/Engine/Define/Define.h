@@ -54,6 +54,7 @@ namespace Define
 		Animator,
 		BoxComponent,
 		TextRenderComponent,
+		UIComponent,
 		Max
 	};
 

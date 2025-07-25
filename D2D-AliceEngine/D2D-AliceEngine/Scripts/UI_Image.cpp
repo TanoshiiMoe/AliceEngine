@@ -9,7 +9,6 @@
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
-#include <Component/UIComponent.h>
 #include <UI/UIImage.h>
 
 void UI_Image::Initialize()
@@ -35,7 +34,6 @@ void UI_Image::OnStart()
 {
 	m_owner = GetOwner();
 	m_owner->AddComponent<UIImage>()->LoadData(L"Sun.png");
-	//m_owner->transform()->SetPosition(50, 50);
 }
 
 void UI_Image::OnEnd()

@@ -16,13 +16,19 @@ public:
 	UIComponent();
 	~UIComponent();
 
-	virtual void Update() override {}
-	virtual void Update(const float& deltaSeconds) override {}
-	virtual void Render() override {}
+	void Initialize() override;
+	void Update(const float& deltaSeconds) override;
+	void Release() override;
+	void Render() override;
 
-	virtual float GetSizeX() { return 0.0f; }
-	virtual float GetSizeY() { return 0.0f; }
+	virtual float GetSizeX() override;
+	virtual float GetSizeY() override;
+
+	FVector2 GetSize();
 
 	virtual void OnMouseEvent(const POINT& mousePos, bool isClick) {}
+
+	std::wstring filePath; // 파일의 경로
+	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 };
 
