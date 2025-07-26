@@ -33,12 +33,15 @@ struct FTickContext
 	Define::ETickingGroup TickGroup;
 	/** Update에 대한 deltatime */
 	float DeltaSeconds;
+	/** FixedUpdate에 대한 deltatime */
+	float FixedDeltaSeconds;
 	/** true면 Update를 로그 처리함 */
 	bool bLogTick;
 
-	FTickContext(float InDeltaSeconds = 0.0f, Define::ETickingGroup InTickGroup = Define::ETickingGroup::TG_PrePhysics)
+	FTickContext(float InDeltaSeconds = 0.0f, float InFixedDeltaSeconds = 0.0f, Define::ETickingGroup InTickGroup = Define::ETickingGroup::TG_PrePhysics)
 		: World(nullptr)
 		, DeltaSeconds(InDeltaSeconds)
+		, FixedDeltaSeconds(InFixedDeltaSeconds)
 		, TickGroup(InTickGroup)
 		, bLogTick(false)
 	{
@@ -60,43 +63,18 @@ struct UpdateWrapper
 
 class UpdateTaskManager : public Singleton<UpdateTaskManager>
 {
+private:
+	FTickContext Context;
 public: 
 	std::unordered_map<Define::ETickingGroup, std::vector<UpdateWrapper>> m_TickLists;
-	FTickContext Context;
 
-	void Enque(WeakObjectPtr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc)
-	{
-		m_TickLists[InGroup].emplace_back(InTarget, TickFunc);
-	}
+	void Enque(WeakObjectPtr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc);
 
 	void StartFrame();
 	void EndFrame();
-	
 	void SetWorld();
 	void ClearWorld();
 
-	void TickAll()
-	{
-		for (int group = 0; group < static_cast<int>(Define::ETickingGroup::TG_MAX); ++group)
-		{
-			Context.TickGroup = static_cast<Define::ETickingGroup>(group);
-
-			// 소멸된 객체면 TickList를 삭제하고 it는 그 자리에 그대로 있는다
-			// 아니라면 it는 계속 탐색.
-			// swap-and-pop을 고려하고 만든 코드
-			for (auto it = m_TickLists[Context.TickGroup].begin(); it != m_TickLists[Context.TickGroup].end(); )
-			{
-				if (auto sp = it->Target.lock())
-				{
-					sp->Update(Context.DeltaSeconds);
-					++it;
-				}
-				else
-				{
-					it = m_TickLists[Context.TickGroup].erase(it); // 소멸된 객체 제거
-				}
-			}
-		}
-	}
+	void TickAll();
 };
 

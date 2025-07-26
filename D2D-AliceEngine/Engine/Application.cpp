@@ -129,7 +129,6 @@ void Application::Initialize()
 
 	Input::Initialize(m_hwnd);
 	TimerManager::GetInstance().Initialize();
-	TimerManager::GetInstance().UpdateTime();
 	PackageResourceManager::Create();
 	PackageResourceManager::GetInstance().Initialize();
 	ClassManager::Create();
