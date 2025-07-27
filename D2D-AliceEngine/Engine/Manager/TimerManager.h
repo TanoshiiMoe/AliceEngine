@@ -15,6 +15,8 @@ public:
 
 	float GetFixedTime();
 
+	float GetAccumulator() const;
+
 	LARGE_INTEGER frequency;
 	LARGE_INTEGER prevCounter;
 	LARGE_INTEGER currentCounter;
@@ -22,7 +24,7 @@ public:
 	float deltaTime{0};
 	float fixedTime{0};
 
-	float fixedDeltaTime{ 1.0f };
+	float fixedDeltaTime{ 0.016f };
 private:
 	float accumulator{ 0.0f };
 };

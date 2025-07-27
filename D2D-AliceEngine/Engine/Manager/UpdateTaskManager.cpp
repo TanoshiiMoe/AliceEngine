@@ -52,7 +52,7 @@ void UpdateTaskManager::TickAll()
 					if (TimerManager::GetInstance().IfFixedUpdatable())
 					{
 						TimerManager::GetInstance().UpdateFixedTime(it->TickFunc);
-						OutputDebugStringW((L"fixedTime : " + std::to_wstring(TimerManager::GetInstance().GetFixedTime()) + L"\n").c_str());
+						//OutputDebugStringW((L"fixedTime : " + std::to_wstring(TimerManager::GetInstance().GetFixedTime()) + L"\n").c_str());
 					}
 					break;
 				default:

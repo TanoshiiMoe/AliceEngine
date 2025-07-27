@@ -254,8 +254,8 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 		}
 
 		// 둘 다 밀림 (질량 비율)
-		if (rbA) rbA->collisionPush += FVector2(pushX * ratioA * 1.2f, pushY * ratioA);
-		if (rbB) rbB->collisionPush += FVector2(-pushX * ratioB * 1.2f, -pushY * ratioB);
+		if (rbA) rbA->collisionPush = FVector2(pushX * ratioA * 1.2f, pushY * ratioA);
+		if (rbB) rbB->collisionPush = FVector2(-pushX * ratioB * 1.2f, -pushY * ratioB);
 	}
 	else if (typeA == Define::ERigidBodyType::Dynamic && (typeB == Define::ERigidBodyType::Static || typeB == Define::ERigidBodyType::Kinematic))
 	{
@@ -267,7 +267,7 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 			is_on_ground = IsOnGround(aabb_a, aabb_b, GROUND_OVERLAP_X_THRESHOLD);
 		}
 		if (rbA) rbA->m_eRigidBodyState = is_on_ground ? Define::ERigidBodyState::Ground : Define::ERigidBodyState::Space;
-		if (rbA) rbA->collisionPush += FVector2(pushX * 1.5f, pushY);
+		if (rbA) rbA->collisionPush = FVector2(pushX * 1.5f, pushY);
 	}
 	else if ((typeA == Define::ERigidBodyType::Static || typeA == Define::ERigidBodyType::Kinematic) && typeB == Define::ERigidBodyType::Dynamic)
 	{
@@ -278,7 +278,7 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 			is_on_ground = IsOnGround(aabb_b, aabb_a, GROUND_OVERLAP_X_THRESHOLD);
 		}
 		if (rbB) rbB->m_eRigidBodyState = is_on_ground ? Define::ERigidBodyState::Ground : Define::ERigidBodyState::Space;
-		if (rbB) rbB->collisionPush += FVector2(-pushX * 1.5f, -pushY);
+		if (rbB) rbB->collisionPush = FVector2(-pushX * 1.5f, -pushY);
 	}
 	// 나머지(Static-Static, Kinematic-Kinematic, Static-Kinematic): 아무것도 안 함
 }
