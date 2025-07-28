@@ -49,6 +49,9 @@
     <Filter Include="Experimental\Collission">
       <UniqueIdentifier>{ca4d7bbf-2055-43a8-81dc-f789295092ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TileMap">
+      <UniqueIdentifier>{80d54bc9-6e68-433d-b55e-8be86dade478}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -222,6 +225,12 @@
     <ClInclude Include="Component\AudioComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="TileMap\TileMapComponent.h">
+      <Filter>TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap\TileMapLoader.h">
+      <Filter>TileMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -391,6 +400,12 @@
     </ClCompile>
     <ClCompile Include="Component\AudioComponent.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap\TileMapComponent.cpp">
+      <Filter>TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap\TileMapLoader.cpp">
+      <Filter>TileMap</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

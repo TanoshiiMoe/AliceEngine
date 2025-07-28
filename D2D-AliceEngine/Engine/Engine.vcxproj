@@ -198,6 +198,8 @@
     <ClInclude Include="Manager\TimerManager.h" />
     <ClInclude Include="Animation\TextureLoader.h" />
     <ClInclude Include="Object\UObjectBase.h" />
+    <ClInclude Include="TileMap\TileMapLoader.h" />
+    <ClInclude Include="TileMap\TileMapComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\AudioComponent.cpp" />
@@ -261,6 +263,8 @@
     <ClCompile Include="Manager\TimerManager.cpp" />
     <ClCompile Include="Animation\TextureLoader.cpp" />
     <ClCompile Include="Object\UObjectBase.cpp" />
+    <ClCompile Include="TileMap\TileMapLoader.cpp" />
+    <ClCompile Include="TileMap\TileMapComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
