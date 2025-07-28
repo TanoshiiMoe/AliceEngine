@@ -20,6 +20,7 @@
 #include "../Scripts/UI_Script.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
+#include <TileMap/TileMapComponent.h>
 #include <Object/Canvas.h>
 
 void DemoScene4::Initialize()
@@ -48,11 +49,13 @@ void DemoScene4::OnEnter()
 	m_player->AddComponent<Rigidbody2D>();
 	m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
 
-	// ¿Àµğ¿À Ãß°¡, ¿Àµğ¿À °ü·Ã ½ºÅ©¸³Æ® ³Ö±â
+	// ì˜¤ë””ì˜¤ ì¶”ê°€, ì˜¤ë””ì˜¤ ê´€ë ¨ ìŠ¤í¬ë¦½íŠ¸ ë„£ê¸°
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
-	// UI Ãß°¡
+	m_tile = NewObject<gameObject>(L"TileMap");
+	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test.tmj");
+	// UI ì¶”ê°€
 	//m_canvas = NewObject<Canvas>(L"Canvas");
 	//m_canvas->AddUI<UI_Script>();
 
