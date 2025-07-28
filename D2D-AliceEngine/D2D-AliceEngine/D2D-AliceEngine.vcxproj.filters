@@ -82,9 +82,6 @@
     <ClInclude Include="Scripts\Enemy.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="DemoScene4.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\DemoScene4.h">
       <Filter>Scene</Filter>
     </ClInclude>

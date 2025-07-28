@@ -162,7 +162,6 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Audio.h" />
-    <ClInclude Include="DemoScene4.h" />
     <ClInclude Include="Scene\DemoScene4.h" />
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h" />
     <ClInclude Include="Scripts\Enemy.h" />
