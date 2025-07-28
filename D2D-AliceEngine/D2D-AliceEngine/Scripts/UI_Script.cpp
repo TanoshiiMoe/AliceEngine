@@ -50,14 +50,14 @@ void UI_Script::OnStart()
 	Canvas* canvas = GetWorld()->CreateCanvas<Canvas>(L"Canvas");
 	canvas->transform()->SetPosition(50, 50);
 	UIImage* image = canvas->AddUI<UIImage>();
-	canvas->AddChildUI(image);
+	canvas->AddToChildUI(image);
 	image->LoadData(L"Mushroom.png");
 	image->SetScale(1);
 	image->SetPosition(FVector2(-50, -50));
 	image->m_layer = 200;
 
 	UIText* text = canvas->AddUI<UIText>();
-	canvas->AddChildUI(text);
+	canvas->AddToChildUI(text);
 	text->SetText(L"Testsfgregdgdxhdfth");
 	text->SetFontSize(20.0f);
 	text->SetColor(FColor(0, 0, 0, 255));

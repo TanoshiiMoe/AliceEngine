@@ -44,7 +44,7 @@ void Canvas::Release()
 {
 }
 
-void Canvas::AddChildUI(const UIComponent* ucmp)
+void Canvas::AddToChildUI(const UIComponent* ucmp)
 {
 	m_transformComponent->AddChildObject(ucmp->GetUITransform());
 }
