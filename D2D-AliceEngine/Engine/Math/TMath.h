@@ -179,6 +179,12 @@ namespace Math
 			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
 		}
 	};
+
+	template <typename T>
+	constexpr const T& clamp(const T& v, const T& lo, const T& hi) 
+	{
+		return (v < lo) ? lo : (hi < v) ? hi : v;
+	}
 }
 
 using FVector2 = TVector2<float>;

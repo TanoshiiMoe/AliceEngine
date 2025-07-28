@@ -19,6 +19,7 @@
 #include "../Scripts/Audio.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
+#include <TileMap/TileMapComponent.h>
 
 void DemoScene4::Initialize()
 {
@@ -46,6 +47,9 @@ void DemoScene4::OnEnter()
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
+
+	m_tile = NewObject<gameObject>(L"TileMap");
+	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test.tmj");
 }
 
 void DemoScene4::OnExit()
