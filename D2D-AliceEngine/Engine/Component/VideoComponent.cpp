@@ -170,7 +170,7 @@ void VideoComponent::Render()
 	context->DrawBitmap(m_bitmaps[m_curClip].get());
 }
 
-float VideoComponent::GetSizeX()
+float VideoComponent::GetBitmapSizeX()
 {
 	if (m_bitmaps.empty() == false)
 	{
@@ -179,7 +179,7 @@ float VideoComponent::GetSizeX()
 	return 0;
 }
 
-float VideoComponent::GetSizeY()
+float VideoComponent::GetBitmapSizeY()
 {
 	if (m_bitmaps.empty() == false)
 	{

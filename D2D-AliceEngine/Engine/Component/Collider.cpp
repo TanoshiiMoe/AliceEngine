@@ -56,10 +56,10 @@ void Collider::UpdateAABB()
 		FVector2 pos = owner->transform()->GetPosition();
 		if (WeakObjectPtr<BoxComponent> comp = boxComponent)
 		{
-			aabb.minVector.x = pos.x - comp->GetSizeX() / 2;
-			aabb.minVector.y = pos.y - comp->GetSizeY() / 2;
-			aabb.maxVector.x = pos.x + comp->GetSizeX() / 2;
-			aabb.maxVector.y = pos.y + comp->GetSizeY() / 2;
+			aabb.minVector.x = pos.x - comp->GetBitmapSizeX() / 2;
+			aabb.minVector.y = pos.y - comp->GetBitmapSizeY() / 2;
+			aabb.maxVector.x = pos.x + comp->GetBitmapSizeX() / 2;
+			aabb.maxVector.y = pos.y + comp->GetBitmapSizeY() / 2;
 		}
 	}
 }
