@@ -72,8 +72,8 @@ void Animator::Render()
 	auto& sprite = sheet.get()->sprites[animationClips[curAnimationClip]->frames[m_curFrame].spriteSheetIndex];
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
-	float ScaleX = GetSizeX() / sheet.get()->textureWidth;
-	float ScaleY = GetSizeY() / sheet.get()->textureHeight;
+	float ScaleX = GetBitmapSizeX() / sheet.get()->textureWidth;
+	float ScaleY = GetBitmapSizeY() / sheet.get()->textureHeight;
 	float x = sprite.x * ScaleX;
 	float y = sprite.y * ScaleY;
 	float width = sprite.width * ScaleX;
@@ -87,14 +87,14 @@ void Animator::Render()
 	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 }
 
-float Animator::GetSizeX()
+float Animator::GetBitmapSizeX()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return static_cast<float>(bmpSize.width);
 }
 
-float Animator::GetSizeY()
+float Animator::GetBitmapSizeY()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();

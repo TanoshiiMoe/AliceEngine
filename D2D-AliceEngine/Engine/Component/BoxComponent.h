@@ -16,8 +16,8 @@ public:
 	void Release() override;
 	void Render() override;
 
-	virtual float GetSizeX() override;
-	virtual float GetSizeY() override;
+	virtual float GetBitmapSizeX() override;
+	virtual float GetBitmapSizeY() override;
 
 	void SetSize(const FVector2& _size){ m_size = _size; }
 	void SetColor(const FColor& color);

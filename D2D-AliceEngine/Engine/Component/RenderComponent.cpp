@@ -58,5 +58,7 @@ void RenderComponent::Render()
 	{
 		view = D2D1::Matrix3x2F::Scale(-1.f, 1.f) * view;
 	}
+
+	view = D2D1::Matrix3x2F::Scale(scale.x, scale.y) * view;
 	context->SetTransform(view);
 }

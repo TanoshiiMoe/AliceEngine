@@ -116,13 +116,13 @@ void TextRenderComponent::Render()
 	);
 }
 
-float TextRenderComponent::GetSizeX()
+float TextRenderComponent::GetBitmapSizeX()
 {
 	InitializeLayout();
 	return m_metrics.width;
 }
 
-float TextRenderComponent::GetSizeY()
+float TextRenderComponent::GetBitmapSizeY()
 {
 	InitializeLayout();
 	return m_metrics.height;

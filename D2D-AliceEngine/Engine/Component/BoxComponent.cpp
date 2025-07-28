@@ -78,12 +78,12 @@ void BoxComponent::Render()
 	);
 }
 
-float BoxComponent::GetSizeX()
+float BoxComponent::GetBitmapSizeX()
 {
 	return m_size.x;
 }
 
-float BoxComponent::GetSizeY()
+float BoxComponent::GetBitmapSizeY()
 {
 	return m_size.y;
 }
