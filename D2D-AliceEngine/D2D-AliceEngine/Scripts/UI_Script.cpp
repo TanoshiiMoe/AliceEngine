@@ -39,6 +39,8 @@ void UI_Script::OnStart()
 	m_owner->GetComponent<UIText>()->SetFontSize(18.0f);
 	m_owner->GetComponent<UIText>()->SetColor(FColor(0, 0, 0, 255));
 	m_owner->GetComponent<UIText>()->SetPosition(FVector2(50,50));
+	m_owner->GetComponent<UIImage>()->m_layer = 500;
+	m_owner->GetComponent<UIText>()->m_layer = 500;
 }
 
 void UI_Script::OnEnd()

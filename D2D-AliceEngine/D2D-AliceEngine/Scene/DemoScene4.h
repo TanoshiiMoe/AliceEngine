@@ -22,10 +22,10 @@ public:
 	gameObject* m_player;
 	gameObject* m_sound;
 	gameObject* m_UIobj;
+	gameObject* m_wall;
 
 	//gameObject* m_backgroundImage;
 	//gameObject* m_spriteAnimationTest;
-	//gameObject* m_wall;
 	//gameObject* m_wall2;
 	//gameObject* m_wall3;
 	//std::vector<gameObject*> m_enemies;
