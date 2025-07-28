@@ -11,7 +11,6 @@
 #include <Manager/TimerManager.h>
 #include <Manager/ClassManager.h>
 #include <Manager/AudioManager.h>
-#include <Manager/UIManager.h>
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
 #include <System/RenderSystem.h>
@@ -41,7 +40,6 @@ Application::~Application()
 	ClassManager::Destroy();
 	PhysicsSystem::Destroy();
 	AudioManager::Destroy();
-	UIManager::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -82,7 +80,6 @@ void Application::Initialize()
 	CollisionSystem			::Create();
 	PhysicsSystem			::Create();
 	AudioManager			::Create();
-	UIManager				::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로

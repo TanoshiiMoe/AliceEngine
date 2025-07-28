@@ -225,9 +225,6 @@
     <ClInclude Include="Component\AudioComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\UIManager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Component\UIComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -236,6 +233,9 @@
     </ClInclude>
     <ClInclude Include="UI\UIText.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Canvas.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -407,9 +407,6 @@
     <ClCompile Include="Component\AudioComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\UIManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Component\UIComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -418,6 +415,9 @@
     </ClCompile>
     <ClCompile Include="UI\UIText.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Canvas.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

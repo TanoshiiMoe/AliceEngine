@@ -19,6 +19,10 @@ void RenderComponent::Initialize()
 	RenderSystem::GetInstance().Regist(WeakFromThis<RenderComponent>());
 }
 
+void RenderComponent::Update()
+{
+}
+
 void RenderComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);

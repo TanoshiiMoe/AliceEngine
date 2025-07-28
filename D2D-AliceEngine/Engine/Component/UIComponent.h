@@ -1,6 +1,6 @@
 #pragma once
 #include <Component/RenderComponent.h>
-#include <Manager/UIManager.h>
+#include <Core/ObjectHandler.h>
 
 /*
 *	UI 컴포넌트입니다.
@@ -17,18 +17,26 @@ public:
 	~UIComponent();
 
 	virtual void Initialize() override;
+	void Update() override;
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
 	virtual void Render() override;
 
-	virtual float GetSizeX() override;
-	virtual float GetSizeY() override;
+	virtual float GetBitmapSizeX() override;
+	virtual float GetBitmapSizeY() override;
 
 	FVector2 GetSize();
 
 	virtual void OnMouseEvent(const POINT& mousePos, bool isClick) {}
 
+	Transform m_transform;
+
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
+
+private:
+	UIComponent* m_parents = nullptr;
+	std::vector<UIComponent*> m_child;
+
 };
 

@@ -40,7 +40,7 @@ public:
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
 	void SetPosition(const FVector2& pos);
-	void SetScale(const FVector2& scale);
+	void SetScale(const FVector2& _scale) { scale = _scale; }
 	void SetTransformType(const ETransformType& type);
 
 	ComPtr<IDWriteTextLayout> m_layout;
@@ -58,7 +58,6 @@ private:
 	float m_fontSize = 24.0f;
 	FColor m_color;
 
-	Transform m_transform;
 	DWRITE_TEXT_METRICS m_metrics{};
 	ETransformType m_eTransformType = ETransformType::D2D;
 	bool m_metricsDirty = true;

@@ -7,6 +7,7 @@
 #include <Object/UObject.h>
 
 class gameObject;
+class Canvas;
 class Transform;
 class Component : public UObject, public ITickable
 {
@@ -38,4 +39,11 @@ public:
 
 protected:
 	WeakObjectPtr<gameObject> owner;
+
+public:
+	inline void SetCanvas(WeakObjectPtr<Canvas> object) { canvas = object; }
+	inline Canvas* GetCanvas() { return canvas.Get(); }
+
+protected:
+	WeakObjectPtr<Canvas> canvas;
 };

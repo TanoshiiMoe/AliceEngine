@@ -20,7 +20,7 @@
 #include "../Scripts/UI_Script.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
-#include <UI/UIImage.h>
+#include <Object/Canvas.h>
 
 void DemoScene4::Initialize()
 {
@@ -43,15 +43,26 @@ void DemoScene4::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
+	SceneManager::GetCamera()->SetOwner(m_player);
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
+	m_player->AddComponent<Rigidbody2D>();
+	m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
-	//m_sound = NewObject<gameObject>(L"Sound");
-	//m_sound->AddComponent<Audio>();
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<Audio>();
 
 	// UI 추가
-	m_UIobj = NewObject<gameObject>(L"UIobjects");
-	m_UIobj->AddComponent<UI_Script>();
+	//m_canvas = NewObject<Canvas>(L"Canvas");
+	//m_canvas->AddUI<UI_Script>();
+
+	m_UI = NewObject<gameObject>(L"ad");
+	m_UI->AddComponent<UI_Script>();
+
+	m_wall = NewObject<gameObject>(L"wall");
+	m_wall->transform()->SetPivot(0.5f);
+	m_wall->transform()->SetPosition(0, -300);
+	m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 }
 
 void DemoScene4::OnExit()
