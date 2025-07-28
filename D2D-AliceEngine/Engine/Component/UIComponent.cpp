@@ -23,6 +23,11 @@ void UIComponent::Initialize()
 	__super::Initialize();
 }
 
+void UIComponent::Update()
+{
+	__super::Update();
+}
+
 void UIComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);

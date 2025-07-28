@@ -1,6 +1,6 @@
 #pragma once
 #include <Component/RenderComponent.h>
-#include <Manager/UIManager.h>
+#include <Core/ObjectHandler.h>
 
 /*
 *	UI 컴포넌트입니다.
@@ -17,6 +17,7 @@ public:
 	~UIComponent();
 
 	virtual void Initialize() override;
+	void Update() override;
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
 	virtual void Render() override;
@@ -32,5 +33,10 @@ public:
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
+
+private:
+	UIComponent* m_parents = nullptr;
+	std::vector<UIComponent*> m_child;
+
 };
 

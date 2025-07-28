@@ -2,6 +2,7 @@
 #include <Scene/Scene.h>
 
 // HiroScene 임시 생성
+class Canvas;
 class TextRenderComponent;
 class DemoScene4 : public Scene
 {
@@ -21,8 +22,10 @@ public:
 
 	gameObject* m_player;
 	gameObject* m_sound;
-	gameObject* m_UIobj;
+	Canvas* m_canvas;
 	gameObject* m_wall;
+
+	gameObject* m_UI;
 
 	//gameObject* m_backgroundImage;
 	//gameObject* m_spriteAnimationTest;
