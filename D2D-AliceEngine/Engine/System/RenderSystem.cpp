@@ -205,8 +205,8 @@ bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& rend
 	/*const float shrinkRatio = 0.5;
 	const float halfW = renderer->GetSizeX() * 0.5f * scale.x * shrinkRatio;
 	const float halfH = renderer->GetSizeY() * 0.5f * scale.y * shrinkRatio;*/
-	const float halfW = renderer->GetSizeX() * 0.5f * scale.x;
-	const float halfH = renderer->GetSizeY() * 0.5f * scale.y;
+	const float halfW = renderer->GetBitmapSizeX() * 0.5f * scale.x;
+	const float halfH = renderer->GetBitmapSizeY() * 0.5f * scale.y;
 
 	const float left = pos.x - halfW;
 	const float right = pos.x + halfW;

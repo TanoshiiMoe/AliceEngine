@@ -2,14 +2,11 @@
 #include <Component/RenderComponent.h>
 #include <Animation/TextureLoader.h>
 
-using namespace Microsoft::WRL;
-
-struct ID2D1Bitmap1;
-class SpriteRenderer : public RenderComponent
+class TileMapComponent : public RenderComponent
 {
 public:
-	SpriteRenderer();
-	~SpriteRenderer();
+	TileMapComponent();
+	~TileMapComponent();
 
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;
@@ -25,3 +22,4 @@ public:
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 };
+

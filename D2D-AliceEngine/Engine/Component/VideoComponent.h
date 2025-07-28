@@ -27,8 +27,8 @@ public:
 	void Release() override;
 	void Render() override;
 
-	virtual float GetSizeX() override;
-	virtual float GetSizeY() override;
+	virtual float GetBitmapSizeX() override;
+	virtual float GetBitmapSizeY() override;
 
 	FVector2 GetSize();
 	std::vector<std::wstring> files;
