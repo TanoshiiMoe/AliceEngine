@@ -49,6 +49,8 @@
     <Filter Include="Experimental\Collission">
       <UniqueIdentifier>{ca4d7bbf-2055-43a8-81dc-f789295092ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TileMap">
+      <UniqueIdentifier>{80d54bc9-6e68-433d-b55e-8be86dade478}</UniqueIdentifier>
     <Filter Include="UI">
       <UniqueIdentifier>{ae6205e7-dc7e-4030-8b89-7474a9813dc6}</UniqueIdentifier>
     </Filter>
@@ -228,9 +230,11 @@
     <ClInclude Include="Component\AudioComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\UIManager.h">
-      <Filter>Manager</Filter>
+    <ClInclude Include="TileMap\TileMapComponent.h">
+      <Filter>TileMap</Filter>
     </ClInclude>
+    <ClInclude Include="TileMap\TileMapLoader.h">
+      <Filter>TileMap</Filter>
     <ClInclude Include="Component\UIComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -242,6 +246,8 @@
     </ClInclude>
     <ClInclude Include="Effect\Prism.h">
       <Filter>Effect</Filter>
+    <ClInclude Include="Object\Canvas.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -413,9 +419,11 @@
     <ClCompile Include="Component\AudioComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\UIManager.cpp">
-      <Filter>Manager</Filter>
+    <ClCompile Include="TileMap\TileMapComponent.cpp">
+      <Filter>TileMap</Filter>
     </ClCompile>
+    <ClCompile Include="TileMap\TileMapLoader.cpp">
+      <Filter>TileMap</Filter>
     <ClCompile Include="Component\UIComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -427,6 +435,8 @@
     </ClCompile>
     <ClCompile Include="Effect\Prism.cpp">
       <Filter>Effect</Filter>
+    <ClCompile Include="Object\Canvas.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

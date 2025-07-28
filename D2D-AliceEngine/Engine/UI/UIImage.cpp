@@ -18,3 +18,8 @@ void UIImage::LoadData(const std::wstring& path)
 	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str());
 }
+
+void UIImage::SetPosition(const FVector2& pos)
+{
+	m_transform.SetPosition(pos.x, pos.y);
+}
