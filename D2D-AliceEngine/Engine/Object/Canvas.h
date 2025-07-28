@@ -11,19 +11,18 @@ class D2DRenderManager;
 class Canvas : public UObject
 {
 public:
-	Canvas() { Initialize(); }
+	Canvas();
 	virtual ~Canvas();
 
 public:
-
 	std::vector<UIComponent*> m_components;
 
 	template<class T, typename... Args>
 	T* AddUI(Args&&... args)
 	{
 		T* createdComp = new T(std::forward<Args>(args)...);
+		createdComp->SetCanvas(WeakFromThis<Canvas>());
 		createdComp->Initialize();
-		createdComp->SetOwner(WeakFromThis<Canvas>());
 		m_components.emplace_back(createdComp);
 
 		return createdComp;
@@ -84,7 +83,7 @@ public:
 	void Release() override;
 
 	TransformComponent* transform() const { return m_transformComponent.lock(); }
-	void AddChildObject(const gameObject* obj);
+	void AddChildUI(const UIComponent* ucmp);
 
 	WeakObjectPtr<TransformComponent> m_transformComponent;
 };

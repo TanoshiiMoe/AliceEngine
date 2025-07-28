@@ -9,7 +9,9 @@
 *	뭐 이미지도 클릭할 수 있게 한다면 사용하셔도 되긴 함 ㅇㅅㅇ...
 *	추가적으로 이미지가 애니메이션도 있을 수 있으니 업데이트도 가져왔어요
 */
-
+class Canvas;
+class TransformComponent;
+struct ID2D1Bitmap1;
 class UIComponent : public RenderComponent
 {
 public:
@@ -25,18 +27,24 @@ public:
 	virtual float GetBitmapSizeX() override;
 	virtual float GetBitmapSizeY() override;
 
+	void SetScale(const FVector2& _scale) { scale = _scale; }
+	void SetPosition(const FVector2& pos);
+	FVector2 GetUIPivot();
+
 	FVector2 GetSize();
 
 	virtual void OnMouseEvent(const POINT& mousePos, bool isClick) {}
 
-	Transform m_transform;
-
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 
-private:
-	UIComponent* m_parents = nullptr;
+	WeakObjectPtr<TransformComponent> GetUITransform() const;
+	void AddChildUI(UIComponent* obj);
+
+protected:
+	WeakObjectPtr<UIComponent> m_parent = nullptr;
 	std::vector<UIComponent*> m_child;
 
+	WeakObjectPtr<TransformComponent> m_transformComponent;
 };
 

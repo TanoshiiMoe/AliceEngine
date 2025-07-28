@@ -12,7 +12,7 @@
 
 RenderSystem::RenderSystem()
 {
-	m_renderers.assign(static_cast<int>(ERenderLayer::Max), std::vector<WeakObjectPtr<RenderComponent>>());
+	m_renderers.clear();
 }
 
 RenderSystem::~RenderSystem()
@@ -22,103 +22,48 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 {
-	if (!renderer.expired())
+	if (auto ptr = renderer.lock()) // raw pointer 반환
 	{
-		auto ptr = renderer.lock(); // raw pointer 반환
-
-		if (dynamic_cast<SpriteRenderer*>(ptr))
-		{
-			m_renderers[static_cast<int>(ERenderLayer::SpriteComponent)].push_back(renderer);
-		}
-		else if (dynamic_cast<VideoComponent*>(ptr))
-		{
-			m_renderers[static_cast<int>(ERenderLayer::VideoComponent)].push_back(renderer);
-		}
-		else if (dynamic_cast<BoxComponent*>(ptr))
-		{
-			m_renderers[static_cast<int>(ERenderLayer::BoxComponent)].push_back(renderer);
-		}
-		else if (dynamic_cast<TextRenderComponent*>(ptr))
-		{
-			m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
-		}
-		else if (dynamic_cast<Animator*>(ptr))
-		{	
-			m_renderers[static_cast<int>(ERenderLayer::Animator)].push_back(renderer);
-		}
-		else if (dynamic_cast<UIComponent*>(ptr))
-		{
-			m_renderers[static_cast<int>(ERenderLayer::UIComponent)].push_back(renderer);
-		}
+		m_renderers.push_back(renderer);
 	}
 }
 
 void RenderSystem::UnRegist(WeakObjectPtr<RenderComponent>&& renderer)
 {
-	if (renderer.expired())
-		return;
-
-	auto ptr = renderer.lock();
-
-	int layer = -1;
-	if (dynamic_cast<SpriteRenderer*>(ptr))
-		layer = static_cast<int>(ERenderLayer::SpriteComponent);
-	else if (dynamic_cast<VideoComponent*>(ptr))
-		layer = static_cast<int>(ERenderLayer::VideoComponent);
-	else if (dynamic_cast<BoxComponent*>(ptr))
-		layer = static_cast<int>(ERenderLayer::BoxComponent);
-	else if (dynamic_cast<TextRenderComponent*>(ptr))
-		layer = static_cast<int>(ERenderLayer::TextRenderComponent);
-	else if (dynamic_cast<Animator*>(ptr))
-		layer = static_cast<int>(ERenderLayer::Animator);
-	else if (dynamic_cast<UIComponent*>(ptr))
-		layer = static_cast<int>(ERenderLayer::UIComponent);
-
-	if (layer >= 0)
+	if (auto ptr = renderer.lock())
 	{
-		for (size_t i = 0; i < m_renderers[layer].size(); ++i) 
-		{
-			if (!m_renderers[layer][i].expired() && m_renderers[layer][i].lock() == ptr) 
+		m_renderers.erase(std::remove_if(m_renderers.begin(), m_renderers.end(),
+				[&](const WeakObjectPtr<RenderComponent>& r)
 			{
-				m_renderers[layer].erase(m_renderers[layer].begin() + i);
-				break;
-			}
-		}
+			return r.handle == renderer.handle;
+			}), m_renderers.end());
 	}
+
 }
 
 void RenderSystem::UnRegistAll()
 {
-	for (int i = 0; i < static_cast<int>(ERenderLayer::Max); ++i)
-	{
-		m_renderers[i].clear();
-	}
+	m_renderers.clear();
 }
 
 void RenderSystem::Initialize()
 {
-	for (int i = 0; i < static_cast<int>(ERenderLayer::Max); ++i)
+	for (auto& renderer : m_renderers)
 	{
-		for (size_t j = 0; j < m_renderers[i].size(); ++j)
+		if (auto render = renderer.lock())
 		{
-			if (!m_renderers[i][j].expired())
-			{
-				m_renderers[i][j].lock()->Initialize();
-			}
+			render->Initialize();
 		}
 	}
 }
 
 void RenderSystem::UnInitialize()
 {
-	for (int i = 0; i < static_cast<int>(ERenderLayer::Max); ++i)
+	for (auto& renderer : m_renderers)
 	{
-		for (size_t j = 0; j < m_renderers[i].size(); ++j)
+		if (auto render = renderer.lock())
 		{
-			if (!m_renderers[i][j].expired())
-			{
-				m_renderers[i][j].lock()->Release();
-			}
+			render->Release();
 		}
 	}
 	UnRegistAll();
@@ -141,43 +86,27 @@ void RenderSystem::Render()
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
 	ViewRect view = GetCameraView();
-	std::vector<WeakObjectPtr<RenderComponent>> collectedComponents;
-	for (int i = 0; i < static_cast<int>(Define::ERenderLayer::Max); i++)
+
+	sort(m_renderers.begin(), m_renderers.end(), &RenderSystem::RenderSortCompare);
+
+	for (auto it = m_renderers.begin(); it != m_renderers.end(); )
 	{
-		if (m_renderers[i].empty()) continue;
-
-		sort(m_renderers[i].begin(), m_renderers[i].end(), &RenderSystem::RenderSortCompare);
-
-		for (auto it = m_renderers[i].begin(); it != m_renderers[i].end(); )
+		if (it->expired())
 		{
-			if (it->expired())
-			{
-				it = m_renderers[i].erase(it);
-				continue;
-			}
-			if (it->lock()->drawType == Define::EDrawType::WorldSpace && CheckCameraCulling(*it, view)) {
-				++it;
-				continue;
-			}
-			auto renderer = dynamic_cast<RenderComponent*>(it->lock());
-			if (renderer->m_layer != -999)
-			{
-				collectedComponents.push_back(renderer);
-			}
-			else
-			{
-				it->lock()->Render();
-			}
+			it = m_renderers.erase(it);
+			continue;
+		}
+		if (it->lock()->drawType == Define::EDrawType::WorldSpace && CheckCameraCulling(*it, view)) 
+		{
 			++it;
+			continue;
 		}
-	}
-	sort(collectedComponents.begin(), collectedComponents.end(), &RenderSystem::RenderSortCompare);
-	for (auto it = collectedComponents.begin(); it != collectedComponents.end(); ++it)
-	{
-		if (!it->expired())
+
+		if (auto renderer = it->lock())
 		{
-			it->lock()->Render();
+			renderer->Render();
 		}
+		++it;
 	}
 
 	HRESULT hr = m_d2dDeviceContext->EndDraw();
