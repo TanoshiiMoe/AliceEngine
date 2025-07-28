@@ -38,21 +38,21 @@ void TileMapComponent::Update(const float& deltaSeconds)
 
 void TileMapComponent::LoadTileMapData(const std::wstring& path)
 {
-	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
 	TileMapLoader::LoadTileMap(filePath, tilemap);
 }
 
 void TileMapComponent::LoadTileSetData(const std::wstring& path)
 {
-	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
 	TileMapLoader::LoadTileSet(filePath, tileset);
 }
 
 void TileMapComponent::LoadMapData(const std::wstring& path)
 {
-	//filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
-	//m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
-	//	(Define::BASE_RESOURCE_PATH + path).c_str());
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
+	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
+		(Define::BASE_RESOURCE_PATH + path).c_str());
 }
 
 void TileMapComponent::CreatetileRenderers()

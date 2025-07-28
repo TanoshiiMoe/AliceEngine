@@ -36,5 +36,8 @@ public:
 	std::vector<WeakObjectPtr<TileMapWrapper>> m_TileRenderers;
 	TileMap tilemap;
 	TileSet tileset;
+
+	std::wstring filePath; // 파일의 경로
+	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 };
 

@@ -55,6 +55,7 @@ void DemoScene4::OnEnter()
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test.tmj");
+	
 	// UI 추가
 	//m_canvas = NewObject<Canvas>(L"Canvas");
 	//m_canvas->AddUI<UI_Script>();
