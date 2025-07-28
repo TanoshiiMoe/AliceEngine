@@ -51,6 +51,7 @@ void Aru::OnStart()
 	m_aru->transform()->SetScale(0.25f, 0.25f);
 	m_aru->transform()->SetPivot(0.5f);
 	m_aru->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
+	m_aru->GetComponent<SpriteRenderer>()->SetSlice(0.0f, 0.0f, 400.0f, 500.0f);
 	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
 
 	/*
@@ -230,5 +231,33 @@ void Aru::Input()
 	if (Input::IsKeyDown(VK_UP))
 	{
 		m_aru->transform()->AddPosition(0, 5.0f);
+	}
+	if (Input::IsKeyDown(VK_K))
+	{
+		m_aru->GetComponent<SpriteRenderer>()->spriteInfo.width += 10;
+		/*FVector2 scale = m_aru->GetComponent<SpriteRenderer>()->GetScale();
+		scale.x += 0.1f;
+		m_aru->GetComponent<SpriteRenderer>()->SetScale(scale);*/
+	}
+	if (Input::IsKeyDown(VK_L))
+	{
+		m_aru->GetComponent<SpriteRenderer>()->spriteInfo.height += 10;
+		/*FVector2 scale = m_aru->GetComponent<SpriteRenderer>()->GetScale();
+		scale.y += 0.1f;
+		m_aru->GetComponent<SpriteRenderer>()->SetScale(scale);*/
+	}
+	if (Input::IsKeyDown(VK_O))
+	{
+		m_aru->GetComponent<SpriteRenderer>()->spriteInfo.width -= 10;
+		/*FVector2 scale = m_aru->GetComponent<SpriteRenderer>()->GetScale();
+		scale.x -= 0.1f;
+		m_aru->GetComponent<SpriteRenderer>()->SetScale(scale);*/
+	}
+	if (Input::IsKeyDown(VK_P))
+	{
+		m_aru->GetComponent<SpriteRenderer>()->spriteInfo.height -= 10;
+		/*FVector2 scale = m_aru->GetComponent<SpriteRenderer>()->GetScale();
+		scale.y -= 0.1f;
+		m_aru->GetComponent<SpriteRenderer>()->SetScale(scale);*/
 	}
 }

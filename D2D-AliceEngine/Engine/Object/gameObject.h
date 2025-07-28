@@ -30,8 +30,8 @@ public:
 	T* AddComponent(Args&&... args)
 	{	
 		T* createdComp = new T(std::forward<Args>(args)...);
-		createdComp->Initialize();
 		createdComp->SetOwner(WeakFromThis<gameObject>());
+		createdComp->Initialize();
 		m_components.emplace_back(createdComp);
 
 		return createdComp;
