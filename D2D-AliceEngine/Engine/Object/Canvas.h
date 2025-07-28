@@ -83,7 +83,7 @@ public:
 	void Release() override;
 
 	TransformComponent* transform() const { return m_transformComponent.lock(); }
-	void AddChildUI(const UIComponent* ucmp);
+	void AddToChildUI(const UIComponent* ucmp);
 
 	WeakObjectPtr<TransformComponent> m_transformComponent;
 };
