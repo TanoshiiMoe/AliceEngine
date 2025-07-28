@@ -11,12 +11,8 @@ public:
 	UIImage();
 	virtual ~UIImage();
 
+	virtual void Render() override;
 	void LoadData(const std::wstring& path);
-	void SetScale(const FVector2& _scale) { scale = _scale; }
-	void SetScale(const float& _x, const float& _y) { scale = FVector2(_x, _y); }
-	void SetScale(const float& _x) { scale = FVector2(_x, _x); }
-
-	void SetPosition(const FVector2& pos);
 
 private:
 	/*	º¸·ù
