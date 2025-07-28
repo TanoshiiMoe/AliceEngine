@@ -16,6 +16,8 @@ public:
 	UIText(const std::wstring& content, const FColor& color, const std::wstring& font, const float& fontSize);
 	virtual ~UIText();
 
+	void Initialize() override;
+
 	void Render() override;
 
 	void SetTextAlignment(ETextFormat format);

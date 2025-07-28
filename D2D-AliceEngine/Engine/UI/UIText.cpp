@@ -3,6 +3,7 @@
 #include <Component/Component.h>
 #include <Manager/D2DRenderManager.h>
 #include <Manager/SceneManager.h>
+#include <Manager/UpdateTaskManager.h>
 #include <Object/Camera.h>
 #include <Component/TransformComponent.h>
 #include <System/RenderSystem.h>
@@ -14,7 +15,7 @@ UIText::UIText()
 	drawType = EDrawType::ScreenSpace;
 }
 
-UIText::UIText(const std::wstring& content, const FColor& color, const std::wstring& font, const float& fontSize)
+UIText::UIText(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
 {
 	m_content = content;
 	m_color = color;
@@ -27,6 +28,27 @@ UIText::UIText(const std::wstring& content, const FColor& color, const std::wstr
 
 UIText::~UIText()
 {
+}
+
+void UIText::Initialize()
+{
+	__super::Initialize();
+
+	InitializeFormat();
+	InitializeColor();
+	InitializeLayout();
+
+	UpdateTaskManager::GetInstance().Enque(
+		WeakFromThis<ITickable>(),
+		Define::ETickingGroup::TG_PostUpdateWork,
+		[weak = WeakFromThis<ITickable>()](const float& dt)
+		{
+			if (auto sp = weak.lock())
+			{
+				sp->Update(dt);
+			}
+		}
+	);
 }
 
 void UIText::Render()

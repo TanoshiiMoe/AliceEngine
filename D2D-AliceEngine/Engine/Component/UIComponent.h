@@ -16,7 +16,7 @@ public:
 	UIComponent();
 	~UIComponent();
 
-	void Initialize() override;
+	virtual void Initialize() override;
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
 	virtual void Render() override;

@@ -34,7 +34,7 @@ void UI_Script::Awake()
 void UI_Script::OnStart()
 {
 	m_owner = GetOwner();
-	//m_owner->AddComponent<UIImage>()->LoadData(L"Sun.png");
+	m_owner->AddComponent<UIImage>()->LoadData(L"Sun.png");
 	m_owner->AddComponent<UIText>()->SetText(L"Test");
 	m_owner->GetComponent<UIText>()->SetFontSize(18.0f);
 	m_owner->GetComponent<UIText>()->SetColor(FColor(0, 0, 0, 255));
