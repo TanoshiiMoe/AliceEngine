@@ -64,12 +64,13 @@ void ScriptComponent::Initialize()
 
 void ScriptComponent::FixedUpdate(const float& deltaSeconds)
 {
-
+	OutputDebugStringW((L"FixedUpdate(deltaSeconds) : " + std::to_wstring(deltaSeconds) + L"\n").c_str());
 }
 
 void ScriptComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	//OutputDebugStringW((L"Update(deltaSeconds) : " + std::to_wstring(deltaSeconds) + L"\n").c_str());
 }
 
 void ScriptComponent::LateUpdate(const float& deltaSeconds)
