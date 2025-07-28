@@ -51,6 +51,7 @@
     </Filter>
     <Filter Include="TileMap">
       <UniqueIdentifier>{80d54bc9-6e68-433d-b55e-8be86dade478}</UniqueIdentifier>
+	</Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{ae6205e7-dc7e-4030-8b89-7474a9813dc6}</UniqueIdentifier>
     </Filter>
@@ -232,6 +233,7 @@
     </ClInclude>
     <ClInclude Include="TileMap\TileMapLoader.h">
       <Filter>TileMap</Filter>
+	</ClInclude>
     <ClInclude Include="Component\UIComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -419,6 +421,7 @@
     </ClCompile>
     <ClCompile Include="TileMap\TileMapLoader.cpp">
       <Filter>TileMap</Filter>
+	</ClCompile>
     <ClCompile Include="Component\UIComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
