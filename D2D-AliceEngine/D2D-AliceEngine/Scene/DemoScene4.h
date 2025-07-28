@@ -1,7 +1,8 @@
 #pragma once
 #include <Scene/Scene.h>
 
-// HiroScene ÀÓ½Ã »ý¼º
+// HiroScene Ã€Ã“Â½Ãƒ Â»Ã½Â¼Âº
+class Canvas;
 class TextRenderComponent;
 class DemoScene4 : public Scene
 {
@@ -22,10 +23,13 @@ public:
 	gameObject* m_player;
 	gameObject* m_sound;
 	gameObject* m_tile;
+	Canvas* m_canvas;
+	gameObject* m_wall;
+
+	gameObject* m_UI;
 
 	//gameObject* m_backgroundImage;
 	//gameObject* m_spriteAnimationTest;
-	//gameObject* m_wall;
 	//gameObject* m_wall2;
 	//gameObject* m_wall3;
 	//std::vector<gameObject*> m_enemies;
