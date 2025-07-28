@@ -37,6 +37,9 @@ public:
 	}
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
+	void SetPosition(const FVector2& pos);
+	void SetScale(const FVector2& scale);
+	void SetTransformType(const ETransformType& type);
 
 	ComPtr<IDWriteTextLayout> m_layout;
 	ComPtr<IDWriteTextFormat> m_dWriteTextFormat;
@@ -52,5 +55,10 @@ private:
 	std::wstring m_font = L"Consolas";
 	float m_fontSize = 24.0f;
 	FColor m_color;
+
+	Transform m_transform;
+	DWRITE_TEXT_METRICS m_metrics{};
+	ETransformType m_eTransformType = ETransformType::D2D;
+	bool m_metricsDirty = true;
 };
 

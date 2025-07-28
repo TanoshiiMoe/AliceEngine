@@ -35,7 +35,10 @@ void UI_Script::OnStart()
 {
 	m_owner = GetOwner();
 	//m_owner->AddComponent<UIImage>()->LoadData(L"Sun.png");
-	m_owner->AddComponent<UIText>()->SetText(L"asdf");
+	m_owner->AddComponent<UIText>()->SetText(L"Test");
+	m_owner->GetComponent<UIText>()->SetFontSize(18.0f);
+	m_owner->GetComponent<UIText>()->SetColor(FColor(0, 0, 0, 255));
+	m_owner->GetComponent<UIText>()->SetPosition(FVector2(50,50));
 }
 
 void UI_Script::OnEnd()

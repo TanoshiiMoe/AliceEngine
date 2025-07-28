@@ -46,8 +46,8 @@ void DemoScene4::OnEnter()
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
-	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<Audio>();
+	//m_sound = NewObject<gameObject>(L"Sound");
+	//m_sound->AddComponent<Audio>();
 
 	// UI 추가
 	m_UIobj = NewObject<gameObject>(L"UIobjects");

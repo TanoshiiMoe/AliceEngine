@@ -2,6 +2,8 @@
 #include "UIText.h"
 #include <Component/Component.h>
 #include <Manager/D2DRenderManager.h>
+#include <Manager/SceneManager.h>
+#include <Object/Camera.h>
 #include <Component/TransformComponent.h>
 #include <System/RenderSystem.h>
 #include <Math/TColor.h>
@@ -29,34 +31,52 @@ UIText::~UIText()
 
 void UIText::Render()
 {
-	__super::Render();
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!context || m_content.empty()) return;
+	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
 
-	if (!m_layout) return;
-
-	TransformComponent* transform = GetOwner()->GetComponent<TransformComponent>();
-	if (!transform) return;
-
-	// 텍스트 정렬에 맞춘 pivot 보정
-	DWRITE_TEXT_METRICS metrics;
-	m_layout->GetMetrics(&metrics);
+	InitializeLayout();
+	// 피벗 보정
 	D2D1_POINT_2F pivotOffset = {
-		metrics.width * 0.5f, // 예시로 중앙 정렬 가정
-		metrics.height * 0.5f
+		m_metrics.width * GetPivot()->x,
+		m_metrics.height * GetPivot()->y
 	};
 	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
 
-	D2D1::Matrix3x2F mat =
-		D2D1::Matrix3x2F::Scale(transform->GetScale().x, transform->GetScale().y) *
-		D2D1::Matrix3x2F::Rotation(transform->GetRotation() * 180.0f / Define::PI) *
-		D2D1::Matrix3x2F::Translation(transform->GetPosition().x, transform->GetPosition().y);
+	// 로컬 변환 먼저 적용 (내부 transform + pivotAdjust)
+	D2D1::Matrix3x2F localTransform =
+		D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
+		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation()) *
+		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
 
-	ID2D1DeviceContext7* d2dDeviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext.Get();
+	// 그 뒤에 world, camera 적용
+	// m_pTransform이 계산된 worldTransform의 주소를 가지고 있음
+	if (m_eTransformType == ETransformType::Unity)
+	{
+		D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
+		D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 
-	d2dDeviceContext->SetTransform(pivotAdjust * mat);
+		Camera* camera = SceneManager::GetCamera();
+		D2D1::Matrix3x2F cameraInv = camera ? camera->m_transform->ToMatrix() : D2D1::Matrix3x2F::Identity();
+		cameraInv.Invert();
 
-	d2dDeviceContext->DrawTextLayout(
-		D2D1::Point2F(0, 0),
-		m_layout.Get(),
+		view = unity * world * cameraInv;
+		view = view * unity * D2D1::Matrix3x2F::Translation(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
+	}
+	else
+	{
+		view = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+	}
+
+	D2D1::Matrix3x2F finalTransform = pivotAdjust * localTransform * view;
+	context->SetTransform(finalTransform);
+
+	// 그리기
+	context->DrawText(
+		m_content.c_str(),
+		static_cast<UINT32>(m_content.length()),
+		m_dWriteTextFormat.Get(),
+		D2D1::RectF(0, 0, m_metrics.width, m_metrics.height),
 		m_pBrush.Get()
 	);
 }
@@ -121,22 +141,41 @@ void UIText::SetTextAlignment(ETextFormat format)
 void UIText::SetText(const std::wstring& content)
 {
 	m_content = content;
+	m_metricsDirty = true;
 }
 
 void UIText::SetText(const float& val)
 {
 	m_content = std::to_wstring(val);
+	m_metricsDirty = true;
 }
 
 void UIText::SetColor(const FColor& color)
 {
 	m_color = color;
+	m_metricsDirty = true;
 }
 
 void UIText::SetFontSize(const float& _size)
 {
 	m_fontSize = _size;
+	m_metricsDirty = true;
 	InitializeFormat();
+}
+
+void UIText::SetPosition(const FVector2& pos)
+{
+	m_transform.SetPosition(pos.x, pos.y);
+}
+
+void UIText::SetScale(const FVector2& scale)
+{
+	m_transform.SetScale(scale.x, scale.y);
+}
+
+void UIText::SetTransformType(const ETransformType& type)
+{
+	m_eTransformType = type;
 }
 
 void UIText::InitializeFormat()
@@ -168,14 +207,17 @@ void UIText::InitializeColor()
 
 void UIText::InitializeLayout()
 {
-	m_layout = nullptr;
-	HRESULT hr = D2DRenderManager::GetInstance().m_dWriteFactory->CreateTextLayout(
-		m_content.c_str(),
-		static_cast<UINT32>(m_content.length()),
-		m_dWriteTextFormat.Get(),
-		FLT_MAX, FLT_MAX,
-		&m_layout
-	);
-
-	if (FAILED(hr)) return;
+	if (m_metricsDirty) {
+		m_layout = nullptr;
+		HRESULT hr = D2DRenderManager::GetInstance().m_dWriteFactory->CreateTextLayout(
+			m_content.c_str(),
+			static_cast<UINT32>(m_content.length()),
+			m_dWriteTextFormat.Get(),
+			FLT_MAX, FLT_MAX,
+			&m_layout
+		);
+		m_layout->GetMetrics(&m_metrics);
+		m_metricsDirty = false;
+		if (FAILED(hr)) return;
+	}
 }
