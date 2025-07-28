@@ -67,7 +67,10 @@ void gameObject::Initialize(const FVector2& position = FVector2(0.0f), const flo
 
 void gameObject::AddChildObject(const gameObject* obj)
 {
-	this->transform()->AddChildObject(obj->m_transformComponent);
+	if (auto weakThis = WeakFromThis<gameObject>())
+	{
+		weakThis->transform()->AddChildObject(obj->m_transformComponent);
+	}
 }
 
 void gameObject::Update()
