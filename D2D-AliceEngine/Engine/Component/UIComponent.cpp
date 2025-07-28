@@ -44,7 +44,7 @@ void UIComponent::Render()
 	
 	// 좌표계는 유니티 좌표계가 아닌 D2D기반, 뒤 숫자는 크기 (이거 래핑해서 생성할때 크기 정해두고 띄우면 될듯)
 	// 제가 만든 버튼도 이런식이었던거긴해요
-	D2D1_RECT_F destRect = { 0, 0, GetSizeX(), GetSizeY()};
+	D2D1_RECT_F destRect = { 0, 0, GetBitmapSizeX(), GetBitmapSizeY()};
 
 	D2D1::Matrix3x2F mat =
 		D2D1::Matrix3x2F::Scale(transform->GetScale().x, transform->GetScale().y) *
@@ -57,14 +57,14 @@ void UIComponent::Render()
 	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
 }
 
-float UIComponent::GetSizeX()
+float UIComponent::GetBitmapSizeX()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return static_cast<float>(bmpSize.width);
 }
 
-float UIComponent::GetSizeY()
+float UIComponent::GetBitmapSizeY()
 {
 	if (!m_bitmap.get()) return 0;
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();

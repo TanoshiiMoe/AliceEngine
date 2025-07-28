@@ -21,8 +21,8 @@ public:
 	void Release() override;
 	virtual void Render() override;
 
-	virtual float GetSizeX() override;
-	virtual float GetSizeY() override;
+	virtual float GetBitmapSizeX() override;
+	virtual float GetBitmapSizeY() override;
 
 	FVector2 GetSize();
 

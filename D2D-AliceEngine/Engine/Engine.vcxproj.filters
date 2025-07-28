@@ -52,6 +52,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{ae6205e7-dc7e-4030-8b89-7474a9813dc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{d66d8a9d-0672-451b-99c7-6721d795d93b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -237,6 +240,9 @@
     <ClInclude Include="UI\UIText.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Effect\Prism.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -418,6 +424,9 @@
     </ClCompile>
     <ClCompile Include="UI\UIText.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\Prism.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

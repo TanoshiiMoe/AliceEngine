@@ -20,6 +20,9 @@
     <Filter Include="Scene\ExampleScene">
       <UniqueIdentifier>{622f0825-07bc-42f4-bcc6-b92d5fc1e316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Kang">
+      <UniqueIdentifier>{d227acb4-fc9f-4bac-924c-a7af76e31f4b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -97,6 +100,9 @@
     <ClInclude Include="Scripts\UI_Script.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Kang\KangScene.h">
+      <Filter>Kang</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -164,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="Scripts\UI_Script.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Kang\KangScene.cpp">
+      <Filter>Kang</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

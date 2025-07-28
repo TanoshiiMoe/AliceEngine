@@ -216,6 +216,7 @@ void DemoScene3::OnEnter()
 	m_player->AddComponent<Player>();
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 
+
 	for (int i = 0; i < enemyMax; i++)
 	{
 		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
