@@ -190,11 +190,6 @@ void UIText::SetPosition(const FVector2& pos)
 	m_transform.SetPosition(pos.x, pos.y);
 }
 
-void UIText::SetScale(const FVector2& scale)
-{
-	m_transform.SetScale(scale.x, scale.y);
-}
-
 void UIText::SetTransformType(const ETransformType& type)
 {
 	m_eTransformType = type;

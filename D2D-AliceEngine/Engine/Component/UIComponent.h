@@ -21,12 +21,14 @@ public:
 	void Release() override;
 	virtual void Render() override;
 
-	virtual float GetSizeX() override;
-	virtual float GetSizeY() override;
+	virtual float GetBitmapSizeX() override;
+	virtual float GetBitmapSizeY() override;
 
 	FVector2 GetSize();
 
 	virtual void OnMouseEvent(const POINT& mousePos, bool isClick) {}
+
+	Transform m_transform;
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
