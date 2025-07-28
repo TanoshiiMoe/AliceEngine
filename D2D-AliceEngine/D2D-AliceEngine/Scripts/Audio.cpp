@@ -25,7 +25,6 @@ void Audio::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
-
 }
 
 void Audio::Awake()
@@ -34,16 +33,17 @@ void Audio::Awake()
 
 void Audio::OnStart()
 {
-	m_sound = GetOwner();
-	m_sound->AddComponent<AudioComponent>()->Load(L"../Resource/Sound/idol.mp3", AudioMode::Stream);
-	m_sound->GetComponent<AudioComponent>()->Play();
+	m_owner = GetOwner();
+	m_owner->AddComponent<AudioComponent>()->Load(L"../Resource/Sound/idol.mp3", AudioMode::Stream);
+	m_owner->GetComponent<AudioComponent>()->Play();
 	// 음량 조절
-	//m_sound->GetComponent<AudioComponent>()->SetVolume(0.3f);
+	//m_owner->GetComponent<AudioComponent>()->SetVolume(0.3f);
 }
 
 void Audio::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+	m_owner->GetComponent<AudioComponent>()->Stop();
 }
 
 void Audio::OnDestroy()

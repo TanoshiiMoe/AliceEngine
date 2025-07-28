@@ -94,6 +94,9 @@
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h">
       <Filter>Scene\ExampleScene</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\UI_Script.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -158,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="Scene\ExampleScene\ExampleScene.cpp">
       <Filter>Scene\ExampleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\UI_Script.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -7,6 +7,8 @@
 #include <Component/Animator.h>
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
+#include <Component/UIComponent.h>
+//#include <UI/UIImage.h>
 
 RenderSystem::RenderSystem()
 {
@@ -41,8 +43,12 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 			m_renderers[static_cast<int>(ERenderLayer::TextRenderComponent)].push_back(renderer);
 		}
 		else if (dynamic_cast<Animator*>(ptr))
-		{
+		{	
 			m_renderers[static_cast<int>(ERenderLayer::Animator)].push_back(renderer);
+		}
+		else if (dynamic_cast<UIComponent*>(ptr))
+		{
+			m_renderers[static_cast<int>(ERenderLayer::UIComponent)].push_back(renderer);
 		}
 	}
 }
@@ -65,6 +71,8 @@ void RenderSystem::UnRegist(WeakObjectPtr<RenderComponent>&& renderer)
 		layer = static_cast<int>(ERenderLayer::TextRenderComponent);
 	else if (dynamic_cast<Animator*>(ptr))
 		layer = static_cast<int>(ERenderLayer::Animator);
+	else if (dynamic_cast<UIComponent*>(ptr))
+		layer = static_cast<int>(ERenderLayer::UIComponent);
 
 	if (layer >= 0)
 	{

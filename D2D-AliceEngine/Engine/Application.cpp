@@ -39,6 +39,7 @@ Application::~Application()
 	CollisionSystem::Destroy();
 	ClassManager::Destroy();
 	PhysicsSystem::Destroy();
+	AudioManager::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -68,17 +69,17 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Application::Initialize()
 {
-	ObjectHandler::Create();
-	ScriptSystem::Create();
-	InputSystem::Create();
-	D2DRenderManager::Create();
-	SceneManager::Create();
-	UpdateTaskManager::Create();
-	TimerManager::Create();
-	RenderSystem::Create();
-	CollisionSystem::Create();
-	PhysicsSystem::Create();
-	AudioManager::Create();
+	ObjectHandler			::Create();
+	ScriptSystem			::Create();
+	InputSystem				::Create();
+	D2DRenderManager		::Create();
+	SceneManager			::Create();
+	UpdateTaskManager		::Create();
+	TimerManager			::Create();
+	RenderSystem			::Create();
+	CollisionSystem			::Create();
+	PhysicsSystem			::Create();
+	AudioManager			::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로

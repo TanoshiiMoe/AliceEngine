@@ -17,9 +17,11 @@
 #include "../Scripts/Player.h"
 #include "../Scripts/Enemy.h"
 #include "../Scripts/Audio.h"
+#include "../Scripts/UI_Script.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
+#include <Object/Canvas.h>
 
 void DemoScene4::Initialize()
 {
@@ -42,14 +44,28 @@ void DemoScene4::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
+	SceneManager::GetCamera()->SetOwner(m_player);
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
+	m_player->AddComponent<Rigidbody2D>();
+	m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
 
-	// ¿Àµğ¿À Ãß°¡, ¿Àµğ¿À °ü·Ã ½ºÅ©¸³Æ® ³Ö±â
+	// ì˜¤ë””ì˜¤ ì¶”ê°€, ì˜¤ë””ì˜¤ ê´€ë ¨ ìŠ¤í¬ë¦½íŠ¸ ë„£ê¸°
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test.tmj");
+	// UI ì¶”ê°€
+	//m_canvas = NewObject<Canvas>(L"Canvas");
+	//m_canvas->AddUI<UI_Script>();
+
+	m_UI = NewObject<gameObject>(L"ad");
+	m_UI->AddComponent<UI_Script>();
+
+	m_wall = NewObject<gameObject>(L"wall");
+	m_wall->transform()->SetPivot(0.5f);
+	m_wall->transform()->SetPosition(0, -300);
+	m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 }
 
 void DemoScene4::OnExit()

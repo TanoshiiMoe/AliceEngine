@@ -7,6 +7,9 @@ namespace Input
 	bool IsKeyDown(int vKey);
 	bool IsKeyPressed(int vKey);
 	bool IsKeyReleased(int vKey);
+	bool AnyKeyPressed();
 	FVector2 GetMousePosition();
+	void SetMousePosition(HWND hWnd, int mousePosX, int mousePosY);
+
 	//FVector2 GetMouseWorldPosition(std::weak_ptr<ACameraActor> camera);
 }

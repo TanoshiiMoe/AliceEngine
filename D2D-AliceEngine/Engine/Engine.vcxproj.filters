@@ -51,6 +51,8 @@
     </Filter>
     <Filter Include="TileMap">
       <UniqueIdentifier>{80d54bc9-6e68-433d-b55e-8be86dade478}</UniqueIdentifier>
+    <Filter Include="UI">
+      <UniqueIdentifier>{ae6205e7-dc7e-4030-8b89-7474a9813dc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +232,17 @@
     </ClInclude>
     <ClInclude Include="TileMap\TileMapLoader.h">
       <Filter>TileMap</Filter>
+    <ClInclude Include="Component\UIComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIImage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIText.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Canvas.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -406,6 +419,17 @@
     </ClCompile>
     <ClCompile Include="TileMap\TileMapLoader.cpp">
       <Filter>TileMap</Filter>
+    <ClCompile Include="Component\UIComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIImage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIText.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Canvas.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
