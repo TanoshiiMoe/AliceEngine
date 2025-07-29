@@ -42,7 +42,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/..\/..\/TileEditor\/Practice\/blocks.tsx"
+         "source":"..\/..\/..\/..\/..\/TileEditor\/Practice\/blocks.tsj"
         }],
  "tilewidth":32,
  "type":"map",

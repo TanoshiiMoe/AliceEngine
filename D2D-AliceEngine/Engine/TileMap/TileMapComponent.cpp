@@ -9,6 +9,7 @@
 #include <System/RenderSystem.h>
 #include <Component/TransformComponent.h>
 #include <Object/gameObject.h>
+#include <Scene/Scene.h>
 
 TileMapComponent::TileMapComponent()
 {
@@ -18,10 +19,7 @@ TileMapComponent::~TileMapComponent()
 {
 	for(auto& tileRenderer : m_TileRenderers)
 	{
-		if (auto renderer = tileRenderer.Get())
-		{
-			renderer->spriteRenderer.reset();
-		}
+		tileRenderer.reset();
 	}
 	m_TileRenderers.clear();
 }
@@ -57,38 +55,49 @@ void TileMapComponent::LoadMapData(const std::wstring& path)
 
 void TileMapComponent::CreatetileRenderers()
 {
-	//for (const auto& layer : tilemap.layers)
-	//{
-	//	if (!layer.visible) continue; // 레이어가 비활성화된 경우 건너뛰기
-	//	for (int row = 0; row < layer.height; ++row)
-	//	{
-	//		for (int col = 0; col < layer.width; ++col)
-	//		{
-	//			int index = row * layer.width + col;
-	//			int gid = layer.data[index];
-	//			if (gid == 0) continue; // 빈 타일은 건너뛰기
-	//
-	//			SpriteRenderer* tileRenderer = GetOwner()->AddComponent<SpriteRenderer>();
-	//
-	//			// 이 부분에서 bimap 한장 잘라야함
-	//
-	//			auto tileRenderer = std::make_shared<TileMapWrapper>();
-	//			tileRenderer->row = row;
-	//			tileRenderer->col = col;
-	//			tileRenderer->width = tileset.tilewidth;
-	//			tileRenderer->height = tileset.tileheight;
-	//			// 스프라이트 렌더러 생성 및 설정
-	//			auto spriteRenderer = std::make_shared<SpriteRenderer>();
-	//			spriteRenderer->LoadData(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + tileset.image));
-	//			spriteRenderer->SetTransform(GetTransform());
-	//			spriteRenderer->SetPivot(GetPivot());
-	//			spriteRenderer->SetScale(FVector2(1.0f, 1.0f));
-	//			
-	//			tileRenderer->spriteRenderer = spriteRenderer;
-	//			m_TileRenderers.push_back(tileRenderer);
-	//		}
-	//	}
-	//}
+	for (const auto& layer : tilemap.layers)
+	{
+		if (!layer.visible) continue; // 레이어가 비활성화된 경우 건너뛰기
+		for (int row = 0; row < layer.height; ++row)
+		{
+			for (int col = 0; col < layer.width; ++col)
+			{
+				int index = row * layer.width + col;
+				int gid = layer.data[index];
+				if (gid == 0) continue; // 빈 타일은 건너뛰기
+
+				gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
+				//go->transform()->SetPosition(FVector2(row * tileset.tilewidth, col * tileset.tileheight));
+				go->transform()->SetPosition(FVector2(Define::SCREEN_WIDTH * (row / layer.height), Define::SCREEN_HEIGHT * (col / layer.width)));
+				SpriteRenderer* tileRenderer = go->AddComponent<SpriteRenderer>(); 
+				tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
+
+				float gidRow = gid / tileset.columns;
+				float gidCol = gid % tileset.columns;
+				float x = gidRow * tileset.tilewidth;
+				float y = gidCol * tileset.tileheight;
+				float width = tileset.tilewidth;
+				float height = tileset.tileheight;
+				tileRenderer->SetSlice(x,y,x+width,y+height);
+				
+				// 이 부분에서 bimap 한장 잘라야함
+				//auto tileRenderer = std::make_shared<TileMapWrapper>();
+				//tileRenderer->row = row;
+				//tileRenderer->col = col;
+				//tileRenderer->width = tileset.tilewidth;
+				//tileRenderer->height = tileset.tileheight;
+				//// 스프라이트 렌더러 생성 및 설정
+				//auto spriteRenderer = std::make_shared<SpriteRenderer>();
+				//spriteRenderer->LoadData(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + tileset.image));
+				//spriteRenderer->SetTransform(GetTransform());
+				//spriteRenderer->SetPivot(GetPivot());
+				//spriteRenderer->SetScale(FVector2(1.0f, 1.0f));
+				//tileRenderer->spriteRenderer = spriteRenderer;
+
+				m_TileRenderers.push_back(tileRenderer);
+			}
+		}
+	}
 }
 
 void TileMapComponent::Release()
