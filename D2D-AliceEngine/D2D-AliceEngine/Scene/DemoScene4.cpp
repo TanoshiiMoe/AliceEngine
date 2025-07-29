@@ -54,7 +54,7 @@ void DemoScene4::OnEnter()
 	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
-	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test3.tmj");
+	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
 	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
 	// UI 추가
@@ -70,6 +70,8 @@ void DemoScene4::OnEnter()
 	m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 
 	//RemoveObject(m_wall);
+
+	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
 }
 
 void DemoScene4::OnExit()
@@ -82,6 +84,14 @@ void DemoScene4::PlayerInput()
 	if (Input::IsKeyPressed(VK_3))
 	{
 		SceneManager::ChangeScene(L"aruScene");
+	}
+	if (Input::IsKeyDown(VK_K))
+	{
+		m_player->GetComponent<Player>()->walkSpeed += 5.0f;
+	}
+	if (Input::IsKeyDown(VK_L))
+	{
+		m_player->GetComponent<Player>()->walkSpeed -= 5.0f;
 	}
 }
 
