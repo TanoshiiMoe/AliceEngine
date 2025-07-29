@@ -123,8 +123,6 @@ void Prism::MakeEffect()
 
 	WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObject<gameObject>(L"effect");
 	if (temp) {
-		std::wstring tt2 = L"-------\n";
-		OutputDebugStringW(tt2.c_str());
 		// 스프라이트 렌더러 설정
 		SpriteRenderer* sr = temp->AddComponent<SpriteRenderer>();
 		sr->m_bitmap = bitmap.lock();
