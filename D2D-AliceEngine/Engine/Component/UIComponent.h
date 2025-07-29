@@ -2,6 +2,7 @@
 #include <Component/RenderComponent.h>
 #include <Core/ObjectHandler.h>
 #include <Math/Transform.h>
+#include "InputComponent.h"
 
 /*
 *	UI 컴포넌트입니다.
@@ -28,15 +29,26 @@ public:
 
 	FVector2 GetSize();
 
-	virtual void OnMouseEvent(const POINT& mousePos, bool isClick) {}
-
 	Transform m_transform;
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 
+	template<typename F>
+	void SetAction(F&& action)
+	{
+		slots.push_back({ owner, action });
+	}
+
 private:
 	UIComponent* m_parents = nullptr;
 	std::vector<UIComponent*> m_child;
 
+private:
+	struct ClickSlot 
+	{
+		WeakObjectPtr<gameObject> weakPtr;
+		std::function<void()> func;
+	};
+	std::vector<ClickSlot> slots;
 };

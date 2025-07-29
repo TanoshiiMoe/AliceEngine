@@ -40,6 +40,13 @@ void UI_Script::OnStart()
 	m_owner->GetComponent<UIImage>()->SetScale(150);
 	m_owner->GetComponent<UIImage>()->SetPosition(FVector2(50, 50));
 	m_owner->GetComponent<UIImage>()->m_layer = 500;
+	m_owner->GetComponent<UIImage>()->SetAction([]()
+		{ 
+		OutputDebugStringW(L"SetAction click!\n"); 
+		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+		});
+
+	m_owner->GetComponent<UIImage>();
 
 	m_owner->AddComponent<UIText>()->SetText(L"Test");
 	m_owner->GetComponent<UIText>()->SetFontSize(18.0f);

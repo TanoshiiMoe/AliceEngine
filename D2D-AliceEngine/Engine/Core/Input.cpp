@@ -92,4 +92,13 @@ namespace Input
 	//	}
 	//	return screenPos + cameraPos;
 	//}
+
+	bool IsMouseLeftReleased()
+	{
+		return ((prevState[VK_LBUTTON] & 0x8000) && !(currState[VK_LBUTTON] & 0x8000));
+	}
+	bool IsMouseLeftPressed()
+	{
+		return (!(prevState[VK_LBUTTON] & 0x8000) && (currState[VK_LBUTTON] & 0x8000));
+	}
 }
