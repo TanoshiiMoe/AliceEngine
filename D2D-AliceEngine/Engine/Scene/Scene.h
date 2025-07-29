@@ -43,51 +43,11 @@ public:
 		return rawPtr;
 	}
 
-	template<class T>
-	void RemoveObject(T& targetObj)
-	{
-		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
-		{
-			if (*it == targetObj)
-			{
-				it->second.reset();
-				m_objects.erase(it);
-				return true;
-			}
-		}
-		return false;
-	}
+	bool RemoveObject(gameObject* targetObj);
 
-	bool RemoveObjectByName(const std::wstring& objectName)
-	{
-		auto it = m_nameToUUIDs.find(objectName);
-		if (it != m_nameToUUIDs.end()) 
-		{
-			// 예: 첫번째 UUID 삭제 (다른 방식도 가능)
-			auto uuidIt = it->second.begin();
-			m_objects.erase(*uuidIt);
-			it->second.erase(uuidIt);
-			if (it->second.empty())
-				m_nameToUUIDs.erase(it);
-			return true;
-		}
-		return false;
-	}
+	bool RemoveObjectByName(const std::wstring& objectName);
 
-	bool RemoveAllObjectsByName(const std::wstring& name) 
-	{
-		auto it = m_nameToUUIDs.find(name);
-		if (it != m_nameToUUIDs.end()) 
-		{
-			for (const auto& uuid : it->second)
-			{
-				m_objects.erase(uuid);
-			}
-			m_nameToUUIDs.erase(it);
-			return true;
-		}
-		return false;
-	}
+	bool RemoveAllObjectsByName(const std::wstring& name);
 
 	template<class T>
 	bool RemoveObjectByType()
@@ -147,18 +107,16 @@ public:
 	}
 
 	template<class T>
-	void RemoveCanvas(T& targetObj)
+	void RemoveCanvas(T* targetObj)
 	{
 		for (auto it = m_canvas.begin(); it != m_canvas.end(); ++it)
 		{
-			if (*it == targetObj)
+			if (it->second.get() == targetObj)
 			{
 				it->second.reset();
 				m_canvas.erase(it);
-				return true;
 			}
 		}
-		return false;
 	}
 
 private:
