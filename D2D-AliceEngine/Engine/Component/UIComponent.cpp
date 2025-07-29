@@ -7,6 +7,8 @@
 #include <Math/Transform.h>
 #include <System/RenderSystem.h>
 #include <Component/TransformComponent.h>
+#include <Manager/UpdateTaskManager.h>
+#include <Core/Input.h>
 
 UIComponent::UIComponent()
 {
@@ -21,6 +23,19 @@ UIComponent::~UIComponent()
 void UIComponent::Initialize()
 {
 	__super::Initialize();
+
+	UpdateTaskManager::GetInstance().Enque(
+		WeakFromThis<ITickable>(),
+		Define::ETickingGroup::TG_PostUpdateWork,
+		[weak = WeakFromThis<ITickable>()](const float& dt)
+		{
+			if (auto sp = weak.lock())
+			{
+				sp->Update(dt);
+			}
+		}
+	);
+
 }
 
 void UIComponent::Update()
@@ -31,6 +46,33 @@ void UIComponent::Update()
 void UIComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+
+	for (auto it = slots.begin(); it != slots.end();)
+	{
+		if (!it->weakPtr.expired())
+		{
+			if (Input::IsMouseLeftPressed())
+			{
+				FVector2 mousePos = Input::GetMousePosition();
+				FVector2 ownerPos = FVector2( m_transform.GetPosition().x, m_transform.GetPosition().y);
+				float width = GetScale().x;
+				float height = GetScale().y;
+				if (mousePos.x >= ownerPos.x &&
+					mousePos.x <= ownerPos.x + width &&
+					mousePos.y >= ownerPos.y &&
+					mousePos.y <= ownerPos.y + height)
+				{
+					// 마우스가 UI 영역 안에 있을 때만 함수 호출
+					it->func();
+				}
+			}
+			it++;
+		}
+		else
+		{
+			it = slots.erase(it);
+		}
+	}
 }
 
 void UIComponent::Release()
