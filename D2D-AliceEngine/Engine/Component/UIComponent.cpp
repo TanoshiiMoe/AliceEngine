@@ -39,14 +39,6 @@ void UIComponent::Update(const float& deltaSeconds)
 void UIComponent::Release()
 {
 	__super::Release();
-
-	for (auto* child : m_child)
-	{
-		if (child)
-			child->SetParentUI(nullptr);
-	}
-
-	m_child.clear();
 }
 
 void UIComponent::Render()
@@ -86,51 +78,4 @@ FVector2 UIComponent::GetSize()
 	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
-}
-
-WeakObjectPtr<TransformComponent> UIComponent::GetUITransform() const
-{
-	return m_transformComponent;
-}
-
-void UIComponent::AddChildUI(UIComponent* child)
-{
-	if (!child || child == this) return;
-
-	if (std::find(m_child.begin(), m_child.end(), child) != m_child.end())
-		return;
-
-	if (child->m_parent.IsValid() && child->m_parent.Get() != this)
-	{
-		// 기존 부모 자식 리스트에서 제거
-		auto* oldParent = child->m_parent.Get();
-		auto& siblings = oldParent->m_child;
-		siblings.erase(std::remove(siblings.begin(), siblings.end(), child), siblings.end());
-	}
-
-	child->m_parent = this;
-
-	m_child.push_back(child);
-
-	if (auto weakThis = WeakFromThis<UIComponent>())
-	{
-		weakThis->GetUITransform()->AddChildObject(child->m_transformComponent);
-	}
-}
-
-void UIComponent::SetParentUI(UIComponent* parent)
-{
-	m_parent = parent;
-}
-
-void UIComponent::SetPosition(const FVector2& pos)
-{
-	m_transformComponent->SetPosition(pos.x, pos.y);
-}
-
-FVector2 UIComponent::GetUIPivot()
-{
-	if (!m_transformComponent.expired())
-		return *m_transformComponent.Get()->GetPivot();
-	return FVector2(0.5f, 0.5f);
 }

@@ -2,31 +2,17 @@
 #include <Component/RenderComponent.h>
 #include <Animation/TextureLoader.h>
 
-using namespace Microsoft::WRL;
-
-struct ID2D1Bitmap1;
-class SpriteRenderer : public RenderComponent
+class TileMapRenderer : public RenderComponent
 {
 public:
-	SpriteRenderer();
-	~SpriteRenderer();
+	TileMapRenderer();
+	~TileMapRenderer();
 
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;
 	void LoadData(const std::wstring& path);
 	void Release() override;
 	void Render() override;
-
-	virtual float GetBitmapSizeX() override;
-	virtual float GetBitmapSizeY() override;
-
-	FVector2 GetSize();
-
-	void SetSlice(float x, float y, float w, float h);
-
-	void SetTransform(TransformComponent* transform) { m_transform = transform; }
-
-	SpriteInfo spriteInfo; // 스프라이트 정보
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
@@ -36,6 +22,21 @@ public:
 		float srcW{ -1 }, srcH{ -1 };
 	} slice;
 
+	int row = 0;
+	int col = 0;
+	int width = 0;			// tileWidth
+	int height = 0;			// tileHeight
+	int tilesetColumns = 0;
+	int gid = 0;
+
+	SpriteInfo spriteInfo; // 스프라이트 정보
+
+	virtual float GetBitmapSizeX() override;
+	virtual float GetBitmapSizeY() override;
+
+	void SetSlice(float x, float y, float w, float h);
+
 private:
 	TransformComponent* m_transform = nullptr;
 };
+

@@ -42,6 +42,14 @@ Transform* Component::GetTransform() const
 	return nullptr;
 }
 
+TransformComponent* Component::GetTransformComp() const
+{
+	if (!owner.expired())
+		return owner.lock()->GetComponent<TransformComponent>();
+
+	return nullptr;
+}
+
 FVector2* Component::GetPivot() const
 {
 	if (!owner.expired())
