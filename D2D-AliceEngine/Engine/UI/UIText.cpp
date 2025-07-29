@@ -51,23 +51,44 @@ void UIText::Initialize()
 	);
 }
 
-/*
-* UIComponent에서 월드 좌표를 이미 구했기 때문에 여기서는 Text에 대한 것만 렌더링
-*/
 void UIText::Render()
 {
-	__super::Render();
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	if (!context || m_content.empty()) return;
+	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
 
 	InitializeLayout();
 	// 피벗 보정
 	D2D1_POINT_2F pivotOffset = {
-		m_metrics.width * GetUIPivot().x,
-		m_metrics.height * GetUIPivot().y
+		m_metrics.width * GetPivot()->x,
+		m_metrics.height * GetPivot()->y
 	};
 	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F localTransform = m_transform.ToMatrix();
+
+	// 로컬 변환 먼저 적용 (내부 transform + pivotAdjust)
+	D2D1::Matrix3x2F localTransform =
+		D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
+		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation()) *
+		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
+
+	// 그 뒤에 world, camera 적용
+	// m_pTransform이 계산된 worldTransform의 주소를 가지고 있음
+	if (m_eTransformType == ETransformType::Unity)
+	{
+		D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
+		D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+
+		Camera* camera = SceneManager::GetCamera();
+		D2D1::Matrix3x2F cameraInv = camera ? camera->m_transform->ToMatrix() : D2D1::Matrix3x2F::Identity();
+		cameraInv.Invert();
+
+		view = unity * world * cameraInv;
+		view = view * unity * D2D1::Matrix3x2F::Translation(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
+	}
+	else
+	{
+		view = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+	}
 
 	D2D1::Matrix3x2F finalTransform = pivotAdjust * localTransform * view;
 	context->SetTransform(finalTransform);
@@ -164,7 +185,7 @@ void UIText::SetFontSize(const float& _size)
 	InitializeFormat();
 }
 
-void UIText::SetTextPosition(const FVector2& pos)
+void UIText::SetPosition(const FVector2& pos)
 {
 	m_transform.SetPosition(pos.x, pos.y);
 }
