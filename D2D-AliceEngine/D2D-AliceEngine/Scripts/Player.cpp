@@ -108,7 +108,7 @@ void Player::OnStart()
 
 	m_owner->transform()->SetPosition(0, 0);
 	m_owner->transform()->SetRotation(0);
-	m_owner->transform()->SetScale(1.5f, 1.5f);
+	m_owner->transform()->SetScale(1.0f, 1.0f);
 	m_owner->transform()->SetPivot(0.5f);
 	
 	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
@@ -138,7 +138,7 @@ void Player::OnStart()
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 
 	// 산데비스탄 테스트
-	m_owner->AddComponent<Prism>(5, 1.0f);
+	m_owner->AddComponent<Prism>(5, 0.1f);
 
 }
 

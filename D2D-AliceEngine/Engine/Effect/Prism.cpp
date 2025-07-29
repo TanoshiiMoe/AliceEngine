@@ -105,26 +105,32 @@ void Prism::MakeEffect()
 
 
 
-	WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObjectByWeak<gameObject>(L"effect");
+	WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObject<gameObject>(L"effect");
 	if (temp) {
+		std::wstring tt2 = L"-------\n";
+		OutputDebugStringW(tt2.c_str());
 		// 스프라이트 렌더러 설정
 		SpriteRenderer* sr = temp->AddComponent<SpriteRenderer>();
 		sr->m_bitmap = bitmap.lock();
 		sr->m_layer = animator->m_layer;
 		// TODO::스프라이터 렌더러에 srcRect 설정하기
-		//sr->SetSlice(spriteInfo->x, spriteInfo->y , spriteInfo->width, spriteInfo->height);
-		sr->spriteInfo = *spriteInfo;
+		sr->SetSlice(spriteInfo->x, spriteInfo->y , spriteInfo->width, spriteInfo->height);
+		//sr->spriteInfo = *spriteInfo;
 
 		// 트랜스폼 설정
-		temp->m_transformComponent->SetPosition(owner->transform()->GetPosition());
-		temp->m_transformComponent->SetRotation(owner->transform()->GetRotation());
-		temp->m_transformComponent->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);
-		
+		//temp->transform()->SetWorldPosition(owner->transform()->GetPosition());
+		temp->transform()->AddPosition(owner->transform()->GetPosition().x, owner->transform()->GetPosition().y);
+		temp->transform()->AddRotation(owner->transform()->GetRotation());
+		temp->transform()->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);
+		std::wstring tt = L"11 temp->transform() " + std::to_wstring(temp->transform()->GetPosition().x) + L"\n";
+		OutputDebugStringW(tt.c_str());
 		// 임시 오브젝트 큐에 저장
 		objects.push_back(temp);
 
 		// 갯수 넘어가면 삭제
 		while (objects.size() > prismCount) {
+			// TODO::Delete 하기
+			SceneManager::GetInstance().GetWorld()->RemoveObject(objects.front().Get());
 			objects.front().reset();
 			objects.pop_front();
 		}
@@ -133,6 +139,8 @@ void Prism::MakeEffect()
 		for (auto& object : objects) {
 			if (object) {
 				object->GetComponent<SpriteRenderer>()->m_layer -= 1;
+				std::wstring tt = L"22 temp->transform() " + std::to_wstring(object->transform()->GetPosition().x) + L"\n";
+				OutputDebugStringW(tt.c_str());
 			}
 		}
 

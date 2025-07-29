@@ -68,9 +68,9 @@ void SpriteRenderer::Render()
 	float y = spriteInfo.y;
 	float width = spriteInfo.width;
 	float height = spriteInfo.height;
-	D2D1_RECT_F SrcRect = { -width, height, width, -height};
- 	D2D1_RECT_F destRect = { -width * spriteInfo.pivotX, -height * spriteInfo.pivotY,  -width * spriteInfo.pivotX + width,  -height * spriteInfo.pivotY + height };
-	*/
+	D2D1_RECT_F srcRect = { -width, height, width, -height };
+	D2D1_RECT_F destRect = { -width * spriteInfo.pivotX, -height * spriteInfo.pivotY,  -width * spriteInfo.pivotX + width,  -height * spriteInfo.pivotY + height };*/
+
 
 	// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
 	float cropW = (slice.srcW > 0) ? slice.srcW : spriteInfo.width;
@@ -89,7 +89,7 @@ void SpriteRenderer::Render()
 							 spriteInfo.y + offsetY,
 							 spriteInfo.x + offsetX + cropW,
 							 spriteInfo.y + offsetY + cropH };
-	
+
 	
 	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
 }
