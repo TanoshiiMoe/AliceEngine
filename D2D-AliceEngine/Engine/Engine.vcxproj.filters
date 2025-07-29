@@ -249,6 +249,9 @@
     <ClInclude Include="Object\Canvas.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="Component\TileMapRenderer.h">
+      <Filter>Component</Filter>
+    </ClInclude>
     <ClInclude Include="Effect\Prism.h">
       <Filter>Effect</Filter>
     </ClInclude>
@@ -442,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="Object\Canvas.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\TileMapRenderer.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Effect\Prism.cpp">
       <Filter>Effect</Filter>

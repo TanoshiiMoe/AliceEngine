@@ -10,6 +10,7 @@
 #include <Component/TransformComponent.h>
 #include <Object/gameObject.h>
 #include <Scene/Scene.h>
+#include <Component/TileMapRenderer.h>
 
 TileMapComponent::TileMapComponent()
 {
@@ -36,21 +37,21 @@ void TileMapComponent::Update(const float& deltaSeconds)
 
 void TileMapComponent::LoadTileMapData(const std::wstring& path)
 {
-	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
 	TileMapLoader::LoadTileMap(filePath, tilemap);
 }
 
 void TileMapComponent::LoadTileSetData(const std::wstring& path)
 {
-	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
 	TileMapLoader::LoadTileSet(filePath, tileset);
 }
 
 void TileMapComponent::LoadMapData(const std::wstring& path)
 {
-	//filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
-	//m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
-	//	(Define::BASE_RESOURCE_PATH + path).c_str());
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
+	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
+		(Define::BASE_RESOURCE_PATH + path).c_str());
 }
 
 void TileMapComponent::CreatetileRenderers()
@@ -68,28 +69,31 @@ void TileMapComponent::CreatetileRenderers()
 
 				gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
 				//go->transform()->SetPosition(FVector2(row * tileset.tilewidth, col * tileset.tileheight));
-				go->transform()->SetPosition(FVector2(Define::SCREEN_WIDTH * (row / layer.height), Define::SCREEN_HEIGHT * (col / layer.width)));
-				SpriteRenderer* tileRenderer = go->AddComponent<SpriteRenderer>(); 
+				go->transform()->SetPosition(FVector2(Define::SCREEN_WIDTH * (((float)col / layer.width) - 0.5f), Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height))));
+				//go->transform()->SetPosition(FVector2(-Define::SCREEN_WIDTH / 2.0f + col,0));
+				TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
 				tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
+				
 
-				float gidRow = gid / tileset.columns;
-				float gidCol = gid % tileset.columns;
-				float x = gidRow * tileset.tilewidth;
-				float y = gidCol * tileset.tileheight;
+				float gidRow = (gid-1) / tileset.columns ;
+				float gidCol = (gid-1) % tileset.columns;
+				float x = gidCol * tileset.tilewidth;
+				float y = gidRow * tileset.tileheight;
 				float width = tileset.tilewidth;
 				float height = tileset.tileheight;
-				tileRenderer->SetSlice(x,y,x+width,y+height);
+				tileRenderer->SetSlice(x, y, width, height);
 				
 				// 이 부분에서 bimap 한장 잘라야함
-				//auto tileRenderer = std::make_shared<TileMapWrapper>();
+				//tileRenderer = std::make_shared<SpriteRenderer>();
 				//tileRenderer->row = row;
 				//tileRenderer->col = col;
 				//tileRenderer->width = tileset.tilewidth;
 				//tileRenderer->height = tileset.tileheight;
+
 				//// 스프라이트 렌더러 생성 및 설정
 				//auto spriteRenderer = std::make_shared<SpriteRenderer>();
-				//spriteRenderer->LoadData(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + tileset.image));
-				//spriteRenderer->SetTransform(GetTransform());
+				//spriteRenderer->LoadData(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(tileset.image)));
+				//spriteRenderer->SetTransform(GetTransformComp());
 				//spriteRenderer->SetPivot(GetPivot());
 				//spriteRenderer->SetScale(FVector2(1.0f, 1.0f));
 				//tileRenderer->spriteRenderer = spriteRenderer;
@@ -113,17 +117,7 @@ void TileMapComponent::Release()
 
 void TileMapComponent::Render()
 {
-	//if (m_bitmap == nullptr) return;
-	//__super::Render();
-	//
-	//// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
-	//D2D1_POINT_2F m_pivot =
-	//{
-	//	GetBitmapSizeX() * GetPivot()->x,
-	//	GetBitmapSizeY() * GetPivot()->y
-	//};
-	//D2D1_RECT_F destRect = { -m_pivot.x, -m_pivot.y,  m_pivot.x,  m_pivot.y };
-	//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
+	
 }
 
 //WeakObjectPtr<TileMapWrapper> TileMapComponent::AddSpriteRenderer(const std::wstring& path)

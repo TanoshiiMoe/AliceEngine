@@ -1,6 +1,6 @@
 #pragma once
 #include <Component/RenderComponent.h>
-#include <Component/SpriteRenderer.h>
+#include <Component/TileMapRenderer.h>
 #include <TileMap/TileMapLoader.h>
 
 class TileMapComponent : public RenderComponent
@@ -26,8 +26,11 @@ public:
 	//WeakObjectPtr<TileMapWrapper> AddSpriteRenderer(const std::wstring& path);
 	
 public:
-	std::vector<WeakObjectPtr<SpriteRenderer>> m_TileRenderers;
+	std::vector<WeakObjectPtr<TileMapRenderer>> m_TileRenderers;
 	TileMap tilemap;
 	TileSet tileset;
+
+	std::wstring filePath; // 파일의 경로
+	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 };
 
