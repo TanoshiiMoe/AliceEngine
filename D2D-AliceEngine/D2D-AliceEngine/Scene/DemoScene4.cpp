@@ -55,7 +55,8 @@ void DemoScene4::OnEnter()
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test.tmj");
-	
+	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
+	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
 	// UI 추가
 	//m_canvas = NewObject<Canvas>(L"Canvas");
 	//m_canvas->AddUI<UI_Script>();
@@ -67,6 +68,8 @@ void DemoScene4::OnEnter()
 	m_wall->transform()->SetPivot(0.5f);
 	m_wall->transform()->SetPosition(0, -300);
 	m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
+
+	//RemoveObject(m_wall);
 }
 
 void DemoScene4::OnExit()
