@@ -7,7 +7,6 @@
 #include <Math/Transform.h>
 #include <System/RenderSystem.h>
 #include <Component/TransformComponent.h>
-#include <Object/Canvas.h>
 
 UIComponent::UIComponent()
 {
@@ -17,15 +16,11 @@ UIComponent::UIComponent()
 UIComponent::~UIComponent()
 {
 	PackageResourceManager::GetInstance().UnloadData(filePath); // 비트맵 언로드
-	m_transformComponent.reset();
 }
 
 void UIComponent::Initialize()
 {
 	__super::Initialize();
-	m_transformComponent = new TransformComponent();
-	m_transformComponent->SetCanvas(WeakFromThis<Canvas>());
-	m_transformComponent->Initialize();
 }
 
 void UIComponent::Update()
@@ -45,21 +40,20 @@ void UIComponent::Release()
 
 void UIComponent::Render()
 {
-	__super::Render(); // view 계산
+	if (m_bitmap == nullptr) return;
+	__super::Render();
 
-	D2D1::Matrix3x2F localTransform = m_transformComponent->m_localTransform.ToMatrix();
-		//D2D1::Matrix3x2F::Scale(m_transformComponent->GetScale().x, m_transformComponent->GetScale().y) *
-		//D2D1::Matrix3x2F::Rotation(m_transformComponent->GetRotation() * 180.0f / Define::PI) *
-		//D2D1::Matrix3x2F::Translation(m_transformComponent->GetPosition().x, m_transformComponent->GetPosition().y);
-	view = view * localTransform;
+	D2D1_RECT_F destRect = { 0, 0, scale.x, scale.y };
 
-	//D2DRenderManager::GetD2DDevice()->SetTransform(view);
-	//D2D1_RECT_F destRect = { 0, 0, scale.x, scale.y };
-	//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
-	//for (auto* child : m_child)
-	//{
-	//	child->Render();
-	//}
+	D2D1::Matrix3x2F mat =
+		D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
+		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation() * 180.0f / Define::PI) *
+		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
+
+	// 카메라 무시하고 위치 기반 UI 그리기
+	D2DRenderManager::GetD2DDevice()->SetTransform(mat);
+
+	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
 }
 
 float UIComponent::GetBitmapSizeX()
@@ -81,30 +75,4 @@ FVector2 UIComponent::GetSize()
 	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
-}
-
-WeakObjectPtr<TransformComponent> UIComponent::GetUITransform() const
-{
-	return m_transformComponent;
-}
-
-void UIComponent::AddChildUI(UIComponent* obj)
-{
-	m_child.push_back(obj);
-	if (auto weakThis = WeakFromThis<UIComponent>())
-	{
-		weakThis->GetUITransform()->AddChildObject(obj->m_transformComponent);
-	}
-}
-
-void UIComponent::SetPosition(const FVector2& pos)
-{
-	m_transformComponent->SetPosition(pos.x, pos.y);
-}
-
-FVector2 UIComponent::GetUIPivot()
-{
-	if (!m_transformComponent.expired())
-		return *m_transformComponent.Get()->GetPivot();
-	return FVector2(0.5f, 0.5f);
 }
