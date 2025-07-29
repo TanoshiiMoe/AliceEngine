@@ -3,13 +3,6 @@
 #include <Component/SpriteRenderer.h>
 #include <TileMap/TileMapLoader.h>
 
-struct TileMapWrapper
-{
-	int row, col; // 타일맵의 행과 열
-	int width, height; // 타일맵의 너비와 높이
-	WeakObjectPtr<SpriteRenderer> spriteRenderer; // 타일에 해당하는 스프라이트 렌더러
-};
-
 class TileMapComponent : public RenderComponent
 {
 public:
@@ -33,7 +26,7 @@ public:
 	//WeakObjectPtr<TileMapWrapper> AddSpriteRenderer(const std::wstring& path);
 	
 public:
-	std::vector<WeakObjectPtr<TileMapWrapper>> m_TileRenderers;
+	std::vector<WeakObjectPtr<SpriteRenderer>> m_TileRenderers;
 	TileMap tilemap;
 	TileSet tileset;
 };

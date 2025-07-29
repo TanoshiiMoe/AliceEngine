@@ -1,5 +1,5 @@
 { "columns":5,
- "image":"..\/..\/..\/..\/Direct2D_1.3\/Resource\/blocks.png",
+ "image":"TileMap\\blocks.png",
  "imageheight":160,
  "imagewidth":160,
  "margin":0,
