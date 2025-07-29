@@ -200,6 +200,7 @@
     <ClInclude Include="Manager\TimerManager.h" />
     <ClInclude Include="Animation\TextureLoader.h" />
     <ClInclude Include="Object\UObjectBase.h" />
+    <ClInclude Include="Component\TileMapRenderer.h" />
     <ClInclude Include="TileMap\TileMapLoader.h" />
     <ClInclude Include="TileMap\TileMapComponent.h" />
     <ClInclude Include="Component\UIComponent.h" />
@@ -271,6 +272,7 @@
     <ClCompile Include="Manager\TimerManager.cpp" />
     <ClCompile Include="Animation\TextureLoader.cpp" />
     <ClCompile Include="Object\UObjectBase.cpp" />
+    <ClCompile Include="Component\TileMapRenderer.cpp" />
     <ClCompile Include="TileMap\TileMapLoader.cpp" />
     <ClCompile Include="TileMap\TileMapComponent.cpp" />
     <ClCompile Include="Component\UIComponent.cpp" />

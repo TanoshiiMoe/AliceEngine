@@ -17,7 +17,7 @@ UIComponent::UIComponent()
 
 UIComponent::~UIComponent()
 {
-	PackageResourceManager::GetInstance().UnloadData(filePath); // ºñÆ®¸Ê ¾ð·Îµå
+	PackageResourceManager::GetInstance().UnloadData(filePath); // ë¹„íŠ¸ë§µ ì–¸ë¡œë“œ
 }
 
 void UIComponent::Initialize()
@@ -62,7 +62,7 @@ void UIComponent::Update(const float& deltaSeconds)
 					mousePos.y >= ownerPos.y &&
 					mousePos.y <= ownerPos.y + height)
 				{
-					// ¸¶¿ì½º°¡ UI ¿µ¿ª ¾È¿¡ ÀÖÀ» ¶§¸¸ ÇÔ¼ö È£Ãâ
+					// ë§ˆìš°ìŠ¤ê°€ UI ì˜ì—­ ì•ˆì— ìžˆì„ ë•Œë§Œ í•¨ìˆ˜ í˜¸ì¶œ
 					it->func();
 				}
 			}
@@ -92,7 +92,7 @@ void UIComponent::Render()
 		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation() * 180.0f / Define::PI) *
 		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
 
-	// Ä«¸Þ¶ó ¹«½ÃÇÏ°í À§Ä¡ ±â¹Ý UI ±×¸®±â
+	// ì¹´ë©”ë¼ ë¬´ì‹œí•˜ê³  ìœ„ì¹˜ ê¸°ë°˜ UI ê·¸ë¦¬ê¸°
 	D2DRenderManager::GetD2DDevice()->SetTransform(mat);
 
 	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);

@@ -54,7 +54,7 @@ void DemoScene4::OnEnter()
 	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
-	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test.tmj");
+	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test3.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
 	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
 	// UI 추가

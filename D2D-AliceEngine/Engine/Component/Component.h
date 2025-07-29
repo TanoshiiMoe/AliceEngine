@@ -9,6 +9,7 @@
 class gameObject;
 class Canvas;
 class Transform;
+class TransformComponent;
 class Component : public UObject, public ITickable
 {
 public:
@@ -35,6 +36,7 @@ public:
 	inline gameObject* GetOwner() { return owner.Get(); }
 	const std::wstring& GetOwnerName();
 	Transform* GetTransform() const;
+	TransformComponent* GetTransformComp() const;
 	FVector2* GetPivot() const;
 
 protected:

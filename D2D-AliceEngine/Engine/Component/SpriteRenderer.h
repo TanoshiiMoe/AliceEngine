@@ -24,6 +24,8 @@ public:
 
 	void SetSlice(float x, float y, float w, float h);
 
+	void SetTransform(TransformComponent* transform) { m_transform = transform; }
+
 	SpriteInfo spriteInfo; // 스프라이트 정보
 
 	std::wstring filePath; // 파일의 경로
@@ -34,4 +36,7 @@ public:
 		float srcX{ 0 }, srcY{ 0 };
 		float srcW{ -1 }, srcH{ -1 };
 	} slice;
+
+private:
+	TransformComponent* m_transform = nullptr;
 };
