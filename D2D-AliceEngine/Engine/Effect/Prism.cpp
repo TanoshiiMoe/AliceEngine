@@ -114,13 +114,13 @@ void Prism::MakeEffect()
 		sr->m_bitmap = bitmap.lock();
 		sr->m_layer = animator->m_layer;
 		// TODO::스프라이터 렌더러에 srcRect 설정하기
-		sr->SetSlice(spriteInfo->x, spriteInfo->y , spriteInfo->width, spriteInfo->height);
+		sr->SetSlice(spriteInfo->x, (spriteInfo->y / 1.5f) , spriteInfo->width, spriteInfo->height);
 		//sr->spriteInfo = *spriteInfo;
 
 		// 트랜스폼 설정
-		//temp->transform()->SetWorldPosition(owner->transform()->GetPosition());
-		temp->transform()->AddPosition(owner->transform()->GetPosition().x, owner->transform()->GetPosition().y);
-		temp->transform()->AddRotation(owner->transform()->GetRotation());
+		temp->transform()->SetWorldPosition(owner->transform()->GetPosition());
+		//temp->transform()->SetPosition(owner->transform()->GetPosition());
+		temp->transform()->SetRotation(owner->transform()->GetRotation());
 		temp->transform()->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);
 		std::wstring tt = L"11 temp->transform() " + std::to_wstring(temp->transform()->GetPosition().x) + L"\n";
 		OutputDebugStringW(tt.c_str());
