@@ -7,6 +7,8 @@
 #include <Math/Transform.h>
 #include <System/RenderSystem.h>
 #include <Component/TransformComponent.h>
+#include <Manager/UpdateTaskManager.h>
+#include <Core/Input.h>
 
 UIComponent::UIComponent()
 {
@@ -15,12 +17,25 @@ UIComponent::UIComponent()
 
 UIComponent::~UIComponent()
 {
-	PackageResourceManager::GetInstance().UnloadData(filePath); // ºñÆ®¸Ê ¾ð·Îµå
+	PackageResourceManager::GetInstance().UnloadData(filePath); // ë¹„íŠ¸ë§µ ì–¸ë¡œë“œ
 }
 
 void UIComponent::Initialize()
 {
 	__super::Initialize();
+
+	UpdateTaskManager::GetInstance().Enque(
+		WeakFromThis<ITickable>(),
+		Define::ETickingGroup::TG_PostUpdateWork,
+		[weak = WeakFromThis<ITickable>()](const float& dt)
+		{
+			if (auto sp = weak.lock())
+			{
+				sp->Update(dt);
+			}
+		}
+	);
+
 }
 
 void UIComponent::Update()
@@ -32,8 +47,32 @@ void UIComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
-	for (auto* child : m_child)
-		child->Update(deltaSeconds);
+	for (auto it = slots.begin(); it != slots.end();)
+	{
+		if (!it->weakPtr.expired())
+		{
+			if (Input::IsMouseLeftPressed())
+			{
+				FVector2 mousePos = Input::GetMousePosition();
+				FVector2 ownerPos = FVector2( m_transform.GetPosition().x, m_transform.GetPosition().y);
+				float width = GetScale().x;
+				float height = GetScale().y;
+				if (mousePos.x >= ownerPos.x &&
+					mousePos.x <= ownerPos.x + width &&
+					mousePos.y >= ownerPos.y &&
+					mousePos.y <= ownerPos.y + height)
+				{
+					// ë§ˆìš°ìŠ¤ê°€ UI ì˜ì—­ ì•ˆì— ìžˆì„ ë•Œë§Œ í•¨ìˆ˜ í˜¸ì¶œ
+					it->func();
+				}
+			}
+			it++;
+		}
+		else
+		{
+			it = slots.erase(it);
+		}
+	}
 }
 
 void UIComponent::Release()
@@ -53,7 +92,7 @@ void UIComponent::Render()
 		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation() * 180.0f / Define::PI) *
 		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
 
-	// Ä«¸Þ¶ó ¹«½ÃÇÏ°í À§Ä¡ ±â¹Ý UI ±×¸®±â
+	// ì¹´ë©”ë¼ ë¬´ì‹œí•˜ê³  ìœ„ì¹˜ ê¸°ë°˜ UI ê·¸ë¦¬ê¸°
 	D2DRenderManager::GetD2DDevice()->SetTransform(mat);
 
 	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);

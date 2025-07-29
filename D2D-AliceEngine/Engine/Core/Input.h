@@ -12,4 +12,6 @@ namespace Input
 	void SetMousePosition(HWND hWnd, int mousePosX, int mousePosY);
 
 	//FVector2 GetMouseWorldPosition(std::weak_ptr<ACameraActor> camera);
+	bool IsMouseLeftReleased();
+	bool IsMouseLeftPressed();
 }

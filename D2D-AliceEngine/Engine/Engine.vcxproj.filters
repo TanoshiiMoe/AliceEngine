@@ -55,6 +55,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{ae6205e7-dc7e-4030-8b89-7474a9813dc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{d0654fef-fd7d-4736-9de7-f8137dec6841}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -249,6 +252,12 @@
     <ClInclude Include="Component\TileMapRenderer.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Effect\Prism.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect\PrismIllusion.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -439,6 +448,12 @@
     </ClCompile>
     <ClCompile Include="Component\TileMapRenderer.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\Prism.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect\PrismIllusion.cpp">
+      <Filter>Effect</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
