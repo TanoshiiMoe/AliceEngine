@@ -46,4 +46,8 @@ public:
 	FVector2* GetPivot();
 
 	void SetDirty();
+
+private:
+	TransformComponent* m_parent = nullptr;
+	std::vector<TransformComponent*> m_children;
 };

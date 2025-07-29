@@ -8,6 +8,7 @@
 #include <System/RenderSystem.h>
 #include <Component/TransformComponent.h>
 #include <Object/Canvas.h>
+#include <vector>
 
 UIComponent::UIComponent()
 {
@@ -36,11 +37,22 @@ void UIComponent::Update()
 void UIComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+
+	for (auto* child : m_child)
+		child->Update(deltaSeconds);
 }
 
 void UIComponent::Release()
 {
 	__super::Release();
+
+	for (auto* child : m_child)
+	{
+		if (child)
+			child->SetParentUI(nullptr);
+	}
+
+	m_child.clear();
 }
 
 void UIComponent::Render()
@@ -60,6 +72,9 @@ void UIComponent::Render()
 	//{
 	//	child->Render();
 	//}
+
+	for (auto* child : m_child)
+		child->Render();
 }
 
 float UIComponent::GetBitmapSizeX()
@@ -88,13 +103,34 @@ WeakObjectPtr<TransformComponent> UIComponent::GetUITransform() const
 	return m_transformComponent;
 }
 
-void UIComponent::AddChildUI(UIComponent* obj)
+void UIComponent::AddChildUI(UIComponent* child)
 {
-	m_child.push_back(obj);
+	if (!child || child == this) return;
+
+	if (std::find(m_child.begin(), m_child.end(), child) != m_child.end())
+		return;
+
+	if (child->m_parent.IsValid() && child->m_parent.Get() != this)
+	{
+		// 기존 부모 자식 리스트에서 제거
+		auto* oldParent = child->m_parent.Get();
+		auto& siblings = oldParent->m_child;
+		siblings.erase(std::remove(siblings.begin(), siblings.end(), child), siblings.end());
+	}
+
+	child->m_parent = this;
+
+	m_child.push_back(child);
+
 	if (auto weakThis = WeakFromThis<UIComponent>())
 	{
-		weakThis->GetUITransform()->AddChildObject(obj->m_transformComponent);
+		weakThis->GetUITransform()->AddChildObject(child->m_transformComponent);
 	}
+}
+
+void UIComponent::SetParentUI(UIComponent* parent)
+{
+	m_parent = parent;
 }
 
 void UIComponent::SetPosition(const FVector2& pos)
