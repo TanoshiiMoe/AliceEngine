@@ -374,11 +374,6 @@ public:
 				const Define::ETransformType* srcVal = reinterpret_cast<const Define::ETransformType*>(reinterpret_cast<const char*>(src) + srcOffset);
 				*dstVal = *srcVal;
 			}
-			else if (type == typeid(Define::ERenderLayer).name()) {
-				Define::ERenderLayer* dstVal = reinterpret_cast<Define::ERenderLayer*>(reinterpret_cast<char*>(dst) + dstOffset);
-				const Define::ERenderLayer* srcVal = reinterpret_cast<const Define::ERenderLayer*>(reinterpret_cast<const char*>(src) + srcOffset);
-				*dstVal = *srcVal;
-			}
 			else if (type == typeid(Define::ETickingGroup).name()) {
 				Define::ETickingGroup* dstVal = reinterpret_cast<Define::ETickingGroup*>(reinterpret_cast<char*>(dst) + dstOffset);
 				const Define::ETickingGroup* srcVal = reinterpret_cast<const Define::ETickingGroup*>(reinterpret_cast<const char*>(src) + srcOffset);

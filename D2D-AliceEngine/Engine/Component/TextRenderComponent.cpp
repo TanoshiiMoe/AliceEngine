@@ -13,6 +13,7 @@ TextRenderComponent::TextRenderComponent()
 {
 	m_color = FColor::Black;
 	drawType = EDrawType::ScreenSpace;
+	m_layer = 101;
 	//InitializeFormat();
 	//InitializeColor();
 	//InitializeLayout();

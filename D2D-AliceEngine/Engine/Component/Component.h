@@ -40,9 +40,11 @@ public:
 protected:
 	WeakObjectPtr<gameObject> owner;
 
+	//-- UI를 위한 것
 public:
-	inline void SetCanvas(WeakObjectPtr<Canvas> object) { canvas = object; }
-	inline Canvas* GetCanvas() { return canvas.Get(); }
+	void SetCanvas(WeakObjectPtr<Canvas> object);
+	Canvas* GetCanvas();
+	Transform* GetCanvasTransform();
 
 protected:
 	WeakObjectPtr<Canvas> canvas;

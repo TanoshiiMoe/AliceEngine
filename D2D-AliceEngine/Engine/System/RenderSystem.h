@@ -25,7 +25,7 @@ public:
 	void UnInitialize();
 
 	// 렌더링 대기열
-	std::vector<std::vector<WeakObjectPtr<RenderComponent>>> m_renderers;
+	std::vector<WeakObjectPtr<RenderComponent>> m_renderers;
 
 	void Render();
 	ViewRect GetCameraView();

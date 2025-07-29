@@ -47,16 +47,6 @@ namespace Define
 		Unity,
 		Max
 	};
-	enum class ERenderLayer
-	{
-		VideoComponent,
-		SpriteComponent,
-		Animator,
-		BoxComponent,
-		TextRenderComponent,
-		UIComponent,
-		Max
-	};
 
 	// Unreal ↔ Unity 주요 Tick/Update 비교
 	// TG_PrePhysics       : EarlyUpdate         // (AI/입력, Unity의 EarlyUpdate)

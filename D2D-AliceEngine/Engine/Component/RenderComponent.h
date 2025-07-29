@@ -1,4 +1,10 @@
 #pragma once
+
+#include <d2d1_1.h>
+#include <d2d1_1helper.h>
+#include <wrl/client.h>
+#include <memory>
+
 #include "Component.h"
 #include <Define/Define.h>
 
@@ -25,7 +31,7 @@ public:
 	int m_layer = -999;
 	bool bFlip = false;
 protected:
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F view;
 	FVector2 scale{ 1.0f, 1.0f };
 };
 
