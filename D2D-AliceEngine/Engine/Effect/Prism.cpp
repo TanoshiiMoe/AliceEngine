@@ -10,10 +10,7 @@
 
 Prism::~Prism()
 {
-	while (!objects.empty()) {
-		objects.front().reset();
-		objects.pop_front();
-	}
+	ClearObjects();
 }
 
 void Prism::Initialize()
@@ -45,17 +42,35 @@ void Prism::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
-	// 애니메이터 없을시 리턴
-	if (animator == nullptr)
+	if (!isActive)
 		return;
 
+	// 더티면 다 찰시 isEnabled를 false로
+	if (isEnabled && isDirty && objects.size() == prismCount)
+		isEnabled = false;
+
+	// count || interval이 0보다 작으면 실행안함
+	if (prismCount <= 0 || interval <= 0.0f) {
+		isActive = false;
+		return;
+	}
+
+	// 애니메이터 없을시 리턴
+	if (animator == nullptr) {
+		isActive = false;
+		return;
+	}
+		
 	ellipsedTime += deltaSeconds;
 
 	if (ellipsedTime >= interval) {
 		ellipsedTime -= interval;
 
 		// TODO::산데비스탄 생성
-		MakeEffect();
+		if(isEnabled)
+			MakeEffect();
+		ChangeColor();
+		DeleteLast();
 	}
 }
 
@@ -130,22 +145,12 @@ void Prism::MakeEffect()
 		// 임시 오브젝트 큐에 저장
 		objects.push_back(temp);
 
-		// 갯수 넘어가면 삭제
-		while (objects.size() > prismCount) {
-			SceneManager::GetInstance().GetWorld()->RemoveObject(objects.front().Get());
-			objects.front().reset();
-			objects.pop_front();
-		}
-
 		// 오브젝트들 렌더순서 변경
 		for (auto& object : objects) {
 			if (object) {
 				object->GetComponent<SpriteRenderer>()->m_layer -= 1;
 			}
 		}
-
-		// 색깔필터 변경하기
-		ChangeColor();
 	}
 	else {
 		OutputDebugStringW(L"프리즘 컴포넌트에서 gameObject를 생성할수 없습니다!!");
@@ -155,21 +160,37 @@ void Prism::MakeEffect()
 
 void Prism::ChangeColor()
 {
-	int it = 0;
+	// 뒤에서부터 시작해야함
+	auto it = objects.rbegin();
 
-	for (auto& object : objects) {
-		if (object) {
-			SpriteRenderer* sr = object->GetComponent<SpriteRenderer>();
+	while (it != objects.rend()) {
+		if (*it) {
+			SpriteRenderer* sr = (*it)->GetComponent<SpriteRenderer>();
 			if (sr) {
 				ComPtr<ID2D1Effect> colorEffect;
 				D2DRenderManager::GetD2DDevice()->CreateEffect(CLSID_D2D1ColorMatrix, &colorEffect);
 
-				// 원본 이미지 입력
+				//원본 이미지 입력
 				colorEffect->SetInput(0, sr->m_bitmap.get());
 				
-				float red = (1.0f / (float)prismCount) * (prismCount - it);
-				float blue = (1.0f / (float)prismCount) * it;
-				float alpha = 0.8f - red;
+				int distance = std::distance(objects.rbegin(), it);
+
+				float blue = 0.0f;
+				float red = 0.0f;
+				float alpha = 0.0f;
+
+				// 색상 enable에 따라 정하기
+				if (isEnabled) {
+					blue = (1.0f / (float)prismCount) * (prismCount - distance);
+					red = (1.0f / (float)prismCount) * distance;
+					alpha = 0.8f - red;
+				}
+				else {
+					blue = (1.0f / (float)prismCount) * (prismCount - (distance + (prismCount - objects.size())));
+					red = (1.0f / (float)prismCount) * (distance + (prismCount - objects.size()));
+					alpha = 0.8f - red;
+				}
+
 
 				// 색상 행렬 설정 (예 : 빨강 강조)
 				D2D1_MATRIX_5X4_F colorMatrix = {
@@ -190,4 +211,91 @@ void Prism::ChangeColor()
 		}
 		++it;
 	}
+
+	//int it = 0;
+
+	//for (auto& object : objects) {
+	//	if (object) {
+	//		SpriteRenderer* sr = object->GetComponent<SpriteRenderer>();
+	//		if (sr) {
+	//			ComPtr<ID2D1Effect> colorEffect;
+	//			D2DRenderManager::GetD2DDevice()->CreateEffect(CLSID_D2D1ColorMatrix, &colorEffect);
+
+	//			// 원본 이미지 입력
+	//			colorEffect->SetInput(0, sr->m_bitmap.get());
+	//			
+	//			float red = (1.0f / (float)prismCount) * (prismCount - it);
+	//			float blue = (1.0f / (float)prismCount) * it;
+	//			float alpha = 0.8f - red;
+
+	//			// 색상 행렬 설정 (예 : 빨강 강조)
+	//			D2D1_MATRIX_5X4_F colorMatrix = {
+	//				red, 0.0f, blue, 0.0f, // R
+	//				0.0f, 0.5f, 0.0f, 0.0f, // G
+	//				red, 0.0f, blue, 0.0f, // B
+	//				0.0f, 0.0f, 0.0f, alpha,	// A
+	//				0.0f, 0.0f, 0.0f, 0.0f	// 1
+	//			};
+
+	//			colorEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
+	//			
+	//			sr->m_effect = colorEffect;
+	//		}
+	//		else {
+	//			OutputDebugStringW(L"프리즘 컴포넌트에서 object를 찾을수 없습니다!!");
+	//		}
+	//	}
+	//	++it;
+	//}
 }
+
+void Prism::DeleteLast()
+{
+	if (isEnabled) {
+		// 갯수 넘어가면 삭제
+		while (objects.size() > prismCount) {
+			SceneManager::GetInstance().GetWorld()->RemoveObject(objects.front().Get());
+			objects.front().reset();
+			objects.pop_front();
+		}
+	}
+	else if (!objects.empty()) {
+		// 앞에것부터 차례대로 삭제
+		SceneManager::GetInstance().GetWorld()->RemoveObject(objects.front().Get());
+		objects.front().reset();
+		objects.pop_front();
+	}
+	else {
+		isActive = false;
+		ellipsedTime = 0.0f;
+	}
+}
+
+void Prism::ClearObjects()
+{
+	while (!objects.empty()) {
+		SceneManager::GetInstance().GetWorld()->RemoveObject(objects.front().Get());
+		objects.front().reset();
+		objects.pop_front();
+	}
+	objects.clear();
+	ellipsedTime = 0.0f;
+}
+
+void Prism::SetActive(bool _val)
+{
+	isDirty = !(_val);
+
+	if (_val == true) {
+		isDirty = false;
+		isEnabled = true;
+		isActive = true;
+		ClearObjects();
+	}
+}
+
+bool Prism::IsActive()
+{
+	return isEnabled;
+}
+

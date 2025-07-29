@@ -177,6 +177,12 @@ void Player::Input()
 		}
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
 	}
+
+	// 산데비스탄 테스트
+	if (Input::IsKeyPressed(VK_G)) {
+		if (auto prism = m_owner->GetComponent<Prism>())
+			prism->SetActive(!prism->IsActive());
+	}
 }
 
 void Player::OnCollisionEnter2D(Collision2D* collider)
