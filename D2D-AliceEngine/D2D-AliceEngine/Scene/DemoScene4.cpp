@@ -85,6 +85,14 @@ void DemoScene4::PlayerInput()
 	{
 		SceneManager::ChangeScene(L"aruScene");
 	}
+	if (Input::IsKeyDown(VK_K))
+	{
+		m_player->GetComponent<Player>()->walkSpeed += 5.0f;
+	}
+	if (Input::IsKeyDown(VK_L))
+	{
+		m_player->GetComponent<Player>()->walkSpeed -= 5.0f;
+	}
 }
 
 void DemoScene4::EnemyInput()
