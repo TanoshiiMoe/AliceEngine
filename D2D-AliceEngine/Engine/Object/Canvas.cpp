@@ -1,5 +1,11 @@
 #include "pch.h"
 #include "Canvas.h"
+#include <Component/TransformComponent.h>
+
+Canvas::Canvas()
+{
+	Initialize();
+}
 
 Canvas::~Canvas()
 {
@@ -17,20 +23,28 @@ Canvas::~Canvas()
 
 void Canvas::Initialize()
 {
+	/*TransformComponent* tc = new TransformComponent();
+	tc->SetCanvas(WeakFromThis<Canvas>());
+	tc->Initialize();
+	m_transformComponent = WeakObjectPtr<TransformComponent>(tc);*/
+	m_transformComponent = new TransformComponent();
+	m_transformComponent->SetCanvas(WeakFromThis<Canvas>());
+	m_transformComponent->Initialize();
 }
 
 void Canvas::Update()
 {
-	for (auto& comp : m_components)
-	{
-		comp->Update();
-	}
+	//for (auto& comp : m_components)
+	//{
+	//	comp->Update();
+	//}
 }
 
 void Canvas::Release()
 {
 }
 
-void Canvas::AddChildObject(const gameObject* obj)
+void Canvas::AddToChildUI(const UIComponent* ucmp)
 {
+	m_transformComponent->AddChildObject(ucmp->GetUITransform());
 }

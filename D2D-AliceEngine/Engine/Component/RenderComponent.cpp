@@ -7,6 +7,7 @@
 
 RenderComponent::RenderComponent()
 {
+	view = D2D1::Matrix3x2F::Identity();
 }
 
 RenderComponent::~RenderComponent()
@@ -41,7 +42,11 @@ void RenderComponent::Render()
 	Camera* camera = SceneManager::GetCamera();
 	view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F world = D2D1::Matrix3x2F::Identity();
+	if (drawType == Define::EDrawType::WorldSpace)
+		world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+	else if (drawType == Define::EDrawType::ScreenSpace)
+		world = GetCanvasTransform() ? GetCanvasTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -50,8 +55,13 @@ void RenderComponent::Render()
 	}
 
 	// 로컬 피벗 기준 월드 변환, 카메라 역행렬 적용
-	cameraInv.Invert();
-	view = view * world * cameraInv;
+	view = view * world;
+	
+	if (drawType == Define::EDrawType::WorldSpace)
+	{
+		cameraInv.Invert();
+		view = view * cameraInv;
+	}
 
 	// Unity 좌표계면 변환 추가
 	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
@@ -64,5 +74,7 @@ void RenderComponent::Render()
 	}
 
 	view = D2D1::Matrix3x2F::Scale(scale.x, scale.y) * view;
-	context->SetTransform(view);
+
+	if(drawType == Define::EDrawType::WorldSpace)
+		context->SetTransform(view);
 }
