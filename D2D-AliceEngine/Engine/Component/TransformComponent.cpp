@@ -107,6 +107,13 @@ void TransformComponent::SetPosition(const FVector2& _v)
 	bMoved = true;
 }
 
+void TransformComponent::SetWorldPosition(const FVector2& _v)
+{
+	m_worldTransform.SetPosition(_v.x, _v.y);
+	SetDirty();
+	bMoved = true;
+}
+
 void TransformComponent::SetRotation(const float& _val)
 {
 	m_localTransform.SetRotation(_val);
@@ -132,6 +139,12 @@ void TransformComponent::SetScale(const float& _x, const float& _y)
 void TransformComponent::SetScale(const float& _x)
 {
 	m_localTransform.SetScale(_x, _x);
+	SetDirty();
+}
+
+void TransformComponent::SetWorldScale(const FVector2& _v)
+{
+	m_worldTransform.SetScale(_v.x, _v.y);
 	SetDirty();
 }
 

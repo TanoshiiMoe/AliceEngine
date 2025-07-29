@@ -15,6 +15,7 @@
 #include <Animation/AnimatorInstance.h>
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
+#include "Effect/Prism.h"
 
 void Player::Initialize()
 {
@@ -135,6 +136,9 @@ void Player::OnStart()
 	}
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
+
+	// 산데비스탄 테스트
+	m_owner->AddComponent<Prism>(10, 0.1f);
 }
 
 void Player::OnEnd()

@@ -28,5 +28,6 @@ public:
 	void GetSpriteInfo();
 	void GetCurrBitmap();
 	void MakeEffect();
+	void ChangeColor();
 };
 
