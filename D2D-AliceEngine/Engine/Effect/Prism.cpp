@@ -134,8 +134,7 @@ void Prism::MakeEffect()
 
 		// 트랜스폼 설정
 		// TODO::localTransform 오류 해결되면 SetWorldTransform 제거하기
-		temp->transform()->SetWorldPosition(owner->transform()->GetPosition());
-		//temp->transform()->SetPosition(owner->transform()->GetPosition());
+		temp->transform()->SetPosition(owner->transform()->GetPosition());
 		temp->transform()->SetRotation(owner->transform()->GetRotation());
 		temp->transform()->SetWorldScale(owner->transform()->GetScale());
 		//temp->transform()->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);

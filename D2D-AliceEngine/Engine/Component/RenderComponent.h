@@ -33,5 +33,7 @@ public:
 protected:
 	D2D1::Matrix3x2F view;
 	FVector2 scale{ 1.0f, 1.0f };
+private:
+	bool bReadyForRender = false;
 };
 

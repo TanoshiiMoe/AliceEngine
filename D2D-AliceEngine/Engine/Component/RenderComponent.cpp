@@ -36,6 +36,11 @@ void RenderComponent::Release()
 void RenderComponent::Render()
 {
 	__super::Render();
+	if (!bReadyForRender)
+	{
+		bReadyForRender = true;
+		return;
+	}
 
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	if (context == nullptr) return;
