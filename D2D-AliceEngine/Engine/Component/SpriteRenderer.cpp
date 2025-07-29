@@ -90,8 +90,14 @@ void SpriteRenderer::Render()
 							 spriteInfo.x + offsetX + cropW,
 							 spriteInfo.y + offsetY + cropH };
 	
-	
-	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+	// 이펙트 있을시 이펙트 그리기
+	if (!m_effect)
+		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+	else {
+		D2D1_POINT_2F destPos = D2D1::Point2F(offsetX, offsetY);
+		D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get(), &destPos, &srcRect);
+	}
+		
 }
 
 float SpriteRenderer::GetBitmapSizeX()

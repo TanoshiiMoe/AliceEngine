@@ -28,6 +28,7 @@ public:
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
+	ComPtr<ID2D1Effect> m_effect;	// 이펙트 이미지
 
 	struct FSlicedArea {
 		float srcX{ 0 }, srcY{ 0 };

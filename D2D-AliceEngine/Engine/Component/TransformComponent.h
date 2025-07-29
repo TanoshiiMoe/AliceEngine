@@ -30,12 +30,14 @@ public:
 	void SetPosition(const float& _x, const float& _y);
 	void SetPosition(const float& _x);
 	void SetPosition(const FVector2& _v);
+	void SetWorldPosition(const FVector2& _v);
 	void SetRotation(const float& _val);
 
 	float GetRotation();
 	FVector2 GetScale();
 	void SetScale(const float& _x, const float& _y);
 	void SetScale(const float& _x);
+	void SetWorldScale(const FVector2& _v);
 
 	void AddRotation(const float& _val);
 	void AddPosition(const float& _x, const float& _y);
