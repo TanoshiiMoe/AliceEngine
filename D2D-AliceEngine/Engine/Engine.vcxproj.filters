@@ -258,6 +258,7 @@
     <ClInclude Include="Effect\PrismIllusion.h">
       <Filter>Effect</Filter>
     </ClInclude>
+    <ClInclude Include="UI\UIButton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -455,5 +456,6 @@
     <ClCompile Include="Effect\PrismIllusion.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
+    <ClCompile Include="UI\UIButton.cpp" />
   </ItemGroup>
 </Project>
