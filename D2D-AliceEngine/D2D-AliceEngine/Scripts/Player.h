@@ -31,6 +31,7 @@ public:
 	void Input();
 
 	gameObject* m_owner = nullptr;
+	gameObject* m_background = nullptr;
 	int jumpCount = 0;
 	int maxJumpCount = 2;
 	int prevGroundState = 0;

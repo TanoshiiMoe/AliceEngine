@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\BackGroundComponent.h" />
     <ClInclude Include="Component\AudioComponent.h" />
     <ClInclude Include="Effect\Prism.h" />
     <ClInclude Include="Experimental\Collision\Collision2D.h" />
@@ -209,6 +210,7 @@
     <ClInclude Include="UI\UIImage.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\BackGroundComponent.cpp" />
     <ClCompile Include="Component\AudioComponent.cpp" />
     <ClCompile Include="Effect\Prism.cpp" />
     <ClCompile Include="Experimental\Collision\Collision2D.cpp" />
