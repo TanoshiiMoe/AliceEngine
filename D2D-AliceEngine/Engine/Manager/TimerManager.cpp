@@ -15,6 +15,16 @@ void TimerManager::UpdateTime()
 	prevCounter = currentCounter;
 	accumulator += deltaTime;
 	//OutputDebugStringW((L"DeltaTime : " + std::to_wstring(deltaTime) + L"\n").c_str());
+
+	frameCount++;
+	timeSinceLastFps += deltaTime;
+	if (timeSinceLastFps >= 1.0f)
+	{
+		currentFps = frameCount / timeSinceLastFps;
+		frameCount = 0;
+		timeSinceLastFps = 0.0f;
+		ShowFPSDebug();
+	}
 }
 
 void TimerManager::UpdateFixedTime(std::function<void(const float&)> f)
@@ -57,4 +67,15 @@ float TimerManager::GetFixedTime()
 float TimerManager::GetAccumulator() const
 {
 	return accumulator;
+}
+
+float TimerManager::GetCurrentFPS() const
+{
+	return currentFps;
+}
+
+void TimerManager::ShowFPSDebug()
+{
+
+	OutputDebugStringW((L"FPS : " + std::to_wstring(currentFps) + L"\n").c_str());
 }
