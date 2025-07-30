@@ -25,6 +25,7 @@ public:
 	Transform m_localTransform; // Transform 컴포넌트
 	Transform m_worldTransform; // Transform 컴포넌트
 	bool bMoved = false; // 최초 Collision에 쓰이는 변수
+	bool bReadyForRender = false; // 렌더링 준비가 되었는지 여부 -> WorldTransform이 업데이트 되었는지 여부
 
 	FVector2 GetPosition() const;
 	void SetPosition(const float& _x, const float& _y);
@@ -35,6 +36,7 @@ public:
 
 	float GetRotation();
 	FVector2 GetScale();
+	void SetScale(const FVector2& _v);
 	void SetScale(const float& _x, const float& _y);
 	void SetScale(const float& _x);
 	void SetWorldScale(const FVector2& _v);

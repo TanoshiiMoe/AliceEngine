@@ -38,5 +38,6 @@ public:
 
 	void SetActive(bool _val);
 	bool IsActive();
+	void SetPrismTransform(gameObject* go);
 };
 
