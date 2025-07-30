@@ -59,6 +59,7 @@ void TileMapComponent::CreatetileRenderers()
 	for (const auto& layer : tilemap.layers)
 	{
 		if (!layer.visible) continue; // 레이어가 비활성화된 경우 건너뛰기
+		int widthCount = 0;
 		for (int row = 0; row < layer.height; ++row)
 		{
 			for (int col = 0; col < layer.width; ++col)
@@ -66,15 +67,18 @@ void TileMapComponent::CreatetileRenderers()
 				int index = row * layer.width + col;
 				int gid = layer.data[index];
 				if (gid == 0) continue; // 빈 타일은 건너뛰기
-
+				if ((col * tileset.tilewidth) % Define::SCREEN_WIDTH == 0)
+				{
+					widthCount++;
+				}
 				gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
-				//go->transform()->SetPosition(FVector2(row * tileset.tilewidth, col * tileset.tileheight));
-				go->transform()->SetPosition(FVector2(Define::SCREEN_WIDTH * (((float)col / layer.width) - 0.5f), Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height))));
-				//go->transform()->SetPosition(FVector2(-Define::SCREEN_WIDTH / 2.0f + col,0));
+				// x는 실제 위치를 그대로 그려야하고, y는 d2d->unity 좌표계 변환에서 y축 반전이 있으므로 절반에서 빼ㅇ
+				int tileX = (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
+				int tileY = Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height));
+				go->transform()->SetPosition(FVector2(tileX, tileY));
 				TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
 				tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
 				
-
 				float gidRow = (gid-1) / tileset.columns ;
 				float gidCol = (gid-1) % tileset.columns;
 				float x = gidCol * tileset.tilewidth;
@@ -82,21 +86,6 @@ void TileMapComponent::CreatetileRenderers()
 				float width = tileset.tilewidth;
 				float height = tileset.tileheight;
 				tileRenderer->SetSlice(x, y, width, height);
-				
-				// 이 부분에서 bimap 한장 잘라야함
-				//tileRenderer = std::make_shared<SpriteRenderer>();
-				//tileRenderer->row = row;
-				//tileRenderer->col = col;
-				//tileRenderer->width = tileset.tilewidth;
-				//tileRenderer->height = tileset.tileheight;
-
-				//// 스프라이트 렌더러 생성 및 설정
-				//auto spriteRenderer = std::make_shared<SpriteRenderer>();
-				//spriteRenderer->LoadData(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(tileset.image)));
-				//spriteRenderer->SetTransform(GetTransformComp());
-				//spriteRenderer->SetPivot(GetPivot());
-				//spriteRenderer->SetScale(FVector2(1.0f, 1.0f));
-				//tileRenderer->spriteRenderer = spriteRenderer;
 
 				m_TileRenderers.push_back(tileRenderer);
 			}
