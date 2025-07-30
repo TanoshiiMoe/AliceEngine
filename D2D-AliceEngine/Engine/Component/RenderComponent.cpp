@@ -80,30 +80,6 @@ void RenderComponent::Render()
 
 D2D1::Matrix3x2F RenderComponent::GetWorldTransform(D2D1::Matrix3x2F& world)
 {
-	//if (auto rb = GetOwner()->GetComponent<Rigidbody2D>())
-	//{
-	//	// RigidBody2D가 있으면 보간된 위치 사용
-	//	FVector2 interpPos = rb->GetInterpolatedPosition();
-	//	float interpRot = rb->GetInterpolatedRotation();
-	//	D2D1_VECTOR_2F scale = GetTransform() ? GetTransform()->GetScale() : D2D1_VECTOR_2F{ 1.0f,1.0f };
-
-	//	world =
-	//		D2D1::Matrix3x2F::Scale(scale.x, scale.y) *
-	//		D2D1::Matrix3x2F::Rotation(interpRot * 180.0f / Define::PI) *
-	//		D2D1::Matrix3x2F::Translation(interpPos.x, interpPos.y);
-	//}
-	//else
-	//{
-	//	if (drawType == Define::EDrawType::WorldSpace)
-	//	{
-	//		world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	//	}
-	//	else if (drawType == Define::EDrawType::ScreenSpace)
-	//	{
-	//		world = GetCanvasTransform() ? GetCanvasTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	//	}
-	//}
-
 	if (drawType == Define::EDrawType::WorldSpace)
 	{
 		world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
