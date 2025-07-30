@@ -7,6 +7,7 @@
 #include "Component/TransformComponent.h"
 #include "Manager/UpdateTaskManager.h"
 #include "Manager/D2DRenderManager.h"
+#include <Component/Rigidbody2D.h>
 
 Prism::~Prism()
 {
@@ -131,6 +132,12 @@ void Prism::MakeEffect()
 		// y값에 왜 Height만큼 빼야함????????????????? <- x,y 점이 좌하단에 찍히기 때문에 - height 해야 정상화된다.
 		sr->SetSlice(spriteInfo->x, spriteInfo->y - spriteInfo->height, spriteInfo->width, spriteInfo->height);
 		//sr->spriteInfo = *spriteInfo;
+
+		temp->AddComponent<Rigidbody2D>();
+		if (auto rb = temp->GetComponent<Rigidbody2D>())
+		{
+			rb->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
+		}
 
 		// 트랜스폼 설정
 		// TODO::localTransform 오류 해결되면 SetWorldTransform 제거하기

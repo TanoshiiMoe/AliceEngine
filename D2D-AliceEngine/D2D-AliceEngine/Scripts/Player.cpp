@@ -128,11 +128,12 @@ void Player::OnStart()
 	m_owner->AddComponent<Rigidbody2D>();
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
-		rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+		rb->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
 		rb->gravityScale = 60.0f;
 		rb->mass = 20.0f;
 		rb->drag = 0.6f;
 		//rb->angularDrag = 0;
+		bMoveRigidBody = false;
 	}
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
@@ -144,7 +145,7 @@ void Player::OnStart()
 void Player::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
-	m_owner->GetComponent<Collider>()->SetBoxSize(FVector2(55, 90));
+	//m_owner->GetComponent<Collider>()->SetBoxSize(FVector2(55, 90));
 }
 
 void Player::OnDestroy()

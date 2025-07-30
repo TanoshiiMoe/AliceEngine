@@ -45,18 +45,17 @@ void DemoScene4::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
-	SceneManager::GetCamera()->SetOwner(m_player);
+	//SceneManager::GetCamera()->SetOwner(m_player);
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
-	m_player->AddComponent<Rigidbody2D>();
-	m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
+	//m_player->AddComponent<Rigidbody2D>();
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
-	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
+	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
+	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
 	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
 	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
@@ -108,6 +107,23 @@ void DemoScene4::PlayerInput()
 	if (Input::IsKeyPressed(VK_U))
 	{
 		m_player->GetComponent<Player>()->bMoveRigidBody = !m_player->GetComponent<Player>()->bMoveRigidBody;
+	}
+
+	if (Input::IsKeyDown(VK_D))
+	{
+		SceneManager::GetCamera()->AddPosition(5.0f, 0);
+	}
+	if (Input::IsKeyDown(VK_A))
+	{
+		SceneManager::GetCamera()->AddPosition(-5.0f, 0);
+	}
+	if (Input::IsKeyDown(VK_W))
+	{
+		SceneManager::GetCamera()->AddPosition(0, 5.0f);
+	}
+	if (Input::IsKeyDown(VK_S))
+	{
+		SceneManager::GetCamera()->AddPosition(0, -5.0f);
 	}
 }
 

@@ -27,6 +27,9 @@ public:
 	void SetScale(const FVector2& _scale) { scale = _scale; }
 	FVector2 GetScale() const { return scale; }
 
+	// FixedUpdate시 Interpolation된 transform을 적용하기 위한 함수
+	D2D1::Matrix3x2F GetWorldTransform(D2D1::Matrix3x2F& world);
+
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	int m_layer = -999;
 	bool bFlip = false;
