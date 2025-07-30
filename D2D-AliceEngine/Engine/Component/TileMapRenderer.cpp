@@ -113,6 +113,7 @@ void TileMapRenderer::SetSkew(bool _setActive, FVector2 _skewAngle)
 	}
 	else {
 		m_effect.Reset();
+		skewAngle = FVector2(0.0f, 0.0f);
 	}
 }
 

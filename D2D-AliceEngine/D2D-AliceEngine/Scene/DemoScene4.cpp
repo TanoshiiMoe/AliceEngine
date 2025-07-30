@@ -65,11 +65,6 @@ void DemoScene4::OnEnter()
 	//m_canvas = NewObject<Canvas>(L"Canvas");
 	//m_canvas->AddUI<UI_Script>();
 
-	// Skew 테스트
-	for (auto& tile : m_tile->GetComponent<TileMapComponent>()->m_TileRenderers) {
-		tile->SetSkew(true, FVector2(30.0f, 0.0f));
-	}
-
 	m_UI = NewObject<gameObject>(L"ad");
 	m_UI->AddComponent<UI_Script>();
 
