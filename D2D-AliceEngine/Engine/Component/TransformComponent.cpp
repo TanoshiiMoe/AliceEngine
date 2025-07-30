@@ -53,7 +53,6 @@ void TransformComponent::Update(const float& deltaSeconds)
 	}
 
 	m_worldTransform.SetFromMatrix(mat);
-	if (bReadyForRender == false) bReadyForRender = true;
 
 	for (auto child : children)
 	{
