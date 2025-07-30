@@ -35,7 +35,7 @@ void Audio::OnStart()
 {
 	m_owner = GetOwner();
 	m_owner->AddComponent<AudioComponent>()->Load(L"../Resource/Sound/Umapyoi.mp3", AudioMode::StreamLoop);
-	m_owner->GetComponent<AudioComponent>()->Play();
+	m_owner->GetComponent<AudioComponent>()->Play(62.5f);
 	// 음량 조절
 	//m_owner->GetComponent<AudioComponent>()->SetVolume(0.3f);
 }
