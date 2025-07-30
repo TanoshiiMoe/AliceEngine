@@ -151,19 +151,19 @@ bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& rend
 	const float top = pos.y + halfH;
 
 	// margin 비율 (예: 0.1f = 10% 여유)
-	/*const float marginRatio = 0.01f;
+	const float marginRatio = 0.05f;
 	const float marginX = (view.maxX - view.minX) * marginRatio;
-	const float marginY = (view.maxY - view.minY) * marginRatio;
+	const float marginY = (view.maxY - view.minY) * 1.2f;
 	const float minX = view.minX - marginX;
 	const float maxX = view.maxX + marginX;
 	const float minY = view.minY - marginY;
-	const float maxY = view.maxY + marginY;*/
-	const float marginX = (view.maxX - view.minX);
+	const float maxY = view.maxY + marginY;
+	/*const float marginX = (view.maxX - view.minX);
 	const float marginY = (view.maxY - view.minY);
 	const float minX = view.minX;
 	const float maxX = view.maxX;
 	const float minY = view.minY;
-	const float maxY = view.maxY;
+	const float maxY = view.maxY;*/
 
 	// 카메라 뷰 안에만 보이게 (여유 포함)
 	return (right < minX || left > maxX ||

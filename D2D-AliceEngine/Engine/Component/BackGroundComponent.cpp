@@ -98,6 +98,30 @@ void BackGroundComponent::LoadData(const std::wstring& path, const int& fps, con
 	m_bitmaps.clear();
 }
 
+void BackGroundComponent::LoadFromFolder(const std::wstring& folderPath, int fps, const std::wstring& extension)
+{
+	std::wstring pattern = L"*." + extension;
+	files = FileHelper::GetFilesWithPattern(folderPath, pattern);
+	if (files.empty()) return;
+
+	m_fFPSTime = 1.0f / fps;
+	m_maxClipSize = files.size();
+	m_curClip = 0;
+	m_bitmaps.clear();
+	m_bitmaps.resize(m_maxClipSize);
+
+	for (size_t i = 0; i < files.size(); ++i)
+	{
+		// ¾ÈÀüÇÏ°Ô ºñÆ®¸Ê ÆÐ½Ì
+		auto bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[i].c_str());
+
+		if (bitmap)
+			m_bitmaps[i] = bitmap;
+		else
+			OutputDebugStringW(L"Fail to load bitmap");
+	}
+}
+
 void BackGroundComponent::LoadFrame(size_t frameIndex)
 {
 	std::shared_ptr<ID2D1Bitmap1> temp = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[frameIndex].c_str());

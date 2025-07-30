@@ -163,11 +163,6 @@ void Player::OnStart()
 
 	// 산데비스탄 테스트
 	m_owner->AddComponent<Prism>(10, 0.1f);
-
-
-
-	/*m_background->AddComponent<BackGroundComponent>();
-	m_background->transform()->SetPosition(m_owner->transform()->GetPosition().x, Define::SCREEN_HEIGHT);*/
 }
 
 void Player::OnEnd()

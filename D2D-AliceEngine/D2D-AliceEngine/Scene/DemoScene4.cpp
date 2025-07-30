@@ -18,11 +18,13 @@
 #include "../Scripts/Enemy.h"
 #include "../Scripts/Audio.h"
 #include "../Scripts/UI_Script.h"
+#include "../Scripts/BackGroundVideo.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
 #include <Object/Canvas.h>
 #include <UI/UIButton.h>
+#include <Component/BackGroundComponent.h>
 
 void DemoScene4::Initialize()
 {
@@ -49,9 +51,12 @@ void DemoScene4::OnEnter()
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 	//m_player->AddComponent<Rigidbody2D>();
 
+	m_bg = NewObject<gameObject>(L"BackGround");
+	m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
+
 	// 오디오 추가, 오디오 관련 스크립트 넣기
-	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<Audio>();
+	//m_sound = NewObject<gameObject>(L"Sound");
+	//m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
