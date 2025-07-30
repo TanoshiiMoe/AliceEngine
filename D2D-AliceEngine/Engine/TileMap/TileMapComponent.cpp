@@ -73,12 +73,16 @@ void TileMapComponent::CreatetileRenderers()
 				}
 				gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
 				// x는 실제 위치를 그대로 그려야하고, y는 d2d->unity 좌표계 변환에서 y축 반전이 있으므로 절반에서 빼기
-				int tileX = tileset.tileheight * std::tan(60) * (float)row + (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
-				int tileY = Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height));
+				//int tileX = (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
+				float tileX = tileset.tileheight * std::tan(skewAngle * (Define::PI / 180)) * (float)row + (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
+				//float tileY = Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height));
+				float tileY = (layer.height - 1 - row) * tileset.tileheight - Define::SCREEN_HEIGHT * 0.5f;
 				go->transform()->SetPosition(FVector2(tileX, tileY));
+
 				TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
 				tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
-				tileRenderer->SetSkew(true, FVector2(30.0f, 0.0f));
+				//tileRenderer->m_layer = row + 100;
+				tileRenderer->SetSkew(true, FVector2(skewAngle, 0.0f));
 				
 				float gidRow = (gid-1) / tileset.columns;
 				float gidCol = (gid-1) % tileset.columns;
@@ -110,20 +114,6 @@ void TileMapComponent::Render()
 	
 }
 
-//WeakObjectPtr<TileMapWrapper> TileMapComponent::AddSpriteRenderer(const std::wstring& path)
-//{
-//	SpriteRenderer* sr = GetOwner()->AddComponent<SpriteRenderer>();
-//	return WeakObjectPtr<SpriteRenderer>(sr);
-//
-//	//sr->LoadData(path);
-//	//sr->SetTransform(GetTransform());
-//	//sr->SetPivot(GetPivot());
-//	//sr->Initialize();
-//	//m_TileRenderers.push_back(sr);
-//	//
-//	//SceneManager::GetInstance().GetCurrentScene()->AddComponent(spriteRenderer);
-//}
-
 float TileMapComponent::GetBitmapSizeX()
 {
 	return 0;
@@ -132,6 +122,11 @@ float TileMapComponent::GetBitmapSizeX()
 float TileMapComponent::GetBitmapSizeY()
 {
 	return 0;
+}
+
+void TileMapComponent::SetSkew(const float& angle)
+{
+	skewAngle = angle;
 }
 
 FVector2 TileMapComponent::GetSize()
