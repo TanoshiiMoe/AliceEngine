@@ -67,7 +67,7 @@ void AudioManager::LoadSound(const std::wstring& path, AudioMode audioMode, FMOD
 
 }
 
-void AudioManager::PlaySound(FMOD::Sound* sound, FMOD::Channel** channel, float volume, int startTime, bool paused)
+void AudioManager::PlaySound(FMOD::Sound* sound, FMOD::Channel** channel, float volume, float startTime, bool paused)
 {
 	if (!sound || !channel) return;
 

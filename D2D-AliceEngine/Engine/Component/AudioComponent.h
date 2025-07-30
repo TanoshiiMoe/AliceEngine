@@ -14,7 +14,7 @@ public:
 		const std::wstring& audioPath,
 		AudioMode audioMode);
 
-	void Play(int startTime = 0,
+	void Play(float sec = 0,
 		float volume = 0.3f,
 		bool paused = false);
 
