@@ -7,6 +7,7 @@
 void Camera::Initialize()
 {
 	m_transform = std::make_unique<Transform>();
+	m_transform->SetPosition(0, 0);
 }
 
 void Camera::Update()
