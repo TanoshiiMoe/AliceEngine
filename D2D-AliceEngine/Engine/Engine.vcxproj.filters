@@ -255,10 +255,12 @@
     <ClInclude Include="Effect\Prism.h">
       <Filter>Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Effect\PrismIllusion.h">
-      <Filter>Effect</Filter>
+    <ClInclude Include="UI\UIButton.h">
+      <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI\UIButton.h" />
+    <ClInclude Include="Component\BackGroundComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -453,9 +455,11 @@
     <ClCompile Include="Effect\Prism.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
-    <ClCompile Include="Effect\PrismIllusion.cpp">
-      <Filter>Effect</Filter>
+    <ClCompile Include="UI\UIButton.cpp">
+      <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="UI\UIButton.cpp" />
+    <ClCompile Include="Component\BackGroundComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
