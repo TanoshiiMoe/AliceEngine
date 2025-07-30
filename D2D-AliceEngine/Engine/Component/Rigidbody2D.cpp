@@ -7,6 +7,7 @@
 #include <System/CollisionSystem.h>
 #include <Define/Define.h>
 #include <Experimental/Collision/CollisionDetector.h>
+#include <Manager/TimerManager.h>
 
 Rigidbody2D::Rigidbody2D()
 {
@@ -21,6 +22,9 @@ Rigidbody2D::~Rigidbody2D()
 void Rigidbody2D::Initialize()
 {
 	PhysicsSystem::GetInstance().Regist(WeakFromThis<Rigidbody2D>());
+	m_prevPosition = m_currentPosition;
+	m_currentPosition = owner->transform()->GetPosition();
+	m_prevRotation = m_currentRotation = owner->transform()->GetRotation();
 }
 
 void Rigidbody2D::Update(const float& deltaSeconds)
@@ -30,6 +34,10 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 
 	if (!GetOwner()->transform()->bMoved)
 		return;
+
+	// FixedUpdate 시작 시 이전 위치 저장
+	m_prevPosition = m_currentPosition;
+	m_prevRotation = m_currentRotation;
 
 	const float dt = deltaSeconds;
 	FVector2 calcPos = owner->transform()->GetPosition() + collisionPush;
@@ -101,6 +109,10 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 	}
 
 	// 최종 적용
+	 // 물리 계산 완료 후 현재 위치 저장
+    m_currentPosition = calcPos;
+    m_currentRotation = calcAngle;
+
 	owner->transform()->SetPosition(calcPos);
 	owner->transform()->SetRotation(calcAngle);
 	velocity = calcVel;
@@ -119,4 +131,24 @@ void Rigidbody2D::AddForce(const float& _x, const float& _y)
 {
 	force.x += _x * 1000;
 	force.y += _y * 1000;
+}
+
+FVector2 Rigidbody2D::GetInterpolatedPosition() const
+{
+	float alpha = TimerManager::GetInstance().GetAccumulator() / TimerManager::GetInstance().fixedDeltaTime;
+	alpha = Math::clamp(alpha, 0.0f, 1.0f);
+
+	// 선형 보간: prevPos + (currPos - prevPos) * alpha
+	return FVector2(
+		m_prevPosition.x + (m_currentPosition.x - m_prevPosition.x) * alpha,
+		m_prevPosition.y + (m_currentPosition.y - m_prevPosition.y) * alpha
+	);
+}
+
+float Rigidbody2D::GetInterpolatedRotation() const
+{
+	float alpha = TimerManager::GetInstance().GetAccumulator() / TimerManager::GetInstance().fixedDeltaTime;
+	alpha = Math::clamp(alpha, 0.0f, 1.0f);
+
+	return m_prevRotation + (m_currentRotation - m_prevRotation) * alpha;
 }

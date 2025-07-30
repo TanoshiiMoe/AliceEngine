@@ -72,14 +72,14 @@ void TileMapComponent::CreatetileRenderers()
 					widthCount++;
 				}
 				gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
-				// x는 실제 위치를 그대로 그려야하고, y는 d2d->unity 좌표계 변환에서 y축 반전이 있으므로 절반에서 빼ㅇ
-				int tileX = (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
+				// x는 실제 위치를 그대로 그려야하고, y는 d2d->unity 좌표계 변환에서 y축 반전이 있으므로 절반에서 빼기
+				int tileX = tileset.tileheight * std::tan(60) * (float)row + (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
 				int tileY = Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height));
 				go->transform()->SetPosition(FVector2(tileX, tileY));
 				TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
 				tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
 				
-				float gidRow = (gid-1) / tileset.columns ;
+				float gidRow = (gid-1) / tileset.columns;
 				float gidCol = (gid-1) % tileset.columns;
 				float x = gidCol * tileset.tilewidth;
 				float y = gidRow * tileset.tileheight;

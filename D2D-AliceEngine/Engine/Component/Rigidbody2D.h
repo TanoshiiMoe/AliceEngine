@@ -32,4 +32,15 @@ public:
 	FVector2 collisionPush;
 
 	void AddForce(const float& _x, const float& _y);
+
+	// 보간용 변수
+	FVector2 m_prevPosition;     // 이전 FixedUpdate 위치
+	FVector2 m_currentPosition;  // 현재 FixedUpdate 위치
+	float m_prevRotation;        // 이전 FixedUpdate 회전
+	float m_currentRotation;     // 현재 FixedUpdate 회전
+
+public:
+	// 보간된 위치 반환하는 함수
+	FVector2 GetInterpolatedPosition() const;
+	float GetInterpolatedRotation() const;
 };
