@@ -136,8 +136,8 @@ void Prism::MakeEffect()
 		// TODO::localTransform 오류 해결되면 SetWorldTransform 제거하기
 		temp->transform()->SetPosition(owner->transform()->GetPosition());
 		temp->transform()->SetRotation(owner->transform()->GetRotation());
-		temp->transform()->SetWorldScale(owner->transform()->GetScale());
-		//temp->transform()->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);
+		//temp->transform()->SetWorldScale(owner->transform()->GetScale());
+		temp->transform()->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);
 		// 
 		// 임시 오브젝트 큐에 저장
 		objects.push_back(temp);
@@ -165,6 +165,7 @@ void Prism::ChangeColor()
 			SpriteRenderer* sr = (*it)->GetComponent<SpriteRenderer>();
 			if (sr) {
 				ComPtr<ID2D1Effect> colorEffect;
+
 				D2DRenderManager::GetD2DDevice()->CreateEffect(CLSID_D2D1ColorMatrix, &colorEffect);
 
 				//원본 이미지 입력
@@ -199,8 +200,9 @@ void Prism::ChangeColor()
 				};
 
 				colorEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
-				
+
 				sr->m_effect = colorEffect;
+				//sr->m_effect->SetInputEffect(0, colorEffect.Get());
 			}
 			else {
 				OutputDebugStringW(L"프리즘 컴포넌트에서 object를 찾을수 없습니다!!");

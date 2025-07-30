@@ -16,6 +16,7 @@ public:
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
+	ComPtr<ID2D1Effect> m_effect; // 이펙트
 
 	struct FSlicedArea {
 		float srcX{ 0 }, srcY{ 0 };
@@ -35,8 +36,12 @@ public:
 	virtual float GetBitmapSizeY() override;
 
 	void SetSlice(float x, float y, float w, float h);
+	void SetSkew(bool _setActive, FVector2 _skewAngle = FVector2(0.0f, 0.0f));
 
 private:
 	TransformComponent* m_transform = nullptr;
+	FVector2 skewAngle;
+
+	ComPtr<ID2D1Bitmap1> GetSlicedBitmap(ID2D1Bitmap1* bitmap, const D2D1_RECT_F& srcRect);
 };
 

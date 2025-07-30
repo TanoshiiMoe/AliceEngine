@@ -255,9 +255,6 @@
     <ClInclude Include="Effect\Prism.h">
       <Filter>Effect</Filter>
     </ClInclude>
-    <ClInclude Include="Effect\PrismIllusion.h">
-      <Filter>Effect</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -450,9 +447,6 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Effect\Prism.cpp">
-      <Filter>Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="Effect\PrismIllusion.cpp">
       <Filter>Effect</Filter>
     </ClCompile>
   </ItemGroup>

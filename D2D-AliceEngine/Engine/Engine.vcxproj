@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClInclude Include="Component\AudioComponent.h" />
     <ClInclude Include="Effect\Prism.h" />
-    <ClInclude Include="Effect\PrismIllusion.h" />
     <ClInclude Include="Experimental\Collision\Collision2D.h" />
     <ClInclude Include="Component\Rigidbody2D.h" />
     <ClInclude Include="Manager\AudioManager.h" />
@@ -211,7 +210,6 @@
   <ItemGroup>
     <ClCompile Include="Component\AudioComponent.cpp" />
     <ClCompile Include="Effect\Prism.cpp" />
-    <ClCompile Include="Effect\PrismIllusion.cpp" />
     <ClCompile Include="Experimental\Collision\Collision2D.cpp" />
     <ClCompile Include="Component\Rigidbody2D.cpp" />
     <ClCompile Include="Manager\AudioManager.cpp" />

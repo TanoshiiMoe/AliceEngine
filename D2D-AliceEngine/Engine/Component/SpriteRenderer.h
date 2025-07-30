@@ -26,6 +26,8 @@ public:
 
 	void SetTransform(TransformComponent* transform) { m_transform = transform; }
 
+	void SetSkewing(bool _isSkewing, FVector2 _skewAngle = FVector2(0.0f, 0.0f));
+
 	SpriteInfo spriteInfo; // 스프라이트 정보
 
 	std::wstring filePath; // 파일의 경로
