@@ -27,7 +27,7 @@ void Prism::Initialize()
 
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_LastDemotable,
+		Define::ETickingGroup::TG_PrePhysics,
 		[weak = WeakFromThis<ITickable>()](const float& dt)
 		{
 			if (auto sp = weak.lock())
@@ -297,16 +297,6 @@ bool Prism::IsActive()
 // Rigidbody2D가 있다면 보간으로 작동하는 위치를 넣어주자
 void Prism::SetPrismTransform(gameObject* go)
 {
-	/*if (auto rb = owner->GetComponent<Rigidbody2D>())
-	{
-		go->transform()->SetPosition(rb->GetInterpolatedPosition());
-		go->transform()->SetRotation(rb->GetInterpolatedRotation());
-	}
-	else
-	{
-		go->transform()->SetPosition(owner->transform()->GetPosition());
-		go->transform()->SetRotation(owner->transform()->GetRotation());
-	}*/
 	go->transform()->SetPosition(owner->transform()->GetPosition());
 	go->transform()->SetRotation(owner->transform()->GetRotation());
 	go->transform()->SetScale(owner->transform()->GetScale());
