@@ -42,6 +42,7 @@ private:
 	TransformComponent* m_transform = nullptr;
 	FVector2 skewAngle;
 
+	ComPtr<ID2D1Bitmap1> slicedBitmap;
 	ComPtr<ID2D1Bitmap1> GetSlicedBitmap(ID2D1Bitmap1* bitmap, const D2D1_RECT_F& srcRect);
 };
 
