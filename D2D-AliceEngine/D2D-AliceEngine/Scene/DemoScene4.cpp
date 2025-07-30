@@ -55,7 +55,10 @@ void DemoScene4::OnEnter()
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
-	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
+	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
+	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
+	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
+	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
 	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
 	// UI 추가
 	//m_canvas = NewObject<Canvas>(L"Canvas");
@@ -92,6 +95,10 @@ void DemoScene4::PlayerInput()
 	if (Input::IsKeyDown(VK_L))
 	{
 		m_player->GetComponent<Player>()->walkSpeed -= 5.0f;
+	}
+	if (Input::IsKeyPressed(VK_U))
+	{
+		m_player->GetComponent<Player>()->bMoveRigidBody = !m_player->GetComponent<Player>()->bMoveRigidBody;
 	}
 }
 
