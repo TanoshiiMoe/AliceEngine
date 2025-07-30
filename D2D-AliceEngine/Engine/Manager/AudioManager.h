@@ -31,7 +31,9 @@ public:
 		FMOD::Sound* sound,
 		FMOD::Channel** channel,
 		float volume = 1.0f,
-		bool paused = false);	// true : 일시정지
+		int startTime = 0,
+		bool paused = false
+	);	// true : 일시정지
 
 	void PauseSound(
 		FMOD::Channel* channel,

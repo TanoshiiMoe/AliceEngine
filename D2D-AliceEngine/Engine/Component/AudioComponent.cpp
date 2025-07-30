@@ -22,11 +22,13 @@ void AudioComponent::Load(const std::wstring& audioPath, AudioMode audioMode)
 	AudioManager::GetInstance().LoadSound(audioPath, audioMode, &m_Sound);
 }
 
-void AudioComponent::Play(float volume, bool paused)
+void AudioComponent::Play(int sec, float volume, bool paused)
 {
+	int startSec = sec * 1000;	// s -> ms
+
 	if (!m_Sound) return;
 
-	AudioManager::GetInstance().PlaySound(m_Sound, &m_Channel, volume, paused);
+	AudioManager::GetInstance().PlaySound(m_Sound, &m_Channel, volume, sec, paused);
 }
 
 void AudioComponent::SetVolume(float volume)
