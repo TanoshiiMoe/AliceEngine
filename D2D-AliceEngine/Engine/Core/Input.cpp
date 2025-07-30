@@ -101,4 +101,8 @@ namespace Input
 	{
 		return (!(prevState[VK_LBUTTON] & 0x8000) && (currState[VK_LBUTTON] & 0x8000));
 	}
+	bool IsMouseLeftDown()
+	{
+		return (currState[VK_LBUTTON] & 0x8000) != 0;
+	}
 }

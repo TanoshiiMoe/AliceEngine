@@ -27,6 +27,7 @@ public:
 	gameObject* m_wall;
 
 	gameObject* m_UI;
+	gameObject* m_button;
 
 	//gameObject* m_backgroundImage;
 	//gameObject* m_spriteAnimationTest;

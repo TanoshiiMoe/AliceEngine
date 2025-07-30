@@ -14,4 +14,5 @@ namespace Input
 	//FVector2 GetMouseWorldPosition(std::weak_ptr<ACameraActor> camera);
 	bool IsMouseLeftReleased();
 	bool IsMouseLeftPressed();
+	bool IsMouseLeftDown();
 }
