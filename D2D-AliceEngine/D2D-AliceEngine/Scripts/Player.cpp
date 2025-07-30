@@ -16,6 +16,7 @@
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include "Effect/Prism.h"
+#include <Manager/SceneManager.h>
 
 #include <Component/BackGroundComponent.h>
 
@@ -89,6 +90,26 @@ void Player::Update(const float& deltaSeconds)
 			jumpCount = 0; // 땅에 처음 닿았을 때만 리셋
 		}
 		prevGroundState = isGround ? 1 : 0;
+	}
+
+
+	if (Input::IsKeyDown(VK_OEM_4))
+	{
+		//float fov = SceneManager::GetCamera()->fieldOfView;
+		//fov -= 5.0f * deltaSeconds;
+		//SceneManager::GetCamera()->SetFieldOfView(fov);
+
+		FVector2 pos = SceneManager::GetCamera()->GetScale() + 1.1f * deltaSeconds;
+		SceneManager::GetCamera()->SetScale(pos);
+	}
+	if (Input::IsKeyDown(VK_OEM_6))
+	{
+		//float fov = SceneManager::GetCamera()->fieldOfView;
+		//fov += 5.0f * deltaSeconds;
+		//SceneManager::GetCamera()->SetFieldOfView(fov);
+
+		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1f * deltaSeconds;
+		SceneManager::GetCamera()->SetScale(pos);
 	}
 }
 

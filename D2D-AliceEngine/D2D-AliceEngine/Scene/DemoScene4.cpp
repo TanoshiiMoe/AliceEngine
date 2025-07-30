@@ -59,6 +59,7 @@ void DemoScene4::OnEnter()
 	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
 	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
+	m_tile->GetComponent<TileMapComponent>()->SetSkew(30);
 	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
 	// UI 추가
 	//m_canvas = NewObject<Canvas>(L"Canvas");

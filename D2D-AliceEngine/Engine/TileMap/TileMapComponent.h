@@ -20,6 +20,7 @@ public:
 
 	virtual float GetBitmapSizeX() override;
 	virtual float GetBitmapSizeY() override;
+	void SetSkew(const float& angle);
 
 	FVector2 GetSize();
 
@@ -32,5 +33,7 @@ public:
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
+
+	float skewAngle = 0.0f;
 };
 

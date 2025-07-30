@@ -40,6 +40,9 @@ void TileMapRenderer::LoadData(const std::wstring& path)
 	spriteInfo.width = GetBitmapSizeX();
 	spriteInfo.pivotX = 0.5f;
 	spriteInfo.pivotY = 0.5f;
+
+	// 비트맵 교체
+	slicedBitmap.Reset();
 }
 
 void TileMapRenderer::Release()
@@ -52,40 +55,55 @@ void TileMapRenderer::Render()
 	if (m_bitmap == nullptr) return;
 	__super::Render();
 
-	// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
-	float cropW = (slice.srcW > 0) ? slice.srcW : spriteInfo.width;
-	float cropH = (slice.srcH > 0) ? slice.srcH : spriteInfo.height;
-	float srcL = slice.srcX;
-	float srcT = slice.srcY;
-
-	D2D1_RECT_F srcRect = { srcL,               srcT,
-							 srcL + cropW,       srcT + cropH };
-
-	// 화면에 그릴 위치(센터링 포함)
-	float offsetX = -cropW * spriteInfo.pivotX;
-	float offsetY = -cropH * spriteInfo.pivotY;
-
-	D2D1_RECT_F destRect = { (spriteInfo.x + offsetX),
-							 (spriteInfo.y + offsetY),
-							 (spriteInfo.x + offsetX + cropW),
-							 (spriteInfo.y + offsetY + cropH) };
-
-
 	if (!m_effect) {
+		// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
+		float cropW = (slice.srcW > 0) ? slice.srcW : spriteInfo.width;
+		float cropH = (slice.srcH > 0) ? slice.srcH : spriteInfo.height;
+		float srcL = slice.srcX;
+		float srcT = slice.srcY;
+
+		D2D1_RECT_F srcRect = { srcL,               srcT,
+								 srcL + cropW,       srcT + cropH };
+
+		// 화면에 그릴 위치(센터링 포함)
+		float offsetX = -cropW * spriteInfo.pivotX;
+		float offsetY = -cropH * spriteInfo.pivotY;
+
+		D2D1_RECT_F destRect = { (spriteInfo.x + offsetX),
+								 (spriteInfo.y + offsetY),
+								 (spriteInfo.x + offsetX + cropW),
+								 (spriteInfo.y + offsetY + cropH) };
+
 		//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
 		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, &srcRect);
 	}
 	else {
 		// Skew Effect만 쓰는걸로 가정함.
-		ComPtr<ID2D1Bitmap1> bitmap = GetSlicedBitmap(m_bitmap.get(), srcRect);
-		m_effect->SetInput(0, bitmap.Get());
+		if (!slicedBitmap) {
+			// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
+			float cropW = (slice.srcW > 0) ? slice.srcW : spriteInfo.width;
+			float cropH = (slice.srcH > 0) ? slice.srcH : spriteInfo.height;
+			float srcL = slice.srcX;
+			float srcT = slice.srcY;
 
-		D2D1_POINT_2F center = D2D1::Point2F(spriteInfo.x, spriteInfo.y);
+			D2D1_RECT_F srcRect = { srcL,               srcT,
+									 srcL + cropW,       srcT + cropH };
+
+			slicedBitmap = GetSlicedBitmap(m_bitmap.get(), srcRect);
+		}
+
+		m_effect->SetInput(0, slicedBitmap.Get());
+
+		// 오프셋
+		float offsetX = -static_cast<float>(slicedBitmap->GetPixelSize().width) * spriteInfo.pivotX;
+		float offsetY = -static_cast<float>(slicedBitmap->GetPixelSize().height) * spriteInfo.pivotY;
+
+		D2D1_POINT_2F center = D2D1::Point2F(-offsetX, -offsetY);
 		D2D1_MATRIX_3X2_F skewMat = D2D1::Matrix3x2F::Skew(skewAngle.x, skewAngle.y, center);
-		HRESULT hr = m_effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX, skewMat);
+		m_effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX, skewMat);
 
 		D2D1_POINT_2F destPos = D2D1::Point2F(offsetX, offsetY);
-		D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get(), &destPos);
+		D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get());// , & destPos);
 	}
 }
 
@@ -103,6 +121,9 @@ void TileMapRenderer::SetSlice(float x, float y, float w, float h)
 {
 	slice.srcX = x;  slice.srcY = y;
 	slice.srcW = w;  slice.srcH = h;
+
+	// 비트맵 교체
+	slicedBitmap.Reset();
 }
 
 void TileMapRenderer::SetSkew(bool _setActive, FVector2 _skewAngle)
@@ -113,6 +134,7 @@ void TileMapRenderer::SetSkew(bool _setActive, FVector2 _skewAngle)
 	}
 	else {
 		m_effect.Reset();
+		slicedBitmap.Reset();
 		skewAngle = FVector2(0.0f, 0.0f);
 	}
 }
