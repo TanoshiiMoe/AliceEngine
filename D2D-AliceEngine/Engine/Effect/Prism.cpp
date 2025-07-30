@@ -121,7 +121,6 @@ void Prism::MakeEffect()
 	}
 
 
-
 	WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObject<gameObject>(L"effect");
 	if (temp) {
 		// 스프라이트 렌더러 설정
@@ -133,19 +132,9 @@ void Prism::MakeEffect()
 		sr->SetSlice(spriteInfo->x, spriteInfo->y - spriteInfo->height, spriteInfo->width, spriteInfo->height);
 		//sr->spriteInfo = *spriteInfo;
 
-		temp->AddComponent<Rigidbody2D>();
-		if (auto rb = temp->GetComponent<Rigidbody2D>())
-		{
-			rb->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
-		}
-
 		// 트랜스폼 설정
-		// TODO::localTransform 오류 해결되면 SetWorldTransform 제거하기
-		temp->transform()->SetPosition(owner->transform()->GetPosition());
-		temp->transform()->SetRotation(owner->transform()->GetRotation());
-		//temp->transform()->SetWorldScale(owner->transform()->GetScale());
-		temp->transform()->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);
-		// 
+		SetPrismTransform(temp.Get());
+
 		// 임시 오브젝트 큐에 저장
 		objects.push_back(temp);
 
@@ -305,3 +294,20 @@ bool Prism::IsActive()
 	return isEnabled;
 }
 
+// Rigidbody2D가 있다면 보간으로 작동하는 위치를 넣어주자
+void Prism::SetPrismTransform(gameObject* go)
+{
+	/*if (auto rb = owner->GetComponent<Rigidbody2D>())
+	{
+		go->transform()->SetPosition(rb->GetInterpolatedPosition());
+		go->transform()->SetRotation(rb->GetInterpolatedRotation());
+	}
+	else
+	{
+		go->transform()->SetPosition(owner->transform()->GetPosition());
+		go->transform()->SetRotation(owner->transform()->GetRotation());
+	}*/
+	go->transform()->SetPosition(owner->transform()->GetPosition());
+	go->transform()->SetRotation(owner->transform()->GetRotation());
+	go->transform()->SetScale(owner->transform()->GetScale());
+}
