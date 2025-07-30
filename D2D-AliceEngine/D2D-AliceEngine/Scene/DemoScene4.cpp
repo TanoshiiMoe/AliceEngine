@@ -22,6 +22,7 @@
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
 #include <Object/Canvas.h>
+#include <UI/UIButton.h>
 
 void DemoScene4::Initialize()
 {
@@ -71,6 +72,14 @@ void DemoScene4::OnEnter()
 
 	m_UI = NewObject<gameObject>(L"ad");
 	m_UI->AddComponent<UI_Script>();
+
+	m_button = NewObject<gameObject>(L"Button");
+	m_button->AddComponent<UIButton>();
+	m_button->GetComponent<UIButton>()->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
+	m_button->GetComponent<UIButton>()->SetPosition(FVector2(100, 100));
+	m_button->GetComponent<UIButton>()->SetAction([]() {});
+	m_button->GetComponent<UIButton>()->SetScale(150);
+	m_button->GetComponent<UIButton>()->m_layer = 510;
 
 	m_wall = NewObject<gameObject>(L"wall");
 	m_wall->transform()->SetPivot(0.5f);

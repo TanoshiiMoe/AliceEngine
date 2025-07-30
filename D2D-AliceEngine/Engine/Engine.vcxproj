@@ -204,6 +204,7 @@
     <ClInclude Include="TileMap\TileMapComponent.h" />
     <ClInclude Include="Component\UIComponent.h" />
     <ClInclude Include="Object\Canvas.h" />
+    <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="UI\UIText.h" />
     <ClInclude Include="UI\UIImage.h" />
   </ItemGroup>
@@ -275,6 +276,7 @@
     <ClCompile Include="TileMap\TileMapComponent.cpp" />
     <ClCompile Include="Component\UIComponent.cpp" />
     <ClCompile Include="Object\Canvas.cpp" />
+    <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="UI\UIText.cpp" />
     <ClCompile Include="UI\UIImage.cpp" />
   </ItemGroup>
