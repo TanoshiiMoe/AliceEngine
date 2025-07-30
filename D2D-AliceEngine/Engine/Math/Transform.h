@@ -103,8 +103,6 @@ public:
 		// 회전 (라디안 → 도)
 		float radians = std::atan2(mat.m12, mat.m11);
 		Rotation = radians * (180.0f / Define::PI);
-
-		cachedMatrix = mat;
 	}
 
 	D2D1::Matrix3x2F ToMatrixWithOutScale()

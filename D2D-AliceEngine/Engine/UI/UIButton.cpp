@@ -12,6 +12,14 @@ UIButton::~UIButton()
 {
 }
 
+void UIButton::SetImages(const std::wstring& idle, const std::wstring& hover, const std::wstring& pressed)
+{
+    m_idleImage = idle;
+    m_hoverImage = hover;
+    m_pressedImage = pressed;
+    LoadData(m_idleImage); // 초기 이미지 세팅
+}
+
 void UIButton::LoadData(const std::wstring& path)
 {
     filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장

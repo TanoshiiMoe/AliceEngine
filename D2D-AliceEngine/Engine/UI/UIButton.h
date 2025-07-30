@@ -14,19 +14,11 @@ public:
 	UIButton();
 	virtual ~UIButton();
 
-	void SetImages(const std::wstring& idle, const std::wstring& hover, const std::wstring& pressed)
-	{
-		m_idleImage = idle;
-		m_hoverImage = hover;
-		m_pressedImage = pressed;
-
-		LoadData(m_idleImage); // 초기 이미지 세팅
-	}
-
+	void SetImages(const std::wstring& idle, const std::wstring& hover, const std::wstring& pressed);
 	void LoadData(const std::wstring& path);
-	void SetScale(const FVector2& _scale) { scale = _scale; }
-	void SetScale(const float& _x, const float& _y) { scale = FVector2(_x, _y); }
-	void SetScale(const float& _x) { scale = FVector2(_x, _x); }
+	inline void SetScale(const FVector2& _scale) { scale = _scale; }
+	inline void SetScale(const float& _x, const float& _y) { scale = FVector2(_x, _y); }
+	inline void SetScale(const float& _x) { scale = FVector2(_x, _x); }
 	void SetPosition(const FVector2& pos);
 
 	void Update(const float& deltaSeconds) override;

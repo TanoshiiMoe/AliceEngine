@@ -277,14 +277,6 @@ void DemoScene3::EnemyInput()
 
 void DemoScene3::PlayerInput()
 {
-	if (Input::IsKeyPressed(VK_Q))
-	{
-		SceneManager::GetCamera()->SetOwner(m_player);
-	}
-	if (Input::IsKeyPressed(VK_E))
-	{
-		SceneManager::GetCamera()->ClearOwner();
-	}
 	if (Input::IsKeyPressed(VK_3))
 	{
 		SceneManager::ChangeScene(L"aruScene");
@@ -292,65 +284,5 @@ void DemoScene3::PlayerInput()
 	if (Input::IsKeyPressed(VK_R))
 	{
 		SceneManager::RestartScene();
-	}
-	if (Input::IsKeyDown(VK_K))
-	{
-		m_player->GetComponent<Player>()->walkSpeed += 5.0f;
-	}
-	if (Input::IsKeyDown(VK_L))
-	{
-		m_player->GetComponent<Player>()->walkSpeed -= 5.0f;
-	}
-	if (Input::IsKeyDown(VK_G))
-	{
-		m_player->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
-	}
-	if (Input::IsKeyDown(VK_H))
-	{
-		m_player->GetComponent<Rigidbody2D>()->gravityScale -= 0.1f;
-	}
-	if (Input::IsKeyPressed(VK_U))
-	{
-		m_player->GetComponent<Player>()->bMoveRigidBody = !m_player->GetComponent<Player>()->bMoveRigidBody;
-	}
-	if (Input::IsKeyPressed(VK_I))
-	{
-		m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
-	}
-	if (Input::IsKeyPressed(VK_O))
-	{
-		m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-	}
-	if (Input::IsKeyPressed(VK_P))
-	{
-		m_player->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Static;
-	}
-
-	if (Input::IsKeyDown(VK_T))
-	{
-		m_player->RemoveComponent<Rigidbody2D>(m_player->GetComponent<Rigidbody2D>());
-	}
-	if (Input::IsKeyDown(VK_Y))
-	{
-		if (m_player->GetComponent<Rigidbody2D>() == nullptr)
-		{
-			m_player->AddComponent<Rigidbody2D>();
-			if (auto rb = m_player->GetComponent<Rigidbody2D>())
-			{
-				rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
-				rb->gravityScale = 60.0f;
-				rb->mass = 20.0f;
-				rb->drag = 0.6f;
-			}
-		}
-	}
-	if (Input::IsKeyDown(VK_8))
-	{
-		m_player->RemoveComponent<Collider>(m_player->GetComponent<Collider>());
-	}
-	if (Input::IsKeyDown(VK_9))
-	{
-		if(m_player->GetComponent<Collider>() == nullptr)
-			m_player->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
 	}
 }

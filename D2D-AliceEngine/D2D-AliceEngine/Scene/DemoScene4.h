@@ -20,6 +20,8 @@ public:
 	void PlayerInput();
 	void EnemyInput();
 
+	gameObject* m_cameraController;
+
 	gameObject* m_player;
 	gameObject* m_sound;
 	gameObject* m_tile;
