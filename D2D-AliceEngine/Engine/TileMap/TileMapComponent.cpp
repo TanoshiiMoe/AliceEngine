@@ -78,6 +78,7 @@ void TileMapComponent::CreatetileRenderers()
 				go->transform()->SetPosition(FVector2(tileX, tileY));
 				TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
 				tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
+				tileRenderer->SetSkew(true, FVector2(30.0f, 0.0f));
 				
 				float gidRow = (gid-1) / tileset.columns ;
 				float gidCol = (gid-1) % tileset.columns;

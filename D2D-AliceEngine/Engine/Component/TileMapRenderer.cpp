@@ -71,8 +71,22 @@ void TileMapRenderer::Render()
 							 (spriteInfo.y + offsetY + cropH) };
 
 
-	//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
-	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, &srcRect);
+	if (!m_effect) {
+		//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, &srcRect);
+	}
+	else {
+		// Skew Effect만 쓰는걸로 가정함.
+		ComPtr<ID2D1Bitmap1> bitmap = GetSlicedBitmap(m_bitmap.get(), srcRect);
+		m_effect->SetInput(0, bitmap.Get());
+
+		D2D1_POINT_2F center = D2D1::Point2F(spriteInfo.x, spriteInfo.y);
+		D2D1_MATRIX_3X2_F skewMat = D2D1::Matrix3x2F::Skew(skewAngle.x, skewAngle.y, center);
+		HRESULT hr = m_effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX, skewMat);
+
+		D2D1_POINT_2F destPos = D2D1::Point2F(offsetX, offsetY);
+		D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get(), &destPos);
+	}
 }
 
 float TileMapRenderer::GetBitmapSizeX()
@@ -90,3 +104,47 @@ void TileMapRenderer::SetSlice(float x, float y, float w, float h)
 	slice.srcX = x;  slice.srcY = y;
 	slice.srcW = w;  slice.srcH = h;
 }
+
+void TileMapRenderer::SetSkew(bool _setActive, FVector2 _skewAngle)
+{
+	if (_setActive) {
+		D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateEffect(CLSID_D2D12DAffineTransform, &m_effect);
+		skewAngle = _skewAngle;
+	}
+	else {
+		m_effect.Reset();
+		skewAngle = FVector2(0.0f, 0.0f);
+	}
+}
+
+Microsoft::WRL::ComPtr<ID2D1Bitmap1> TileMapRenderer::GetSlicedBitmap(ID2D1Bitmap1* bitmap, const D2D1_RECT_F& srcRect)
+{
+	ComPtr<ID2D1Bitmap1> result;
+
+	// 1. 잘라낼 영역 크기
+	D2D1_SIZE_U croppedSize = {
+		static_cast<UINT32>(srcRect.right - srcRect.left),
+		static_cast<UINT32>(srcRect.bottom - srcRect.top)
+	};
+
+	// 2. 새로운 비트맵 생성
+	D2D1_BITMAP_PROPERTIES1 props = {
+		{ DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED },
+		96.0f, 96.0f
+	};
+	D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateBitmap(
+		croppedSize, nullptr, 0, &props, &result);
+
+	// srcRect는 D2D1_RECT_U로 변환 필요
+	D2D1_RECT_U srcRectU = {
+		static_cast<UINT32>(srcRect.left),
+		static_cast<UINT32>(srcRect.top),
+		static_cast<UINT32>(srcRect.right),
+		static_cast<UINT32>(srcRect.bottom)
+	};
+
+	result->CopyFromBitmap(nullptr, bitmap, &srcRectU);
+
+	return result;
+}
+

@@ -89,7 +89,7 @@ void SpriteRenderer::Render()
 							 spriteInfo.y + offsetY,
 							 spriteInfo.x + offsetX + cropW,
 							 spriteInfo.y + offsetY + cropH };
-	
+
 	// 이펙트 있을시 이펙트 그리기
 	if (!m_effect)
 		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
@@ -125,4 +125,9 @@ void SpriteRenderer::SetSlice(float x, float y, float w, float h)
 {
 	slice.srcX = x;  slice.srcY = y;
 	slice.srcW = w;  slice.srcH = h;
+}
+
+void SpriteRenderer::SetSkewing(bool _isSkewing, FVector2 _skewAngle /*= FVector2(0.0f, 0.0f)*/)
+{
+	
 }
