@@ -5,6 +5,7 @@
 #include "Scene/DemoScene3.h"
 #include "Scene/DemoScene4.h"
 #include <Manager/SceneManager.h>
+#include <Manager/TimerManager.h>
 
 DemoGameApp::DemoGameApp()
 {
