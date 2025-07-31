@@ -84,6 +84,15 @@ void Collider::SetBoxSize(const FVector2& _size)
 	UpdateAABB();
 }
 
+void Collider::SetBoxPosition(const FVector2& _pos)
+{
+	WeakObjectPtr<BoxComponent> comp = boxComponent;
+	if (comp.expired())
+	{
+		comp->SetRelativePosition(_pos);
+	}
+}
+
 void Collider::SetBoxColor(const FColor _color)
 {
 	if (boxComponent)

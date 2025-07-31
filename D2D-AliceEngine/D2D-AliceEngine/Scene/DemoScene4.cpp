@@ -19,6 +19,7 @@
 #include "../Scripts/Audio.h"
 #include "../Scripts/UI_Script.h"
 #include "../Scripts/BackGroundVideo.h"
+#include "../Scripts/Truck.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
@@ -80,6 +81,10 @@ void DemoScene4::OnEnter()
 	m_button->GetComponent<UIButton>()->SetAction([]() {});
 	m_button->GetComponent<UIButton>()->SetScale(150);
 	m_button->GetComponent<UIButton>()->m_layer = 510;
+
+	// Truck(점프대)
+	m_truck = NewObject<gameObject>(L"Truck");
+	m_truck->AddComponent<Truck>();
 
 	//m_wall = NewObject<gameObject>(L"wall");
 	//m_wall->transform()->SetPivot(0.5f);

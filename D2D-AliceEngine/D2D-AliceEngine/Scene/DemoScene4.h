@@ -33,6 +33,8 @@ public:
 
 	gameObject* m_bg;
 
+	gameObject* m_truck;
+
 	//gameObject* m_backgroundImage;
 	//gameObject* m_spriteAnimationTest;
 	//gameObject* m_wall2;

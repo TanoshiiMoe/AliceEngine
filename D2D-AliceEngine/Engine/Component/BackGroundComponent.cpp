@@ -231,7 +231,7 @@ void BackGroundComponent::Render()
 
 float BackGroundComponent::GetBitmapSizeX()
 {
-	if (m_bitmaps.empty() == false && GetOwner())
+	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
 		return static_cast<float>(bmpSize.width) * owner->transform()->GetScale().x;
 	}
@@ -240,20 +240,20 @@ float BackGroundComponent::GetBitmapSizeX()
 
 float BackGroundComponent::GetBitmapSizeY()
 {
-	if (m_bitmaps.empty() == false && GetOwner())
+	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
-		return static_cast<float>(bmpSize.height) * owner->transform()->GetScale().x;
+		return static_cast<float>(bmpSize.height) * owner->transform()->GetScale().y;
 	}
 	return 0;
 }
 
 FVector2 BackGroundComponent::GetSize()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
 		if (m_bitmaps[m_curClip])
 		{
-			return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
+			return FVector2(static_cast<float>(bmpSize.width) * owner->transform()->GetScale().x, static_cast<float>(bmpSize.height) * owner->transform()->GetScale().y);
 		}
 	}
 	return FVector2();

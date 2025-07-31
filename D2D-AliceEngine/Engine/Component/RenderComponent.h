@@ -27,6 +27,8 @@ public:
 	void SetScale(const FVector2& _scale) { scale = _scale; }
 	FVector2 GetScale() const { return scale; }
 
+	void SetRelativePosition(const FVector2& _pos);
+
 	// FixedUpdate시 Interpolation된 transform을 적용하기 위한 함수
 	D2D1::Matrix3x2F GetWorldTransform(D2D1::Matrix3x2F& world);
 
