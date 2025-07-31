@@ -60,7 +60,7 @@ void TileMapComponent::CreatetileRenderers()
 	TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
 	tileRenderer->m_layer = 1;
 	tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
-	tileRenderer->SetSkew(80);
+	tileRenderer->SetSkew(skewAngle);
 	tileRenderer->SetMapInfo(tilemap, tileset);
 }
 
