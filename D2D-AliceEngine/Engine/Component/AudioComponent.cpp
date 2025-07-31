@@ -19,7 +19,7 @@ void AudioComponent::Initialize()
 
 void AudioComponent::Load(const std::wstring& audioPath, AudioMode audioMode)
 {
-	AudioManager::GetInstance().LoadSound(audioPath, audioMode, &m_Sound);
+	AudioManager::GetInstance().LoadSound(L"../" + Define::BASE_RESOURCE_PATH + L"Sound/" + audioPath, audioMode, &m_Sound);
 }
 
 void AudioComponent::Play(float sec, float volume, bool paused)

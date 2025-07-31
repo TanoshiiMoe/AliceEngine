@@ -1,6 +1,7 @@
 #pragma once
 #include <Component/ScriptComponent.h>
 
+class AudioComponent;
 class gameObject;
 class Audio : public ScriptComponent
 {
@@ -14,4 +15,7 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+
+	AudioComponent* m_bgm = nullptr;
+	AudioComponent* m_ambience = nullptr;
 };
