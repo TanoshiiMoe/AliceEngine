@@ -261,6 +261,9 @@
     <ClInclude Include="Component\BackGroundComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Component\SkewTransform.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -459,6 +462,9 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Component\BackGroundComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SkewTransform.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
