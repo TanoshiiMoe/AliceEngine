@@ -132,7 +132,6 @@ public:
 		REGISTER_MEMBER(allMemberInfos[className], VideoComponent, bPlay);
 		REGISTER_MEMBER(allMemberInfos[className], VideoComponent, m_fFPSTime);
 		REGISTER_MEMBER(allMemberInfos[className], VideoComponent, m_fFPSLastTime);
-		REGISTER_MEMBER(allMemberInfos[className], VideoComponent, bmpSize);
 		className = typeid(TransformComponent).name();
 		REGISTER_MEMBER(allMemberInfos[className], TransformComponent, parent);
 		REGISTER_MEMBER(allMemberInfos[className], TransformComponent, children);

@@ -76,14 +76,17 @@ void SpriteRenderer::Render()
 	float offsetX = -cropW * spriteInfo.pivotX;
 	float offsetY = -cropH * spriteInfo.pivotY;
 
-	D2D1_RECT_F destRect = { spriteInfo.x + offsetX,
-							 spriteInfo.y + offsetY,
-							 spriteInfo.x + offsetX + cropW,
-							 spriteInfo.y + offsetY + cropH };
-
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!context) return;
+	
 	// 이펙트 있을시 이펙트 그리기
 	if (!m_effect)
-		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+	{
+		D2D1::Matrix3x2F backToD2DTransform = D2D1::Matrix3x2F::Translation(-GetBitmapSizeX() / 2, -GetBitmapSizeY() / 2);
+		D2D1::Matrix3x2F pivotTransform = D2D1::Matrix3x2F::Translation((GetBitmapSizeX() / 2) * (GetPivot()->x - 0.5f), (GetBitmapSizeY() / 2) * (GetPivot()->y - 0.5f));
+		context->SetTransform(backToD2DTransform * pivotTransform * view);
+		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get());
+	}
 	else {
 		D2D1_POINT_2F destPos = D2D1::Point2F(offsetX, offsetY);
 		D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get(), &destPos, &srcRect);

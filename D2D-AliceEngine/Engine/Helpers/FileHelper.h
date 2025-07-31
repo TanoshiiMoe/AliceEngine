@@ -219,6 +219,22 @@ public:
 		return { fileName, extension };
 	}
 
+	// 해당 경로의 폴더와 이름을 분리하는 함수
+	static std::pair<std::wstring, std::wstring> ExtractFileDirectoryAndName(const std::wstring& absPath)
+	{
+		std::wstring inputPath = absPath;
+		size_t lastSlash = inputPath.find_last_of(L"/\\");
+		size_t lastDot = inputPath.find_last_of(L'.');
+
+		std::wstring folderPath = inputPath.substr(0, lastSlash);
+		std::wstring fileName = inputPath.substr(
+			lastSlash + 1,
+			(lastDot != std::wstring::npos ? lastDot : inputPath.length()) - (lastSlash + 1)
+		);
+
+		return { folderPath, fileName };
+	}
+
 
 	// 파일 경로에서 해당 폴더만 가져오는 함수 (std::wstring 버전)
 	// "\\Resource\\content\\video\\aru.mp4" -> "\\Resource\\content\\video"
