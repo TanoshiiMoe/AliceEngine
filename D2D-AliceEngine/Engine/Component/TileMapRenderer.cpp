@@ -74,96 +74,45 @@ void TileMapRenderer::Render()
 			tileId -= 1;
 			int sx = (tileId % tilePerRow) * tileWidth ;
 			int sy = (tileId / tilePerRow) * tileHeight;
-
-			float quarterViewOffset = y * tileHeight * std::tan(skewAngle.x * (Define::PI / 180.0f)) * 0.5f;
-
-			// destRect에 쿼터뷰 오프셋 적용
 			D2D1_RECT_F destRect = D2D1::RectF(
-				(FLOAT)(x * tileWidth) + quarterViewOffset,     // X에 오프셋 추가
+				(FLOAT)(x * tileWidth),     // X에 오프셋 추가
 				(FLOAT)(y * tileHeight),                        // Y는 그대로
-				(FLOAT)((x + 1) * tileWidth) + quarterViewOffset, // 오른쪽도 동일 오프셋
+				(FLOAT)((x + 1) * tileWidth), // 오른쪽도 동일 오프셋
 				(FLOAT)((y + 1) * tileHeight)
 			);
 			D2D1_RECT_U srcRect = { (UINT32)sx, (UINT32)sy, (UINT32)(sx + tileWidth), (UINT32)(sy + tileHeight) };
-
-			D2D1_POINT_2F center = D2D1::Point2F(
-				(destRect.left + destRect.right) * 0.5f,   // 타일 중심 X
-				(destRect.top + destRect.bottom) * 0.5f    // 타일 중심 Y
-			);
-			D2D1_MATRIX_3X2_F skewMat = D2D1::Matrix3x2F::Skew(skewAngle.x, skewAngle.y, center);
-			//D2D1_MATRIX_3X2_F transform = D2D1::Matrix3x2F::Skew(20);
-			//D2D1_MATRIX_3X2_F skewMat = D2D1::Matrix3x2F::Skew(30, 0, center);
-			 
-			//D2D1_RECT_F srcRect = { (UINT32)sx, (UINT32)sy, (UINT32)(sx + tileWidth), (UINT32)(sy + tileHeight) };
-			//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, &srcRect);
-			HRESULT hr = D2DRenderManager::GetInstance().m_spriteBatch->AddSprites(1, &destRect, &srcRect, nullptr, &skewMat);
-			//HRESULT hr = D2DRenderManager::GetInstance().m_spriteBatch->AddSprites(1, &destRect, &srcRect, nullptr, nullptr);
-
-			//실제 좌표에 추가하면 3D 좌표계에서의 위치가 되므로, 3D 효과가 나옴.
-			//D2D1_MATRIX_3X2_F finalTransform = view * skewMat;
-			//HRESULT hr = D2DRenderManager::GetInstance().m_spriteBatch->AddSprites(1, &destRect, &srcRect, nullptr, &finalTransform);
+			HRESULT hr = D2DRenderManager::GetInstance().m_spriteBatch->AddSprites(1, &destRect, &srcRect, nullptr, nullptr);
 			assert(SUCCEEDED(hr));
 		}
 	}
 	int batchSize = batch->GetSpriteCount();
 	assert(batchSize > 0);
+	
+	float angleDeg = skewAngle.x; // 예: 30도
+	float angleRad = angleDeg * (Define::PI / 180.0f);
+
+	float totalHeight = mapHeight * tileHeight;
+	float xOffset = totalHeight * std::tan(angleRad);
+
+	// 기준점: 왼쪽 아래 (붙어 있게 하려면 여기 기준으로 움직임)
+	D2D1_MATRIX_3X2_F skewMatrix = D2D1::Matrix3x2F::Skew(angleDeg, 0);
+
+	// 왼쪽 아래 기준, 오른쪽 위로 이동
+	D2D1_MATRIX_3X2_F originTranslate = D2D1::Matrix3x2F::Translation(0, 0);
+	D2D1_MATRIX_3X2_F skewTransform =
+		originTranslate *
+		skewMatrix *
+		D2D1::Matrix3x2F::Translation(xOffset, 0);
+	D2D1_MATRIX_3X2_F backD2DTransform = D2D1::Matrix3x2F::Translation(-Define::SCREEN_WIDTH/2, -Define::SCREEN_HEIGHT/2);
+	// 최종 View와 결합
+	context->SetTransform(backD2DTransform *skewTransform * view);
+
 	context->DrawSpriteBatch(
 		batch,
 		0, batchSize,
 		m_bitmap.get(),
 		D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR,
 		D2D1_SPRITE_OPTIONS_NONE);
-
-	//if (!m_effect) {
-	//	// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
-	//	float cropW = (slice.srcW > 0) ? slice.srcW : spriteInfo.width;
-	//	float cropH = (slice.srcH > 0) ? slice.srcH : spriteInfo.height;
-	//	float srcL = slice.srcX;
-	//	float srcT = slice.srcY;
-
-	//	D2D1_RECT_F srcRect = { srcL,               srcT,
-	//							 srcL + cropW,       srcT + cropH };
-
-	//	// 화면에 그릴 위치(센터링 포함)
-	//	float offsetX = -cropW * spriteInfo.pivotX;
-	//	float offsetY = -cropH * spriteInfo.pivotY;
-
-	//	D2D1_RECT_F destRect = { (spriteInfo.x + offsetX),
-	//							 (spriteInfo.y + offsetY),
-	//							 (spriteInfo.x + offsetX + cropW),
-	//							 (spriteInfo.y + offsetY + cropH) };
-
-	//	//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
-	//	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR, &srcRect);
-	//}
-	//else {
-	//	// Skew Effect만 쓰는걸로 가정함.
-	//	if (!slicedBitmap) {
-	//		// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
-	//		float cropW = (slice.srcW > 0) ? slice.srcW : spriteInfo.width;
-	//		float cropH = (slice.srcH > 0) ? slice.srcH : spriteInfo.height;
-	//		float srcL = slice.srcX;
-	//		float srcT = slice.srcY;
-
-	//		D2D1_RECT_F srcRect = { srcL,               srcT,
-	//								 srcL + cropW,       srcT + cropH };
-
-	//		slicedBitmap = GetSlicedBitmap(m_bitmap.get(), srcRect);
-	//	}
-
-	//	m_effect->SetInput(0, slicedBitmap.Get());
-
-	//	// 오프셋
-	//	float offsetX = -static_cast<float>(slicedBitmap->GetPixelSize().width) * spriteInfo.pivotX;
-	//	float offsetY = -static_cast<float>(slicedBitmap->GetPixelSize().height) * spriteInfo.pivotY;
-
-	//	D2D1_POINT_2F center = D2D1::Point2F(-offsetX, -offsetY);
-	//	D2D1_MATRIX_3X2_F skewMat = D2D1::Matrix3x2F::Skew(skewAngle.x, skewAngle.y, center);
-	//	m_effect->SetValue(D2D1_2DAFFINETRANSFORM_PROP_TRANSFORM_MATRIX, skewMat);
-
-	//	D2D1_POINT_2F destPos = D2D1::Point2F(offsetX, offsetY);
-	//	D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get());// , & destPos);
-	//}
 }
 
 float TileMapRenderer::GetBitmapSizeX()
