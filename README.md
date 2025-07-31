@@ -5,7 +5,7 @@
 
 # AliceEngine
 **D2D 기반으로 개발 중인 2D 게임 엔진입니다.**  
-C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커니즘(충돌처리, 리소스매니저, 컴포넌트, 씬)을 지원합니다.
+C++로 구현했으며, 2D 캐릭터 애니메이션, 게임 메커니즘( 게임오브젝트, 충돌처리, 리소스매니저, 컴포넌트, 씬)을 지원합니다.
 
 
 ## 팀원
@@ -45,7 +45,7 @@ C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커
 
 ## 프로젝트 구조
 - `Engine/` : 엔진 핵심 모듈
-- `Game/` : 샘플 게임 및 테스트 코드
+- `Game/` : 게임 콘텐츠 빌드
 
 ## UML 다이어그램
 
@@ -64,8 +64,8 @@ C++로 작성되었으며, 실시간 2D 캐릭터 애니메이션, 게임 메커
 <img width="8364" height="6484" alt="image" src="https://github.com/user-attachments/assets/322820e5-b1b0-452b-88bb-a9552b3e7141" />
 ![image](https://github.com/user-attachments/assets/3ba63e7f-b3b9-4d83-a0e0-b80878f3dca6)
 ![image](https://github.com/user-attachments/assets/260f4579-27f2-4a43-a752-69909bf1edaa)
-<img width="5328" height="3004" alt="image" src="https://github.com/user-attachments/assets/b477d00f-1121-4a02-aa59-67c6b029b4fb" />
-
+<img width="5628" height="3728" alt="image" src="https://github.com/user-attachments/assets/d4588b8d-9f20-4be8-85cf-90eb786c03a6" />
+<img width="5604" height="3008" alt="image" src="https://github.com/user-attachments/assets/d4a5fe4d-f989-49a5-9a11-49f6f3d6fa33" />
 
 
 ## 빌드 및 실행

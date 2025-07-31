@@ -158,6 +158,7 @@ bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& rend
 	const float maxX = view.maxX + marginX;
 	const float minY = view.minY - marginY;
 	const float maxY = view.maxY + marginY;
+
 	/*const float marginX = (view.maxX - view.minX);
 	const float marginY = (view.maxY - view.minY);
 	const float minX = view.minX;

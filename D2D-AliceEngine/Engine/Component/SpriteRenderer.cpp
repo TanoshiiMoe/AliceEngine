@@ -63,15 +63,6 @@ void SpriteRenderer::Render()
 	if (m_bitmap == nullptr) return;
 	__super::Render();
 
-	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
-	/*float x = spriteInfo.x;
-	float y = spriteInfo.y;
-	float width = spriteInfo.width;
-	float height = spriteInfo.height;
-	D2D1_RECT_F SrcRect = { -width, height, width, -height};
- 	D2D1_RECT_F destRect = { -width * spriteInfo.pivotX, -height * spriteInfo.pivotY,  -width * spriteInfo.pivotX + width,  -height * spriteInfo.pivotY + height };
-	*/
-
 	// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
 	float cropW = (slice.srcW > 0) ? slice.srcW : spriteInfo.width;
 	float cropH = (slice.srcH > 0) ? slice.srcH : spriteInfo.height;

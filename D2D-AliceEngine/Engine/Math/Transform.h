@@ -22,7 +22,8 @@ public:
 	D2D1::Matrix3x2F cachedMatrix = D2D1::Matrix3x2F::Identity();
 	bool dirty = true;
 
-	Transform() : Translation{ 0.0f, 0.0f }, Rotation(0.0f), Scale{ 1.0f,1.0f } {}
+	Transform() : Translation{ 0, 0 }, Rotation(0.0f), Scale{ 1.0f,1.0f } {}
+	//Transform() : Translation{ -10000.0f, -10000.0f }, Rotation(0.0f), Scale{ 1.0f,1.0f } {}
 	~Transform() {}
 
 	D2D1_VECTOR_2F GetPosition() const
@@ -102,8 +103,6 @@ public:
 		// 회전 (라디안 → 도)
 		float radians = std::atan2(mat.m12, mat.m11);
 		Rotation = radians * (180.0f / Define::PI);
-
-		cachedMatrix = mat;
 	}
 
 	D2D1::Matrix3x2F ToMatrixWithOutScale()

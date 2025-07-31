@@ -41,6 +41,15 @@ void Player::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
+	if (Input::IsKeyPressed(VK_Q))
+	{
+		SceneManager::GetCamera()->SetOwner(m_owner);
+	}
+	if (Input::IsKeyPressed(VK_E))
+	{
+		SceneManager::GetCamera()->ClearOwner();
+	}
+
 	float speed = walkSpeed * deltaSeconds;
 	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
@@ -178,6 +187,80 @@ void Player::OnDestroy()
 void Player::Input()
 {
 	// 여기에 Input에 대한 로직 작성
+
+	if (Input::IsKeyDown(VK_K))
+	{
+		walkSpeed += 5.0f;
+	}
+	if (Input::IsKeyDown(VK_L))
+	{
+		walkSpeed -= 5.0f;
+	}
+	if (Input::IsKeyPressed(VK_U))
+	{
+		bMoveRigidBody = !bMoveRigidBody;
+	}
+	if (Input::IsKeyDown(VK_K))
+	{
+		walkSpeed += 5.0f;
+	}
+	if (Input::IsKeyDown(VK_L))
+	{
+		walkSpeed -= 5.0f;
+	}
+	if (Input::IsKeyDown(VK_G))
+	{
+		m_owner->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
+	}
+	if (Input::IsKeyDown(VK_H))
+	{
+		m_owner->GetComponent<Rigidbody2D>()->gravityScale -= 0.1f;
+	}
+	if (Input::IsKeyPressed(VK_U))
+	{
+		bMoveRigidBody = !bMoveRigidBody;
+	}
+	if (Input::IsKeyPressed(VK_I))
+	{
+		m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
+	}
+	if (Input::IsKeyPressed(VK_O))
+	{
+		m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+	}
+	if (Input::IsKeyPressed(VK_P))
+	{
+		m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Static;
+	}
+
+	if (Input::IsKeyDown(VK_T))
+	{
+		m_owner->RemoveComponent<Rigidbody2D>(m_owner->GetComponent<Rigidbody2D>());
+	}
+	if (Input::IsKeyDown(VK_Y))
+	{
+		if (m_owner->GetComponent<Rigidbody2D>() == nullptr)
+		{
+			m_owner->AddComponent<Rigidbody2D>();
+			if (auto rb = m_owner->GetComponent<Rigidbody2D>())
+			{
+				rb->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+				rb->gravityScale = 60.0f;
+				rb->mass = 20.0f;
+				rb->drag = 0.6f;
+			}
+		}
+	}
+	if (Input::IsKeyDown(VK_8))
+	{
+		m_owner->RemoveComponent<Collider>(m_owner->GetComponent<Collider>());
+	}
+	if (Input::IsKeyDown(VK_9))
+	{
+		if (m_owner->GetComponent<Collider>() == nullptr)
+			m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
+	}
+
 
 	if (Input::IsKeyDown(VK_C))
 	{

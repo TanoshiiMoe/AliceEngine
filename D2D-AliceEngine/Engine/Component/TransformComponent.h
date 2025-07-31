@@ -35,6 +35,7 @@ public:
 
 	float GetRotation();
 	FVector2 GetScale();
+	void SetScale(const FVector2& _v);
 	void SetScale(const float& _x, const float& _y);
 	void SetScale(const float& _x);
 	void SetWorldScale(const FVector2& _v);

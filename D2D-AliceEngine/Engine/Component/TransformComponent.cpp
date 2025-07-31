@@ -5,7 +5,7 @@
 
 TransformComponent::TransformComponent()
 {
-	SetTransform(FVector2(0.0f), 0, FVector2(1.0f), FVector2(0.5f));
+	SetTransform(FVector2(-1000.0f), 0, FVector2(1.0f), FVector2(0.5f));
 }
 
 TransformComponent::~TransformComponent()
@@ -128,6 +128,12 @@ float TransformComponent::GetRotation()
 FVector2 TransformComponent::GetScale()
 {
 	return FVector2(m_localTransform.GetScale().x, m_localTransform.GetScale().y);
+}
+
+void TransformComponent::SetScale(const FVector2& _v)
+{
+	m_localTransform.SetScale(_v.x, _v.y);
+	SetDirty();
 }
 
 void TransformComponent::SetScale(const float& _x, const float& _y)

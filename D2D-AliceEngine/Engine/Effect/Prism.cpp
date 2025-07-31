@@ -16,18 +16,18 @@ Prism::~Prism()
 
 void Prism::Initialize()
 {
-	//WeakFromThis<Prism>()
-
 	if (owner)
 		animator = owner->GetComponent<Animator>();
-	else {
+	else 
+	{
 		OutputDebugStringW(L"프리즘 컴포넌트에서 Animator를 찾을수 없습니다!!");
 		return;
 	}
 
+	// 다음 프레임의 첫 시작시에 바로 생성시켜서 트랜스폼의 지연을 막기
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_LastDemotable,
+		Define::ETickingGroup::TG_PrePhysics,
 		[weak = WeakFromThis<ITickable>()](const float& dt)
 		{
 			if (auto sp = weak.lock())
@@ -120,32 +120,10 @@ void Prism::MakeEffect()
 		return;
 	}
 
+	if (WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObject<gameObject>(L"effect")){
+		SetSpriteRenderer(temp.Get());
+		SetPrismTransform(temp.Get()); // 트랜스폼 설정
 
-
-	WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObject<gameObject>(L"effect");
-	if (temp) {
-		// 스프라이트 렌더러 설정
-		SpriteRenderer* sr = temp->AddComponent<SpriteRenderer>();
-		sr->m_bitmap = bitmap.lock();
-		sr->m_layer = animator->m_layer;
-		sr->SetFlip(animator->bFlip);
-		// y값에 왜 Height만큼 빼야함????????????????? <- x,y 점이 좌하단에 찍히기 때문에 - height 해야 정상화된다.
-		sr->SetSlice(spriteInfo->x, spriteInfo->y - spriteInfo->height, spriteInfo->width, spriteInfo->height);
-		//sr->spriteInfo = *spriteInfo;
-
-		temp->AddComponent<Rigidbody2D>();
-		if (auto rb = temp->GetComponent<Rigidbody2D>())
-		{
-			rb->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
-		}
-
-		// 트랜스폼 설정
-		// TODO::localTransform 오류 해결되면 SetWorldTransform 제거하기
-		temp->transform()->SetPosition(owner->transform()->GetPosition());
-		temp->transform()->SetRotation(owner->transform()->GetRotation());
-		//temp->transform()->SetWorldScale(owner->transform()->GetScale());
-		temp->transform()->SetScale(owner->transform()->GetScale().x, owner->transform()->GetScale().y);
-		// 
 		// 임시 오브젝트 큐에 저장
 		objects.push_back(temp);
 
@@ -305,3 +283,21 @@ bool Prism::IsActive()
 	return isEnabled;
 }
 
+void Prism::SetPrismTransform(gameObject* go)
+{
+	go->transform()->SetPosition(owner->transform()->GetPosition());
+	go->transform()->SetRotation(owner->transform()->GetRotation());
+	go->transform()->SetScale(owner->transform()->GetScale());
+}
+
+// 스프라이트 렌더러 설정
+void Prism::SetSpriteRenderer(gameObject* go)
+{
+	SpriteRenderer* sr = go->AddComponent<SpriteRenderer>();
+	sr->m_bitmap = bitmap.lock();
+	sr->m_layer = animator->m_layer;
+	sr->SetFlip(animator->bFlip);
+	// y값에 왜 Height만큼 빼야함????????????????? <- x,y 점이 좌하단에 찍히기 때문에 - height 해야 정상화된다.
+	sr->SetSlice(spriteInfo->x, spriteInfo->y - spriteInfo->height, spriteInfo->width, spriteInfo->height);
+	//sr->spriteInfo = *spriteInfo;
+}

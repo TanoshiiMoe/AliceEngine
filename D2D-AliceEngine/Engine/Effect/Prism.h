@@ -38,5 +38,7 @@ public:
 
 	void SetActive(bool _val);
 	bool IsActive();
+	void SetPrismTransform(gameObject* go); // 스프라이트 렌더러를 넣을 게임오브젝트 좌표 설정
+	void SetSpriteRenderer(gameObject* go); // 스프라이트 렌더러 설정
 };
 
