@@ -25,14 +25,17 @@ void BackGroundVideo::Update(const float& deltaSeconds)
 	FVector2 playerPos = m_player->transform()->GetPosition();
 	FVector2 myPos = m_owner->transform()->GetPosition();
 
-	m_owner->transform()->SetPosition(playerPos.x, 550);
+	
+	float size = m_owner->GetComponent<BackGroundComponent>()->GetBitmapSizeX();
+
+	m_owner->transform()->SetPosition(playerPos.x - size / 2, 550);
 	//m_owner->transform()->SetPosition(playerPos.x, Define::SCREEN_HEIGHT);
 }
 
 void BackGroundVideo::OnStart()
 {
 	m_owner = GetOwner();
-	m_owner->transform()->SetScale(0.3f, 0.3f);
+	m_owner->transform()->SetScale(1, 1);
 
 	//m_owner->AddComponent<BackGroundComponent>()->LoadData(L"BackGround\\Alice.webm", 10, L"jpg", 95, true);
 	m_owner->AddComponent<BackGroundComponent>()->LoadFromFolder(L"BackGround\\Ena", 5, L"png");

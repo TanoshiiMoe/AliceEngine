@@ -109,7 +109,7 @@ void BackGroundComponent::LoadFromFolder(const std::wstring& folderPath, int fps
 
 	m_fFPSTime = 1.0f / fps;
 	m_maxClipSize = files.size();
-	m_curClip = 0;
+	m_curClip = files.size()-1;
 	m_bitmaps.clear();
 	m_bitmaps.resize(m_maxClipSize);
 
@@ -231,18 +231,18 @@ void BackGroundComponent::Render()
 
 float BackGroundComponent::GetBitmapSizeX()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.empty() == false && GetOwner())
 	{
-		return static_cast<float>(bmpSize.width);
+		return static_cast<float>(bmpSize.width) * owner->transform()->GetScale().x;
 	}
 	return 0;
 }
 
 float BackGroundComponent::GetBitmapSizeY()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.empty() == false && GetOwner())
 	{
-		return static_cast<float>(bmpSize.height);
+		return static_cast<float>(bmpSize.height) * owner->transform()->GetScale().x;
 	}
 	return 0;
 }
