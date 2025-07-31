@@ -18,11 +18,14 @@
 #include "../Scripts/Enemy.h"
 #include "../Scripts/Audio.h"
 #include "../Scripts/UI_Script.h"
+#include "../Scripts/BackGroundVideo.h"
+#include "../Scripts/Truck.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
 #include <Object/Canvas.h>
 #include <UI/UIButton.h>
+#include <Component/BackGroundComponent.h>
 #include <Scripts/CameraController.h>
 #include <Component/SkewTransform.h>
 #include <Effect/Prism.h>
@@ -48,6 +51,18 @@ void DemoScene4::OnEnter()
 
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraController>();
+
+
+	m_player = NewObject<gameObject>(L"Player");
+	m_player->AddComponent<Player>();
+	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
+
+	m_bg = NewObject<gameObject>(L"BackGround");
+	m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
+
+	// 오디오 추가, 오디오 관련 스크립트 넣기
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
@@ -82,6 +97,10 @@ void DemoScene4::OnEnter()
 	m_button->GetComponent<UIButton>()->SetAction([]() {});
 	m_button->GetComponent<UIButton>()->SetScale(150);
 	m_button->GetComponent<UIButton>()->m_layer = 510;
+
+	// Truck(점프대)
+	m_truck = NewObject<gameObject>(L"Truck");
+	m_truck->AddComponent<Truck>();
 
 	//m_wall = NewObject<gameObject>(L"wall");
 	//m_wall->transform()->SetPivot(0.5f);

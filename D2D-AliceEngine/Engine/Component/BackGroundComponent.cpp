@@ -98,9 +98,72 @@ void BackGroundComponent::LoadData(const std::wstring& path, const int& fps, con
 	m_bitmaps.clear();
 }
 
+void BackGroundComponent::LoadFromFolder(const std::wstring& folderPath, int fps, const std::wstring& extension)
+{
+	bImage = true;
+	imageExtension = extension;
+	std::wstring pattern = std::wstring(L"frames\\*.") + extension;
+	fileDirPath = Define::BASE_RESOURCE_PATH + folderPath;
+	files = FileHelper::GetFilesWithPattern(FileHelper::GetProjectRootPath() + L"\\" + fileDirPath, pattern);
+	if (files.empty()) return;
+
+	m_fFPSTime = 1.0f / fps;
+	m_maxClipSize = files.size();
+	m_curClip = files.size()-1;
+	m_bitmaps.clear();
+	m_bitmaps.resize(m_maxClipSize);
+
+	for (size_t i = 0; i < files.size(); ++i)
+	{
+		std::wstring inputPath = files[i];
+		size_t lastSlash = inputPath.find_last_of(L"/\\");
+		size_t lastDot = inputPath.find_last_of(L'.');
+		std::wstring fileName = inputPath.substr(
+			lastSlash + 1,
+			(lastDot != std::wstring::npos ? lastDot : inputPath.length()) - (lastSlash + 1)
+		);
+		// 상위 폴더 경로 추출
+		std::wstring folderPath = inputPath.substr(0, lastSlash);
+		
+		// 최종 출력 폴더 경로 조합
+		std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + extension;
+
+		// 안전하게 비트맵 패싱
+		auto bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(parentDir.c_str());
+
+		if (bitmap)
+			m_bitmaps[i] = bitmap;
+		else
+			OutputDebugStringW(L"Fail to load bitmap");
+	}
+}
+
 void BackGroundComponent::LoadFrame(size_t frameIndex)
 {
 	std::shared_ptr<ID2D1Bitmap1> temp = PackageResourceManager::GetInstance().CreateBitmapFromFile(files[frameIndex].c_str());
+	if (m_bitmaps.size() <= frameIndex)
+	{
+		m_bitmaps.resize(frameIndex + 1);
+	}
+	m_bitmaps[frameIndex] = temp;
+}
+
+void BackGroundComponent::LoadFrameFromFolder(size_t frameIndex)
+{
+	std::wstring inputPath = files[frameIndex];
+	size_t lastSlash = inputPath.find_last_of(L"/\\");
+	size_t lastDot = inputPath.find_last_of(L'.');
+	std::wstring fileName = inputPath.substr(
+		lastSlash + 1,
+		(lastDot != std::wstring::npos ? lastDot : inputPath.length()) - (lastSlash + 1)
+	);
+	// 상위 폴더 경로 추출
+	std::wstring folderPath = inputPath.substr(0, lastSlash);
+
+	// 최종 출력 폴더 경로 조합
+	std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + imageExtension;
+
+	std::shared_ptr<ID2D1Bitmap1> temp = PackageResourceManager::GetInstance().CreateBitmapFromFile(parentDir.c_str());
 	if (m_bitmaps.size() <= frameIndex)
 	{
 		m_bitmaps.resize(frameIndex + 1);
@@ -120,7 +183,10 @@ void BackGroundComponent::Render()
 	if (m_bitmaps.size() <= m_curClip)
 	{
 		// 필요한 프레임만 로딩
-		LoadFrame(m_curClip);
+		if (!bImage)
+			LoadFrame(m_curClip);
+		else
+			LoadFrameFromFolder(m_curClip);
 	}
 	if (m_bitmaps.empty()) return;
 	if (m_bitmaps[m_curClip] == nullptr) return;
@@ -165,29 +231,29 @@ void BackGroundComponent::Render()
 
 float BackGroundComponent::GetBitmapSizeX()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
-		return static_cast<float>(bmpSize.width);
+		return static_cast<float>(bmpSize.width) * owner->transform()->GetScale().x;
 	}
 	return 0;
 }
 
 float BackGroundComponent::GetBitmapSizeY()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
-		return static_cast<float>(bmpSize.height);
+		return static_cast<float>(bmpSize.height) * owner->transform()->GetScale().y;
 	}
 	return 0;
 }
 
 FVector2 BackGroundComponent::GetSize()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
 		if (m_bitmaps[m_curClip])
 		{
-			return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
+			return FVector2(static_cast<float>(bmpSize.width) * owner->transform()->GetScale().x, static_cast<float>(bmpSize.height) * owner->transform()->GetScale().y);
 		}
 	}
 	return FVector2();
