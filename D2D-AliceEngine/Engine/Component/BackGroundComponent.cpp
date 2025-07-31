@@ -115,18 +115,9 @@ void BackGroundComponent::LoadFromFolder(const std::wstring& folderPath, int fps
 
 	for (size_t i = 0; i < files.size(); ++i)
 	{
-		std::wstring inputPath = files[i];
-		size_t lastSlash = inputPath.find_last_of(L"/\\");
-		size_t lastDot = inputPath.find_last_of(L'.');
-		std::wstring fileName = inputPath.substr(
-			lastSlash + 1,
-			(lastDot != std::wstring::npos ? lastDot : inputPath.length()) - (lastSlash + 1)
-		);
-		// 상위 폴더 경로 추출
-		std::wstring folderPath = inputPath.substr(0, lastSlash);
-		
-		// 최종 출력 폴더 경로 조합
-		std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + extension;
+		std::pair<std::wstring, std::wstring> path = FileHelper::ExtractFileNameAndExtension(files[i]);
+		std::wstring folderPath = path.first; std::wstring fileName = path.second;
+		std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + extension; // 최종 출력 폴더 경로 조합
 
 		// 안전하게 비트맵 패싱
 		auto bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(parentDir.c_str());
@@ -150,18 +141,9 @@ void BackGroundComponent::LoadFrame(size_t frameIndex)
 
 void BackGroundComponent::LoadFrameFromFolder(size_t frameIndex)
 {
-	std::wstring inputPath = files[frameIndex];
-	size_t lastSlash = inputPath.find_last_of(L"/\\");
-	size_t lastDot = inputPath.find_last_of(L'.');
-	std::wstring fileName = inputPath.substr(
-		lastSlash + 1,
-		(lastDot != std::wstring::npos ? lastDot : inputPath.length()) - (lastSlash + 1)
-	);
-	// 상위 폴더 경로 추출
-	std::wstring folderPath = inputPath.substr(0, lastSlash);
-
-	// 최종 출력 폴더 경로 조합
-	std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + imageExtension;
+	std::pair<std::wstring, std::wstring> path = FileHelper::ExtractFileNameAndExtension(files[frameIndex]);
+	std::wstring folderPath = path.first; std::wstring fileName = path.second;
+	std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + imageExtension; // 최종 출력 폴더 경로 조합
 
 	std::shared_ptr<ID2D1Bitmap1> temp = PackageResourceManager::GetInstance().CreateBitmapFromFile(parentDir.c_str());
 	if (m_bitmaps.size() <= frameIndex)
@@ -178,7 +160,6 @@ void BackGroundComponent::Release()
 
 void BackGroundComponent::Render()
 {
-	__super::Render();
 	if (files.empty()) return;
 	if (m_bitmaps.size() <= m_curClip)
 	{
@@ -190,39 +171,14 @@ void BackGroundComponent::Render()
 	}
 	if (m_bitmaps.empty()) return;
 	if (m_bitmaps[m_curClip] == nullptr) return;
-
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	Camera* camera = SceneManager::GetCamera();
-	bmpSize = m_bitmaps[m_curClip]->GetPixelSize(); // 비트맵 크기 및 피벗
-	D2D1_POINT_2F pivotOffset = {
-		bmpSize.width * 0.5f,
-		bmpSize.height * 0.5f
-	};
-	if (auto pivot = GetPivot()) {
-		pivotOffset = {
-			bmpSize.width * pivot->x,
-			bmpSize.height * pivot->y
-		};
-	}
-	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
+	if (!context) return;
 
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity;
-	}
+	__super::Render();
 
-	// 로컬 피벗 기준 월드 변환, 카메라 역행렬 적용
-	cameraInv.Invert();
-	view = view * world * cameraInv;
-
-	// Unity 좌표계면 변환 추가
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
-	}
+	D2D1::Matrix3x2F backToD2DTransform = D2D1::Matrix3x2F::Translation(-GetBitmapSizeX() / 2, -GetBitmapSizeY() / 2);
+	D2D1::Matrix3x2F pivotTransform = D2D1::Matrix3x2F::Translation((GetBitmapSizeX() / 2) * (GetPivot()->x - 0.5f), (GetBitmapSizeY() / 2) * (GetPivot()->y - 0.5f));
+	context->SetTransform(backToD2DTransform * pivotTransform * view);
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)
 	context->SetTransform(view);
