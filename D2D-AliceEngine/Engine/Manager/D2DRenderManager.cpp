@@ -106,7 +106,7 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	CreateSwapChainAndD2DTarget();
 
 	// 7. SpriteBatch »ý¼º
-	hr = m_d2dDeviceContext->CreateSpriteBatch(g_spriteBatch.GetAddressOf());
+	hr = m_d2dDeviceContext->CreateSpriteBatch(m_spriteBatch.GetAddressOf());
 	assert(SUCCEEDED(hr));
 
 	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
@@ -121,7 +121,7 @@ void D2DRenderManager::UnInitialize()
 
 	// For DrawText
 	m_dWriteFactory = nullptr;
-	g_spriteBatch = nullptr;
+	m_spriteBatch = nullptr;
 }
 
 void D2DRenderManager::GetApplicationSize(int& width, int& height)

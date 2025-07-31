@@ -56,46 +56,54 @@ void TileMapComponent::LoadMapData(const std::wstring& path)
 
 void TileMapComponent::CreatetileRenderers()
 {
-	for (const auto& layer : tilemap.layers)
-	{
-		if (!layer.visible) continue; // 레이어가 비활성화된 경우 건너뛰기
-		int widthCount = 0;
-		for (int row = 0; row < layer.height; ++row)
-		{
-			for (int col = 0; col < layer.width; ++col)
-			{
-				int index = row * layer.width + col;
-				int gid = layer.data[index];
-				if (gid == 0) continue; // 빈 타일은 건너뛰기
-				if ((col * tileset.tilewidth) % Define::SCREEN_WIDTH == 0)
-				{
-					widthCount++;
-				}
-				gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
-				// x는 실제 위치를 그대로 그려야하고, y는 d2d->unity 좌표계 변환에서 y축 반전이 있으므로 절반에서 빼기
-				//int tileX = (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
-				float tileX = tileset.tileheight * std::tan(skewAngle * (Define::PI / 180)) * (float)row + (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
-				//float tileY = Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height));
-				float tileY = (layer.height - 1 - row) * tileset.tileheight - Define::SCREEN_HEIGHT * 0.5f;
-				go->transform()->SetPosition(FVector2(tileX, tileY));
+	gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
+	TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
+	tileRenderer->m_layer = 100;
+	tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
+	//tileRenderer->SetSkew(skewAngle);
+	//tileRenderer->SetSkew(skewAngle);
+	tileRenderer->SetMapInfo(tilemap, tileset);
 
-				TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
-				tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
-				//tileRenderer->m_layer = row + 100;
-				tileRenderer->SetSkew(true, FVector2(skewAngle, 0.0f));
-				
-				float gidRow = (gid-1) / tileset.columns;
-				float gidCol = (gid-1) % tileset.columns;
-				float x = gidCol * tileset.tilewidth;
-				float y = gidRow * tileset.tileheight;
-				float width = tileset.tilewidth;
-				float height = tileset.tileheight;
-				tileRenderer->SetSlice(x, y, width, height);
-
-				m_TileRenderers.push_back(tileRenderer);
-			}
-		}
-	}
+	//for (const auto& layer : tilemap.layers)
+	//{
+	//	if (!layer.visible) continue; // 레이어가 비활성화된 경우 건너뛰기
+	//	int widthCount = 0;
+	//	for (int row = 0; row < layer.height; ++row)
+	//	{
+	//		for (int col = 0; col < layer.width; ++col)
+	//		{
+	//			int index = row * layer.width + col;
+	//			int gid = layer.data[index];
+	//			if (gid == 0) continue; // 빈 타일은 건너뛰기
+	//			if ((col * tileset.tilewidth) % Define::SCREEN_WIDTH == 0)
+	//			{
+	//				widthCount++;
+	//			}
+	//			gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
+	//			// x는 실제 위치를 그대로 그려야하고, y는 d2d->unity 좌표계 변환에서 y축 반전이 있으므로 절반에서 빼기
+	//			//int tileX = (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
+	//			float tileX = tileset.tileheight * std::tan(skewAngle * (Define::PI / 180)) * (float)row + (float)col * tileset.tilewidth - 0.5f * Define::SCREEN_WIDTH;
+	//			//float tileY = Define::SCREEN_HEIGHT * (0.5f - ((float)row / layer.height));
+	//			float tileY = (layer.height - 1 - row) * tileset.tileheight - Define::SCREEN_HEIGHT * 0.5f;
+	//			go->transform()->SetPosition(FVector2(tileX, tileY));
+	//
+	//			TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
+	//			tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
+	//			//tileRenderer->m_layer = row + 100;
+	//			tileRenderer->SetSkew(true, FVector2(skewAngle, 0.0f));
+	//			
+	//			float gidRow = (gid-1) / tileset.columns;
+	//			float gidCol = (gid-1) % tileset.columns;
+	//			float x = gidCol * tileset.tilewidth;
+	//			float y = gidRow * tileset.tileheight;
+	//			float width = tileset.tilewidth;
+	//			float height = tileset.tileheight;
+	//			tileRenderer->SetSlice(x, y, width, height);
+	//
+	//			m_TileRenderers.push_back(tileRenderer);
+	//		}
+	//	}
+	//}
 }
 
 void TileMapComponent::Release()
