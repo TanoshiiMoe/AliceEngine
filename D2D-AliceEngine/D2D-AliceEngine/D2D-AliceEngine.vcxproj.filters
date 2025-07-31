@@ -97,6 +97,12 @@
     <ClInclude Include="Scripts\Truck.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\TitleUIScript.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -166,6 +172,12 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Truck.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\TitleUIScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>

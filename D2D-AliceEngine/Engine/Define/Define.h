@@ -92,6 +92,21 @@ namespace Define
 	enum class ERigidBodyType { Dynamic, Kinematic, Static, Max };
 
 	enum class ERigidBodyState { Space, Ground, OnRigidBody, Max};
+
+	// for UI
+	enum class EUIScreenAnchor
+	{
+		TopLeft,
+		TopCenter,
+		TopRight,
+		MiddleLeft,
+		MiddleCenter,
+		MiddleRight,
+		BottomLeft,
+		BottomCenter,
+		BottomRight
+	};
+	enum class EButtonState { Idle, Hover, Pressed};
 };
 
 #define VK_A 0x41  // 'A'
