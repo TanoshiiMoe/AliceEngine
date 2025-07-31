@@ -18,6 +18,7 @@ public:
 	void Release() override;
 
 	void SetBoxSize(const FVector2& _size);
+	void SetBoxPosition(const FVector2& _pos);
 	void SetBoxColor(const FColor _color);
 	void UpdateAABB();
 
