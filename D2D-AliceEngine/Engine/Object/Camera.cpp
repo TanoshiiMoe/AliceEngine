@@ -84,3 +84,63 @@ void Camera::ClearOwner()
 {
 	owner = nullptr;
 }
+
+D2D1_POINT_2F Camera::TransformPoint(const D2D1_MATRIX_3X2_F& mat, const D2D1_POINT_2F& pt)
+{
+	return {
+		pt.x * mat.m11 + pt.y * mat.m21 + mat.dx,
+		pt.x * mat.m12 + pt.y * mat.m22 + mat.dy
+	};
+}
+
+D2D1_POINT_2F Camera::ViewportToWorldPoint(const D2D1_POINT_2F& viewport)
+{
+	float screenX = viewport.x * Define::SCREEN_WIDTH;
+	float screenY = viewport.y * Define::SCREEN_HEIGHT;
+	return ScreenToWorldPoint({ screenX, screenY });
+}
+
+D2D1_POINT_2F Camera::WorldToViewportPoint(const D2D1_POINT_2F& world)
+{
+	D2D1_POINT_2F screen = WorldToScreenPoint(world);
+	return {
+		screen.x / Define::SCREEN_WIDTH,
+		screen.y / Define::SCREEN_HEIGHT
+	};
+}
+
+D2D1_POINT_2F Camera::ScreenToWorldPoint(const D2D1_POINT_2F& screenPos)
+{
+	const float fov = fieldOfView;
+	FVector2 scale = GetScale();
+	if (scale.x == 0.0f) scale.x = 1.0f;
+	if (scale.y == 0.0f) scale.y = 1.0f;
+
+	D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+
+	mat = mat * D2D1::Matrix3x2F::Scale(1.f, -1.f);
+	mat = mat * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
+	mat = mat * D2D1::Matrix3x2F::Scale(fov * scale.x, fov * scale.y);
+	mat = mat * m_transform->ToMatrix();
+
+	BOOL success = D2D1InvertMatrix(&mat);
+
+	return TransformPoint(mat, screenPos);
+}
+
+D2D1_POINT_2F Camera::WorldToScreenPoint(const D2D1_POINT_2F& world)
+{
+	const float fov = fieldOfView;
+	FVector2 scale = GetScale();
+	if (scale.x == 0.0f) scale.x = 1.0f;
+	if (scale.y == 0.0f) scale.y = 1.0f;
+
+	D2D1_MATRIX_3X2_F mat = D2D1::Matrix3x2F::Identity();
+
+	mat = mat * m_transform->ToMatrix();
+	mat = mat * D2D1::Matrix3x2F::Scale(fov * scale.x, fov * scale.y);
+	mat = mat * D2D1::Matrix3x2F::Scale(1.f, -1.f);
+	mat = mat * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
+
+	return TransformPoint(mat, world);
+}

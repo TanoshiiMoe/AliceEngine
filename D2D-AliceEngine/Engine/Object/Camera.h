@@ -34,6 +34,15 @@ public:
 	void SetOwner(gameObject* obj);
 	void ClearOwner();
 
+	D2D1_POINT_2F TransformPoint(const D2D1_MATRIX_3X2_F& mat, const D2D1_POINT_2F& pt);
+
+	// 좌표 변환 함수들
+	D2D1_POINT_2F ViewportToWorldPoint(const D2D1_POINT_2F& viewport);
+	D2D1_POINT_2F WorldToViewportPoint(const D2D1_POINT_2F& world);
+
+	D2D1_POINT_2F ScreenToWorldPoint(const D2D1_POINT_2F& screenPos);
+	D2D1_POINT_2F WorldToScreenPoint(const D2D1_POINT_2F& world);
+
 	void SetFieldOfView(float& InFieldOfView) { fieldOfView = InFieldOfView; }
 	float fieldOfView = 1.0f;
 	gameObject* owner = nullptr;
