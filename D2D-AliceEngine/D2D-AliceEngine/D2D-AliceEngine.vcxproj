@@ -161,6 +161,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Battery.h" />
     <ClInclude Include="Scripts\Audio.h" />
     <ClInclude Include="Scene\DemoScene4.h" />
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h" />
@@ -188,6 +189,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Truck.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Battery.cpp" />
     <ClCompile Include="Scripts\Audio.cpp" />
     <ClCompile Include="d2dengine_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -197,7 +199,6 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scene\ExampleScene\ExampleScene.cpp" />
     <ClCompile Include="Scripts\Enemy.cpp" />
     <ClCompile Include="Scene\DemoScene3.cpp" />
-    <ClCompile Include="Scripts\Player.cpp" />
     <ClCompile Include="Scripts\Aru2.cpp" />
     <ClCompile Include="Scripts\Example\ScriptExample.cpp" />
     <ClCompile Include="Scripts\CameraController.cpp" />
@@ -210,6 +211,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scene\DemoScene.cpp" />
     <ClCompile Include="DemoGameApp.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scripts\Player.cpp" />
     <ClCompile Include="Scripts\Sun.cpp" />
     <ClCompile Include="Scripts\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
