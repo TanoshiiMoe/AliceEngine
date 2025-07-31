@@ -13,6 +13,7 @@ UIText::UIText()
 {
 	m_color = FColor::Black;
 	drawType = EDrawType::ScreenSpace;
+	m_layer = 1000;
 }
 
 UIText::UIText(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
@@ -21,6 +22,7 @@ UIText::UIText(const std::wstring& content = L"", const FColor& color = FColor::
 	m_color = color;
 	m_font = font;
 	m_fontSize = fontSize;
+	m_layer = 1000;
 	InitializeFormat();
 	InitializeColor();
 	InitializeLayout();
@@ -193,6 +195,135 @@ void UIText::SetPosition(const FVector2& pos)
 void UIText::SetTransformType(const ETransformType& type)
 {
 	m_eTransformType = type;
+}
+
+void UIText::SetPivot(float _x, float _y)
+{
+	owner->transform()->SetPivot(_x, _y);
+}
+
+void UIText::SetAnchor(EUIScreenAnchor anchor, const FVector2& offset)
+{
+	m_anchor = anchor;
+
+	FVector2 pos = FVector2(0 ,0);
+	SetPivot(0, 0);
+
+	switch (anchor)
+	{
+	case EUIScreenAnchor::TopLeft:
+		break;
+
+	case EUIScreenAnchor::TopCenter:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, 0);
+		SetPivot(0.5f, 0);
+		break;
+
+	case EUIScreenAnchor::TopRight:
+		pos = FVector2(SCREEN_WIDTH, 0);
+		SetPivot(1, 0);
+		break;
+
+	case EUIScreenAnchor::MiddleLeft:
+		pos = FVector2(0, SCREEN_HEIGHT / 2.0f);
+		SetPivot(0, 0.5f);
+		break;
+
+	case EUIScreenAnchor::MiddleCenter:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
+		SetPivot(0.5f, 0.5f);
+		break;
+
+	case EUIScreenAnchor::MiddleRight:
+		pos = FVector2(SCREEN_WIDTH, SCREEN_HEIGHT / 2.0f);
+		SetPivot(1, 0.5f);
+		break;
+
+	case EUIScreenAnchor::BottomLeft:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT);
+		SetPivot(0, 1);
+		break;
+
+	case EUIScreenAnchor::BottomCenter:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT);
+		// 이론상으로는 위 코드가 맞는데, 추후 확인 예정
+		//pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 100);
+		SetPivot(0.5f, 1);
+		break;
+
+	case EUIScreenAnchor::BottomRight:
+		pos = FVector2(SCREEN_WIDTH, SCREEN_HEIGHT);
+		SetPivot(1, 1);
+		break;
+
+	default:
+		break;
+	}
+
+	//Offset은 D2D좌표계를 사용합니다.
+	SetPosition(pos + offset);
+}
+
+void UIText::SetAnchor(EUIScreenAnchor anchor, const float& offsetX, const float& offsetY)
+{
+	m_anchor = anchor;
+
+	FVector2 pos = FVector2(0, 0);
+	SetPivot(0, 0);
+
+	switch (anchor)
+	{
+	case EUIScreenAnchor::TopLeft:
+		break;
+
+	case EUIScreenAnchor::TopCenter:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, 0);
+		SetPivot(0.5f, 0);
+		break;
+
+	case EUIScreenAnchor::TopRight:
+		pos = FVector2(SCREEN_WIDTH, 0);
+		SetPivot(1, 0);
+		break;
+
+	case EUIScreenAnchor::MiddleLeft:
+		pos = FVector2(0, SCREEN_HEIGHT / 2.0f);
+		SetPivot(0, 0.5f);
+		break;
+
+	case EUIScreenAnchor::MiddleCenter:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f);
+		SetPivot(0.5f, 0.5f);
+		break;
+
+	case EUIScreenAnchor::MiddleRight:
+		pos = FVector2(SCREEN_WIDTH, SCREEN_HEIGHT / 2.0f);
+		SetPivot(1, 0.5f);
+		break;
+
+	case EUIScreenAnchor::BottomLeft:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT);
+		SetPivot(0, 1);
+		break;
+
+	case EUIScreenAnchor::BottomCenter:
+		pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT);
+		// 이론상으로는 위 코드가 맞는데, 추후 확인 예정
+		//pos = FVector2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 100);
+		SetPivot(0.5f, 1);
+		break;
+
+	case EUIScreenAnchor::BottomRight:
+		pos = FVector2(SCREEN_WIDTH, SCREEN_HEIGHT);
+		SetPivot(1, 1);
+		break;
+
+	default:
+		break;
+	}
+
+	//Offset은 D2D좌표계를 사용합니다.
+	SetPosition(pos + FVector2(offsetX, offsetY));
 }
 
 void UIText::InitializeFormat()

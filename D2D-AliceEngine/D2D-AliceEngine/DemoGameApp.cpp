@@ -7,6 +7,9 @@
 #include <Manager/SceneManager.h>
 #include <Manager/TimerManager.h>
 
+/*-----이제 인게임씬을 추가합니다-----*/
+#include "Scene/TitleScene.h"
+
 DemoGameApp::DemoGameApp()
 {
 
@@ -25,7 +28,8 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
 	SceneManager::AddScene<DemoScene4>(L"HiroScene");
-	SceneManager::ChangeScene(L"HiroScene");
+	SceneManager::AddScene<TitleScene>(L"TitleScene");
+	SceneManager::ChangeScene(L"TitleScene");
 }
 
 void DemoGameApp::Run()
