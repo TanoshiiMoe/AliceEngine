@@ -33,14 +33,14 @@ void Player::Initialize()
 void Player::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
 
 }
 
 void Player::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
 
 	if (Input::IsKeyPressed(VK_Q))
 	{
@@ -81,7 +81,7 @@ void Player::Update(const float& deltaSeconds)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
 		else
 			m_owner->GetComponent<SkewTransform>()->zPos -= speed;
-			//m_owner->transform()->AddPosition(0, -speed);
+		//m_owner->transform()->AddPosition(0, -speed);
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
@@ -89,9 +89,9 @@ void Player::Update(const float& deltaSeconds)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
 		else
 			m_owner->GetComponent<SkewTransform>()->zPos += speed;
-			//m_owner->transform()->AddPosition(0, speed);
+		//m_owner->transform()->AddPosition(0, speed);
 	}
-	// ì í”„ ì¹´ìš´íŠ¸ ë¦¬ì…‹: ë•…ì— ë‹¿ìœ¼ë©´ jumpCount = 0
+	// Á¡ÇÁ Ä«¿îÆ® ¸®¼Â: ¶¥¿¡ ´êÀ¸¸é jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
 	if (rb)
 	{
@@ -99,7 +99,7 @@ void Player::Update(const float& deltaSeconds)
 			rb->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody);
 		if (isGround && prevGroundState == 0)
 		{
-			jumpCount = 0; // ë•…ì— ì²˜ìŒ ë‹¿ì•˜ì„ ë•Œë§Œ ë¦¬ì…‹
+			jumpCount = 0; // ¶¥¿¡ Ã³À½ ´ê¾ÒÀ» ¶§¸¸ ¸®¼Â
 		}
 		prevGroundState = isGround ? 1 : 0;
 	}
@@ -128,7 +128,7 @@ void Player::Update(const float& deltaSeconds)
 void Player::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
 
 }
 
@@ -138,14 +138,14 @@ void Player::Awake()
 
 void Player::OnStart()
 {
-	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
 	m_owner = GetOwner();
 
 	m_owner->transform()->SetPosition(0, 0);
 	m_owner->transform()->SetRotation(0);
 	m_owner->transform()->SetScale(1.5f, 1.5f);
 	m_owner->transform()->SetPivot(0.5f);
-	
+
 	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
 	animInstance = m_owner->AddComponent<AnimatorInstance>();
 	animInstance->SetAnimatorController(&animController);
@@ -159,7 +159,7 @@ void Player::OnStart()
 	animInstance->m_layer = 5;
 	animInstance->OnStart();
 
-	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35,60));
+	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
 	m_owner->AddComponent<Rigidbody2D>();
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
@@ -176,13 +176,13 @@ void Player::OnStart()
 	/*m_background->AddComponent<BackGroundComponent>();
 	m_background->transform()->SetPosition(m_owner->transform()->GetPosition().x, Define::SCREEN_HEIGHT);*/
 
-	// ì‚°ë°ë¹„ìŠ¤íƒ„ í…ŒìŠ¤íŠ¸
+	// »êµ¥ºñ½ºÅº Å×½ºÆ®
 	m_owner->AddComponent<Prism>(10, 0.1f);
 }
 
 void Player::OnEnd()
 {
-	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
 	//m_owner->GetComponent<Collider>()->SetBoxSize(FVector2(55, 90));
 }
 
@@ -192,7 +192,7 @@ void Player::OnDestroy()
 
 void Player::Input()
 {
-	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
 
 	if (Input::IsKeyDown(VK_K))
 	{
@@ -284,14 +284,14 @@ void Player::Input()
 	{
 		if (jumpCount < maxJumpCount)
 		{
-			if(m_owner->GetComponent<Rigidbody2D>())
+			if (m_owner->GetComponent<Rigidbody2D>())
 				m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 720);
 			jumpCount++;
 		}
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
 	}
 
-	// ì‚°ë°ë¹„ìŠ¤íƒ„ í…ŒìŠ¤íŠ¸
+	// »êµ¥ºñ½ºÅº Å×½ºÆ®
 	if (Input::IsKeyPressed(VK_G)) {
 		if (auto prism = m_owner->GetComponent<Prism>())
 			prism->SetActive(!prism->IsActive());
@@ -300,36 +300,36 @@ void Player::Input()
 
 void Player::OnCollisionEnter2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionEnter2D í˜¸ì¶œë¨" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionEnter2D í˜¸ì¶œë¨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionEnter2D È£ÃâµÊ" << std::endl;
+	OutputDebugStringW((L"[Player] OnCollisionEnter2D È£ÃâµÊ" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionStay2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionStay2D í˜¸ì¶œë¨" << std::endl;
-    //OutputDebugStringW((L"[Player] OnCollisionStay2D í˜¸ì¶œë¨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionStay2D È£ÃâµÊ" << std::endl;
+	//OutputDebugStringW((L"[Player] OnCollisionStay2D È£ÃâµÊ" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionExit2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionExit2D í˜¸ì¶œë¨" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionExit2D í˜¸ì¶œë¨" + std::to_wstring(ExitIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionExit2D È£ÃâµÊ" << std::endl;
+	OutputDebugStringW((L"[Player] OnCollisionExit2D È£ÃâµÊ" + std::to_wstring(ExitIndex++) + L"\n").c_str());
 }
 
 void Player::OnTriggerEnter2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerEnter2D í˜¸ì¶œë¨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerEnter2D í˜¸ì¶œë¨\n");
+	std::cout << "[Player] OnTriggerEnter2D È£ÃâµÊ" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerEnter2D È£ÃâµÊ\n");
 }
 
 void Player::OnTriggerStay2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerStay2D í˜¸ì¶œë¨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerStay2D í˜¸ì¶œë¨\n");
+	std::cout << "[Player] OnTriggerStay2D È£ÃâµÊ" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerStay2D È£ÃâµÊ\n");
 }
 
 void Player::OnTriggerExit2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerExit2D í˜¸ì¶œë¨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerExit2D í˜¸ì¶œë¨\n");
+	std::cout << "[Player] OnTriggerExit2D È£ÃâµÊ" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerExit2D È£ÃâµÊ\n");
 }

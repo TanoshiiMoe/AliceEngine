@@ -52,10 +52,8 @@ void DemoScene4::OnEnter()
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraController>();
 
-
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
-	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 
 	m_bg = NewObject<gameObject>(L"BackGround");
 	m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
@@ -67,15 +65,13 @@ void DemoScene4::OnEnter()
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
+	/*m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/tutorial.tmj");
+	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");*/
 	m_tile->GetComponent<TileMapComponent>()->SetSkew(30);
 	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
 	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
 	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
 	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
-
-	m_player = NewObject<gameObject>(L"Player");
-	m_player->AddComponent<Player>();
-	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 	
 	// SkewTransform 테스트
 	m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
@@ -84,7 +80,6 @@ void DemoScene4::OnEnter()
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
-	
 	
 	// UI 추가
 	m_UI = NewObject<gameObject>(L"ad");
