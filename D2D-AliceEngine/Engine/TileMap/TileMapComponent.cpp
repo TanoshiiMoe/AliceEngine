@@ -62,6 +62,7 @@ void TileMapComponent::CreatetileRenderers()
 	tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
 	tileRenderer->SetSkew(skewAngle);
 	tileRenderer->SetMapInfo(tilemap, tileset);
+	go->transform()->SetPosition(tileRenderer->GetBitmapSizeX() / 2, 0);
 }
 
 void TileMapComponent::Release()
