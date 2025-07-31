@@ -9,6 +9,7 @@
 #include <Core/Input.h>
 #include <Component/VideoComponent.h>
 #include <System/ScriptSystem.h>
+#include <TileMap/TileMapComponent.h>
 
 void BackGroundVideo::Initialize()
 {
@@ -26,7 +27,8 @@ void BackGroundVideo::Update(const float& deltaSeconds)
 	FVector2 myPos = m_owner->transform()->GetPosition();
 
 	FVector2 size = m_owner->GetComponent<BackGroundComponent>()->GetSize();
-	m_owner->transform()->SetPosition(playerPos.x - size.x / 2, size.y / 2);
+
+	m_owner->transform()->SetPosition(playerPos.x - size.x / 2, (size.y /*+ 타일맵 이미지 사이즈*/) / 2);
 
 	//m_owner->transform()->SetPosition(playerPos.x, Define::SCREEN_HEIGHT);
 }
