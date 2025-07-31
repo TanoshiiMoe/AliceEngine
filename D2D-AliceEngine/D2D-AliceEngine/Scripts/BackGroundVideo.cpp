@@ -25,10 +25,9 @@ void BackGroundVideo::Update(const float& deltaSeconds)
 	FVector2 playerPos = m_player->transform()->GetPosition();
 	FVector2 myPos = m_owner->transform()->GetPosition();
 
-	
-	float size = m_owner->GetComponent<BackGroundComponent>()->GetBitmapSizeX();
+	FVector2 size = m_owner->GetComponent<BackGroundComponent>()->GetSize();
+	m_owner->transform()->SetPosition(playerPos.x - size.x / 2, size.y / 2);
 
-	m_owner->transform()->SetPosition(playerPos.x - size / 2, 550);
 	//m_owner->transform()->SetPosition(playerPos.x, Define::SCREEN_HEIGHT);
 }
 
