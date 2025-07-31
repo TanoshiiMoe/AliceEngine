@@ -24,6 +24,8 @@
 #include <Object/Canvas.h>
 #include <UI/UIButton.h>
 #include <Scripts/CameraController.h>
+#include <Component/SkewTransform.h>
+#include <Effect/Prism.h>
 
 void DemoScene4::Initialize()
 {
@@ -47,14 +49,6 @@ void DemoScene4::OnEnter()
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraController>();
 
-	m_player = NewObject<gameObject>(L"Player");
-	m_player->AddComponent<Player>();
-	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
-
-	// 오디오 추가, 오디오 관련 스크립트 넣기
-	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<Audio>();
-
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
@@ -63,6 +57,19 @@ void DemoScene4::OnEnter()
 	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
 	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
 	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
+
+	m_player = NewObject<gameObject>(L"Player");
+	m_player->AddComponent<Player>();
+	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
+	
+	// SkewTransform 테스트
+	m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
+
+	// 오디오 추가, 오디오 관련 스크립트 넣기
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<Audio>();
+
+	
 	
 	// UI 추가
 	m_UI = NewObject<gameObject>(L"ad");

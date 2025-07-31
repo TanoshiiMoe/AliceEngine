@@ -19,6 +19,7 @@
 #include <Manager/SceneManager.h>
 
 #include <Component/BackGroundComponent.h>
+#include <Component/SkewTransform.h>
 
 void Player::Initialize()
 {
@@ -79,14 +80,16 @@ void Player::Update(const float& deltaSeconds)
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
 		else
-			m_owner->transform()->AddPosition(0, -speed);
+			m_owner->GetComponent<SkewTransform>()->zPos -= speed;
+			//m_owner->transform()->AddPosition(0, -speed);
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
 		else
-			m_owner->transform()->AddPosition(0, speed);
+			m_owner->GetComponent<SkewTransform>()->zPos += speed;
+			//m_owner->transform()->AddPosition(0, speed);
 	}
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
@@ -170,13 +173,11 @@ void Player::OnStart()
 
 	m_owner->AddComponent<InputComponent>()->SetAction(m_owner->GetHandle(), [this]() { Input(); });
 
-	// 산데비스탄 테스트
-	m_owner->AddComponent<Prism>(10, 0.1f);
-
-
-
 	/*m_background->AddComponent<BackGroundComponent>();
 	m_background->transform()->SetPosition(m_owner->transform()->GetPosition().x, Define::SCREEN_HEIGHT);*/
+
+	// 산데비스탄 테스트
+	m_owner->AddComponent<Prism>(10, 0.1f);
 }
 
 void Player::OnEnd()
