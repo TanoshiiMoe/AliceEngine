@@ -18,6 +18,7 @@ public:
 	void LoadFromFolder(const std::wstring& folderPath, int fps, const std::wstring& extension);
 	
 	void LoadFrame(size_t frameIndex);
+	void LoadFrameFromFolder(size_t frameIndex);
 	void Release() override;
 	void Render() override;
 
@@ -43,5 +44,7 @@ public:
 	D2D1_SIZE_U bmpSize;
 
 	gameObject* m_player = nullptr;
+	bool bImage = false;
+	std::wstring imageExtension;
 };
 

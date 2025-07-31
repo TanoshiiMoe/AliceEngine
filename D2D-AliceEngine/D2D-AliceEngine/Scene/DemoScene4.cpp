@@ -57,8 +57,8 @@ void DemoScene4::OnEnter()
 	m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
-	//m_sound = NewObject<gameObject>(L"Sound");
-	//m_sound->AddComponent<Audio>();
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");

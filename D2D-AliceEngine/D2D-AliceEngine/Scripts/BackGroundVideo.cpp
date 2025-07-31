@@ -34,7 +34,8 @@ void BackGroundVideo::OnStart()
 	m_owner = GetOwner();
 	m_owner->transform()->SetScale(0.3f, 0.3f);
 
-	m_owner->AddComponent<BackGroundComponent>()->LoadData(L"BackGround\\Mari_Sportswear.webm", 30, L"jpg", 95, true);
+	//m_owner->AddComponent<BackGroundComponent>()->LoadData(L"BackGround\\Alice.webm", 10, L"jpg", 95, true);
+	m_owner->AddComponent<BackGroundComponent>()->LoadFromFolder(L"BackGround\\Ena", 5, L"png");
 	m_owner->GetComponent<BackGroundComponent>()->Play();
 
 	if (m_player != nullptr)
