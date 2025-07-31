@@ -33,14 +33,14 @@ void Player::Initialize()
 void Player::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ���⿡ FixedUpdate�� ���� ���� �ۼ�
+	// 여기에 FixedUpdate에 대한 로직 작성
 
 }
 
 void Player::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ���⿡ Update�� ���� ���� �ۼ�
+	// 여기에 Update에 대한 로직 작성
 
 	if (Input::IsKeyPressed(VK_Q))
 	{
@@ -91,7 +91,7 @@ void Player::Update(const float& deltaSeconds)
 			m_owner->GetComponent<SkewTransform>()->zPos += speed;
 			//m_owner->transform()->AddPosition(0, speed);
 	}
-	// ���� ī��Ʈ ����: ���� ������ jumpCount = 0
+	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
 	if (rb)
 	{
@@ -99,7 +99,7 @@ void Player::Update(const float& deltaSeconds)
 			rb->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody);
 		if (isGround && prevGroundState == 0)
 		{
-			jumpCount = 0; // ���� ó�� ����� ���� ����
+			jumpCount = 0; // 땅에 처음 닿았을 때만 리셋
 		}
 		prevGroundState = isGround ? 1 : 0;
 	}
@@ -128,7 +128,7 @@ void Player::Update(const float& deltaSeconds)
 void Player::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ���⿡ LateUpdate�� ���� ���� �ۼ�
+	// 여기에 LateUpdate에 대한 로직 작성
 
 }
 
@@ -138,7 +138,7 @@ void Player::Awake()
 
 void Player::OnStart()
 {
-	// ���⿡ OnStart�� ���� ���� �ۼ�
+	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
 
 	m_owner->transform()->SetPosition(0, 0);
@@ -176,13 +176,13 @@ void Player::OnStart()
 	/*m_background->AddComponent<BackGroundComponent>();
 	m_background->transform()->SetPosition(m_owner->transform()->GetPosition().x, Define::SCREEN_HEIGHT);*/
 
-	// �굥��ź �׽�Ʈ
+	// 산데비스탄 테스트
 	m_owner->AddComponent<Prism>(10, 0.1f);
 }
 
 void Player::OnEnd()
 {
-	// ���⿡ OnEnd�� ���� ���� �ۼ�
+	// 여기에 OnEnd에 대한 로직 작성
 	//m_owner->GetComponent<Collider>()->SetBoxSize(FVector2(55, 90));
 }
 
@@ -192,7 +192,7 @@ void Player::OnDestroy()
 
 void Player::Input()
 {
-	// ���⿡ Input�� ���� ���� �ۼ�
+	// 여기에 Input에 대한 로직 작성
 
 	if (Input::IsKeyDown(VK_K))
 	{
@@ -291,7 +291,7 @@ void Player::Input()
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
 	}
 
-	// �굥��ź �׽�Ʈ
+	// 산데비스탄 테스트
 	if (Input::IsKeyPressed(VK_G)) {
 		if (auto prism = m_owner->GetComponent<Prism>())
 			prism->SetActive(!prism->IsActive());
@@ -300,36 +300,36 @@ void Player::Input()
 
 void Player::OnCollisionEnter2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionEnter2D ȣ���" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionEnter2D ȣ���" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+    std::cout << "[Player] OnCollisionEnter2D 호출됨" << std::endl;
+    OutputDebugStringW((L"[Player] OnCollisionEnter2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionStay2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionStay2D ȣ���" << std::endl;
-    //OutputDebugStringW((L"[Player] OnCollisionStay2D ȣ���" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+    std::cout << "[Player] OnCollisionStay2D 호출됨" << std::endl;
+    //OutputDebugStringW((L"[Player] OnCollisionStay2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionExit2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionExit2D ȣ���" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionExit2D ȣ���" + std::to_wstring(ExitIndex++) + L"\n").c_str());
+    std::cout << "[Player] OnCollisionExit2D 호출됨" << std::endl;
+    OutputDebugStringW((L"[Player] OnCollisionExit2D 호출됨" + std::to_wstring(ExitIndex++) + L"\n").c_str());
 }
 
 void Player::OnTriggerEnter2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerEnter2D ȣ���" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerEnter2D ȣ���\n");
+    std::cout << "[Player] OnTriggerEnter2D 호출됨" << std::endl;
+    OutputDebugStringW(L"[Player] OnTriggerEnter2D 호출됨\n");
 }
 
 void Player::OnTriggerStay2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerStay2D ȣ���" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerStay2D ȣ���\n");
+    std::cout << "[Player] OnTriggerStay2D 호출됨" << std::endl;
+    OutputDebugStringW(L"[Player] OnTriggerStay2D 호출됨\n");
 }
 
 void Player::OnTriggerExit2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerExit2D ȣ���" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerExit2D ȣ���\n");
+    std::cout << "[Player] OnTriggerExit2D 호출됨" << std::endl;
+    OutputDebugStringW(L"[Player] OnTriggerExit2D 호출됨\n");
 }

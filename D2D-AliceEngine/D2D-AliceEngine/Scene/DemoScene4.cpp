@@ -52,6 +52,7 @@ void DemoScene4::OnEnter()
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraController>();
 
+
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
