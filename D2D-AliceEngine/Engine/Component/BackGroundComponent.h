@@ -14,7 +14,11 @@ public:
 	void ReleaseFrames();
 
 	void LoadData(const std::wstring& path, const int& fps, const std::wstring& extension = L"jpg", const int& quality = 95, const bool& bIsBackGround = false);
+	
+	void LoadFromFolder(const std::wstring& folderPath, int fps, const std::wstring& extension);
+	
 	void LoadFrame(size_t frameIndex);
+	void LoadFrameFromFolder(size_t frameIndex);
 	void Release() override;
 	void Render() override;
 
@@ -30,11 +34,17 @@ public:
 	void Play() { bPlay = true; }
 	void Stop() { bPlay = false; }
 
+	void SetPlayer(gameObject* player) { m_player = player; }
+
 	size_t m_curClip = 0;
 	size_t m_maxClipSize = 0;
 	bool bPlay = false;
 	float m_fFPSTime = 1.0f / 18.0f;
 	float m_fFPSLastTime = 0;
 	D2D1_SIZE_U bmpSize;
+
+	gameObject* m_player = nullptr;
+	bool bImage = false;
+	std::wstring imageExtension;
 };
 

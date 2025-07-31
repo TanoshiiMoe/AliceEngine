@@ -172,7 +172,7 @@ void VideoComponent::Render()
 
 float VideoComponent::GetBitmapSizeX()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.size() > m_curClip)
 	{
 		return static_cast<float>(bmpSize.width);
 	}
@@ -181,7 +181,7 @@ float VideoComponent::GetBitmapSizeX()
 
 float VideoComponent::GetBitmapSizeY()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.size() > m_curClip)
 	{
 		return static_cast<float>(bmpSize.height);
 	}
@@ -190,7 +190,7 @@ float VideoComponent::GetBitmapSizeY()
 
 FVector2 VideoComponent::GetSize()
 {
-	if (m_bitmaps.empty() == false)
+	if (m_bitmaps.size() > m_curClip)
 	{
 		if (m_bitmaps[m_curClip])
 		{

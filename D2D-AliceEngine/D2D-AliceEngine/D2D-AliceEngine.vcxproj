@@ -185,6 +185,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
+    <ClInclude Include="Scripts\Truck.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scripts\Audio.cpp" />
@@ -212,6 +213,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\Sun.cpp" />
     <ClCompile Include="Scripts\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
+    <ClCompile Include="Scripts\Truck.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

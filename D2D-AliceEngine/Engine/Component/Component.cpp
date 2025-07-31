@@ -5,6 +5,7 @@
 #include <Helpers/StringHelper.h>
 #include <Math/Transform.h>
 #include <Object/Canvas.h>
+#include <Math/Transform.h>
 
 Component::Component()
 {

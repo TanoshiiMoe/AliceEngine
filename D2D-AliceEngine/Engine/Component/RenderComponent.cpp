@@ -74,8 +74,16 @@ void RenderComponent::Render()
 
 	view = D2D1::Matrix3x2F::Scale(scale.x, scale.y) * view;
 
+	// 상대좌표 더 가게 만들기
+	//view = view * relativeTransform.ToMatrix();
+
 	if(drawType == Define::EDrawType::WorldSpace)
 		context->SetTransform(view);
+}
+
+void RenderComponent::SetRelativePosition(const FVector2& _pos)
+{
+	//relativeTransform.SetPosition(_pos.x, _pos.y);
 }
 
 D2D1::Matrix3x2F RenderComponent::GetWorldTransform(D2D1::Matrix3x2F& world)
