@@ -43,6 +43,11 @@ public:
 	D2D1_POINT_2F ScreenToWorldPoint(const D2D1_POINT_2F& screenPos);
 	D2D1_POINT_2F WorldToScreenPoint(const D2D1_POINT_2F& world);
 
+	// D2D ½ºÅ©¸° ÇÈ¼¿ ¡æ UI ÁÂÇ¥°è (0~1, ÁÂÇÏ´Ü ±âÁØ)
+	D2D1_POINT_2F ScreenToUICoord(const D2D1_POINT_2F& screen);
+	// UI ÁÂÇ¥°è (0~1, ÁÂÇÏ´Ü ±âÁØ) ¡æ D2D ½ºÅ©¸° ÇÈ¼¿
+	D2D1_POINT_2F UICoordToScreen(const D2D1_POINT_2F& ui);
+
 	void SetFieldOfView(float& InFieldOfView) { fieldOfView = InFieldOfView; }
 	float fieldOfView = 1.0f;
 	gameObject* owner = nullptr;

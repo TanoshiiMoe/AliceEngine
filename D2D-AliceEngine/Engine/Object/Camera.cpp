@@ -144,3 +144,24 @@ D2D1_POINT_2F Camera::WorldToScreenPoint(const D2D1_POINT_2F& world)
 
 	return TransformPoint(mat, world);
 }
+
+// 실제 위치에서 ui 좌표계로 변환하기
+D2D1_POINT_2F Camera::ScreenToUICoord(const D2D1_POINT_2F& screen)
+{
+	// D2D는 좌상단이 (0,0), 아래로 내려갈수록 y 증가
+	// Unity UI는 좌하단이 (0,0), 위로 올라갈수록 y 증가
+	return {
+		screen.x / static_cast<float>(Define::SCREEN_WIDTH),
+		1.0f - (screen.y / static_cast<float>(Define::SCREEN_HEIGHT))
+	};
+}
+
+// UICoordToScreen({0.5f,0.5f}); 로 쓰면 반환값이 실제 위치.
+D2D1_POINT_2F Camera::UICoordToScreen(const D2D1_POINT_2F& ui)
+{
+	// UI (0~1) → 픽셀 좌표로 변환, Y축 뒤집기
+	return {
+		ui.x * static_cast<float>(Define::SCREEN_WIDTH),
+		(1.0f - ui.y) * static_cast<float>(Define::SCREEN_HEIGHT)
+	};
+}
