@@ -43,30 +43,23 @@ void RenderComponent::Render()
 	Camera* camera = SceneManager::GetCamera();
 	view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F world = D2D1::Matrix3x2F::Identity();
-	GetWorldTransform(world);
-
+	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
-		view = view * unity;
-	}
-
-	// 로컬 피벗 기준 월드 변환, 카메라 역행렬 적용
-	view = view * world;
-	
 	if (drawType == Define::EDrawType::WorldSpace)
 	{
+		view = view * unity;
+		view = view * world; // 로컬 피벗 기준 월드 변환, 카메라 역행렬 적용
 		cameraInv.Invert();
 		view = view * cameraInv;
-	}
-
-	// Unity 좌표계면 변환 추가
-	if (D2DRenderManager::GetInstance().m_eTransformType == ETransformType::Unity)
-	{
+		// Unity 좌표계면 변환 추가
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}
+	else if (drawType == Define::EDrawType::ScreenSpace)
+	{
+		view = view * world;
+	}
+
 	if (bFlip)
 	{
 		view = D2D1::Matrix3x2F::Scale(-1.f, 1.f) * view;
@@ -74,28 +67,5 @@ void RenderComponent::Render()
 
 	view = D2D1::Matrix3x2F::Scale(scale.x, scale.y) * view;
 
-	// 상대좌표 더 가게 만들기
-	//view = view * relativeTransform.ToMatrix();
-
-	if(drawType == Define::EDrawType::WorldSpace)
-		context->SetTransform(view);
+	context->SetTransform(view);
 }
-
-void RenderComponent::SetRelativePosition(const FVector2& _pos)
-{
-	//relativeTransform.SetPosition(_pos.x, _pos.y);
-}
-
-D2D1::Matrix3x2F RenderComponent::GetWorldTransform(D2D1::Matrix3x2F& world)
-{
-	if (drawType == Define::EDrawType::WorldSpace)
-	{
-		world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	}
-	else if (drawType == Define::EDrawType::ScreenSpace)
-	{
-		world = GetCanvasTransform() ? GetCanvasTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	}
-	return world;
-}
-
