@@ -161,13 +161,14 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Scripts\Battery.h" />
+    <ClInclude Include="Scripts\Bike\LaneController.h" />
+    <ClInclude Include="Scripts\Bike\Battery.h" />
     <ClInclude Include="Scripts\Audio.h" />
     <ClInclude Include="Scene\DemoScene4.h" />
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h" />
     <ClInclude Include="Scripts\Enemy.h" />
     <ClInclude Include="Scene\DemoScene3.h" />
-    <ClInclude Include="Scripts\Health.h" />
+    <ClInclude Include="Scripts\Bike\Health.h" />
     <ClInclude Include="Scripts\Player.h" />
     <ClInclude Include="Scripts\Aru2.h" />
     <ClInclude Include="Scripts\Example\ScriptExample.h" />
@@ -192,7 +193,9 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\TitleUIScript.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scripts\Battery.cpp" />
+    <ClCompile Include="Scripts\Player.cpp" />
+    <ClCompile Include="Scripts\Bike\LaneController.cpp" />
+    <ClCompile Include="Scripts\Bike\Battery.cpp" />
     <ClCompile Include="Scripts\Audio.cpp" />
     <ClCompile Include="d2dengine_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -208,14 +211,13 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\BackGroundImage.cpp" />
     <ClCompile Include="Scripts\BackGroundVideo.cpp" />
     <ClCompile Include="Scripts\Aru.cpp" />
-    <ClCompile Include="Scripts\Health.cpp" />
+    <ClCompile Include="Scripts\Bike\Health.cpp" />
     <ClCompile Include="Scripts\Moon.cpp" />
     <ClCompile Include="Scripts\Earth.cpp" />
     <ClCompile Include="Scene\DemoScene2.cpp" />
     <ClCompile Include="Scene\DemoScene.cpp" />
     <ClCompile Include="DemoGameApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scripts\Player.cpp" />
     <ClCompile Include="Scripts\Sun.cpp" />
     <ClCompile Include="Scripts\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
