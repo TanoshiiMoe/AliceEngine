@@ -20,7 +20,7 @@ void ScriptExample::Initialize()
 	REGISTER_SCRIPT_METHOD(OnEnd);
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 
-	REGISTER_UPDATE_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
 }
 
 void ScriptExample::FixedUpdate(const float& deltaSeconds)

@@ -25,7 +25,7 @@ void Prism::Initialize()
 	}
 
 	// 다음 프레임의 첫 시작시에 바로 생성시켜서 트랜스폼의 지연을 막기
-	REGISTER_UPDATE_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
 }
 
 void Prism::Update(const float& deltaSeconds)

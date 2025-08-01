@@ -48,7 +48,7 @@ void LaneController::RemoveAction(ObjectHandle _handle, ActionType _type)
 void LaneController::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_UPDATE_TASK(Update, Define::ETickingGroup::TG_PostPhysics);
+	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
 }
 
 void LaneController::OnStart()

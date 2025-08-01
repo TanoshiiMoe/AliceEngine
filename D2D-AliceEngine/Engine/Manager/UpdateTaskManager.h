@@ -6,8 +6,9 @@
 #include <Scene/Scene.h>
 #include <unordered_map>
 #include <Core/Tickable.h>
+#include <Define/Define.h>
 
-#define REGISTER_UPDATE_TASK(FunctionName, TickGroup) \
+#define REGISTER_UPDATE_TASK_IN_SCRIPT(FunctionName, TickGroup) \
 	UpdateTaskManager::GetInstance().Enque( \
 		WeakFromThis<ITickable>(), \
 		TickGroup, \
@@ -19,6 +20,19 @@
 				{ \
 					script->FunctionName(dt); \
 				} \
+			} \
+		} \
+	)
+
+#define REGISTER_TICK_TASK(FunctionName, TickGroup) \
+	UpdateTaskManager::GetInstance().Enque( \
+		WeakFromThis<ITickable>(), \
+		TickGroup, \
+		[weak = WeakFromThis<ITickable>()](const float& dt) \
+		{ \
+			if (auto sp = weak.lock()) \
+			{ \
+				sp->FunctionName(dt); \
 			} \
 		} \
 	)
