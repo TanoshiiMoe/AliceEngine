@@ -20,12 +20,9 @@ public:
 	virtual float GetBitmapSizeX() override;
 	virtual float GetBitmapSizeY() override;
 
-	FVector2 GetSize();
+	FVector2 GetBitmapSize();
 
 	void SetSlice(float x, float y, float w, float h);
-
-	void SetTransform(TransformComponent* transform) { m_transform = transform; }
-
 	void SetSkewing(bool _isSkewing, FVector2 _skewAngle = FVector2(0.0f, 0.0f));
 
 	SpriteInfo spriteInfo; // 스프라이트 정보
@@ -39,6 +36,4 @@ public:
 		float srcW{ -1 }, srcH{ -1 };
 	} slice;
 
-private:
-	TransformComponent* m_transform = nullptr;
 };

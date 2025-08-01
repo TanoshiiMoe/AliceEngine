@@ -14,9 +14,6 @@ TextRenderComponent::TextRenderComponent()
 	m_color = FColor::Black;
 	drawType = EDrawType::ScreenSpace;
 	m_layer = 101;
-	//InitializeFormat();
-	//InitializeColor();
-	//InitializeLayout();
 }
 
 TextRenderComponent::TextRenderComponent(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
@@ -42,17 +39,7 @@ void TextRenderComponent::Initialize()
 	InitializeColor();
 	InitializeLayout();
 
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_PostUpdateWork,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PostUpdateWork);
 }
 
 void TextRenderComponent::Update(const float& deltaSeconds)
@@ -69,43 +56,21 @@ void TextRenderComponent::Render()
 {
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	if (!context || m_content.empty()) return;
-	D2D1::Matrix3x2F view = D2D1::Matrix3x2F::Identity();
-
+	__super::Render();
+	
 	InitializeLayout();
+
+	D2D1::Matrix3x2F viewTransform;
+	context->GetTransform(&viewTransform);
+
 	// 피벗 보정
 	D2D1_POINT_2F pivotOffset = {
 		m_metrics.width * GetPivot()->x,
 		m_metrics.height * GetPivot()->y
 	};
-	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x, -pivotOffset.y);
-
-	// 로컬 변환 먼저 적용 (내부 transform + pivotAdjust)
-	D2D1::Matrix3x2F localTransform =
-		D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
-		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation()) *
-		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
-
-	// 그 뒤에 world, camera 적용
-	// m_pTransform이 계산된 worldTransform의 주소를 가지고 있음
-	if (m_eTransformType == ETransformType::Unity)
-	{
-		D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-		D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-
-		Camera* camera = SceneManager::GetCamera();
-		D2D1::Matrix3x2F cameraInv = camera ? camera->m_transform->ToMatrix() : D2D1::Matrix3x2F::Identity();
-		cameraInv.Invert();
-
-		view = unity * world * cameraInv;
-		view = view * unity * D2D1::Matrix3x2F::Translation(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
-	}
-	else
-	{
-		view = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	}
-
-	D2D1::Matrix3x2F finalTransform = pivotAdjust * localTransform * view;
-	context->SetTransform(finalTransform);
+	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x / 2, -pivotOffset.y / 2);
+	viewTransform = viewTransform * pivotAdjust * m_transform.ToMatrix();
+	context->SetTransform(viewTransform);
 
 	// 그리기
 	context->DrawText(
@@ -143,10 +108,6 @@ void TextRenderComponent::InitializeFormat()
 		L"", //locale
 		&m_dWriteTextFormat
 	);
-
-	// 텍스트를 수평 및 수직으로 중앙에 맞춥니다.
-	m_dWriteTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_JUSTIFIED);
-	m_dWriteTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 }
 
 void TextRenderComponent::InitializeColor()
@@ -228,6 +189,8 @@ void TextRenderComponent::SetTextAlignment(ETextFormat format)
 	default:
 		break;
 	}
+
+	m_metricsDirty = true;
 }
 
 void TextRenderComponent::SetText(const std::wstring& content)
@@ -260,12 +223,7 @@ void TextRenderComponent::SetPosition(const FVector2& pos)
 	m_transform.SetPosition(pos.x, pos.y);
 }
 
-void TextRenderComponent::SetScale(const FVector2& scale)
+void TextRenderComponent::SetIgnoreCameraTransform(bool bIgnore)
 {
-	m_transform.SetScale(scale.x, scale.y);
-}
-
-void TextRenderComponent::SetTransformType(const ETransformType& type)
-{
-	m_eTransformType = type;
+	bIgnoreCameraTransform = bIgnore;
 }

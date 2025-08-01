@@ -28,12 +28,12 @@ void Sun::OnStart()
 	m_sun->transform()->SetPivot(0.5f);
 	m_sun->transform()->SetScale(0.5f);
 	m_sun->AddComponent<TextRenderComponent>()->SetText(m_sun->GetName());
-	m_sun->GetComponent<TextRenderComponent>()->SetTransformType(ETransformType::Unity);
+	m_sun->GetComponent<TextRenderComponent>()->SetDrawType(EDrawType::WorldSpace);
 	m_sun->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_sun->GetComponent<TextRenderComponent>()->SetScale(FVector2(2, 2));
 	m_sun->AddComponent<SpriteRenderer>()->LoadData(L"Sun.png");
-	m_sun->AddComponent<BoxComponent>(m_sun->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
-	m_sun->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_sun->GetComponent<SpriteRenderer>()->GetSize().y * 0.7f));
+	m_sun->AddComponent<BoxComponent>(m_sun->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
+	m_sun->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_sun->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.7f));
 
 	m_sun->AddComponent<InputComponent>()->SetAction(m_sun->GetHandle(),[this]() { Input(); });
 }

@@ -35,6 +35,11 @@ void RenderComponent::Release()
 {
 }
 
+void RenderComponent::SetDrawType(const Define::EDrawType& type)
+{
+	drawType = type;
+}
+
 void RenderComponent::Render()
 {
 	__super::Render();
@@ -44,15 +49,12 @@ void RenderComponent::Render()
 	view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
-
+	
 	if (drawType == Define::EDrawType::WorldSpace)
 	{
-		view = view * unity;
-		view = view * world; // 로컬 피벗 기준 월드 변환, 카메라 역행렬 적용
+		D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
 		cameraInv.Invert();
-		view = view * cameraInv;
-		// Unity 좌표계면 변환 추가
+		view = view * unity * world * cameraInv;
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	}
 	else if (drawType == Define::EDrawType::ScreenSpace)

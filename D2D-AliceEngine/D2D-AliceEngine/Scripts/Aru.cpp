@@ -51,8 +51,9 @@ void Aru::OnStart()
 	m_aru->transform()->SetScale(0.25f, 0.25f);
 	m_aru->transform()->SetPivot(0.5f);
 	m_aru->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
-	m_aru->GetComponent<SpriteRenderer>()->SetSlice(0.0f, 0.0f, 400.0f, 500.0f);
-	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
+	m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
+	m_aru->GetComponent<BoxComponent>()->SetSize(m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize());
+	m_aru->GetComponent<BoxComponent>()->SetIgnoreOwnerScale(false);
 
 	/*
 	* 게임오브젝트에 TextRenderComponent를 붙이는 예시
@@ -60,42 +61,47 @@ void Aru::OnStart()
 
 	TextRenderComponent* m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
 	m_aruTextCmp->SetText(m_aru->GetName());
-	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_aruTextCmp->SetScale(FVector2(3, 3));
-	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.5f));
+	m_aruTextCmp->SetFontSize(24);
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.5f) * m_aru->transform()->GetScale());
 	m_aruNameTexts.push_back(m_aruTextCmp);
 
 	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
 	m_aruTextCmp->SetText(L"test");
-	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_aruTextCmp->SetScale(FVector2(3, 3));
-	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.2f));
+	m_aruTextCmp->SetFontSize(24);
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.2f) * m_aru->transform()->GetScale());
 	m_aruNameTexts.push_back(m_aruTextCmp);
 
 	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
 	m_aruTextCmp->SetText(L"test");
-	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_aruTextCmp->SetScale(FVector2(3, 3));
-	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.3f));
+	m_aruTextCmp->SetFontSize(24);
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.3f) * m_aru->transform()->GetScale());
 	m_aruNameTexts.push_back(m_aruTextCmp);
 
 	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
 	m_aruTextCmp->SetText(L"test");
-	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_aruTextCmp->SetScale(FVector2(3, 3));
-	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.4f));
+	m_aruTextCmp->SetFontSize(24);
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.4f) * m_aru->transform()->GetScale());
 	m_aruNameTexts.push_back(m_aruTextCmp);
 
 	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
 	m_aruTextCmp->SetText(L"test");
-	m_aruTextCmp->SetTransformType(ETransformType::Unity);
+	m_aruTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_aruTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_aruTextCmp->SetScale(FVector2(3, 3));
-	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetSize().y * 0.1f));
+	m_aruTextCmp->SetFontSize(24);
+	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.1f) * m_aru->transform()->GetScale());
 	m_aruNameTexts.push_back(m_aruTextCmp);
 
 
@@ -117,13 +123,13 @@ void Aru::OnStart()
 		{
 			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
 			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"dead.png");
-			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
+			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
 		}
 		else if (oldVal <= 0)	// 부활하는 시점
 		{
 			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
 			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
-			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
+			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
 		}
 		m_aruNameTexts[1]->SetTextFormat(L"직전 체력 : ", oldVal);
 		m_aruNameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);

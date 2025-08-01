@@ -51,8 +51,8 @@ public:
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
 	void SetPosition(const FVector2& pos);
-	void SetScale(const FVector2& scale);
-	void SetTransformType(const ETransformType& type);
+
+	void SetIgnoreCameraTransform(bool bIgnore);
 
 public:
 	ETransformType m_eTransformType = ETransformType::D2D;
@@ -64,5 +64,8 @@ public:
 
 	DWRITE_TEXT_METRICS m_metrics{};
 	bool m_metricsDirty = true;
+
+private:
+	bool bIgnoreCameraTransform = false;
 };
 

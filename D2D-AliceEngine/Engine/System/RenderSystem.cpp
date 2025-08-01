@@ -125,10 +125,9 @@ ViewRect RenderSystem::GetCameraView()
 	FVector2 scale = SceneManager::GetCamera()->GetScale();
 	if (scale.x == 0.0f) scale.x = 1.0f;
 	if (scale.y == 0.0f) scale.y = 1.0f;
-	int screenWidth = 0, screenHeight = 0;
-	D2DRenderManager::GetInstance().GetApplicationSize(screenWidth, screenHeight);
-	const float halfWidth = (screenWidth * 0.5f * fov) * scale.x;
-	const float halfHeight = (screenHeight * 0.5f * fov) * scale.y;
+	FVector2 screen = D2DRenderManager::GetInstance().GetApplicationSize();
+	const float halfWidth = (screen.x * 0.5f * fov) * scale.x;
+	const float halfHeight = (screen.y * 0.5f * fov) * scale.y;
 	return ViewRect{ camX - halfWidth, camX + halfWidth, camY - halfHeight, camY + halfHeight };
 }
 

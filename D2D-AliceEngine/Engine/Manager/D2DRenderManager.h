@@ -23,7 +23,7 @@ public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
 
-	void GetApplicationSize(int& width, int& height);
+	FVector2 GetApplicationSize();
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수
 	void OutputError(HRESULT hr);
 	void DrawDebugBox(const float& startPosX, const float& startPosY, const float& ensPosX, const float& ensPosY, const float& r, const float& g, const float& b, const float& a);
