@@ -167,6 +167,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h" />
     <ClInclude Include="Scripts\Enemy.h" />
     <ClInclude Include="Scene\DemoScene3.h" />
+    <ClInclude Include="Scripts\Health.h" />
     <ClInclude Include="Scripts\Player.h" />
     <ClInclude Include="Scripts\Aru2.h" />
     <ClInclude Include="Scripts\Example\ScriptExample.h" />
@@ -207,6 +208,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\BackGroundImage.cpp" />
     <ClCompile Include="Scripts\BackGroundVideo.cpp" />
     <ClCompile Include="Scripts\Aru.cpp" />
+    <ClCompile Include="Scripts\Health.cpp" />
     <ClCompile Include="Scripts\Moon.cpp" />
     <ClCompile Include="Scripts\Earth.cpp" />
     <ClCompile Include="Scene\DemoScene2.cpp" />
