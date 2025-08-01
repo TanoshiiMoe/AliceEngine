@@ -1,9 +1,11 @@
 #pragma once
 #include <Component/UIComponent.h>
 #include <Animation/TextureLoader.h>
+#include <Define/Define.h>
+#include <Math/Transform.h>
 
 using namespace Microsoft::WRL;
-
+using namespace Define;
 struct ID2D1Bitmap1;
 class UIImage : public UIComponent
 {
@@ -17,6 +19,12 @@ public:
 	void SetScale(const float& _x) { scale = FVector2(_x, _x); }
 
 	void SetPosition(const FVector2& pos);
+	void SetPivot(float _x, float _y);
+	void SetAnchor(EUIScreenAnchor anchor, const FVector2& offset = FVector2(0, 0));
+	void SetAnchor(EUIScreenAnchor anchor, const float& offsetX, const float& offsetY);
+
+	EUIScreenAnchor GetAnchor() { return m_anchor; }
+	EUIScreenAnchor m_anchor = EUIScreenAnchor::TopLeft;
 
 private:
 	/*	º¸·ù

@@ -41,7 +41,6 @@ public:
 	bool bPlay = false;
 	float m_fFPSTime = 1.0f / 18.0f;
 	float m_fFPSLastTime = 0;
-	D2D1_SIZE_U bmpSize;
 
 	gameObject* m_player = nullptr;
 	bool bImage = false;

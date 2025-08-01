@@ -42,10 +42,16 @@ public:
 	void SetPosition(const FVector2& pos);
 	void SetScale(const FVector2& _scale) { scale = _scale; }
 	void SetTransformType(const ETransformType& type);
-
+	void SetPivot(float _x, float _y);
+	void SetAnchor(EUIScreenAnchor anchor, const FVector2& offset = FVector2(0,0));
+	void SetAnchor(EUIScreenAnchor anchor, const float& offsetX, const float& offsetY);
+	
 	ComPtr<IDWriteTextLayout> m_layout;
 	ComPtr<IDWriteTextFormat> m_dWriteTextFormat;
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
+
+	EUIScreenAnchor GetAnchor() { return m_anchor; }
+	EUIScreenAnchor m_anchor = EUIScreenAnchor::TopLeft;
 
 private:
 	void InitializeFormat();

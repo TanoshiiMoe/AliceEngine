@@ -187,6 +187,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
     <ClInclude Include="Scripts\Truck.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Scripts\TitleUIScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scripts\Battery.cpp" />
@@ -216,6 +218,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
     <ClCompile Include="Scripts\Truck.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Scripts\TitleUIScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

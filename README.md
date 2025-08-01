@@ -63,9 +63,12 @@ C++로 구현했으며, 2D 캐릭터 애니메이션, 게임 메커니즘( 게�
 ![image](https://github.com/user-attachments/assets/4eed35f8-791a-41d5-ba9f-167964154676)
 <img width="8364" height="6484" alt="image" src="https://github.com/user-attachments/assets/322820e5-b1b0-452b-88bb-a9552b3e7141" />
 ![image](https://github.com/user-attachments/assets/3ba63e7f-b3b9-4d83-a0e0-b80878f3dca6)
-![image](https://github.com/user-attachments/assets/260f4579-27f2-4a43-a752-69909bf1edaa)
+<img width="12488" height="6844" alt="image" src="https://github.com/user-attachments/assets/68f469f4-3287-4290-8973-de75c8fec962" />
 <img width="5628" height="3728" alt="image" src="https://github.com/user-attachments/assets/d4588b8d-9f20-4be8-85cf-90eb786c03a6" />
 <img width="5604" height="3008" alt="image" src="https://github.com/user-attachments/assets/d4a5fe4d-f989-49a5-9a11-49f6f3d6fa33" />
+
+
+
 
 
 ## 빌드 및 실행

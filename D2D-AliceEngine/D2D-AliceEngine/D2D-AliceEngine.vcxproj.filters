@@ -100,6 +100,12 @@
     <ClInclude Include="Scripts\Battery.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\TitleUIScript.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -170,6 +176,10 @@
     </ClCompile>
     <ClCompile Include="Scripts\Player.cpp" />
     <ClCompile Include="Scripts\Battery.cpp">
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\TitleUIScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>

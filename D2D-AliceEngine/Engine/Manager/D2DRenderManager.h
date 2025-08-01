@@ -41,7 +41,7 @@ public:
 	// For DrawText
 	ComPtr<IDWriteFactory> m_dWriteFactory;
 	// SpriteBatch
-	ComPtr<ID2D1SpriteBatch>    g_spriteBatch;
+	ComPtr<ID2D1SpriteBatch> m_spriteBatch;
 	bool m_resizePending = false;
 
 	// Debug¿ë box

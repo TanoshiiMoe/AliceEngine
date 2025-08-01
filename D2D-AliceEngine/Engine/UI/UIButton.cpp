@@ -3,6 +3,9 @@
 #include <Helpers/FileHelper.h>
 #include <Manager/PackageResourceManager.h>
 #include <Core/Input.h>
+#include <Component/Component.h>
+#include <Manager/SceneManager.h>
+#include <Component/TransformComponent.h>
 
 UIButton::UIButton()
 {
@@ -32,6 +35,121 @@ void UIButton::SetPosition(const FVector2& pos)
     m_transform.SetPosition(pos.x, pos.y);
 }
 
+void UIButton::SetPivot(float _x, float _y)
+{
+    owner->transform()->SetPivot(_x, _y);
+}
+
+void UIButton::SetAnchor(EUIScreenAnchor anchor, const FVector2& offset)
+{
+    m_anchor = anchor;
+
+    FVector2 pos = FVector2(0, 0);
+    SetPivot(0.5f, 0.5f);
+
+    float screenWidth = SCREEN_WIDTH - GetScale().x;
+    float screenHeight = SCREEN_HEIGHT - GetScale().y;
+
+    switch (anchor)
+    {
+    case EUIScreenAnchor::TopLeft:
+        break;
+
+    case EUIScreenAnchor::TopCenter:
+        pos = FVector2(screenWidth / 2.0f, 0);
+        break;
+
+    case EUIScreenAnchor::TopRight:
+        pos = FVector2(screenWidth, 0);
+        break;
+
+    case EUIScreenAnchor::MiddleLeft:
+        pos = FVector2(0, screenHeight / 2.0f);
+        break;
+
+    case EUIScreenAnchor::MiddleCenter:
+        pos = FVector2(screenWidth / 2.0f, screenHeight / 2.0f);
+        break;
+
+    case EUIScreenAnchor::MiddleRight:
+        pos = FVector2(screenWidth, screenHeight / 2.0f);
+        break;
+
+    case EUIScreenAnchor::BottomLeft:
+        pos = FVector2(0, screenHeight);
+        break;
+
+    case EUIScreenAnchor::BottomCenter:
+        pos = FVector2(screenWidth / 2.0f, screenHeight);
+        break;
+
+    case EUIScreenAnchor::BottomRight:
+        pos = FVector2(screenWidth, screenHeight);
+        break;
+
+    default:
+        break;
+    }
+
+    //Offset은 D2D좌표계를 사용합니다.
+    SetPosition(pos + offset);
+}
+
+void UIButton::SetAnchor(EUIScreenAnchor anchor, const float& offsetX, const float& offsetY)
+{
+    m_anchor = anchor;
+
+    FVector2 pos = FVector2(0, 0);
+    SetPivot(0.5f, 0.5f);
+
+    float screenWidth = SCREEN_WIDTH - GetScale().x;
+    float screenHeight = SCREEN_HEIGHT - GetScale().y;
+
+    switch (anchor)
+    {
+    case EUIScreenAnchor::TopLeft:
+        break;
+
+    case EUIScreenAnchor::TopCenter:
+        pos = FVector2(screenWidth / 2.0f, 0);
+        break;
+
+    case EUIScreenAnchor::TopRight:
+        pos = FVector2(screenWidth, 0);
+        break;
+
+    case EUIScreenAnchor::MiddleLeft:
+        pos = FVector2(0, screenHeight / 2.0f);
+        break;
+
+    case EUIScreenAnchor::MiddleCenter:
+        pos = FVector2(screenWidth / 2.0f, screenHeight / 2.0f);
+        break;
+
+    case EUIScreenAnchor::MiddleRight:
+        pos = FVector2(screenWidth, screenHeight / 2.0f);
+        break;
+
+    case EUIScreenAnchor::BottomLeft:
+        pos = FVector2(0, screenHeight);
+        break;
+
+    case EUIScreenAnchor::BottomCenter:
+        pos = FVector2(screenWidth / 2.0f, screenHeight);
+        break;
+
+    case EUIScreenAnchor::BottomRight:
+        pos = FVector2(screenWidth, screenHeight);
+        break;
+
+    default:
+        break;
+    }
+
+    //Offset은 D2D좌표계를 사용합니다.
+    SetPosition(pos + FVector2(offsetX, offsetY));
+}
+
 void UIButton::Update(const float& deltaSeconds)
 {
     __super::Update(deltaSeconds);
@@ -57,18 +175,20 @@ void UIButton::Update(const float& deltaSeconds)
 
         if (mouseDown)
         {
-            m_state = ButtonState::Pressed;
+            m_state = EButtonState::Pressed;
             if (!m_pressedImage.empty())
                 LoadData(m_pressedImage);
         }
         else
         {
-            m_state = ButtonState::Hover;
+            m_state = EButtonState::Hover;
             if (!m_hoverImage.empty())
+            {
                 LoadData(m_hoverImage);
+            }
         }
 
-        if (m_state == ButtonState::Pressed && m_prevMouseDown)
+        if (m_state == EButtonState::Pressed && m_prevMouseDown)
         {
             // 클릭 완료 판정 (눌렀다가 손 뗀 상태)
             if (onClick) onClick();
@@ -76,9 +196,11 @@ void UIButton::Update(const float& deltaSeconds)
     }
     else
     {
-        m_state = ButtonState::Idle;
+        m_state = EButtonState::Idle;
         if (!m_idleImage.empty())
+        {
             LoadData(m_idleImage);
+        }
 
         SetCursor(LoadCursorW(nullptr, IDC_ARROW));
     }

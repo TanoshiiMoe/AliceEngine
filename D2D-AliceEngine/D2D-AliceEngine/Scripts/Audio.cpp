@@ -34,8 +34,23 @@ void Audio::Awake()
 void Audio::OnStart()
 {
 	m_owner = GetOwner();
-	m_owner->AddComponent<AudioComponent>()->Load(L"../Resource/Sound/Umapyoi.mp3", AudioMode::StreamLoop);
-	m_owner->GetComponent<AudioComponent>()->Play(62.5f);
+	//m_owner->AddComponent<AudioComponent>()->Load(L"Umapyoi.mp3", AudioMode::StreamLoop);
+	//m_owner->GetComponent<AudioComponent>()->Play(62.5f);
+
+	m_bgm = m_owner->AddComponent<AudioComponent>();
+	if (m_bgm)
+	{
+		m_bgm->Load(L"Bg_music_tutorial.wav", AudioMode::StreamLoop);
+		m_bgm->Play();
+	}
+
+	m_ambience = m_owner->AddComponent<AudioComponent>();
+	if (m_ambience)
+	{
+		m_ambience->Load(L"BG_Ambience_Loop.wav", AudioMode::StreamLoop);
+		m_ambience->Play();
+	}
+
 	// 음량 조절
 	//m_owner->GetComponent<AudioComponent>()->SetVolume(0.3f);
 }
@@ -43,7 +58,9 @@ void Audio::OnStart()
 void Audio::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
-	m_owner->GetComponent<AudioComponent>()->Stop();
+	m_bgm->Stop();
+	m_ambience->Stop();
+	//m_owner->GetComponent<AudioComponent>()->Stop();
 }
 
 void Audio::OnDestroy()
