@@ -97,11 +97,17 @@
     <ClInclude Include="Scripts\Truck.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Battery.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
     <ClInclude Include="Scripts\TitleUIScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Health.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -147,9 +153,6 @@
     <ClCompile Include="Scripts\Example\ScriptExample.cpp">
       <Filter>Scripts\ScriptExample</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Player.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Enemy.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -174,10 +177,19 @@
     <ClCompile Include="Scripts\Truck.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Player.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Battery.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\TitleUIScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Health.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>

@@ -19,7 +19,7 @@ public:
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
 private:
-	TransformComponent* renderTransform;
+	TransformComponent* renderTransform = nullptr;
 	std::pair<float, float> clamp = { 0.0f, 0.0f };
 
 	FVector2 offset = { 0.0f, 0.0f };
