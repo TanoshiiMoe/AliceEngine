@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -161,7 +161,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Battery.h" />
+    <ClInclude Include="Scripts\Battery.h" />
     <ClInclude Include="Scripts\Audio.h" />
     <ClInclude Include="Scene\DemoScene4.h" />
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h" />
@@ -189,7 +189,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Truck.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Battery.cpp" />
+    <ClCompile Include="Scripts\Battery.cpp" />
     <ClCompile Include="Scripts\Audio.cpp" />
     <ClCompile Include="d2dengine_pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

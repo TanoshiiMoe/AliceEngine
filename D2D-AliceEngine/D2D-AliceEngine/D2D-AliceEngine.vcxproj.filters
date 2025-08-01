@@ -97,8 +97,8 @@
     <ClInclude Include="Scripts\Truck.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Battery.h">
-      <Filter>PreCompiledHeader</Filter>
+    <ClInclude Include="Scripts\Battery.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +169,8 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Player.cpp" />
-    <ClCompile Include="Battery.cpp" />
+    <ClCompile Include="Scripts\Battery.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
