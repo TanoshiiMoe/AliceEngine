@@ -185,6 +185,35 @@ namespace Math
 	{
 		return (v < lo) ? lo : (hi < v) ? hi : v;
 	}
+
+	// EaseInOut
+	inline float EaseInOut(float a, float b, float elapsedTime, float duration) {
+		// 보간 계수 t 계산
+		float t = elapsedTime / duration;
+		t = clamp(t, 0.0f, 1.0f); // 범위 제한
+
+		// EaseInOut 적용 (SmoothStep)
+		float smoothT = t * t * (3.0f - 2.0f * t);
+
+		// 선형 보간
+		return a + (b - a) * smoothT;
+	}
+
+	// EaseOut
+	inline float EaseOut(float a, float b, float elapsedTime, float duration) {
+		float t = elapsedTime / duration;
+		t = clamp(t, 0.0f, 1.0f); // 범위 제한
+
+		// EaseOut: 느려지는 곡선 (예: 1 - (1 - t)^2)
+		float easeT = 1.0f - (1.0f - t) * (1.0f - t);
+
+		return a + (b - a) * easeT;
+	}
+
+	// Approximately
+	inline bool Approximately(float a, float b, float epsilon = 1e-5f) {
+		return std::fabs(a - b) <= epsilon;
+	}
 }
 
 using FVector2 = TVector2<float>;

@@ -1,4 +1,4 @@
-ï»¿#include "Player.h"
+#include "Player.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -20,6 +20,7 @@
 
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
+#include "Bike/LaneController.h"
 
 void Player::Initialize()
 {
@@ -79,18 +80,23 @@ void Player::Update(const float& deltaSeconds)
 	{
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
-		else
-			m_owner->GetComponent<SkewTransform>()->zPos -= speed;
-		//m_owner->transform()->AddPosition(0, -speed);
+		/*else
+			m_owner->GetComponent<SkewTransform>()->zPos -= speed;*/
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
-		else
-			m_owner->GetComponent<SkewTransform>()->zPos += speed;
-		//m_owner->transform()->AddPosition(0, speed);
+		/*else
+			m_owner->GetComponent<SkewTransform>()->zPos += speed;*/
 	}
+	if (Input::IsKeyPressed(VK_DOWN)) {
+		m_owner->GetComponent<LaneController>()->MoveDown();
+	}
+	if (Input::IsKeyPressed(VK_UP)) {
+		m_owner->GetComponent<LaneController>()->MoveUp();
+	}
+
 	// Á¡ÇÁ Ä«¿îÆ® ¸®¼Â: ¶¥¿¡ ´êÀ¸¸é jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
 	if (rb)
@@ -160,7 +166,7 @@ void Player::OnStart()
 	animInstance->OnStart();
 
 	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
-	m_owner->AddComponent<Rigidbody2D>();
+	//m_owner->AddComponent<Rigidbody2D>();
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
 		rb->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
@@ -178,6 +184,9 @@ void Player::OnStart()
 
 	// »êµ¥ºñ½ºÅº Å×½ºÆ®
 	m_owner->AddComponent<Prism>(10, 0.1f);
+
+	// LandController Å×½ºÆ®
+	m_owner->AddComponent<LaneController>();
 }
 
 void Player::OnEnd()
@@ -216,7 +225,7 @@ void Player::Input()
 	}
 	if (Input::IsKeyDown(VK_G))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
+		//m_owner->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
 	}
 	if (Input::IsKeyDown(VK_H))
 	{
