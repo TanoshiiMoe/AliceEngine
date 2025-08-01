@@ -8,6 +8,7 @@
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 #include <Math/Transform.h>
+#include <Component/TransformComponent.h>
 
 TextRenderComponent::TextRenderComponent()
 {
@@ -55,7 +56,8 @@ void TextRenderComponent::Release()
 void TextRenderComponent::Render()
 {
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	if (!context || m_content.empty()) return;
+	Camera* camera = SceneManager::GetCamera();
+	if (!context || m_content.empty() || !camera) return;
 	__super::Render();
 	
 	InitializeLayout();
@@ -69,17 +71,9 @@ void TextRenderComponent::Render()
 		m_metrics.height * GetPivot()->y
 	};
 	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x / 2, -pivotOffset.y / 2);
-	viewTransform = viewTransform * pivotAdjust * m_transform.ToMatrix();
+	viewTransform =  pivotAdjust * m_transform.ToMatrix() * viewTransform;
 	context->SetTransform(viewTransform);
-
-	// ±×¸®±â
-	context->DrawText(
-		m_content.c_str(),
-		static_cast<UINT32>(m_content.length()),
-		m_dWriteTextFormat.Get(),
-		D2D1::RectF(0, 0, m_metrics.width, m_metrics.height),
-		m_pBrush.Get()
-	);
+	context->DrawTextLayout(D2D1::Point2F(0, 0), m_layout.Get(), m_pBrush.Get());
 }
 
 float TextRenderComponent::GetBitmapSizeX()

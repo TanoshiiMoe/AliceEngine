@@ -60,6 +60,7 @@ void Aru2::OnStart()
 	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_Aru2TextCmp->SetScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.5f));
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
@@ -68,6 +69,7 @@ void Aru2::OnStart()
 	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_Aru2TextCmp->SetScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.2f));
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
@@ -76,6 +78,7 @@ void Aru2::OnStart()
 	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_Aru2TextCmp->SetScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.3f));
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
@@ -84,6 +87,7 @@ void Aru2::OnStart()
 	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_Aru2TextCmp->SetScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.4f));
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
@@ -92,6 +96,7 @@ void Aru2::OnStart()
 	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_Aru2TextCmp->SetScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.1f));
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 

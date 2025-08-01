@@ -66,6 +66,7 @@ void Aru::OnStart()
 	m_aruTextCmp->SetScale(FVector2(3, 3));
 	m_aruTextCmp->SetFontSize(24);
 	m_aruTextCmp->SetPosition(FVector2(0, -m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.5f) * m_aru->transform()->GetScale());
+	m_aruTextCmp->SetIgnoreCameraTransform(true);
 	m_aruNameTexts.push_back(m_aruTextCmp);
 
 	m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
