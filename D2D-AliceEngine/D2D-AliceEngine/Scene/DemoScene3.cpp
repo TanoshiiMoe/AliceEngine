@@ -205,9 +205,8 @@ void DemoScene3::OnEnter()
 
 	m_widget4->transform()->SetPosition(0, 0);
 	m_widget4->AddComponent<TextRenderComponent>()->SetText(L" test");
-	m_widget4->GetComponent<TextRenderComponent>()->SetDrawType(Define::EDrawType::WorldSpace);
 	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
-	m_widget4->GetComponent<TextRenderComponent>()->SetPosition(FVector2(45, 60));
+	m_widget4->GetComponent<TextRenderComponent>()->SetPosition(CoordHelper::RatioCoordToScreen({ 0.7,0.6 }));
 	m_widget4->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget4->GetComponent<TextRenderComponent>()->m_layer = 20;
 

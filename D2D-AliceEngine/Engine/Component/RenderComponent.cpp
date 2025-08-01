@@ -44,8 +44,8 @@ void RenderComponent::Render()
 {
 	__super::Render();
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	if (context == nullptr) return;
 	Camera* camera = SceneManager::GetCamera();
+	if (!context || !camera) return;
 	view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
