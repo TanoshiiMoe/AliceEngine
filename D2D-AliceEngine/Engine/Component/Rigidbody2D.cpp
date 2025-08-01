@@ -115,6 +115,7 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 
 	owner->transform()->SetPosition(calcPos);
 	owner->transform()->SetRotation(calcAngle);
+
 	velocity = calcVel;
 	angularVelocity = calcAngularVel;
 
@@ -131,6 +132,16 @@ void Rigidbody2D::AddForce(const float& _x, const float& _y)
 {
 	force.x += _x * 1000;
 	force.y += _y * 1000;
+}
+
+FVector2 Rigidbody2D::GetPredictedPosition() const
+{
+	float alpha = TimerManager::GetInstance().GetAccumulator() / TimerManager::GetInstance().fixedDeltaTime;
+	alpha = Math::clamp(alpha, 0.0f, 1.0f);
+
+	// 속도를 고려한 더 정확한 예측 위치 계산
+	FVector2 predictedDelta = velocity * alpha * TimerManager::GetInstance().fixedDeltaTime;
+	return m_currentPosition + predictedDelta;
 }
 
 FVector2 Rigidbody2D::GetInterpolatedPosition() const
@@ -151,4 +162,13 @@ float Rigidbody2D::GetInterpolatedRotation() const
 	alpha = Math::clamp(alpha, 0.0f, 1.0f);
 
 	return m_prevRotation + (m_currentRotation - m_prevRotation) * alpha;
+}
+
+void Rigidbody2D::UpdateInterpolatedPosition()
+{
+	FVector2 interpolatedPos = GetInterpolatedPosition();
+	float interplatedRot = GetInterpolatedRotation();
+
+	owner->transform()->SetPosition(interpolatedPos);
+	owner->transform()->SetRotation(interplatedRot);
 }
