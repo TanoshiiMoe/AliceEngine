@@ -21,6 +21,8 @@
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
 
+#include <Manager/TimerManager.h>
+
 void Player::Initialize()
 {
 	__super::Initialize();
@@ -42,6 +44,10 @@ void Player::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
+	float playerDeltaSeconds = deltaSeconds * playerTimeScale;
+
+	prismTimeCount += deltaSeconds;
+
 	if (Input::IsKeyPressed(VK_Q))
 	{
 		SceneManager::GetCamera()->SetOwner(m_owner);
@@ -51,7 +57,7 @@ void Player::Update(const float& deltaSeconds)
 		SceneManager::GetCamera()->ClearOwner();
 	}
 
-	float speed = walkSpeed * deltaSeconds;
+	float speed = walkSpeed * playerDeltaSeconds;
 	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
 	{
@@ -285,7 +291,7 @@ void Player::Input()
 		if (jumpCount < maxJumpCount)
 		{
 			if(m_owner->GetComponent<Rigidbody2D>())
-				m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 720);
+				m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 120);
 			jumpCount++;
 		}
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
@@ -294,7 +300,11 @@ void Player::Input()
 	// 산데비스탄 테스트
 	if (Input::IsKeyPressed(VK_G)) {
 		if (auto prism = m_owner->GetComponent<Prism>())
+		{
 			prism->SetActive(!prism->IsActive());
+			TimerManager::GetInstance().SetGlobalTimeScale(0.5);
+			playerTimeScale = 2.0f;
+		}
 	}
 }
 

@@ -42,5 +42,9 @@ public:
 
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
+
+	float playerTimeScale{ 1.0f };
+	float prismTimeCount{ 0 };
+	float prismDelay{ 2.0f };
 };
 
