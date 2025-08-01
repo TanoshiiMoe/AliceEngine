@@ -115,7 +115,7 @@ void BackGroundComponent::LoadFromFolder(const std::wstring& folderPath, int fps
 
 	for (size_t i = 0; i < files.size(); ++i)
 	{
-		std::pair<std::wstring, std::wstring> path = FileHelper::ExtractFileNameAndExtension(files[i]);
+		std::pair<std::wstring, std::wstring> path = FileHelper::ExtractFileDirectoryAndName(files[i]);
 		std::wstring folderPath = path.first; std::wstring fileName = path.second;
 		std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + extension; // 최종 출력 폴더 경로 조합
 
@@ -141,7 +141,7 @@ void BackGroundComponent::LoadFrame(size_t frameIndex)
 
 void BackGroundComponent::LoadFrameFromFolder(size_t frameIndex)
 {
-	std::pair<std::wstring, std::wstring> path = FileHelper::ExtractFileNameAndExtension(files[frameIndex]);
+	std::pair<std::wstring, std::wstring> path = FileHelper::ExtractFileDirectoryAndName(files[frameIndex]);
 	std::wstring folderPath = path.first; std::wstring fileName = path.second;
 	std::wstring parentDir = folderPath + L"\\frames\\" + fileName + L"." + imageExtension; // 최종 출력 폴더 경로 조합
 
@@ -189,7 +189,7 @@ float BackGroundComponent::GetBitmapSizeX()
 {
 	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
-		return static_cast<float>(bmpSize.width) * owner->transform()->GetScale().x;
+		return static_cast<float>(m_bitmaps[m_curClip]->GetSize().width) * owner->transform()->GetScale().x;
 	}
 	return 0;
 }
@@ -198,7 +198,7 @@ float BackGroundComponent::GetBitmapSizeY()
 {
 	if (m_bitmaps.size() > m_curClip && GetOwner())
 	{
-		return static_cast<float>(bmpSize.height) * owner->transform()->GetScale().y;
+		return static_cast<float>(m_bitmaps[m_curClip]->GetSize().height) * owner->transform()->GetScale().y;
 	}
 	return 0;
 }
@@ -209,7 +209,7 @@ FVector2 BackGroundComponent::GetSize()
 	{
 		if (m_bitmaps[m_curClip])
 		{
-			return FVector2(static_cast<float>(bmpSize.width) * owner->transform()->GetScale().x, static_cast<float>(bmpSize.height) * owner->transform()->GetScale().y);
+			return FVector2(static_cast<float>(m_bitmaps[m_curClip]->GetSize().width) * owner->transform()->GetScale().x, static_cast<float>(m_bitmaps[m_curClip]->GetSize().height) * owner->transform()->GetScale().y);
 		}
 	}
 	return FVector2();
