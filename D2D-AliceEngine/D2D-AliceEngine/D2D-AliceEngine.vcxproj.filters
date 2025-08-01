@@ -20,6 +20,9 @@
     <Filter Include="Scene\ExampleScene">
       <UniqueIdentifier>{622f0825-07bc-42f4-bcc6-b92d5fc1e316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Bike">
+      <UniqueIdentifier>{556ab419-90eb-4a8a-a977-62945c1f74ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -97,17 +100,20 @@
     <ClInclude Include="Scripts\Truck.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Battery.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\TitleUIScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Health.h">
-      <Filter>Scripts</Filter>
+    <ClInclude Include="Scripts\Bike\Battery.h">
+      <Filter>Scripts\Bike</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Bike\Health.h">
+      <Filter>Scripts\Bike</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Bike\LaneController.h">
+      <Filter>Scripts\Bike</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -177,19 +183,22 @@
     <ClCompile Include="Scripts\Truck.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Player.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Battery.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\TitleUIScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Health.cpp">
+    <ClCompile Include="Scripts\Bike\Battery.cpp">
+      <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Bike\Health.cpp">
+      <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Bike\LaneController.cpp">
+      <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Player.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>

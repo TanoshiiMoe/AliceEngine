@@ -23,7 +23,7 @@ void SkewTransform::Initialize()
 
 	UpdateTaskManager::GetInstance().Enque(
 		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_LastDemotable,
+		Define::ETickingGroup::TG_PostPhysics,
 		[weak = WeakFromThis<ITickable>()](const float& dt)
 		{
 			if (auto sp = weak.lock())
