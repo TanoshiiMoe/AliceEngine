@@ -82,7 +82,7 @@ void DemoScene2::OnEnter()
 	m_widget2->transform()->SetPosition(0, 0);
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <¾À> \n [3] : ¾À ÀüÈ¯");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
-	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(FVector2(850, 0));
+	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(FVector2(Define::SCREEN_WIDTH * 0.9, 0));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	
 	m_widget3->transform()->SetPosition(0, 0);

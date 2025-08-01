@@ -108,7 +108,7 @@ float SpriteRenderer::GetBitmapSizeY()
 	return static_cast<float>(bmpSize.height);
 }
 
-FVector2 SpriteRenderer::GetSize()
+FVector2 SpriteRenderer::GetBitmapSize()
 {
 	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();

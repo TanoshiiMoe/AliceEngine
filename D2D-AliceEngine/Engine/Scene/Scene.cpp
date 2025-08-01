@@ -72,9 +72,8 @@ void Scene::OnEnter()
 	m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
 	m_sysinfoWidget->AddComponent<TextRenderComponent>();
 
-	int x = 0, y = 0;
-	D2DRenderManager::GetInstance().GetApplicationSize(x, y);
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(x * 0.7f, y * 0.1f));
+	FVector2 pos = D2DRenderManager::GetInstance().GetApplicationSize();
+	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(pos.x * 0.7f, pos.y * 0.1f));
 }
 
 void Scene::OnExit()
@@ -92,6 +91,7 @@ void Scene::VisibleMemoryInfo()
 	FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetText(L"VRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
 	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetColor(FColor(200, 0, 0, 255));
+
 }
 
 bool Scene::RemoveObject(gameObject* targetObj)

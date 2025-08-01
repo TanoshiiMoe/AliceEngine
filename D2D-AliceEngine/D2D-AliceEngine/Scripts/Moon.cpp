@@ -28,12 +28,12 @@ void Moon::OnStart()
 	m_moon->transform()->SetPivot(0.5f);
 	m_moon->transform()->SetScale(0.5f);
 	m_moon->AddComponent<SpriteRenderer>()->LoadData(L"Moon.png");
-	m_moon->AddComponent<BoxComponent>(m_moon->GetComponent<SpriteRenderer>()->GetSize(), FColor::Black);
+	m_moon->AddComponent<BoxComponent>(m_moon->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Black);
 	m_moon->AddComponent<TextRenderComponent>()->SetText(m_moon->GetName());
-	m_moon->GetComponent<TextRenderComponent>()->SetTransformType(ETransformType::Unity);
+	m_moon->GetComponent<TextRenderComponent>()->SetDrawType(EDrawType::WorldSpace);
 	m_moon->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_moon->GetComponent<TextRenderComponent>()->SetScale(FVector2(4, 4));
-	m_moon->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_moon->GetComponent<SpriteRenderer>()->GetSize().y * 0.7f));
+	m_moon->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_moon->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.7f));
 
 	m_moon->AddComponent<InputComponent>()->SetAction(m_moon->GetHandle(),[this]() { Input(); });
 }

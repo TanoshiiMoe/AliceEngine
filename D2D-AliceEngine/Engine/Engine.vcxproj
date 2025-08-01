@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Component\BackGroundComponent.h" />
     <ClInclude Include="Component\AudioComponent.h" />
+    <ClInclude Include="Helpers\CoordHelper.h" />
     <ClInclude Include="Effect\Prism.h" />
     <ClInclude Include="Experimental\Collision\Collision2D.h" />
     <ClInclude Include="Component\Rigidbody2D.h" />
@@ -213,6 +214,7 @@
   <ItemGroup>
     <ClCompile Include="Component\BackGroundComponent.cpp" />
     <ClCompile Include="Component\AudioComponent.cpp" />
+    <ClCompile Include="Helpers\CoordHelper.cpp" />
     <ClCompile Include="Effect\Prism.cpp" />
     <ClCompile Include="Experimental\Collision\Collision2D.cpp" />
     <ClCompile Include="Component\Rigidbody2D.cpp" />

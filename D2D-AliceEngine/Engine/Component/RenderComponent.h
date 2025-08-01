@@ -19,6 +19,7 @@ public:
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
 
+	void SetDrawType(const Define::EDrawType& type);
 	virtual float GetBitmapSizeX() = 0;
 	virtual float GetBitmapSizeY() = 0;
 	virtual void Render() override;

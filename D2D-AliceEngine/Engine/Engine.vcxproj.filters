@@ -264,6 +264,9 @@
     <ClInclude Include="Component\SkewTransform.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Helpers\CoordHelper.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -466,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="Component\SkewTransform.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\CoordHelper.cpp">
+      <Filter>Helper</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
