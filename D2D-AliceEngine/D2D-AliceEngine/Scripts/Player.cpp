@@ -1,4 +1,4 @@
-﻿#include "Player.h"
+癤#include "Player.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -87,7 +87,7 @@ void Player::Update(const float& deltaSeconds)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
 		else
 			m_owner->GetComponent<SkewTransform>()->zPos -= speed;
-			//m_owner->transform()->AddPosition(0, -speed);
+		//m_owner->transform()->AddPosition(0, -speed);
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
@@ -95,7 +95,7 @@ void Player::Update(const float& deltaSeconds)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
 		else
 			m_owner->GetComponent<SkewTransform>()->zPos += speed;
-			//m_owner->transform()->AddPosition(0, speed);
+		//m_owner->transform()->AddPosition(0, speed);
 	}
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
@@ -151,7 +151,7 @@ void Player::OnStart()
 	m_owner->transform()->SetRotation(0);
 	m_owner->transform()->SetScale(1.5f, 1.5f);
 	m_owner->transform()->SetPivot(0.5f);
-	
+
 	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
 	animInstance = m_owner->AddComponent<AnimatorInstance>();
 	animInstance->SetAnimatorController(&animController);
@@ -165,7 +165,7 @@ void Player::OnStart()
 	animInstance->m_layer = 5;
 	animInstance->OnStart();
 
-	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35,60));
+	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
 	m_owner->AddComponent<Rigidbody2D>();
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
@@ -310,36 +310,36 @@ void Player::Input()
 
 void Player::OnCollisionEnter2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionEnter2D 호출됨" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionEnter2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionEnter2D 호출됨" << std::endl;
+	OutputDebugStringW((L"[Player] OnCollisionEnter2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionStay2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionStay2D 호출됨" << std::endl;
-    //OutputDebugStringW((L"[Player] OnCollisionStay2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionStay2D 호출됨" << std::endl;
+	//OutputDebugStringW((L"[Player] OnCollisionStay2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionExit2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionExit2D 호출됨" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionExit2D 호출됨" + std::to_wstring(ExitIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionExit2D 호출됨" << std::endl;
+	OutputDebugStringW((L"[Player] OnCollisionExit2D 호출됨" + std::to_wstring(ExitIndex++) + L"\n").c_str());
 }
 
 void Player::OnTriggerEnter2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerEnter2D 호출됨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerEnter2D 호출됨\n");
+	std::cout << "[Player] OnTriggerEnter2D 호출됨" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerEnter2D 호출됨\n");
 }
 
 void Player::OnTriggerStay2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerStay2D 호출됨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerStay2D 호출됨\n");
+	std::cout << "[Player] OnTriggerStay2D 호출됨" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerStay2D 호출됨\n");
 }
 
 void Player::OnTriggerExit2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerExit2D 호출됨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerExit2D 호출됨\n");
+	std::cout << "[Player] OnTriggerExit2D 호출됨" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerExit2D 호출됨\n");
 }
