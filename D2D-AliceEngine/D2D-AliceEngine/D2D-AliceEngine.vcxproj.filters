@@ -174,8 +174,12 @@
     <ClCompile Include="Scripts\Truck.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Player.cpp" />
+    <ClCompile Include="Scripts\Player.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
     <ClCompile Include="Scripts\Battery.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
