@@ -13,7 +13,7 @@ void TimerManager::UpdateTime()
 	QueryPerformanceCounter(&currentCounter);
 	deltaTime = static_cast<float>(currentCounter.QuadPart - prevCounter.QuadPart) / frequency.QuadPart;
 	prevCounter = currentCounter;
-	accumulator += deltaTime;
+	accumulator += deltaTime * globalTimeScale;
 	//OutputDebugStringW((L"DeltaTime : " + std::to_wstring(deltaTime) + L"\n").c_str());
 
 	frameCount++;
@@ -78,4 +78,14 @@ void TimerManager::ShowFPSDebug()
 {
 
 	OutputDebugStringW((L"FPS : " + std::to_wstring(currentFps) + L"\n").c_str());
+}
+
+float TimerManager::GetGlobalTimeScale() const
+{
+	return globalTimeScale;
+}
+
+void TimerManager::SetGlobalTimeScale(const float& _value)
+{
+	globalTimeScale = _value;
 }

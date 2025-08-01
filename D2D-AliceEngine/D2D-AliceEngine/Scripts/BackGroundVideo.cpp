@@ -29,7 +29,6 @@ void BackGroundVideo::Update(const float& deltaSeconds)
 	FVector2 size = m_owner->GetComponent<BackGroundComponent>()->GetSize();
 
 	m_owner->transform()->SetPosition(playerPos.x - size.x / 2, (size.y /*+ 타일맵 이미지 사이즈*/) / 2);
-	m_owner->GetComponent<BackGroundComponent>()->m_layer = -1000;
 	//m_owner->transform()->SetPosition(playerPos.x, Define::SCREEN_HEIGHT);
 }
 
@@ -37,11 +36,12 @@ void BackGroundVideo::OnStart()
 {
 	m_owner = GetOwner();
 	m_owner->transform()->SetScale(1, 1);
+	m_owner->transform()->SetPivot(0.5, 0.5);
 	
 	//m_owner->AddComponent<BackGroundComponent>()->LoadData(L"BackGround\\Alice.webm", 10, L"jpg", 95, true);
 	m_owner->AddComponent<BackGroundComponent>()->LoadFromFolder(L"BackGround\\Ena", 5, L"png");
 	m_owner->GetComponent<BackGroundComponent>()->Play();
-	
+	m_owner->GetComponent<BackGroundComponent>()->m_layer = 500;
 
 	if (m_player != nullptr)
 		m_owner->GetComponent<BackGroundComponent>()->SetPlayer(m_player);
