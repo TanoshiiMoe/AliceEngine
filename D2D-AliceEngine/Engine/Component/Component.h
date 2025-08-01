@@ -50,5 +50,4 @@ public:
 
 protected:
 	WeakObjectPtr<Canvas> canvas;
-	//Transform relativeTransform;
 };
