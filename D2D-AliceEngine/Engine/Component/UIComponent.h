@@ -3,6 +3,7 @@
 #include <Core/ObjectHandler.h>
 #include <Math/Transform.h>
 #include "InputComponent.h"
+#include <Define/Define.h>
 
 /*
 *	UI 컴포넌트입니다.
@@ -12,6 +13,8 @@
 *	추가적으로 이미지가 애니메이션도 있을 수 있으니 업데이트도 가져왔어요
 */
 
+using namespace Define;
+class gameObject;
 class UIComponent : public RenderComponent
 {
 public:
@@ -39,6 +42,14 @@ public:
 	{
 		slots.push_back({ owner, action });
 	}
+
+	virtual void SetPosition(const FVector2& pos);
+	virtual void SetPivot(float _x, float _y);
+	virtual void SetAnchor(EUIScreenAnchor anchor, const FVector2& offset = FVector2(0, 0));
+	virtual void SetAnchor(EUIScreenAnchor anchor, const float& offsetX, const float& offsetY);
+
+	EUIScreenAnchor GetAnchor() { return m_anchor; }
+	EUIScreenAnchor m_anchor = EUIScreenAnchor::TopLeft;
 
 private:
 	UIComponent* m_parents = nullptr;
