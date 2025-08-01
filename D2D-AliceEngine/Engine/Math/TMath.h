@@ -55,6 +55,11 @@ public:
 		x *= rhs.x;
 		y *= rhs.y;
 	}
+	void operator*=(const float& value)
+	{
+		x *= value;
+		y *= value;
+	}
 	void operator+=(const TVector2& rhs)
 	{
 		x += rhs.x;
@@ -106,6 +111,26 @@ template<typename T>
 TVector2<T> operator+(const TVector2<T>& lhs, const TVector2<T>& rhs)
 {
 	return TVector2<T>(lhs.x + rhs.x, lhs.y + rhs.y);
+}
+
+template<typename T>
+TVector2<T> operator*(const TVector2<T>& lhs, const TVector2<T>& rhs)
+{
+	return TVector2<T>(lhs.x * rhs.x, lhs.y * rhs.y);
+}
+
+//  float * TVector2 연산 (순서 바뀐 경우)
+template<typename T>
+TVector2<T> operator*(const float& value, const TVector2<T>& vec)
+{
+	return TVector2<T>(vec.x * value, vec.y * value);
+}
+
+// TVector2 * float 연산 (전역 함수로)
+template<typename T>
+TVector2<T> operator*(const TVector2<T>& vec, const float& value)
+{
+	return TVector2<T>(vec.x * value, vec.y * value);
 }
 
 template<typename T>
