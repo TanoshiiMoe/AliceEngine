@@ -41,7 +41,7 @@ void BackGroundVideo::OnStart()
 	//m_owner->AddComponent<BackGroundComponent>()->LoadData(L"BackGround\\Alice.webm", 10, L"jpg", 95, true);
 	m_owner->AddComponent<BackGroundComponent>()->LoadFromFolder(L"BackGround\\Ena", 5, L"png");
 	m_owner->GetComponent<BackGroundComponent>()->Play();
-	m_owner->GetComponent<BackGroundComponent>()->m_layer = 500;
+	m_owner->GetComponent<BackGroundComponent>()->m_layer = -500;
 
 	if (m_player != nullptr)
 		m_owner->GetComponent<BackGroundComponent>()->SetPlayer(m_player);
