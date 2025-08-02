@@ -73,7 +73,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 float SkewTransform::GetSkew()
 {
 	if (groundTile)
-		return groundTile->GetComponent<TileMapComponent>()->skewAngle;
+		return groundTile->GetComponent<TileMapComponent>()->skewAngle.x;
 	
 	OutputDebugStringW(L"SkewTransform 컴포넌트에 groundTile 오브젝트가 등록되지 않았습니다!!");
 	return 0.0f;
