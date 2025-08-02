@@ -92,11 +92,11 @@ void Physics::FCollisionDetector::LoadPreviousCollisions()
 			if (b->GetOwner()) scB = b->GetOwner()->GetComponents<ScriptComponent>();
 			if (collision2D.rigidbody && collision2D.rigidbody->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && collision2D.otherRigidbody && collision2D.otherRigidbody->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
 			{
-				for (auto sc : scA) sc->OnCollisionExit2D(&collision2D);
-				for (auto sc : scB) sc->OnCollisionExit2D(&collision2D);
+				for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionExit2D(&collision2D);
+				for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionExit2D(&collision2D);
 			}
-			for (auto sc : scA) sc->OnTriggerExit2D(b);
-			for (auto sc : scB) sc->OnTriggerExit2D(a);
+			for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerExit2D(b);
+			for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerExit2D(a);
 		}
 	}
 	CollisionSystem::GetInstance().previousCollisions = CollisionSystem::GetInstance().currentCollisions;
@@ -131,21 +131,21 @@ void Physics::FCollisionDetector::SavePreviousCollisionData(Collider* src, Colli
 	{
 		if (rbA && rbA->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && rbB && rbB->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
 		{
-			for (auto sc : scA) sc->OnCollisionEnter2D(&collision2D);
-			for (auto sc : scB) sc->OnCollisionEnter2D(&collision2D);
+			for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionEnter2D(&collision2D);
+			for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionEnter2D(&collision2D);
 		}
-		for (auto sc : scA) sc->OnTriggerEnter2D(b);
-		for (auto sc : scB) sc->OnTriggerEnter2D(a);
+		for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerEnter2D(b);
+		for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerEnter2D(a);
 	}
 	else
 	{
 		if (rbA && rbA->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && rbB && rbB->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
 		{
-			for (auto sc : scA) sc->OnCollisionStay2D(&collision2D);
-			for (auto sc : scB) sc->OnCollisionStay2D(&collision2D);
+			for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionStay2D(&collision2D);
+			for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionStay2D(&collision2D);
 		}
-		for (auto sc : scA) sc->OnTriggerStay2D(b);
-		for (auto sc : scB) sc->OnTriggerStay2D(a);
+		for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerStay2D(b);
+		for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerStay2D(a);
 	}
 }
 

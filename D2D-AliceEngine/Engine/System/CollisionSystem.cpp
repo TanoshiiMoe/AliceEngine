@@ -53,17 +53,7 @@ void CollisionSystem::Update(const float& deltaSeconds)
 
 void CollisionSystem::Initialize()
 {
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_StartPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_StartPhysics);
 }
 
 void CollisionSystem::Update()
