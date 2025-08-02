@@ -50,7 +50,7 @@ void RenderComponent::Render()
 	view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F world = GetOwnerTransform() ? GetOwnerTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
-	world = world * relativeTranform.ToMatrix();
+	world = world * relativeTransform.ToMatrix();
 
 	if (drawType == Define::EDrawType::WorldSpace)
 	{
@@ -76,5 +76,32 @@ void RenderComponent::Render()
 
 void RenderComponent::SetRelativePosition(const FVector2& _pos)
 {
-	relativeTranform.SetPosition(_pos.x, _pos.y);
+	relativeTransform.SetPosition(_pos.x, _pos.y);
+}
+
+void RenderComponent::SetRelativeRotation(const float& _rotation)
+{
+	relativeTransform.SetRotation(_rotation);
+}
+
+void RenderComponent::SetRelativeScale(const FVector2& _scale)
+{
+	relativeTransform.SetScale(_scale.x, _scale.y);
+}
+
+FVector2 RenderComponent::GetRelativePosition() const
+{
+	D2D1_VECTOR_2F pos = relativeTransform.GetPosition();
+	return FVector2(pos.x, pos.y);
+}
+
+float RenderComponent::GetRelativeRotation() const
+{
+	return relativeTransform.GetRotation();
+}
+
+FVector2 RenderComponent::GetRelativeScale() const
+{
+	D2D1_VECTOR_2F scale = relativeTransform.GetScale();
+	return FVector2(scale.x, scale.y);
 }

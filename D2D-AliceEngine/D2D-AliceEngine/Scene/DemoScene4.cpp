@@ -23,7 +23,6 @@
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
-#include <Object/Canvas.h>
 #include <UI/UIButton.h>
 #include <Component/BackGroundComponent.h>
 #include <Scripts/CameraController.h>

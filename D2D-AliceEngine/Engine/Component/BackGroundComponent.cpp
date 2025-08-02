@@ -177,7 +177,7 @@ void BackGroundComponent::Render()
 	__super::Render();
 
 	D2D1::Matrix3x2F backToD2DTransform = D2D1::Matrix3x2F::Translation(-GetBitmapSizeX() / 2, -GetBitmapSizeY() / 2);
-	D2D1::Matrix3x2F pivotTransform = D2D1::Matrix3x2F::Translation((GetBitmapSizeX() / 2) * (GetPivot()->x - 0.5f), (GetBitmapSizeY() / 2) * (GetPivot()->y - 0.5f));
+	D2D1::Matrix3x2F pivotTransform = D2D1::Matrix3x2F::Translation((GetBitmapSizeX() / 2) * (GetOwnerPivot()->x - 0.5f), (GetBitmapSizeY() / 2) * (GetOwnerPivot()->y - 0.5f));
 	context->SetTransform(backToD2DTransform * pivotTransform * view);
 
 	// 최종 변환 비트맵 원점에 맞춰 그리기 (Src 전체 사용)

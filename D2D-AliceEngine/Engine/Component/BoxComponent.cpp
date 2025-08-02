@@ -66,8 +66,8 @@ void BoxComponent::Render()
 
 	D2D1_POINT_2F pivot = 
 	{
-		drawWidth * GetPivot()->x,
-		drawHeight * GetPivot()->y
+		drawWidth * GetOwnerPivot()->x,
+		drawHeight * GetOwnerPivot()->y
 	};
 	D2DRenderManager::GetD2DDevice()->DrawRectangle(
 		D2D1::RectF(-pivot.x, -pivot.y, pivot.x, pivot.y),

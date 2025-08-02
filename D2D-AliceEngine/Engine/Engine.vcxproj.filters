@@ -246,9 +246,6 @@
     <ClInclude Include="UI\UIText.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Canvas.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="Component\TileMapRenderer.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -451,9 +448,6 @@
     </ClCompile>
     <ClCompile Include="UI\UIText.cpp">
       <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\Canvas.cpp">
-      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Component\TileMapRenderer.cpp">
       <Filter>Component</Filter>
