@@ -20,18 +20,7 @@ Collider::~Collider()
 void Collider::Initialize()
 {
 	CollisionSystem::GetInstance().Regist(WeakFromThis<Collider>());
-
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_PrePhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
 }
 
 void Collider::Update(const float& deltaSeconds)

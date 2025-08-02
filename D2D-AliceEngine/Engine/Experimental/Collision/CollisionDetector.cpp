@@ -90,8 +90,13 @@ void Physics::FCollisionDetector::LoadPreviousCollisions()
 			std::vector<ScriptComponent*> scA, scB;
 			if (a->GetOwner()) scA = a->GetOwner()->GetComponents<ScriptComponent>();
 			if (b->GetOwner()) scB = b->GetOwner()->GetComponents<ScriptComponent>();
-			for (auto sc : scA) sc->OnCollisionExit2D(&collision2D);
-			for (auto sc : scB) sc->OnCollisionExit2D(&collision2D);
+			if (collision2D.rigidbody && collision2D.rigidbody->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && collision2D.otherRigidbody && collision2D.otherRigidbody->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
+			{
+				for (auto sc : scA) sc->OnCollisionExit2D(&collision2D);
+				for (auto sc : scB) sc->OnCollisionExit2D(&collision2D);
+			}
+			for (auto sc : scA) sc->OnTriggerExit2D(b);
+			for (auto sc : scB) sc->OnTriggerExit2D(a);
 		}
 	}
 	CollisionSystem::GetInstance().previousCollisions = CollisionSystem::GetInstance().currentCollisions;
@@ -124,13 +129,23 @@ void Physics::FCollisionDetector::SavePreviousCollisionData(Collider* src, Colli
 	// 이전 충돌정보와 비교해서 Enter인지 Stay인지 검증하자.
 	if (CollisionSystem::GetInstance().previousCollisions.find(pair) == CollisionSystem::GetInstance().previousCollisions.end())
 	{
-		for (auto sc : scA) sc->OnCollisionEnter2D(&collision2D);
-		for (auto sc : scB) sc->OnCollisionEnter2D(&collision2D);
+		if (rbA && rbA->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && rbB && rbB->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
+		{
+			for (auto sc : scA) sc->OnCollisionEnter2D(&collision2D);
+			for (auto sc : scB) sc->OnCollisionEnter2D(&collision2D);
+		}
+		for (auto sc : scA) sc->OnTriggerEnter2D(b);
+		for (auto sc : scB) sc->OnTriggerEnter2D(a);
 	}
 	else
 	{
-		for (auto sc : scA) sc->OnCollisionStay2D(&collision2D);
-		for (auto sc : scB) sc->OnCollisionStay2D(&collision2D);
+		if (rbA && rbA->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && rbB && rbB->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
+		{
+			for (auto sc : scA) sc->OnCollisionStay2D(&collision2D);
+			for (auto sc : scB) sc->OnCollisionStay2D(&collision2D);
+		}
+		for (auto sc : scA) sc->OnTriggerStay2D(b);
+		for (auto sc : scB) sc->OnTriggerStay2D(a);
 	}
 }
 
