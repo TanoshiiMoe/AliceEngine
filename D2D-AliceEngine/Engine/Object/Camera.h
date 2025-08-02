@@ -1,5 +1,6 @@
 #pragma once
 #include "Object/UObject.h"
+#include <Component/TransformComponent.h>
 
 /*
 * @brief 카메라 클래스. 
@@ -7,7 +8,6 @@
 */
 class Transform;
 class gameObject;
-
 class Camera : public UObject
 {
 public:

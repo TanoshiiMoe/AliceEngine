@@ -67,8 +67,8 @@ void TextRenderComponent::Render()
 
 	// ÇÇ¹þ º¸Á¤
 	D2D1_POINT_2F pivotOffset = {
-		m_metrics.width * GetPivot()->x,
-		m_metrics.height * GetPivot()->y
+		m_metrics.width * GetOwnerPivot()->x,
+		m_metrics.height * GetOwnerPivot()->y
 	};
 	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x / 2, -pivotOffset.y / 2);
 	viewTransform =  pivotAdjust * m_transform.ToMatrix() * viewTransform;

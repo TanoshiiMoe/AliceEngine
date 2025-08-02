@@ -12,7 +12,6 @@
 #include <UI/UIImage.h>
 #include <UI/UIText.h>
 #include <Scene/Scene.h>
-#include <Object/Canvas.h>
 
 void UI_Script::Initialize()
 {
