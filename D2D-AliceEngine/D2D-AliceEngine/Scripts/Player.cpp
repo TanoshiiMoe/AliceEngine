@@ -173,7 +173,7 @@ void Player::OnStart()
 	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
 	if (auto collider = m_owner->GetComponent<Collider>())
 	{
-		collider->SetLayer(30);
+		collider->SetLayer(2);
 	}
 	//m_owner->AddComponent<Rigidbody2D>();
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
