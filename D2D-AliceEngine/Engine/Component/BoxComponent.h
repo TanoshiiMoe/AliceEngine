@@ -24,6 +24,7 @@ public:
 	FColor GetColor() { return m_color; }
 	void SetThickness(const float& _thickness) { thickness = _thickness; }
 	float GetThickness() { return thickness; }
+	void SetSkewAngle(const FVector2& _angle) { skewAngle = _angle; }
 
 	void SetIgnoreOwnerScale(bool ignore) { bIgnoreOwnerScale = ignore; }
 	bool GetIgnoreOwnerScale() const { return bIgnoreOwnerScale; }
@@ -32,6 +33,7 @@ public:
 	FColor m_color;
 	float thickness = 5.0f;
 	FVector2 m_size;
+	FVector2 skewAngle;
 private:
 	bool bIgnoreOwnerScale = false;
 };
