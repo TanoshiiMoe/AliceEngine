@@ -1,0 +1,10 @@
+[
+    {
+        "index": 2,
+        "collisionChannel": 2
+    },
+    {
+        "index": 3,
+        "collisionChannel": 1
+    }
+]
