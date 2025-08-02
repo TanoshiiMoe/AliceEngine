@@ -78,3 +78,30 @@ void RenderComponent::SetRelativePosition(const FVector2& _pos)
 {
 	relativeTranform.SetPosition(_pos.x, _pos.y);
 }
+
+void RenderComponent::SetRelativeRotation(const float& _rotation)
+{
+	relativeTranform.SetRotation(_rotation);
+}
+
+void RenderComponent::SetRelativeScale(const FVector2& _scale)
+{
+	relativeTranform.SetScale(_scale.x, _scale.y);
+}
+
+FVector2 RenderComponent::GetRelativePosition() const
+{
+	D2D1_VECTOR_2F pos = relativeTranform.GetPosition();
+	return FVector2(pos.x, pos.y);
+}
+
+float RenderComponent::GetRelativeRotation() const
+{
+	return relativeTranform.GetRotation();
+}
+
+FVector2 RenderComponent::GetRelativeScale() const
+{
+	D2D1_VECTOR_2F scale = relativeTranform.GetScale();
+	return FVector2(scale.x, scale.y);
+}

@@ -29,6 +29,12 @@ public:
 	void SetScale(const FVector2& _scale) { scale = _scale; }
 	FVector2 GetScale() const { return scale; }
 	void SetRelativePosition(const FVector2& _pos);
+	void SetRelativeRotation(const float& _rotation);
+	void SetRelativeScale(const FVector2& _scale);
+	
+	FVector2 GetRelativePosition() const;
+	float GetRelativeRotation() const;
+	FVector2 GetRelativeScale() const;
 
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	int m_layer = -999;
