@@ -7,6 +7,7 @@
 
 #include "Component.h"
 #include <Define/Define.h>
+#include <Math/Transform.h>
 
 class RenderComponent : public Component
 {
@@ -27,6 +28,7 @@ public:
 	void SetFlip(const bool& _flip) { bFlip = _flip; }
 	void SetScale(const FVector2& _scale) { scale = _scale; }
 	FVector2 GetScale() const { return scale; }
+	void SetRelativePosition(const FVector2& _pos);
 
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	int m_layer = -999;
@@ -35,5 +37,6 @@ protected:
 	D2D1_SIZE_U bmpSize;
 	D2D1::Matrix3x2F view;
 	FVector2 scale{ 1.0f, 1.0f };
+	Transform relativeTranform;
 };
 
