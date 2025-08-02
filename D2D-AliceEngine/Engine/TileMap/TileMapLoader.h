@@ -53,11 +53,18 @@ struct TileMap {
 	std::vector<int> usedGIDs;        // 중복 제거된 GID 집합
 };
 
+struct TileMapColiderInfo 
+{
+	int index;						// 1번부터 시작
+	int collisionChannel;			// 콜리전 레이어
+};
+
 /* ───── 로더(정적 유틸) ───── */
 class TileMapLoader {
 public:
 	static void LoadTileSet(const std::wstring& filePath, TileSet& tileSet);
 	static void LoadTileMap(const std::wstring& filePath, TileMap& tileMap); // TileMap도 Load함수와 Parse함수 추가
+	static std::unordered_map<int, int> LoadTileMapColliderInfo(const std::wstring& filePath); // TileMap도 Load함수와 Parse함수 추가
 };
 
 void from_json(const nlohmann::json& j, TileSet& ts);
@@ -66,3 +73,5 @@ void from_json(const json& j, TileMapLayer& l);
 void to_json(json& j, const TileMapLayer& l);
 void from_json(const json& j, TileMap& m); 
 void to_json(json& j, const TileMap& m);
+void from_json(const json& j, TileMapColiderInfo& m);
+void to_json(json& j, const TileMapColiderInfo& m);

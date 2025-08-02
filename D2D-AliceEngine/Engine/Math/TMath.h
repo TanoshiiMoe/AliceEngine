@@ -33,6 +33,11 @@ public:
 		return TVector2(x / value, y / value);
 	}
 
+	TVector2 operator-() const
+	{
+		return TVector2(-x, -y);
+	}
+
 	TVector2 operator+(const TVector2& rhs)
 	{
 		return TVector2(x + rhs.x, y + rhs.y);

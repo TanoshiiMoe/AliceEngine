@@ -63,20 +63,12 @@ void DemoScene4::OnEnter()
 	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/stage_tutorial.tmj");
-	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/Batchtest.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
-	/*m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/tutorial.tmj");
-	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");*/
-	m_tile->GetComponent<TileMapComponent>()->SetSkew(30);
-	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
-	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
-	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
+	m_tile->GetComponent<TileMapComponent>()->LoadTileCollisionData(L"TileMap/TileMapColiderInfo.json");
+	m_tile->GetComponent<TileMapComponent>()->SetSkew({ 30, 0});
+	m_tile->GetComponent<TileMapComponent>()->CreateTileRenderers();
+	m_tile->GetComponent<TileMapComponent>()->CreateTileCollision();
 	
 	// SkewTransform 테스트
 	m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
