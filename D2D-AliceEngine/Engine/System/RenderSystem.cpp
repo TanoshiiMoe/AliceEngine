@@ -134,7 +134,7 @@ ViewRect RenderSystem::GetCameraView()
 // 컬링이 되는걸 확실하게 보려면 주석처리 된 부분을 사용
 bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view)
 {
-	auto* transform = renderer->GetTransform();
+	auto* transform = renderer->GetOwnerTransform();
 	const auto pos = transform ? transform->GetPosition() : D2D1_VECTOR_2F{ 0, 0 };
 	const auto scale = transform ? transform->GetScale() : D2D1_VECTOR_2F{ 1, 1 };
 

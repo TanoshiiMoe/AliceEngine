@@ -48,7 +48,7 @@ void RenderComponent::Render()
 	if (!context || !camera) return;
 	view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F world = GetOwnerTransform() ? GetOwnerTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	
 	if (drawType == Define::EDrawType::WorldSpace)
 	{

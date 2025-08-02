@@ -78,7 +78,7 @@ void UIText::Render()
 	if (m_eTransformType == ETransformType::Unity)
 	{
 		D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-		D2D1::Matrix3x2F world = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+		D2D1::Matrix3x2F world = GetOwnerTransform() ? GetOwnerTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 
 		Camera* camera = SceneManager::GetCamera();
 		D2D1::Matrix3x2F cameraInv = camera ? camera->m_transform->ToMatrix() : D2D1::Matrix3x2F::Identity();
@@ -89,7 +89,7 @@ void UIText::Render()
 	}
 	else
 	{
-		view = GetTransform() ? GetTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
+		view = GetOwnerTransform() ? GetOwnerTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 	}
 
 	D2D1::Matrix3x2F finalTransform = pivotAdjust * localTransform * view;
