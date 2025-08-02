@@ -264,6 +264,9 @@
     <ClInclude Include="Helpers\CoordHelper.h">
       <Filter>Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Component\ButtonComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -466,6 +469,9 @@
     </ClCompile>
     <ClCompile Include="Helpers\CoordHelper.cpp">
       <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ButtonComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\ButtonComponent.h" />
     <ClInclude Include="Component\BackGroundComponent.h" />
     <ClInclude Include="Component\AudioComponent.h" />
     <ClInclude Include="Helpers\CoordHelper.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="UI\UIImage.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\ButtonComponent.cpp" />
     <ClCompile Include="Component\BackGroundComponent.cpp" />
     <ClCompile Include="Component\AudioComponent.cpp" />
     <ClCompile Include="Helpers\CoordHelper.cpp" />
