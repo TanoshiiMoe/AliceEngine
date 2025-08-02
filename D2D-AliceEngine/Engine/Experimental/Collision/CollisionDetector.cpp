@@ -85,7 +85,7 @@ void Physics::FCollisionDetector::LoadPreviousCollisions()
 			collision2D.otherCollider = b;
 			if (a->GetOwner()) collision2D.rigidbody = a->GetOwner()->GetComponent<Rigidbody2D>();
 			if (b->GetOwner()) collision2D.otherRigidbody = b->GetOwner()->GetComponent<Rigidbody2D>();
-			collision2D.transform = a->GetTransform();
+			collision2D.transform = a->GetOwnerTransform();
 
 			std::vector<ScriptComponent*> scA, scB;
 			if (a->GetOwner()) scA = a->GetOwner()->GetComponents<ScriptComponent>();
@@ -124,7 +124,7 @@ void Physics::FCollisionDetector::SavePreviousCollisionData(Collider* src, Colli
 	collision2D.otherCollider = b;
 	collision2D.rigidbody = rbA;
 	collision2D.otherRigidbody = rbB;
-	collision2D.transform = a->GetTransform();
+	collision2D.transform = a->GetOwnerTransform();
 
 	// 이전 충돌정보와 비교해서 Enter인지 Stay인지 검증하자.
 	if (CollisionSystem::GetInstance().previousCollisions.find(pair) == CollisionSystem::GetInstance().previousCollisions.end())

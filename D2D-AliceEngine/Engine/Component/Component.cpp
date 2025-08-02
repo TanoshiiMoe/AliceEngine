@@ -36,14 +36,14 @@ const std::wstring& Component::GetOwnerName()
 	return L"No Owner";
 }
 
-Transform* Component::GetTransform() const
+Transform* Component::GetOwnerTransform() const
 {
 	if (!owner.expired()) 
 		return &owner.lock()->transform()->m_worldTransform;
 	return nullptr;
 }
 
-TransformComponent* Component::GetTransformComp() const
+TransformComponent* Component::GetOwnerTransformComponent() const
 {
 	if (!owner.expired())
 		return owner.lock()->GetComponent<TransformComponent>();

@@ -35,8 +35,8 @@ public:
 	inline void SetOwner(WeakObjectPtr<gameObject> object) { owner = object; }
 	inline gameObject* GetOwner() { return owner.Get(); }
 	const std::wstring& GetOwnerName();
-	Transform* GetTransform() const;
-	TransformComponent* GetTransformComp() const;
+	Transform* GetOwnerTransform() const;
+	TransformComponent* GetOwnerTransformComponent() const;
 	FVector2* GetPivot() const;
 
 protected:
