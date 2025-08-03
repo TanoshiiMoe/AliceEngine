@@ -32,6 +32,12 @@
     <Filter Include="Scripts\Video">
       <UniqueIdentifier>{425c74aa-3b3e-482d-ab8b-6b6092708d2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Spine2D">
+      <UniqueIdentifier>{5f9912cc-ad01-4238-9c12-ceeb59ef58c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Spine2D">
+      <UniqueIdentifier>{a2ac56ab-5efd-440d-a652-1f690479b030}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -130,6 +136,15 @@
     <ClInclude Include="Scripts\Bike\BikeMovementScript.h">
       <Filter>Scripts\Bike</Filter>
     </ClInclude>
+    <ClInclude Include="Spine2D\SpineRenderer.h">
+      <Filter>Spine2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SpineScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Spine2D\SpineScript.h">
+      <Filter>Scripts\Spine2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -221,6 +236,15 @@
     </ClCompile>
     <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp">
       <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Spine2D\SpineRenderer.cpp">
+      <Filter>Spine2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SpineScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Spine2D\SpineScript.cpp">
+      <Filter>Scripts\Spine2D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

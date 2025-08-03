@@ -14,6 +14,7 @@
 #include <Scene/Scene.h>
 #include <Component/ButtonComponent.h>
 #include <Helpers/CoordHelper.h>
+#include <Manager/SceneManager.h>
 
 void TitleWidgetScript::Initialize()
 {
@@ -88,8 +89,10 @@ void TitleWidgetScript::OnStart()
 	// ======================== Delegete
 	button->SetStateAction(Define::EButtonState::Pressed, []()
 	{
+
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+		SceneManager::ChangeScene(L"HiroScene");
 	});
 }
 
