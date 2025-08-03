@@ -30,6 +30,7 @@
 #include <Effect/Prism.h>
 #include <Scripts/Widget/TitleWidgetScript.h>
 #include <Component/ButtonComponent.h>
+#include <Scripts/Bike/BikeMovementScript.h>
 
 void DemoScene4::Initialize()
 {
@@ -73,11 +74,11 @@ void DemoScene4::OnEnter()
 	
 	// SkewTransform 테스트
 	m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
+	m_player->AddComponent<BikeMovementScript>();
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
-
 	
 	// UI 추가
 	//m_UI = NewObject<gameObject>(L"ad");
