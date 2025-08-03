@@ -97,10 +97,10 @@ void Player::Update(const float& deltaSeconds)
 			m_owner->GetComponent<SkewTransform>()->zPos += speed;*/
 	}
 	if (Input::IsKeyPressed(VK_DOWN)) {
-		m_owner->GetComponent<LaneController>()->MoveDown();
+		if(m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveDown();
 	}
 	if (Input::IsKeyPressed(VK_UP)) {
-		m_owner->GetComponent<LaneController>()->MoveUp();
+		if (m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveUp();
 	}
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();

@@ -32,39 +32,44 @@ void ButtonComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
-	for (auto it = slots.begin(); it != slots.end();)
-	{
-		if (!it->weakPtr.expired())
-		{
-			if (Input::IsMouseLeftPressed())
-			{
-				// 마우스 위치 가져오기
-				FVector2 mousePos = Input::GetMousePosition();
-				
-				// 컴포넌트의 상대좌표
-				FVector2 relativePos = FVector2(
-					relativeTransform.GetPosition().x, 
-					relativeTransform.GetPosition().y
-				);
-				
-				// UI 크기 가져오기 및 위치 계산 (부모 좌표 + 상대좌표)
-				FVector2 uiSize = GetRelativeSize();
-				FVector2 finalUIPos = relativePos + FVector2(-uiSize.x * GetOwnerPivot()->x, -uiSize.y * GetOwnerPivot()->y);
+	bool mouseDown = Input::IsMouseLeftDown();
+	bool mouseUp = Input::IsMouseLeftReleased();
 
-				// UI 영역 내 마우스 클릭 확인
-				if (IsMouseInUIArea(mousePos, finalUIPos, uiSize))
-				{
-					// 마우스가 UI 영역 안에 있을 때만 함수 호출
-					it->func();
-				}
-			}
-			it++;
+	FVector2 mousePos = Input::GetMousePosition();
+	FVector2 relativePos = FVector2(
+		relativeTransform.GetPosition().x,
+		relativeTransform.GetPosition().y
+	);
+
+	FVector2 uiSize = GetRelativeSize();
+	FVector2 finalUIPos = relativePos + FVector2(-uiSize.x * GetOwnerPivot()->x, -uiSize.y * GetOwnerPivot()->y);
+
+	// UI 영역 내 마우스 클릭 확인
+	if (IsMouseInUIArea(mousePos, finalUIPos, uiSize))
+	{
+		// 마우스가 UI 영역 안에 있을 때만 함수 호출
+		SetCursor(LoadCursorW(nullptr, IDC_HAND));
+
+		if (mouseUp && m_prevMouseDown) // 마우스가 떼어졌고 이전에 눌려있었다면 Release 상태
+		{
+			SetCurrentState(EButtonState::Release);
+		}
+		else if (mouseDown) // 마우스가 눌려있으면 Pressed 상태
+		{
+			SetCurrentState(EButtonState::Pressed);
 		}
 		else
 		{
-			it = slots.erase(it);
+			SetCurrentState(EButtonState::Hover); // 마우스가 올라가있지만 눌리지 않았으면 Hover 상태
 		}
 	}
+	else
+	{
+		SetCurrentState(EButtonState::Idle);
+		SetCursor(LoadCursorW(nullptr, IDC_ARROW));
+	}
+
+	m_prevMouseDown = mouseDown;
 }
 
 void ButtonComponent::Release()
@@ -104,11 +109,17 @@ FVector2 ButtonComponent::GetRelativeSize()
 	return relativeSize;
 }
 
-void ButtonComponent::LoadData(const std::wstring& path)
+void ButtonComponent::LoadData(Define::EButtonState state, const std::wstring& path)
 {
 	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
-	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
+	m_bitmaps[state] = PackageResourceManager::GetInstance().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str());
+	
+	// 현재 상태의 이미지라면 m_bitmap도 업데이트
+	if (state == m_state)
+	{
+		m_bitmap = m_bitmaps[state];
+	}
 }
 
 bool ButtonComponent::IsMouseInUIArea(const FVector2& mousePos, const FVector2& uiPos, const FVector2& uiSize)
@@ -117,4 +128,44 @@ bool ButtonComponent::IsMouseInUIArea(const FVector2& mousePos, const FVector2& 
 			mousePos.x <= uiPos.x + uiSize.x &&
 			mousePos.y >= uiPos.y &&
 			mousePos.y <= uiPos.y + uiSize.y);
+}
+
+void ButtonComponent::ExecuteStateAction(Define::EButtonState state)
+{
+	auto it = stateActionSlots.find(state);
+	if (it != stateActionSlots.end())
+	{
+		// 부모 객체가 유효한지 확인
+		if (!it->second.weakPtr.expired())
+		{
+			it->second.func(); // 해당 상태의 함수 실행
+		}
+		else
+		{
+			// 부모 객체가 파괴되었으면 슬롯 제거
+			stateActionSlots.erase(it);
+		}
+	}
+}
+
+void ButtonComponent::SetCurrentState(Define::EButtonState state)
+{
+	// 이전 상태와 다르면 상태 변경
+	if (m_state != state)
+	{
+		// 이전 상태의 종료 함수 실행 (있는 경우)
+		ExecuteStateAction(static_cast<Define::EButtonState>(static_cast<int>(m_state) + 100)); // 종료 상태는 +100으로 가정
+		
+		m_state = state;
+		
+		// 새 상태의 시작 함수 실행
+		ExecuteStateAction(state);
+		
+		// 현재 상태에 맞는 이미지로 m_bitmap 업데이트
+		auto it = m_bitmaps.find(state);
+		if (it != m_bitmaps.end() && it->second)
+		{
+			m_bitmap = it->second;
+		}
+	}
 }

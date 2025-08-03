@@ -70,6 +70,25 @@ void TransformComponent::AddChildObject(WeakObjectPtr<TransformComponent> child)
 	children.push_back(childPtr);
 }
 
+void TransformComponent::RemoveFromParent()
+{
+	auto parentPtr = parent.lock();
+	if (!parentPtr) return; // 부모가 없으면 아무것도 하지 않음
+	
+	// 부모의 children 리스트에서 자신을 제거
+	for (auto it = parentPtr->children.begin(); it != parentPtr->children.end(); ++it)
+	{
+		if (it->lock() == this)
+		{
+			parentPtr->children.erase(it);
+			break;
+		}
+	}
+	
+	// 자신의 parent 참조 제거
+	parent.reset();
+}
+
 FVector2 TransformComponent::GetPosition() const
 {
 	const D2D1_VECTOR_2F& pos = m_worldTransform.GetPosition();

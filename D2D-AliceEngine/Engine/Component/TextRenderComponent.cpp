@@ -194,18 +194,21 @@ void TextRenderComponent::SetTextAlignment(ETextFormat format)
 void TextRenderComponent::SetText(const std::wstring& content)
 {
 	m_content = content;
+	InitializeFormat();
 	m_metricsDirty = true;
 }
 
 void TextRenderComponent::SetText(const float& val)
 {
 	m_content = std::to_wstring(val);
+	InitializeFormat();
 	m_metricsDirty = true;
 }
 
 void TextRenderComponent::SetColor(const FColor& color)
 {
 	m_color = color;
+	InitializeColor();
 	m_metricsDirty = true;
 }
 

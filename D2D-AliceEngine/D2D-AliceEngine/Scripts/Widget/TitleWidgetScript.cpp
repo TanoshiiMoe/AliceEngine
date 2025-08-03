@@ -39,39 +39,58 @@ void TitleWidgetScript::OnStart()
 	m_owner = GetOwner();
 	m_owner->transform()->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f,0.5f)));
 	auto text = m_owner->AddComponent<TextRenderComponent>();
+	auto title = m_owner->AddComponent<TextRenderComponent>();
 	auto button = m_owner->AddComponent<ButtonComponent>();
+	auto background = m_owner->AddComponent<SpriteRenderer>();
 	if (!text || !button) return;
 	
-	button->LoadData(L"Mushroom.png");
+	// ======================== button
+	button->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	button->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	button->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	button->LoadData(Define::EButtonState::Release, L"dead.png");
 	FVector2 buttonSize = button->GetRelativeSize();
 	button->SetRelativePosition(CoordHelper::RatioCoordToScreen(buttonSize, FVector2(0, -0.5)));
 	button->SetRelativeScale(FVector2(1, 1));
 	button->SetRelativeRotation(30);
 	button->m_layer = 500;
 
-	// Delegete
-	button->SetAction([]()
+	// ======================== title
+	title->SetText(L"Button 1");
+	title->SetFontSize(120.0f);
+	title->SetColor(FColor(255, 0, 0, 255));
+	FVector2 titleRectSize = title->GetRelativeSize();
+	title->SetRelativePosition(CoordHelper::RatioCoordToScreen(titleRectSize, FVector2(-0.5, -0.5)) + FVector2(0, -300));
+	title->SetRelativeScale(FVector2(1, 1));
+	title->SetRelativeRotation(0);
+	title->m_layer = 501;
+
+	// ======================== text
+	text->SetText(L"Button 1");
+	text->SetFontSize(60.0f);
+	text->SetColor(FColor(255, 0, 0, 255));
+	FVector2 textRectSize = text->GetRelativeSize();
+	text->SetRelativePosition(CoordHelper::RatioCoordToScreen(textRectSize, FVector2(-0.5, -0.5)));
+	text->SetRelativeScale(FVector2(1, 1));
+	text->SetRelativeRotation(0);
+	text->m_layer = 501;
+	text->RemoveFromParent();
+	button->AddChildComponent(text);
+
+	// ======================== background
+	background->LoadData(L"tree.jpg");
+	background->SetDrawType(Define::EDrawType::ScreenSpace);
+	FVector2 backgroundSize = background->GetRelativeSize();
+	background->SetRelativePosition(CoordHelper::RatioCoordToScreen(backgroundSize, FVector2(0, 0)));
+	background->SetRelativeScale(FVector2(1, 1));
+	background->SetRelativeRotation(0);
+
+	// ======================== Delegete
+	button->SetStateAction(Define::EButtonState::Pressed, []()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 	});
-
-	text->SetText(L"Title");
-	text->SetFontSize(60.0f);
-	text->SetColor(FColor(0, 0, 0, 255));
-	//text->SetPosition(FVector2(Define::SCREEN_WIDTH / 2, 40));
-	FVector2 textRectSize = text->GetRelativeSize();
-	text->SetRelativePosition(CoordHelper::RatioCoordToScreen(textRectSize, FVector2(-0.5, -0.5)));
-	//text->SetTextAlignment(ETextFormat::TopLeft);
-	text->m_layer = 500;
-
-	//button->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
-	//button->SetScale(150);
-	// º¸·ù
-	//button->SetHoverScale(160);
-	//button->SetAnchor(EUIScreenAnchor::MiddleCenter, 0, 250);
-	//button->SetPosition(FVector2(100,100));
-
 }
 
 void TitleWidgetScript::OnEnd()
