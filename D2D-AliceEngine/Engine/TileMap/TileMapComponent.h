@@ -24,8 +24,6 @@ public:
 	void SetSkew(const FVector2& angle);
 
 	FVector2 GetSize();
-
-	//WeakObjectPtr<TileMapWrapper> AddSpriteRenderer(const std::wstring& path);
 	
 public:
 	std::vector<WeakObjectPtr<TileMapRenderer>> m_TileRenderers;
