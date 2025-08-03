@@ -55,16 +55,16 @@ void UIComponent::Update(const float& deltaSeconds)
 			{
 				FVector2 mousePos = Input::GetMousePosition();
 				FVector2 ownerPos = FVector2( m_transform.GetPosition().x, m_transform.GetPosition().y);
-				float width = GetScale().x;
-				float height = GetScale().y;
-				if (mousePos.x >= ownerPos.x &&
-					mousePos.x <= ownerPos.x + width &&
-					mousePos.y >= ownerPos.y &&
-					mousePos.y <= ownerPos.y + height)
-				{
-					// 마우스가 UI 영역 안에 있을 때만 함수 호출
-					it->func();
-				}
+				//float width = GetScale().x;
+				//float height = GetScale().y;
+				//if (mousePos.x >= ownerPos.x &&
+				//	mousePos.x <= ownerPos.x + width &&
+				//	mousePos.y >= ownerPos.y &&
+				//	mousePos.y <= ownerPos.y + height)
+				//{
+				//	// 마우스가 UI 영역 안에 있을 때만 함수 호출
+				//	it->func();
+				//}
 			}
 			it++;
 		}
@@ -85,17 +85,17 @@ void UIComponent::Render()
 	if (m_bitmap == nullptr) return;
 	__super::Render();
 
-	D2D1_RECT_F destRect = { 0, 0, scale.x, scale.y };
-
-	D2D1::Matrix3x2F mat =
-		D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
-		D2D1::Matrix3x2F::Rotation(m_transform.GetRotation() * 180.0f / Define::PI) *
-		D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
+	//D2D1_RECT_F destRect = { 0, 0, scale.x, scale.y };
+	//
+	//D2D1::Matrix3x2F mat =
+	//	D2D1::Matrix3x2F::Scale(m_transform.GetScale().x, m_transform.GetScale().y) *
+	//	D2D1::Matrix3x2F::Rotation(m_transform.GetRotation() * 180.0f / Define::PI) *
+	//	D2D1::Matrix3x2F::Translation(m_transform.GetPosition().x, m_transform.GetPosition().y);
 
 	// 카메라 무시하고 위치 기반 UI 그리기
-	D2DRenderManager::GetD2DDevice()->SetTransform(mat);
-
-	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
+	//D2DRenderManager::GetD2DDevice()->SetTransform(mat);
+	
+	//D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR);
 }
 
 float UIComponent::GetBitmapSizeX()

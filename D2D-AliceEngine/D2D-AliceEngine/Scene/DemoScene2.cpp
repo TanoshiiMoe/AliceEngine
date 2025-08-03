@@ -15,6 +15,7 @@
 #include "../Scripts/Aru2.h"
 #include "../Scripts/Player.h"
 #include "../Scripts/CameraController.h"
+#include <Helpers/CoordHelper.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -75,20 +76,22 @@ void DemoScene2::OnEnter()
 		L" [H] : 아루2 7 회복하기 \n"
 		L" [J] : 아루 최대체력 15 늘리기"
 	);
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 50));
-	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
+	FVector2 widgetSize = m_widget->GetComponent<TextRenderComponent>()->GetRelativeSize();
+	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(0.1, 0.1)));
+	//m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 50));
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
 	m_widget2->transform()->SetPosition(0, 0);
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <씬> \n [3] : 씬 전환");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
-	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(FVector2(Define::SCREEN_WIDTH * 0.9, 0));
+	m_widget2->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.9, 0));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	
 	m_widget3->transform()->SetPosition(0, 0);
 	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <현재 씬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
-	m_widget3->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 10));
+	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
 	m_backgroundImage = NewObject<gameObject>(L"yuuka");

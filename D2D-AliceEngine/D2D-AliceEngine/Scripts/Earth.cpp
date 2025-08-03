@@ -31,9 +31,9 @@ void Earth::OnStart()
 	m_earth->AddComponent<BoxComponent>(m_earth->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
 	m_earth->AddComponent<TextRenderComponent>()->SetText(m_earth->GetName());
 	m_earth->GetComponent<TextRenderComponent>()->SetDrawType(EDrawType::WorldSpace);
-	m_earth->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_earth->GetComponent<TextRenderComponent>()->SetScale(FVector2(3, 3));
-	m_earth->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_earth->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.7f));
+	//m_earth->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_earth->GetComponent<TextRenderComponent>()->SetRelativeScale(FVector2(3, 3));
+	m_earth->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(0, -m_earth->GetComponent<SpriteRenderer>()->GetRelativeSize().y * 0.7f));
 
 	m_earth->AddComponent<InputComponent>()->SetAction(m_earth->GetHandle(),[this]() { Input(); });
 }

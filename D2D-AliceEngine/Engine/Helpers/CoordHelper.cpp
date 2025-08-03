@@ -10,6 +10,14 @@ FVector2 CoordHelper::RatioCoordToScreen(const FVector2& _pos)
 	};
 }
 
+FVector2 CoordHelper::RatioCoordToScreen(const FVector2& _size, const FVector2& _pivot)
+{
+	return {
+		_pivot.x * static_cast<float>(_size.x),
+		_pivot.y * static_cast<float>(_size.y)
+	};
+}
+
 D2D1_POINT_2F CoordHelper::TransformPoint(const D2D1_MATRIX_3X2_F& mat, const D2D1_POINT_2F& pt)
 {
 	return D2D1::Point2F(

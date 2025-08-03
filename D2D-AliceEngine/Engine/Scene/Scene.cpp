@@ -73,7 +73,7 @@ void Scene::OnEnter()
 	m_sysinfoWidget->AddComponent<TextRenderComponent>();
 
 	FVector2 pos = D2DRenderManager::GetInstance().GetApplicationSize();
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(pos.x * 0.7f, pos.y * 0.1f));
+	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(pos.x * 0.7f, pos.y * 0.1f));
 }
 
 void Scene::OnExit()

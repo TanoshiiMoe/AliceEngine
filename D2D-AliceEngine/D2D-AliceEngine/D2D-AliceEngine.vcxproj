@@ -191,6 +191,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Truck.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
+    <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scripts\Player.cpp" />
@@ -224,6 +225,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\Truck.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scripts\TitleUIScript.cpp" />
+    <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

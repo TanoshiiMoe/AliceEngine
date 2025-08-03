@@ -12,35 +12,35 @@ public:
 
 	void SetImages(const std::wstring& idle, const std::wstring& hover, const std::wstring& pressed);
 	void LoadData(const std::wstring& path);
-	inline void SetScale(const FVector2& _scale)
-	{
-		if (isHovered)
-		{
-			scale = m_hoveredScale;
-		}
-		else
-			scale = _scale;
-	}
-
-	inline void SetScale(const float& _x, const float& _y)
-	{
-		if (isHovered)
-		{
-			scale = m_hoveredScale;
-		}
-		else
-			scale = FVector2(_x, _y);
-	}
-
-	inline void SetScale(const float& _x)
-	{
-		if (isHovered)
-		{
-			scale = m_hoveredScale;
-		}
-		else
-			scale = FVector2(_x, _x);
-	}
+	//inline void SetScale(const FVector2& _scale)
+	//{
+	//	if (isHovered)
+	//	{
+	//		scale = m_hoveredScale;
+	//	}
+	//	else
+	//		scale = _scale;
+	//}
+	//
+	//inline void SetScale(const float& _x, const float& _y)
+	//{
+	//	if (isHovered)
+	//	{
+	//		scale = m_hoveredScale;
+	//	}
+	//	else
+	//		scale = FVector2(_x, _y);
+	//}
+	//
+	//inline void SetScale(const float& _x)
+	//{
+	//	if (isHovered)
+	//	{
+	//		scale = m_hoveredScale;
+	//	}
+	//	else
+	//		scale = FVector2(_x, _x);
+	//}
 
 	void SetPosition(const FVector2& pos);
 

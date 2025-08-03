@@ -38,14 +38,21 @@ void ButtonComponent::Update(const float& deltaSeconds)
 		{
 			if (Input::IsMouseLeftPressed())
 			{
+				// 마우스 위치 가져오기
 				FVector2 mousePos = Input::GetMousePosition();
-				FVector2 ownerPos = FVector2(relativeTransform.GetPosition().x, relativeTransform.GetPosition().y);
-				float width = GetScale().x;
-				float height = GetScale().y;
-				if (mousePos.x >= ownerPos.x &&
-					mousePos.x <= ownerPos.x + width &&
-					mousePos.y >= ownerPos.y &&
-					mousePos.y <= ownerPos.y + height)
+				
+				// 컴포넌트의 상대좌표
+				FVector2 relativePos = FVector2(
+					relativeTransform.GetPosition().x, 
+					relativeTransform.GetPosition().y
+				);
+				
+				// UI 크기 가져오기 및 위치 계산 (부모 좌표 + 상대좌표)
+				FVector2 uiSize = GetRelativeSize();
+				FVector2 finalUIPos = relativePos + FVector2(-uiSize.x * GetOwnerPivot()->x, -uiSize.y * GetOwnerPivot()->y);
+
+				// UI 영역 내 마우스 클릭 확인
+				if (IsMouseInUIArea(mousePos, finalUIPos, uiSize))
 				{
 					// 마우스가 UI 영역 안에 있을 때만 함수 호출
 					it->func();
@@ -67,12 +74,12 @@ void ButtonComponent::Release()
 
 void ButtonComponent::Render()
 {
-	if (m_bitmap == nullptr) return;
+	if (!m_bitmap) return;
 	__super::Render();
 
-	// 카메라 무시하고 위치 기반 UI 그리기
-	D2DRenderManager::GetD2DDevice()->SetTransform(view);
-	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get());
+	FVector2 relativeSize = FVector2(GetBitmapSizeX(), GetBitmapSizeY());
+	D2D1_RECT_F destRect = D2D1::RectF(-relativeSize.x / 2, -relativeSize.y / 2, relativeSize.x / 2, relativeSize.y / 2);
+	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), destRect);
 }
 
 float ButtonComponent::GetBitmapSizeX()
@@ -89,6 +96,14 @@ float ButtonComponent::GetBitmapSizeY()
 	return static_cast<float>(bmpSize.height);
 }
 
+FVector2 ButtonComponent::GetRelativeSize()
+{
+	FVector2 relativeSize = __super::GetRelativeSize();
+	relativeSize.x *= GetBitmapSizeX();
+	relativeSize.y *= GetBitmapSizeY();;
+	return relativeSize;
+}
+
 void ButtonComponent::LoadData(const std::wstring& path)
 {
 	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
@@ -96,9 +111,10 @@ void ButtonComponent::LoadData(const std::wstring& path)
 		(Define::BASE_RESOURCE_PATH + path).c_str());
 }
 
-FVector2 ButtonComponent::GetSize()
+bool ButtonComponent::IsMouseInUIArea(const FVector2& mousePos, const FVector2& uiPos, const FVector2& uiSize)
 {
-	if (!m_bitmap) return FVector2(0);
-	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
-	return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
+	return (mousePos.x >= uiPos.x &&
+			mousePos.x <= uiPos.x + uiSize.x &&
+			mousePos.y >= uiPos.y &&
+			mousePos.y <= uiPos.y + uiSize.y);
 }

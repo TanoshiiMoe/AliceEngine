@@ -21,6 +21,7 @@ public:
 	virtual float GetBitmapSizeY() override;
 
 	FVector2 GetBitmapSize();
+	virtual FVector2 GetRelativeSize() override;
 
 	void SetSlice(float x, float y, float w, float h);
 	void SetSkewing(bool _isSkewing, FVector2 _skewAngle = FVector2(0.0f, 0.0f));

@@ -184,7 +184,7 @@ void DemoScene3::OnEnter()
 		L" [R] : Scene Àç½ÃÀÛ \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 45));
+	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(18, 45));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
@@ -192,21 +192,21 @@ void DemoScene3::OnEnter()
 	m_widget2->transform()->SetPosition(0, 0);
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <¾À> \n [3] : ¾À ÀüÈ¯");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
-	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(CoordHelper::RatioCoordToScreen({ 0.9,0 }));
+	m_widget2->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen({ 0.9,0 }));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget2->GetComponent<TextRenderComponent>()->m_layer = 20;
 
 	m_widget3->transform()->SetPosition(0, 0);
 	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <ÇöÀç ¾À> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
-	m_widget3->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 10));
+	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget3->GetComponent<TextRenderComponent>()->m_layer = 20;
 
 	m_widget4->transform()->SetPosition(0, 0);
 	m_widget4->AddComponent<TextRenderComponent>()->SetText(L" test");
 	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
-	m_widget4->GetComponent<TextRenderComponent>()->SetPosition(CoordHelper::RatioCoordToScreen({ 0.7,0.6 }));
+	m_widget4->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen({ 0.7,0.6 }));
 	m_widget4->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget4->GetComponent<TextRenderComponent>()->m_layer = 20;
 

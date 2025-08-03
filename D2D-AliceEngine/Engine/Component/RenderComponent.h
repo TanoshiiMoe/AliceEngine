@@ -8,6 +8,7 @@
 #include "Component.h"
 #include <Define/Define.h>
 #include <Math/Transform.h>
+#include <Component/TransformComponent.h>
 
 class RenderComponent : public Component
 {
@@ -26,23 +27,21 @@ public:
 	virtual void Render() override;
 
 	void SetFlip(const bool& _flip) { bFlip = _flip; }
-	void SetScale(const FVector2& _scale) { scale = _scale; }
-	FVector2 GetScale() const { return scale; }
 	void SetRelativePosition(const FVector2& _pos);
 	void SetRelativeRotation(const float& _rotation);
 	void SetRelativeScale(const FVector2& _scale);
 	
 	FVector2 GetRelativePosition() const;
-	float GetRelativeRotation() const;
-	FVector2 GetRelativeScale() const;
+	float GetRelativeRotation();
+	FVector2 GetRelativeScale();
+
+	virtual FVector2 GetRelativeSize();
 
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	int m_layer = -999;
 	bool bFlip = false;
 protected:
-	D2D1_SIZE_U bmpSize;
 	D2D1::Matrix3x2F view;
-	FVector2 scale{ 1.0f, 1.0f };
-	Transform relativeTransform;
+	TransformComponent relativeTransform;
 };
 
