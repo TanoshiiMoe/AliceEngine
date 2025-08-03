@@ -115,7 +115,6 @@ public:
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_dWriteTextFormat);
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_pBrush);
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_eTransformType);
-		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_transform);
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_content);
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_color);
 		REGISTER_MEMBER(allMemberInfos[className], TextRenderComponent, m_font);
