@@ -42,36 +42,33 @@ void TitleWidgetScript::OnStart()
 	auto button = m_owner->AddComponent<ButtonComponent>();
 	if (!text || !button) return;
 	
-	button->LoadData(L"Mushroom.png");
+	// ======================== button
+	button->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	button->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	button->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	button->LoadData(Define::EButtonState::Release, L"dead.png");
 	FVector2 buttonSize = button->GetRelativeSize();
 	button->SetRelativePosition(CoordHelper::RatioCoordToScreen(buttonSize, FVector2(0, -0.5)));
 	button->SetRelativeScale(FVector2(1, 1));
 	button->SetRelativeRotation(30);
 	button->m_layer = 500;
 
-	// Delegete
-	button->SetAction([]()
+	// ======================== text
+	text->SetText(L"Title");
+	text->SetFontSize(60.0f);
+	text->SetColor(FColor(0, 0, 0, 255));
+	FVector2 textRectSize = text->GetRelativeSize();
+	text->SetRelativePosition(CoordHelper::RatioCoordToScreen(textRectSize, FVector2(-0.5, -0.5)));
+	text->SetRelativeScale(FVector2(1, 1));
+	text->SetRelativeRotation(30);
+	text->m_layer = 500;
+
+	// ======================== Delegete
+	button->SetStateAction(Define::EButtonState::Pressed, []()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 	});
-
-	text->SetText(L"Title");
-	text->SetFontSize(60.0f);
-	text->SetColor(FColor(0, 0, 0, 255));
-	//text->SetPosition(FVector2(Define::SCREEN_WIDTH / 2, 40));
-	FVector2 textRectSize = text->GetRelativeSize();
-	text->SetRelativePosition(CoordHelper::RatioCoordToScreen(textRectSize, FVector2(-0.5, -0.5)));
-	//text->SetTextAlignment(ETextFormat::TopLeft);
-	text->m_layer = 500;
-
-	//button->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
-	//button->SetScale(150);
-	// º¸·ù
-	//button->SetHoverScale(160);
-	//button->SetAnchor(EUIScreenAnchor::MiddleCenter, 0, 250);
-	//button->SetPosition(FVector2(100,100));
-
 }
 
 void TitleWidgetScript::OnEnd()

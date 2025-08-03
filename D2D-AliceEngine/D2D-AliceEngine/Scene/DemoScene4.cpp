@@ -86,10 +86,10 @@ void DemoScene4::OnEnter()
 	m_button = NewObject<gameObject>(L"Button");
 	m_button->AddComponent<ButtonComponent>();
 	//m_button->GetComponent<ButtonComponent>()->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
-	m_button->GetComponent<ButtonComponent>()->LoadData(L"Button_Idle.png");
+	m_button->GetComponent<ButtonComponent>()->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
 	m_button->GetComponent<ButtonComponent>()->SetRelativePosition(FVector2(100, 100));
 	m_button->GetComponent<ButtonComponent>()->SetRelativeScale(FVector2(1,1));
-	m_button->GetComponent<ButtonComponent>()->SetAction([]() {});
+	m_button->GetComponent<ButtonComponent>()->SetStateAction(Define::EButtonState::Pressed,[]() {});
 	m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
 	// Truck(점프대)
