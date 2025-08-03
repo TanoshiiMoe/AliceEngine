@@ -10,10 +10,10 @@
 #include <Component/TransformComponent.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
-#include "../Scripts/Sun.h"
-#include "../Scripts/Moon.h"
-#include "../Scripts/Earth.h"
-#include "../Scripts/YuukaVideo.h"
+#include "../Scripts/SolarScene/Sun.h"
+#include "../Scripts/SolarScene/Moon.h"
+#include "../Scripts/SolarScene/Earth.h"
+#include "../Scripts/Video/YuukaVideo.h"
 #include "../Scripts/CameraController.h"
 
 /*
