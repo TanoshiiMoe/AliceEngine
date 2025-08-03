@@ -20,6 +20,7 @@ public:
 	std::vector<WeakObjectPtr<TransformComponent>> children;
 
 	void AddChildObject(WeakObjectPtr<TransformComponent> child);
+	void RemoveFromParent();
 
 	FVector2 m_pivot{ 0.5f,0.5f }; // 좌표 중심점
 	Transform m_localTransform; // Transform 컴포넌트

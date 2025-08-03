@@ -88,6 +88,24 @@ void RenderComponent::SetRelativeScale(const FVector2& _scale)
 	relativeTransform.SetScale(_scale.x, _scale.y);
 }
 
+void RenderComponent::AddRelativePosition(const FVector2& _pos)
+{
+	FVector2 currentPos = relativeTransform.GetPosition();
+	relativeTransform.SetPosition(currentPos.x + _pos.x, currentPos.y + _pos.y);
+}
+
+void RenderComponent::AddRelativeRotation(const float& _rotation)
+{
+	float currentRotation = relativeTransform.GetRotation();
+	relativeTransform.SetRotation(currentRotation + _rotation);
+}
+
+void RenderComponent::AddRelativeScale(const FVector2& _scale)
+{
+	FVector2 currentScale = relativeTransform.GetScale();
+	relativeTransform.SetScale(currentScale.x + _scale.x, currentScale.y + _scale.y);
+}
+
 FVector2 RenderComponent::GetRelativePosition() const
 {
 	//D2D1_VECTOR_2F pos = relativeTransform.GetPosition();
@@ -120,4 +138,16 @@ FVector2 RenderComponent::GetRelativeSize()
 		relativeScale.x,
 		relativeScale.y
 	);
+}
+void RenderComponent::AddChildComponent(WeakObjectPtr<RenderComponent> rc)
+{
+	if (!rc.expired())
+	{
+		relativeTransform.AddChildObject(&rc->relativeTransform);
+	}
+}
+
+void RenderComponent::RemoveFromParent()
+{
+	relativeTransform.RemoveFromParent();
 }

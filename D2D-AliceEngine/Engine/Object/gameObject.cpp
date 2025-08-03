@@ -73,6 +73,15 @@ void gameObject::AddChildObject(const gameObject* obj)
 	}
 }
 
+void gameObject::RemoveFromParent()
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		// 부모로부터 자신을 제거
+		transformComp->RemoveFromParent();
+	}
+}
+
 void gameObject::Update()
 {
 

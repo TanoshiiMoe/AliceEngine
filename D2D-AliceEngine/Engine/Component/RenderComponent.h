@@ -31,11 +31,17 @@ public:
 	void SetRelativeRotation(const float& _rotation);
 	void SetRelativeScale(const FVector2& _scale);
 	
+	void AddRelativePosition(const FVector2& _pos);
+	void AddRelativeRotation(const float& _rotation);
+	void AddRelativeScale(const FVector2& _scale);
+	
 	FVector2 GetRelativePosition() const;
 	float GetRelativeRotation();
 	FVector2 GetRelativeScale();
 
 	virtual FVector2 GetRelativeSize();
+	virtual void AddChildComponent(WeakObjectPtr<RenderComponent> rc);
+	virtual void RemoveFromParent();
 
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	int m_layer = -999;
