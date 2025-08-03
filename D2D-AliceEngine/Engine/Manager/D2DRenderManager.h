@@ -23,6 +23,7 @@ public:
 	void Initialize(HWND hwnd);
 	void UnInitialize();
 
+	HWND GetHWND() { return m_hwnd; }
 	FVector2 GetApplicationSize();
 	void CreateSwapChainAndD2DTarget();	// 비트맵을 여러 개 묶어주는 함수
 	void OutputError(HRESULT hr);

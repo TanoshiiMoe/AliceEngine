@@ -85,9 +85,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>d2dengine_pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,9 +123,10 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>d2dengine_pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -186,6 +188,9 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scripts\SolarScene\Sun.h" />
     <ClInclude Include="d2dengine_pch.h" />
+    <ClInclude Include="Spine2D\SpineRenderer.h" />
+    <ClInclude Include="Scene\SpineScene.h" />
+    <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\Video\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
@@ -228,10 +233,16 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scripts\TitleUIScript.cpp" />
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
+    <ClCompile Include="Spine2D\SpineRenderer.cpp" />
+    <ClCompile Include="Scene\SpineScene.cpp" />
+    <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{ff21bb58-7919-4e53-a917-2a8af0469c81}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\spine-cpp\spine-cpp.vcxproj">
+      <Project>{9a954b2e-ffb7-408a-87d1-e75dd7139d0e}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

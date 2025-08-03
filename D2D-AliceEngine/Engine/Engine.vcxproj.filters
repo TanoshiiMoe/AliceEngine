@@ -58,6 +58,9 @@
     <Filter Include="Effect">
       <UniqueIdentifier>{d0654fef-fd7d-4736-9de7-f8137dec6841}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Spine2D">
+      <UniqueIdentifier>{95330cb4-092e-413d-975d-63995b0227e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
