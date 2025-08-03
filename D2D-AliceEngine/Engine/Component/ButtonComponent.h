@@ -17,10 +17,9 @@ public:
 
 	virtual float GetBitmapSizeX() override;
 	virtual float GetBitmapSizeY() override;
+	virtual FVector2 GetRelativeSize() override;
 
 	void LoadData(const std::wstring& path);
-
-	FVector2 GetSize();
 
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
@@ -32,11 +31,14 @@ public:
 	}
 	
 private:
+	// UI 영역 내 마우스 위치 확인 헬퍼 메서드
+	bool IsMouseInUIArea(const FVector2& mousePos, const FVector2& uiPos, const FVector2& uiSize);
+	
 	struct ClickFunctionSlot
 	{
 		WeakObjectPtr<gameObject> weakPtr;
 		std::function<void()> func;
 	};
 	std::vector<ClickFunctionSlot> slots;
-	EButtonState m_state = EButtonState::Idle;
+	Define::EButtonState m_state = Define::EButtonState::Idle;
 };

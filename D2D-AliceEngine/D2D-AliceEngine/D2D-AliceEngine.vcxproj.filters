@@ -23,6 +23,9 @@
     <Filter Include="Scripts\Bike">
       <UniqueIdentifier>{556ab419-90eb-4a8a-a977-62945c1f74ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Widget">
+      <UniqueIdentifier>{8f0c8008-cfac-4743-9c41-1b5f5fa8e323}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -115,6 +118,9 @@
     <ClInclude Include="Scripts\Bike\LaneController.h">
       <Filter>Scripts\Bike</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Widget\TitleWidgetScript.h">
+      <Filter>Scripts\Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -200,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="Scripts\Player.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp">
+      <Filter>Scripts\Widget</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

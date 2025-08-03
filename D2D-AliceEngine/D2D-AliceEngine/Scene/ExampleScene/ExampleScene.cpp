@@ -95,7 +95,7 @@ void ExampleScene::OnEnter()
 		L" 텍스트 텍스트 텍스트 \n"
 		L"\n"
 	);
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 60));
+	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(18, 60));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;

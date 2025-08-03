@@ -28,6 +28,8 @@
 #include <Scripts/CameraController.h>
 #include <Component/SkewTransform.h>
 #include <Effect/Prism.h>
+#include <Scripts/Widget/TitleWidgetScript.h>
+#include <Component/ButtonComponent.h>
 
 void DemoScene4::Initialize()
 {
@@ -78,16 +80,17 @@ void DemoScene4::OnEnter()
 
 	
 	// UI 추가
-	m_UI = NewObject<gameObject>(L"ad");
-	m_UI->AddComponent<UI_Script>();
+	//m_UI = NewObject<gameObject>(L"ad");
+	//m_UI->AddComponent<TitleWidgetScript>();
 
 	m_button = NewObject<gameObject>(L"Button");
-	m_button->AddComponent<UIButton>();
-	m_button->GetComponent<UIButton>()->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
-	m_button->GetComponent<UIButton>()->SetPosition(FVector2(100, 100));
-	m_button->GetComponent<UIButton>()->SetAction([]() {});
-	m_button->GetComponent<UIButton>()->SetScale(150);
-	m_button->GetComponent<UIButton>()->m_layer = 510;
+	m_button->AddComponent<ButtonComponent>();
+	//m_button->GetComponent<ButtonComponent>()->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
+	m_button->GetComponent<ButtonComponent>()->LoadData(L"Button_Idle.png");
+	m_button->GetComponent<ButtonComponent>()->SetRelativePosition(FVector2(100, 100));
+	m_button->GetComponent<ButtonComponent>()->SetRelativeScale(FVector2(1,1));
+	m_button->GetComponent<ButtonComponent>()->SetAction([]() {});
+	m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

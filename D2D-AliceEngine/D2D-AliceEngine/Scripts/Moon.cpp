@@ -31,9 +31,9 @@ void Moon::OnStart()
 	m_moon->AddComponent<BoxComponent>(m_moon->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Black);
 	m_moon->AddComponent<TextRenderComponent>()->SetText(m_moon->GetName());
 	m_moon->GetComponent<TextRenderComponent>()->SetDrawType(EDrawType::WorldSpace);
-	m_moon->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_moon->GetComponent<TextRenderComponent>()->SetScale(FVector2(4, 4));
-	m_moon->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_moon->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.7f));
+	//m_moon->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_moon->GetComponent<TextRenderComponent>()->SetRelativeScale(FVector2(4, 4));
+	m_moon->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(0, -m_moon->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.7f));
 
 	m_moon->AddComponent<InputComponent>()->SetAction(m_moon->GetHandle(),[this]() { Input(); });
 }

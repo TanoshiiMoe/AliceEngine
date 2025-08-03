@@ -5,7 +5,7 @@
 
 TransformComponent::TransformComponent()
 {
-	SetTransform(FVector2(-1000.0f), 0, FVector2(1.0f), FVector2(0.5f));
+	SetTransform(FVector2(0), 0, FVector2(1.0f), FVector2(0.5f));
 }
 
 TransformComponent::~TransformComponent()
@@ -14,17 +14,7 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_EndPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_EndPhysics);
 }
 
 void TransformComponent::Release()

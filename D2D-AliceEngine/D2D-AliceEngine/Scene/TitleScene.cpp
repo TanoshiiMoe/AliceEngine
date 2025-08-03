@@ -1,6 +1,8 @@
 #include "TitleScene.h"
 #include <Manager/SceneManager.h>
 #include "Scripts/TitleUIScript.h"
+#include <Scripts/Widget/TitleWidgetScript.h>
+#include <Component/SpriteRenderer.h>
 
 void TitleScene::Initialize()
 {
@@ -25,7 +27,13 @@ void TitleScene::OnEnter()
 	m_bg = NewObject<gameObject>(L"BackGround");
 
 	m_UI = NewObject<gameObject>(L"UI");
-	m_UI->AddComponent<TitleUIScript>();
+	//m_UI->AddComponent<TitleUIScript>();
+	m_UI->AddComponent<TitleWidgetScript>();
+
+	iamge = NewObject<gameObject>(L"image");
+	iamge->transform()->SetPosition(0, 0);
+	//iamge->transform()->SetPivot(0.5f,0.5f);
+	iamge->AddComponent<SpriteRenderer>()->LoadData(L"Sun.png");
 }
 
 void TitleScene::OnExit()

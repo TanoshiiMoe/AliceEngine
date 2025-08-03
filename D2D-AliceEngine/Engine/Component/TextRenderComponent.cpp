@@ -9,6 +9,7 @@
 #include <Math/TMath.h>
 #include <Math/Transform.h>
 #include <Component/TransformComponent.h>
+#include <Helpers/CoordHelper.h>
 
 TextRenderComponent::TextRenderComponent()
 {
@@ -62,18 +63,12 @@ void TextRenderComponent::Render()
 	
 	InitializeLayout();
 
-	D2D1::Matrix3x2F viewTransform;
-	context->GetTransform(&viewTransform);
+	D2D1_POINT_2F textPosition = D2D1::Point2F(0, 0); // destRect의 중앙 (0,0)을 기준점으로 사용
+	context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
+	//FVector2 relativeSize = GetRelativeSize();
+	//D2D1_POINT_2F textPosition = D2D1::Point2F(-relativeSize.x / 2, -relativeSize.y / 2);
+	//context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
 
-	// 피벗 보정
-	D2D1_POINT_2F pivotOffset = {
-		m_metrics.width * GetOwnerPivot()->x,
-		m_metrics.height * GetOwnerPivot()->y
-	};
-	D2D1::Matrix3x2F pivotAdjust = D2D1::Matrix3x2F::Translation(-pivotOffset.x / 2, -pivotOffset.y / 2);
-	viewTransform =  pivotAdjust * m_transform.ToMatrix() * viewTransform;
-	context->SetTransform(viewTransform);
-	context->DrawTextLayout(D2D1::Point2F(0, 0), m_layout.Get(), m_pBrush.Get());
 }
 
 float TextRenderComponent::GetBitmapSizeX()
@@ -86,6 +81,14 @@ float TextRenderComponent::GetBitmapSizeY()
 {
 	InitializeLayout();
 	return m_metrics.height;
+}
+
+FVector2 TextRenderComponent::GetRelativeSize()
+{
+	FVector2 relativeSize = __super::GetRelativeSize();
+	relativeSize.x *= GetBitmapSizeX();
+	relativeSize.y *= GetBitmapSizeY();;
+	return relativeSize;
 }
 
 void TextRenderComponent::InitializeFormat()
@@ -184,6 +187,7 @@ void TextRenderComponent::SetTextAlignment(ETextFormat format)
 		break;
 	}
 
+	InitializeFormat();
 	m_metricsDirty = true;
 }
 
@@ -210,11 +214,6 @@ void TextRenderComponent::SetFontSize(const float& _size)
 	m_fontSize = _size;
 	m_metricsDirty = true;
 	InitializeFormat();
-}
-
-void TextRenderComponent::SetPosition(const FVector2& pos)
-{
-	m_transform.SetPosition(pos.x, pos.y);
 }
 
 void TextRenderComponent::SetIgnoreCameraTransform(bool bIgnore)

@@ -9,6 +9,7 @@
 #include <Core/Input.h>
 #include <Manager/SceneManager.h>
 #include <System/ScriptSystem.h>
+#include <Helpers/CoordHelper.h>
 
 void Sun::Initialize()
 {
@@ -29,11 +30,11 @@ void Sun::OnStart()
 	m_sun->transform()->SetScale(0.5f);
 	m_sun->AddComponent<TextRenderComponent>()->SetText(m_sun->GetName());
 	m_sun->GetComponent<TextRenderComponent>()->SetDrawType(EDrawType::WorldSpace);
-	m_sun->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_sun->GetComponent<TextRenderComponent>()->SetScale(FVector2(2, 2));
+	m_sun->GetComponent<TextRenderComponent>()->SetRelativeScale(FVector2(2, 2));
 	m_sun->AddComponent<SpriteRenderer>()->LoadData(L"Sun.png");
 	m_sun->AddComponent<BoxComponent>(m_sun->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
-	m_sun->GetComponent<TextRenderComponent>()->SetPosition(FVector2(0, -m_sun->GetComponent<SpriteRenderer>()->GetBitmapSize().y * 0.7f));
+	FVector2 buttonSize = m_sun->GetComponent<TextRenderComponent>()->GetRelativeSize();
+	m_sun->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen(buttonSize, FVector2(-0.5, -0.5)));
 
 	m_sun->AddComponent<InputComponent>()->SetAction(m_sun->GetHandle(),[this]() { Input(); });
 }

@@ -78,14 +78,13 @@ void SpriteRenderer::Render()
 	// 이펙트 있을시 이펙트 그리기
 	if (!m_effect)
 	{
-		D2D1::Matrix3x2F backToD2DTransform = D2D1::Matrix3x2F::Translation(-GetBitmapSizeX() / 2, -GetBitmapSizeY() / 2);
-		D2D1::Matrix3x2F pivotTransform = D2D1::Matrix3x2F::Translation((GetBitmapSizeX() / 2) * (GetOwnerPivot()->x - 0.5f), (GetBitmapSizeY() / 2) * (GetOwnerPivot()->y - 0.5f));
-		context->SetTransform(backToD2DTransform * pivotTransform * view);
-		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get());
+		FVector2 relativeSize = GetBitmapSize();
+		D2D1_RECT_F destRect = D2D1::RectF(-relativeSize.x/2, -relativeSize.y/2, relativeSize.x/2, relativeSize.y/2);
+		context->DrawBitmap(m_bitmap.get(), destRect);
 	}
 	else {
 		D2D1_POINT_2F destPos = D2D1::Point2F(offsetX, offsetY);
-		D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get(), &destPos, &srcRect);
+		context->DrawImage(m_effect.Get(), &destPos, &srcRect);
 	}
 		
 }
@@ -109,6 +108,14 @@ FVector2 SpriteRenderer::GetBitmapSize()
 	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
+}
+
+FVector2 SpriteRenderer::GetRelativeSize()
+{
+	FVector2 relativeSize = __super::GetRelativeSize();
+	relativeSize.x *= GetBitmapSizeX();
+	relativeSize.y *= GetBitmapSizeY();;
+	return relativeSize;
 }
 
 void SpriteRenderer::SetSlice(float x, float y, float w, float h)
