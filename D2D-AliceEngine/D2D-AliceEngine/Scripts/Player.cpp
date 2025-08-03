@@ -49,15 +49,6 @@ void Player::Update(const float& deltaSeconds)
 
 	prismTimeCount += deltaSeconds;
 
-	if (Input::IsKeyPressed(VK_Q))
-	{
-		SceneManager::GetCamera()->SetOwner(m_owner);
-	}
-	if (Input::IsKeyPressed(VK_E))
-	{
-		SceneManager::GetCamera()->ClearOwner();
-	}
-
 	float speed = walkSpeed * playerDeltaSeconds;
 	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
@@ -197,6 +188,8 @@ void Player::OnStart()
 
 	// LandController �׽�Ʈ
 	m_owner->AddComponent<LaneController>();
+
+	SceneManager::GetCamera()->SetOwner(m_owner);
 }
 
 void Player::OnEnd()
@@ -213,6 +206,14 @@ void Player::Input()
 {
 	// 여기에 Input에 대한 로직 작성
 
+	if (Input::IsKeyPressed(VK_Q))
+	{
+		SceneManager::GetCamera()->SetOwner(m_owner);
+	}
+	if (Input::IsKeyPressed(VK_E))
+	{
+		SceneManager::GetCamera()->ClearOwner();
+	}
 	if (Input::IsKeyDown(VK_K))
 	{
 		walkSpeed += 5.0f;

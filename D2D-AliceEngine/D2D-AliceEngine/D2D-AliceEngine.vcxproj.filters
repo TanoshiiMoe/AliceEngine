@@ -127,6 +127,9 @@
     <ClInclude Include="Scripts\Video\YuukaVideo.h">
       <Filter>Scripts\Video</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Bike\BikeMovementScript.h">
+      <Filter>Scripts\Bike</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -215,6 +218,9 @@
     </ClCompile>
     <ClCompile Include="Scripts\Video\YuukaVideo.cpp">
       <Filter>Scripts\Video</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp">
+      <Filter>Scripts\Bike</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
