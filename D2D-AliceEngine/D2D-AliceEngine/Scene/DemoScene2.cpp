@@ -50,6 +50,7 @@ void DemoScene2::OnEnter()
 	m_widget4 = NewObject<gameObject>(L"widget4");
 	m_widget5 = NewObject<gameObject>(L"widget5");
 	m_widget6 = NewObject<gameObject>(L"widget6");
+	m_widget7 = NewObject<gameObject>(L"widget6");
 
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
 		L"\n"
@@ -115,6 +116,12 @@ void DemoScene2::OnEnter()
 	m_widget6->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(480, 180));
 	m_widget6->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
+	m_widget7->transform()->SetPosition(0, 0);
+	m_widget7->AddComponent<TextRenderComponent>()->SetText(L" <gameObject> :" + GetName());
+	m_widget7->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
+	m_widget7->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(480, 220));
+	m_widget7->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+
 	m_backgroundImage = NewObject<gameObject>(L"yuuka");
 	m_backgroundImage->AddComponent<BackGroundImage>();
 
@@ -126,18 +133,18 @@ void DemoScene2::OnEnter()
 	//m_alice->AddComponent<VideoComponent>()->LoadData(L"BackGround\\Alice.webm", 30, L"jpg", 95, false);
 	//m_alice->GetComponent<VideoComponent>()->Play();
 
-	m_aru = NewObject<gameObject>(L"aru");
+	m_aru = NewObject<gameObject>(L"Aru");
 	m_aru->AddComponent<Aru>();
 
-	m_aru2 = NewObject<gameObject>(L"aru2");
+	m_aru2 = NewObject<gameObject>(L"Aru2");
 	m_aru2->AddComponent<Aru2>();
 
+	// =======================================  Tag Example  ==========================================
 	// 태그 변하는걸 보려면 여기서 m_aru2를 Aru2로 바꿔주세요.
 	// 지금은 2개가 찾아지는 걸 볼 수 있습니다.
 	m_aru->SetTag(L"Aru");
 	m_aru2->SetTag(L"Aru");
 	//m_aru2->SetTag(L"Aru2");
-
 
 	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { aruInput(); });
 	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2->GetHandle(), [this]() { aru2Input(); });
@@ -210,7 +217,7 @@ void DemoScene2::aruInput()
 
 	if (Input::IsKeyDown(VK_I))
 	{
-		WeakObjectPtr<gameObject> weakAru = FindObjectByTag<gameObject>(L"Aru");
+		WeakObjectPtr<gameObject> weakAru = FindObjectByName<gameObject>(L"Aru");
 		if (!weakAru.expired())
 		{
 			m_widget4->GetComponent<TextRenderComponent>()->SetText(L" <gameObject> :" + weakAru->GetName());
@@ -232,6 +239,15 @@ void DemoScene2::aruInput()
 		if (!weakAru.empty())
 		{
 			m_widget6->GetComponent<TextRenderComponent>()->SetText(L" <gameObject> : " + std::to_wstring(weakAru.size()));
+		}
+	}
+
+	if (Input::IsKeyDown(VK_L))
+	{
+		std::vector<WeakObjectPtr<gameObject>> weakAru = FindObjectsByName<gameObject>(L"Aru");
+		if (!weakAru.empty())
+		{
+			m_widget7->GetComponent<TextRenderComponent>()->SetText(L" <gameObject> : " + std::to_wstring(weakAru.size()));
 		}
 	}
 
