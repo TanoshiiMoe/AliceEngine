@@ -95,7 +95,7 @@ public:
 	}
 
 	template<class T>
-	std::vector<WeakObjectPtr<T>> FindObjectsByType()
+	std::vector<WeakObjectPtr<T>> FindObjects()
 	{
 		std::vector<WeakObjectPtr<T>> foundObjects;
 		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
@@ -131,6 +131,35 @@ public:
 			if (auto found = dynamic_cast<T*>(it->second.get()))
 			{
 				if (found->GetTag() == _tag)
+					foundObjects.push_back(WeakObjectPtr<T>(found));
+			}
+		}
+		return foundObjects;
+	}
+
+	template<class T>
+	WeakObjectPtr<T> FindObjectByName(std::wstring _name)
+	{
+		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			if (auto found = dynamic_cast<T*>(it->second.get()))
+			{
+				if (found->GetName() == _name)
+					return WeakObjectPtr<T>(found);
+			}
+		}
+		return WeakObjectPtr<T>();
+	}
+
+	template<class T>
+	std::vector<WeakObjectPtr<T>> FindObjectsByName(std::wstring _name)
+	{
+		std::vector<WeakObjectPtr<T>> foundObjects;
+		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			if (auto found = dynamic_cast<T*>(it->second.get()))
+			{
+				if (found->GetName() == _name)
 					foundObjects.push_back(WeakObjectPtr<T>(found));
 			}
 		}
