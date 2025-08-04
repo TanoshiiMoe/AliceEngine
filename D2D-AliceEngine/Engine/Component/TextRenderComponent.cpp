@@ -102,7 +102,7 @@ void TextRenderComponent::InitializeFormat()
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
 		m_fontSize,
-		L"", //locale
+		m_locale.c_str(), //locale
 		&m_dWriteTextFormat
 	);
 }
@@ -216,6 +216,13 @@ void TextRenderComponent::SetFontSize(const float& _size)
 {
 	m_fontSize = _size;
 	m_metricsDirty = true;
+	InitializeFormat();
+}
+
+void TextRenderComponent::SetFont(const std::wstring& _fontName, const std::wstring& _fontLocale)
+{
+	m_font = _fontName;
+	m_locale = _fontLocale;
 	InitializeFormat();
 }
 
