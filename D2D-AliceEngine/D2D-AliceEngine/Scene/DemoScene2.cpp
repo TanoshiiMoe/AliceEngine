@@ -47,6 +47,9 @@ void DemoScene2::OnEnter()
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget2 = NewObject<gameObject>(L"widget2");
 	m_widget3 = NewObject<gameObject>(L"widget3");
+	m_widget4 = NewObject<gameObject>(L"widget4");
+	m_widget5 = NewObject<gameObject>(L"widget5");
+	m_widget6 = NewObject<gameObject>(L"widget6");
 
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
 		L"\n"
@@ -94,6 +97,24 @@ void DemoScene2::OnEnter()
 	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
+	m_widget4->transform()->SetPosition(0, 0);
+	m_widget4->AddComponent<TextRenderComponent>()->SetText(L" <gameObject> :" + GetName());
+	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
+	m_widget4->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(480, 100));
+	m_widget4->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+	
+	m_widget5->transform()->SetPosition(0, 0);
+	m_widget5->AddComponent<TextRenderComponent>()->SetText(L" <gameObject> :" + GetName());
+	m_widget5->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
+	m_widget5->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(480, 140));
+	m_widget5->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+
+	m_widget6->transform()->SetPosition(0, 0);
+	m_widget6->AddComponent<TextRenderComponent>()->SetText(L" <gameObject> :" + GetName());
+	m_widget6->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
+	m_widget6->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(480, 180));
+	m_widget6->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+
 	m_backgroundImage = NewObject<gameObject>(L"yuuka");
 	m_backgroundImage->AddComponent<BackGroundImage>();
 
@@ -110,7 +131,14 @@ void DemoScene2::OnEnter()
 
 	m_aru2 = NewObject<gameObject>(L"aru2");
 	m_aru2->AddComponent<Aru2>();
-	
+
+	// 태그 변하는걸 보려면 여기서 m_aru2를 Aru2로 바꿔주세요.
+	// 지금은 2개가 찾아지는 걸 볼 수 있습니다.
+	m_aru->SetTag(L"Aru");
+	m_aru2->SetTag(L"Aru");
+	//m_aru2->SetTag(L"Aru2");
+
+
 	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { aruInput(); });
 	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2->GetHandle(), [this]() { aru2Input(); });
 }
@@ -175,6 +203,38 @@ void DemoScene2::aruInput()
 		FVector2 scale = m_aru->transform()->GetScale() * 1.3f;
 		m_aru->transform()->SetScale(scale.x, scale.y);
 	}
+	if (Input::IsKeyDown(VK_R))
+	{
+		m_aru->transform()->SetRotation(m_aru->transform()->GetRotation() + 5.0f);
+	}
+
+	if (Input::IsKeyDown(VK_I))
+	{
+		WeakObjectPtr<gameObject> weakAru = FindObjectByTag<gameObject>(L"Aru");
+		if (!weakAru.expired())
+		{
+			m_widget4->GetComponent<TextRenderComponent>()->SetText(L" <gameObject> :" + weakAru->GetName());
+		}
+	}
+
+	if (Input::IsKeyDown(VK_O))
+	{
+		WeakObjectPtr<gameObject> weakAru = FindObjectByTag<gameObject>(L"Aru2");
+		if (!weakAru.expired())
+		{
+			m_widget5->GetComponent<TextRenderComponent>()->SetText(L" <gameObject> :" + weakAru->GetName());
+		}
+	}
+
+	if (Input::IsKeyDown(VK_P))
+	{
+		std::vector<WeakObjectPtr<gameObject>> weakAru = FindObjectsByTag<gameObject>(L"Aru");
+		if (!weakAru.empty())
+		{
+			m_widget6->GetComponent<TextRenderComponent>()->SetText(L" <gameObject> : " + std::to_wstring(weakAru.size()));
+		}
+	}
+
 	if (Input::IsKeyDown(VK_R))
 	{
 		m_aru->transform()->SetRotation(m_aru->transform()->GetRotation() + 5.0f);

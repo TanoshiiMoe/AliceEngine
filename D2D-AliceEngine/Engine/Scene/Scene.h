@@ -81,6 +81,62 @@ public:
 		return WeakObjectPtr<TReturnType>(createdObj);
 	}
 
+	template<class T>
+	WeakObjectPtr<T> FindObject()
+	{
+		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			if (auto found = dynamic_cast<T*>(it->second.get()))
+			{
+				return WeakObjectPtr<T>(found);
+			}
+		}
+		return WeakObjectPtr<T>();
+	}
+
+	template<class T>
+	std::vector<WeakObjectPtr<T>> FindObjectsByType()
+	{
+		std::vector<WeakObjectPtr<T>> foundObjects;
+		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			if (auto found = dynamic_cast<T*>(it->second.get()))
+			{
+				foundObjects.push_back(WeakObjectPtr<T>(found));
+			}
+		}
+		return foundObjects;
+	}
+
+	template<class T>
+	WeakObjectPtr<T> FindObjectByTag(std::wstring _tag)
+	{
+		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			if (auto found = dynamic_cast<T*>(it->second.get()))
+			{
+				if (found->GetTag() == _tag)
+					return WeakObjectPtr<T>(found);
+			}
+		}
+		return WeakObjectPtr<T>();
+	}
+
+	template<class T>
+	std::vector<WeakObjectPtr<T>> FindObjectsByTag(std::wstring _tag)
+	{
+		std::vector<WeakObjectPtr<T>> foundObjects;
+		for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+		{
+			if (auto found = dynamic_cast<T*>(it->second.get()))
+			{
+				if (found->GetTag() == _tag)
+					foundObjects.push_back(WeakObjectPtr<T>(found));
+			}
+		}
+		return foundObjects;
+	}
+
 	gameObject* Instantiate(gameObject* obj);
 
 private:
