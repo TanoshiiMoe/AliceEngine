@@ -100,6 +100,7 @@ bool Scene::RemoveObject(gameObject* targetObj)
 	{
 		if (it->second.get() == targetObj)
 		{
+			m_nameToUUIDs.erase(it->second->GetName());
 			it->second.reset();
 			m_objects.erase(it);
 			return true;
