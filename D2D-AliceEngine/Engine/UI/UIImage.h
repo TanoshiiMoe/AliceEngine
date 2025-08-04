@@ -20,8 +20,8 @@ public:
 
 	void SetPosition(const FVector2& pos) override {}
 	void SetPivot(float _x, float _y);
-	void SetAnchor(EUIScreenAnchor anchor, const FVector2& offset = FVector2(0, 0)) override {}
-	void SetAnchor(EUIScreenAnchor anchor, const float& offsetX, const float& offsetY) override {}
+	void SetAnchor(EUIScreenAnchor anchor, const FVector2& offset = FVector2(0, 0)) override;
+	void SetAnchor(EUIScreenAnchor anchor, const float& offsetX, const float& offsetY) override;
 
 	EUIScreenAnchor GetAnchor() { return m_anchor; }
 	EUIScreenAnchor m_anchor = EUIScreenAnchor::TopLeft;
