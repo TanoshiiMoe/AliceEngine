@@ -22,6 +22,8 @@ public:
 	virtual float GetBitmapSizeX() override;
 	virtual float GetBitmapSizeY() override;
 
+	virtual FVector2 GetRelativeSize() override;
+
 	ComPtr<IDWriteTextLayout> m_layout;
 	ComPtr<IDWriteTextFormat> m_dWriteTextFormat;
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
@@ -46,17 +48,15 @@ public:
 		};
 
 		m_content = oss.str();
+		InitializeFormat();
 		InitializeLayout();
 	}
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
-	void SetPosition(const FVector2& pos);
-	void SetScale(const FVector2& scale);
-	void SetTransformType(const ETransformType& type);
+	void SetIgnoreCameraTransform(bool bIgnore);
 
 public:
 	ETransformType m_eTransformType = ETransformType::D2D;
-	Transform m_transform;
 	std::wstring m_content = L"";
 	FColor m_color;
 	std::wstring m_font = L"Consolas";
@@ -64,5 +64,8 @@ public:
 
 	DWRITE_TEXT_METRICS m_metrics{};
 	bool m_metricsDirty = true;
+
+private:
+	bool bIgnoreCameraTransform = false;
 };
 

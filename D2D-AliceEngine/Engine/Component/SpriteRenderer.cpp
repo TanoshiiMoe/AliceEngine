@@ -60,7 +60,8 @@ void SpriteRenderer::Release()
 
 void SpriteRenderer::Render()
 {
-	if (m_bitmap == nullptr) return;
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!m_bitmap || !context) return;
 	__super::Render();
 
 	// 잘라올 영역 결정 ― 값이 -1이면 원본 전부
@@ -68,28 +69,22 @@ void SpriteRenderer::Render()
 	float cropH = (slice.srcH > 0) ? slice.srcH : spriteInfo.height;
 	float srcL = slice.srcX;
 	float srcT = slice.srcY;
-
 	D2D1_RECT_F srcRect = { srcL,               srcT,
 							 srcL + cropW,       srcT + cropH };
-
 	// 화면에 그릴 위치(센터링 포함)
 	float offsetX = -cropW * spriteInfo.pivotX;
 	float offsetY = -cropH * spriteInfo.pivotY;
 
-	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	if (!context) return;
-	
 	// 이펙트 있을시 이펙트 그리기
 	if (!m_effect)
 	{
-		D2D1::Matrix3x2F backToD2DTransform = D2D1::Matrix3x2F::Translation(-GetBitmapSizeX() / 2, -GetBitmapSizeY() / 2);
-		D2D1::Matrix3x2F pivotTransform = D2D1::Matrix3x2F::Translation((GetBitmapSizeX() / 2) * (GetPivot()->x - 0.5f), (GetBitmapSizeY() / 2) * (GetPivot()->y - 0.5f));
-		context->SetTransform(backToD2DTransform * pivotTransform * view);
-		D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get());
+		FVector2 relativeSize = GetBitmapSize();
+		D2D1_RECT_F destRect = D2D1::RectF(-relativeSize.x/2, -relativeSize.y/2, relativeSize.x/2, relativeSize.y/2);
+		context->DrawBitmap(m_bitmap.get(), destRect);
 	}
 	else {
 		D2D1_POINT_2F destPos = D2D1::Point2F(offsetX, offsetY);
-		D2DRenderManager::GetD2DDevice()->DrawImage(m_effect.Get(), &destPos, &srcRect);
+		context->DrawImage(m_effect.Get(), &destPos, &srcRect);
 	}
 		
 }
@@ -108,11 +103,19 @@ float SpriteRenderer::GetBitmapSizeY()
 	return static_cast<float>(bmpSize.height);
 }
 
-FVector2 SpriteRenderer::GetSize()
+FVector2 SpriteRenderer::GetBitmapSize()
 {
 	if (!m_bitmap) return FVector2(0);
 	D2D1_SIZE_U bmpSize = m_bitmap->GetPixelSize();
 	return FVector2(static_cast<float>(bmpSize.width), static_cast<float>(bmpSize.height));
+}
+
+FVector2 SpriteRenderer::GetRelativeSize()
+{
+	FVector2 relativeSize = __super::GetRelativeSize();
+	relativeSize.x *= GetBitmapSizeX();
+	relativeSize.y *= GetBitmapSizeY();;
+	return relativeSize;
 }
 
 void SpriteRenderer::SetSlice(float x, float y, float w, float h)

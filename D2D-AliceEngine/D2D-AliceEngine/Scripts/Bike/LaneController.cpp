@@ -48,18 +48,7 @@ void LaneController::RemoveAction(ObjectHandle _handle, ActionType _type)
 void LaneController::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(OnStart);
-
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_PostPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-		{
-			if (auto sp = weak.lock())
-			{
-				sp->Update(dt);
-			}
-		}
-	);
+	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
 }
 
 void LaneController::OnStart()

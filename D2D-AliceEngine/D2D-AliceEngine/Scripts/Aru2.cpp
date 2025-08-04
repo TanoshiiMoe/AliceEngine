@@ -9,6 +9,7 @@
 #include <Component/InputComponent.h>
 #include <Component/StatComponent.h>
 #include <System/ScriptSystem.h>
+#include <Helpers/CoordHelper.h>
 
 void Aru2::Initialize()
 {
@@ -49,7 +50,7 @@ void Aru2::OnStart()
 	m_aru2->transform()->SetScale(0.5f, 0.5f);
 	m_aru2->transform()->SetPivot(0.5f);
 	m_aru2->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
-	m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetSize(), FColor::Green);
+	m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Green);
 
 	/*
 	* 게임오브젝트에 TextRenderComponent를 붙이는 예시
@@ -57,42 +58,44 @@ void Aru2::OnStart()
 
 	TextRenderComponent* m_Aru2TextCmp = m_aru2->AddComponent<TextRenderComponent>();
 	m_Aru2TextCmp->SetText(m_aru2->GetName());
-	m_Aru2TextCmp->SetTransformType(ETransformType::Unity);
+	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_Aru2TextCmp->SetScale(FVector2(3, 3));
-	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetSize().y * 0.5f));
+	m_Aru2TextCmp->SetRelativeScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
+	FVector2 widgetSize = m_Aru2TextCmp->GetRelativeSize();
+	m_Aru2TextCmp->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.25f, 4.5f)));
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
 	m_Aru2TextCmp = m_aru2->AddComponent<TextRenderComponent>();
 	m_Aru2TextCmp->SetText(L"test");
-	m_Aru2TextCmp->SetTransformType(ETransformType::Unity);
+	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_Aru2TextCmp->SetScale(FVector2(3, 3));
-	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetSize().y * 0.2f));
+	m_Aru2TextCmp->SetRelativeScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
 	m_Aru2TextCmp = m_aru2->AddComponent<TextRenderComponent>();
 	m_Aru2TextCmp->SetText(L"test");
-	m_Aru2TextCmp->SetTransformType(ETransformType::Unity);
+	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_Aru2TextCmp->SetScale(FVector2(3, 3));
-	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetSize().y * 0.3f));
+	m_Aru2TextCmp->SetRelativeScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
 	m_Aru2TextCmp = m_aru2->AddComponent<TextRenderComponent>();
 	m_Aru2TextCmp->SetText(L"test");
-	m_Aru2TextCmp->SetTransformType(ETransformType::Unity);
+	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_Aru2TextCmp->SetScale(FVector2(3, 3));
-	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetSize().y * 0.4f));
+	m_Aru2TextCmp->SetRelativeScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
 	m_Aru2TextCmp = m_aru2->AddComponent<TextRenderComponent>();
 	m_Aru2TextCmp->SetText(L"test");
-	m_Aru2TextCmp->SetTransformType(ETransformType::Unity);
+	m_Aru2TextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_Aru2TextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_Aru2TextCmp->SetScale(FVector2(3, 3));
-	m_Aru2TextCmp->SetPosition(FVector2(0, -m_aru2->GetComponent<SpriteRenderer>()->GetSize().y * 0.1f));
+	m_Aru2TextCmp->SetRelativeScale(FVector2(3, 3));
+	m_Aru2TextCmp->SetFontSize(24);
 	m_aru2NameTexts.push_back(m_Aru2TextCmp);
 
 
@@ -108,19 +111,28 @@ void Aru2::OnStart()
 	m_aru2NameTexts[3]->SetTextFormat(L"최대 체력 : ", m_aru2Stat->GetStat("MAXHP"));
 	m_aru2NameTexts[4]->SetTextFormat(L"마나 : ", m_aru2Stat->GetStat("MP"));
 
+	widgetSize = m_aru2NameTexts[1]->GetRelativeSize();
+	m_aru2NameTexts[1]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 0.0)));
+	widgetSize = m_aru2NameTexts[2]->GetRelativeSize();
+	m_aru2NameTexts[2]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 1.0f)));
+	widgetSize = m_aru2NameTexts[3]->GetRelativeSize();
+	m_aru2NameTexts[3]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 2.f)));
+	widgetSize = m_aru2NameTexts[4]->GetRelativeSize();
+	m_aru2NameTexts[4]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, -1.0f)));
+
 	m_aru2Stat->OnChangeStatMap["HP"].Add(m_aru2->GetHandle(), [this](float oldVal, float newVal)
 	{
 		if (newVal <= 0)	// 죽는 시점
 		{
 			m_aru2->RemoveComponent<BoxComponent>(m_aru2->GetComponent<BoxComponent>());
 			m_aru2->GetComponent<SpriteRenderer>()->LoadData(L"dead.png");
-			m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetSize(), FColor::Red);
+			m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
 		}
 		else if (oldVal <= 0)	// 부활하는 시점
 		{
 			m_aru2->RemoveComponent<BoxComponent>(m_aru2->GetComponent<BoxComponent>());
 			m_aru2->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
-			m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetSize(), FColor::Blue);
+			m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
 		}
 		m_aru2NameTexts[1]->SetTextFormat(L"직전 체력 : ", oldVal);
 		m_aru2NameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);

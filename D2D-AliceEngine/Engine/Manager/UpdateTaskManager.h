@@ -6,6 +6,36 @@
 #include <Scene/Scene.h>
 #include <unordered_map>
 #include <Core/Tickable.h>
+#include <Define/Define.h>
+
+#define REGISTER_UPDATE_TASK_IN_SCRIPT(FunctionName, TickGroup) \
+	UpdateTaskManager::GetInstance().Enque( \
+		WeakFromThis<ITickable>(), \
+		TickGroup, \
+		[weak = WeakFromThis<ITickable>()](const float& dt) \
+		{ \
+			if (auto sp = weak.lock()) \
+			{ \
+				if (auto script = dynamic_cast<ScriptComponent*>(sp)) \
+				{ \
+					script->FunctionName(dt); \
+				} \
+			} \
+		} \
+	)
+
+#define REGISTER_TICK_TASK(FunctionName, TickGroup) \
+	UpdateTaskManager::GetInstance().Enque( \
+		WeakFromThis<ITickable>(), \
+		TickGroup, \
+		[weak = WeakFromThis<ITickable>()](const float& dt) \
+		{ \
+			if (auto sp = weak.lock()) \
+			{ \
+				sp->FunctionName(dt); \
+			} \
+		} \
+	)
 
 /*
 * @brief : Update()안에서의 순서를 정하기 위한 매니저입니다

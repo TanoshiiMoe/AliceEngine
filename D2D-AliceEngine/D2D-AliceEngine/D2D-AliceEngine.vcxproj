@@ -85,9 +85,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>d2dengine_pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,9 +123,10 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>d2dengine_pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -161,6 +163,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Bike\BikeMovementScript.h" />
     <ClInclude Include="Scripts\Bike\LaneController.h" />
     <ClInclude Include="Scripts\Bike\Battery.h" />
     <ClInclude Include="Scripts\Audio.h" />
@@ -176,23 +179,28 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\BackGroundImage.h" />
     <ClInclude Include="Scripts\BackGroundVideo.h" />
     <ClInclude Include="Scripts\Aru.h" />
-    <ClInclude Include="Scripts\Moon.h" />
-    <ClInclude Include="Scripts\Earth.h" />
+    <ClInclude Include="Scripts\SolarScene\Moon.h" />
+    <ClInclude Include="Scripts\SolarScene\Earth.h" />
     <ClInclude Include="Scene\DemoScene2.h" />
     <ClInclude Include="Scene\DemoScene.h" />
     <ClInclude Include="DemoGameApp.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Scripts\Sun.h" />
+    <ClInclude Include="Scripts\SolarScene\Sun.h" />
     <ClInclude Include="d2dengine_pch.h" />
+    <ClInclude Include="Spine2D\SpineRenderer.h" />
+    <ClInclude Include="Scene\SpineScene.h" />
+    <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Scripts\YuukaVideo.h" />
+    <ClInclude Include="Scripts\Video\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
     <ClInclude Include="Scripts\Truck.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
+    <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp" />
     <ClCompile Include="Scripts\Player.cpp" />
     <ClCompile Include="Scripts\Bike\LaneController.cpp" />
     <ClCompile Include="Scripts\Bike\Battery.cpp" />
@@ -212,22 +220,29 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\BackGroundVideo.cpp" />
     <ClCompile Include="Scripts\Aru.cpp" />
     <ClCompile Include="Scripts\Bike\Health.cpp" />
-    <ClCompile Include="Scripts\Moon.cpp" />
-    <ClCompile Include="Scripts\Earth.cpp" />
+    <ClCompile Include="Scripts\SolarScene\Moon.cpp" />
+    <ClCompile Include="Scripts\SolarScene\Earth.cpp" />
     <ClCompile Include="Scene\DemoScene2.cpp" />
     <ClCompile Include="Scene\DemoScene.cpp" />
     <ClCompile Include="DemoGameApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scripts\Sun.cpp" />
-    <ClCompile Include="Scripts\YuukaVideo.cpp" />
+    <ClCompile Include="Scripts\SolarScene\Sun.cpp" />
+    <ClCompile Include="Scripts\Video\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
     <ClCompile Include="Scripts\Truck.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scripts\TitleUIScript.cpp" />
+    <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
+    <ClCompile Include="Spine2D\SpineRenderer.cpp" />
+    <ClCompile Include="Scene\SpineScene.cpp" />
+    <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{ff21bb58-7919-4e53-a917-2a8af0469c81}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\spine-cpp\spine-cpp.vcxproj">
+      <Project>{9a954b2e-ffb7-408a-87d1-e75dd7139d0e}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

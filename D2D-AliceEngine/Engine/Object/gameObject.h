@@ -112,6 +112,7 @@ public:
 
 	TransformComponent* transform() const { return m_transformComponent.lock(); }
 	void AddChildObject(const gameObject* obj);
+	void RemoveFromParent();
 
 public:
 	WeakObjectPtr<TransformComponent> m_transformComponent;

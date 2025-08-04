@@ -5,15 +5,14 @@
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
 #include <Component/VideoComponent.h>
-#include <Component/Spine2DRenderComponent.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/TransformComponent.h>
 #include <Core/Input.h>
 #include <Math/TColor.h>
-#include "../Scripts/Sun.h"
-#include "../Scripts/Moon.h"
-#include "../Scripts/Earth.h"
-#include "../Scripts/YuukaVideo.h"
+#include "../Scripts/SolarScene/Sun.h"
+#include "../Scripts/SolarScene/Moon.h"
+#include "../Scripts/SolarScene/Earth.h"
+#include "../Scripts/Video/YuukaVideo.h"
 #include "../Scripts/CameraController.h"
 
 /*
@@ -93,17 +92,17 @@ void DemoScene::OnEnter()
 	/*
 	* UI는 gameObject와 별개로 분리해서 만들어야함. 이후에 예정 
 	*/
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 80));
+	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 80));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <씬> \n [3] : 씬 전환");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
-	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(FVector2(850, 0));
+	m_widget2->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(850, 0));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
 	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <현재 씬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
-	m_widget3->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 10));
+	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 }
 

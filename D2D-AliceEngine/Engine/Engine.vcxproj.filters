@@ -58,6 +58,9 @@
     <Filter Include="Effect">
       <UniqueIdentifier>{d0654fef-fd7d-4736-9de7-f8137dec6841}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Spine2D">
+      <UniqueIdentifier>{95330cb4-092e-413d-975d-63995b0227e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -246,9 +249,6 @@
     <ClInclude Include="UI\UIText.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Canvas.h">
-      <Filter>Object</Filter>
-    </ClInclude>
     <ClInclude Include="Component\TileMapRenderer.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -262,6 +262,12 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\SkewTransform.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers\CoordHelper.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ButtonComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
@@ -449,9 +455,6 @@
     <ClCompile Include="UI\UIText.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Canvas.cpp">
-      <Filter>Object</Filter>
-    </ClCompile>
     <ClCompile Include="Component\TileMapRenderer.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -465,6 +468,12 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\SkewTransform.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\CoordHelper.cpp">
+      <Filter>Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ButtonComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>

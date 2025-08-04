@@ -3,6 +3,7 @@
 #include <Helpers/StringHelper.h>
 #include <Core/Singleton.h>
 #include "../System/SystemBase.h"
+#include <Define/Define.h>
 
 /* 
 *  @briefs : 렌더링을 담당하는 시스템입니다

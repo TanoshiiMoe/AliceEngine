@@ -47,7 +47,7 @@ void TitleUIScript::OnStart()
 	//Anchor를 지정하면 Offset은 D2D좌표계를 사용합니다.
 
 	image->LoadData(L"Mushroom.png");
-	image->SetScale(150);
+	//image->SetScale(150);
 	//image->SetPosition(FVector2(50, 50));
 	image->SetAnchor(EUIScreenAnchor::MiddleCenter);
 
@@ -68,7 +68,7 @@ void TitleUIScript::OnStart()
 	text->m_layer = 500;
 
 	button->SetImages(L"Button_Idle.png",L"Button_Hover.png", L"Button_Pressed.png");
-	button->SetScale(150);
+	//button->SetScale(150);
 	// 보류
 	//button->SetHoverScale(160);
 	button->SetAnchor(EUIScreenAnchor::MiddleCenter, 0, 250);

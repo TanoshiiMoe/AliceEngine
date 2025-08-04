@@ -18,8 +18,6 @@ public:
 
 	void AddTileToSpriteBatch();
 
-	D2D1_MATRIX_3X2_F GetSkewMatrix();
-
 	std::vector<int> tileData;
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;

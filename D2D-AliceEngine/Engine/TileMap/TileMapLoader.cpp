@@ -71,6 +71,28 @@ void TileMapLoader::LoadTileMap(const std::wstring& filePath, TileMap& tileMap)
 	}
 }
 
+std::unordered_map<int, int> TileMapLoader::LoadTileMapColliderInfo(const std::wstring& filePath)
+{
+	std::ifstream inFile(filePath);
+	if (inFile.is_open()) {
+		json j;
+		inFile >> j;
+		inFile.close();
+
+		std::vector<TileMapColiderInfo> infoList = j.get<std::vector<TileMapColiderInfo>>();
+
+		std::unordered_map<int, int> result;
+		for (const auto& info : infoList)
+		{
+			result[info.index] = info.collisionChannel;
+		}
+		return result;
+	}
+	else {
+		throw std::runtime_error("Failed to open tilemap file: " + StringHelper::wstring_to_string(filePath));
+	}
+}
+
 // TileLayer JSON ╦егн
 void from_json(const json& j, TileMapLayer& tl) {
 	j.at("data").get_to(tl.data);
@@ -133,5 +155,19 @@ void to_json(json& j, const TileMap& tm) {
 		{"type", tm.type},
 		{"version", tm.version},
 		{"width", tm.width}
+	};
+}
+
+void from_json(const json& j, TileMapColiderInfo& m)
+{
+	j.at("index").get_to(m.index);
+	j.at("collisionChannel").get_to(m.collisionChannel);
+}
+
+void to_json(json& j, const TileMapColiderInfo& m)
+{
+	j = json{
+		{"index", m.index},
+		{"collisionChannel", m.collisionChannel},
 	};
 }

@@ -4,6 +4,7 @@
 #include "Scene/DemoScene2.h"
 #include "Scene/DemoScene3.h"
 #include "Scene/DemoScene4.h"
+#include "Scene/SpineScene.h"
 #include <Manager/SceneManager.h>
 #include <Manager/TimerManager.h>
 
@@ -29,7 +30,8 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
 	SceneManager::AddScene<DemoScene4>(L"HiroScene");
 	SceneManager::AddScene<TitleScene>(L"TitleScene");
-	SceneManager::ChangeScene(L"HiroScene");
+	SceneManager::AddScene<SpineScene>(L"SpineScene");
+	SceneManager::ChangeScene(L"TitleScene");
 }
 
 void DemoGameApp::Run()

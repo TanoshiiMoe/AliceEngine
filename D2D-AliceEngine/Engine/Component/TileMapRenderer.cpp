@@ -4,6 +4,7 @@
 #include <Manager/PackageResourceManager.h>
 #include <Helpers/FileHelper.h>
 #include <TileMap/TileMapLoader.h>
+#include <Helpers/CoordHelper.h>
 
 TileMapRenderer::TileMapRenderer()
 {
@@ -48,7 +49,7 @@ void TileMapRenderer::Render()
 	int batchSize = batch->GetSpriteCount();
 	assert(batchSize > 0);
 
-	D2D1_MATRIX_3X2_F skewTransform = GetSkewMatrix();
+	D2D1_MATRIX_3X2_F skewTransform = CoordHelper::GetSkewMatrix({30,0}, mapHeight * tileHeight);
 	D2D1_MATRIX_3X2_F backD2DTransform = D2D1::Matrix3x2F::Translation(-Define::SCREEN_WIDTH/2 - GetBitmapSizeX() / 2, -Define::SCREEN_HEIGHT / 2);
 	context->SetTransform(backD2DTransform *skewTransform * view); // 최종 View와 결합
 	context->DrawSpriteBatch(
@@ -88,26 +89,6 @@ void TileMapRenderer::AddTileToSpriteBatch()
 			assert(SUCCEEDED(hr));
 		}
 	}
-}
-
-D2D1_MATRIX_3X2_F TileMapRenderer::GetSkewMatrix()
-{
-	float angleDeg = skewAngle.x; // 예: 30도
-	float angleRad = angleDeg * (Define::PI / 180.0f);
-
-	float totalHeight = mapHeight * tileHeight;
-	float xOffset = totalHeight * std::tan(angleRad);
-
-	// 기준점: 왼쪽 아래 (붙어 있게 하려면 여기 기준으로 움직임)
-	D2D1_MATRIX_3X2_F skewMatrix = D2D1::Matrix3x2F::Skew(angleDeg, 0);
-
-	// 왼쪽 아래 기준, 오른쪽 위로 이동
-	D2D1_MATRIX_3X2_F originTranslate = D2D1::Matrix3x2F::Translation(0, 0);
-	D2D1_MATRIX_3X2_F skewTransform =
-		originTranslate *
-		skewMatrix *
-		D2D1::Matrix3x2F::Translation(xOffset, 0);
-	return skewTransform;
 }
 
 float TileMapRenderer::GetBitmapSizeX()

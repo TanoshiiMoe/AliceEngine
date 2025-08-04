@@ -23,7 +23,6 @@
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
 #include <Component/VideoComponent.h>
-#include <Component/Spine2DRenderComponent.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/TransformComponent.h>
 #include <Component/RenderComponent.h>

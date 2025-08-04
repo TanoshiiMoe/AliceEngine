@@ -23,12 +23,14 @@
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
-#include <Object/Canvas.h>
 #include <UI/UIButton.h>
 #include <Component/BackGroundComponent.h>
 #include <Scripts/CameraController.h>
 #include <Component/SkewTransform.h>
 #include <Effect/Prism.h>
+#include <Scripts/Widget/TitleWidgetScript.h>
+#include <Component/ButtonComponent.h>
+#include <Scripts/Bike/BikeMovementScript.h>
 
 void DemoScene4::Initialize()
 {
@@ -63,40 +65,33 @@ void DemoScene4::OnEnter()
 	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/stage_tutorial.tmj");
-	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/Batchtest.tmj");
 	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
-	/*m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/tutorial.tmj");
-	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");*/
-	m_tile->GetComponent<TileMapComponent>()->SetSkew(30);
-	m_tile->GetComponent<TileMapComponent>()->CreatetileRenderers();
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
-	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test5.tmj");
-	//m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/test4.tmj");
-	//m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/Tile_Road.tsj");
+	m_tile->GetComponent<TileMapComponent>()->LoadTileCollisionData(L"TileMap/TileMapColiderInfo.json");
+	m_tile->GetComponent<TileMapComponent>()->SetSkew({ 30, 0});
+	m_tile->GetComponent<TileMapComponent>()->CreateTileRenderers();
+	m_tile->GetComponent<TileMapComponent>()->CreateTileCollision();
 	
 	// SkewTransform 테스트
 	m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
+	m_player->AddComponent<BikeMovementScript>();
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
-
 	
 	// UI 추가
-	m_UI = NewObject<gameObject>(L"ad");
-	m_UI->AddComponent<UI_Script>();
+	//m_UI = NewObject<gameObject>(L"ad");
+	//m_UI->AddComponent<TitleWidgetScript>();
 
 	m_button = NewObject<gameObject>(L"Button");
-	m_button->AddComponent<UIButton>();
-	m_button->GetComponent<UIButton>()->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
-	m_button->GetComponent<UIButton>()->SetPosition(FVector2(100, 100));
-	m_button->GetComponent<UIButton>()->SetAction([]() {});
-	m_button->GetComponent<UIButton>()->SetScale(150);
-	m_button->GetComponent<UIButton>()->m_layer = 510;
+	m_button->AddComponent<ButtonComponent>();
+	//m_button->GetComponent<ButtonComponent>()->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
+	m_button->GetComponent<ButtonComponent>()->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	m_button->GetComponent<ButtonComponent>()->SetRelativePosition(FVector2(100, 100));
+	m_button->GetComponent<ButtonComponent>()->SetRelativeScale(FVector2(1,1));
+	m_button->GetComponent<ButtonComponent>()->SetStateAction(Define::EButtonState::Pressed,[]() {});
+	m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

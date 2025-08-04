@@ -18,6 +18,8 @@ public:
 	virtual void Input();
 	virtual void Uninitialize();
 
+	FVector2 GetSize() { return FVector2(m_width, m_height); }
+
 protected:
 	HWND m_hwnd = nullptr;
 	HINSTANCE m_hInstance;

@@ -49,15 +49,6 @@ void Player::Update(const float& deltaSeconds)
 
 	prismTimeCount += deltaSeconds;
 
-	if (Input::IsKeyPressed(VK_Q))
-	{
-		SceneManager::GetCamera()->SetOwner(m_owner);
-	}
-	if (Input::IsKeyPressed(VK_E))
-	{
-		SceneManager::GetCamera()->ClearOwner();
-	}
-
 	float speed = walkSpeed * playerDeltaSeconds;
 	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
@@ -97,10 +88,10 @@ void Player::Update(const float& deltaSeconds)
 			m_owner->GetComponent<SkewTransform>()->zPos += speed;*/
 	}
 	if (Input::IsKeyPressed(VK_DOWN)) {
-		m_owner->GetComponent<LaneController>()->MoveDown();
+		if(m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveDown();
 	}
 	if (Input::IsKeyPressed(VK_UP)) {
-		m_owner->GetComponent<LaneController>()->MoveUp();
+		if (m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveUp();
 	}
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
@@ -170,7 +161,12 @@ void Player::OnStart()
 	animInstance->m_layer = 5;
 	animInstance->OnStart();
 
-	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
+	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 10));
+	if (auto collider = m_owner->GetComponent<Collider>())
+	{
+		collider->SetLayer(2);
+		collider->boxComponent->SetRelativePosition(FVector2(0,-20));
+	}
 	//m_owner->AddComponent<Rigidbody2D>();
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
@@ -192,6 +188,8 @@ void Player::OnStart()
 
 	// LandController �׽�Ʈ
 	m_owner->AddComponent<LaneController>();
+
+	SceneManager::GetCamera()->SetOwner(m_owner);
 }
 
 void Player::OnEnd()
@@ -208,6 +206,14 @@ void Player::Input()
 {
 	// 여기에 Input에 대한 로직 작성
 
+	if (Input::IsKeyPressed(VK_Q))
+	{
+		SceneManager::GetCamera()->SetOwner(m_owner);
+	}
+	if (Input::IsKeyPressed(VK_E))
+	{
+		SceneManager::GetCamera()->ClearOwner();
+	}
 	if (Input::IsKeyDown(VK_K))
 	{
 		walkSpeed += 5.0f;

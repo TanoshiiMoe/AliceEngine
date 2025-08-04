@@ -17,6 +17,7 @@
 #include "../Scripts/Enemy.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
+#include <Helpers/CoordHelper.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -183,7 +184,7 @@ void DemoScene3::OnEnter()
 		L" [R] : Scene 재시작 \n"
 		L"\n"
 	);	
-	m_widget->GetComponent<TextRenderComponent>()->SetPosition(FVector2(18, 45));
+	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(18, 45));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
@@ -191,21 +192,21 @@ void DemoScene3::OnEnter()
 	m_widget2->transform()->SetPosition(0, 0);
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <씬> \n [3] : 씬 전환");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
-	m_widget2->GetComponent<TextRenderComponent>()->SetPosition(FVector2(850, 0));
+	m_widget2->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen({ 0.9,0 }));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget2->GetComponent<TextRenderComponent>()->m_layer = 20;
 
 	m_widget3->transform()->SetPosition(0, 0);
 	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <현재 씬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
-	m_widget3->GetComponent<TextRenderComponent>()->SetPosition(FVector2(20, 10));
+	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget3->GetComponent<TextRenderComponent>()->m_layer = 20;
 
-	m_widget4->transform()->SetPosition(512, 512);
+	m_widget4->transform()->SetPosition(0, 0);
 	m_widget4->AddComponent<TextRenderComponent>()->SetText(L" test");
 	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
-	m_widget4->GetComponent<TextRenderComponent>()->SetPosition(FVector2(45, 60));
+	m_widget4->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen({ 0.7,0.6 }));
 	m_widget4->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget4->GetComponent<TextRenderComponent>()->m_layer = 20;
 

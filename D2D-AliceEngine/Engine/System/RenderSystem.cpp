@@ -125,17 +125,16 @@ ViewRect RenderSystem::GetCameraView()
 	FVector2 scale = SceneManager::GetCamera()->GetScale();
 	if (scale.x == 0.0f) scale.x = 1.0f;
 	if (scale.y == 0.0f) scale.y = 1.0f;
-	int screenWidth = 0, screenHeight = 0;
-	D2DRenderManager::GetInstance().GetApplicationSize(screenWidth, screenHeight);
-	const float halfWidth = (screenWidth * 0.5f * fov) * scale.x;
-	const float halfHeight = (screenHeight * 0.5f * fov) * scale.y;
+	FVector2 screen = D2DRenderManager::GetInstance().GetApplicationSize();
+	const float halfWidth = (screen.x * 0.5f * fov) * scale.x;
+	const float halfHeight = (screen.y * 0.5f * fov) * scale.y;
 	return ViewRect{ camX - halfWidth, camX + halfWidth, camY - halfHeight, camY + halfHeight };
 }
 
 // 컬링이 되는걸 확실하게 보려면 주석처리 된 부분을 사용
 bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view)
 {
-	auto* transform = renderer->GetTransform();
+	auto* transform = renderer->GetOwnerTransform();
 	const auto pos = transform ? transform->GetPosition() : D2D1_VECTOR_2F{ 0, 0 };
 	const auto scale = transform ? transform->GetScale() : D2D1_VECTOR_2F{ 1, 1 };
 

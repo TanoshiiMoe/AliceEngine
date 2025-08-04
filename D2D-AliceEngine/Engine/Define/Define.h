@@ -106,7 +106,12 @@ namespace Define
 		BottomCenter,
 		BottomRight
 	};
-	enum class EButtonState { Idle, Hover, Pressed};
+	enum class EButtonState { Idle, Hover, Pressed, Release, Max};
+
+	enum class ERenderType
+	{
+		D2D, Spine2D
+	};
 };
 
 #define VK_A 0x41  // 'A'
