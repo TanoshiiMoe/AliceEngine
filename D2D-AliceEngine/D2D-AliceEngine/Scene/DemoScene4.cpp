@@ -20,6 +20,7 @@
 #include "../Scripts/UI_Script.h"
 #include "../Scripts/BackGroundVideo.h"
 #include "../Scripts/Truck.h"
+#include "../Scripts/BackGroundRender.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
@@ -56,9 +57,10 @@ void DemoScene4::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
+	m_player->AddComponent<BackGroundRender>();
 
-	m_bg = NewObject<gameObject>(L"BackGround");
-	m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
+	//m_bg = NewObject<gameObject>(L"BackGround");
+	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
@@ -73,14 +75,11 @@ void DemoScene4::OnEnter()
 	m_tile->GetComponent<TileMapComponent>()->SetSkew({ 45, 0});
 	m_tile->GetComponent<TileMapComponent>()->CreateTileRenderers();
 	m_tile->GetComponent<TileMapComponent>()->CreateTileCollision();
+	m_tile->GetComponent<TileMapComponent>()->SetTileLayer(3);	// 타일 레이어를 3으로 설정
 	
 	// SkewTransform 테스트
 	m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
 	m_player->AddComponent<BikeMovementScript>();
-
-	// 오디오 추가, 오디오 관련 스크립트 넣기
-	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<Audio>();
 	
 	// UI 추가
 	//m_UI = NewObject<gameObject>(L"ad");
@@ -94,6 +93,21 @@ void DemoScene4::OnEnter()
 	m_button->GetComponent<ButtonComponent>()->SetRelativeScale(FVector2(1,1));
 	m_button->GetComponent<ButtonComponent>()->SetStateAction(Define::EButtonState::Pressed,[]() {});
 	m_button->GetComponent<ButtonComponent>()->m_layer = 510;
+
+	// ============ background (test 1 - 쓰크립트에서 객체 생성 후 , 업데이트 돌게 하기)
+	//m_sky = NewObject<gameObject>(L"Sky");
+	//
+	//m_building = NewObject<gameObject>(L"Building");
+
+	//m_bridge = NewObject<gameObject>(L"Bridge");
+
+	//m_frontBarrier = NewObject<gameObject>(L"FrontBarrier");
+
+	//m_backBarrier = NewObject<gameObject>(L"BackBarrier");
+
+	//m_guardrail = NewObject<gameObject>(L"GuardRail");
+
+	//m_market = NewObject<gameObject>(L"Market");
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

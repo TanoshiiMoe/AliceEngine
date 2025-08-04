@@ -75,7 +75,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(buttonBasePos, -150));
 	startButton->SetRelativeScale(FVector2(1, 1));
 	startButton->SetRelativeRotation(0);
-	startButton->m_layer = 500;
+	startButton->m_layer = 300;
 
 	// ======================== continueButton
 	continueButton->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
@@ -127,7 +127,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(buttonBasePos, 450));
 	quitButton->SetRelativeScale(FVector2(1, 1));
 	quitButton->SetRelativeRotation(0);
-	quitButton->m_layer = 500;
+	quitButton->m_layer = 300;
 
 	// ======================== mainTitle
 	mainTitle->SetText(L"높다락길의 질주");
