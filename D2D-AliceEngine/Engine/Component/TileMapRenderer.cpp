@@ -49,7 +49,7 @@ void TileMapRenderer::Render()
 	int batchSize = batch->GetSpriteCount();
 	assert(batchSize > 0);
 
-	D2D1_MATRIX_3X2_F skewTransform = CoordHelper::GetSkewMatrix({30,0}, mapHeight * tileHeight);
+	D2D1_MATRIX_3X2_F skewTransform = CoordHelper::GetSkewMatrix(skewAngle, mapHeight * tileHeight);
 	D2D1_MATRIX_3X2_F backD2DTransform = D2D1::Matrix3x2F::Translation(-Define::SCREEN_WIDTH/2 - GetBitmapSizeX() / 2, -Define::SCREEN_HEIGHT / 2);
 	context->SetTransform(backD2DTransform *skewTransform * view); // 최종 View와 결합
 	context->DrawSpriteBatch(
