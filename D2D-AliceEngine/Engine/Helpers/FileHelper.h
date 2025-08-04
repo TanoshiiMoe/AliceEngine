@@ -70,13 +70,17 @@ public:
 
 	static std::wstring ToAbsolutePath(const std::wstring& baseDir)
 	{
+		// '/'를 '\'로 변환
+		std::wstring fixedDir = baseDir;
+		for (auto& ch : fixedDir) {
+			if (ch == L'/') ch = L'\\';
+		}
 		// 이미 절대경로라면 그대로 반환
-		if (baseDir.size() > 1 && (baseDir[1] == L':' || baseDir[0] == L'\\' || baseDir[0] == L'/'))
-			return baseDir;
-
+		if (fixedDir.size() > 1 && (fixedDir[1] == L':' || fixedDir[0] == L'\\' || fixedDir[0] == L'/'))
+			return fixedDir;
 		std::wstring root = GetProjectRootPath();
-		if (root.empty()) return baseDir;
-		return root + L"\\" + baseDir;
+		if (root.empty()) return fixedDir;
+		return root + L"\\" + fixedDir;
 	}
 
 	static bool CreateDirectoryRecursive(const std::wstring& path) {
