@@ -94,8 +94,7 @@ void Player::Update(const float& deltaSeconds)
 		if (m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveUp();
 	}
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
-	auto rb = m_owner->GetComponent<Rigidbody2D>();
-	if (rb)
+	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
 		bool isGround = (rb->m_eRigidBodyState == Define::ERigidBodyState::Ground ||
 			rb->m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody);
@@ -190,6 +189,7 @@ void Player::OnStart()
 	m_owner->AddComponent<LaneController>();
 
 	//SceneManager::GetCamera()->SetOwner(m_owner);
+	//m_owner->AddChildTransform(&SceneManager::GetCamera()->relativeTransform);
 }
 
 void Player::OnEnd()

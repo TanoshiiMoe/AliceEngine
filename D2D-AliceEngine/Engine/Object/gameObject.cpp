@@ -73,6 +73,14 @@ void gameObject::AddChildObject(const gameObject* obj)
 	}
 }
 
+void gameObject::AddChildTransform(TransformComponent* transform)
+{
+	if (auto weakThis = WeakFromThis<gameObject>())
+	{
+		weakThis->transform()->AddChildObject(transform);
+	}
+}
+
 void gameObject::RemoveFromParent()
 {
 	if (auto transformComp = m_transformComponent.lock())
@@ -80,6 +88,87 @@ void gameObject::RemoveFromParent()
 		// 부모로부터 자신을 제거
 		transformComp->RemoveFromParent();
 	}
+}
+
+// 좌표, 스케일, 회전 관련 함수들
+void gameObject::SetPosition(const FVector2& _pos)
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		transformComp->SetPosition(_pos.x, _pos.y);
+	}
+}
+
+void gameObject::SetRotation(const float& _rotation)
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		transformComp->SetRotation(_rotation);
+	}
+}
+
+void gameObject::SetScale(const FVector2& _scale)
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		transformComp->SetScale(_scale.x, _scale.y);
+	}
+}
+
+void gameObject::AddPosition(const FVector2& _pos)
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		FVector2 currentPos = transformComp->GetPosition();
+		transformComp->SetPosition(currentPos.x + _pos.x, currentPos.y + _pos.y);
+	}
+}
+
+void gameObject::AddRotation(const float& _rotation)
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		float currentRotation = transformComp->GetRotation();
+		transformComp->SetRotation(currentRotation + _rotation);
+	}
+}
+
+void gameObject::AddScale(const FVector2& _scale)
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		FVector2 currentScale = transformComp->GetScale();
+		transformComp->SetScale(currentScale.x + _scale.x, currentScale.y + _scale.y);
+	}
+}
+
+FVector2 gameObject::GetPosition() const
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		FVector2 pos = transformComp->GetPosition();
+		return FVector2(pos.x, pos.y);
+	}
+	return FVector2(0.0f, 0.0f);
+}
+
+float gameObject::GetRotation()
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		return transformComp->GetRotation();
+	}
+	return 0.0f;
+}
+
+FVector2 gameObject::GetScale()
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		FVector2 scale = transformComp->GetScale();
+		return FVector2(scale.x, scale.y);
+	}
+	return FVector2(1.0f, 1.0f);
 }
 
 void gameObject::Update()

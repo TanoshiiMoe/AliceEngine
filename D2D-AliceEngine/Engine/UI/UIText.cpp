@@ -81,7 +81,7 @@ void UIText::Render()
 		D2D1::Matrix3x2F world = GetOwnerTransform() ? GetOwnerTransform()->ToMatrix() : D2D1::Matrix3x2F::Identity();
 
 		Camera* camera = SceneManager::GetCamera();
-		D2D1::Matrix3x2F cameraInv = camera ? camera->m_transform->ToMatrix() : D2D1::Matrix3x2F::Identity();
+		D2D1::Matrix3x2F cameraInv = camera ? camera->relativeTransform.m_worldTransform.ToMatrix() : D2D1::Matrix3x2F::Identity();
 		cameraInv.Invert();
 
 		view = unity * world * cameraInv;
