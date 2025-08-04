@@ -1,0 +1,14 @@
+{ "columns":1,
+ "image":"TileMap\\test\\Tile_Road_Trash_Blue_45.png",
+ "imageheight":360,
+ "imagewidth":120,
+ "margin":0,
+ "name":"Tile_Road_Trash_Blue_45",
+ "spacing":0,
+ "tilecount":3,
+ "tiledversion":"1.11.2",
+ "tileheight":120,
+ "tilewidth":120,
+ "type":"tileset",
+ "version":"1.10"
+}

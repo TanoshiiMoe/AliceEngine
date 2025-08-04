@@ -26,12 +26,12 @@
 #include <TileMap/TileMapComponent.h>
 #include <UI/UIButton.h>
 #include <Component/BackGroundComponent.h>
-#include <Scripts/CameraController.h>
 #include <Component/SkewTransform.h>
 #include <Effect/Prism.h>
 #include <Scripts/Widget/TitleWidgetScript.h>
 #include <Component/ButtonComponent.h>
 #include <Scripts/Bike/BikeMovementScript.h>
+#include <Scripts/Camera/CameraMover.h>
 
 void DemoScene4::Initialize()
 {
@@ -53,7 +53,7 @@ void DemoScene4::OnEnter()
 	__super::OnEnter();
 
 	m_cameraController = NewObject<gameObject>(L"Camera");
-	m_cameraController->AddComponent<CameraController>();
+	m_cameraController->AddComponent<CameraMover>();
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();

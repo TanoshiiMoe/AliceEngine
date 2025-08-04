@@ -38,12 +38,15 @@
     <Filter Include="Scripts\Spine2D">
       <UniqueIdentifier>{a2ac56ab-5efd-440d-a652-1f690479b030}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{e4fd900e-08b6-42f5-8172-641535b1f65e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameManage">
+      <UniqueIdentifier>{79079b44-802b-46b6-998c-90bb5bb158eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
-      <Filter>PreCompiledHeader</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="d2dengine_pch.h">
@@ -148,6 +151,15 @@
     <ClInclude Include="Scripts\BackGroundRender.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Camera\CameraMover.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\GameManage\SpeedManager.h">
+      <Filter>GameManage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -251,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="Scripts\BackGroundRender.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Camera\CameraMover.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\GameManage\SpeedManager.cpp">
+      <Filter>GameManage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -20,9 +20,9 @@
 
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
-#include "Bike/LaneController.h"
 
 #include <Manager/TimerManager.h>
+#include <Scripts/Bike/LaneController.h>
 
 void Player::Initialize()
 {
@@ -189,7 +189,7 @@ void Player::OnStart()
 	// LandController �׽�Ʈ
 	m_owner->AddComponent<LaneController>();
 
-	SceneManager::GetCamera()->SetOwner(m_owner);
+	//SceneManager::GetCamera()->SetOwner(m_owner);
 }
 
 void Player::OnEnd()
@@ -240,7 +240,7 @@ void Player::Input()
 	}
 	if (Input::IsKeyDown(VK_H))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->gravityScale -= 0.1f;
+		//m_owner->GetComponent<Rigidbody2D>()->gravityScale -= 0.1f;
 	}
 	if (Input::IsKeyPressed(VK_U))
 	{
@@ -248,20 +248,20 @@ void Player::Input()
 	}
 	if (Input::IsKeyPressed(VK_I))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
+		//m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
 	}
 	if (Input::IsKeyPressed(VK_O))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
+		//m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Dynamic;
 	}
 	if (Input::IsKeyPressed(VK_P))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Static;
+		//m_owner->GetComponent<Rigidbody2D>()->m_eRigidBodyType = Define::ERigidBodyType::Static;
 	}
 
 	if (Input::IsKeyDown(VK_T))
 	{
-		m_owner->RemoveComponent<Rigidbody2D>(m_owner->GetComponent<Rigidbody2D>());
+		//m_owner->RemoveComponent<Rigidbody2D>(m_owner->GetComponent<Rigidbody2D>());
 	}
 	if (Input::IsKeyDown(VK_Y))
 	{
