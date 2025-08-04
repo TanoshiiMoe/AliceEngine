@@ -65,10 +65,12 @@ void DemoScene4::OnEnter()
 	m_sound->AddComponent<Audio>();
 
 	m_tile = NewObject<gameObject>(L"TileMap");
-	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
-	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");
+	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/stage01_real/stage01_real.tmj");
+	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/stage01_real/Tile_Road.tsj");
+	/*m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/BigMap.tmj");
+	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/blocks.tsj");*/
 	m_tile->GetComponent<TileMapComponent>()->LoadTileCollisionData(L"TileMap/TileMapColiderInfo.json");
-	m_tile->GetComponent<TileMapComponent>()->SetSkew({ 30, 0});
+	m_tile->GetComponent<TileMapComponent>()->SetSkew({ 45, 0});
 	m_tile->GetComponent<TileMapComponent>()->CreateTileRenderers();
 	m_tile->GetComponent<TileMapComponent>()->CreateTileCollision();
 	
