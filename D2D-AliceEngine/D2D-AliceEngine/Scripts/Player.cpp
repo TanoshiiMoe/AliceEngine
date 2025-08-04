@@ -20,6 +20,9 @@
 
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
+#include "Bike/LaneController.h"
+
+#include <Manager/TimerManager.h>
 
 void Player::Initialize()
 {
@@ -42,16 +45,11 @@ void Player::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 
-	if (Input::IsKeyPressed(VK_Q))
-	{
-		SceneManager::GetCamera()->SetOwner(m_owner);
-	}
-	if (Input::IsKeyPressed(VK_E))
-	{
-		SceneManager::GetCamera()->ClearOwner();
-	}
+	float playerDeltaSeconds = deltaSeconds * playerTimeScale;
 
-	float speed = walkSpeed * deltaSeconds;
+	prismTimeCount += deltaSeconds;
+
+	float speed = walkSpeed * playerDeltaSeconds;
 	//float speed = 125.0f;
 	if (!(Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_LEFT) || Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP)))
 	{
@@ -79,17 +77,21 @@ void Player::Update(const float& deltaSeconds)
 	{
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
-		else
-			m_owner->GetComponent<SkewTransform>()->zPos -= speed;
-			//m_owner->transform()->AddPosition(0, -speed);
+		/*else
+			m_owner->GetComponent<SkewTransform>()->zPos -= speed;*/
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
-		else
-			m_owner->GetComponent<SkewTransform>()->zPos += speed;
-			//m_owner->transform()->AddPosition(0, speed);
+		/*else
+			m_owner->GetComponent<SkewTransform>()->zPos += speed;*/
+	}
+	if (Input::IsKeyPressed(VK_DOWN)) {
+		if(m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveDown();
+	}
+	if (Input::IsKeyPressed(VK_UP)) {
+		if (m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveUp();
 	}
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	auto rb = m_owner->GetComponent<Rigidbody2D>();
@@ -145,7 +147,7 @@ void Player::OnStart()
 	m_owner->transform()->SetRotation(0);
 	m_owner->transform()->SetScale(1.5f, 1.5f);
 	m_owner->transform()->SetPivot(0.5f);
-	
+
 	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
 	animInstance = m_owner->AddComponent<AnimatorInstance>();
 	animInstance->SetAnimatorController(&animController);
@@ -159,8 +161,13 @@ void Player::OnStart()
 	animInstance->m_layer = 5;
 	animInstance->OnStart();
 
-	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35,60));
-	m_owner->AddComponent<Rigidbody2D>();
+	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 10));
+	if (auto collider = m_owner->GetComponent<Collider>())
+	{
+		collider->SetLayer(2);
+		collider->boxComponent->SetRelativePosition(FVector2(0,-20));
+	}
+	//m_owner->AddComponent<Rigidbody2D>();
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{
 		rb->m_eRigidBodyType = Define::ERigidBodyType::Kinematic;
@@ -178,6 +185,11 @@ void Player::OnStart()
 
 	// 산데비스탄 테스트
 	m_owner->AddComponent<Prism>(10, 0.1f);
+
+	// LandController �׽�Ʈ
+	m_owner->AddComponent<LaneController>();
+
+	SceneManager::GetCamera()->SetOwner(m_owner);
 }
 
 void Player::OnEnd()
@@ -194,6 +206,14 @@ void Player::Input()
 {
 	// 여기에 Input에 대한 로직 작성
 
+	if (Input::IsKeyPressed(VK_Q))
+	{
+		SceneManager::GetCamera()->SetOwner(m_owner);
+	}
+	if (Input::IsKeyPressed(VK_E))
+	{
+		SceneManager::GetCamera()->ClearOwner();
+	}
 	if (Input::IsKeyDown(VK_K))
 	{
 		walkSpeed += 5.0f;
@@ -216,7 +236,7 @@ void Player::Input()
 	}
 	if (Input::IsKeyDown(VK_G))
 	{
-		m_owner->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
+		//m_owner->GetComponent<Rigidbody2D>()->gravityScale += 0.1f;
 	}
 	if (Input::IsKeyDown(VK_H))
 	{
@@ -285,7 +305,7 @@ void Player::Input()
 		if (jumpCount < maxJumpCount)
 		{
 			if(m_owner->GetComponent<Rigidbody2D>())
-				m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 720);
+				m_owner->GetComponent<Rigidbody2D>()->AddForce(0, 120);
 			jumpCount++;
 		}
 		//m_owner->GetComponent<Rigidbody2D>()->velocity.y = 150;
@@ -294,42 +314,46 @@ void Player::Input()
 	// 산데비스탄 테스트
 	if (Input::IsKeyPressed(VK_G)) {
 		if (auto prism = m_owner->GetComponent<Prism>())
+		{
 			prism->SetActive(!prism->IsActive());
+			TimerManager::GetInstance().SetGlobalTimeScale(0.5);
+			playerTimeScale = 2.0f;
+		}
 	}
 }
 
 void Player::OnCollisionEnter2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionEnter2D 호출됨" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionEnter2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionEnter2D 호출됨" << std::endl;
+	OutputDebugStringW((L"[Player] OnCollisionEnter2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionStay2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionStay2D 호출됨" << std::endl;
-    //OutputDebugStringW((L"[Player] OnCollisionStay2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionStay2D 호출됨" << std::endl;
+	//OutputDebugStringW((L"[Player] OnCollisionStay2D 호출됨" + std::to_wstring(EnterIndex++) + L"\n").c_str());
 }
 
 void Player::OnCollisionExit2D(Collision2D* collider)
 {
-    std::cout << "[Player] OnCollisionExit2D 호출됨" << std::endl;
-    OutputDebugStringW((L"[Player] OnCollisionExit2D 호출됨" + std::to_wstring(ExitIndex++) + L"\n").c_str());
+	std::cout << "[Player] OnCollisionExit2D 호출됨" << std::endl;
+	OutputDebugStringW((L"[Player] OnCollisionExit2D 호출됨" + std::to_wstring(ExitIndex++) + L"\n").c_str());
 }
 
 void Player::OnTriggerEnter2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerEnter2D 호출됨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerEnter2D 호출됨\n");
+	std::cout << "[Player] OnTriggerEnter2D 호출됨" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerEnter2D 호출됨\n");
 }
 
 void Player::OnTriggerStay2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerStay2D 호출됨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerStay2D 호출됨\n");
+	std::cout << "[Player] OnTriggerStay2D 호출됨" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerStay2D 호출됨\n");
 }
 
 void Player::OnTriggerExit2D(Collider* collider)
 {
-    std::cout << "[Player] OnTriggerExit2D 호출됨" << std::endl;
-    OutputDebugStringW(L"[Player] OnTriggerExit2D 호출됨\n");
+	std::cout << "[Player] OnTriggerExit2D 호출됨" << std::endl;
+	OutputDebugStringW(L"[Player] OnTriggerExit2D 호출됨\n");
 }

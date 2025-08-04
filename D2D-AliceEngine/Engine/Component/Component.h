@@ -7,7 +7,6 @@
 #include <Object/UObject.h>
 
 class gameObject;
-class Canvas;
 class Transform;
 class TransformComponent;
 class Component : public UObject, public ITickable
@@ -35,20 +34,10 @@ public:
 	inline void SetOwner(WeakObjectPtr<gameObject> object) { owner = object; }
 	inline gameObject* GetOwner() { return owner.Get(); }
 	const std::wstring& GetOwnerName();
-	Transform* GetTransform() const;
-	TransformComponent* GetTransformComp() const;
-	FVector2* GetPivot() const;
+	Transform* GetOwnerTransform() const;
+	TransformComponent* GetOwnerTransformComponent() const;
+	FVector2* GetOwnerPivot() const;
 
 protected:
 	WeakObjectPtr<gameObject> owner;
-
-	//-- UI를 위한 것
-public:
-	void SetCanvas(WeakObjectPtr<Canvas> object);
-	Canvas* GetCanvas();
-	Transform* GetCanvasTransform();
-
-protected:
-	WeakObjectPtr<Canvas> canvas;
-	//Transform relativeTransform;
 };

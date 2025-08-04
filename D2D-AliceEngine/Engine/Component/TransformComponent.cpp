@@ -5,7 +5,7 @@
 
 TransformComponent::TransformComponent()
 {
-	SetTransform(FVector2(-1000.0f), 0, FVector2(1.0f), FVector2(0.5f));
+	SetTransform(FVector2(0), 0, FVector2(1.0f), FVector2(0.5f));
 }
 
 TransformComponent::~TransformComponent()
@@ -14,17 +14,7 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_EndPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_EndPhysics);
 }
 
 void TransformComponent::Release()
@@ -78,6 +68,25 @@ void TransformComponent::AddChildObject(WeakObjectPtr<TransformComponent> child)
 	
 	childPtr->parent = WeakFromThis<TransformComponent>();
 	children.push_back(childPtr);
+}
+
+void TransformComponent::RemoveFromParent()
+{
+	auto parentPtr = parent.lock();
+	if (!parentPtr) return; // 부모가 없으면 아무것도 하지 않음
+	
+	// 부모의 children 리스트에서 자신을 제거
+	for (auto it = parentPtr->children.begin(); it != parentPtr->children.end(); ++it)
+	{
+		if (it->lock() == this)
+		{
+			parentPtr->children.erase(it);
+			break;
+		}
+	}
+	
+	// 자신의 parent 참조 제거
+	parent.reset();
 }
 
 FVector2 TransformComponent::GetPosition() const

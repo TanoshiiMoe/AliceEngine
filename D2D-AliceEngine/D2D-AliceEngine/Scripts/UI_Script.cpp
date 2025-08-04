@@ -12,7 +12,6 @@
 #include <UI/UIImage.h>
 #include <UI/UIText.h>
 #include <Scene/Scene.h>
-#include <Object/Canvas.h>
 
 void UI_Script::Initialize()
 {
@@ -37,7 +36,7 @@ void UI_Script::OnStart()
 {
 	m_owner = GetOwner();
 	m_owner->AddComponent<UIImage>()->LoadData(L"Mushroom.png");
-	m_owner->GetComponent<UIImage>()->SetScale(150);
+	m_owner->GetComponent<UIImage>()->SetRelativeScale(150);
 	m_owner->GetComponent<UIImage>()->SetPosition(FVector2(50, 50));
 	m_owner->GetComponent<UIImage>()->m_layer = 500;
 	m_owner->GetComponent<UIImage>()->SetAction([]()

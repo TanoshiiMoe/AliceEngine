@@ -14,12 +14,12 @@ public:
 	float GetTotalTime();
 
 	float GetFixedTime();
-
 	float GetAccumulator() const;
-
 	float GetCurrentFPS() const;
 
 	void ShowFPSDebug();
+	float GetGlobalTimeScale() const;
+	void SetGlobalTimeScale(const float& _value);
 
 	LARGE_INTEGER frequency;
 	LARGE_INTEGER prevCounter;
@@ -37,5 +37,7 @@ private:
 	float currentFps = 0.0f;     // ÇöÀç FPS °ª
 
 	float timeSinceLastDebug = 0.0f;
+
+	float globalTimeScale = 1.0f;
 };
 

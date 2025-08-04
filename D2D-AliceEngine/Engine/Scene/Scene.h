@@ -1,6 +1,5 @@
 #pragma once
 #include <Object/gameObject.h>
-#include <Object/Canvas.h>
 #include <Object/Camera.h>
 #include <Helpers/StringHelper.h>
 #include <unordered_set>
@@ -88,38 +87,5 @@ private:
 	gameObject* m_sysinfoWidget;
 	std::unordered_map<std::wstring, std::unique_ptr<gameObject>> m_objects;
 	std::unordered_map<std::wstring, std::unordered_set<std::wstring>> m_nameToUUIDs;
-
-public:
-	// UI ·ÎÁ÷
-	template<class TReturnType, typename... Args>
-	TReturnType* CreateCanvas(const std::wstring& NewobjectName, Args&&... args)
-	{
-		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
-		std::unique_ptr<TReturnType> createdObj = std::make_unique<TReturnType>(std::forward<Args>(args)...);
-
-		createdObj->SetName(NewobjectName);
-		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
-		m_nameToUUIDs[NewobjectName].insert(createdObj->GetUUID());
-		TReturnType* rawPtr = createdObj.get();
-		m_canvas[createdObj->GetUUID()] = std::move(createdObj);
-
-		return rawPtr;
-	}
-
-	template<class T>
-	void RemoveCanvas(T* targetObj)
-	{
-		for (auto it = m_canvas.begin(); it != m_canvas.end(); ++it)
-		{
-			if (it->second.get() == targetObj)
-			{
-				it->second.reset();
-				m_canvas.erase(it);
-			}
-		}
-	}
-
-private:
-	std::unordered_map<std::wstring, std::unique_ptr<Canvas>> m_canvas;
 };
 

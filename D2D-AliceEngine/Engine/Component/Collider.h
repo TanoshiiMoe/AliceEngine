@@ -18,13 +18,15 @@ public:
 	void Release() override;
 
 	void SetBoxSize(const FVector2& _size);
-	void SetBoxPosition(const FVector2& _pos);
 	void SetBoxColor(const FColor _color);
 	void UpdateAABB();
+	void SetLayer(const int& _layer) { m_layer = _layer; }
+	int GetLayer() { return m_layer; }
 
 	FAABB aabb;
 	BoxComponent* boxComponent;
 
 	bool dirty = true;
 	float collisionDelay = 0.1f;
+	int m_layer = -999;
 };

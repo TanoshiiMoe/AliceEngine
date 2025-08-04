@@ -7,6 +7,7 @@
 #include <Math/TColor.h>
 #include <Math/Transform.h>
 #include <Component/TransformComponent.h>
+#include <Helpers/CoordHelper.h>
 
 BoxComponent::BoxComponent()
 {
@@ -28,17 +29,7 @@ void BoxComponent::Initialize()
 {
 	__super::Initialize();
 
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_PostPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-		{
-			if (auto sp = weak.lock())
-			{
-				sp->Update(dt);
-			}
-		}
-	);
+	REGISTER_TICK_TASK(Update, ETickingGroup::TG_PostPhysics);
 }
 
 void BoxComponent::Update(const float& deltaSeconds)
@@ -53,8 +44,8 @@ void BoxComponent::Release()
 
 void BoxComponent::Render()
 {
-	if (GetOwner() == nullptr) return;
-
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!GetOwner() || !context) return;
 	__super::Render();
 
 	FVector2 scale(1.0f, 1.0f);
@@ -63,14 +54,20 @@ void BoxComponent::Render()
 			scale = transformComp->GetScale();
 	}
 	// 스케일 무시 모드면 scale은 (1,1) 유지
-
 	float drawWidth = m_size.x / (scale.x != 0 ? scale.x : 1.0f);
 	float drawHeight = m_size.y / (scale.y != 0 ? scale.y : 1.0f);
 
+	D2D1_MATRIX_3X2_F prevTransform;
+	context->GetTransform(&prevTransform);
+
+	D2D1_MATRIX_3X2_F skewMatrix = CoordHelper::GetSkewMatrix(skewAngle, drawHeight);
+
+	context->SetTransform(skewMatrix * prevTransform);
+
 	D2D1_POINT_2F pivot = 
 	{
-		drawWidth * GetPivot()->x,
-		drawHeight * GetPivot()->y
+		drawWidth * GetOwnerPivot()->x,
+		drawHeight * GetOwnerPivot()->y
 	};
 	D2DRenderManager::GetD2DDevice()->DrawRectangle(
 		D2D1::RectF(-pivot.x, -pivot.y, pivot.x, pivot.y),

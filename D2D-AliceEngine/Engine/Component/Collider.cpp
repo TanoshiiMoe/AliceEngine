@@ -20,18 +20,7 @@ Collider::~Collider()
 void Collider::Initialize()
 {
 	CollisionSystem::GetInstance().Regist(WeakFromThis<Collider>());
-
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_PrePhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
 }
 
 void Collider::Update(const float& deltaSeconds)
@@ -74,23 +63,13 @@ void Collider::SetBoxSize(const FVector2& _size)
 	if (comp.expired())
 	{
 		boxComponent = GetOwner()->AddComponent<BoxComponent>();
-		boxComponent->SetIgnoreOwnerScale(true);
+		boxComponent->SetIgnoreOwnerScale(false);
+		boxComponent->SetColor(FColor::Red);
+		boxComponent->SetSize(_size);
+		boxComponent->SetThickness(3.0f);
+		boxComponent->m_layer = 999; // 디버그용 맨 앞에 그려지도록. 999
 	}
-	boxComponent->SetColor(FColor::Red);
-	boxComponent->SetSize(_size);
-	boxComponent->SetThickness(3.0f);
-	boxComponent->m_layer = 999; // 디버그용 맨 뒤에 그려지도록. 999
-
 	UpdateAABB();
-}
-
-void Collider::SetBoxPosition(const FVector2& _pos)
-{
-	WeakObjectPtr<BoxComponent> comp = boxComponent;
-	if (comp.expired())
-	{
-		comp->SetRelativePosition(_pos);
-	}
 }
 
 void Collider::SetBoxColor(const FColor _color)

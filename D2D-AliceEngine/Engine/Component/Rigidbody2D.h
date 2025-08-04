@@ -41,6 +41,8 @@ public:
 
 public:
 	// 보간된 위치 반환하는 함수
+	FVector2 GetPredictedPosition() const;
 	FVector2 GetInterpolatedPosition() const;
 	float GetInterpolatedRotation() const;
+	void UpdateInterpolatedPosition();
 };

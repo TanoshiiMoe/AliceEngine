@@ -64,13 +64,10 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	ComPtr<IDXGIFactory7> dxgiFactory;
 	CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
 
-	int width{ 0 }, height{ 0 };
-	GetApplicationSize(width, height);
-
 	// SwapChain 생성
 	DXGI_SWAP_CHAIN_DESC1 scDesc = {};
-	scDesc.Width = width;
-	scDesc.Height = height;
+	scDesc.Width = GetApplicationSize().x;
+	scDesc.Height = GetApplicationSize().y;
 	scDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	scDesc.SampleDesc.Count = 1;
 	scDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -124,12 +121,13 @@ void D2DRenderManager::UnInitialize()
 	m_spriteBatch = nullptr;
 }
 
-void D2DRenderManager::GetApplicationSize(int& width, int& height)
+FVector2 D2DRenderManager::GetApplicationSize()
 {
 	RECT rc = {};
 	GetClientRect(m_hwnd, &rc);
-	width = rc.right - rc.left;
-	height = rc.bottom - rc.top;
+	float width = (float)(rc.right - rc.left);
+	float height = (float)(rc.bottom - rc.top);
+	return { width, height };
 }
 
 void D2DRenderManager::CreateSwapChainAndD2DTarget()
@@ -141,16 +139,13 @@ void D2DRenderManager::CreateSwapChainAndD2DTarget()
 	}
 	m_d2dBitmapTarget.Reset();
 
-	int width = 0, height = 0;
-	GetApplicationSize(width, height);
-
 	// 2. SwapChain 재설정
 	if (m_dxgiSwapChain) {
 		// ResizeBuffers: 넓이/높이가 0이면 현재 설정 유지, 여기선 실제 크기로 넘깁니다.
 		m_dxgiSwapChain->ResizeBuffers(
 			0,
-			width,
-			height,
+			GetApplicationSize().x,
+			GetApplicationSize().y,
 			DXGI_FORMAT_UNKNOWN,
 			0
 		);

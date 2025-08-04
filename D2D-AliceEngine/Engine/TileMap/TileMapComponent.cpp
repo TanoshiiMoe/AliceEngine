@@ -11,6 +11,10 @@
 #include <Object/gameObject.h>
 #include <Scene/Scene.h>
 #include <Component/TileMapRenderer.h>
+#include <Component/Collider.h>
+#include <Helpers/CoordHelper.h>
+#include <Manager/UpdateTaskManager.h>
+#include <Component/BoxComponent.h>
 
 TileMapComponent::TileMapComponent()
 {
@@ -28,40 +32,96 @@ TileMapComponent::~TileMapComponent()
 void TileMapComponent::Initialize()
 {
 	__super::Initialize();
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
+
 }
 
 void TileMapComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	go;
 }
 
 void TileMapComponent::LoadTileMapData(const std::wstring& path)
 {
 	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
-	TileMapLoader::LoadTileMap(filePath, tilemap);
+	TileMapLoader::LoadTileMap(filePath, tileMap);
 }
 
 void TileMapComponent::LoadTileSetData(const std::wstring& path)
 {
 	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
-	TileMapLoader::LoadTileSet(filePath, tileset);
+	TileMapLoader::LoadTileSet(filePath, tileSet);
 }
 
-void TileMapComponent::LoadMapData(const std::wstring& path)
+void TileMapComponent::LoadTileCollisionData(const std::wstring& path)
 {
-	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // 파일 이름만 저장
-	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(
-		(Define::BASE_RESOURCE_PATH + path).c_str());
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path);
+	tileCollision = TileMapLoader::LoadTileMapColliderInfo(filePath);
 }
 
-void TileMapComponent::CreatetileRenderers()
+void TileMapComponent::CreateTileCollision()
+{
+	int mapHeight = tileMap.layers[0].height;
+	int mapWidth = tileMap.layers[0].width;
+	int imageWidth = tileSet.imagewidth;
+	int tileWidth = tileSet.tilewidth;
+	int tileHeight = tileSet.tileheight;
+	std::vector<int> tileData = tileMap.layers[0].data;
+
+	const int tilePerRow = imageWidth / tileWidth;
+	for (int y = 0; y < mapHeight; ++y)
+	{
+		for (int x = 0; x < mapWidth; ++x)
+		{
+			int index = y * mapWidth + x;
+			int tileId = tileData[index];
+			if (tileId == 0)
+				continue;
+			if (tileCollision.find(tileId) == tileCollision.end()) continue;
+
+			tileId -= 1;
+			int sx = (tileId % tilePerRow) * tileWidth;
+			int sy = (tileId / tilePerRow) * tileHeight;
+			D2D1_RECT_U srcRect = { (UINT32)sx, (UINT32)sy, (UINT32)(sx + tileWidth), (UINT32)(sy + tileHeight) };
+
+			D2D1_RECT_F destRect = D2D1::RectF(
+				(FLOAT)(x * tileWidth),
+				(FLOAT)(y * tileHeight),
+				(FLOAT)((x + 1) * tileWidth),
+				(FLOAT)((y + 1) * tileHeight)
+			);
+
+			D2D1_MATRIX_3X2_F fullTransform =
+				D2D1::Matrix3x2F::Translation(-Define::SCREEN_WIDTH / 2.0f, -Define::SCREEN_HEIGHT / 2.0f) *
+				CoordHelper::GetSkewMatrix(skewAngle, mapHeight * tileHeight) * 
+				D2D1::Matrix3x2F::Scale(1,-1);
+			D2D1_POINT_2F topLeft = CoordHelper::TransformPoint(fullTransform, D2D1::Point2F(destRect.left, destRect.top + tileHeight / 2));
+			D2D1_POINT_2F bottomRight = CoordHelper::TransformPoint(fullTransform, D2D1::Point2F(destRect.right, destRect.bottom));
+
+			gameObject* collisionGo = GetWorld()->NewObject<gameObject>(L"tileCollision");
+			collisionGo->transform()->SetPosition({ topLeft.x, topLeft.y });
+			collisionGo->transform()->SetPivot(0.5f, 0.5f);
+			collisionGo->AddComponent<Collider>();
+			if (auto collider = collisionGo->GetComponent<Collider>())
+			{
+				collider->SetBoxSize(FVector2(tileWidth, tileHeight));
+				collider->boxComponent->SetSkewAngle(FVector2(30, 0));
+				collider->SetLayer(tileCollision[tileId+1]); // 실제 위치를 반환하기 위해 -1 했던것을 다시 +1
+			}
+			go.push_back(collisionGo);
+		}
+	}
+}
+
+void TileMapComponent::CreateTileRenderers()
 {
 	gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
 	TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
 	tileRenderer->m_layer = 1;
-	tileRenderer->LoadData(StringHelper::string_to_wstring(tileset.image));
+	tileRenderer->LoadData(StringHelper::string_to_wstring(tileSet.image));
 	tileRenderer->SetSkew(skewAngle);
-	tileRenderer->SetMapInfo(tilemap, tileset);
+	tileRenderer->SetMapInfo(tileMap, tileSet);
 	go->transform()->SetPosition(tileRenderer->GetBitmapSizeX() / 2, 0);
 }
 
@@ -91,7 +151,7 @@ float TileMapComponent::GetBitmapSizeY()
 	return 0;
 }
 
-void TileMapComponent::SetSkew(const float& angle)
+void TileMapComponent::SetSkew(const FVector2& angle)
 {
 	skewAngle = angle;
 }

@@ -39,7 +39,12 @@ public:
 	}
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
+
 	void SetScale(const FVector2& _scale) { scale = _scale; }
+
+	void SetPosition(const FVector2& pos);
+	//void SetScale(const FVector2& _scale) { scale = _scale; }
+
 	void SetTransformType(const ETransformType& type);
 
 	void SetPosition(const FVector2& pos) override {}

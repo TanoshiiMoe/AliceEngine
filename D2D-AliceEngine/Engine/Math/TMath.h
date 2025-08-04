@@ -33,6 +33,11 @@ public:
 		return TVector2(x / value, y / value);
 	}
 
+	TVector2 operator-() const
+	{
+		return TVector2(-x, -y);
+	}
+
 	TVector2 operator+(const TVector2& rhs)
 	{
 		return TVector2(x + rhs.x, y + rhs.y);
@@ -54,6 +59,11 @@ public:
 	{
 		x *= rhs.x;
 		y *= rhs.y;
+	}
+	void operator*=(const float& value)
+	{
+		x *= value;
+		y *= value;
 	}
 	void operator+=(const TVector2& rhs)
 	{
@@ -106,6 +116,26 @@ template<typename T>
 TVector2<T> operator+(const TVector2<T>& lhs, const TVector2<T>& rhs)
 {
 	return TVector2<T>(lhs.x + rhs.x, lhs.y + rhs.y);
+}
+
+template<typename T>
+TVector2<T> operator*(const TVector2<T>& lhs, const TVector2<T>& rhs)
+{
+	return TVector2<T>(lhs.x * rhs.x, lhs.y * rhs.y);
+}
+
+//  float * TVector2 연산 (순서 바뀐 경우)
+template<typename T>
+TVector2<T> operator*(const float& value, const TVector2<T>& vec)
+{
+	return TVector2<T>(vec.x * value, vec.y * value);
+}
+
+// TVector2 * float 연산 (전역 함수로)
+template<typename T>
+TVector2<T> operator*(const TVector2<T>& vec, const float& value)
+{
+	return TVector2<T>(vec.x * value, vec.y * value);
 }
 
 template<typename T>
@@ -184,6 +214,35 @@ namespace Math
 	constexpr const T& clamp(const T& v, const T& lo, const T& hi) 
 	{
 		return (v < lo) ? lo : (hi < v) ? hi : v;
+	}
+
+	// EaseInOut
+	inline float EaseInOut(float a, float b, float elapsedTime, float duration) {
+		// 보간 계수 t 계산
+		float t = elapsedTime / duration;
+		t = clamp(t, 0.0f, 1.0f); // 범위 제한
+
+		// EaseInOut 적용 (SmoothStep)
+		float smoothT = t * t * (3.0f - 2.0f * t);
+
+		// 선형 보간
+		return a + (b - a) * smoothT;
+	}
+
+	// EaseOut
+	inline float EaseOut(float a, float b, float elapsedTime, float duration) {
+		float t = elapsedTime / duration;
+		t = clamp(t, 0.0f, 1.0f); // 범위 제한
+
+		// EaseOut: 느려지는 곡선 (예: 1 - (1 - t)^2)
+		float easeT = 1.0f - (1.0f - t) * (1.0f - t);
+
+		return a + (b - a) * easeT;
+	}
+
+	// Approximately
+	inline bool Approximately(float a, float b, float epsilon = 1e-5f) {
+		return std::fabs(a - b) <= epsilon;
 	}
 }
 

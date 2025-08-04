@@ -20,6 +20,24 @@
     <Filter Include="Scene\ExampleScene">
       <UniqueIdentifier>{622f0825-07bc-42f4-bcc6-b92d5fc1e316}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Bike">
+      <UniqueIdentifier>{556ab419-90eb-4a8a-a977-62945c1f74ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Widget">
+      <UniqueIdentifier>{8f0c8008-cfac-4743-9c41-1b5f5fa8e323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\SolarScene">
+      <UniqueIdentifier>{086d22b4-f7d7-49e9-a1a4-6e0721449d59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Video">
+      <UniqueIdentifier>{425c74aa-3b3e-482d-ab8b-6b6092708d2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Spine2D">
+      <UniqueIdentifier>{5f9912cc-ad01-4238-9c12-ceeb59ef58c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Spine2D">
+      <UniqueIdentifier>{a2ac56ab-5efd-440d-a652-1f690479b030}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -55,23 +73,11 @@
     <ClInclude Include="Scripts\CameraController.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Earth.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Moon.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\YuukaVideo.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Example\ScriptExample.h">
       <Filter>Scripts\ScriptExample</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Sun.h">
-      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Player.h">
       <Filter>Scripts</Filter>
@@ -103,6 +109,42 @@
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Bike\Battery.h">
+      <Filter>Scripts\Bike</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Bike\Health.h">
+      <Filter>Scripts\Bike</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Bike\LaneController.h">
+      <Filter>Scripts\Bike</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Widget\TitleWidgetScript.h">
+      <Filter>Scripts\Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\SolarScene\Sun.h">
+      <Filter>Scripts\SolarScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\SolarScene\Moon.h">
+      <Filter>Scripts\SolarScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\SolarScene\Earth.h">
+      <Filter>Scripts\SolarScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Video\YuukaVideo.h">
+      <Filter>Scripts\Video</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Bike\BikeMovementScript.h">
+      <Filter>Scripts\Bike</Filter>
+    </ClInclude>
+    <ClInclude Include="Spine2D\SpineRenderer.h">
+      <Filter>Spine2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SpineScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Spine2D\SpineScript.h">
+      <Filter>Scripts\Spine2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -132,23 +174,8 @@
     <ClCompile Include="Scripts\CameraController.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Earth.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Moon.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Sun.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\YuukaVideo.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Example\ScriptExample.cpp">
       <Filter>Scripts\ScriptExample</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Player.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy.cpp">
       <Filter>Scripts</Filter>
@@ -179,6 +206,45 @@
     </ClCompile>
     <ClCompile Include="Scripts\TitleUIScript.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Bike\Battery.cpp">
+      <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Bike\Health.cpp">
+      <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Bike\LaneController.cpp">
+      <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Player.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp">
+      <Filter>Scripts\Widget</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\SolarScene\Sun.cpp">
+      <Filter>Scripts\SolarScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\SolarScene\Moon.cpp">
+      <Filter>Scripts\SolarScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\SolarScene\Earth.cpp">
+      <Filter>Scripts\SolarScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Video\YuukaVideo.cpp">
+      <Filter>Scripts\Video</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp">
+      <Filter>Scripts\Bike</Filter>
+    </ClCompile>
+    <ClCompile Include="Spine2D\SpineRenderer.cpp">
+      <Filter>Spine2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SpineScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Spine2D\SpineScript.cpp">
+      <Filter>Scripts\Spine2D</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

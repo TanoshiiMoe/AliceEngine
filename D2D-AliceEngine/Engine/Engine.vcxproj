@@ -79,6 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -114,6 +115,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)Engine\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -141,8 +143,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\ButtonComponent.h" />
     <ClInclude Include="Component\BackGroundComponent.h" />
     <ClInclude Include="Component\AudioComponent.h" />
+    <ClInclude Include="Helpers\CoordHelper.h" />
     <ClInclude Include="Effect\Prism.h" />
     <ClInclude Include="Experimental\Collision\Collision2D.h" />
     <ClInclude Include="Component\Rigidbody2D.h" />
@@ -205,14 +209,15 @@
     <ClInclude Include="TileMap\TileMapLoader.h" />
     <ClInclude Include="TileMap\TileMapComponent.h" />
     <ClInclude Include="Component\UIComponent.h" />
-    <ClInclude Include="Object\Canvas.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="UI\UIText.h" />
     <ClInclude Include="UI\UIImage.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\ButtonComponent.cpp" />
     <ClCompile Include="Component\BackGroundComponent.cpp" />
     <ClCompile Include="Component\AudioComponent.cpp" />
+    <ClCompile Include="Helpers\CoordHelper.cpp" />
     <ClCompile Include="Effect\Prism.cpp" />
     <ClCompile Include="Experimental\Collision\Collision2D.cpp" />
     <ClCompile Include="Component\Rigidbody2D.cpp" />
@@ -279,7 +284,6 @@
     <ClCompile Include="TileMap\TileMapLoader.cpp" />
     <ClCompile Include="TileMap\TileMapComponent.cpp" />
     <ClCompile Include="Component\UIComponent.cpp" />
-    <ClCompile Include="Object\Canvas.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="UI\UIText.cpp" />
     <ClCompile Include="UI\UIImage.cpp" />

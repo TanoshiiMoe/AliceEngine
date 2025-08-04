@@ -4,8 +4,6 @@
 #include <Object/gameObject.h>
 #include <Helpers/StringHelper.h>
 #include <Math/Transform.h>
-#include <Object/Canvas.h>
-#include <Math/Transform.h>
 
 Component::Component()
 {
@@ -36,14 +34,14 @@ const std::wstring& Component::GetOwnerName()
 	return L"No Owner";
 }
 
-Transform* Component::GetTransform() const
+Transform* Component::GetOwnerTransform() const
 {
 	if (!owner.expired()) 
 		return &owner.lock()->transform()->m_worldTransform;
 	return nullptr;
 }
 
-TransformComponent* Component::GetTransformComp() const
+TransformComponent* Component::GetOwnerTransformComponent() const
 {
 	if (!owner.expired())
 		return owner.lock()->GetComponent<TransformComponent>();
@@ -51,26 +49,9 @@ TransformComponent* Component::GetTransformComp() const
 	return nullptr;
 }
 
-FVector2* Component::GetPivot() const
+FVector2* Component::GetOwnerPivot() const
 {
 	if (!owner.expired())
 		return owner.lock()->transform()->GetPivot();
-	return nullptr;
-}
-
-void Component::SetCanvas(WeakObjectPtr<Canvas> object)
-{
-	canvas = object;
-}
-
-Canvas* Component::GetCanvas()
-{
-	return canvas.Get();
-}
-
-Transform* Component::GetCanvasTransform()
-{
-	if (!canvas.expired())
-		return &canvas.lock()->transform()->m_worldTransform;
 	return nullptr;
 }
