@@ -39,10 +39,15 @@ void TitleUIScript::OnStart()
 {
 	m_owner = GetOwner();
 	auto image = m_owner->AddComponent<UIImage>();
-	auto text = m_owner->AddComponent<UIText>();
+	auto mainTitle = m_owner->AddComponent<UIText>();
+	auto subTitle = m_owner->AddComponent<UIText>();
 	auto button = m_owner->AddComponent<UIButton>();
 
-	if (!image || !text || !button) return;
+	if (!image ||
+		!mainTitle ||
+		!button ||
+		!subTitle
+		) return;
 
 	//Anchor를 지정하면 Offset은 D2D좌표계를 사용합니다.
 
@@ -50,7 +55,6 @@ void TitleUIScript::OnStart()
 	//image->SetScale(150);
 	//image->SetPosition(FVector2(50, 50));
 	image->SetAnchor(EUIScreenAnchor::MiddleCenter);
-
 	image->m_layer = 500;
 
 	// Delegete
@@ -60,12 +64,19 @@ void TitleUIScript::OnStart()
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 		});
 
-	text->SetText(L"Title");
-	text->SetFontSize(60.0f);
-	text->SetColor(FColor(0, 0, 0, 255));
+	// text
+	mainTitle->SetText(L"높다락길의 질주");
+	mainTitle->SetFontSize(60.0f);
+	mainTitle->SetColor(FColor(0, 0, 0, 255));
 	//text->SetPosition(FVector2(Define::SCREEN_WIDTH / 2, 40));
-	text->SetAnchor(EUIScreenAnchor::MiddleCenter);
-	text->m_layer = 500;
+	mainTitle->SetAnchor(EUIScreenAnchor::MiddleRight);
+	mainTitle->m_layer = 500;
+
+	subTitle->SetText(L"~활빈은 두령을 쫒는다~");
+	subTitle->SetFontSize(30.0f);
+	subTitle->SetColor(FColor::Black);
+	subTitle->SetAnchor(EUIScreenAnchor::MiddleRight, 0, 50);
+	subTitle->m_layer = 500;
 
 	button->SetImages(L"Button_Idle.png",L"Button_Hover.png", L"Button_Pressed.png");
 	//button->SetScale(150);

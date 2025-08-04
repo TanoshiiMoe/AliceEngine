@@ -39,44 +39,175 @@ void TitleWidgetScript::OnStart()
 {
 	m_owner = GetOwner();
 	m_owner->transform()->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f,0.5f)));
-	auto text = m_owner->AddComponent<TextRenderComponent>();
-	auto title = m_owner->AddComponent<TextRenderComponent>();
-	auto button = m_owner->AddComponent<ButtonComponent>();
-	auto background = m_owner->AddComponent<SpriteRenderer>();
-	if (!text || !button) return;
-	
-	// ======================== button
-	button->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
-	button->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
-	button->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
-	button->LoadData(Define::EButtonState::Release, L"dead.png");
-	FVector2 buttonSize = button->GetRelativeSize();
-	button->SetRelativePosition(CoordHelper::RatioCoordToScreen(buttonSize, FVector2(0, -0.5)));
-	button->SetRelativeScale(FVector2(1, 1));
-	button->SetRelativeRotation(30);
-	button->m_layer = 500;
 
-	// ======================== title
-	title->SetText(L"Button 1");
-	title->SetFontSize(120.0f);
-	title->SetColor(FColor(255, 0, 0, 255));
-	FVector2 titleRectSize = title->GetRelativeSize();
-	title->SetRelativePosition(CoordHelper::RatioCoordToScreen(titleRectSize, FVector2(-0.5, -0.5)) + FVector2(0, -300));
-	title->SetRelativeScale(FVector2(1, 1));
-	title->SetRelativeRotation(0);
-	title->m_layer = 501;
+	auto background = m_owner->AddComponent<SpriteRenderer>();
+
+	auto startText = m_owner->AddComponent<TextRenderComponent>();
+	auto continueText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionText = m_owner->AddComponent<TextRenderComponent>();
+	auto staffText = m_owner->AddComponent<TextRenderComponent>();
+	auto quitText = m_owner->AddComponent<TextRenderComponent>();
+
+	auto mainTitle = m_owner->AddComponent<TextRenderComponent>();
+	auto subTitle = m_owner->AddComponent<TextRenderComponent>();
+
+	auto startButton = m_owner->AddComponent<ButtonComponent>();
+	auto continueButton = m_owner->AddComponent<ButtonComponent>();
+	auto optionButton = m_owner->AddComponent<ButtonComponent>();
+	auto staffButton = m_owner->AddComponent<ButtonComponent>();
+	auto quitButton = m_owner->AddComponent<ButtonComponent>();
+
+	if (!startText || !startButton) return;
+	if (!continueText || !continueButton) return;
+	if (!optionText || !optionButton) return;
+	if (!staffText || !staffButton) return;
+	if (!quitText || !quitButton) return;
+	
+	float buttonBasePos = 500;
+
+	// ======================== startButton
+	startButton->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	startButton->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	startButton->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	startButton->LoadData(Define::EButtonState::Release, L"dead.png");
+	FVector2 startButtonSize = startButton->GetRelativeSize();
+	startButton->SetRelativePosition(CoordHelper::RatioCoordToScreen(startButtonSize, FVector2(1, 0))
+		+ FVector2(buttonBasePos, -150));
+	startButton->SetRelativeScale(FVector2(1, 1));
+	startButton->SetRelativeRotation(0);
+	startButton->m_layer = 500;
+
+	// ======================== continueButton
+	continueButton->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	continueButton->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	continueButton->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	continueButton->LoadData(Define::EButtonState::Release, L"dead.png");
+	FVector2 continueButtonSize = continueButton->GetRelativeSize();
+	continueButton->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(continueButtonSize, FVector2(1, 0))
+		+ FVector2(buttonBasePos, 0));
+	continueButton->SetRelativeScale(FVector2(1, 1));
+	continueButton->SetRelativeRotation(0);
+	continueButton->m_layer = 500;
+
+	// ======================== optionButton
+	optionButton->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	optionButton->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	optionButton->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	optionButton->LoadData(Define::EButtonState::Release, L"dead.png");
+	FVector2 optionButtonSize = optionButton->GetRelativeSize();
+	optionButton->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionButtonSize, FVector2(1, 0))
+		+ FVector2(buttonBasePos, 150));
+	optionButton->SetRelativeScale(FVector2(1, 1));
+	optionButton->SetRelativeRotation(0);
+	optionButton->m_layer = 500;
+
+	// ======================== staffButton
+	staffButton->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	staffButton->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	staffButton->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	staffButton->LoadData(Define::EButtonState::Release, L"dead.png");
+	FVector2 staffButtonSize = staffButton->GetRelativeSize();
+	staffButton->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(staffButtonSize, FVector2(1, 0))
+		+ FVector2(buttonBasePos, 300));
+	staffButton->SetRelativeScale(FVector2(1, 1));
+	staffButton->SetRelativeRotation(0);
+	staffButton->m_layer = 500;
+
+	// ======================== quitButton
+	quitButton->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	quitButton->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	quitButton->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	quitButton->LoadData(Define::EButtonState::Release, L"dead.png");
+	FVector2 quitButtonSize = quitButton->GetRelativeSize();
+	quitButton->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(quitButtonSize, FVector2(1, 0))
+		+ FVector2(buttonBasePos, 450));
+	quitButton->SetRelativeScale(FVector2(1, 1));
+	quitButton->SetRelativeRotation(0);
+	quitButton->m_layer = 500;
+
+	// ======================== mainTitle
+	mainTitle->SetText(L"높다락길의 질주");
+	mainTitle->SetFontSize(120.0f);
+	mainTitle->SetColor(FColor(255, 0, 0, 255));
+	FVector2 mainTitleRectSize = mainTitle->GetRelativeSize();
+	mainTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(mainTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, -300));
+	mainTitle->SetRelativeScale(FVector2(1, 1));
+	mainTitle->SetRelativeRotation(0);
+	mainTitle->m_layer = 501;
+
+	// ======================== subTitle
+	subTitle->SetText(L"~활빈은 두령을 쫒는다~");
+	subTitle->SetFontSize(60.0f);
+	subTitle->SetColor(FColor(255, 0, 0, 255));
+	FVector2 subTitleRectSize = subTitle->GetRelativeSize();
+	subTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(subTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, 0));
+	subTitle->SetRelativeScale(FVector2(1, 1));
+	subTitle->SetRelativeRotation(0);
+	subTitle->m_layer = 501;
 
 	// ======================== text
-	text->SetText(L"Button 1");
-	text->SetFontSize(60.0f);
-	text->SetColor(FColor(255, 0, 0, 255));
-	FVector2 textRectSize = text->GetRelativeSize();
-	text->SetRelativePosition(CoordHelper::RatioCoordToScreen(textRectSize, FVector2(-0.5, -0.5)));
-	text->SetRelativeScale(FVector2(1, 1));
-	text->SetRelativeRotation(0);
-	text->m_layer = 501;
-	text->RemoveFromParent();
-	button->AddChildComponent(text);
+	startText->SetText(L"시작하기");
+	startText->SetFontSize(60.0f);
+	startText->SetColor(FColor(255, 0, 0, 255));
+	FVector2 startTextRectSize = startText->GetRelativeSize();
+	startText->SetRelativePosition(CoordHelper::RatioCoordToScreen(startTextRectSize, FVector2(-0.5, -0.5)));
+	startText->SetRelativeScale(FVector2(1, 1));
+	startText->SetRelativeRotation(0);
+	startText->m_layer = 501;
+	startText->RemoveFromParent();
+	startButton->AddChildComponent(startText);
+
+	// ======================== continueText
+	continueText->SetText(L"이어하기");
+	continueText->SetFontSize(60.0f);
+	continueText->SetColor(FColor(255, 0, 0, 255));
+	FVector2 continueTextRectSize = continueText->GetRelativeSize();
+	continueText->SetRelativePosition(CoordHelper::RatioCoordToScreen(continueTextRectSize, FVector2(-0.5, -0.5)));
+	continueText->SetRelativeScale(FVector2(1, 1));
+	continueText->SetRelativeRotation(0);
+	continueText->m_layer = 501;
+	continueText->RemoveFromParent();
+	continueButton->AddChildComponent(continueText);
+
+	// ======================== continueText
+	optionText->SetText(L"음량 조정");
+	optionText->SetFontSize(60.0f);
+	optionText->SetColor(FColor(255, 0, 0, 255));
+	FVector2 optionTextRectSize = optionText->GetRelativeSize();
+	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionTextRectSize, FVector2(-0.5, -0.5)));
+	optionText->SetRelativeScale(FVector2(1, 1));
+	optionText->SetRelativeRotation(0);
+	optionText->m_layer = 501;
+	optionText->RemoveFromParent();
+	optionButton->AddChildComponent(optionText);
+
+	// ======================== continueText
+	staffText->SetText(L"제작진");
+	staffText->SetFontSize(60.0f);
+	staffText->SetColor(FColor(255, 0, 0, 255));
+	FVector2 staffTextRectSize = continueText->GetRelativeSize();
+	staffText->SetRelativePosition(CoordHelper::RatioCoordToScreen(staffTextRectSize, FVector2(-0.5, -0.5)));
+	staffText->SetRelativeScale(FVector2(1, 1));
+	staffText->SetRelativeRotation(0);
+	staffText->m_layer = 501;
+	staffText->RemoveFromParent();
+	staffButton->AddChildComponent(staffText);
+
+	// ======================== continueText
+	quitText->SetText(L"오락 종료");
+	quitText->SetFontSize(60.0f);
+	quitText->SetColor(FColor(255, 0, 0, 255));
+	FVector2 quitTextRectSize = quitText->GetRelativeSize();
+	quitText->SetRelativePosition(CoordHelper::RatioCoordToScreen(quitTextRectSize, FVector2(-0.5, -0.5)));
+	quitText->SetRelativeScale(FVector2(1, 1));
+	quitText->SetRelativeRotation(0);
+	quitText->m_layer = 501;
+	quitText->RemoveFromParent();
+	quitButton->AddChildComponent(quitText);
 
 	// ======================== background
 	background->LoadData(L"tree.jpg");
@@ -87,13 +218,14 @@ void TitleWidgetScript::OnStart()
 	background->SetRelativeRotation(0);
 
 	// ======================== Delegete
-	button->SetStateAction(Define::EButtonState::Pressed, []()
+	startButton->SetStateAction(Define::EButtonState::Pressed, []()
 	{
-
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 		SceneManager::ChangeScene(L"HiroScene");
 	});
+
+	
 }
 
 void TitleWidgetScript::OnEnd()
