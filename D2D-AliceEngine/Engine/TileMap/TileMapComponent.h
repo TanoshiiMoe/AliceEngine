@@ -16,6 +16,7 @@ public:
 	void LoadTileCollisionData(const std::wstring& path);
 	void CreateTileCollision();
 	void CreateTileRenderers();
+	void SetTileLayer(const int& layer);
 	void Release() override;
 	void Render() override;
 
@@ -33,6 +34,8 @@ public:
 	std::wstring filePath; // 파일의 경로
 
 	FVector2 skewAngle;
+
+	gameObject* m_tile;
 
 	std::vector<gameObject*> go;
 };

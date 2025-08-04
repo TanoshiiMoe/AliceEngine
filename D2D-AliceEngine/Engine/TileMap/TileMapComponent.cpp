@@ -116,13 +116,19 @@ void TileMapComponent::CreateTileCollision()
 
 void TileMapComponent::CreateTileRenderers()
 {
-	gameObject* go = GetWorld()->NewObject<gameObject>(L"tileSprite");
-	TileMapRenderer* tileRenderer = go->AddComponent<TileMapRenderer>();
+	m_tile = GetWorld()->NewObject<gameObject>(L"tileSprite");
+	TileMapRenderer* tileRenderer = m_tile->AddComponent<TileMapRenderer>();
 	tileRenderer->m_layer = 1;
 	tileRenderer->LoadData(StringHelper::string_to_wstring(tileSet.image));
 	tileRenderer->SetSkew(skewAngle);
 	tileRenderer->SetMapInfo(tileMap, tileSet);
-	go->transform()->SetPosition(tileRenderer->GetBitmapSizeX() / 2, 0);
+	m_tile->transform()->SetPosition(tileRenderer->GetBitmapSizeX() / 2, 0);
+}
+
+void TileMapComponent::SetTileLayer(const int& layer)
+{
+	TileMapRenderer* tileRenderer = m_tile->GetComponent<TileMapRenderer>();
+	tileRenderer->m_layer = layer;
 }
 
 void TileMapComponent::Release()

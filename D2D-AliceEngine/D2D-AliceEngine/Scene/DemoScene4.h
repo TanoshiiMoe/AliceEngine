@@ -24,14 +24,14 @@ public:
 
 	gameObject* m_player;
 	gameObject* m_sound;
-	gameObject* m_tile;
+	gameObject* m_tile;	// = 3
 	Canvas* m_canvas;
 	gameObject* m_wall;
 
 	gameObject* m_UI;
 	gameObject* m_button;
 
-	gameObject* m_bg;
+	gameObject* m_bg;	// 임시 배경
 
 	gameObject* m_truck;
 
