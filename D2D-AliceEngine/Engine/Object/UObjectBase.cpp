@@ -20,3 +20,13 @@ void UObjectBase::SetUUID(const std::wstring& value)
 {
 	m_uuid = value;
 }
+
+std::wstring& UObjectBase::GetTag()
+{
+	return m_tag;
+}
+
+void UObjectBase::SetTag(const std::wstring& value)
+{
+	m_tag = value;
+}

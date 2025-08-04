@@ -10,8 +10,12 @@ public:
 	std::wstring& GetUUID();
 	void SetUUID(const std::wstring& value);
 
+	std::wstring& GetTag();
+	void SetTag(const std::wstring& value);
+
 protected:
 	std::wstring m_name;
 	std::wstring m_uuid;
+	std::wstring m_tag;
 };
 
