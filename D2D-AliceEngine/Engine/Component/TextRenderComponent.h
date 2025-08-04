@@ -53,6 +53,7 @@ public:
 	}
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
+	void SetFont(const float& _fontName);
 	void SetIgnoreCameraTransform(bool bIgnore);
 
 public:

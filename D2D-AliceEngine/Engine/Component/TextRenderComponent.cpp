@@ -219,6 +219,12 @@ void TextRenderComponent::SetFontSize(const float& _size)
 	InitializeFormat();
 }
 
+void TextRenderComponent::SetFont(const float& _fontName)
+{
+	m_font = _fontName;
+	InitializeFormat();
+}
+
 void TextRenderComponent::SetIgnoreCameraTransform(bool bIgnore)
 {
 	bIgnoreCameraTransform = bIgnore;
