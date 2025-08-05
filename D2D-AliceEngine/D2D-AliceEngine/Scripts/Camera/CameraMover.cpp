@@ -19,7 +19,7 @@ void CameraMover::OnStart()
 
 	FVector2 initPos;
 
-	camera = SceneManager::GetInstance().GetCamera();
+	//camera = SceneManager::GetInstance().GetCamera();
 
 	if (player) {
 		initPos = player->transform()->GetPosition();
@@ -47,18 +47,18 @@ void CameraMover::Update(const float& dt)
 
 	if (!player) return;
 
-	FVector2 targetPos = player->transform()->GetPosition();
-	FVector2 cameraPos = camera->GetPosition();  // camera는 이 스크립트의 owner임
-
-	FVector2 delta = targetPos - cameraPos;
-
-	// deadZone 안에 있으면 움직이지 않음
-	if (fabs(delta.x) < deadZoneX) delta.x = 0.0f;
-	if (fabs(delta.y) < deadZoneY) delta.y = 0.0f;
-
-	// 느리게 따라오기 (선형 보간 방식)
-	FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
-	camera->SetRelativePosition(newPos);
+	//FVector2 targetPos = player->transform()->GetPosition();
+	//FVector2 cameraPos = camera->GetPosition();  // camera는 이 스크립트의 owner임
+	//
+	//FVector2 delta = targetPos - cameraPos;
+	//
+	//// deadZone 안에 있으면 움직이지 않음
+	//if (fabs(delta.x) < deadZoneX) delta.x = 0.0f;
+	//if (fabs(delta.y) < deadZoneY) delta.y = 0.0f;
+	//
+	//// 느리게 따라오기 (선형 보간 방식)
+	//FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
+	//camera->SetRelativePosition(newPos);
 }
 
 void CameraMover::SetPlayer(gameObject* _player)

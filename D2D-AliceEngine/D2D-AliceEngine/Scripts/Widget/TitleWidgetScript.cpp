@@ -43,6 +43,8 @@ void TitleWidgetScript::OnStart()
 	m_owner = GetOwner();
 	m_owner->transform()->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f,0.5f)));
 
+	GetCamera()->AddChildObject(m_owner);
+
 	auto background = m_owner->AddComponent<SpriteRenderer>();
 
 	auto startText = m_owner->AddComponent<TextRenderComponent>();

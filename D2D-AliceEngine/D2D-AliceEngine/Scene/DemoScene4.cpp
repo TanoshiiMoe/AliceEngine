@@ -32,6 +32,7 @@
 #include <Component/ButtonComponent.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Camera/CameraMover.h>
+#include <Scripts/CameraController.h>
 
 void DemoScene4::Initialize()
 {
@@ -107,6 +108,8 @@ void DemoScene4::OnEnter()
 	//m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 
 	//RemoveObject(m_wall);
+	m_cameraController = NewObject<gameObject>(L"m_cameraController");
+	m_cameraController->AddComponent<CameraController>();
 
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
 }

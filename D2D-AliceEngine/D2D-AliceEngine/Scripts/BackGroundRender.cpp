@@ -69,9 +69,10 @@ void BackGroundRender::Awake()
 void BackGroundRender::OnStart()
 {
 	m_owner = GetOwner();
+	GetCamera()->AddChildObject(m_owner);
 
 	m_sky = GetWorld()->NewObject<gameObject>(L"Sky");
-
+	GetCamera()->AddChildObject(m_sky);
 	auto sky = m_sky->AddComponent<SpriteRenderer>();
 	sky->LoadData(L"BackGround\\BG_Sky.png");
 	sky->SetDrawType(EDrawType::ScreenSpace);
