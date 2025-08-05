@@ -189,7 +189,7 @@ void Player::OnStart()
 	m_owner->AddComponent<LaneController>();
 
 	//SceneManager::GetCamera()->SetOwner(m_owner);
-	//m_owner->AddChildTransform(&SceneManager::GetCamera()->relativeTransform);
+	//m_owner->AddChildTransform(&GetCamera()->relativeTransform);
 }
 
 void Player::OnEnd()
@@ -208,11 +208,19 @@ void Player::Input()
 
 	if (Input::IsKeyPressed(VK_Q))
 	{
-		SceneManager::GetCamera()->SetOwner(m_owner);
+		//SceneManager::GetCamera()->SetOwner(m_owner);
+		m_owner->RemoveFromParent();
+		//GetCamera()->AddChildObject(m_owner);
+		m_owner->AddChildTransform(&GetCamera()->relativeTransform);
+		GetCamera()->SetRelativeScale(m_owner->GetScaleInv());
+		GetCamera()->SetRelativePosition(FVector2(0,0));
 	}
 	if (Input::IsKeyPressed(VK_E))
 	{
-		SceneManager::GetCamera()->ClearOwner();
+		//SceneManager::GetCamera()->ClearOwner();
+		//m_owner->RemoveFromParent();
+		GetCamera()->RemoveFromParent();
+		//m_owner->AddChildTransform(&SceneManager::GetCamera()->relativeTransform);
 	}
 	if (Input::IsKeyDown(VK_K))
 	{

@@ -33,5 +33,6 @@ public:
 	gameObject* m_widget5;
 	gameObject* m_widget6;
 	gameObject* m_widget7;
+	gameObject* spineObject;
 };
 

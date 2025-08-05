@@ -9,6 +9,7 @@
 #include <Component/InputComponent.h>
 #include <Component/VideoComponent.h>
 #include <System/ScriptSystem.h>
+#include <Object/Camera.h>
 
 void BackGroundImage::Initialize()
 {
@@ -46,6 +47,7 @@ void BackGroundImage::OnStart()
 	//m_owner->transform()->SetScale(2.0f, 2.0f);
 	//m_owner->transform()->SetPivot(0.5f);
 	//m_owner->AddComponent<SpriteRenderer>()->LoadData(L"cloud.jpg");
+	GetCamera()->AddChildObject(m_owner);
 
 	m_owner->transform()->SetPosition(0, 0);
 	m_owner->transform()->SetRotation(0);

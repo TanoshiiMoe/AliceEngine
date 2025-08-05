@@ -8,7 +8,7 @@
 #include <Manager/SceneManager.h>
 #include <Manager/TimerManager.h>
 
-/*-----юла╕ юн╟тюс╬юю╩ цъ╟║гу╢о╢ы-----*/
+/*-----О©╫О©╫О©╫О©╫ О©╫н╟О©╫О©╫с╬О©╫О©╫О©╫ О©╫ъ╟О©╫О©╫у╢о╢О©╫-----*/
 #include "Scene/TitleScene.h"
 
 DemoGameApp::DemoGameApp()
@@ -37,7 +37,7 @@ void DemoGameApp::Initialize()
 void DemoGameApp::Run()
 {
 	__super::Run();
-	// ╦ч╫цаЖ ╥Гга
+	// О©╫ч╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{

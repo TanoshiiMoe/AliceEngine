@@ -70,6 +70,7 @@ void Scene::OnEnter()
 	}
 
 	m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
+	GetCamera()->AddChildObject(m_sysinfoWidget);
 	m_sysinfoWidget->AddComponent<TextRenderComponent>();
 
 	FVector2 pos = D2DRenderManager::GetInstance().GetApplicationSize();
