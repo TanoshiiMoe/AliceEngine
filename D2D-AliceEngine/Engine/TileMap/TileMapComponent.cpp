@@ -118,7 +118,7 @@ void TileMapComponent::CreateTileRenderers()
 {
 	m_tile = GetWorld()->NewObject<gameObject>(L"tileSprite");
 	TileMapRenderer* tileRenderer = m_tile->AddComponent<TileMapRenderer>();
-	tileRenderer->m_layer = 1;
+	//tileRenderer->m_layer = 1;
 	tileRenderer->LoadData(StringHelper::string_to_wstring(tileSet.image));
 	tileRenderer->SetSkew(skewAngle);
 	tileRenderer->SetMapInfo(tileMap, tileSet);

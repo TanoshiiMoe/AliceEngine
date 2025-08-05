@@ -2,10 +2,13 @@
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
+
 #include <Component/TransformComponent.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/BoxComponent.h>
+#include <Component/VideoComponent.h>
+
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
@@ -47,6 +50,7 @@ void TitleWidgetScript::OnStart()
 	auto optionText = m_owner->AddComponent<TextRenderComponent>();
 	auto staffText = m_owner->AddComponent<TextRenderComponent>();
 	auto quitText = m_owner->AddComponent<TextRenderComponent>();
+	auto closeText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto mainTitle = m_owner->AddComponent<TextRenderComponent>();
 	auto subTitle = m_owner->AddComponent<TextRenderComponent>();
@@ -56,13 +60,20 @@ void TitleWidgetScript::OnStart()
 	auto optionButton = m_owner->AddComponent<ButtonComponent>();
 	auto staffButton = m_owner->AddComponent<ButtonComponent>();
 	auto quitButton = m_owner->AddComponent<ButtonComponent>();
+	auto closeButton = m_owner->AddComponent<ButtonComponent>();
+
+	auto tutorial = m_owner->AddComponent<VideoComponent>();
+	tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm",30,L"jpg",95,true);
+	tutorial->m_layer = -1000;
+	tutorial->SetRelativePosition(FVector2(-960, -550));
 
 	if (!startText || !startButton) return;
 	if (!continueText || !continueButton) return;
 	if (!optionText || !optionButton) return;
 	if (!staffText || !staffButton) return;
 	if (!quitText || !quitButton) return;
-	
+	if (!tutorial || !closeText || !closeButton) return;
+
 	float buttonBasePos = 500;
 
 	// ======================== startButton
@@ -127,7 +138,17 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(buttonBasePos, 450));
 	quitButton->SetRelativeScale(FVector2(1, 1));
 	quitButton->SetRelativeRotation(0);
-	quitButton->m_layer = 300;
+	quitButton->m_layer = 500;
+
+	// ======================== closeButton
+	closeButton->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	closeButton->LoadData(Define::EButtonState::Hover, L"Button_Hover.png");
+	closeButton->LoadData(Define::EButtonState::Pressed, L"Button_Pressed.png");
+	closeButton->LoadData(Define::EButtonState::Release, L"dead.png");
+	closeButton->SetRelativePosition(FVector2(0,350));
+	closeButton->SetRelativeScale(FVector2(1, 1));
+	closeButton->SetRelativeRotation(0);
+	closeButton->m_layer = -1000;
 
 	// ======================== mainTitle
 	mainTitle->SetText(L"높다락길의 질주");
@@ -149,7 +170,7 @@ void TitleWidgetScript::OnStart()
 	subTitle->SetRelativeRotation(0);
 	subTitle->m_layer = 501;
 
-	// ======================== text
+	// ======================== startText
 	startText->SetText(L"시작하기");
 	startText->SetFontSize(60.0f);
 	startText->SetColor(FColor(255, 0, 0, 255));
@@ -173,7 +194,7 @@ void TitleWidgetScript::OnStart()
 	continueText->RemoveFromParent();
 	continueButton->AddChildComponent(continueText);
 
-	// ======================== continueText
+	// ======================== optionText
 	optionText->SetText(L"음량 조정");
 	optionText->SetFontSize(60.0f);
 	optionText->SetColor(FColor(255, 0, 0, 255));
@@ -185,7 +206,7 @@ void TitleWidgetScript::OnStart()
 	optionText->RemoveFromParent();
 	optionButton->AddChildComponent(optionText);
 
-	// ======================== continueText
+	// ======================== staffText
 	staffText->SetText(L"제작진");
 	staffText->SetFontSize(60.0f);
 	staffText->SetColor(FColor(255, 0, 0, 255));
@@ -197,7 +218,7 @@ void TitleWidgetScript::OnStart()
 	staffText->RemoveFromParent();
 	staffButton->AddChildComponent(staffText);
 
-	// ======================== continueText
+	// ======================== quitText
 	quitText->SetText(L"오락 종료");
 	quitText->SetFontSize(60.0f);
 	quitText->SetColor(FColor(255, 0, 0, 255));
@@ -209,6 +230,19 @@ void TitleWidgetScript::OnStart()
 	quitText->RemoveFromParent();
 	quitButton->AddChildComponent(quitText);
 
+	// ======================== closeText
+	closeText->SetText(L"닫기");
+	closeText->SetFontSize(60.0f);
+	closeText->SetColor(FColor(255, 0, 0, 255));
+	FVector2 closeTextRectSize = closeText->GetRelativeSize();
+	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
+	closeText->SetRelativeScale(FVector2(1, 1));
+	closeText->SetRelativeRotation(0);
+	closeText->m_layer = -1000;
+	closeButton->SetActive(false);
+	closeText->RemoveFromParent();
+	closeButton->AddChildComponent(closeText);
+
 	// ======================== background
 	background->LoadData(L"tree.jpg");
 	background->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -218,14 +252,61 @@ void TitleWidgetScript::OnStart()
 	background->SetRelativeRotation(0);
 
 	// ======================== Delegete
-	startButton->SetStateAction(Define::EButtonState::Pressed, []()
+	startButton->SetStateAction(Define::EButtonState::Pressed, [
+		tutorial, startButton, quitButton, staffButton, optionButton, closeButton, closeText]()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-		SceneManager::ChangeScene(L"HiroScene");
+		//SceneManager::ChangeScene(L"HiroScene");
+
+		startButton->SetActive(false);
+		quitButton->SetActive(false);
+		staffButton->SetActive(false);
+		optionButton->SetActive(false);
+
+		closeButton->m_layer = 503;
+		closeButton->SetActive(true);
+		closeText->m_layer = 504;
+
+		tutorial->m_layer = 502;
+		tutorial->Play();
 	});
 
-	
+	continueButton->SetStateAction(Define::EButtonState::Pressed, []()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+			//SceneManager::ChangeScene(L"HiroScene");
+		});
+
+	closeButton->SetStateAction(Define::EButtonState::Pressed, []()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+			SceneManager::ChangeScene(L"HiroScene");
+		});
+
+	optionButton->SetStateAction(Define::EButtonState::Pressed, []()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+			//SceneManager::ChangeScene(L"HiroScene");
+		});
+
+	staffButton->SetStateAction(Define::EButtonState::Pressed, []()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+			
+		});
+
+	quitButton->SetStateAction(Define::EButtonState::Pressed, []()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+			// Quit
+			PostQuitMessage(0);
+		});
 }
 
 void TitleWidgetScript::OnEnd()

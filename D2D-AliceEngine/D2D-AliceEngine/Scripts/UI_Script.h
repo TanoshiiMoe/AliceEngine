@@ -14,5 +14,12 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+
+	gameObject* m_UI_HUD;
+	gameObject* m_UI_PlayerHP;
+
+	gameObject* m_UI_Button;
+	gameObject* m_UI_Dashboard;
+	gameObject* m_UI_SpeedText;
 };
 
