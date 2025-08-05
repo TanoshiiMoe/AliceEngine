@@ -31,6 +31,8 @@
 
 #include <Core/Singleton.h>
 #include <Manager/D2DRenderManager.h>
+#include <Helpers/FileHelper.h>
+#include <Helpers/StringHelper.h>
 
 
 // Direct2DTextureLoader 구현
@@ -85,24 +87,22 @@ void Direct2DTextureLoader::unload(void* texture)
 SpineRenderer::SpineRenderer() : m_textureLoader(nullptr), m_atlas(nullptr), m_skeletonData(nullptr), m_skeleton(nullptr), m_stateData(nullptr), m_state(nullptr) {}
 SpineRenderer::~SpineRenderer() { Shutdown(); }
 
-bool SpineRenderer::Initialize(HWND hwnd, int width, int height) {
-	m_hwnd = hwnd;
+void SpineRenderer::Initialize()
+{
+	LoadTextureLoader();
+	if (!m_textureLoader)
+	{
+		OutputDebugStringW(L"spineRenderer Initialize() Error!\n");
+	}
+}
 
-	m_UnityScreen = D2D1::Matrix3x2F::Scale(1.0f, -1.0f) *
-		D2D1::Matrix3x2F::Translation((float)width / 2, (float)height / 2);
-
-	m_clientWidth = width;
-	m_clientHeight = height;
-
+void SpineRenderer::LoadTextureLoader()
+{
 	m_textureLoader = std::make_unique<Direct2DTextureLoader>(D2DRenderManager::GetInstance().m_d2dDeviceContext.Get());
 
-	// spine-cpp 기반 Spine 데이터 로드
-	if (!LoadSpine("../Resource/Spine2D/Monster_1.atlas", "../Resource/Spine2D/Monster_1.json")) {
-		std::cout << "Spine2D(spine-cpp) initialization failed" << std::endl;
-		return false;
-	}
-	m_initialized = true;
-	return true;
+	FVector2 screenSize = D2DRenderManager::GetInstance().GetApplicationSize();
+	m_UnityScreen = D2D1::Matrix3x2F::Scale(1.0f, -1.0f) *
+		D2D1::Matrix3x2F::Translation((float)screenSize.x / 2, (float)screenSize.y / 2);
 }
 
 void SpineRenderer::Shutdown()
@@ -111,165 +111,9 @@ void SpineRenderer::Shutdown()
 	ReleaseDirect2D();
 }
 
-bool SpineRenderer::InitializeD3D11() {
-	// Direct3D 11 디바이스 생성
-	D3D_FEATURE_LEVEL featureLevels[] = {
-		D3D_FEATURE_LEVEL_11_1,
-		D3D_FEATURE_LEVEL_11_0,
-		D3D_FEATURE_LEVEL_10_1,
-		D3D_FEATURE_LEVEL_10_0
-	};
-
-	D3D_FEATURE_LEVEL featureLevel;
-
-	HRESULT hr = D3D11CreateDevice(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-		featureLevels,
-		ARRAYSIZE(featureLevels),
-		D3D11_SDK_VERSION,
-		&m_device,
-		&featureLevel,
-		&m_deviceContext
-	);
-
-	if (FAILED(hr)) {
-		return false;
-	}
-
-	// DXGI 팩토리 생성
-	ComPtr<IDXGIFactory> dxgiFactory;
-	hr = CreateDXGIFactory(__uuidof(IDXGIFactory), &dxgiFactory);
-	if (FAILED(hr)) {
-		return false;
-	}
-
-	// 스왑체인 생성
-	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-	swapChainDesc.BufferCount = 2;
-	swapChainDesc.BufferDesc.Width = m_clientWidth;
-	swapChainDesc.BufferDesc.Height = m_clientHeight;
-	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.OutputWindow = m_hwnd;
-	swapChainDesc.SampleDesc.Count = 1;
-	swapChainDesc.SampleDesc.Quality = 0;
-	swapChainDesc.Windowed = TRUE;
-
-	hr = dxgiFactory->CreateSwapChain(m_device.Get(), &swapChainDesc, &m_swapChain);
-	if (FAILED(hr)) {
-		return false;
-	}
-
-	return true;
-}
-
-bool SpineRenderer::InitializeD2D1() {
-	// Direct2D 1 팩토리 생성
-	D2D1_FACTORY_OPTIONS options = {};
-	options.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
-
-	HRESULT hr = D2D1CreateFactory(
-		D2D1_FACTORY_TYPE_SINGLE_THREADED,
-		options,
-		m_factory.GetAddressOf()
-	);
-
-	if (FAILED(hr)) {
-		return false;
-	}
-
-	// Direct2D 렌더 타겟 생성
-	ComPtr<IDXGISurface> dxgiSurface;
-	hr = m_swapChain->GetBuffer(0, __uuidof(IDXGISurface), &dxgiSurface);
-	if (FAILED(hr)) {
-		return false;
-	}
-
-	D2D1_RENDER_TARGET_PROPERTIES renderTargetProperties = {};
-	renderTargetProperties.type = D2D1_RENDER_TARGET_TYPE_DEFAULT;
-	renderTargetProperties.pixelFormat = D2D1::PixelFormat(
-		DXGI_FORMAT_B8G8R8A8_UNORM,
-		D2D1_ALPHA_MODE_PREMULTIPLIED
-	);
-
-	//hr = m_factory->CreateDxgiSurfaceRenderTarget(
-	//	dxgiSurface.Get(),
-	//	renderTargetProperties,
-	//	&D2DRenderManager::GetInstance().m_d2dDeviceContext
-	//);
-
-	if (FAILED(hr)) {
-		return false;
-	}
-
-	// 브러시 생성
-	hr = D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::White),
-		&m_brush
-	);
-
-	if (FAILED(hr)) {
-		return false;
-	}
-
-	return true;
-}
-
-bool SpineRenderer::InitializeDWrite() {
-	HRESULT hr = DWriteCreateFactory(
-		DWRITE_FACTORY_TYPE_SHARED,
-		__uuidof(IDWriteFactory),
-		reinterpret_cast<IUnknown**>(m_dwriteFactory.GetAddressOf())
-	);
-	if (FAILED(hr)) {
-		std::cout << "DWriteCreateFactory failed" << std::endl;
-		return false;
-	}
-	hr = m_dwriteFactory->CreateTextFormat(
-		L"맑은 고딕", // 한글 폰트
-		nullptr,
-		DWRITE_FONT_WEIGHT_NORMAL,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		16.0f,
-		L"ko-kr",
-		&m_textFormat
-	);
-	if (FAILED(hr)) {
-		std::cout << "CreateTextFormat failed" << std::endl;
-		return false;
-	}
-	return true;
-}
-
-
 void SpineRenderer::ReleaseResources() {
 
 }
-
-void SpineRenderer::BeginRender() {
-	if (!m_initialized) return;
-
-	// 렌더 타겟 시작
-	D2DRenderManager::GetInstance().m_d2dDeviceContext->BeginDraw();
-}
-
-void SpineRenderer::EndRender() {
-	if (!m_initialized) return;
-
-	// 렌더 타겟 종료
-	HRESULT hr = D2DRenderManager::GetInstance().m_d2dDeviceContext->EndDraw();
-	if (SUCCEEDED(hr)) {
-		// 스왑체인 프레젠트
-		m_swapChain->Present(1, 0);
-	}
-}
-
 
 void SpineRenderer::SetAnimation(const std::string& animationName) {
 	if (m_state && m_skeletonData) {
@@ -306,7 +150,8 @@ D2D1_SIZE_F SpineRenderer::GetRenderTargetSize() const {
 	if (D2DRenderManager::GetInstance().m_d2dDeviceContext) {
 		return D2DRenderManager::GetInstance().m_d2dDeviceContext->GetSize();
 	}
-	return D2D1::SizeF(static_cast<float>(m_clientWidth), static_cast<float>(m_clientHeight)); // 기본 크기
+	FVector2 screenSize = D2DRenderManager::GetInstance().GetApplicationSize();
+	return D2D1::SizeF(static_cast<float>(screenSize.x), static_cast<float>(screenSize.y)); // 기본 크기
 }
 
 void SpineRenderer::Clear(const D2D1_COLOR_F& color) {
@@ -423,7 +268,7 @@ void SpineRenderer::Render()
 		//else
 		//	m_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Green, 0.1f));
 		//D2DRenderManager::GetInstance().m_d2dDeviceContext->FillRectangle(destRect, m_brush.Get());
-
+		
 		// 이미지 그리기
 		D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawBitmap(bitmap, destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, srcRect);
 	}
@@ -501,15 +346,23 @@ void SpineRenderer::SetPreviousAnimation() {
 }
 
 
-bool SpineRenderer::LoadSpine(const std::string& atlasPath, const std::string& jsonPath)
+void SpineRenderer::LoadSpine(const std::wstring& atlasPath, const std::wstring& jsonPath)
 {
+	std::wstring atlasFilePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + atlasPath); // 파일 이름만 저장
+	std::wstring jsonFilePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + jsonPath); // 파일 이름만 저장
+	std::string atlasFileStrPath = StringHelper::wstring_to_string(atlasFilePath);
+	std::string jsonFileStrPath = StringHelper::wstring_to_string(jsonFilePath);
+
 	m_atlas.reset();
-	m_atlas = std::make_unique<spine::Atlas>(atlasPath.c_str(), m_textureLoader.get());
+	m_atlas = std::make_unique<spine::Atlas>(atlasFileStrPath.c_str(), m_textureLoader.get());
 	spine::SkeletonJson json(m_atlas.get());
 
-	m_skeletonData.reset(json.readSkeletonDataFile(jsonPath.c_str())); // 내부 new
+	m_skeletonData.reset(json.readSkeletonDataFile(jsonFileStrPath.c_str())); // 내부 new
 	if (!m_skeletonData)
-		return false;
+	{
+		OutputDebugStringW(L"spineRenderer LoadSpine()  m_skeletonDataError!\n");
+		return;
+	}
 
 	m_skeleton.reset(new spine::Skeleton(m_skeletonData.get()));
 	m_stateData.reset(new spine::AnimationStateData(m_skeletonData.get()));
@@ -519,7 +372,8 @@ bool SpineRenderer::LoadSpine(const std::string& atlasPath, const std::string& j
 	for (int i = 0; i < m_skeletonData->getAnimations().size(); ++i) {
 		m_animationList.push_back(m_skeletonData->getAnimations()[i]->getName().buffer());
 	}
-	return true;
+
+	m_initialized = true;
 }
 
 void SpineRenderer::ReleaseSpine()
@@ -530,7 +384,6 @@ void SpineRenderer::ReleaseSpine()
 	m_skeleton.reset();
 	m_skeletonData.reset();
 	m_atlas.reset();
-	m_spineBitmap.Reset();
 
 	if (m_textureLoader)
 		m_textureLoader->unload(nullptr); // 비트맵 해제)
@@ -539,11 +392,5 @@ void SpineRenderer::ReleaseSpine()
 void SpineRenderer::ReleaseDirect2D()
 {
 	m_textureLoader.reset();
-	m_brush.Reset();
-	D2DRenderManager::GetInstance().m_d2dDeviceContext.Reset();
-	m_factory.Reset();
-	m_swapChain.Reset();
-	m_deviceContext.Reset();
-	m_device.Reset();
 }
 

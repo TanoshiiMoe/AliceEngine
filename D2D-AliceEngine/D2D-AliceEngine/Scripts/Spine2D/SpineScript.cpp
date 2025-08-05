@@ -13,6 +13,7 @@
 #include <System/ScriptSystem.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Manager/D2DRenderManager.h>
+#include <Manager/SceneManager.h>
 #include <System/RenderSystem.h>
 
 void SpineScript::Initialize()
@@ -43,17 +44,8 @@ void SpineScript::Update(const float& deltaSeconds)
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-	// 애니메이션 업데이트
-	spineRenderer->UpdateAnimation(deltaSeconds);
-	// 렌더링
-	//spineRenderer->BeginRender();
-	//spineRenderer->Clear(D2D1::ColorF(D2D1::ColorF::LightGray));
-	//spineRenderer->EndRender();
-}
 
-void SpineScript::RenderSpine()
-{
-	spineRenderer->Render();
+	spineRenderer->UpdateAnimation(deltaSeconds);
 }
 
 void SpineScript::LateUpdate(const float& deltaSeconds)
@@ -71,15 +63,12 @@ void SpineScript::OnStart()
 {
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
-	RenderSystem::GetInstance().m_spineRenders.push_back([this]() { RenderSpine(); });
+	//RenderSystem::GetInstance().m_spineRenders.push_back({ m_owner->GetHandle(), [this]() { spineRenderer->Render(); } });
+	RenderSystem::GetInstance().RegistSpine2D(m_owner->GetHandle(), [this]() { spineRenderer->Render(); });
 
 	spineRenderer = std::make_unique<SpineRenderer>();
-	
-	// Spine 렌더러 초기화
-	if (!spineRenderer->Initialize(D2DRenderManager::GetInstance().GetHWND(), Define::SCREEN_WIDTH, Define::SCREEN_HEIGHT)) {
-		std::cout << "Spine 렌더러 초기화 실패" << std::endl;
-		MessageBoxA(nullptr, "Spine 렌더러 초기화 실패", "Initialization Error", MB_OK | MB_ICONERROR);
-	}
+	spineRenderer->Initialize();
+	spineRenderer->LoadSpine(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
 
 	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), 
 		[this]() 
@@ -145,12 +134,15 @@ void SpineScript::Input()
 		spineRenderer->SetPreviousAnimation();
 	}
 	else if (Input::IsKeyPressed('1')) {
-		spineRenderer->SetAnimation("idle");
+		spineRenderer->SetAnimation("Idle");
 	}
 	else if (Input::IsKeyPressed('2')) {
-		spineRenderer->SetAnimation("walk");
+		spineRenderer->SetAnimation("Move");
 	}
 	else if (Input::IsKeyPressed('3')) {
-		spineRenderer->SetAnimation("run");
+		spineRenderer->SetAnimation("Attack_Melee");
+	}
+	else if (Input::IsKeyPressed('4')) {
+		SceneManager::GetInstance().ChangeScene(L"TitleScene");
 	}
 }

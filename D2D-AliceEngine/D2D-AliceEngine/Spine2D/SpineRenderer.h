@@ -49,12 +49,9 @@ public:
     ~SpineRenderer();
 
     // 초기화
-    bool Initialize(HWND hwnd, int width, int height);
+    void Initialize();
+    void LoadTextureLoader();
     void Shutdown();
-
-    // 렌더링 시작/종료
-    void BeginRender();
-    void EndRender();
 
     // 애니메이션 제어
     void SetAnimation(const std::string& animationName);
@@ -68,33 +65,14 @@ public:
     void Clear(const D2D1_COLOR_F& color = { 0.1f, 0.1f, 0.1f, 1.0f });
     D2D1_SIZE_F GetRenderTargetSize() const;
 
-    // Direct2D 리소스 접근자
-    Microsoft::WRL::ComPtr<ID2D1RenderTarget> GetRenderTarget() const { return m_renderTarget; }
-    Microsoft::WRL::ComPtr<ID2D1Factory> GetFactory() const { return m_factory; }
-
     // 렌더링
     void Render();
 
-    bool LoadSpine(const std::string& atlasPath, const std::string& jsonPath);
+    void LoadSpine(const std::wstring& atlasPath, const std::wstring& jsonPath);
 
     void ReleaseSpine();
 
 private:
-    // Direct2D 리소스들
-    Microsoft::WRL::ComPtr<ID2D1Factory> m_factory;
-    Microsoft::WRL::ComPtr<ID2D1RenderTarget> m_renderTarget;
-    Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> m_brush;
-    Microsoft::WRL::ComPtr<ID2D1Bitmap> m_spineBitmap;
-
-    // DirectWrite 리소스들
-    Microsoft::WRL::ComPtr<IDWriteFactory> m_dwriteFactory;
-    Microsoft::WRL::ComPtr<IDWriteTextFormat> m_textFormat;
-
-    // Direct3D 11 리소스들
-    Microsoft::WRL::ComPtr<ID3D11Device> m_device;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_deviceContext;
-    Microsoft::WRL::ComPtr<IDXGISwapChain> m_swapChain;
-
     D2D1::Matrix3x2F m_UnityScreen;
 
     // Spine-cpp 객체
@@ -122,10 +100,6 @@ private:
     D2D1_VECTOR_2F m_CameraPosition = D2D1::Vector2F(0.0f, 300.0f);
 
     // 내부 함수들(Direct2D/3D 초기화 등)
-    bool InitializeD3D11();
-    bool InitializeD2D1();
-    bool InitializeDWrite();
     void ReleaseResources();
-
     void ReleaseDirect2D();
 };

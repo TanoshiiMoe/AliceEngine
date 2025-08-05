@@ -11,7 +11,6 @@ public:
 	void FixedUpdate(const float& deltaSeconds);
 	void Update(const float& deltaSeconds) override;
 	void LateUpdate(const float& deltaSeconds);
-	void RenderSpine();
 
 	virtual void Awake() override;
 	virtual void OnStart() override;
