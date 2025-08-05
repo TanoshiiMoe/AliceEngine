@@ -33,7 +33,8 @@
 #include <Manager/D2DRenderManager.h>
 #include <Helpers/FileHelper.h>
 #include <Helpers/StringHelper.h>
-
+#include <System/RenderSystem.h>
+#include <Manager/PackageResourceManager.h>
 
 // Direct2DTextureLoader ±¸Çö
 Direct2DTextureLoader::Direct2DTextureLoader(ID2D1RenderTarget* renderTarget)
@@ -43,36 +44,40 @@ Direct2DTextureLoader::~Direct2DTextureLoader() {}
 void Direct2DTextureLoader::load(spine::AtlasPage& page, const spine::String& path)
 {
 	std::wstring wPath(path.buffer(), path.buffer() + path.length());
-	Microsoft::WRL::ComPtr<IWICImagingFactory> wicFactory;
-	HRESULT hr = CoCreateInstance(
-		CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
-	if (FAILED(hr))
-		return;
 
-	Microsoft::WRL::ComPtr<IWICBitmapDecoder> decoder;
-	hr = wicFactory->CreateDecoderFromFilename(wPath.c_str(), nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
-	if (FAILED(hr))
-		return;
+	std::shared_ptr<ID2D1Bitmap1> bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(wPath.c_str());
 
-	Microsoft::WRL::ComPtr<IWICBitmapFrameDecode> frame;
-	hr = decoder->GetFrame(0, &frame);
-	if (FAILED(hr))
-		return;
+	//Microsoft::WRL::ComPtr<IWICImagingFactory> wicFactory;
+	//HRESULT hr = CoCreateInstance(
+	//	CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
+	//if (FAILED(hr))
+	//	return;
+	//
+	//Microsoft::WRL::ComPtr<IWICBitmapDecoder> decoder;
+	//hr = wicFactory->CreateDecoderFromFilename(wPath.c_str(), nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
+	//if (FAILED(hr))
+	//	return;
+	//
+	//Microsoft::WRL::ComPtr<IWICBitmapFrameDecode> frame;
+	//hr = decoder->GetFrame(0, &frame);
+	//if (FAILED(hr))
+	//	return;
+	//
+	//Microsoft::WRL::ComPtr<IWICFormatConverter> converter;
+	//hr = wicFactory->CreateFormatConverter(&converter);
+	//if (FAILED(hr))
+	//	return;
+	//hr = converter->Initialize(frame.Get(), GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0f, WICBitmapPaletteTypeCustom);
+	//if (FAILED(hr))
+	//	return;
+	//
+	//Microsoft::WRL::ComPtr<ID2D1Bitmap> bitmap;
+	//
+	//hr = D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), bitmap.GetAddressOf());
+	//if (FAILED(hr))
+	//	return;
 
-	Microsoft::WRL::ComPtr<IWICFormatConverter> converter;
-	hr = wicFactory->CreateFormatConverter(&converter);
-	if (FAILED(hr))
-		return;
-	hr = converter->Initialize(frame.Get(), GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0f, WICBitmapPaletteTypeCustom);
-	if (FAILED(hr))
-		return;
-
-	Microsoft::WRL::ComPtr<ID2D1Bitmap> bitmap;
-	hr = D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), bitmap.GetAddressOf());
-	if (FAILED(hr))
-		return;
-
-	page.texture = bitmap.Get();
+	page.texture = bitmap.get();
 	m_bitmapMap[path.buffer()] = bitmap;
 	page.width = static_cast<int>(bitmap->GetSize().width);
 	page.height = static_cast<int>(bitmap->GetSize().height);
@@ -87,6 +92,13 @@ void Direct2DTextureLoader::unload(void* texture)
 SpineRenderer::SpineRenderer() : m_textureLoader(nullptr), m_atlas(nullptr), m_skeletonData(nullptr), m_skeleton(nullptr), m_stateData(nullptr), m_state(nullptr) {}
 SpineRenderer::~SpineRenderer() { Shutdown(); }
 
+void SpineRenderer::RegistSystem(WeakObjectPtr<UObject> object)
+{
+	if (!ObjectHandler::GetInstance().IsValid(object.Get()->GetHandle())) return;
+	
+	RenderSystem::GetInstance().RegistSpine2D(object->GetHandle(), [this]() { Render(); }, GetDrawType(), GetLayer());
+}
+
 void SpineRenderer::Initialize()
 {
 	LoadTextureLoader();
@@ -94,6 +106,7 @@ void SpineRenderer::Initialize()
 	{
 		OutputDebugStringW(L"spineRenderer Initialize() Error!\n");
 	}
+
 }
 
 void SpineRenderer::LoadTextureLoader()

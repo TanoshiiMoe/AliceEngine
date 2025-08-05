@@ -19,20 +19,17 @@ struct RenderItem
 	int layer;
 	ObjectHandle objectHandle;
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
+	RenderComponent* D2DObject = nullptr;
 
 	// Spine2D용 데이터
-	std::function<void()> spine2dRenderFunc;
-
+	std::function<void()> RenderFunc;
+	RenderItem();
+	// D2D 렌더러용 생성자
+	explicit RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int renderLayer);
 	// Spine2D 렌더러용 생성자
-	RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType& _drawType, int renderLayer)
-		: type(_type), layer(renderLayer), objectHandle(handle), drawType(_drawType), spine2dRenderFunc(func)
-	{
-	}
+	explicit RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int renderLayer);
 
-	bool IsValid() const
-	{
-		return ObjectHandler::GetInstance().IsValid(objectHandle);
-	}
+	bool IsValid() const;
 };
 
 class RenderSystem : public Singleton<RenderSystem>
@@ -65,6 +62,6 @@ public:
 	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
 	static bool RenderItemSortCompare(const RenderItem& a, const RenderItem& b);
 
-	void RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, int layer = 0);
+	void RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType = Define::EDrawType::ScreenSpace, int _layer = 0);
 	std::vector<std::pair<ObjectHandle, std::function<void()>>> m_spineRenders;
 };

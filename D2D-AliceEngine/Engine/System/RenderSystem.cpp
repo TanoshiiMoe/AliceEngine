@@ -10,7 +10,36 @@
 #include <Manager/D2DRenderManager.h>
 #include <Component/UIComponent.h>
 #include <tuple>
+#include <Define/Define.h>
 //#include <UI/UIImage.h>
+
+RenderItem::RenderItem()
+	: type(Define::ERenderType::D2D),
+	layer(0),
+	objectHandle(),
+	drawType(Define::EDrawType::WorldSpace),
+	D2DObject(nullptr),
+	RenderFunc(nullptr)
+{
+}
+
+RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int renderLayer)
+	: type(Define::ERenderType::D2D), objectHandle(handle), D2DObject(object), RenderFunc(func), drawType(_drawType), layer(renderLayer)
+{
+	if (!ObjectHandler::GetInstance().IsValid(handle)) {
+		// 유효하지 않으면 이후 렌더링 시 IsValid()에서 걸러지므로 이 자리에서 강제 탈출하지 않아도 됩니다.
+	}
+}
+
+RenderItem::RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int renderLayer)
+	: type(_type), objectHandle(handle), RenderFunc(func), drawType(_drawType), layer(renderLayer)
+{
+}
+
+bool RenderItem::IsValid() const
+{
+	return ObjectHandler::GetInstance().IsValid(objectHandle);
+}
 
 RenderSystem::RenderSystem()
 {
@@ -29,20 +58,38 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 	if (auto ptr = renderer.lock())
 	{
 		m_renderers.push_back(renderer);
-
+		//ObjectHandle objectHandle = renderer->GetOwner()->GetHandle();
+		//RenderItem item(objectHandle, renderer.Get(), [renderer]() { renderer->Render(); }, renderer->drawType, renderer->m_layer);
+		//m_renderQueue.push_back(item);
 		// 통합 렌더링 큐에도 추가
-		int layer = ptr->m_layer;
-		m_renderQueue.emplace_back(Define::ERenderType::D2D, renderer->GetHandle(), [renderer](){ renderer->Render(); }, renderer->drawType, renderer->m_layer);
+		//int layer = ptr->m_layer;
+		m_renderQueue.emplace_back(
+			renderer->GetHandle(),
+			renderer.Get(),
+			[renderer](){ renderer->Render(); },
+			renderer->drawType,
+			renderer->m_layer
+		);
+		//m_renderQueue.emplace_back(renderer->GetHandle(), renderer, [&renderer]() { renderer->Render(); });
 	}
 }
 
-void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, int layer)
+void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType, int _layer)
 {
 	// 기존 방식 유지 (하위 호환성)
 	m_spineRenders.push_back({ objectHandle, f });
 
+	//RenderItem item(Define::ERenderType::Spine2D, objectHandle, f, _drawType, _layer);
+	//m_renderQueue.push_back(item);
+
 	// 통합 렌더링 큐에 추가
-	//m_renderQueue.emplace_back(Define::ERenderType::D2D, objectHandle, [renderer]() { renderer->Render(); }, renderer->drawType, renderer->m_layer);
+	m_renderQueue.emplace_back(
+		Define::ERenderType::Spine2D,
+		objectHandle,
+		f,
+		_drawType,
+		_layer
+	);
 	//(objectHandle, f, layer);
 }
 
@@ -62,7 +109,7 @@ void RenderSystem::UnRegist(WeakObjectPtr<RenderComponent>&& renderer)
 		m_renderQueue.erase(std::remove_if(m_renderQueue.begin(), m_renderQueue.end(),
 			[&](const RenderItem& item)
 			{
-				return item.objectHandle == targetHandle && item.type == RenderItem::Type::D2D;
+				return item.objectHandle == targetHandle && item.type == Define::ERenderType::D2D;
 			}), m_renderQueue.end());
 	}
 }
@@ -143,27 +190,28 @@ void RenderSystem::RenderUnified()
 	{
 		if (!item.IsValid()) continue;
 
-		if (item.type == RenderItem::Type::D2D)
+		if (item.type == Define::ERenderType::D2D)
 		{
 			// D2D 렌더링
-			if (auto renderer = item.d2dRenderer.lock())
+			if (ObjectHandler::GetInstance().IsValid(item.objectHandle))
 			{
 				// 카메라 컬링 체크 (WorldSpace인 경우에만)
-				if (renderer->drawType == Define::EDrawType::WorldSpace &&
-					CheckCameraCulling(item.d2dRenderer, view))
+				if (item.drawType == Define::EDrawType::WorldSpace &&
+					CheckCameraCulling(item.D2DObject, view))
 				{
 					continue;
 				}
 
-				renderer->Render();
+				item.RenderFunc();
+				//renderer->Render();
 			}
 		}
-		else if (item.type == RenderItem::Type::Spine2D)
+		else if (item.type == Define::ERenderType::Spine2D)
 		{
 			// Spine2D 렌더링
 			if (ObjectHandler::GetInstance().IsValid(item.objectHandle))
 			{
-				item.spine2dRenderFunc();
+				item.RenderFunc();
 			}
 		}
 	}
@@ -247,13 +295,6 @@ bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& rend
 	const float maxX = view.maxX + marginX;
 	const float minY = view.minY - marginY;
 	const float maxY = view.maxY + marginY;
-
-	/*const float marginX = (view.maxX - view.minX);
-	const float marginY = (view.maxY - view.minY);
-	const float minX = view.minX;
-	const float maxX = view.maxX;
-	const float minY = view.minY;
-	const float maxY = view.maxY;*/
 
 	// 카메라 뷰 안에만 보이게 (여유 포함)
 	return (right < minX || left > maxX ||

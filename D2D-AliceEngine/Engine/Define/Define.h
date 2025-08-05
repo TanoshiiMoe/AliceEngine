@@ -28,8 +28,6 @@ namespace Define
 		Max
 	};
 
-	enum class ERenderType { D2D, Spine2D };
-
 	enum class ETextFormat
 	{
 		TopLeft,

@@ -24,7 +24,12 @@ void SpineScript::Initialize()
 	REGISTER_SCRIPT_METHOD(OnEnd);
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
+	spineRenderer = std::make_unique<SpineRenderer>();
+	spineRenderer->RegistSystem(owner.Get());
+	spineRenderer->Initialize();
+
+	// 입력이 끝난 이후에 Update가 실행되어야함. 왜냐하면 
+	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_NewlySpawned);
 }
 
 void SpineScript::FixedUpdate(const float& deltaSeconds)
@@ -45,7 +50,8 @@ void SpineScript::Update(const float& deltaSeconds)
 		DispatchMessage(&msg);
 	}
 
-	spineRenderer->UpdateAnimation(deltaSeconds);
+	if(bSpineReady)
+		spineRenderer->UpdateAnimation(deltaSeconds);
 }
 
 void SpineScript::LateUpdate(const float& deltaSeconds)
@@ -64,11 +70,9 @@ void SpineScript::OnStart()
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
 	//RenderSystem::GetInstance().m_spineRenders.push_back({ m_owner->GetHandle(), [this]() { spineRenderer->Render(); } });
-	RenderSystem::GetInstance().RegistSpine2D(m_owner->GetHandle(), [this]() { spineRenderer->Render(); });
+	//spineRenderer->LoadSpine(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
 
-	spineRenderer = std::make_unique<SpineRenderer>();
-	spineRenderer->Initialize();
-	spineRenderer->LoadSpine(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
+	bSpineReady = true;
 
 	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), 
 		[this]() 
@@ -86,6 +90,11 @@ void SpineScript::OnDestroy()
 {
 	spineRenderer->Shutdown();
 	spineRenderer.reset();
+}
+
+void SpineScript::LoadData(const std::wstring& atlasPath, const std::wstring& jsonPath)
+{
+	spineRenderer->LoadSpine(atlasPath, jsonPath);
 }
 
 void SpineScript::OnCollisionEnter2D(Collision2D* collider)
@@ -142,7 +151,7 @@ void SpineScript::Input()
 	else if (Input::IsKeyPressed('3')) {
 		spineRenderer->SetAnimation("Attack_Melee");
 	}
-	else if (Input::IsKeyPressed('4')) {
+	else if (Input::IsKeyPressed('5')) {
 		SceneManager::GetInstance().ChangeScene(L"TitleScene");
 	}
 }

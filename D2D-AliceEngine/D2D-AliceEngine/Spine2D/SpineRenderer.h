@@ -40,15 +40,17 @@ public:
     void unload(void* texture) override;
 private:
     ID2D1RenderTarget* m_renderTarget;
-    std::map<std::string, Microsoft::WRL::ComPtr<ID2D1Bitmap>> m_bitmapMap;
+    std::map<std::string, std::shared_ptr<ID2D1Bitmap>> m_bitmapMap;
 };
 
-class SpineRenderer {
+class SpineRenderer
+{
 public:
     SpineRenderer();
     ~SpineRenderer();
 
     // 초기화
+    void RegistSystem(WeakObjectPtr<UObject> object);
     void Initialize();
     void LoadTextureLoader();
     void Shutdown();
@@ -71,6 +73,12 @@ public:
     void LoadSpine(const std::wstring& atlasPath, const std::wstring& jsonPath);
 
     void ReleaseSpine();
+
+    void SetDrawType(Define::EDrawType _type) { m_drawType = _type; }
+    Define::EDrawType GetDrawType() { return m_drawType; }
+
+    void SetLayer(int _layer) { m_layer = _layer; }
+    int GetLayer () { return m_layer; }
 
 private:
     D2D1::Matrix3x2F m_UnityScreen;
@@ -98,6 +106,9 @@ private:
     bool m_initialized = false;
     D2D1_VECTOR_2F m_CharacterPosition = D2D1::Vector2F(0.0f, 0.0f);
     D2D1_VECTOR_2F m_CameraPosition = D2D1::Vector2F(0.0f, 300.0f);
+
+    Define::EDrawType m_drawType = Define::EDrawType::ScreenSpace;
+    int m_layer = 1000;
 
     // 내부 함수들(Direct2D/3D 초기화 등)
     void ReleaseResources();
