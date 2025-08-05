@@ -55,17 +55,19 @@ void SkewTransform::Update(const float& deltaSeconds)
 
 	skewDeg = GetSkew();
 	
+	// 오프셋 안한 트랜스폼 저장하기
+	realPos = renderTransform->GetPosition() - offset;
+
 	// 원래대로 돌려놓기
 	renderTransform->AddPosition(-offset.x, -offset.y);
 
-	float rad = Deg2Rad(skewDeg);
+	float rad = Math::Deg2Rad(skewDeg);
 
 	offset.x = -std::sin(rad) * zPos;
 	offset.y = std::cos(rad) * zPos;
 
 	// 트랜스폼 적용하기
 	renderTransform->AddPosition(offset.x, offset.y);
-
 
 	//renderTransform->SetPosition(transform.GetPosition() + FVector2(GetOffsetX(), 0.0f));
 }
@@ -77,9 +79,4 @@ float SkewTransform::GetSkew()
 	
 	OutputDebugStringW(L"SkewTransform 컴포넌트에 groundTile 오브젝트가 등록되지 않았습니다!!");
 	return 0.0f;
-}
-
-float SkewTransform::Deg2Rad(float _deg)
-{
-	return (_deg / 180.0f) * Define::PI;
 }

@@ -163,6 +163,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Prefab\PlayerBike.h" />
+    <ClInclude Include="Prefab\EnemyBike.h" />
     <ClInclude Include="Scripts\BackGroundRender.h" />
     <ClInclude Include="Scripts\Camera\CameraMover.h" />
     <ClInclude Include="Scripts\Bike\BikeMovementScript.h" />
@@ -202,6 +204,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Prefab\PlayerBike.cpp" />
+    <ClCompile Include="Prefab\EnemyBike.cpp" />
     <ClCompile Include="Scripts\BackGroundRender.cpp" />
     <ClCompile Include="Scripts\Camera\CameraMover.cpp" />
     <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp" />

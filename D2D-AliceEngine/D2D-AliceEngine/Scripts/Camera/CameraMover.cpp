@@ -4,18 +4,25 @@
 #include "../Bike/BikeMovementScript.h"
 #include "Manager/SceneManager.h"
 #include <Scripts/CameraController.h>
+#include "Component/SkewTransform.h"
 
 void CameraMover::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(OnStart);
+	REGISTER_SCRIPT_METHOD(Awake);
 	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+}
+
+void CameraMover::Awake()
+{
+	ownerST = owner->AddComponent<SkewTransform>();
 }
 
 void CameraMover::OnStart()
 {
 	//owner->AddComponent<CameraController>();
 	// 플레이어 찾아서 넣기
-	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
+	WeakObjectPtr<gameObject> player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
 
 	FVector2 initPos;
 
@@ -23,14 +30,11 @@ void CameraMover::OnStart()
 
 	if (player) {
 		initPos = player->transform()->GetPosition();
-		playerBM = player->GetComponent<BikeMovementScript>();
+		playerST = player->GetComponent<SkewTransform>();
 	}
-
 
 	xPos = initPos.x;
 	yPos = initPos.y;
-
-	owner->transform()->SetPosition(xPos, 0.0f);
 }
 
 void CameraMover::Update(const float& dt)
@@ -45,9 +49,9 @@ void CameraMover::Update(const float& dt)
 	//camera->SetPosition(xPos, yPos);
 
 
-	if (!player) return;
+	if (!playerST) return;
 
-	FVector2 targetPos = player->transform()->GetPosition();
+	FVector2 targetPos = playerST->GetRealPos();
 	FVector2 cameraPos = camera->GetPosition();  // camera는 이 스크립트의 owner임
 
 	FVector2 delta = targetPos - cameraPos;
@@ -58,10 +62,5 @@ void CameraMover::Update(const float& dt)
 
 	// 느리게 따라오기 (선형 보간 방식)
 	FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
-	camera->SetRelativePosition(newPos);
-}
-
-void CameraMover::SetPlayer(gameObject* _player)
-{
-	player = _player;
+	camera->SetRelativePosition(targetPos);
 }

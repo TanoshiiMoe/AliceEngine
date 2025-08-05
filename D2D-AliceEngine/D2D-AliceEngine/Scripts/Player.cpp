@@ -77,22 +77,22 @@ void Player::Update(const float& deltaSeconds)
 	{
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, -speed);
-		/*else
-			m_owner->GetComponent<SkewTransform>()->zPos -= speed;*/
+		else
+			m_owner->GetComponent<SkewTransform>()->zPos -= 300.0f * deltaSeconds;
 	}
 	if (Input::IsKeyDown(VK_UP))
 	{
 		if (bMoveRigidBody)
 			m_owner->GetComponent<Rigidbody2D>()->AddForce(0, speed);
-		/*else
-			m_owner->GetComponent<SkewTransform>()->zPos += speed;*/
+		else
+			m_owner->GetComponent<SkewTransform>()->zPos += 300.0f * deltaSeconds;
 	}
-	if (Input::IsKeyPressed(VK_DOWN)) {
+	/*if (Input::IsKeyPressed(VK_DOWN)) {
 		if(m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveDown();
 	}
 	if (Input::IsKeyPressed(VK_UP)) {
 		if (m_owner->GetComponent<LaneController>()) m_owner->GetComponent<LaneController>()->MoveUp();
-	}
+	}*/
 	// 점프 카운트 리셋: 땅에 닿으면 jumpCount = 0
 	if (auto rb = m_owner->GetComponent<Rigidbody2D>())
 	{

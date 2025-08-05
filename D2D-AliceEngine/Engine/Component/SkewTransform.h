@@ -14,6 +14,7 @@ public:
 	
 	void SetClamp(float minZ = 0.0f, float maxZ = 0.0f);
 	const FVector2 GetOffset();
+	const FVector2 GetRealPos() { return realPos; }
 
 	void Initialize() override;
 	void OnStart() override;
@@ -23,9 +24,9 @@ private:
 	std::pair<float, float> clamp = { 0.0f, 0.0f };
 
 	FVector2 offset = { 0.0f, 0.0f };
+	FVector2 realPos = { 0.0f, 0.0f };
 	float skewDeg = 0.0f;
 
 	float GetSkew();
-	float Deg2Rad(float _deg);
 };
 
