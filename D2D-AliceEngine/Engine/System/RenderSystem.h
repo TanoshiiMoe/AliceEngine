@@ -32,4 +32,6 @@ public:
 	ViewRect GetCameraView();
 	bool CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view);
 	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
+
+	std::vector<std::function<void()>> m_spineRenders;
 };
