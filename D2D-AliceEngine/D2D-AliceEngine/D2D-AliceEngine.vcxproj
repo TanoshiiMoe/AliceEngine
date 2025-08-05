@@ -164,6 +164,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\BackGroundRender.h" />
+    <ClInclude Include="Scripts\Camera\CameraMover.h" />
     <ClInclude Include="Scripts\Bike\BikeMovementScript.h" />
     <ClInclude Include="Scripts\Bike\LaneController.h" />
     <ClInclude Include="Scripts\Bike\Battery.h" />
@@ -202,6 +203,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scripts\BackGroundRender.cpp" />
+    <ClCompile Include="Scripts\Camera\CameraMover.cpp" />
     <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp" />
     <ClCompile Include="Scripts\Player.cpp" />
     <ClCompile Include="Scripts\Bike\LaneController.cpp" />

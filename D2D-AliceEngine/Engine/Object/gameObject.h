@@ -112,7 +112,21 @@ public:
 
 	TransformComponent* transform() const { return m_transformComponent.lock(); }
 	void AddChildObject(const gameObject* obj);
+	void AddChildTransform(TransformComponent* transform);
 	void RemoveFromParent();
+
+	// 좌표, 스케일, 회전 관련 함수들
+	void SetPosition(const FVector2& _pos);
+	void SetRotation(const float& _rotation);
+	void SetScale(const FVector2& _scale);
+	
+	void AddPosition(const FVector2& _pos);
+	void AddRotation(const float& _rotation);
+	void AddScale(const FVector2& _scale);
+	
+	FVector2 GetPosition() const;
+	float GetRotation();
+	FVector2 GetScale();
 
 public:
 	WeakObjectPtr<TransformComponent> m_transformComponent;

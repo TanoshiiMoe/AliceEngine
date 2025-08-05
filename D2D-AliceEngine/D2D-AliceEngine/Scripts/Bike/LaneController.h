@@ -18,6 +18,8 @@ public:
 	float changeSpeed = 0.5f;
 
 	void SetLaneWidth(float _width);
+	float GetLaneWidth();
+	int GetLaneIndex();
 	void MoveUp();
 	void MoveDown();
 

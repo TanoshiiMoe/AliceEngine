@@ -27,6 +27,12 @@ public:
 	void ApplySlow(float slowFactor, float duration);
 	void ApplyBoost(float boostFactor, float duration);
 
+	// 현재 속도 출력
+	float GetCurrSpeed() { return m_currentSpeed; }
+
+	// 현재 속도변화 출력
+	float GetSpeedModifier() { return m_speedModifier; }
+
 	void Input();
 
 private:
@@ -34,7 +40,7 @@ private:
 
 	// 기본 속도 설정
 	float m_initialSpeed = 50.0f;
-	float m_maxSpeed = 300.0f;
+	float m_maxSpeed = 200.0f;
 	float m_acceleration = 20.0f;
 
 	// 현재 속도

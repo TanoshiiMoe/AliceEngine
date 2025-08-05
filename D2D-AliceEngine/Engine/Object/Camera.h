@@ -31,8 +31,25 @@ public:
 	void AddRotation(const float& _val);
 	void AddPosition(const float& _x, const float& _y);
 
+	// 상대 좌표, 스케일, 회전 관련 함수들
+	void SetRelativePosition(const FVector2& _pos);
+	void SetRelativeRotation(const float& _rotation);
+	void SetRelativeScale(const FVector2& _scale);
+	
+	void AddRelativePosition(const FVector2& _pos);
+	void AddRelativeRotation(const float& _rotation);
+	void AddRelativeScale(const FVector2& _scale);
+	
+	FVector2 GetRelativePosition() const;
+	float GetRelativeRotation();
+	FVector2 GetRelativeScale();
+
 	void SetOwner(gameObject* obj);
 	void ClearOwner();
+
+	// 부모-자식 관계 관리 함수들
+	void AddChildObject(gameObject* obj);
+	void RemoveFromParent();
 
 	D2D1_POINT_2F TransformPoint(const D2D1_MATRIX_3X2_F& mat, const D2D1_POINT_2F& pt);
 
@@ -51,6 +68,6 @@ public:
 	void SetFieldOfView(float& InFieldOfView) { fieldOfView = InFieldOfView; }
 	float fieldOfView = 1.0f;
 	gameObject* owner = nullptr;
-	std::unique_ptr<Transform> m_transform;
+	TransformComponent relativeTransform;
 };
 
