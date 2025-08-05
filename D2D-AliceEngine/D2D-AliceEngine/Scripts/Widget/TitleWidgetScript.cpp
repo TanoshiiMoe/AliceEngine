@@ -238,7 +238,8 @@ void TitleWidgetScript::OnStart()
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
 	closeText->SetRelativeScale(FVector2(1, 1));
 	closeText->SetRelativeRotation(0);
-	closeText->m_layer = 501;
+	closeText->m_layer = -1000;
+	closeButton->SetActive(false);
 	closeText->RemoveFromParent();
 	closeButton->AddChildComponent(closeText);
 
@@ -251,16 +252,24 @@ void TitleWidgetScript::OnStart()
 	background->SetRelativeRotation(0);
 
 	// ======================== Delegete
-	startButton->SetStateAction(Define::EButtonState::Pressed, [tutorial, closeButton]()
+	startButton->SetStateAction(Define::EButtonState::Pressed, [
+		tutorial, startButton, quitButton, staffButton, optionButton, closeButton, closeText]()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 		//SceneManager::ChangeScene(L"HiroScene");
-		closeButton->m_layer = 1000;
-		closeButton->SetRelativePosition(FVector2(0, 350));
-		
-		//tutorial->m_layer = 510;
-		//tutorial->Play();
+
+		startButton->SetActive(false);
+		quitButton->SetActive(false);
+		staffButton->SetActive(false);
+		optionButton->SetActive(false);
+
+		closeButton->m_layer = 503;
+		closeButton->SetActive(true);
+		closeText->m_layer = 504;
+
+		tutorial->m_layer = 502;
+		tutorial->Play();
 	});
 
 	continueButton->SetStateAction(Define::EButtonState::Pressed, []()
@@ -270,16 +279,10 @@ void TitleWidgetScript::OnStart()
 			//SceneManager::ChangeScene(L"HiroScene");
 		});
 
-	closeButton->SetStateAction(Define::EButtonState::Pressed, [tutorial,closeButton]()
+	closeButton->SetStateAction(Define::EButtonState::Pressed, []()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			
-			tutorial->Stop();
-			tutorial->m_layer = -1000;
-
-			closeButton->m_layer = -1000;
-			closeButton->SetRelativePosition(FVector2(-960, 20000));
 			SceneManager::ChangeScene(L"HiroScene");
 		});
 

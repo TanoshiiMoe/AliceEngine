@@ -31,7 +31,7 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene4>(L"HiroScene");
 	SceneManager::AddScene<TitleScene>(L"TitleScene");
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
-	SceneManager::ChangeScene(L"SpineScene");
+	SceneManager::ChangeScene(L"TitleScene");
 }
 
 void DemoGameApp::Run()
