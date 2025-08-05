@@ -143,32 +143,17 @@ void BackGroundRender::OnStart()
 	if (!player.expired())
 	{
 		BikeMovementScript* bs = player.Get()->GetComponent<BikeMovementScript>();
-		
+		// 여기에 Get함수로 속도 받아오기
 	}
 	// 맨 뒷 숫자가 속도임
-	AddLooping(L"Building", L"BackGround\\BG_Building.png", -5, 340, 10);
+	AddLooping(L"Building", L"BackGround\\BG_Building.png", -5, 340, 30);
 
-	AddLooping(L"GuardRail", L"BackGround\\BG_GuardRail.png", 12, 310, 250);
-	AddLooping(L"BackBarrier", L"BackGround\\BG_BackBarrier.png", 10, 250, 250);
+	AddLooping(L"GuardRail", L"BackGround\\BG_GuardRail.png", 12, 310, 450);
+	AddLooping(L"BackBarrier", L"BackGround\\BG_BackBarrier.png", 10, 250, 450);
 
-	AddLooping(L"Bridge", L"BackGround\\BG_Bridge.png", 4, 1190, 250);
-	AddLooping(L"Market", L"BackGround\\BG_Market.png", 5, 1140, 250);
-	AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740, 250);
-
-	m_UI_HUD = GetWorld()->NewObject<gameObject>(L"HUD");
-	auto HUD = m_UI_HUD->AddComponent<SpriteRenderer>();
-	HUD->LoadData(L"UI\\UI_1_HP+Time_Background.png");
-	HUD->SetDrawType(EDrawType::ScreenSpace);
-	FVector2 HUDSize = HUD->GetRelativeSize();
-	HUD->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(HUDSize, FVector2(0.5,0.5) + FVector2(0,0)));
-	HUD->m_layer = 50;
-
-	m_playerHP = GetWorld()->NewObject<gameObject>(L"HP");
-	auto HP = m_playerHP->AddComponent<SpriteRenderer>();
-	HP->LoadData(L"UI\\UI_1_HP.png");
-
-	m_UI_Dashboard = GetWorld()->NewObject<gameObject>(L"Dashboard");
+	AddLooping(L"Bridge", L"BackGround\\BG_Bridge.png", 4, 1190, 450);
+	AddLooping(L"Market", L"BackGround\\BG_Market.png", 5, 1140, 450);
+	AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740, 450);
 }
 
 void BackGroundRender::OnEnd()
@@ -185,7 +170,7 @@ void BackGroundRender::AddLooping(const std::wstring& name, const std::wstring& 
 	auto* sr1 = obj1->AddComponent<SpriteRenderer>();
 	sr1->LoadData(texturePath);
 	sr1->SetDrawType(EDrawType::ScreenSpace);
-	float width = sr1->GetBitmapSizeX() / 2.0f;
+	float width = sr1->GetBitmapSizeX();
 	sr1->m_layer = layer;
 
 	auto obj2 = GetWorld()->NewObject<gameObject>(name + L"_2");

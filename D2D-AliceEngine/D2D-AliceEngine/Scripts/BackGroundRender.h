@@ -40,10 +40,6 @@ public:
 
 	std::vector<LoopingBackGround> m_loopingLayers;
 
-	gameObject* m_UI_HUD;
-	gameObject* m_playerHP;
-	gameObject* m_UI_Dashboard;
-
 private:
 	void AddLooping(const std::wstring& name,
 		const std::wstring& path,
