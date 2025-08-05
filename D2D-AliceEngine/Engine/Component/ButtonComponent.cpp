@@ -32,6 +32,8 @@ void ButtonComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
+	if (!bActive) return;
+
 	bool mouseDown = Input::IsMouseLeftDown();
 	bool mouseUp = Input::IsMouseLeftReleased();
 

@@ -109,6 +109,11 @@ void RenderSystem::Render()
 		++it;
 	}
 
+	for (auto m_spineRender : m_spineRenders)
+	{
+		m_spineRender();
+	}
+
 	HRESULT hr = m_d2dDeviceContext->EndDraw();
 	if (FAILED(hr)) {
 		D2DRenderManager::GetInstance().OutputError(hr);
