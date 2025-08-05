@@ -94,6 +94,7 @@ void BackGroundRender::OnStart()
 
 	//m_loopingLayers.push_back({ obj1, obj2, 1.0f, width, y });
 
+	m_building = GetWorld()->NewObject<gameObject>(L"Building");
 	auto building = m_building->AddComponent<SpriteRenderer>();
 	building->LoadData(L"BackGround\\BG_Building.png");
 	building->SetRelativePosition(FVector2(building->GetBitmapSizeX() / 2.0f, 200));
