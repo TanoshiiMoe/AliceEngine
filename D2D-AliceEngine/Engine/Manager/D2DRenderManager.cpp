@@ -187,3 +187,46 @@ void D2DRenderManager::DrawDebugBox(const float& startPosX, const float& startPo
 	m_pBrush->SetColor(D2D1::ColorF(r, g, b, a));
 	m_d2dDeviceContext->DrawRectangle(D2D1::RectF(startPosX, startPosY, ensPosX, ensPosY), m_pBrush.Get(), 3.0f);
 }
+
+void D2DRenderManager::DrawDebugText(
+	const std::wstring& text,
+	float posX,
+	float posY,
+	float fontSize,
+	const D2D1::ColorF& color)
+{
+	if (!m_d2dDeviceContext || !m_dWriteFactory)
+		return;
+
+	// 1. 브러시 색상 설정
+	m_pBrush->SetColor(color);
+
+	// 2. 텍스트 포맷 생성
+	ComPtr<IDWriteTextFormat> textFormat;
+	HRESULT hr = m_dWriteFactory->CreateTextFormat(
+		L"맑은 고딕",              // 폰트
+		nullptr,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		fontSize,
+		L"ko-kr",
+		&textFormat
+	);
+	if (FAILED(hr)) {
+		OutputError(hr);
+		return;
+	}
+
+	// 3. 출력 영역 설정
+	D2D1_RECT_F layoutRect = D2D1::RectF(posX, posY, posX + 1000.0f, posY + fontSize + 10.0f);
+
+	// 4. 그리기
+	m_d2dDeviceContext->DrawTextW(
+		text.c_str(),
+		static_cast<UINT32>(text.length()),
+		textFormat.Get(),
+		&layoutRect,
+		m_pBrush.Get()
+	);
+}
