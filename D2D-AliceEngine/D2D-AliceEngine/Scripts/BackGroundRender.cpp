@@ -31,6 +31,27 @@ void BackGroundRender::FixedUpdate(const float& deltaSeconds)
 void BackGroundRender::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+
+	//for (auto& layer : m_loopingLayers)
+	//{
+	//	if (!layer.obj1 || !layer.obj2) return;
+
+	//	FVector2 pos1 = layer.obj1->transform()->GetPosition();
+	//	FVector2 pos2 = layer.obj2->transform()->GetPosition();
+
+	//	pos1.x -= layer.speed * deltaSeconds;
+	//	pos2.x -= layer.speed * deltaSeconds;
+
+	//	float restX = layer.width;
+
+	//	if (pos1.x <= -restX)
+	//		pos1.x = pos2.x + restX;
+	//	if (pos2.x <= -restX)
+	//		pos2.x = pos1.x + restX;
+
+	//	layer.obj1->transform()->SetPosition(pos1);
+	//	layer.obj2->transform()->SetPosition(pos2);
+	//}
 }
 
 void BackGroundRender::LateUpdate(const float& deltaSeconds)
@@ -53,7 +74,26 @@ void BackGroundRender::OnStart()
 	sky->SetRelativePosition(FVector2(960,550));
 	sky->m_layer = -10;
 
-	m_building = GetWorld()->NewObject<gameObject>(L"Building");
+	//auto obj1 = GetWorld()->NewObject<gameObject>(L"Building_1");
+	//auto* sr1 = obj1->AddComponent<SpriteRenderer>();
+	//sr1->LoadData(L"BackGround\\BG_Building.png");
+	//sr1->SetRelativePosition(FVector2(sr1->GetBitmapSizeX() / 2.0f, 200));
+	//sr1->m_layer = -5;
+
+	//auto obj2 = GetWorld()->NewObject<gameObject>(L"Building_2");
+	//auto* sr2 = obj2->AddComponent<SpriteRenderer>();
+	//sr2->LoadData(L"BackGround\\BG_Building.png");
+	//sr2->SetRelativePosition(FVector2(sr2->GetBitmapSizeX() / 2.0f, 200));
+	//sr2->m_layer = -5;
+
+	//float width = sr1->GetBitmapSizeX();
+	//float y = 200;
+	//
+	//sr1->SetRelativePosition(FVector2(0, y));
+	//sr2->SetRelativePosition(FVector2(width, y));
+
+	//m_loopingLayers.push_back({ obj1, obj2, 1.0f, width, y });
+
 	auto building = m_building->AddComponent<SpriteRenderer>();
 	building->LoadData(L"BackGround\\BG_Building.png");
 	building->SetRelativePosition(FVector2(building->GetBitmapSizeX() / 2.0f, 200));
@@ -88,8 +128,6 @@ void BackGroundRender::OnStart()
 	guardrail->LoadData(L"BackGround\\BG_GuardRail.png");
 	guardrail->SetRelativePosition(FVector2(guardrail->GetBitmapSizeX() / 2.0f, 240));
 	guardrail->m_layer = 12;
-
-
 }
 
 void BackGroundRender::OnEnd()
