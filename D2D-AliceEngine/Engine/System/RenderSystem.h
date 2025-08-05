@@ -16,7 +16,7 @@ struct ViewRect { float minX, maxX, minY, maxY; };
 struct RenderItem
 {
 	Define::ERenderType type;
-	int layer;
+	int* layer;
 	ObjectHandle objectHandle;
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	RenderComponent* D2DObject = nullptr;
@@ -25,9 +25,9 @@ struct RenderItem
 	std::function<void()> RenderFunc;
 	RenderItem();
 	// D2D 렌더러용 생성자
-	explicit RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int renderLayer);
+	explicit RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer);
 	// Spine2D 렌더러용 생성자
-	explicit RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int renderLayer);
+	explicit RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer);
 
 	bool IsValid() const;
 };
@@ -54,6 +54,7 @@ public:
 
 	void Render();
 	void RenderUnified(); // 새로운 통합 렌더링 함수
+	void DebugCamera();
 	void RenderD2D();
 	void RenderSpine2D();
 
@@ -62,6 +63,6 @@ public:
 	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
 	static bool RenderItemSortCompare(const RenderItem& a, const RenderItem& b);
 
-	void RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType = Define::EDrawType::ScreenSpace, int _layer = 0);
+	void RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType = Define::EDrawType::ScreenSpace, int* _layer = 0);
 	std::vector<std::pair<ObjectHandle, std::function<void()>>> m_spineRenders;
 };

@@ -23,7 +23,7 @@ RenderItem::RenderItem()
 {
 }
 
-RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int renderLayer)
+RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer)
 	: type(Define::ERenderType::D2D), objectHandle(handle), D2DObject(object), RenderFunc(func), drawType(_drawType), layer(renderLayer)
 {
 	if (!ObjectHandler::GetInstance().IsValid(handle)) {
@@ -31,7 +31,7 @@ RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::functi
 	}
 }
 
-RenderItem::RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int renderLayer)
+RenderItem::RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer)
 	: type(_type), objectHandle(handle), RenderFunc(func), drawType(_drawType), layer(renderLayer)
 {
 }
@@ -58,30 +58,22 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 	if (auto ptr = renderer.lock())
 	{
 		m_renderers.push_back(renderer);
-		//ObjectHandle objectHandle = renderer->GetOwner()->GetHandle();
-		//RenderItem item(objectHandle, renderer.Get(), [renderer]() { renderer->Render(); }, renderer->drawType, renderer->m_layer);
-		//m_renderQueue.push_back(item);
+
 		// 통합 렌더링 큐에도 추가
-		//int layer = ptr->m_layer;
 		m_renderQueue.emplace_back(
 			renderer->GetHandle(),
 			renderer.Get(),
 			[renderer](){ renderer->Render(); },
 			renderer->drawType,
-			renderer->m_layer
+			&renderer->m_layer
 		);
-		//m_renderQueue.emplace_back(renderer->GetHandle(), renderer, [&renderer]() { renderer->Render(); });
 	}
 }
 
-void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType, int _layer)
+void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType, int* _layer)
 {
 	// 기존 방식 유지 (하위 호환성)
 	m_spineRenders.push_back({ objectHandle, f });
-
-	//RenderItem item(Define::ERenderType::Spine2D, objectHandle, f, _drawType, _layer);
-	//m_renderQueue.push_back(item);
-
 	// 통합 렌더링 큐에 추가
 	m_renderQueue.emplace_back(
 		Define::ERenderType::Spine2D,
@@ -90,7 +82,6 @@ void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()
 		_drawType,
 		_layer
 	);
-	//(objectHandle, f, layer);
 }
 
 void RenderSystem::UnRegist(WeakObjectPtr<RenderComponent>&& renderer)
@@ -148,6 +139,7 @@ void RenderSystem::UnInitialize()
 void RenderSystem::Render()
 {
 	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
+	if (!m_d2dDeviceContext.Get()) return;
 	bool m_resizePending = D2DRenderManager::GetInstance().m_resizePending;
 	m_d2dDeviceContext->BeginDraw();
 	m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
@@ -165,6 +157,8 @@ void RenderSystem::Render()
 
 	// 통합 렌더링 사용
 	RenderUnified();
+	DebugCamera();
+	
 
 	HRESULT hr = m_d2dDeviceContext->EndDraw();
 	if (FAILED(hr)) {
@@ -196,13 +190,21 @@ void RenderSystem::RenderUnified()
 			if (ObjectHandler::GetInstance().IsValid(item.objectHandle))
 			{
 				// 카메라 컬링 체크 (WorldSpace인 경우에만)
-				if (item.drawType == Define::EDrawType::WorldSpace &&
-					CheckCameraCulling(item.D2DObject, view))
+				switch (item.drawType)
 				{
-					continue;
+				case Define::EDrawType::WorldSpace:
+					if (!CheckCameraCulling(item.D2DObject, view))
+					{
+						item.RenderFunc();
+					}
+					break;
+				case Define::EDrawType::ScreenSpace:
+					// ScreenSpace는 컬링 체크를 하지 않음
+					item.RenderFunc();
+					break;
+				default:
+					break;
 				}
-
-				item.RenderFunc();
 				//renderer->Render();
 			}
 		}
@@ -213,6 +215,29 @@ void RenderSystem::RenderUnified()
 			{
 				item.RenderFunc();
 			}
+		}
+	}
+}
+
+void RenderSystem::DebugCamera()
+{
+	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
+	if (!m_d2dDeviceContext.Get()) return;
+	if (Camera* camera = SceneManager::GetCamera())
+	{
+		if (camera->bDebug)
+		{
+			D2D1::Matrix3x2F flipY = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
+			D2D1::Matrix3x2F screen = D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
+			D2D1::Matrix3x2F cameraInv = camera->relativeTransform.m_worldTransform.ToMatrix();
+			cameraInv.Invert();
+			m_d2dDeviceContext->SetTransform(cameraInv * flipY * screen);
+
+			FVector2 pos = SceneManager::GetCamera()->GetRelativePosition();
+			D2DRenderManager::GetInstance().DrawDebugBox(pos.x - 10, pos.y - 10, pos.x + 10, pos.y + 10, 0, 0, 255, 255);
+
+			m_d2dDeviceContext->SetTransform(cameraInv * screen);
+			D2DRenderManager::GetInstance().DrawDebugText(L"(" + std::to_wstring(pos.x) + L" " + std::to_wstring(pos.y) + L")", pos.x, pos.y, 24, D2D1::ColorF(0, 0, 255, 1));
 		}
 	}
 }
@@ -260,12 +285,14 @@ ViewRect RenderSystem::GetCameraView()
 	const float camX = SceneManager::GetCamera()->GetPositionX();
 	const float camY = SceneManager::GetCamera()->GetPositionY();
 	const float fov = SceneManager::GetCamera()->fieldOfView;
-	FVector2 scale = SceneManager::GetCamera()->GetScale();
-	if (scale.x == 0.0f) scale.x = 1.0f;
-	if (scale.y == 0.0f) scale.y = 1.0f;
+	//FVector2 scale = SceneManager::GetCamera()->GetScale();
+	//if (scale.x == 0.0f) scale.x = 1.0f;
+	//if (scale.y == 0.0f) scale.y = 1.0f;
 	FVector2 screen = D2DRenderManager::GetInstance().GetApplicationSize();
-	const float halfWidth = (screen.x * 0.5f * fov) * scale.x;
-	const float halfHeight = (screen.y * 0.5f * fov) * scale.y;
+	//const float halfWidth = (screen.x * 0.5f * fov) * scale.x;
+	//const float halfHeight = (screen.y * 0.5f * fov) * scale.y;
+	const float halfWidth = (screen.x * 0.5f * fov);
+	const float halfHeight = (screen.y * 0.5f * fov);
 	return ViewRect{ camX - halfWidth, camX + halfWidth, camY - halfHeight, camY + halfHeight };
 }
 
@@ -310,5 +337,5 @@ bool RenderSystem::RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, co
 
 bool RenderSystem::RenderItemSortCompare(const RenderItem& a, const RenderItem& b)
 {
-	return a.layer < b.layer;
+	return *(a.layer) < *(b.layer);
 }
