@@ -1,14 +1,15 @@
 #pragma once
 #include <Component/ScriptComponent.h>
 
-//struct LoopingBackGround
-//{
-//	gameObject* obj1 = nullptr;
-//	gameObject* obj2 = nullptr;
-//	float speed = 100.0f;
-//	float width = 0.0f;
-//	float xPos = 0.0f;
-//};
+struct LoopingBackGround
+{
+	gameObject* obj1 = nullptr;
+	gameObject* obj2 = nullptr;
+	float speed = 100.0f;
+	float width = 0.0f;
+	float x = 0.0f;
+	float y = 0.0f;
+};
 
 class gameObject;
 class BackGroundRender : public ScriptComponent
@@ -36,5 +37,12 @@ public:
 	gameObject* m_frontBarrier; // 방음벽(밖) = 7
 	gameObject* m_guardrail; // 가드레일 = 8
 
-	//std::vector<LoopingBackGround> m_loopingLayers;
+	std::vector<LoopingBackGround> m_loopingLayers;
+
+private:
+	void AddLooping(const std::wstring& name,
+		const std::wstring& path,
+		int layer,
+		float y,
+		float speed);
 };
