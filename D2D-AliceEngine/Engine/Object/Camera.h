@@ -69,5 +69,6 @@ public:
 	float fieldOfView = 1.0f;
 	gameObject* owner = nullptr;
 	TransformComponent relativeTransform;
+	bool bDebug = true;
 };
 
