@@ -109,7 +109,6 @@ private:
     D2D1_VECTOR_2F m_CameraPosition = D2D1::Vector2F(0.0f, 300.0f);
 
     Define::EDrawType m_drawType = Define::EDrawType::ScreenSpace;
-    int m_layer = 1000;
 
     // 내부 함수들(Direct2D/3D 초기화 등)
     void ReleaseResources();

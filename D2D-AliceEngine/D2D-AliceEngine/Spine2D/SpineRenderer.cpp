@@ -96,7 +96,7 @@ void SpineRenderer::RegistSystem(WeakObjectPtr<UObject> object)
 {
 	if (!ObjectHandler::GetInstance().IsValid(object.Get()->GetHandle())) return;
 	
-	RenderSystem::GetInstance().RegistSpine2D(object->GetHandle(), [this]() { Render(); }, GetDrawType(), GetLayer());
+	RenderSystem::GetInstance().RegistSpine2D(object->GetHandle(), [this]() { Render(); }, GetDrawType(), &m_layer);
 }
 
 void SpineRenderer::Initialize()

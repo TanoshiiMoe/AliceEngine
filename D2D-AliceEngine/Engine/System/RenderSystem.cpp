@@ -23,7 +23,7 @@ RenderItem::RenderItem()
 {
 }
 
-RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int renderLayer)
+RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer)
 	: type(Define::ERenderType::D2D), objectHandle(handle), D2DObject(object), RenderFunc(func), drawType(_drawType), layer(renderLayer)
 {
 	if (!ObjectHandler::GetInstance().IsValid(handle)) {
@@ -31,7 +31,7 @@ RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::functi
 	}
 }
 
-RenderItem::RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int renderLayer)
+RenderItem::RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer)
 	: type(_type), objectHandle(handle), RenderFunc(func), drawType(_drawType), layer(renderLayer)
 {
 }
@@ -68,13 +68,13 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 			renderer.Get(),
 			[renderer](){ renderer->Render(); },
 			renderer->drawType,
-			renderer->m_layer
+			&renderer->m_layer
 		);
 		//m_renderQueue.emplace_back(renderer->GetHandle(), renderer, [&renderer]() { renderer->Render(); });
 	}
 }
 
-void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType, int _layer)
+void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType, int* _layer)
 {
 	// 기존 방식 유지 (하위 호환성)
 	m_spineRenders.push_back({ objectHandle, f });
@@ -288,7 +288,7 @@ bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& rend
 	const float top = pos.y + halfH;
 
 	// margin 비율 (예: 0.1f = 10% 여유)
-	const float marginRatio = 0.05f;
+	const float marginRatio = 0.25f;
 	const float marginX = (view.maxX - view.minX) * marginRatio;
 	const float marginY = (view.maxY - view.minY) * 1.2f;
 	const float minX = view.minX - marginX;
@@ -310,5 +310,5 @@ bool RenderSystem::RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, co
 
 bool RenderSystem::RenderItemSortCompare(const RenderItem& a, const RenderItem& b)
 {
-	return a.layer < b.layer;
+	return *(a.layer) < *(b.layer);
 }
