@@ -7,6 +7,16 @@ void LaneController::SetLaneWidth(float _width)
 	laneWidth = _width;
 }
 
+float LaneController::GetLaneWidth()
+{
+	return laneWidth;
+}
+
+int LaneController::GetLaneIndex()
+{
+	return currLane;
+}
+
 void LaneController::MoveUp()
 {
 	if (currLane < maxLane) {

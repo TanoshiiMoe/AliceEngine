@@ -55,7 +55,7 @@ void RenderComponent::Render()
 
 	if (drawType == Define::EDrawType::WorldSpace)
 	{
-		D2D1::Matrix3x2F cameraInv = camera->m_transform->ToMatrix();
+		D2D1::Matrix3x2F cameraInv = camera->relativeTransform.m_worldTransform.ToMatrix();
 		cameraInv.Invert();
 		view = view * unity * world * cameraInv;
 		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
