@@ -79,6 +79,7 @@ public:
 
     void SetLayer(int _layer) { m_layer = _layer; }
     int GetLayer () { return m_layer; }
+    int m_layer = 1000;
 
 private:
     D2D1::Matrix3x2F m_UnityScreen;
