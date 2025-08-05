@@ -94,6 +94,9 @@ void DemoScene4::OnEnter()
 	m_button->GetComponent<ButtonComponent>()->SetStateAction(Define::EButtonState::Pressed,[]() {});
 	m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
+	m_UI = NewObject<gameObject>(L"UI");
+	m_UI->AddComponent<UI_Script>();
+
 	// ============ background (test 1 - 쓰크립트에서 객체 생성 후 , 업데이트 돌게 하기)
 	//m_sky = NewObject<gameObject>(L"Sky");
 	//

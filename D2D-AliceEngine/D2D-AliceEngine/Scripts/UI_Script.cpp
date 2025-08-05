@@ -51,7 +51,7 @@ void UI_Script::OnStart()
 	m_owner->GetComponent<UIText>()->SetFontSize(18.0f);
 	m_owner->GetComponent<UIText>()->SetColor(FColor(0, 0, 0, 255));
 	m_owner->GetComponent<UIText>()->SetPosition(FVector2(50, 300));
-	m_owner->GetComponent<UIText>()->m_layer = 500;
+	m_owner->GetComponent<UIText>()->m_layer = 540;
 
 	/*Canvas* canvas = GetWorld()->CreateCanvas<Canvas>(L"Canvas");
 	canvas->transform()->SetPosition(50, 50);

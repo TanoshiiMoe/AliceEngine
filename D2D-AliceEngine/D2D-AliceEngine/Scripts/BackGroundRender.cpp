@@ -12,7 +12,9 @@
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
 #include <Manager/UpdateTaskManager.h>
+#include <Helpers/CoordHelper.h>
 #include <Component/BackGroundComponent.h>
+#include "Bike/BikeMovementScript.h"
 
 void BackGroundRender::Initialize()
 {
@@ -137,7 +139,12 @@ void BackGroundRender::OnStart()
 	//guardrail->SetDrawType(EDrawType::ScreenSpace);
 	//guardrail->SetRelativePosition(FVector2(guardrail->GetBitmapSizeX() / 2.0f, 240));
 	//guardrail->m_layer = 12;
-
+	WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player");
+	if (!player.expired())
+	{
+		BikeMovementScript* bs = player.Get()->GetComponent<BikeMovementScript>();
+		
+	}
 	// 맨 뒷 숫자가 속도임
 	AddLooping(L"Building", L"BackGround\\BG_Building.png", -5, 340, 10);
 
@@ -147,6 +154,21 @@ void BackGroundRender::OnStart()
 	AddLooping(L"Bridge", L"BackGround\\BG_Bridge.png", 4, 1190, 250);
 	AddLooping(L"Market", L"BackGround\\BG_Market.png", 5, 1140, 250);
 	AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740, 250);
+
+	m_UI_HUD = GetWorld()->NewObject<gameObject>(L"HUD");
+	auto HUD = m_UI_HUD->AddComponent<SpriteRenderer>();
+	HUD->LoadData(L"UI\\UI_1_HP+Time_Background.png");
+	HUD->SetDrawType(EDrawType::ScreenSpace);
+	FVector2 HUDSize = HUD->GetRelativeSize();
+	HUD->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(HUDSize, FVector2(0.5,0.5) + FVector2(0,0)));
+	HUD->m_layer = 50;
+
+	m_playerHP = GetWorld()->NewObject<gameObject>(L"HP");
+	auto HP = m_playerHP->AddComponent<SpriteRenderer>();
+	HP->LoadData(L"UI\\UI_1_HP.png");
+
+	m_UI_Dashboard = GetWorld()->NewObject<gameObject>(L"Dashboard");
 }
 
 void BackGroundRender::OnEnd()

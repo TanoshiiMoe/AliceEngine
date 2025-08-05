@@ -29,15 +29,20 @@ public:
 	gameObject* m_owner;
 
 	// background
-	gameObject* m_sky;	// 밤하늘 배경(남산타워) // = 1
-	gameObject* m_building;	// 건물 배경 // = 2
-	gameObject* m_bridge;	// 다리 = 4
-	gameObject* m_market;	// 다리 아래 건물 배경 = 5
-	gameObject* m_backBarrier; // 방음벽(안) = 6
-	gameObject* m_frontBarrier; // 방음벽(밖) = 7
-	gameObject* m_guardrail; // 가드레일 = 8
+	gameObject* m_sky;	// 밤하늘 배경(남산타워)
+
+	//gameObject* m_building;
+	//gameObject* m_bridge;
+	//gameObject* m_market;
+	//gameObject* m_backBarrier;
+	//gameObject* m_frontBarrier;
+	//gameObject* m_guardrail;
 
 	std::vector<LoopingBackGround> m_loopingLayers;
+
+	gameObject* m_UI_HUD;
+	gameObject* m_playerHP;
+	gameObject* m_UI_Dashboard;
 
 private:
 	void AddLooping(const std::wstring& name,
