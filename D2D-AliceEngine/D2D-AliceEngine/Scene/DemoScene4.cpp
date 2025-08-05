@@ -88,29 +88,17 @@ void DemoScene4::OnEnter()
 	//m_UI = NewObject<gameObject>(L"ad");
 	//m_UI->AddComponent<TitleWidgetScript>();
 
-	m_button = NewObject<gameObject>(L"Button");
-	m_button->AddComponent<ButtonComponent>();
+	//m_button = NewObject<gameObject>(L"Button");
+	//m_button->AddComponent<ButtonComponent>();
 	//m_button->GetComponent<ButtonComponent>()->SetImages(L"Button_Idle.png", L"Button_Hover.png", L"Button_Pressed.png");
-	m_button->GetComponent<ButtonComponent>()->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
-	m_button->GetComponent<ButtonComponent>()->SetRelativePosition(FVector2(100, 100));
-	m_button->GetComponent<ButtonComponent>()->SetRelativeScale(FVector2(1,1));
-	m_button->GetComponent<ButtonComponent>()->SetStateAction(Define::EButtonState::Pressed,[]() {});
-	m_button->GetComponent<ButtonComponent>()->m_layer = 510;
+	//m_button->GetComponent<ButtonComponent>()->LoadData(Define::EButtonState::Idle, L"Button_Idle.png");
+	//m_button->GetComponent<ButtonComponent>()->SetRelativePosition(FVector2(100, 100));
+	//m_button->GetComponent<ButtonComponent>()->SetRelativeScale(FVector2(1,1));
+	//m_button->GetComponent<ButtonComponent>()->SetStateAction(Define::EButtonState::Pressed,[]() {});
+	//m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
-	// ============ background (test 1 - 쓰크립트에서 객체 생성 후 , 업데이트 돌게 하기)
-	//m_sky = NewObject<gameObject>(L"Sky");
-	//
-	//m_building = NewObject<gameObject>(L"Building");
-
-	//m_bridge = NewObject<gameObject>(L"Bridge");
-
-	//m_frontBarrier = NewObject<gameObject>(L"FrontBarrier");
-
-	//m_backBarrier = NewObject<gameObject>(L"BackBarrier");
-
-	//m_guardrail = NewObject<gameObject>(L"GuardRail");
-
-	//m_market = NewObject<gameObject>(L"Market");
+	m_UI = NewObject<gameObject>(L"UI");
+	m_UI->AddComponent<UI_Script>();
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

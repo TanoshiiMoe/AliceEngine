@@ -13,6 +13,7 @@
 #include <System/ScriptSystem.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Manager/D2DRenderManager.h>
+#include <System/RenderSystem.h>
 
 void SpineScript::Initialize()
 {
@@ -45,10 +46,14 @@ void SpineScript::Update(const float& deltaSeconds)
 	// 애니메이션 업데이트
 	spineRenderer->UpdateAnimation(deltaSeconds);
 	// 렌더링
-	spineRenderer->BeginRender();
-	spineRenderer->Clear(D2D1::ColorF(D2D1::ColorF::LightGray));
+	//spineRenderer->BeginRender();
+	//spineRenderer->Clear(D2D1::ColorF(D2D1::ColorF::LightGray));
+	//spineRenderer->EndRender();
+}
+
+void SpineScript::RenderSpine()
+{
 	spineRenderer->Render();
-	spineRenderer->EndRender();
 }
 
 void SpineScript::LateUpdate(const float& deltaSeconds)
@@ -66,6 +71,8 @@ void SpineScript::OnStart()
 {
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
+	RenderSystem::GetInstance().m_spineRenders.push_back([this]() { RenderSpine(); });
+
 	spineRenderer = std::make_unique<SpineRenderer>();
 	
 	// Spine 렌더러 초기화
@@ -73,6 +80,12 @@ void SpineScript::OnStart()
 		std::cout << "Spine 렌더러 초기화 실패" << std::endl;
 		MessageBoxA(nullptr, "Spine 렌더러 초기화 실패", "Initialization Error", MB_OK | MB_ICONERROR);
 	}
+
+	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), 
+		[this]() 
+		{
+			Input();
+		});
 }
 
 void SpineScript::OnEnd()
@@ -125,4 +138,19 @@ void SpineScript::OnTriggerExit2D(Collider* collider)
 void SpineScript::Input()
 {
 	// 여기에 Input에 대한 로직 작성
+	if (Input::IsKeyPressed(VK_SPACE)) {
+		spineRenderer->SetNextAnimation();
+	}
+	else if (Input::IsKeyPressed(VK_BACK)) {
+		spineRenderer->SetPreviousAnimation();
+	}
+	else if (Input::IsKeyPressed('1')) {
+		spineRenderer->SetAnimation("idle");
+	}
+	else if (Input::IsKeyPressed('2')) {
+		spineRenderer->SetAnimation("walk");
+	}
+	else if (Input::IsKeyPressed('3')) {
+		spineRenderer->SetAnimation("run");
+	}
 }

@@ -36,6 +36,9 @@ public:
 	{
 		stateActionSlots[state] = { owner, action };
 	}
+
+	void SetActive(bool _active) { bActive = _active; }
+	bool GetActive() const { return bActive; }
 	
 private:
 	// UI 영역 내 마우스 위치 확인 헬퍼 메서드
@@ -51,4 +54,6 @@ private:
 	
 	// 상태별 함수 저장을 위한 unordered_map (안전한 버전)
 	std::unordered_map<Define::EButtonState, ClickFunctionSlot> stateActionSlots;
+
+	bool bActive = true;
 };

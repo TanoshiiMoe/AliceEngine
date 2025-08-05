@@ -11,11 +11,13 @@ public:
 	void FixedUpdate(const float& deltaSeconds);
 	void Update(const float& deltaSeconds) override;
 	void LateUpdate(const float& deltaSeconds);
+	void RenderSpine();
 
 	virtual void Awake() override;
 	virtual void OnStart() override;
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
+
 
 	virtual void OnCollisionEnter2D(Collision2D* collider) override;
 	virtual void OnCollisionStay2D(Collision2D* collider) override;

@@ -53,6 +53,7 @@ public:
 	}
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
+	void SetFont(const std::wstring& _fontName, const std::wstring& _fontLocale);
 	void SetIgnoreCameraTransform(bool bIgnore);
 
 public:
@@ -60,6 +61,7 @@ public:
 	std::wstring m_content = L"";
 	FColor m_color;
 	std::wstring m_font = L"Consolas";
+	std::wstring m_locale = L"";
 	float m_fontSize = 24.0f;
 
 	DWRITE_TEXT_METRICS m_metrics{};
