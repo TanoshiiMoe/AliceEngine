@@ -78,7 +78,7 @@ public:
     Define::EDrawType GetDrawType() { return m_drawType; }
 
     void SetLayer(int _layer) { m_layer = _layer; }
-    int GetLayer () { return m_layer; }
+    int* GetLayer () { return &m_layer; }
 
 private:
     D2D1::Matrix3x2F m_UnityScreen;
