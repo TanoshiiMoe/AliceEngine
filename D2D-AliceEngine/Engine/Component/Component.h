@@ -9,6 +9,7 @@
 class gameObject;
 class Transform;
 class TransformComponent;
+class Camera;
 class Component : public UObject, public ITickable
 {
 public:
@@ -40,4 +41,7 @@ public:
 
 protected:
 	WeakObjectPtr<gameObject> owner;
+
+protected:
+	Camera* GetCamera();
 };

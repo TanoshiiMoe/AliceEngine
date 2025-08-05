@@ -20,6 +20,7 @@ TextRenderComponent::TextRenderComponent()
 
 TextRenderComponent::TextRenderComponent(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
 {
+	drawType = EDrawType::ScreenSpace;
 	m_content = content;
 	m_color = color;
 	m_font = font;
@@ -57,8 +58,7 @@ void TextRenderComponent::Release()
 void TextRenderComponent::Render()
 {
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-	Camera* camera = SceneManager::GetCamera();
-	if (!context || m_content.empty() || !camera) return;
+	if (!context || m_content.empty()) return;
 	__super::Render();
 	
 	InitializeLayout();
