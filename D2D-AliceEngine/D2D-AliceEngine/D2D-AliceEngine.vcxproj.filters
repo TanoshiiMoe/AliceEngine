@@ -47,6 +47,9 @@
     <Filter Include="Prefab">
       <UniqueIdentifier>{e3a8234c-4eb7-4d1b-8e10-e1ad19a39c70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Player">
+      <UniqueIdentifier>{69b3ea38-b5c2-4f03-b4eb-2b87c6b435f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -163,8 +166,11 @@
     <ClInclude Include="Prefab\EnemyBike.h">
       <Filter>Prefab</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Player\PlayerManager.h">
+      <Filter>Scripts\Player</Filter>
+    </ClInclude>
     <ClInclude Include="Prefab\PlayerBike.h">
-      <Filter>PreCompiledHeader</Filter>
+      <Filter>Prefab</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +282,11 @@
     <ClCompile Include="Prefab\EnemyBike.cpp">
       <Filter>Prefab</Filter>
     </ClCompile>
-    <ClCompile Include="Prefab\PlayerBike.cpp" />
+    <ClCompile Include="Scripts\Player\PlayerManager.cpp">
+      <Filter>Scripts\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\PlayerBike.cpp">
+      <Filter>Prefab</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

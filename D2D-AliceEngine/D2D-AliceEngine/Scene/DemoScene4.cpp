@@ -111,7 +111,7 @@ void DemoScene4::OnEnter()
 
 	//RemoveObject(m_wall);
 
-	m_player->GetComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
+	//m_player->GetComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
 	//m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
 }
 

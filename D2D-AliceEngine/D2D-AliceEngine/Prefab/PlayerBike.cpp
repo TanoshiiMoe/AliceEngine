@@ -5,6 +5,7 @@
 #include <Scripts/Bike/BikeMovementScript.h>
 #include "Component/InputComponent.h"
 #include "Manager/SceneManager.h"
+#include "Scripts/Player/PlayerManager.h"
 
 void PlayerBike::Initialize()
 {
@@ -16,5 +17,6 @@ void PlayerBike::Initialize()
 	AddComponent<SkewTransform>();
 	AddComponent<BikeMovementScript>();
 	AddComponent<InputComponent>();
+	AddComponent<PlayerManager>();
 }
 
