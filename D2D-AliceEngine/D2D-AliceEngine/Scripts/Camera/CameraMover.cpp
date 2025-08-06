@@ -26,7 +26,7 @@ void CameraMover::OnStart()
 
 	FVector2 initPos;
 
-	//camera = SceneManager::GetInstance().GetCamera();
+	camera = GetCamera();
 
 	if (player) {
 		initPos = player->transform()->GetPosition();
