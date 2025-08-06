@@ -19,7 +19,8 @@ void AudioComponent::Initialize()
 
 void AudioComponent::Load(const std::wstring& audioPath, AudioMode audioMode)
 {
-	AudioManager::GetInstance().LoadSound(L"../" + Define::BASE_RESOURCE_PATH + L"Sound/" + audioPath, audioMode, &m_Sound);
+	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"Sound/" + audioPath);
+	AudioManager::GetInstance().LoadSound(filePath, audioMode, &m_Sound);
 }
 
 void AudioComponent::Play(float sec, float volume, bool paused)

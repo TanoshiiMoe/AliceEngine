@@ -176,6 +176,8 @@
       <Filter>Scene\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Enemy\Car.h">
+    </ClInclude>
+    <ClInclude Include="TitleAudioScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
@@ -295,5 +297,8 @@
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\Car.cpp" />
+    </ClCompile>
+    <ClCompile Include="TitleAudioScript.cpp" />
+   </ClCompile>
   </ItemGroup>
 </Project>

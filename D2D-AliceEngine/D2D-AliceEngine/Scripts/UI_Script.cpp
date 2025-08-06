@@ -112,6 +112,7 @@ void UI_Script::OnStart()
 	auto BoardText = m_UI_BoardText->AddComponent<TextRenderComponent>();
 	BoardText->SetFontSize(30.0);
 	BoardText->SetColor(FColor(0, 234, 255, 1));
+	BoardText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	BoardText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	BoardText->SetDrawType(EDrawType::ScreenSpace);
 	FVector2 BoardTextSize = BoardText->GetRelativeSize();
@@ -137,6 +138,7 @@ void UI_Script::OnStart()
 	SpeedText->SetText(L"");
 	SpeedText->SetFontSize(60.0);
 	SpeedText->SetColor(FColor(0, 234, 255, 1));
+	SpeedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	SpeedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	SpeedText->SetDrawType(EDrawType::ScreenSpace);
 	SpeedText->SetRelativePosition(

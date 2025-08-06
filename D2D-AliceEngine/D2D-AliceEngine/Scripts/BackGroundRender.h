@@ -30,8 +30,7 @@ public:
 
 	// background
 	gameObject* m_sky;	// ¹ãÇÏ´Ã ¹è°æ(³²»êÅ¸¿ö)
-
-	//gameObject* m_building;
+	gameObject* m_building;
 	//gameObject* m_bridge;
 	//gameObject* m_market;
 	//gameObject* m_backBarrier;
