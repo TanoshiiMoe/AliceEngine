@@ -9,6 +9,26 @@ void UpdateTaskManager::Enque(WeakObjectPtr<ITickable> InTarget, Define::ETickin
 	m_TickLists[InGroup].emplace_back(InTarget, TickFunc);
 }
 
+void UpdateTaskManager::Dequeue(WeakObjectPtr<ITickable> InTarget)
+{
+	for (int group = 0; group < static_cast<int>(Define::ETickingGroup::TG_MAX); ++group)
+	{
+		auto& tickDeque = m_TickLists[static_cast<Define::ETickingGroup>(group)];
+
+		for (auto it = tickDeque.begin(); it != tickDeque.end(); )
+		{
+			if (it->Target.lock() == InTarget.lock())
+			{
+				it = tickDeque.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+}
+
 void UpdateTaskManager::StartFrame()
 {
 	Context.DeltaSeconds = TimerManager::GetInstance().GetElapsedTime();
