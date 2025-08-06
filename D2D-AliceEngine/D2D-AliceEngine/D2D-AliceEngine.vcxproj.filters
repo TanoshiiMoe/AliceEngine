@@ -168,6 +168,7 @@
     </ClInclude>
     <ClInclude Include="Scripts\TitleAudioScript.h">
       <Filter>Scripts</Filter>
+    </ClInclude>
     <ClInclude Include="Prefab\EnemyBike.h">
       <Filter>Prefab</Filter>
     </ClInclude>
@@ -185,9 +186,6 @@
     </ClInclude>
     <ClInclude Include="Scene\KangScene\KangScene.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleAudioScript.h">
-      <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -305,18 +303,17 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
-      <Filter>Scripts\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp" />
+    <ClCompile Include="Scripts\Enemy\Car.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="TitleAudioScript.cpp" />
-   </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp">
+      <Filter>Scripts\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
