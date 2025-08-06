@@ -53,6 +53,9 @@
     <Filter Include="Scene\GameScene">
       <UniqueIdentifier>{e99e9ec0-bb79-445d-bba6-38a45ae1e494}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Enemy">
+      <UniqueIdentifier>{1da6b723-0835-409f-9932-b22729aa232d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -178,6 +181,10 @@
       <Filter>Scene\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Enemy\Car.h">
+      <Filter>Scripts\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\KangScene\KangScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="TitleAudioScript.h">
       <Filter>PreCompiledHeader</Filter>
@@ -297,6 +304,12 @@
     </ClCompile>
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp">
+      <Filter>Scripts\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\KangScene\KangScene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\Car.cpp" />
     </ClCompile>

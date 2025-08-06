@@ -68,7 +68,7 @@ void BackGroundRender::Awake()
 void BackGroundRender::OnStart()
 {
 	m_owner = GetOwner();
-	GetCamera()->AddChildObject(m_owner);
+	//GetCamera()->AddChildObject(m_owner);
 
 	m_sky = GetWorld()->NewObject<gameObject>(L"Sky");
 	GetCamera()->AddChildObject(m_sky);

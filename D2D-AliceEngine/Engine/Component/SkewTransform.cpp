@@ -6,12 +6,6 @@
 #include <System/ScriptSystem.h>
 #include "Object/gameObject.h"
 
-
-void SkewTransform::SetClamp(float minY /*= 0.0f*/, float maxY /*= 0.0f*/)
-{
-	clamp = std::make_pair(minY, maxY);
-}
-
 const FVector2 SkewTransform::GetOffset()
 {
 	return offset;
@@ -30,7 +24,7 @@ void SkewTransform::OnStart()
 	__super::OnStart();
 
 	if (!owner) {
-		OutputDebugStringW(L"SkewTransform 컴포넌트의 owner가 없습니다!!!!");
+		OutputDebugStringW(L"SkewTransform 컴포넌트의 owner가 없습니다!!!!\n");
 		return;
 	}
 		
@@ -44,15 +38,15 @@ void SkewTransform::Update(const float& deltaSeconds)
 	if (!renderTransform)
 		return;
 
+	// 오프셋 안한 트랜스폼 저장하기
+	realPos = renderTransform->GetPosition() - offset;
+
 	if (!Math::Approximately(prevzPos, zPos)) {
 
 		// prevPos에 저장하기
 		prevzPos = zPos;
 
 		skewDeg = GetSkew();
-
-		// 오프셋 안한 트랜스폼 저장하기
-		realPos = renderTransform->GetPosition() - offset;
 
 		// 원래대로 돌려놓기
 		renderTransform->AddPosition(-offset.x, -offset.y);
@@ -65,6 +59,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 		// 트랜스폼 적용하기
 		renderTransform->AddPosition(offset.x, offset.y);
 	}
+
 }
 
 float SkewTransform::GetSkew()
@@ -72,7 +67,7 @@ float SkewTransform::GetSkew()
 	if (groundTile)
 		return groundTile->GetComponent<TileMapComponent>()->skewAngle.x;
 	
-	std::wstring message = owner->GetName() + L" : SkewTransform 컴포넌트에 groundTile 오브젝트가 등록되지 않았습니다!! \n";
+	std::wstring message = owner->GetName() + L" : SkewTransform 컴포넌트에 groundTile 오브젝트가 등록되지 않았습니다!!!\n";
 
 	OutputDebugStringW(message.c_str());
 	return 0.0f;
