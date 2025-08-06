@@ -157,8 +157,8 @@
     <ClInclude Include="Resource.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="TitleAudioScript.h">
-      <Filter>PreCompiledHeader</Filter>
+    <ClInclude Include="Scripts\TitleAudioScript.h">
+      <Filter>Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,6 +267,8 @@
     <ClCompile Include="Scripts\Camera\CameraMover.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="TitleAudioScript.cpp" />
+    <ClCompile Include="Scripts\TitleAudioScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
