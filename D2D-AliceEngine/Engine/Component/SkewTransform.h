@@ -26,6 +26,7 @@ private:
 	FVector2 offset = { 0.0f, 0.0f };
 	FVector2 realPos = { 0.0f, 0.0f };
 	float skewDeg = 0.0f;
+	float prevzPos = -21359786.0f;
 
 	float GetSkew();
 };

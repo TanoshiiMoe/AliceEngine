@@ -175,6 +175,9 @@
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scene\GameScene</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Car.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -291,5 +294,6 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp" />
   </ItemGroup>
 </Project>

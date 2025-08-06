@@ -15,7 +15,6 @@ void CameraMover::Initialize()
 
 void CameraMover::Awake()
 {
-	ownerST = owner->AddComponent<SkewTransform>();
 }
 
 void CameraMover::OnStart()
