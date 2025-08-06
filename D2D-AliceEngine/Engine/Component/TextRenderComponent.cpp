@@ -139,7 +139,12 @@ void TextRenderComponent::InitializeColor()
 {
 	ID2D1DeviceContext7* d2dDeviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext.Get();
 	m_pBrush = nullptr;
-	d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(m_color.r, m_color.g, m_color.b, m_color.a), m_pBrush.GetAddressOf());
+	d2dDeviceContext->CreateSolidColorBrush(D2D1::ColorF(
+		m_color.r / 255.0f,
+		m_color.g / 255.0f,
+		m_color.b / 255.0f,
+		m_color.a / 255.0f
+	), m_pBrush.GetAddressOf());
 }
 
 void TextRenderComponent::InitializeLayout()
