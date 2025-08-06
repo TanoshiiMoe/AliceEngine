@@ -38,11 +38,20 @@
     <Filter Include="Scripts\Spine2D">
       <UniqueIdentifier>{a2ac56ab-5efd-440d-a652-1f690479b030}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Camera">
+    <Filter Include="Scripts\Camera">
       <UniqueIdentifier>{e4fd900e-08b6-42f5-8172-641535b1f65e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameManage">
+    <Filter Include="Scripts\GameManage">
       <UniqueIdentifier>{79079b44-802b-46b6-998c-90bb5bb158eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prefab">
+      <UniqueIdentifier>{e3a8234c-4eb7-4d1b-8e10-e1ad19a39c70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\Player">
+      <UniqueIdentifier>{69b3ea38-b5c2-4f03-b4eb-2b87c6b435f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\GameScene">
+      <UniqueIdentifier>{e99e9ec0-bb79-445d-bba6-38a45ae1e494}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,9 +118,6 @@
     <ClInclude Include="Scripts\TitleUIScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TitleScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Bike\Battery.h">
       <Filter>Scripts\Bike</Filter>
     </ClInclude>
@@ -152,13 +158,29 @@
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Camera\CameraMover.h">
-      <Filter>Camera</Filter>
+      <Filter>Scripts\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\TitleAudioScript.h">
       <Filter>Scripts</Filter>
+    <ClInclude Include="Prefab\EnemyBike.h">
+      <Filter>Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Player\PlayerManager.h">
+      <Filter>Scripts\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\PlayerBike.h">
+      <Filter>Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Car.h">
+    </ClInclude>
+    <ClInclude Include="TitleAudioScript.h">
+      <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -216,9 +238,6 @@
     <ClCompile Include="Scripts\Truck.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\TitleScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\TitleUIScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -265,10 +284,26 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Camera\CameraMover.cpp">
-      <Filter>Camera</Filter>
+      <Filter>Scripts\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\EnemyBike.cpp">
+      <Filter>Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Player\PlayerManager.cpp">
+      <Filter>Scripts\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\PlayerBike.cpp">
+      <Filter>Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp" />
     </ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="TitleAudioScript.cpp" />
+   </ClCompile>
   </ItemGroup>
 </Project>

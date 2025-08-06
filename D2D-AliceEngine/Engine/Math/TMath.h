@@ -244,6 +244,12 @@ namespace Math
 	inline bool Approximately(float a, float b, float epsilon = 1e-5f) {
 		return std::fabs(a - b) <= epsilon;
 	}
+
+	// Deg2Rad
+	inline float Deg2Rad(float _deg)
+	{
+		return (_deg / 180.0f) * Define::PI;
+	}
 }
 
 using FVector2 = TVector2<float>;

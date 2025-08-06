@@ -99,6 +99,7 @@ public:
 	std::unordered_map<Define::ETickingGroup, std::vector<UpdateWrapper>> m_TickLists;
 
 	void Enque(WeakObjectPtr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc);
+	void Dequeue(WeakObjectPtr<ITickable> InTarget);
 
 	void StartFrame();
 	void EndFrame();
