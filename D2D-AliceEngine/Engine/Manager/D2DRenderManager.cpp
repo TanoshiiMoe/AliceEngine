@@ -7,6 +7,7 @@
 #include <d2d1_3.h>            // ID2D1DeviceContext2, ID2D1Factory2 등
 #include <d2d1effectauthor.h>  // LoadPixelShader 관련
 #include <d2d1effecthelpers.h> // 셰이더 헬퍼
+#include <Manager/PackageResourceManager.h>
 
 D2DRenderManager::D2DRenderManager()
 {
@@ -124,6 +125,12 @@ void D2DRenderManager::Initialize(HWND hwnd)
 
 	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
 
+	hr = CreateBitmapFromFile(L"../Resource/BackGround/BG_CS_Arona_04.png", m_overlayBitmap.GetAddressOf());
+	assert(SUCCEEDED(hr));
+
+	hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Saturation, m_sceneEffect.GetAddressOf());
+	m_sceneEffect->SetInput(0, m_screenBitmap.Get());     // 원래 화면
+	m_sceneEffect->SetValue(D2D1_SATURATION_PROP_SATURATION, 10.0f);
 
 }
 
@@ -302,4 +309,45 @@ void D2DRenderManager::LoadEffectShader()
 	//
 	//m_d2dDeviceContext->CreateEffect(CLSID_D2D1DrawPixelShader, &shaderEffect);
 	//shaderEffect->SetValue(D2D1_DRAW_PIXEL_SHADER_PROP_SHADER_GUID, myShaderGUID);
+}
+
+HRESULT D2DRenderManager::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap)
+{
+	ComPtr<IWICBitmapDecoder>     decoder;
+	ComPtr<IWICBitmapFrameDecode> frame;
+	ComPtr<IWICFormatConverter>   converter;
+
+	// ① 디코더 생성
+	HRESULT hr = m_wicFactory->CreateDecoderFromFilename(
+		path, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
+	if (FAILED(hr)) return hr;
+
+	// ② 첫 프레임 얻기
+	hr = decoder->GetFrame(0, &frame);
+	if (FAILED(hr)) return hr;
+
+	// ③ 포맷 변환기 생성
+	hr = m_wicFactory->CreateFormatConverter(&converter);
+	if (FAILED(hr)) return hr;
+
+	// ④ GUID_WICPixelFormat32bppPBGRA로 변환
+	hr = converter->Initialize(
+		frame.Get(),
+		GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone,
+		nullptr,
+		0.0f,
+		WICBitmapPaletteTypeCustom
+	);
+	if (FAILED(hr)) return hr;
+
+	// ⑤ Direct2D 비트맵 속성 (premultiplied alpha, B8G8R8A8_UNORM)
+	D2D1_BITMAP_PROPERTIES1 bmpProps = D2D1::BitmapProperties1(
+		D2D1_BITMAP_OPTIONS_NONE,
+		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
+	);
+
+	// ⑥ DeviceContext에서 WIC 비트맵으로부터 D2D1Bitmap1 생성
+	hr = m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, outBitmap);
+	return hr;
 }

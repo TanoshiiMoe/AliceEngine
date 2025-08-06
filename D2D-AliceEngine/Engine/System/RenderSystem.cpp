@@ -138,20 +138,20 @@ void RenderSystem::UnInitialize()
 
 void RenderSystem::Render()
 {
-	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
-	if (!m_d2dDeviceContext.Get()) return;
+	ComPtr<ID2D1DeviceContext7> deviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
+	if (!deviceContext.Get()) return;
 	bool m_resizePending = D2DRenderManager::GetInstance().m_resizePending;
-	m_d2dDeviceContext->BeginDraw();
-	m_d2dDeviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
+	deviceContext->BeginDraw();
+	deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
 	if (m_resizePending)
 	{
 		D2DRenderManager::GetInstance().CreateSwapChainAndD2DTarget();
 		m_resizePending = false;
 	}
-	m_d2dDeviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
-	//m_d2dDeviceContext->SetTarget(D2DRenderManager::GetInstance().m_overlayBitmap.Get());
-	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
-	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
+	//deviceContext->SetTarget(D2DRenderManager::GetInstance().m_overlayBitmap.Get());
+	deviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
+	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 	//sort(m_renderers.begin(), m_renderers.end(), &RenderSystem::RenderSortCompare);
 	//RenderD2D();
 	//RenderSpine2D();
@@ -161,7 +161,7 @@ void RenderSystem::Render()
 	DebugCamera();
 	
 
-	HRESULT hr = m_d2dDeviceContext->EndDraw();
+	HRESULT hr = deviceContext->EndDraw();
 	if (FAILED(hr)) {
 		D2DRenderManager::GetInstance().OutputError(hr);
 	}
@@ -170,10 +170,35 @@ void RenderSystem::Render()
 	//D2DRenderManager::GetInstance().shaderEffect->SetInput(1, D2DRenderManager::GetInstance().m_overlayBitmap.Get());   // 텍스처 (예: gradient.png)
 
 	// 최종 출력 화면으로 타겟 복귀
-	//m_d2dDeviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
-	//m_d2dDeviceContext->BeginDraw();
-	//m_d2dDeviceContext->DrawImage(D2DRenderManager::GetInstance().shaderEffect.Get());
-	//m_d2dDeviceContext->EndDraw();
+	//deviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
+	//deviceContext->BeginDraw();
+	//deviceContext->DrawImage(D2DRenderManager::GetInstance().shaderEffect.Get());
+	//deviceContext->EndDraw();
+
+	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+
+	D2D1_SIZE_F size = D2DRenderManager::GetInstance().m_screenBitmap->GetSize();	//	그릴 크기
+	D2D1_RECT_F DestRect{ 0,0,size.width,size.height };
+	deviceContext->DrawBitmap(
+		D2DRenderManager::GetInstance().m_overlayBitmap.Get(),
+		DestRect,           // g_d2dBitmapScene 크기에 맞게 늘림
+		1.0f,              // Opacity (0.0 ~ 1.0)
+		D2D1_INTERPOLATION_MODE_LINEAR,
+		nullptr            // 이미지 원본 영역 전체 사용
+	);
+
+	deviceContext->EndDraw();
+
+	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_d2dBitmapTarget.Get());
+	deviceContext->BeginDraw();
+
+	if (bUseScreenEffect)
+		deviceContext->DrawImage(D2DRenderManager::GetInstance().m_sceneEffect.Get());
+	else
+		deviceContext->DrawBitmap(D2DRenderManager::GetInstance().m_screenBitmap.Get());
+
+	deviceContext->EndDraw();
 
 	D2DRenderManager::GetInstance().m_dxgiSwapChain->Present(1, 0);
 }
@@ -231,8 +256,8 @@ void RenderSystem::RenderUnified()
 
 void RenderSystem::DebugCamera()
 {
-	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
-	if (!m_d2dDeviceContext.Get()) return;
+	ComPtr<ID2D1DeviceContext7> deviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
+	if (!deviceContext.Get()) return;
 	if (Camera* camera = SceneManager::GetCamera())
 	{
 		if (camera->bDebug)
@@ -241,12 +266,12 @@ void RenderSystem::DebugCamera()
 			D2D1::Matrix3x2F screen = D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 			D2D1::Matrix3x2F cameraInv = camera->relativeTransform.m_worldTransform.ToMatrix();
 			cameraInv.Invert();
-			m_d2dDeviceContext->SetTransform(cameraInv * flipY * screen);
+			deviceContext->SetTransform(cameraInv * flipY * screen);
 
 			FVector2 pos = SceneManager::GetCamera()->GetRelativePosition();
 			D2DRenderManager::GetInstance().DrawDebugBox(pos.x - 10, pos.y - 10, pos.x + 10, pos.y + 10, 0, 0, 255, 255);
 
-			m_d2dDeviceContext->SetTransform(cameraInv * screen);
+			deviceContext->SetTransform(cameraInv * screen);
 			D2DRenderManager::GetInstance().DrawDebugText(L"(" + std::to_wstring(pos.x) + L" " + std::to_wstring(pos.y) + L")", pos.x, pos.y, 24, D2D1::ColorF(0, 0, 255, 1));
 		}
 	}

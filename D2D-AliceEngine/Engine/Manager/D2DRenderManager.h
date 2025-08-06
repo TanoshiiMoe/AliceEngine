@@ -34,13 +34,15 @@ public:
 	void CreateAfterEffectScreenRenderTarget();
 
 	void LoadGradientTextrue();
-
 	void LoadEffectShader();
+
+	HRESULT CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap);
 
 	// D2D variable
 	ComPtr<ID3D11Device> m_d3dDevice;
 	ComPtr<IDXGISwapChain1> m_dxgiSwapChain;
 	ComPtr<ID2D1DeviceContext7> m_d2dDeviceContext;
+	ComPtr<ID2D1Bitmap1> m_d2dBitmapTarget;
 	ComPtr<ID2D1Bitmap1> m_screenBitmap;
 	ComPtr<IWICImagingFactory> m_wicFactory;
 
@@ -59,8 +61,7 @@ public:
 
 	// 후처리용
 	ComPtr<ID2D1Bitmap1> m_overlayBitmap; // 그라데이션 or 텍스처
-	ComPtr<ID2D1Effect> shaderEffect;
-	ComPtr<ID2D1EffectContext> m_effectContext;
+	ComPtr<ID2D1Effect> m_sceneEffect;
 
 	// Transform Type
 	ETransformType m_eTransformType = ETransformType::Unity;
