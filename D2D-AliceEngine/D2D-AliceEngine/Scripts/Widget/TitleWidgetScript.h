@@ -14,5 +14,8 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+
+private:
+	//void WidgetClose();
 };
 
