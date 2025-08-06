@@ -153,6 +153,8 @@ void TitleWidgetScript::OnStart()
 	closeButton->m_layer = -1000;
 
 	// ======================== mainTitle
+	mainTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	mainTitle->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	mainTitle->SetText(L"높다락길의 질주");
 	mainTitle->SetFontSize(120.0f);
 	mainTitle->SetColor(FColor(255, 0, 0, 255));
@@ -173,6 +175,8 @@ void TitleWidgetScript::OnStart()
 	subTitle->m_layer = 501;
 
 	// ======================== startText
+	startText->SetFontFromFile(L"Fonts\\HancomMalangMalang-Bold.ttf");
+	startText->SetFont(L"한컴 말랑말랑", L"ko-KR");
 	startText->SetText(L"시작하기");
 	startText->SetFontSize(60.0f);
 	startText->SetColor(FColor(255, 0, 0, 255));
