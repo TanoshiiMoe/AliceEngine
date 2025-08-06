@@ -4,23 +4,20 @@
 #include "Object/Camera.h"
 
 class BikeMovementScript;
+class SkewTransform;
 class CameraMover : public ScriptComponent
 {
 public:
 	void Initialize() override;
+	void Awake() override;
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
-
-	void SetPlayer(gameObject* _player);
 private:
-	WeakObjectPtr<gameObject> player;
-	BikeMovementScript* playerBM;
+	WeakObjectPtr<SkewTransform> playerST;
 	Camera* camera;
 
 	float xPos{0};
 	float yPos{0};
-
-	WeakObjectPtr<gameObject> target;
 
 	// 카메라 이동 속도 제어
 	float lerpSpeed = 5.0f;

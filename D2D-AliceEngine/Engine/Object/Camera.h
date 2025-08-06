@@ -11,7 +11,7 @@ class gameObject;
 class Camera : public UObject
 {
 public:
-	Camera() {};
+	Camera();
 	~Camera() {};
 
 	void Initialize();

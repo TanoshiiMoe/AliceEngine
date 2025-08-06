@@ -32,7 +32,7 @@
 #include <Component/ButtonComponent.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Camera/CameraMover.h>
-#include <Scripts/CameraController.h>
+#include <Prefab/PlayerBike.h>
 
 void DemoScene4::Initialize()
 {
@@ -57,8 +57,9 @@ void DemoScene4::OnEnter()
 	m_cameraController->AddComponent<CameraMover>();
 
 	m_player = NewObject<gameObject>(L"Player");
-	m_player->AddComponent<Player>();
-	m_player->AddComponent<BackGroundRender>();
+	m_player->AddComponent<PlayerBike>();
+	//m_player->AddComponent<Player>();
+	//m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
@@ -79,8 +80,10 @@ void DemoScene4::OnEnter()
 	m_tile->GetComponent<TileMapComponent>()->SetTileLayer(3);	// 타일 레이어를 3으로 설정
 	
 	// SkewTransform 테스트
-	m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
-	m_player->AddComponent<BikeMovementScript>();
+	/*if(auto st = m_player->GetComponent<SkewTransform>())
+		st->groundTile = m_tile;*/
+	//m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
+	//m_player->AddComponent<BikeMovementScript>();
 	
 	// UI 추가
 	//m_UI = NewObject<gameObject>(L"ad");
@@ -108,10 +111,8 @@ void DemoScene4::OnEnter()
 	//m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 
 	//RemoveObject(m_wall);
-	m_cameraController = NewObject<gameObject>(L"m_cameraController");
-	m_cameraController->AddComponent<CameraController>();
-
-	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
+	//m_player->GetComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
+	//m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
 }
 
 void DemoScene4::OnExit()

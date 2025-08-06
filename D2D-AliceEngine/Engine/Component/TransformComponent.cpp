@@ -26,6 +26,7 @@ void TransformComponent::Release()
 			child.lock()->parent.reset();
 		}
 	}
+	UpdateTaskManager::GetInstance().Dequeue(WeakFromThis<ITickable>());
 }
 
 void TransformComponent::Update(const float& deltaSeconds)
