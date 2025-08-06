@@ -25,8 +25,8 @@ void SpineScene::OnEnter()
 	__super::OnEnter();
 	//m_cameraController = NewObject<gameObject>(L"Camera");
 	spineObject = NewObject<gameObject>(L"spineObject");
-	spineObject->AddComponent<SpineScript>();
-
+	SpineScript* spine = spineObject->AddComponent<SpineScript>();
+	spine->LoadData(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
 }
 
 void SpineScene::OnExit()

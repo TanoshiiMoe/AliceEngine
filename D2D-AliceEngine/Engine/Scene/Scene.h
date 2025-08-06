@@ -10,7 +10,7 @@ public:
 	Scene();
 	virtual ~Scene();
 
-	Camera* m_mainCamera; // Main Camera
+	WeakObjectPtr<Camera> m_mainCamera; // Main Camera
 
 	void Initialize() override;
 	void Release() override;
@@ -23,7 +23,9 @@ public:
 
 	Camera* GetCamera()
 	{
-		return m_mainCamera;
+		if(!m_mainCamera.expired())
+			return m_mainCamera.Get();
+		return nullptr;
 	}
 
 public:

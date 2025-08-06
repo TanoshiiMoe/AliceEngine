@@ -51,7 +51,7 @@ public:
 
 	void SetDirty();
 
-private:
-	TransformComponent* m_parent = nullptr;
-	std::vector<TransformComponent*> m_children;
+//private:
+//	TransformComponent* m_parent = nullptr;
+//	std::vector<TransformComponent*> m_children;
 };
