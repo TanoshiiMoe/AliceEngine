@@ -67,5 +67,5 @@ void CameraMover::Update(const float& dt)
 
 	// 느리게 따라오기 (선형 보간 방식)
 	FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
-	camera->SetRelativePosition(newPos);
+	camera->SetRelativePosition(targetPos);
 }
