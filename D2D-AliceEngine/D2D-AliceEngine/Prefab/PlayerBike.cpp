@@ -7,11 +7,17 @@
 #include "Component/InputComponent.h"
 #include "Manager/SceneManager.h"
 #include "Scripts/Player/PlayerManager.h"
+#include "System/ScriptSystem.h"
 
 void PlayerBike::Initialize()
 {
 	__super::Initialize();
 
+	REGISTER_SCRIPT_METHOD(OnStart);
+}
+
+void PlayerBike::OnStart()
+{
 	// 여기에 컴포넌트 추가	
 	owner->AddComponent<Player>();
 	owner->AddComponent<BackGroundRender>();

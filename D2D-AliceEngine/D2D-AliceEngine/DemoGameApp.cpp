@@ -10,6 +10,7 @@
 
 /*-----���� �ΰ��Ӿ��� �߰��մϴ�-----*/
 #include "Scene/TitleScene.h"
+#include <Scene/KangScene/KangScene.h>
 
 DemoGameApp::DemoGameApp()
 {
@@ -31,7 +32,8 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene4>(L"HiroScene");
 	SceneManager::AddScene<TitleScene>(L"TitleScene");
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
-	SceneManager::ChangeScene(L"TitleScene");
+	SceneManager::AddScene<KangScene>(L"KangTest");
+	SceneManager::ChangeScene(L"HiroScene");
 }
 
 void DemoGameApp::Run()

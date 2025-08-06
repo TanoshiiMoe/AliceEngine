@@ -12,7 +12,6 @@ public:
 
 	float zPos = 0.0f;
 	
-	void SetClamp(float minZ = 0.0f, float maxZ = 0.0f);
 	const FVector2 GetOffset();
 	const FVector2 GetRealPos() { return realPos; }
 
