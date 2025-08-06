@@ -141,62 +141,56 @@ void RenderSystem::Render()
 	ComPtr<ID2D1DeviceContext7> deviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
 	if (!deviceContext.Get()) return;
 	bool m_resizePending = D2DRenderManager::GetInstance().m_resizePending;
+	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
 	deviceContext->BeginDraw();
 	deviceContext->Clear(D2D1::ColorF(D2D1::ColorF::WhiteSmoke));
 	if (m_resizePending)
 	{
-		D2DRenderManager::GetInstance().CreateSwapChainAndD2DTarget();
+		//D2DRenderManager::GetInstance().CreateSwapChainAndD2DTarget();
 		m_resizePending = false;
 	}
-	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
-	//deviceContext->SetTarget(D2DRenderManager::GetInstance().m_overlayBitmap.Get());
 	deviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-	//sort(m_renderers.begin(), m_renderers.end(), &RenderSystem::RenderSortCompare);
-	//RenderD2D();
-	//RenderSpine2D();
 
 	// 통합 렌더링 사용
 	RenderUnified();
 	DebugCamera();
-	
 
+	if(D2DRenderManager::GetInstance().m_sceneEffect.Get())
+	{
+		deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+		D2D1_SIZE_F size = D2DRenderManager::GetInstance().m_screenBitmap->GetSize();	//	그릴 크기
+		D2D1_RECT_F DestRect{ 0,0,size.width,size.height };
+		deviceContext->DrawBitmap(
+			D2DRenderManager::GetInstance().m_overlayBitmap.Get(),
+			DestRect,           // g_d2dBitmapScene 크기에 맞게 늘림
+			1.0f,              // Opacity (0.0 ~ 1.0)
+			D2D1_INTERPOLATION_MODE_LINEAR,
+			nullptr            // 이미지 원본 영역 전체 사용
+		);
+	}
+	
 	HRESULT hr = deviceContext->EndDraw();
 	if (FAILED(hr)) {
 		D2DRenderManager::GetInstance().OutputError(hr);
 	}
 
-	//D2DRenderManager::GetInstance().shaderEffect->SetInput(0, D2DRenderManager::GetInstance().m_overlayBitmap.Get());   // 화면 원본 (Draw된 화면)
-	//D2DRenderManager::GetInstance().shaderEffect->SetInput(1, D2DRenderManager::GetInstance().m_overlayBitmap.Get());   // 텍스처 (예: gradient.png)
-
-	// 최종 출력 화면으로 타겟 복귀
-	//deviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
-	//deviceContext->BeginDraw();
-	//deviceContext->DrawImage(D2DRenderManager::GetInstance().shaderEffect.Get());
-	//deviceContext->EndDraw();
-
 	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-
-	D2D1_SIZE_F size = D2DRenderManager::GetInstance().m_screenBitmap->GetSize();	//	그릴 크기
-	D2D1_RECT_F DestRect{ 0,0,size.width,size.height };
-	deviceContext->DrawBitmap(
-		D2DRenderManager::GetInstance().m_overlayBitmap.Get(),
-		DestRect,           // g_d2dBitmapScene 크기에 맞게 늘림
-		1.0f,              // Opacity (0.0 ~ 1.0)
-		D2D1_INTERPOLATION_MODE_LINEAR,
-		nullptr            // 이미지 원본 영역 전체 사용
-	);
-
-	deviceContext->EndDraw();
-
-	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_d2dBitmapTarget.Get());
+	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_bitmapTarget.Get());
 	deviceContext->BeginDraw();
 
-	if (bUseScreenEffect)
-		deviceContext->DrawImage(D2DRenderManager::GetInstance().m_sceneEffect.Get());
+	if (D2DRenderManager::GetInstance().m_sceneEffect.Get())
+		deviceContext->DrawImage(
+			D2DRenderManager::GetInstance().m_sceneEffect.Get(),
+			nullptr,
+			nullptr,
+			D2D1_INTERPOLATION_MODE_LINEAR,
+			D2D1_COMPOSITE_MODE_SOURCE_OVER
+		);
 	else
+	{
 		deviceContext->DrawBitmap(D2DRenderManager::GetInstance().m_screenBitmap.Get());
+	}
 
 	deviceContext->EndDraw();
 
