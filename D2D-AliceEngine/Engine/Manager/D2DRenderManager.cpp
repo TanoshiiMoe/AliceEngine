@@ -3,6 +3,10 @@
 #include "D2DRenderManager.h"
 #include <Manager/SceneManager.h>
 #include <Define/Define.h>
+#include <Helpers/FileHelper.h>
+#include <d2d1_3.h>            // ID2D1DeviceContext2, ID2D1Factory2 등
+#include <d2d1effectauthor.h>  // LoadPixelShader 관련
+#include <d2d1effecthelpers.h> // 셰이더 헬퍼
 
 D2DRenderManager::D2DRenderManager()
 {
@@ -38,6 +42,17 @@ void D2DRenderManager::Initialize(HWND hwnd)
 		nullptr
 	);
 	assert(SUCCEEDED(hr));
+
+	hr = CoCreateInstance(
+		CLSID_WICImagingFactory2,
+		nullptr,
+		CLSCTX_INPROC_SERVER,
+		IID_PPV_ARGS(&m_wicFactory)
+	);
+	if (FAILED(hr)) {
+		OutputError(hr);
+		return;
+	}
 
 	// D2D 팩토리 및 디바이스
 	ComPtr<ID2D1Factory8> d2dFactory;
@@ -90,8 +105,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 		D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
 		D2D1::PixelFormat(scDesc.Format, D2D1_ALPHA_MODE_PREMULTIPLIED)
 	);
-	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_d2dBitmapTarget.GetAddressOf());
-	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
+	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_screenBitmap.GetAddressOf());
+	m_d2dDeviceContext->SetTarget(m_screenBitmap.Get());
 
 	// DirectWrite 팩터리를 만듭니다.
 	DWriteCreateFactory(
@@ -101,12 +116,15 @@ void D2DRenderManager::Initialize(HWND hwnd)
 
 	// 4. D2D 타겟 비트맵 및 SetTarget
 	CreateSwapChainAndD2DTarget();
+	CreateAfterEffectScreenRenderTarget();
 
 	// 7. SpriteBatch 생성
 	hr = m_d2dDeviceContext->CreateSpriteBatch(m_spriteBatch.GetAddressOf());
 	assert(SUCCEEDED(hr));
 
 	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
+
+
 }
 
 void D2DRenderManager::UnInitialize()
@@ -114,7 +132,7 @@ void D2DRenderManager::UnInitialize()
 	m_d3dDevice = nullptr;
 	m_dxgiSwapChain = nullptr;
 	m_d2dDeviceContext = nullptr;
-	m_d2dBitmapTarget = nullptr;
+	m_screenBitmap = nullptr;
 
 	// For DrawText
 	m_dWriteFactory = nullptr;
@@ -137,7 +155,7 @@ void D2DRenderManager::CreateSwapChainAndD2DTarget()
 	{
 		m_d2dDeviceContext->SetTarget(nullptr);
 	}
-	m_d2dBitmapTarget.Reset();
+	m_screenBitmap.Reset();
 
 	// 2. SwapChain 재설정
 	if (m_dxgiSwapChain) {
@@ -166,14 +184,14 @@ void D2DRenderManager::CreateSwapChainAndD2DTarget()
 	);
 
 	// 5. DeviceContext에 바인딩할 ID2D1Bitmap1 생성
-	hr = m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, &m_d2dBitmapTarget);
+	hr = m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, &m_screenBitmap);
 	if (FAILED(hr)) {
 		OutputError(hr);
 		return;
 	}
 
 	// 6. 컨텍스트에 SetTarget
-	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
+	m_d2dDeviceContext->SetTarget(m_screenBitmap.Get());
 }
 
 void D2DRenderManager::OutputError(HRESULT hr)
@@ -229,4 +247,59 @@ void D2DRenderManager::DrawDebugText(
 		&layoutRect,
 		m_pBrush.Get()
 	);
+}
+
+void D2DRenderManager::CreateAfterEffectScreenRenderTarget()
+{
+	D2D1_BITMAP_PROPERTIES1 bmpProps =
+		D2D1::BitmapProperties1(
+			D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
+			D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
+		);
+
+	FVector2 size = GetApplicationSize();
+
+	m_d2dDeviceContext->CreateBitmap(
+		D2D1::SizeU((UINT32)size.x, (UINT32)size.y),
+		nullptr,
+		0,
+		&bmpProps,
+		&m_overlayBitmap);
+}
+
+void D2DRenderManager::LoadGradientTextrue()
+{
+	ComPtr<IWICBitmapDecoder> decoder;
+	ComPtr<IWICBitmapFrameDecode> frame;
+	ComPtr<IWICFormatConverter> converter;
+
+	m_wicFactory->CreateDecoderFromFilename(
+		L"Resources/gradient.png", nullptr, GENERIC_READ,
+		WICDecodeMetadataCacheOnLoad, &decoder);
+
+	decoder->GetFrame(0, &frame);
+
+	m_wicFactory->CreateFormatConverter(&converter);
+	converter->Initialize(frame.Get(), GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone, nullptr, 0.0, WICBitmapPaletteTypeCustom);
+
+	m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), nullptr, &m_overlayBitmap);
+}
+
+void D2DRenderManager::LoadEffectShader()
+{
+	//std::vector<BYTE> shaderBytes = FileHelper::LoadBinaryFile(L"MyShader.cso");
+	//GUID myShaderGUID = { /* 생성한 GUID */ };
+	//
+	//ComPtr<ID2D1DeviceContext4> context4;
+	//m_d2dDeviceContext.As(&context4);
+	//
+	//context4->LoadPixelShader(
+	//	myShaderGUID,
+	//	shaderBytes.data(),
+	//	(UINT32)shaderBytes.size()
+	//);
+	//
+	//m_d2dDeviceContext->CreateEffect(CLSID_D2D1DrawPixelShader, &shaderEffect);
+	//shaderEffect->SetValue(D2D1_DRAW_PIXEL_SHADER_PROP_SHADER_GUID, myShaderGUID);
 }

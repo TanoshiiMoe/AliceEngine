@@ -148,7 +148,8 @@ void RenderSystem::Render()
 		D2DRenderManager::GetInstance().CreateSwapChainAndD2DTarget();
 		m_resizePending = false;
 	}
-	m_d2dDeviceContext->SetTarget(D2DRenderManager::GetInstance().m_d2dBitmapTarget.Get());
+	m_d2dDeviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
+	//m_d2dDeviceContext->SetTarget(D2DRenderManager::GetInstance().m_overlayBitmap.Get());
 	m_d2dDeviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 	//sort(m_renderers.begin(), m_renderers.end(), &RenderSystem::RenderSortCompare);
@@ -164,6 +165,15 @@ void RenderSystem::Render()
 	if (FAILED(hr)) {
 		D2DRenderManager::GetInstance().OutputError(hr);
 	}
+
+	//D2DRenderManager::GetInstance().shaderEffect->SetInput(0, D2DRenderManager::GetInstance().m_overlayBitmap.Get());   // 화면 원본 (Draw된 화면)
+	//D2DRenderManager::GetInstance().shaderEffect->SetInput(1, D2DRenderManager::GetInstance().m_overlayBitmap.Get());   // 텍스처 (예: gradient.png)
+
+	// 최종 출력 화면으로 타겟 복귀
+	//m_d2dDeviceContext->SetTarget(D2DRenderManager::GetInstance().m_screenBitmap.Get());
+	//m_d2dDeviceContext->BeginDraw();
+	//m_d2dDeviceContext->DrawImage(D2DRenderManager::GetInstance().shaderEffect.Get());
+	//m_d2dDeviceContext->EndDraw();
 
 	D2DRenderManager::GetInstance().m_dxgiSwapChain->Present(1, 0);
 }

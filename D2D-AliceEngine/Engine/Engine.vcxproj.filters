@@ -61,6 +61,9 @@
     <Filter Include="Spine2D">
       <UniqueIdentifier>{95330cb4-092e-413d-975d-63995b0227e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{eb5df3d8-5caf-4545-ae90-e0849e21f6ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -476,5 +479,10 @@
     <ClCompile Include="Component\ButtonComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\GradationShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
