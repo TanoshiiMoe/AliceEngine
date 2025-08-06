@@ -62,6 +62,7 @@ void TitleWidgetScript::OnStart()
 	auto staffText = m_owner->AddComponent<TextRenderComponent>();
 	auto staffButton = m_owner->AddComponent<ButtonComponent>();
 	auto staffTabText = m_owner->AddComponent<TextRenderComponent>();
+	auto staffNameText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto quitText = m_owner->AddComponent<TextRenderComponent>();
 	auto quitButton = m_owner->AddComponent<ButtonComponent>();
@@ -81,7 +82,7 @@ void TitleWidgetScript::OnStart()
 	tutorial->SetRelativePosition(FVector2(-960, -550));
 
 	auto PopupTab = m_owner->AddComponent<SpriteRenderer>();
-	PopupTab->LoadData(L"UI\\Continue.png");
+	PopupTab->LoadData(L"UI\\PopupTab.png");
 	PopupTab->m_layer = -1000;
 	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f));
 
@@ -95,7 +96,6 @@ void TitleWidgetScript::OnStart()
 	float buttonBasePos = 400;
 
 	// ======================== startButton
-	startButton->SetTag(L"Button");
 	startButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	startButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
 	startButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
@@ -108,7 +108,6 @@ void TitleWidgetScript::OnStart()
 	startButton->m_layer = 300;
 
 	// ======================== continueButton
-	continueButton->SetTag(L"Button");
 	continueButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	continueButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
 	continueButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
@@ -122,7 +121,6 @@ void TitleWidgetScript::OnStart()
 	continueButton->m_layer = 500;
 
 	// ======================== optionButton
-	optionButton->SetTag(L"Button");
 	optionButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	optionButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
 	optionButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
@@ -136,7 +134,6 @@ void TitleWidgetScript::OnStart()
 	optionButton->m_layer = 500;
 
 	// ======================== staffButton
-	staffButton->SetTag(L"Button");
 	staffButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	staffButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
 	staffButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
@@ -292,6 +289,27 @@ void TitleWidgetScript::OnStart()
 	staffTabText->SetRelativeRotation(0);
 	staffTabText->m_layer = -1000;
 
+	staffNameText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	staffNameText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	staffNameText->SetText(
+		L"기획\n"
+		L"이유성 | 신소영\n"
+		L"\n"
+		L"아트\n"
+		L"강연주 | 민지인\n"
+		L"\n"
+		L"프로그래밍\n"
+		L"이창진 | 강성근 | 황태현\n"
+	);
+	staffNameText->SetFontSize(55.0f);
+	staffNameText->SetColor(FColor::Black);
+	FVector2 staffNameTextSize = staffNameText->GetRelativeSize();
+	staffNameText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(staffNameTextSize, FVector2(-0.5, -0.5))
+		+ FVector2(0, 50)
+	);
+	staffNameText->m_layer = -1000;
+
 	// ======================== quitText
 	quitText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	quitText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
@@ -387,7 +405,7 @@ void TitleWidgetScript::OnStart()
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		tutorial, startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
-		uiSound, continueTabText, optionTabText, staffTabText
+		uiSound, continueTabText, optionTabText, staffTabText, staffNameText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -413,6 +431,7 @@ void TitleWidgetScript::OnStart()
 			continueTabText->m_layer = -1000;
 			optionTabText->m_layer = -1000;
 			staffTabText->m_layer = -1000;
+			staffNameText->m_layer = -1000;
 
 			tutorial->m_layer = -1000;
 			tutorial->Stop();
@@ -452,7 +471,7 @@ void TitleWidgetScript::OnStart()
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		uiSound, staffTabText
+		uiSound, staffTabText, staffNameText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -475,6 +494,7 @@ void TitleWidgetScript::OnStart()
 			closeText->m_layer = 504;
 
 			staffTabText->m_layer = 503;
+			staffNameText->m_layer = 503;
 
 			PopupTab->m_layer = 502;
 		});

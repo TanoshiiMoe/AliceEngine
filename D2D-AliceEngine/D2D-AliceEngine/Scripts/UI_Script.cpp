@@ -14,6 +14,7 @@
 #include <Scene/Scene.h>
 #include <Helpers/CoordHelper.h>
 #include <Component/ButtonComponent.h>
+#include <Manager/SceneManager.h>
 
 void UI_Script::Initialize()
 {
@@ -172,13 +173,14 @@ void UI_Script::OnStart()
 		+ FVector2(1800, 30)
 	);
 	Pause->m_layer = 50;
+	Pause->SetActive(true);
 
 	// ================== Delegate
 	Pause->SetStateAction(Define::EButtonState::Pressed, []()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			//SceneManager::ChangeScene(L"HiroScene");
+			//SceneManager::ChangeScene(L"TitleScene");
 		});
 
 	/*Canvas* canvas = GetWorld()->CreateCanvas<Canvas>(L"Canvas");
