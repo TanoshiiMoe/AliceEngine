@@ -56,7 +56,8 @@ void DemoScene4::OnEnter()
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraMover>();
 
-	m_player = NewObject<PlayerBike>(L"Player");
+	m_player = NewObject<gameObject>(L"Player");
+	m_player->AddComponent<PlayerBike>();
 	//m_player->AddComponent<Player>();
 	//m_player->AddComponent<BackGroundRender>();
 
@@ -79,8 +80,8 @@ void DemoScene4::OnEnter()
 	m_tile->GetComponent<TileMapComponent>()->SetTileLayer(3);	// 타일 레이어를 3으로 설정
 	
 	// SkewTransform 테스트
-	if(auto st = m_player->GetComponent<SkewTransform>())
-		st->groundTile = m_tile;
+	/*if(auto st = m_player->GetComponent<SkewTransform>())
+		st->groundTile = m_tile;*/
 	//m_player->AddComponent<SkewTransform>()->groundTile = m_tile;
 	//m_player->AddComponent<BikeMovementScript>();
 	

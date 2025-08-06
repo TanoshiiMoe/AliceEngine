@@ -1,7 +1,8 @@
 #pragma once
-#include "Object/gameObject.h"
-class PlayerBike : public gameObject
+#include "Component/ScriptComponent.h"
+class PlayerBike : public ScriptComponent
 {
+public:
 	void Initialize() override;
 };
 

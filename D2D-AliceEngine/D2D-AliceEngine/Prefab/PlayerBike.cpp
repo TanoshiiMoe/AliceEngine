@@ -1,4 +1,5 @@
 #include "PlayerBike.h"
+#include "Object/gameObject.h"
 #include <Scripts/Player.h>
 #include <Scripts/BackGroundRender.h>
 #include <Component/SkewTransform.h>
@@ -11,12 +12,14 @@ void PlayerBike::Initialize()
 {
 	__super::Initialize();
 
-	// 여기에 컴포넌트 추가
-	AddComponent<Player>();
-	AddComponent<BackGroundRender>();
-	AddComponent<SkewTransform>();
-	AddComponent<BikeMovementScript>();
-	AddComponent<InputComponent>();
-	AddComponent<PlayerManager>();
+	// 여기에 컴포넌트 추가	
+	owner->AddComponent<Player>();
+	owner->AddComponent<BackGroundRender>();
+	owner->AddComponent<SkewTransform>();
+	owner->AddComponent<BikeMovementScript>();
+	owner->AddComponent<InputComponent>();
+
+	// 게임 스크립트 컴포넌트
+	owner->AddComponent<PlayerManager>();
 }
 
