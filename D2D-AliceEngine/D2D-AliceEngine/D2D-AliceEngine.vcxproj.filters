@@ -50,6 +50,9 @@
     <Filter Include="Scripts\Player">
       <UniqueIdentifier>{69b3ea38-b5c2-4f03-b4eb-2b87c6b435f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\GameScene">
+      <UniqueIdentifier>{e99e9ec0-bb79-445d-bba6-38a45ae1e494}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -115,9 +118,6 @@
     <ClInclude Include="Scripts\TitleUIScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TitleScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Bike\Battery.h">
       <Filter>Scripts\Bike</Filter>
     </ClInclude>
@@ -171,6 +171,9 @@
     </ClInclude>
     <ClInclude Include="Prefab\PlayerBike.h">
       <Filter>Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\TitleScene.h">
+      <Filter>Scene\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -228,9 +231,6 @@
     <ClCompile Include="Scripts\Truck.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\TitleScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\TitleUIScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -287,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="Prefab\PlayerBike.cpp">
       <Filter>Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\TitleScene.cpp">
+      <Filter>Scene\GameScene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

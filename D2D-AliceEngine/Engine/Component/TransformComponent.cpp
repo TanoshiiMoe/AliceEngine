@@ -14,7 +14,7 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
 }
 
 void TransformComponent::Release()

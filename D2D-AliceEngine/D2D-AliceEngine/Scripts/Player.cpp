@@ -136,7 +136,7 @@ void Player::LateUpdate(const float& deltaSeconds)
 void Player::Awake()
 {
 }
-
+ 
 void Player::OnStart()
 {
 	// 여기에 OnStart에 대한 로직 작성

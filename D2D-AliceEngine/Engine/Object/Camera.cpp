@@ -4,9 +4,13 @@
 #include <Component/TransformComponent.h>
 #include <Math/Transform.h>
 
-void Camera::Initialize()
+Camera::Camera()
 {
 	relativeTransform.Initialize();
+}
+
+void Camera::Initialize()
+{
 	if (owner) owner->transform()->AddChildObject(&relativeTransform);
 	relativeTransform.SetPosition(0, 0);
 }
@@ -25,6 +29,7 @@ void Camera::Update()
 void Camera::Release()
 {
 	ClearOwner();
+	RemoveFromParent();
 }
 
 FVector2 Camera::GetScale()

@@ -31,6 +31,12 @@ void CameraMover::OnStart()
 	if (player) {
 		initPos = player->transform()->GetPosition();
 		playerST = player->GetComponent<SkewTransform>();
+
+		player->RemoveFromParent();
+		player->AddChildTransform(&GetCamera()->relativeTransform);
+		GetCamera()->SetRelativeScale(player->GetScaleInv());
+		GetCamera()->SetRelativePosition(FVector2(0, 0));
+		GetCamera()->RemoveFromParent();
 	}
 
 	xPos = initPos.x;
@@ -62,5 +68,5 @@ void CameraMover::Update(const float& dt)
 
 	// 느리게 따라오기 (선형 보간 방식)
 	FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
-	camera->SetRelativePosition(targetPos);
+	camera->SetRelativePosition(newPos);
 }
