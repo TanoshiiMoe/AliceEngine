@@ -23,7 +23,6 @@ void BackGroundRender::Initialize()
 	REGISTER_SCRIPT_METHOD(OnStart);
 	REGISTER_SCRIPT_METHOD(OnEnd);
 	REGISTER_SCRIPT_METHOD(OnDestroy);
-
 }
 
 void BackGroundRender::FixedUpdate(const float& deltaSeconds)
@@ -36,26 +35,26 @@ void BackGroundRender::Update(const float& deltaSeconds)
 
 	float playerPosY = m_owner->transform()->GetPosition().y;
 
-	for (auto& layer : m_loopingLayers)
-	{
-		if (!layer.obj1 || !layer.obj2) return;
+	//for (auto& layer : m_loopingLayers)
+	//{
+	//	if (!layer.obj1 || !layer.obj2) return;
 
-		FVector2 pos1 = layer.obj1->transform()->GetPosition();
-		FVector2 pos2 = layer.obj2->transform()->GetPosition();
+	//	FVector2 pos1 = layer.obj1->transform()->GetPosition();
+	//	FVector2 pos2 = layer.obj2->transform()->GetPosition();
 
-		pos1.x -= layer.speed * deltaSeconds;
-		pos2.x -= layer.speed * deltaSeconds;
+	//	pos1.x -= layer.speed * deltaSeconds;
+	//	pos2.x -= layer.speed * deltaSeconds;
 
-		float restX = layer.width;
+	//	float restX = layer.width;
 
-		if (pos1.x <= -restX)
-			pos1.x = pos2.x + restX;
-		if (pos2.x <= -restX)
-			pos2.x = pos1.x + restX;
+	//	if (pos1.x <= -restX)
+	//		pos1.x = pos2.x + restX;
+	//	else if (pos2.x <= -restX)
+	//		pos2.x = pos1.x + restX;
 
-		layer.obj1->transform()->SetPosition(FVector2(pos1.x, playerPosY));
-		layer.obj2->transform()->SetPosition(FVector2(pos2.x, playerPosY));
-	}
+	//	layer.obj1->transform()->SetPosition(FVector2(pos1.x, pos1.y));
+	//	layer.obj2->transform()->SetPosition(FVector2(pos2.x, pos2.y));
+	//}
 }
 
 void BackGroundRender::LateUpdate(const float& deltaSeconds)
@@ -79,32 +78,38 @@ void BackGroundRender::OnStart()
 	sky->SetRelativePosition(FVector2(960,550));
 	sky->m_layer = -10;
 
-	//auto obj1 = GetWorld()->NewObject<gameObject>(L"Building_1");
-	//auto* sr1 = obj1->AddComponent<SpriteRenderer>();
-	//sr1->LoadData(L"BackGround\\BG_Building.png");
-	//sr1->SetRelativePosition(FVector2(sr1->GetBitmapSizeX() / 2.0f, 200));
-	//sr1->m_layer = -5;
+	m_building = GetWorld()->NewObject<gameObject>(L"Building");
+	//GetCamera()->AddChildObject(m_building);
+	auto building = m_building->AddComponent<SpriteRenderer>();
+	building->LoadData(L"BackGround\\BG_Building.png");
+	building->SetDrawType(EDrawType::ScreenSpace);
+	float width = building->GetBitmapSizeX();
+	building->SetRelativePosition(FVector2(0, 390));
+	building->m_layer = -5;
+	
+	auto m_building2 = GetWorld()->NewObject<gameObject>(L"Building2");
+	//GetCamera()->AddChildObject(m_building);
+	auto building2 = m_building2->AddComponent<SpriteRenderer>();
+	building2->LoadData(L"BackGround\\BG_Building.png");
+	building2->SetDrawType(EDrawType::ScreenSpace);
+	building2->SetRelativePosition(FVector2(width, 390));
+	building2->m_layer = -5;
 
-	//auto obj2 = GetWorld()->NewObject<gameObject>(L"Building_2");
-	//auto* sr2 = obj2->AddComponent<SpriteRenderer>();
-	//sr2->LoadData(L"BackGround\\BG_Building.png");
-	//sr2->SetRelativePosition(FVector2(sr2->GetBitmapSizeX() / 2.0f, 200));
-	//sr2->m_layer = -5;
+	auto m_building3 = GetWorld()->NewObject<gameObject>(L"Building3");
+	//GetCamera()->AddChildObject(m_building);
+	auto building3 = m_building3->AddComponent<SpriteRenderer>();
+	building3->LoadData(L"BackGround\\BG_Building.png");
+	building3->SetDrawType(EDrawType::ScreenSpace);
+	building3->SetRelativePosition(FVector2(2 * width, 390));
+	building3->m_layer = -5;
 
-	//float width = sr1->GetBitmapSizeX();
-	//float y = 200;
-	//
-	//sr1->SetRelativePosition(FVector2(0, y));
-	//sr2->SetRelativePosition(FVector2(width, y));
-
-	//m_loopingLayers.push_back({ obj1, obj2, 1.0f, width, y });
-
-	//m_building = GetWorld()->NewObject<gameObject>(L"Building");
-	//auto building = m_building->AddComponent<SpriteRenderer>();
-	//building->LoadData(L"BackGround\\BG_Building.png");
-	//building->SetDrawType(EDrawType::ScreenSpace);
-	//building->SetRelativePosition(FVector2(building->GetBitmapSizeX() / 2.0f, 340));
-	//building->m_layer = -5;
+	auto m_building4 = GetWorld()->NewObject<gameObject>(L"Building4");
+	//GetCamera()->AddChildObject(m_building);
+	auto building4 = m_building4->AddComponent<SpriteRenderer>();
+	building4->LoadData(L"BackGround\\BG_Building.png");
+	building4->SetDrawType(EDrawType::ScreenSpace);
+	building4->SetRelativePosition(FVector2(3 * width, 390));
+	building->m_layer = -5;
 
 	//m_bridge = GetWorld()->NewObject<gameObject>(L"Bridge");
 	//auto bridge = m_bridge->AddComponent<SpriteRenderer>();
@@ -147,14 +152,14 @@ void BackGroundRender::OnStart()
 		// 여기에 Get함수로 속도 받아오기
 	}
 	// 맨 뒷 숫자가 속도임
-	AddLooping(L"Building", L"BackGround\\BG_Building.png", -5, 340, 30);
+	//AddLooping(L"Building", L"BackGround\\BG_Building.png", -5, 340, 30);
 
-	AddLooping(L"GuardRail", L"BackGround\\BG_GuardRail.png", 12, 310, 450);
-	AddLooping(L"BackBarrier", L"BackGround\\BG_BackBarrier.png", 10, 250, 450);
+	//AddLooping(L"GuardRail", L"BackGround\\BG_GuardRail.png", 12, 310, 450);
+	//AddLooping(L"BackBarrier", L"BackGround\\BG_BackBarrier.png", 10, 250, 450);
 
-	AddLooping(L"Bridge", L"BackGround\\BG_Bridge.png", 4, 1190, 450);
-	AddLooping(L"Market", L"BackGround\\BG_Market.png", 5, 1140, 450);
-	AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740, 450);
+	//AddLooping(L"Bridge", L"BackGround\\BG_Bridge.png", 4, 1190, 450);
+	//AddLooping(L"Market", L"BackGround\\BG_Market.png", 5, 1140, 450);
+	//AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740, 450);
 }
 
 void BackGroundRender::OnEnd()
@@ -169,6 +174,7 @@ void BackGroundRender::AddLooping(const std::wstring& name, const std::wstring& 
 {
 	auto obj1 = GetWorld()->NewObject<gameObject>(name + L"_1");
 	auto* sr1 = obj1->AddComponent<SpriteRenderer>();
+	//GetCamera()->AddChildObject(obj1);
 	sr1->LoadData(texturePath);
 	sr1->SetDrawType(EDrawType::ScreenSpace);
 	float width = sr1->GetBitmapSizeX();
@@ -176,6 +182,7 @@ void BackGroundRender::AddLooping(const std::wstring& name, const std::wstring& 
 
 	auto obj2 = GetWorld()->NewObject<gameObject>(name + L"_2");
 	auto* sr2 = obj2->AddComponent<SpriteRenderer>();
+	//GetCamera()->AddChildObject(obj2);
 	sr2->LoadData(texturePath);
 	sr2->SetDrawType(EDrawType::ScreenSpace);
 	sr2->m_layer = layer;
