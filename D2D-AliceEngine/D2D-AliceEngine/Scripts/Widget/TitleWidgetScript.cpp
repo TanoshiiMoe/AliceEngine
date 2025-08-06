@@ -52,7 +52,7 @@ void TitleWidgetScript::OnStart()
 
 	auto continueText = m_owner->AddComponent<TextRenderComponent>();
 	auto continueButton = m_owner->AddComponent<ButtonComponent>();
-	auto continueTabText = m_owner->AddComponent<RenderComponent>();
+	auto continueTabText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto optionText = m_owner->AddComponent<TextRenderComponent>();
 	auto staffText = m_owner->AddComponent<TextRenderComponent>();
@@ -216,6 +216,8 @@ void TitleWidgetScript::OnStart()
 	continueText->RemoveFromParent();
 	continueButton->AddChildComponent(continueText);
 
+	continueTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+
 	// ======================== optionText
 	optionText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	optionText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
@@ -311,7 +313,7 @@ void TitleWidgetScript::OnStart()
 
 	continueButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText, PopupTab,
-		uiSound, m_owner
+		uiSound
 	]()		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
