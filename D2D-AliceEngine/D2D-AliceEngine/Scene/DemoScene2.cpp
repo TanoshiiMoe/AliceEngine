@@ -16,6 +16,7 @@
 #include "../Scripts/Player.h"
 #include "../Scripts/CameraController.h"
 #include <Helpers/CoordHelper.h>
+#include <Scripts/Spine2D/SpineScript.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -254,6 +255,24 @@ void DemoScene2::aruInput()
 	if (Input::IsKeyDown(VK_R))
 	{
 		m_aru->transform()->SetRotation(m_aru->transform()->GetRotation() + 5.0f);
+	}
+
+	if (Input::IsKeyDown(VK_4))
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			spineObject = NewObject<gameObject>(L"spineObject");
+			SpineScript* spine = spineObject->AddComponent<SpineScript>();
+			spine->LoadData(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
+		}
+	}
+
+	if (Input::IsKeyDown(VK_G))
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			GetWorld()->RemoveObjectByName(L"spineObject");
+		}
 	}
 }
 

@@ -9,10 +9,10 @@ class TColor
 public:
 	T r, g, b, a;
 
-	// 기본 생성자 (투명 검정색)
-	TColor() : r(0), g(0), b(0), a(0) {}
+	// 기본 생성자 (반투명 검정색)
+	TColor() : r(0), g(0), b(0), a(255) {}
 
-	// RGB 생성자 (알파 기본값: 0)
+	// RGB 생성자 (알파 기본값: 255)
 	TColor(T _r, T _g, T _b, T _a = 0) : r(_r), g(_g), b(_b), a(_a) {}
 
 	// 단일 값 생성자 (그레이스케일)
@@ -74,13 +74,13 @@ public:
 		return (v < lo) ? lo : (hi < v) ? hi : v;
 	}
 
-	// 클램핑 함수 (0~1 범위 제한)
+	// 클램핑 함수 (0~255 범위 제한)
 	TColor Clamp() const {
 		return TColor(
-			clamp(r, T(0), T(1)),
-			clamp(g, T(0), T(1)),
-			clamp(b, T(0), T(1)),
-			clamp(a, T(0), T(1))
+			clamp(r, T(0), T(255)),
+			clamp(g, T(0), T(255)),
+			clamp(b, T(0), T(255)),
+			clamp(a, T(0), T(255))
 		);
 	}
 
@@ -115,28 +115,28 @@ public:
 	static const TColor<T> Transparent;
 };
 // static 멤버 정의
-template<typename T> const TColor<T> TColor<T>::Red = TColor<T>(1, 0, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Green = TColor<T>(0, 1, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Blue = TColor<T>(0, 0, 1, 1);
-template<typename T> const TColor<T> TColor<T>::White = TColor<T>(1, 1, 1, 1);
-template<typename T> const TColor<T> TColor<T>::Black = TColor<T>(0, 0, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Yellow = TColor<T>(1, 1, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Cyan = TColor<T>(0, 1, 1, 1);
-template<typename T> const TColor<T> TColor<T>::Magenta = TColor<T>(1, 0, 1, 1);
-template<typename T> const TColor<T> TColor<T>::Gray = TColor<T>(0.5, 0.5, 0.5, 1);
-template<typename T> const TColor<T> TColor<T>::LightGray = TColor<T>(0.75, 0.75, 0.75, 1);
-template<typename T> const TColor<T> TColor<T>::DarkGray = TColor<T>(0.25, 0.25, 0.25, 1);
-template<typename T> const TColor<T> TColor<T>::Orange = TColor<T>(1, 0.5, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Pink = TColor<T>(1, 0.75, 0.8, 1);
-template<typename T> const TColor<T> TColor<T>::Purple = TColor<T>(0.5, 0, 0.5, 1);
-template<typename T> const TColor<T> TColor<T>::Brown = TColor<T>(0.6, 0.3, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Lime = TColor<T>(0.75, 1, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Navy = TColor<T>(0, 0, 0.5, 1);
-template<typename T> const TColor<T> TColor<T>::Teal = TColor<T>(0, 0.5, 0.5, 1);
-template<typename T> const TColor<T> TColor<T>::Olive = TColor<T>(0.5, 0.5, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Maroon = TColor<T>(0.5, 0, 0, 1);
-template<typename T> const TColor<T> TColor<T>::Silver = TColor<T>(0.75, 0.75, 0.75, 1);
-template<typename T> const TColor<T> TColor<T>::Gold = TColor<T>(1, 0.84, 0, 1);
+template<typename T> const TColor<T> TColor<T>::Red = TColor<T>(255, 0, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Green = TColor<T>(0, 255, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Blue = TColor<T>(0, 0, 255, 255);
+template<typename T> const TColor<T> TColor<T>::White = TColor<T>(255, 255, 255, 255);
+template<typename T> const TColor<T> TColor<T>::Black = TColor<T>(0, 0, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Yellow = TColor<T>(255, 255, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Cyan = TColor<T>(0, 255, 255, 255);
+template<typename T> const TColor<T> TColor<T>::Magenta = TColor<T>(255, 0, 255, 255);
+template<typename T> const TColor<T> TColor<T>::Gray = TColor<T>(128, 128, 128, 255);
+template<typename T> const TColor<T> TColor<T>::LightGray = TColor<T>(191, 191, 191, 255);
+template<typename T> const TColor<T> TColor<T>::DarkGray = TColor<T>(64, 64, 64, 255);
+template<typename T> const TColor<T> TColor<T>::Orange = TColor<T>(255, 128, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Pink = TColor<T>(255, 191, 204, 255);
+template<typename T> const TColor<T> TColor<T>::Purple = TColor<T>(128, 0, 128, 255);
+template<typename T> const TColor<T> TColor<T>::Brown = TColor<T>(153, 77, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Lime = TColor<T>(191, 255, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Navy = TColor<T>(0, 0, 128, 255);
+template<typename T> const TColor<T> TColor<T>::Teal = TColor<T>(0, 128, 128, 255);
+template<typename T> const TColor<T> TColor<T>::Olive = TColor<T>(128, 128, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Maroon = TColor<T>(128, 0, 0, 255);
+template<typename T> const TColor<T> TColor<T>::Silver = TColor<T>(191, 191, 191, 255);
+template<typename T> const TColor<T> TColor<T>::Gold = TColor<T>(255, 214, 0, 255);
 template<typename T> const TColor<T> TColor<T>::Transparent = TColor<T>(0, 0, 0, 0);
 
-using FColor = TColor<float>;
+using FColor = TColor<uint8_t>;

@@ -14,7 +14,6 @@ public:
 	void Update(const float& deltaSeconds) override;
 private:
 	WeakObjectPtr<SkewTransform> playerST;
-	SkewTransform* ownerST;
 	Camera* camera;
 
 	float xPos{0};

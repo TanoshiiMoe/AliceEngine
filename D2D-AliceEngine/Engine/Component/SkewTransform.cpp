@@ -4,12 +4,7 @@
 #include <TileMap/TileMapComponent.h>
 #include "Define/Define.h"
 #include <System/ScriptSystem.h>
-
-
-void SkewTransform::SetClamp(float minY /*= 0.0f*/, float maxY /*= 0.0f*/)
-{
-	clamp = std::make_pair(minY, maxY);
-}
+#include "Object/gameObject.h"
 
 const FVector2 SkewTransform::GetOffset()
 {
@@ -21,17 +16,7 @@ void SkewTransform::Initialize()
 	REGISTER_SCRIPT_METHOD(Awake);
 	REGISTER_SCRIPT_METHOD(OnStart);
 
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_PostPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-		{
-			if (auto sp = weak.lock())
-			{
-				sp->Update(dt);
-			}
-		}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
 }
 
 void SkewTransform::OnStart()
@@ -39,7 +24,7 @@ void SkewTransform::OnStart()
 	__super::OnStart();
 
 	if (!owner) {
-		OutputDebugStringW(L"SkewTransform 컴포넌트의 owner가 없습니다!!!!");
+		OutputDebugStringW(L"SkewTransform 컴포넌트의 owner가 없습니다!!!!\n");
 		return;
 	}
 		
@@ -53,23 +38,28 @@ void SkewTransform::Update(const float& deltaSeconds)
 	if (!renderTransform)
 		return;
 
-	skewDeg = GetSkew();
-	
 	// 오프셋 안한 트랜스폼 저장하기
 	realPos = renderTransform->GetPosition() - offset;
 
-	// 원래대로 돌려놓기
-	renderTransform->AddPosition(-offset.x, -offset.y);
+	if (!Math::Approximately(prevzPos, zPos)) {
 
-	float rad = Math::Deg2Rad(skewDeg);
+		// prevPos에 저장하기
+		prevzPos = zPos;
 
-	offset.x = -std::sin(rad) * zPos;
-	offset.y = std::cos(rad) * zPos;
+		skewDeg = GetSkew();
 
-	// 트랜스폼 적용하기
-	renderTransform->AddPosition(offset.x, offset.y);
+		// 원래대로 돌려놓기
+		renderTransform->AddPosition(-offset.x, -offset.y);
 
-	//renderTransform->SetPosition(transform.GetPosition() + FVector2(GetOffsetX(), 0.0f));
+		float rad = Math::Deg2Rad(skewDeg);
+
+		offset.x = -std::sin(rad) * zPos;
+		offset.y = std::cos(rad) * zPos;
+
+		// 트랜스폼 적용하기
+		renderTransform->AddPosition(offset.x, offset.y);
+	}
+
 }
 
 float SkewTransform::GetSkew()
@@ -77,6 +67,8 @@ float SkewTransform::GetSkew()
 	if (groundTile)
 		return groundTile->GetComponent<TileMapComponent>()->skewAngle.x;
 	
-	OutputDebugStringW(L"SkewTransform 컴포넌트에 groundTile 오브젝트가 등록되지 않았습니다!!");
+	std::wstring message = owner->GetName() + L" : SkewTransform 컴포넌트에 groundTile 오브젝트가 등록되지 않았습니다!!!\n";
+
+	OutputDebugStringW(message.c_str());
 	return 0.0f;
 }

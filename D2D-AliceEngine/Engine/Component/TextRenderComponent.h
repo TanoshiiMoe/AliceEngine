@@ -54,6 +54,7 @@ public:
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
 	void SetFont(const std::wstring& _fontName, const std::wstring& _fontLocale);
+	void SetFontFromFile(const std::wstring& filePath);
 	void SetIgnoreCameraTransform(bool bIgnore);
 
 public:
@@ -67,6 +68,8 @@ public:
 	DWRITE_TEXT_METRICS m_metrics{};
 	bool m_metricsDirty = true;
 
+	ETextSource m_eTextSource = ETextSource::System;
+	std::wstring m_filePath;
 private:
 	bool bIgnoreCameraTransform = false;
 };

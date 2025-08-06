@@ -171,6 +171,16 @@ FVector2 gameObject::GetScale()
 	return FVector2(1.0f, 1.0f);
 }
 
+FVector2 gameObject::GetScaleInv()
+{
+	if (auto transformComp = m_transformComponent.lock())
+	{
+		FVector2 scale = transformComp->GetScale();
+		return FVector2(1/scale.x, 1/scale.y);
+	}
+	return FVector2(1.0f, 1.0f);
+}
+
 void gameObject::Update()
 {
 

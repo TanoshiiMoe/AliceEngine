@@ -15,22 +15,27 @@ void CameraMover::Initialize()
 
 void CameraMover::Awake()
 {
-	ownerST = owner->AddComponent<SkewTransform>();
 }
 
 void CameraMover::OnStart()
 {
 	//owner->AddComponent<CameraController>();
-	// ÇÃ·¹ÀÌ¾î Ã£¾Æ¼­ ³Ö±â
+	// í”Œë ˆì´ì–´ ì°¾ì•„ì„œ ë„£ê¸°
 	WeakObjectPtr<gameObject> player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
 
 	FVector2 initPos;
 
-	camera = SceneManager::GetInstance().GetCamera();
+	camera = GetCamera();
 
 	if (player) {
 		initPos = player->transform()->GetPosition();
 		playerST = player->GetComponent<SkewTransform>();
+
+		player->RemoveFromParent();
+		player->AddChildTransform(&GetCamera()->relativeTransform);
+		GetCamera()->SetRelativeScale(player->GetScaleInv());
+		GetCamera()->SetRelativePosition(FVector2(0, 0));
+		GetCamera()->RemoveFromParent();
 	}
 
 	xPos = initPos.x;
@@ -52,15 +57,15 @@ void CameraMover::Update(const float& dt)
 	if (!playerST) return;
 
 	FVector2 targetPos = playerST->GetRealPos();
-	FVector2 cameraPos = camera->GetPosition();  // camera´Â ÀÌ ½ºÅ©¸³Æ®ÀÇ ownerÀÓ
+	FVector2 cameraPos = camera->GetPosition();  // cameraëŠ” ì´ ìŠ¤í¬ë¦½íŠ¸ì˜ ownerì„
 
 	FVector2 delta = targetPos - cameraPos;
 
-	// deadZone ¾È¿¡ ÀÖÀ¸¸é ¿òÁ÷ÀÌÁö ¾ÊÀ½
+	// deadZone ì•ˆì— ìˆìœ¼ë©´ ì›€ì§ì´ì§€ ì•ŠìŒ
 	if (fabs(delta.x) < deadZoneX) delta.x = 0.0f;
 	if (fabs(delta.y) < deadZoneY) delta.y = 0.0f;
 
-	// ´À¸®°Ô µû¶ó¿À±â (¼±Çü º¸°£ ¹æ½Ä)
+	// ëŠë¦¬ê²Œ ë”°ë¼ì˜¤ê¸° (ì„ í˜• ë³´ê°„ ë°©ì‹)
 	FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
 	camera->SetRelativePosition(targetPos);
 }

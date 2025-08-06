@@ -12,7 +12,6 @@ public:
 
 	float zPos = 0.0f;
 	
-	void SetClamp(float minZ = 0.0f, float maxZ = 0.0f);
 	const FVector2 GetOffset();
 	const FVector2 GetRealPos() { return realPos; }
 
@@ -26,6 +25,7 @@ private:
 	FVector2 offset = { 0.0f, 0.0f };
 	FVector2 realPos = { 0.0f, 0.0f };
 	float skewDeg = 0.0f;
+	float prevzPos = -21359786.0f;
 
 	float GetSkew();
 };

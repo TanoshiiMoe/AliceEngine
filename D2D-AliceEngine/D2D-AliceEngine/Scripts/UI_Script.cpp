@@ -76,6 +76,7 @@ void UI_Script::OnStart()
 
 	m_UI_HUD = GetWorld()->NewObject<gameObject>(L"HUD");
 	auto HUD = m_UI_HUD->AddComponent<SpriteRenderer>();
+	GetCamera()->AddChildObject(m_UI_HUD);
 	HUD->LoadData(L"UI\\UI_Time.png");
 	HUD->SetDrawType(EDrawType::ScreenSpace);
 	FVector2 HUDSize = HUD->GetRelativeSize();
@@ -85,6 +86,7 @@ void UI_Script::OnStart()
 	HUD->m_layer = 50;
 
 	m_UI_PlayerHP = GetWorld()->NewObject<gameObject>(L"HP");
+	GetCamera()->AddChildObject(m_UI_PlayerHP);
 	auto HP = m_UI_PlayerHP->AddComponent<SpriteRenderer>();
 	HP->LoadData(L"UI\\UI_1_HP.png");
 	HP->SetDrawType(EDrawType::ScreenSpace);
@@ -95,6 +97,7 @@ void UI_Script::OnStart()
 	HP->m_layer = 51;
 
 	m_UI_Dashboard = GetWorld()->NewObject<gameObject>(L"Dashboard");
+	GetCamera()->AddChildObject(m_UI_Dashboard);
 	auto Dashboard = m_UI_Dashboard->AddComponent<SpriteRenderer>();
 	Dashboard->LoadData(L"UI\\UI_2_Speed+Battery_Background.png");
 	Dashboard->SetDrawType(EDrawType::ScreenSpace);
@@ -105,9 +108,11 @@ void UI_Script::OnStart()
 	Dashboard->m_layer = 50;
 
 	m_UI_BoardText = GetWorld()->NewObject<gameObject>(L"BoardText");
+	GetCamera()->AddChildObject(m_UI_BoardText);
 	auto BoardText = m_UI_BoardText->AddComponent<TextRenderComponent>();
 	BoardText->SetFontSize(30.0);
 	BoardText->SetColor(FColor(0, 234, 255, 1));
+	BoardText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	BoardText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	BoardText->SetDrawType(EDrawType::ScreenSpace);
 	FVector2 BoardTextSize = BoardText->GetRelativeSize();
@@ -117,6 +122,7 @@ void UI_Script::OnStart()
 	m_accel = BoardText;
 
 	m_UI_currSpeed = GetWorld()->NewObject<gameObject>(L"Speed");
+	GetCamera()->AddChildObject(m_UI_currSpeed);
 	auto Speed = m_UI_currSpeed->AddComponent<SpriteRenderer>();
 	Speed->LoadData(L"UI\\UI_2_Speed.png");
 	Speed->SetDrawType(EDrawType::ScreenSpace);
@@ -127,10 +133,12 @@ void UI_Script::OnStart()
 	Speed->m_layer = 51;
 
 	m_UI_SpeedText = GetWorld()->NewObject<gameObject>(L"SpeedText");
+	GetCamera()->AddChildObject(m_UI_SpeedText);
 	auto SpeedText = m_UI_SpeedText->AddComponent<TextRenderComponent>();
 	SpeedText->SetText(L"");
 	SpeedText->SetFontSize(60.0);
 	SpeedText->SetColor(FColor(0, 234, 255, 1));
+	SpeedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	SpeedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	SpeedText->SetDrawType(EDrawType::ScreenSpace);
 	SpeedText->SetRelativePosition(
@@ -139,6 +147,7 @@ void UI_Script::OnStart()
 	m_RealTime = SpeedText;
 
 	m_UI_Battery = GetWorld()->NewObject<gameObject>(L"Battery");
+	GetCamera()->AddChildObject(m_UI_Battery);
 	auto Battery = m_UI_Battery->AddComponent<SpriteRenderer>();
 	Battery->LoadData(L"UI\\UI_2_Battery.png");
 	Battery->SetDrawType(EDrawType::ScreenSpace);
@@ -150,6 +159,7 @@ void UI_Script::OnStart()
 
 	// Button
 	m_UI_Pause = GetWorld()->NewObject<gameObject>(L"Pause");
+	GetCamera()->AddChildObject(m_UI_Pause);
 	auto Pause = m_UI_Pause->AddComponent<ButtonComponent>();
 	Pause->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
 	Pause->LoadData(Define::EButtonState::Hover, L"UI\\UI_Pause.png");

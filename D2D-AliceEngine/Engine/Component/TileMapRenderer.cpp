@@ -8,6 +8,7 @@
 
 TileMapRenderer::TileMapRenderer()
 {
+	drawType = Define::EDrawType::WorldSpace;
 }
 
 TileMapRenderer::~TileMapRenderer()

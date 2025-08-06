@@ -127,6 +127,7 @@ public:
 	FVector2 GetPosition() const;
 	float GetRotation();
 	FVector2 GetScale();
+	FVector2 GetScaleInv();
 
 public:
 	WeakObjectPtr<TransformComponent> m_transformComponent;

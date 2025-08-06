@@ -14,7 +14,7 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_EndPhysics);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
 }
 
 void TransformComponent::Release()
@@ -26,6 +26,7 @@ void TransformComponent::Release()
 			child.lock()->parent.reset();
 		}
 	}
+	UpdateTaskManager::GetInstance().Dequeue(WeakFromThis<ITickable>());
 }
 
 void TransformComponent::Update(const float& deltaSeconds)
@@ -33,7 +34,7 @@ void TransformComponent::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	D2D1::Matrix3x2F mat;
 
-	if (parent.lock())
+	if (!parent.expired())
 	{
 		mat = m_localTransform.ToMatrix() * parent.lock()->m_worldTransform.ToMatrix();
 	}
@@ -46,9 +47,9 @@ void TransformComponent::Update(const float& deltaSeconds)
 
 	for (auto child : children)
 	{
-		if (child.lock())
+		if (!child.expired())
 		{
-			child.lock()->Update(deltaSeconds);
+			child->Update(deltaSeconds);
 		}
 	}
 }
@@ -196,9 +197,9 @@ void TransformComponent::SetDirty()
 {
 	m_localTransform.dirty = true;
 	m_worldTransform.dirty = true;
-	for (auto& child : children)
+	for (auto child : children)
 	{
-		if (auto c = child.lock())
-			c->SetDirty();
+		if (!child.expired())
+			child->SetDirty();
 	}
 }

@@ -163,6 +163,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scene\KangScene\KangScene.h" />
+    <ClInclude Include="Scripts\Enemy\Car.h" />
     <ClInclude Include="Scripts\Player\PlayerManager.h" />
     <ClInclude Include="Prefab\PlayerBike.h" />
     <ClInclude Include="Prefab\EnemyBike.h" />
@@ -203,8 +205,11 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
+    <ClInclude Include="Scripts\TitleAudioScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scene\KangScene\KangScene.cpp" />
+    <ClCompile Include="Scripts\Enemy\Car.cpp" />
     <ClCompile Include="Scripts\Player\PlayerManager.cpp" />
     <ClCompile Include="Prefab\PlayerBike.cpp" />
     <ClCompile Include="Prefab\EnemyBike.cpp" />
@@ -246,6 +251,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Spine2D\SpineRenderer.cpp" />
     <ClCompile Include="Scene\SpineScene.cpp" />
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
+    <ClCompile Include="Scripts\TitleAudioScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

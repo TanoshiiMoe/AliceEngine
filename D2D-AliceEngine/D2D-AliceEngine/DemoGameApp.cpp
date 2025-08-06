@@ -8,8 +8,9 @@
 #include <Manager/SceneManager.h>
 #include <Manager/TimerManager.h>
 
-/*-----ÀÌÁ¦ ÀÎ°ÔÀÓ¾ÀÀ» Ãß°¡ÇÕ´Ï´Ù-----*/
+/*-----ï¿½ï¿½ï¿½ï¿½ ï¿½Î°ï¿½ï¿½Ó¾ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Õ´Ï´ï¿½-----*/
 #include "Scene/TitleScene.h"
+#include <Scene/KangScene/KangScene.h>
 
 DemoGameApp::DemoGameApp()
 {
@@ -31,13 +32,14 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene4>(L"HiroScene");
 	SceneManager::AddScene<TitleScene>(L"TitleScene");
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
-	SceneManager::ChangeScene(L"TitleScene");
+	SceneManager::AddScene<KangScene>(L"KangTest");
+	SceneManager::ChangeScene(L"KangTest");
 }
 
 void DemoGameApp::Run()
 {
 	__super::Run();
-	// ¸Þ½ÃÁö ·çÇÁ
+	// ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	MSG msg = {};
 	while (msg.message != WM_QUIT)
 	{

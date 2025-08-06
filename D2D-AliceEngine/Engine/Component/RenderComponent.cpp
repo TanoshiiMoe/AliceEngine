@@ -51,18 +51,22 @@ void RenderComponent::Render()
 	if (!context || !camera) return;
 	view = D2D1::Matrix3x2F::Identity();
 	D2D1::Matrix3x2F unity = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
+	D2D1::Matrix3x2F flipY = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
+	D2D1::Matrix3x2F screen = D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
 	D2D1::Matrix3x2F world = GetOwnerTransform() ? relativeTransform.m_worldTransform.ToMatrix() : D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F cameraInv = camera->relativeTransform.m_worldTransform.ToMatrix();
+	cameraInv.Invert();
 
 	if (drawType == Define::EDrawType::WorldSpace)
 	{
-		D2D1::Matrix3x2F cameraInv = camera->relativeTransform.m_worldTransform.ToMatrix();
-		cameraInv.Invert();
-		view = view * unity * world * cameraInv;
-		view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
+		//view = view * unity * world * cameraInv;
+		//view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
+		// Unity 좌표계 * Owner의 월드 위치 * 카메라 변환 *  화면 중심 보정
+		view = flipY * world * cameraInv * flipY * screen;
 	}
 	else if (drawType == Define::EDrawType::ScreenSpace)
 	{
-		view = view * world;
+		view = world * cameraInv;
 	}
 
 	if (bFlip)

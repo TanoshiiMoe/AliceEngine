@@ -11,7 +11,7 @@ class gameObject;
 class Camera : public UObject
 {
 public:
-	Camera() {};
+	Camera();
 	~Camera() {};
 
 	void Initialize();
@@ -69,5 +69,6 @@ public:
 	float fieldOfView = 1.0f;
 	gameObject* owner = nullptr;
 	TransformComponent relativeTransform;
+	bool bDebug = true;
 };
 
