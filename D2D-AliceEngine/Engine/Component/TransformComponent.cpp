@@ -14,7 +14,7 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
 }
 
 void TransformComponent::Release()
@@ -26,6 +26,7 @@ void TransformComponent::Release()
 			child.lock()->parent.reset();
 		}
 	}
+	UpdateTaskManager::GetInstance().Dequeue(WeakFromThis<ITickable>());
 }
 
 void TransformComponent::Update(const float& deltaSeconds)

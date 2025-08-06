@@ -112,6 +112,12 @@ namespace Define
 	{
 		D2D, Spine2D
 	};
+
+	enum class ETextSource
+	{
+		System,	// 제어판
+		File	// 특정 경로
+	};
 };
 
 #define VK_A 0x41  // 'A'

@@ -6,13 +6,16 @@
 
 Camera::Camera()
 {
-	relativeTransform.Initialize();
 }
 
 void Camera::Initialize()
 {
-	if (owner) owner->transform()->AddChildObject(&relativeTransform);
+	ClearOwner();
+	RemoveFromParent();
+	relativeTransform.Release();
+	relativeTransform.Initialize();
 	relativeTransform.SetPosition(0, 0);
+	relativeTransform.SetWorldPosition(FVector2(0, 0));
 }
 
 void Camera::Update()
@@ -28,8 +31,7 @@ void Camera::Update()
 
 void Camera::Release()
 {
-	ClearOwner();
-	RemoveFromParent();
+	relativeTransform.Release();
 }
 
 FVector2 Camera::GetScale()

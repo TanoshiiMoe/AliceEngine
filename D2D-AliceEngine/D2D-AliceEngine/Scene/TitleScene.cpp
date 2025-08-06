@@ -3,6 +3,8 @@
 #include "Scripts/TitleUIScript.h"
 #include <Scripts/Widget/TitleWidgetScript.h>
 #include <Component/SpriteRenderer.h>
+#include <Component/AudioComponent.h>
+#include <Scripts/TitleAudioScript.h>
 
 void TitleScene::Initialize()
 {
@@ -23,6 +25,9 @@ void TitleScene::OnEnter()
 {
 	__super::OnEnter();
 	m_cameraController = NewObject<gameObject>(L"Camera");
+
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<TitleAudioScript>();
 
 	m_UI = NewObject<gameObject>(L"UI");
 	//m_UI->AddComponent<TitleUIScript>();
