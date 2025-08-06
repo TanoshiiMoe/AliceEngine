@@ -8,22 +8,24 @@
 #include "Manager/SceneManager.h"
 #include "Scripts/Player/PlayerManager.h"
 #include "System/ScriptSystem.h"
+#include "Animation/AnimationController.h"
+#include "Animation/AnimatorInstance.h"
+#include "Component/Collider.h"
+#include "Effect/Prism.h"
 
 void PlayerBike::Initialize()
 {
 	__super::Initialize();
 
-	REGISTER_SCRIPT_METHOD(OnStart);
-}
-
-void PlayerBike::OnStart()
-{
 	// 여기에 컴포넌트 추가	
-	owner->AddComponent<Player>();
+	owner->AddComponent<AnimatorInstance>();
 	owner->AddComponent<BackGroundRender>();
 	owner->AddComponent<SkewTransform>();
 	owner->AddComponent<BikeMovementScript>();
+	owner->AddComponent<Collider>();
 	owner->AddComponent<InputComponent>();
+	owner->AddComponent<Prism>(10, 0.1f);
+	
 
 	// 게임 스크립트 컴포넌트
 	owner->AddComponent<PlayerManager>();

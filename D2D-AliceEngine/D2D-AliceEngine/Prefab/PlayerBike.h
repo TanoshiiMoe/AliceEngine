@@ -4,7 +4,5 @@ class PlayerBike : public ScriptComponent
 {
 public:
 	void Initialize() override;
-
-	void OnStart() override;
 };
 
