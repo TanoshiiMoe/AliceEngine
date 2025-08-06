@@ -10,6 +10,7 @@
 #include <Math/Transform.h>
 #include <Component/TransformComponent.h>
 #include <Helpers/CoordHelper.h>
+#include <Helpers/FileHelper.h>
 
 TextRenderComponent::TextRenderComponent()
 {
@@ -95,16 +96,43 @@ void TextRenderComponent::InitializeFormat()
 {
 	IDWriteFactory* m_dWriteFactory = D2DRenderManager::GetInstance().m_dWriteFactory.Get();
 
-	m_dWriteFactory->CreateTextFormat(
-		m_font.c_str(), // FontName    제어판-모든제어판-항목-글꼴-클릭 으로 글꼴이름 확인가능
-		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		m_fontSize,
-		m_locale.c_str(), //locale
-		&m_dWriteTextFormat
-	);
+	if (m_eTextSource == ETextSource::System)
+	{
+		m_dWriteFactory->CreateTextFormat(
+			m_font.c_str(), // FontName    제어판-모든제어판-항목-글꼴-클릭 으로 글꼴이름 확인가능
+			NULL,
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_fontSize,
+			m_locale.c_str(), //locale
+			&m_dWriteTextFormat
+		);
+	}
+	else
+	{
+		ComPtr<IDWriteFontFile> fontFile;
+		HRESULT hr = m_dWriteFactory->CreateFontFileReference(
+			m_filePath.c_str(),
+			nullptr,
+			&fontFile
+		);
+		if (FAILED(hr)) {
+			// 에러 처리
+			return;
+		}
+
+		m_dWriteFactory->CreateTextFormat(
+			m_font.c_str(), // 폰트 이름을 실제 폰트 파일 이름과 맞춰줘야 함
+			nullptr,
+			DWRITE_FONT_WEIGHT_NORMAL,
+			DWRITE_FONT_STYLE_NORMAL,
+			DWRITE_FONT_STRETCH_NORMAL,
+			m_fontSize,
+			m_locale.c_str(),
+			&m_dWriteTextFormat
+		);
+	}
 }
 
 void TextRenderComponent::InitializeColor()
@@ -224,6 +252,12 @@ void TextRenderComponent::SetFont(const std::wstring& _fontName, const std::wstr
 	m_font = _fontName;
 	m_locale = _fontLocale;
 	InitializeFormat();
+}
+
+void TextRenderComponent::SetFontFromFile(const std::wstring& filePath)
+{
+	m_filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath);
+	m_eTextSource = ETextSource::File;
 }
 
 void TextRenderComponent::SetIgnoreCameraTransform(bool bIgnore)

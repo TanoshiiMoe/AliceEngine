@@ -157,8 +157,8 @@
     <ClInclude Include="Resource.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\GameManage\SpeedManager.h">
-      <Filter>GameManage</Filter>
+    <ClInclude Include="TitleAudioScript.h">
+      <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,8 +267,6 @@
     <ClCompile Include="Scripts\Camera\CameraMover.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\GameManage\SpeedManager.cpp">
-      <Filter>GameManage</Filter>
-    </ClCompile>
+    <ClCompile Include="TitleAudioScript.cpp" />
   </ItemGroup>
 </Project>
