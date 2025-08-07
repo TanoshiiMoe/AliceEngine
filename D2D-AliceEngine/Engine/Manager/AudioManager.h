@@ -45,10 +45,14 @@ public:
 	void StopSound(FMOD::Channel* channel);
 
 	float GetMusicTime(FMOD::Channel* channel);
+
+	void SetMasterVolume(float volume);
+	float GetMasterVolume();
 	
 	std::wstring fileDirPath; // 오디오 파일 경로
 
 private:
 	FMOD::System* m_System = nullptr;
+	FMOD::ChannelGroup* m_MasterGroup = nullptr;
 };
 

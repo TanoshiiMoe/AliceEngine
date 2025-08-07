@@ -8,6 +8,7 @@
 */
 class Transform;
 class gameObject;
+class RenderComponent;
 class Camera : public UObject
 {
 public:
@@ -49,6 +50,7 @@ public:
 
 	// 부모-자식 관계 관리 함수들
 	void AddChildObject(gameObject* obj);
+	void AddChildObject(RenderComponent* obj);
 	void RemoveFromParent();
 
 	D2D1_POINT_2F TransformPoint(const D2D1_MATRIX_3X2_F& mat, const D2D1_POINT_2F& pt);

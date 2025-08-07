@@ -72,6 +72,14 @@ namespace Input
 		return worldMousePos;
 	}
 
+	FVector2 GetMouseWorldPositionInCanvas()
+	{
+		FVector2 mousePos = GetMousePosition();
+		FVector2 cameraWorldPos = SceneManager::GetInstance().GetCamera()->GetPosition();
+		FVector2 worldMousePos = cameraWorldPos + mousePos;
+		return worldMousePos;
+	}
+
 	// 아무 키를 눌렀을 때
 	bool AnyKeyPressed()
 	{

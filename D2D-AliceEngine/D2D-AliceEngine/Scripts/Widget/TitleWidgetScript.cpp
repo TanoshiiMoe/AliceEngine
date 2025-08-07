@@ -46,27 +46,59 @@ void TitleWidgetScript::OnStart()
 
 	GetCamera()->AddChildObject(m_owner);
 
+	float guargeSize = 0.7f;
+
 	auto background = m_owner->AddComponent<SpriteRenderer>();
 
 	auto startText = m_owner->AddComponent<TextRenderComponent>();
+	auto startButton = m_owner->AddComponent<ButtonComponent>();
+	//startButton->RemoveFromParent();
+	//GetCamera()->AddChildObject(startButton);
 
 	auto continueText = m_owner->AddComponent<TextRenderComponent>();
 	auto continueButton = m_owner->AddComponent<ButtonComponent>();
 	auto continueTabText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto optionText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionButton = m_owner->AddComponent<ButtonComponent>();
+	auto optionTabText = m_owner->AddComponent<TextRenderComponent>();
+
 	auto staffText = m_owner->AddComponent<TextRenderComponent>();
+	auto staffButton = m_owner->AddComponent<ButtonComponent>();
+	auto staffTabText = m_owner->AddComponent<TextRenderComponent>();
+	auto staffNameText = m_owner->AddComponent<TextRenderComponent>();
+
 	auto quitText = m_owner->AddComponent<TextRenderComponent>();
+	auto quitButton = m_owner->AddComponent<ButtonComponent>();
+
 	auto closeText = m_owner->AddComponent<TextRenderComponent>();
+	auto closeButton = m_owner->AddComponent<ButtonComponent>();
 
 	auto mainTitle = m_owner->AddComponent<TextRenderComponent>();
 	auto subTitle = m_owner->AddComponent<TextRenderComponent>();
 
-	auto startButton = m_owner->AddComponent<ButtonComponent>();
-	auto optionButton = m_owner->AddComponent<ButtonComponent>();
-	auto staffButton = m_owner->AddComponent<ButtonComponent>();
-	auto quitButton = m_owner->AddComponent<ButtonComponent>();
-	auto closeButton = m_owner->AddComponent<ButtonComponent>();
+	auto soundPlusButton = m_owner->AddComponent<ButtonComponent>();
+	auto soundMinusButton = m_owner->AddComponent<ButtonComponent>();
+
+	auto obj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
+	if (!obj) return;
+	auto bgm = obj->GetComponent<AudioComponent>();
+
+	auto volumeGuarge = m_owner->AddComponent<SpriteRenderer>();
+	volumeGuarge->LoadData(L"UI\\UI_Volume.png");
+	volumeGuarge->m_layer = -1000;
+	volumeGuarge->SetRelativeScale(0.7);
+	volumeGuarge->SetDrawType(EDrawType::WorldSpace);
+	volumeGuarge->SetRelativePosition(FVector2(-960, -550));
+
+	auto volumeValue = m_owner->AddComponent<SpriteRenderer>();
+	volumeValue->LoadData(L"UI\\Volume_Guarge.png");
+	volumeValue->m_layer = -1000;
+	volumeValue->SetDrawType(EDrawType::WorldSpace);
+	float finalPos = -SCREEN_WIDTH / 2.0f
+		+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume() - 1);
+	volumeValue->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
+	volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
 
 	auto uiSound = m_owner->AddComponent<AudioComponent>();
 	uiSound->Load(L"UI_interact_sound.wav", AudioMode::Memory);
@@ -77,16 +109,17 @@ void TitleWidgetScript::OnStart()
 	tutorial->SetRelativePosition(FVector2(-960, -550));
 
 	auto PopupTab = m_owner->AddComponent<SpriteRenderer>();
-	PopupTab->LoadData(L"UI\\Continue.png");
+	PopupTab->LoadData(L"UI\\PopupTab.png");
 	PopupTab->m_layer = -1000;
 	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f));
 
 	if (!startText || !startButton) return;
-	if (!continueText || !continueButton) return;
-	if (!optionText || !optionButton) return;
-	if (!staffText || !staffButton) return;
+	if (!continueText || !continueButton || !continueTabText) return;
+	if (!optionText || !optionButton || !optionTabText) return;
+	if (!staffText || !staffButton || !staffTabText) return;
 	if (!quitText || !quitButton) return;
 	if (!tutorial || !closeText || !closeButton) return;
+	if (!uiSound || !PopupTab) return;
 
 	float buttonBasePos = 400;
 
@@ -99,7 +132,6 @@ void TitleWidgetScript::OnStart()
 	startButton->SetRelativePosition(CoordHelper::RatioCoordToScreen(startButtonSize, FVector2(1, 0))
 		+ FVector2(buttonBasePos, -150));
 	startButton->SetRelativeScale(FVector2(1, 1));
-	startButton->SetRelativeRotation(0);
 	startButton->m_layer = 300;
 
 	// ======================== continueButton
@@ -112,7 +144,6 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(continueButtonSize, FVector2(1, 0))
 		+ FVector2(buttonBasePos, 0));
 	continueButton->SetRelativeScale(FVector2(1, 1));
-	continueButton->SetRelativeRotation(0);
 	continueButton->m_layer = 500;
 
 	// ======================== optionButton
@@ -125,7 +156,6 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(optionButtonSize, FVector2(1, 0))
 		+ FVector2(buttonBasePos, 150));
 	optionButton->SetRelativeScale(FVector2(1, 1));
-	optionButton->SetRelativeRotation(0);
 	optionButton->m_layer = 500;
 
 	// ======================== staffButton
@@ -138,10 +168,10 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(staffButtonSize, FVector2(1, 0))
 		+ FVector2(buttonBasePos, 300));
 	staffButton->SetRelativeScale(FVector2(1, 1));
-	staffButton->SetRelativeRotation(0);
 	staffButton->m_layer = 500;
 
 	// ======================== quitButton
+	quitButton->SetTag(L"Button");
 	quitButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	quitButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
 	quitButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
@@ -161,8 +191,27 @@ void TitleWidgetScript::OnStart()
 	closeButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	closeButton->SetRelativePosition(FVector2(0,350));
 	closeButton->SetRelativeScale(FVector2(1, 1));
-	closeButton->SetRelativeRotation(0);
+	closeButton->SetActive(false);
 	closeButton->m_layer = -1000;
+
+	// ======================== soundButton
+	soundPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
+	soundPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_Pause.png");
+	soundPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_Pause.png");
+	soundPlusButton->LoadData(Define::EButtonState::Release, L"UI\\UI_Pause.png");
+	soundPlusButton->SetRelativePosition(FVector2(400, 0));
+	soundPlusButton->SetRelativeScale(FVector2(1, 1));
+	soundPlusButton->SetActive(false);
+	soundPlusButton->m_layer = -1000;
+
+	soundMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
+	soundMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_Pause.png");
+	soundMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_Pause.png");
+	soundMinusButton->LoadData(Define::EButtonState::Release, L"UI\\UI_Pause.png");
+	soundMinusButton->SetRelativePosition(FVector2(-400, 0));
+	soundMinusButton->SetRelativeScale(FVector2(1, 1));
+	soundMinusButton->SetActive(false);
+	soundMinusButton->m_layer = -1000;
 
 	// ======================== mainTitle
 	mainTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -217,6 +266,17 @@ void TitleWidgetScript::OnStart()
 	continueButton->AddChildComponent(continueText);
 
 	continueTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	continueTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	continueTabText->SetText(L"이어하기");
+	continueTabText->SetFontSize(70.0f);
+	continueTabText->SetColor(FColor(0, 234, 255, 255));
+	FVector2 continueTabTextRectSize = continueTabText->GetRelativeSize();
+	continueTabText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(continueTabTextRectSize, FVector2(-0.5, -0.5))
+		+ FVector2(0, -350)
+	);
+	continueTabText->SetRelativeRotation(0);
+	continueTabText->m_layer = -1000;
 
 	// ======================== optionText
 	optionText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -232,6 +292,19 @@ void TitleWidgetScript::OnStart()
 	optionText->RemoveFromParent();
 	optionButton->AddChildComponent(optionText);
 
+	optionTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabText->SetText(L"음량 조절");
+	optionTabText->SetFontSize(70.0f);
+	optionTabText->SetColor(FColor(0, 234, 255, 255));
+	FVector2 optionTabTextRectSize = optionTabText->GetRelativeSize();
+	optionTabText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabTextRectSize, FVector2(-0.5, -0.5))
+		+ FVector2(0, -350)
+	);
+	optionTabText->SetRelativeRotation(0);
+	optionTabText->m_layer = -1000;
+
 	// ======================== staffText
 	staffText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	staffText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
@@ -245,6 +318,40 @@ void TitleWidgetScript::OnStart()
 	staffText->m_layer = 501;
 	staffText->RemoveFromParent();
 	staffButton->AddChildComponent(staffText);
+
+	staffTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	staffTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	staffTabText->SetText(L"제작진");
+	staffTabText->SetFontSize(70.0f);
+	staffTabText->SetColor(FColor(0, 234, 255, 255));
+	FVector2 staffTabTextSize = staffTabText->GetRelativeSize();
+	staffTabText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(staffTabTextSize, FVector2(-0.5, -0.5))
+		+ FVector2(0, -350)
+	);
+	staffTabText->SetRelativeRotation(0);
+	staffTabText->m_layer = -1000;
+
+	staffNameText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	staffNameText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	staffNameText->SetText(
+		L"기획\n"
+		L"이유성 | 신소영\n"
+		L"\n"
+		L"아트\n"
+		L"강연주 | 민지인\n"
+		L"\n"
+		L"프로그래밍\n"
+		L"이창진 | 강성근 | 황태현\n"
+	);
+	staffNameText->SetFontSize(55.0f);
+	staffNameText->SetColor(FColor::Black);
+	FVector2 staffNameTextSize = staffNameText->GetRelativeSize();
+	staffNameText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(staffNameTextSize, FVector2(-0.5, -0.5))
+		+ FVector2(0, 50)
+	);
+	staffNameText->m_layer = -1000;
 
 	// ======================== quitText
 	quitText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -313,7 +420,7 @@ void TitleWidgetScript::OnStart()
 
 	continueButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText, PopupTab,
-		uiSound
+		uiSound, continueTabText
 	]()		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
@@ -334,13 +441,14 @@ void TitleWidgetScript::OnStart()
 			closeButton->SetActive(true);
 			closeText->m_layer = 504;
 
-			PopupTab->m_layer = 502;
+			continueTabText->m_layer = 503;
 
+			PopupTab->m_layer = 502;
 		});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		tutorial, startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
-		uiSound
+		uiSound, continueTabText, optionTabText, staffTabText, staffNameText, soundMinusButton, soundPlusButton, volumeValue, volumeGuarge
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -363,6 +471,19 @@ void TitleWidgetScript::OnStart()
 			closeButton->SetActive(false);
 			closeText->m_layer = -1000;
 
+			continueTabText->m_layer = -1000;
+			optionTabText->m_layer = -1000;
+			staffTabText->m_layer = -1000;
+			staffNameText->m_layer = -1000;
+
+			soundMinusButton->SetActive(false);
+			soundPlusButton->SetActive(false);
+			soundMinusButton->m_layer = -1000;
+			soundPlusButton->m_layer = -1000;
+
+			volumeValue->m_layer = -1000;
+			volumeGuarge->m_layer = -1000;
+
 			tutorial->m_layer = -1000;
 			tutorial->Stop();
 
@@ -371,7 +492,7 @@ void TitleWidgetScript::OnStart()
 
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		uiSound
+		uiSound, optionTabText, soundMinusButton, soundPlusButton, volumeValue, volumeGuarge
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -394,12 +515,21 @@ void TitleWidgetScript::OnStart()
 			closeButton->SetActive(true);
 			closeText->m_layer = 504;
 
+			optionTabText->m_layer = 503;
+			soundMinusButton->SetActive(true);
+			soundPlusButton->SetActive(true);
+			soundMinusButton->m_layer = 503;
+			soundPlusButton->m_layer = 503;
+
+			volumeValue->m_layer = 503;
+			volumeGuarge->m_layer = 504;
+
 			PopupTab->m_layer = 502;
 		});
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		uiSound
+		uiSound, staffTabText, staffNameText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -421,7 +551,35 @@ void TitleWidgetScript::OnStart()
 			closeButton->SetActive(true);
 			closeText->m_layer = 504;
 
+			staffTabText->m_layer = 503;
+			staffNameText->m_layer = 503;
+
 			PopupTab->m_layer = 502;
+		});
+
+	// bgmVolume
+	soundMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize]
+		{
+			bgm->AddVolume(-0.1f);
+
+			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
+
+			float finalPos = -SCREEN_WIDTH / 2.0f
+				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume() - 1);
+
+			volumeValue->SetRelativePosition(FVector2(finalPos,-SCREEN_HEIGHT / 2.0f -10));
+		});
+
+	soundPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize]
+		{
+			bgm->AddVolume(0.1f);
+
+			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
+
+			float finalPos = -SCREEN_WIDTH / 2.0f
+				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume() - 1);
+
+			volumeValue->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
 		});
 
 	quitButton->SetStateAction(Define::EButtonState::Pressed, []()
@@ -431,7 +589,9 @@ void TitleWidgetScript::OnStart()
 			
 			//uiSound->Play(0.45);
 			// Quit
-			PostQuitMessage(0);
+			//PostQuitMessage(0);
+			// 임시 씬 전환
+			SceneManager::ChangeScene(L"HiroScene");
 		});
 }
 
