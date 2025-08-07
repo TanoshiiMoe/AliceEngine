@@ -40,14 +40,14 @@ void Audio::OnStart()
 	m_bgm = m_owner->AddComponent<AudioComponent>();
 	if (m_bgm)
 	{
-		m_bgm->Load(L"Bg_music_tutorial.wav", AudioMode::StreamLoop);
+		m_bgm->LoadData(L"Bg_music_tutorial.wav", AudioMode::StreamLoop, SoundType::BGM);
 		m_bgm->Play();
 	}
 
 	m_ambience = m_owner->AddComponent<AudioComponent>();
 	if (m_ambience)
 	{
-		m_ambience->Load(L"BG_Ambience_Loop.wav", AudioMode::StreamLoop);
+		m_ambience->LoadData(L"BG_Ambience_Loop.wav", AudioMode::StreamLoop, SoundType::SFX);
 		m_ambience->Play();
 	}
 
