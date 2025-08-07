@@ -1,6 +1,7 @@
 #pragma once
 #include <Component/Component.h>
 #include <Experimental/Physics/AABB.h>
+#include "Math/TColor.h"
 
 /*
 *	@brief : 충돌을 감지하는 컴포넌트입니다.

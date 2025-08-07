@@ -200,6 +200,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scripts\SolarScene\Sun.h" />
     <ClInclude Include="d2dengine_pch.h" />
+    <ClInclude Include="Scripts\Enemy\SpawnCollider.h" />
     <ClInclude Include="Spine2D\SpineRenderer.h" />
     <ClInclude Include="Scene\SpineScene.h" />
     <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
@@ -211,6 +212,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
     <ClInclude Include="Scripts\TitleAudioScript.h" />
+    <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
@@ -258,10 +260,12 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scripts\TitleUIScript.cpp" />
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Enemy\SpawnCollider.cpp" />
     <ClCompile Include="Spine2D\SpineRenderer.cpp" />
     <ClCompile Include="Scene\SpineScene.cpp" />
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
     <ClCompile Include="Scripts\TitleAudioScript.cpp" />
+    <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

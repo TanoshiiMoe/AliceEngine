@@ -1,5 +1,5 @@
 #pragma once
-#define ZPOSINIT -21359786
+#define ZPOSINIT -21359786.0f
 
 #include "Component/ScriptComponent.h"
 #include "Component/TransformComponent.h"

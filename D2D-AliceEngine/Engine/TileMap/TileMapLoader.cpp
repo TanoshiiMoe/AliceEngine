@@ -71,7 +71,7 @@ void TileMapLoader::LoadTileMap(const std::wstring& filePath, TileMap& tileMap)
 	}
 }
 
-std::unordered_map<int, int> TileMapLoader::LoadTileMapColliderInfo(const std::wstring& filePath)
+std::unordered_map<int, CollData> TileMapLoader::LoadTileMapColliderInfo(const std::wstring& filePath)
 {
 	std::ifstream inFile(filePath);
 	if (inFile.is_open()) {
@@ -81,10 +81,12 @@ std::unordered_map<int, int> TileMapLoader::LoadTileMapColliderInfo(const std::w
 
 		std::vector<TileMapColiderInfo> infoList = j.get<std::vector<TileMapColiderInfo>>();
 
-		std::unordered_map<int, int> result;
+		std::unordered_map<int, CollData> result;
 		for (const auto& info : infoList)
 		{
-			result[info.index] = info.collisionChannel;
+			result[info.index].index = info.index;
+			result[info.index].collisionChannel = info.collisionChannel;
+			result[info.index].enemyType = info.enemyType;
 		}
 		return result;
 	}
@@ -162,6 +164,7 @@ void from_json(const json& j, TileMapColiderInfo& m)
 {
 	j.at("index").get_to(m.index);
 	j.at("collisionChannel").get_to(m.collisionChannel);
+	j.at("enemyType").get_to(m.enemyType);
 }
 
 void to_json(json& j, const TileMapColiderInfo& m)
@@ -169,5 +172,6 @@ void to_json(json& j, const TileMapColiderInfo& m)
 	j = json{
 		{"index", m.index},
 		{"collisionChannel", m.collisionChannel},
+		{"enemyType", m.enemyType},
 	};
 }

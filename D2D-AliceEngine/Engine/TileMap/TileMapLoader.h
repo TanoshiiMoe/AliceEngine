@@ -8,6 +8,14 @@
 #include <string>
 using json = nlohmann::json;
 
+// 적 스폰 데이터
+struct CollData {
+	int index = -1;
+	int collisionChannel = -1;
+	int enemyType = -1;
+	bool isUsable = true;
+};
+
 // blocks.tsj 파일에 대응하는 구조체
 struct TileSet {
 	int columns;                 // 타일셋의 열 수
@@ -57,6 +65,7 @@ struct TileMapColiderInfo
 {
 	int index;						// 1번부터 시작
 	int collisionChannel;			// 콜리전 레이어
+	int enemyType;					// 적 타입
 };
 
 /* ───── 로더(정적 유틸) ───── */
@@ -64,7 +73,7 @@ class TileMapLoader {
 public:
 	static void LoadTileSet(const std::wstring& filePath, TileSet& tileSet);
 	static void LoadTileMap(const std::wstring& filePath, TileMap& tileMap); // TileMap도 Load함수와 Parse함수 추가
-	static std::unordered_map<int, int> LoadTileMapColliderInfo(const std::wstring& filePath); // TileMap도 Load함수와 Parse함수 추가
+	static std::unordered_map<int, CollData> LoadTileMapColliderInfo(const std::wstring& filePath); // TileMap도 Load함수와 Parse함수 추가
 };
 
 void from_json(const nlohmann::json& j, TileSet& ts);

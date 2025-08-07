@@ -16,10 +16,5 @@ public:
 
 	void Initialize();
 	void OnStart();
-
-	void CreatSpawnerMap(TileMapComponent* _tilemap = nullptr);
-private:
-	std::unordered_map<FVector2, EnemyType> spawnerMap;
-
 };
 

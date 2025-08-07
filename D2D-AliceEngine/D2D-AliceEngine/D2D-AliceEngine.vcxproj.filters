@@ -211,6 +211,15 @@
     <ClInclude Include="Scripts\Enemy\EnemyManager.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\EnemySpawner.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\TileMap\TileMapManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\SpawnCollider.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -324,9 +333,6 @@
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
-      <Filter>Scripts\Enemy\Base</Filter>
-    </ClCompile>
     <ClCompile Include="Prefab\Enemy\EnemyBike.cpp">
       <Filter>Prefab\Enemy</Filter>
     </ClCompile>
@@ -349,5 +355,8 @@
       <Filter>Prefab\Enemy\Core</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
+    <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
+    <ClCompile Include="Scripts\Enemy\SpawnCollider.cpp" />
   </ItemGroup>
 </Project>
