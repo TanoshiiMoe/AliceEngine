@@ -67,6 +67,8 @@
     </Filter>
     <Filter Include="Prefab\Enemy\Core">
       <UniqueIdentifier>{b81ab542-aa9a-4f68-8904-be6b00cfd23b}</UniqueIdentifier>
+    <Filter Include="Scripts\Weapon">
+      <UniqueIdentifier>{9634cc17-4f05-4b89-90df-3372689afb28}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +221,11 @@
     </ClInclude>
     <ClInclude Include="Scripts\Enemy\SpawnCollider.h">
       <Filter>PreCompiledHeader</Filter>
+    <ClInclude Include="Scripts\Weapon\Bullet.h">
+      <Filter>Scripts\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Weapon\BulletManager.h">
+      <Filter>Scripts\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -335,6 +342,14 @@
     </ClCompile>
     <ClCompile Include="Prefab\Enemy\EnemyBike.cpp">
       <Filter>Prefab\Enemy</Filter>
+    <ClCompile Include="Scripts\Weapon\Bullet.cpp">
+      <Filter>Scripts\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Weapon\BulletManager.cpp">
+      <Filter>Scripts\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp">
+      <Filter>Scripts\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Prefab\Player\PlayerBike.cpp">
       <Filter>Prefab\Player</Filter>

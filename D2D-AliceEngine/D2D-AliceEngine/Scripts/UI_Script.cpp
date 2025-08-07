@@ -14,6 +14,7 @@
 #include <Scene/Scene.h>
 #include <Helpers/CoordHelper.h>
 #include <Component/ButtonComponent.h>
+#include <Manager/SceneManager.h>
 
 void UI_Script::Initialize()
 {
@@ -111,7 +112,7 @@ void UI_Script::OnStart()
 	GetCamera()->AddChildObject(m_UI_BoardText);
 	auto BoardText = m_UI_BoardText->AddComponent<TextRenderComponent>();
 	BoardText->SetFontSize(30.0);
-	BoardText->SetColor(FColor(0, 234, 255, 1));
+	BoardText->SetColor(FColor(0, 234, 255, 255));
 	BoardText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	BoardText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	BoardText->SetDrawType(EDrawType::ScreenSpace);
@@ -137,7 +138,7 @@ void UI_Script::OnStart()
 	auto SpeedText = m_UI_SpeedText->AddComponent<TextRenderComponent>();
 	SpeedText->SetText(L"");
 	SpeedText->SetFontSize(60.0);
-	SpeedText->SetColor(FColor(0, 234, 255, 1));
+	SpeedText->SetColor(FColor(0, 234, 255, 255));
 	SpeedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	SpeedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	SpeedText->SetDrawType(EDrawType::ScreenSpace);
@@ -172,13 +173,14 @@ void UI_Script::OnStart()
 		+ FVector2(1800, 30)
 	);
 	Pause->m_layer = 50;
+	Pause->SetActive(true);
 
 	// ================== Delegate
 	Pause->SetStateAction(Define::EButtonState::Pressed, []()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			//SceneManager::ChangeScene(L"HiroScene");
+			SceneManager::ChangeScene(L"TitleScene");
 		});
 
 	/*Canvas* canvas = GetWorld()->CreateCanvas<Canvas>(L"Canvas");

@@ -25,6 +25,40 @@ void TimerManager::UpdateTime()
 		timeSinceLastFps = 0.0f;
 		ShowFPSDebug();
 	}
+
+
+	std::vector<size_t> TimersToRemove;
+
+	for (auto& Pair : Timers)
+	{
+		auto& Data = Pair.second;
+
+		if (Data.bPaused)
+			continue;
+
+		Data.TimeRemaining -= deltaTime;
+		Data.Elapsed += deltaTime;
+
+		if (Data.TimeRemaining <= 0.0f)
+		{
+			Data.Callback();
+
+			if (Data.bLooping)
+			{
+				Data.TimeRemaining = Data.OriginalRate;
+				Data.Elapsed = 0.0f;
+			}
+			else
+			{
+				TimersToRemove.push_back(Pair.first);
+			}
+		}
+	}
+
+	for (size_t Id : TimersToRemove)
+	{
+		Timers.erase(Id);
+	}
 }
 
 void TimerManager::UpdateFixedTime(std::function<void(const float&)> f)
@@ -88,4 +122,89 @@ float TimerManager::GetGlobalTimeScale() const
 void TimerManager::SetGlobalTimeScale(const float& _value)
 {
 	globalTimeScale = _value;
+}
+
+// =================== TimeHandle ===================
+
+void TimerManager::ClearTimer(FTimerHandle Handle)
+{
+	Timers.erase(Handle.InternalHandle);
+}
+
+bool TimerManager::IsTimerActive(FTimerHandle Handle) const
+{
+	auto it = Timers.find(Handle.InternalHandle);
+	return it != Timers.end() && !it->second.bPaused;
+}
+
+void TimerManager::PauseTimer(FTimerHandle Handle)
+{
+	auto it = Timers.find(Handle.InternalHandle);
+	if (it != Timers.end())
+		it->second.bPaused = true;
+}
+
+void TimerManager::UnPauseTimer(FTimerHandle Handle)
+{
+	auto it = Timers.find(Handle.InternalHandle);
+	if (it != Timers.end())
+		it->second.bPaused = false;
+}
+
+float TimerManager::GetTimerElapsed(FTimerHandle Handle) const
+{
+	auto it = Timers.find(Handle.InternalHandle);
+	if (it != Timers.end())
+		return it->second.Elapsed;
+	return -1.0f;
+}
+
+float TimerManager::GetTimerRemaining(FTimerHandle Handle) const
+{
+	auto it = Timers.find(Handle.InternalHandle);
+	if (it != Timers.end())
+		return it->second.TimeRemaining;
+	return -1.0f;
+}
+
+template <typename UserClass>
+void TimerManager::SetTimer(
+	FTimerHandle& OutHandle,
+	UserClass* InObj,
+	void (UserClass::* InFunc)(),
+	float Rate,
+	bool bLoop,
+	float FirstDelay
+)
+{
+	static_assert(std::is_base_of<UObjectBase, UserClass>::value, "SetTimer requires UObjectBase-derived class");
+
+	FTimerHandle Handle;
+	Handle.InternalHandle = NextHandle++;
+
+	TimerData Data;
+	Data.Callback = [InObj, InFunc]() {
+		(InObj->*InFunc)();
+		};
+	Data.TimeRemaining = FirstDelay > 0 ? FirstDelay : Rate;
+	Data.OriginalRate = Rate;
+	Data.bLooping = bLoop;
+
+	Timers[Handle.InternalHandle] = Data;
+	OutHandle = Handle;
+}
+
+void TimerManager::SetTimer(FTimerHandle& OutHandle, std::function<void()> InCallback, float Rate, bool bLoop, float FirstDelay)
+{
+	FTimerHandle Handle;
+	Handle.InternalHandle = NextHandle++;
+
+	TimerData Data;
+	Data.Callback = InCallback;
+	Data.TimeRemaining = FirstDelay > 0 ? FirstDelay : Rate;
+	Data.OriginalRate = Rate;
+	Data.bLooping = bLoop;
+
+	Timers[Handle.InternalHandle] = Data;
+	OutHandle = Handle;
 }

@@ -11,6 +11,8 @@
 #include <System/ScriptSystem.h>
 #include <Manager/SceneManager.h>
 #include <Helpers/CoordHelper.h>
+#include <Scripts/Weapon/BulletManager.h>
+#include <Manager/TimerManager.h>
 
 void Aru::Initialize()
 {
@@ -33,7 +35,16 @@ void Aru::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
+	// 
+	// 마우스 클릭 감지
 
+	if (Input::IsMouseLeftDown() && bCanFire)
+	{
+		FVector2 ownerPos = owner->GetPosition();
+		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
+		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, 300);
+		bCanFire = false;
+	}
 }
 
 void Aru::LateUpdate(const float& deltaSeconds)
@@ -45,6 +56,17 @@ void Aru::LateUpdate(const float& deltaSeconds)
 
 void Aru::OnStart()
 {
+	TimerManager::GetInstance().SetTimer(
+		timer,
+		[this]()
+		{
+			bCanFire = true;
+			OutputDebugStringW(L"람다 타이머 호출됨!\n");
+		}, 
+		0.1f,
+		true,
+		0.0f
+	);
 	// 여기에 OnStart에 대한 로직 작성
 	m_aru = GetOwner();
 	m_aru->transform()->SetPosition(0, 0);
@@ -157,6 +179,7 @@ void Aru::OnStart()
 void Aru::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+	TimerManager::GetInstance().ClearTimer(timer);
 }
 
 void Aru::OnDestroy()

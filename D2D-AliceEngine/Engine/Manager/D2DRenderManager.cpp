@@ -125,7 +125,7 @@ void D2DRenderManager::Initialize(HWND hwnd)
 
 	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
 
-	hr = CreateBitmapFromFile(L"../Resource/BackGround/BG_CS_Arona_04.png", m_overlayBitmap.GetAddressOf());
+	hr = CreateBitmapFromFile(L"../Resource/BackGround/blood.png", m_overlayBitmap.GetAddressOf());
 	assert(SUCCEEDED(hr));
 
 
@@ -172,8 +172,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Vignette, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
 	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_COLOR, D2D1::Vector4F(0, 0, 0, 1));
-	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_STRENGTH, 0.8f);
-	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_TRANSITION_SIZE, 0.3f);
+	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_STRENGTH, 3.0f);
+	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_TRANSITION_SIZE, 2.0f);
 
 	// »þÇÁ´× (Sharpen)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Sharpen, m_sceneEffect.GetAddressOf());

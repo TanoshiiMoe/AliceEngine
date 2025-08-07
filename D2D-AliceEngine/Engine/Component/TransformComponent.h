@@ -43,6 +43,7 @@ public:
 
 	void AddRotation(const float& _val);
 	void AddPosition(const float& _x, const float& _y);
+	void AddPosition(const FVector2& _v);
 
 	void SetPivot(const float& _x, const float& _y);
 	void SetPivot(const float& _x);

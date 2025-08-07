@@ -17,12 +17,18 @@
 #include <Component/Rigidbody2D.h>
 #include "Effect/Prism.h"
 #include <Manager/SceneManager.h>
+#include <Core/Singleton.h>
 
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
 
 #include <Manager/TimerManager.h>
 #include <Scripts/Bike/LaneController.h>
+
+#include <Scripts/Weapon/BulletManager.h>
+
+#include <Helpers/CoordHelper.h>
+#include "Bike/BikeMovementScript.h"
 
 void Player::Initialize()
 {
@@ -123,6 +129,19 @@ void Player::Update(const float& deltaSeconds)
 
 		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1f * deltaSeconds;
 		SceneManager::GetCamera()->SetScale(pos);
+	}
+
+	// 마우스 클릭 감지
+	if (Input::IsMouseLeftDown())
+	{
+		FVector2 ownerPos = owner->GetPosition();
+		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
+		//FVector2 speed = ;
+		if (BikeMovementScript* bikeMovement = owner->GetComponent<BikeMovementScript>())
+		{
+			speed = bikeMovement->GetCurrSpeed();
+		}
+		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, speed);
 	}
 }
 

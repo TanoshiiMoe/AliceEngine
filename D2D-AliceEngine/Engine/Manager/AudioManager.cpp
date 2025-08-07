@@ -35,6 +35,8 @@ void AudioManager::Initialize()
 
 	fr = m_System->init(512, FMOD_INIT_NORMAL, nullptr);
 	if (fr != FMOD_OK) return;
+
+	m_System->getMasterChannelGroup(&m_MasterGroup);
 }
 
 void AudioManager::Update()
@@ -113,4 +115,18 @@ float AudioManager::GetMusicTime(FMOD::Channel* channel)
 	}
 
 	return 0.0f;
+}
+
+void AudioManager::SetMasterVolume(float volume)
+{
+	if (m_MasterGroup)
+		m_MasterGroup->setVolume(volume);
+}
+
+float AudioManager::GetMasterVolume()
+{
+	float volume = 1.0f;
+	if (m_MasterGroup)
+		m_MasterGroup->getVolume(&volume);
+	return volume;
 }

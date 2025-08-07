@@ -3,6 +3,7 @@
 #include "gameObject.h"
 #include <Component/TransformComponent.h>
 #include <Math/Transform.h>
+#include <Component/RenderComponent.h>
 
 Camera::Camera()
 {
@@ -149,6 +150,15 @@ void Camera::AddChildObject(gameObject* obj)
 	if (obj && obj->transform())
 	{
 		relativeTransform.AddChildObject(obj->transform());
+	}
+}
+
+// 부모-자식 관계 관리 함수들
+void Camera::AddChildObject(RenderComponent* obj)
+{
+	if (obj)
+	{
+		relativeTransform.AddChildObject(&obj->relativeTransform);
 	}
 }
 

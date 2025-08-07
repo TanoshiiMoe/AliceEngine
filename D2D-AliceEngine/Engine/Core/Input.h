@@ -9,6 +9,8 @@ namespace Input
 	bool IsKeyReleased(int vKey);
 	bool AnyKeyPressed();
 	FVector2 GetMousePosition();
+	FVector2 GetMouseWorldPosition();
+	FVector2 GetMouseWorldPositionInCanvas();
 	void SetMousePosition(HWND hWnd, int mousePosX, int mousePosY);
 
 	//FVector2 GetMouseWorldPosition(std::weak_ptr<ACameraActor> camera);

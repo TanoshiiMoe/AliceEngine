@@ -2,6 +2,7 @@
 #include <Component/ScriptComponent.h>
 #include <Core/StatTraits.h>
 #include <Component/StatComponent.h>
+#include <Manager/TimerManager.h>
 
 struct AruStat {
 	float HP = 100.f;
@@ -34,5 +35,8 @@ public:
 	gameObject* m_aru;
 	std::vector<TextRenderComponent*> m_aruNameTexts;
 	StatComponent<AruStat>* m_aruStat;
+
+	FTimerHandle timer;
+	bool bCanFire = true;
 };
 

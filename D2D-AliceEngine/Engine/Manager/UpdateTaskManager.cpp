@@ -58,10 +58,12 @@ void UpdateTaskManager::TickAll()
 	{
 		Context.TickGroup = static_cast<Define::ETickingGroup>(group);
 
-		// 소멸된 객체면 TickList를 삭제하고 it는 그 자리에 그대로 있는다
-		// 아니라면 it는 계속 탐색.
-		// swap-and-pop을 고려하고 만든 코드
-		for (auto it = m_TickLists[Context.TickGroup].begin(); it != m_TickLists[Context.TickGroup].end(); )
+		// 현재 TickList를 복사하고 원본은 비워둔다.
+		auto& currentList = m_TickLists[Context.TickGroup];
+		std::vector<UpdateWrapper> tempList;
+		tempList.swap(currentList); // currentList는 비워지고 tempList에 기존 내용이 들어감
+
+		for (auto it = tempList.begin(); it != tempList.end(); )
 		{
 			if (auto sp = it->Target.lock())
 			{
@@ -72,7 +74,6 @@ void UpdateTaskManager::TickAll()
 					if (TimerManager::GetInstance().IfFixedUpdatable())
 					{
 						TimerManager::GetInstance().UpdateFixedTime(it->TickFunc);
-						//OutputDebugStringW((L"fixedTime : " + std::to_wstring(TimerManager::GetInstance().GetFixedTime()) + L"\n").c_str());
 					}
 					break;
 				default:
@@ -83,8 +84,17 @@ void UpdateTaskManager::TickAll()
 			}
 			else
 			{
-				it = m_TickLists[Context.TickGroup].erase(it); // 소멸된 객체 제거
+				it = tempList.erase(it); // 소멸된 객체 제거
 			}
 		}
+
+		// 이번 프레임 중 추가된 TickWrapper들은 m_TickLists[Context.TickGroup]에 이미 쌓여 있음.
+		// 살아남은 기존 TickWrapper도 다음 프레임을 위해 다시 추가.
+		auto& nextTickList = m_TickLists[Context.TickGroup];
+		nextTickList.insert(
+			nextTickList.end(),
+			std::make_move_iterator(tempList.begin()),
+			std::make_move_iterator(tempList.end())
+		);
 	}
 }

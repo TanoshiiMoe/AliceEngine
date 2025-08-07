@@ -168,6 +168,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Prefab\Enemy\NormalCar.h" />
     <ClInclude Include="Prefab\Enemy\JumpTruck.h" />
     <ClInclude Include="Prefab\Enemy\NormalTruck.h" />
+    <ClInclude Include="Scripts\Weapon\BulletManager.h" />
+    <ClInclude Include="Scripts\Weapon\Bullet.h" />
     <ClInclude Include="Scene\KangScene\KangScene.h" />
     <ClInclude Include="Prefab\Enemy\Core\Car.h" />
     <ClInclude Include="Scripts\Player\PlayerManager.h" />
@@ -220,6 +222,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Prefab\Enemy\NormalCar.cpp" />
     <ClCompile Include="Prefab\Enemy\JumpTruck.cpp" />
     <ClCompile Include="Prefab\Enemy\NormalTruck.cpp" />
+    <ClCompile Include="Scripts\Weapon\BulletManager.cpp" />
+    <ClCompile Include="Scripts\Weapon\Bullet.cpp" />
     <ClCompile Include="Scene\KangScene\KangScene.cpp" />
     <ClCompile Include="Prefab\Enemy\Core\Car.cpp" />
     <ClCompile Include="Scripts\Player\PlayerManager.cpp" />

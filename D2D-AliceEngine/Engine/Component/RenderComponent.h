@@ -12,6 +12,7 @@
 
 class RenderComponent : public Component
 {
+	friend Camera;
 public:
 	RenderComponent();
 	~RenderComponent();

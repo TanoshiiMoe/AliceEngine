@@ -49,7 +49,7 @@ public:
 
 	bool operator!=(const TVector2& rhs)
 	{
-		return x != rhs.x && y != rhs.y;
+		return x != rhs.x || y != rhs.y;
 	}
 	bool operator==(const TVector2& rhs)
 	{
@@ -85,14 +85,17 @@ public:
 		return x == 0 && y == 0;
 	}
 
-	float Dot(const TVector2& v1)
+	float Dot(const TVector2& rhs)
 	{
-		return v1.x * x + v1.y * y;
+		return x * rhs.x + y * rhs.y;
 	}
 
 	TVector2 Normalize()
 	{
-		return TVector2(x / Length(), y / Length());
+		float len = Length();
+		if (len < 1e-6f)
+			return TVector2(0, 0);
+		return TVector2(x / len, y / len);
 	}
 
 	float Length()
@@ -249,6 +252,15 @@ namespace Math
 	inline float Deg2Rad(float _deg)
 	{
 		return (_deg / 180.0f) * Define::PI;
+	}
+
+	template<typename T>
+	TVector2<T> QuadraticBezier(const TVector2<T>& p0, const TVector2<T>& p1, const TVector2<T>& p2, float t)
+	{
+		float oneMinusT = 1.0f - t;
+		return oneMinusT * oneMinusT * p0 +
+			2.0f * oneMinusT * t * p1 +
+			t * t * p2;
 	}
 }
 
