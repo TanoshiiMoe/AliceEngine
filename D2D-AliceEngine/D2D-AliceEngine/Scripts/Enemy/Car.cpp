@@ -2,6 +2,8 @@
 #include "System/ScriptSystem.h"
 #include "Manager/UpdateTaskManager.h"
 #include <Component/Animator.h>
+#include <Component/SkewTransform.h>
+#include <Scripts/Bike/LaneController.h>
 
 void Car::Initialize()
 {
@@ -14,17 +16,19 @@ void Car::Initialize()
 void Car::OnStart()
 {
 	owner->AddComponent<Animator>();
+	owner->AddComponent<SkewTransform>();
+	owner->AddComponent<LaneController>();
 }
 
 void Car::Update(const float& dt)
 {
 	if (isMoving)
-		Move();
+		Move(dt);
 }
 
-void Car::Move()
+void Car::Move(const float& dt)
 {
-	
+	owner->transform()->AddPosition(moveSpeed * dt, 0.0f);
 }
 
 void Car::Stop()

@@ -5,6 +5,8 @@
 #include "Define/Define.h"
 #include <System/ScriptSystem.h>
 #include "Object/gameObject.h"
+#include <Animation/AnimatorInstance.h>
+#include "Component/SpriteRenderer.h"
 
 const FVector2 SkewTransform::GetOffset()
 {
@@ -58,6 +60,13 @@ void SkewTransform::Update(const float& deltaSeconds)
 
 		// 트랜스폼 적용하기
 		renderTransform->AddPosition(offset.x, offset.y);
+
+		// 렌더 레이어 설정하기
+		SetRenderLayer();
+
+		// 디버깅용
+		std::wstring message = owner->GetName() + L" : Zpos = " + std::to_wstring(zPos) + L"\n";
+		OutputDebugStringW(message.c_str());
 	}
 
 }
@@ -71,4 +80,20 @@ float SkewTransform::GetSkew()
 
 	OutputDebugStringW(message.c_str());
 	return 0.0f;
+}
+
+void SkewTransform::SetRenderLayer()
+{
+	if (autoLayer) {
+		int layer = static_cast<int>(-zPos);
+
+		if (auto ani = owner->GetComponent<Animator>())
+			ani->m_layer = layer;
+		else if (auto spr = owner->GetComponent<SpriteRenderer>())
+			spr->m_layer = layer;
+		else {
+			std::wstring message = owner->GetName() + L" : SkewTransform에서 Animator나 SpriteRenderer를 찾을수 없습니다!!\n";
+			OutputDebugStringW(message.c_str());
+		}
+	}
 }

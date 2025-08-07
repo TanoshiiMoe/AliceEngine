@@ -19,7 +19,7 @@ void PlayerBike::Initialize()
 
 	// 여기에 컴포넌트 추가	
 	owner->AddComponent<AnimatorInstance>();
-	owner->AddComponent<BackGroundRender>();
+	//owner->AddComponent<BackGroundRender>();
 	owner->AddComponent<SkewTransform>();
 	owner->AddComponent<BikeMovementScript>();
 	owner->AddComponent<Collider>();
