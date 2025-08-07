@@ -13,6 +13,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Scripts/Weapon/BulletManager.h>
 #include <Scripts/Bike/BikeMovementScript.h>
+#include <Component/SkewTransform.h>
 
 void Drone::Initialize()
 {
@@ -22,7 +23,7 @@ void Drone::Initialize()
 	REGISTER_SCRIPT_METHOD(OnEnd);
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
+	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
 }
 
 void Drone::FixedUpdate(const float& deltaSeconds)
@@ -37,9 +38,12 @@ void Drone::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 
 	// 여기에 Update에 대한 로직 작성
+	// Skew랑은 상관없음.
 	if (Input::IsMouseLeftDown() && bCanFire)
 	{
 		FVector2 ownerPos = owner->GetPosition();
+		//owner->GetComponent<SkewTransform>()->ToSkewPos();
+		//FVector2 ownerPos = owner->GetComponent<SkewTransform>()->GetRealPos();
 		FVector2 cameraPos = GetCamera()->GetPosition();
 		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
 		float currentSpeed = owner->GetComponent<BikeMovementScript>()->GetCurrSpeed();
