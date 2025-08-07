@@ -18,7 +18,13 @@ public:
 		float volume = 0.3f,
 		bool paused = false);
 
+	void SetMasterVolume(float volume);
+	void AddMasterVolume(float volume);
+	float GetMasterVolume();
+
 	void SetVolume(float volume);
+	void AddVolume(float volume);
+	float GetVolume();
 
 	bool IsPlaying() const;
 
@@ -33,6 +39,10 @@ public:
 private:
 	FMOD::Sound* m_Sound = nullptr;
 	FMOD::Channel* m_Channel = nullptr;
+
 	bool isLoaded = false;
+
+	float m_volume = 0.3f;
+	float m_MasterVolume = 1.0f;
 };
 

@@ -19,12 +19,14 @@ void AudioComponent::Initialize()
 
 void AudioComponent::Load(const std::wstring& audioPath, AudioMode audioMode)
 {
-	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"Sound/" + audioPath);
+	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"Sound\\" + audioPath);
 	AudioManager::GetInstance().LoadSound(filePath, audioMode, &m_Sound);
 }
 
 void AudioComponent::Play(float sec, float volume, bool paused)
 {
+	m_volume = volume;
+
 	int startSec = sec * 1000;	// s -> ms
 
 	if (!m_Sound) return;
@@ -32,10 +34,45 @@ void AudioComponent::Play(float sec, float volume, bool paused)
 	AudioManager::GetInstance().PlaySound(m_Sound, &m_Channel, volume, startSec, paused);
 }
 
+void AudioComponent::SetMasterVolume(float volume)
+{
+	AudioManager::GetInstance().SetMasterVolume(volume);
+}
+
+void AudioComponent::AddMasterVolume(float volume)
+{
+	m_MasterVolume += volume;
+	AudioManager::GetInstance().SetMasterVolume(m_MasterVolume);
+}
+
+float AudioComponent::GetMasterVolume()
+{
+	return AudioManager::GetInstance().GetMasterVolume();
+}
+
 void AudioComponent::SetVolume(float volume)
 {
 	if (m_Channel)
+	{
+		m_volume = volume;
 		m_Channel->setVolume(volume);
+	}
+}
+
+float AudioComponent::GetVolume()
+{
+	return this->m_volume;
+}
+
+void AudioComponent::AddVolume(float volume)
+{
+	m_volume += volume;
+
+	if (m_volume > 1.0f) m_volume = 1.0f;
+	if (m_volume < 0.0f) m_volume = 0.0f;
+
+	if (m_Channel)
+		m_Channel->setVolume(m_volume);
 }
 
 bool AudioComponent::IsPlaying() const
