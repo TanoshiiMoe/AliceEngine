@@ -13,6 +13,9 @@
 #include "Component/Collider.h"
 #include "Effect/Prism.h"
 
+#include <Manager/UpdateTaskManager.h>
+#include <Scripts/Weapon/Drone.h>
+
 void PlayerBike::Initialize()
 {
 	__super::Initialize();
@@ -25,9 +28,9 @@ void PlayerBike::Initialize()
 	owner->AddComponent<Collider>();
 	owner->AddComponent<InputComponent>();
 	owner->AddComponent<Prism>(10, 0.1f);
+	owner->AddComponent<Drone>();
 	
 
 	// 게임 스크립트 컴포넌트
 	owner->AddComponent<PlayerManager>();
 }
-

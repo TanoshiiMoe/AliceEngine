@@ -12,6 +12,8 @@
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
 #include <Manager/UpdateTaskManager.h>
+#include <Helpers/CoordHelper.h>
+#include <Component/SkewTransform.h>
 
 void Bullet::Initialize()
 {
@@ -106,6 +108,10 @@ void Bullet::UpdateCameraCulling()
 	float halfW = Define::SCREEN_WIDTH * 0.5f;
 	float halfH = Define::SCREEN_HEIGHT * 0.5f;
 	FVector2 bulletPos = GetOwner()->transform()->GetPosition();
+	if (SkewTransform* skew = GetOwner()->GetComponent<SkewTransform>())
+	{
+		bulletPos = skew->GetRealPos();
+	}
 
 	float marginX = 100.0f;
 	float marginY = 50.0f;

@@ -163,6 +163,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Weapon\Drone.h" />
     <ClInclude Include="Scripts\Enemy\EnemySpawner.h" />
     <ClInclude Include="Scripts\Enemy\EnemyManager.h" />
     <ClInclude Include="Prefab\Enemy\NormalCar.h" />
@@ -219,6 +220,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Weapon\Drone.cpp" />
     <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Prefab\Enemy\NormalCar.cpp" />

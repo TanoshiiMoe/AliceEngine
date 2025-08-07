@@ -2,6 +2,7 @@
 #include <Core/Singleton.h>
 #include <Windows.h>
 #include <functional>
+#include <unordered_map>
 
 class FTimerHandle
 {
