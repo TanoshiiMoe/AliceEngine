@@ -143,7 +143,7 @@ void SelectWidgetScript::OnStart()
 		SceneManager::ChangeScene(L"aruScene");
 		});
 
-	closeButton->SetStateAction(Define::EButtonState::Pressed, [] {
+	closeButton->SetStateAction(Define::EButtonState::Pressed,[] {
 		
 		SceneManager::ChangeScene(L"TitleScene");
 		});
