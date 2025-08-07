@@ -28,6 +28,7 @@
 #include <Scripts/Weapon/BulletManager.h>
 
 #include <Helpers/CoordHelper.h>
+#include "Bike/BikeMovementScript.h"
 
 void Player::Initialize()
 {
@@ -131,13 +132,17 @@ void Player::Update(const float& deltaSeconds)
 	}
 
 	// 마우스 클릭 감지
-	if (Input::IsMouseLeftPressed())
+	if (Input::IsMouseLeftDown())
 	{
-		FVector2 mousePos = Input::GetMousePosition();
-		FVector2 ownerPos = CoordHelper::ConvertD2DToUnity(owner->GetPosition());
-		BulletManager::GetInstance().FireBullet(ownerPos, mousePos);
+		FVector2 ownerPos = owner->GetPosition();
+		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
+		//FVector2 speed = ;
+		if (BikeMovementScript* bikeMovement = owner->GetComponent<BikeMovementScript>())
+		{
+			speed = bikeMovement->GetCurrSpeed();
+		}
+		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, speed);
 	}
-
 }
 
 void Player::LateUpdate(const float& deltaSeconds)
