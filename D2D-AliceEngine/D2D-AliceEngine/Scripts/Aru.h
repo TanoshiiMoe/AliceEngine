@@ -37,5 +37,6 @@ public:
 	StatComponent<AruStat>* m_aruStat;
 
 	FTimerHandle timer;
+	bool bCanFire = true;
 };
 

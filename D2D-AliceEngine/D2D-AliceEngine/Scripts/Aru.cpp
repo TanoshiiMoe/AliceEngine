@@ -38,12 +38,12 @@ void Aru::Update(const float& deltaSeconds)
 	// 
 	// 마우스 클릭 감지
 
-	if (Input::IsMouseLeftDown())
+	if (Input::IsMouseLeftDown() && bCanFire)
 	{
 		FVector2 ownerPos = owner->GetPosition();
 		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
-
-		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos);
+		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, 300);
+		bCanFire = false;
 	}
 }
 
@@ -60,11 +60,12 @@ void Aru::OnStart()
 		timer,
 		[this]()
 		{
+			bCanFire = true;
 			OutputDebugStringW(L"람다 타이머 호출됨!\n");
 		}, 
-		5.0f,
+		0.1f,
 		true,
-		1.0f
+		0.0f
 	);
 	// 여기에 OnStart에 대한 로직 작성
 	m_aru = GetOwner();

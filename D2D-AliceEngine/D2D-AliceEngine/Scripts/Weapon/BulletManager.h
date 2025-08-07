@@ -12,6 +12,6 @@ public:
 	virtual ~BulletManager();
 
 	std::vector<WeakObjectPtr<Bullet>> bullets;
-	void FireBullet(const FVector2& start, const FVector2& target);
+	void FireBullet(const FVector2& start, const FVector2& target, const FVector2& initVelocity);
 };
 
