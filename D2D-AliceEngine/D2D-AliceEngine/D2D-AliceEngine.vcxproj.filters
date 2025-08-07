@@ -312,13 +312,11 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
-      <Filter>Scripts\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\Car.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
@@ -328,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="Scripts\Weapon\BulletManager.cpp">
       <Filter>Scripts\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp">
+      <Filter>Scripts\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
