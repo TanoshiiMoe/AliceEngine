@@ -15,6 +15,7 @@
 #include <Helpers/CoordHelper.h>
 #include <Component/SkewTransform.h>
 #include <scripts/Weapon/BulletManager.h>
+#include <Component/Collider.h>
 
 void Bullet::Initialize()
 {
@@ -28,6 +29,13 @@ void Bullet::Initialize()
 	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
 	sp->LoadData(L"wallet.png");
 	sp->m_layer = 20000;
+
+	
+	if (Collider* co = owner->AddComponent<Collider>())
+	{
+		co->SetBoxSize(FVector2(40, 40));
+		co->SetLayer(-10);
+	}
 
 	TimerManager::GetInstance().ClearTimer(handle); // 이전 타이머 제거
 	TimerManager::GetInstance().SetTimer(handle, [this]() { bCameraCulling = true; }, 0, false, 1.0f);
