@@ -250,6 +250,15 @@ namespace Math
 	{
 		return (_deg / 180.0f) * Define::PI;
 	}
+
+	template<typename T>
+	TVector2<T> QuadraticBezier(const TVector2<T>& p0, const TVector2<T>& p1, const TVector2<T>& p2, float t)
+	{
+		float oneMinusT = 1.0f - t;
+		return oneMinusT * oneMinusT * p0 +
+			2.0f * oneMinusT * t * p1 +
+			t * t * p2;
+	}
 }
 
 using FVector2 = TVector2<float>;
