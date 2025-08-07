@@ -65,4 +65,5 @@ public:
 
 	void RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType = Define::EDrawType::ScreenSpace, int* _layer = 0);
 	std::vector<std::pair<ObjectHandle, std::function<void()>>> m_spineRenders;
+	bool bUseScreenEffect = true;
 };
