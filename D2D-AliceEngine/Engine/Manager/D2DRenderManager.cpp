@@ -3,6 +3,11 @@
 #include "D2DRenderManager.h"
 #include <Manager/SceneManager.h>
 #include <Define/Define.h>
+#include <Helpers/FileHelper.h>
+#include <d2d1_3.h>            // ID2D1DeviceContext2, ID2D1Factory2 등
+#include <d2d1effectauthor.h>  // LoadPixelShader 관련
+#include <d2d1effecthelpers.h> // 셰이더 헬퍼
+#include <Manager/PackageResourceManager.h>
 
 D2DRenderManager::D2DRenderManager()
 {
@@ -38,6 +43,17 @@ void D2DRenderManager::Initialize(HWND hwnd)
 		nullptr
 	);
 	assert(SUCCEEDED(hr));
+
+	hr = CoCreateInstance(
+		CLSID_WICImagingFactory2,
+		nullptr,
+		CLSCTX_INPROC_SERVER,
+		IID_PPV_ARGS(&m_wicFactory)
+	);
+	if (FAILED(hr)) {
+		OutputError(hr);
+		return;
+	}
 
 	// D2D 팩토리 및 디바이스
 	ComPtr<ID2D1Factory8> d2dFactory;
@@ -90,8 +106,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 		D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
 		D2D1::PixelFormat(scDesc.Format, D2D1_ALPHA_MODE_PREMULTIPLIED)
 	);
-	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_d2dBitmapTarget.GetAddressOf());
-	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
+	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_bitmapTarget.GetAddressOf());
+	//m_d2dDeviceContext->SetTarget(m_bitmapTarget.Get());
 
 	// DirectWrite 팩터리를 만듭니다.
 	DWriteCreateFactory(
@@ -100,13 +116,87 @@ void D2DRenderManager::Initialize(HWND hwnd)
 		reinterpret_cast<IUnknown**>(m_dWriteFactory.GetAddressOf()));
 
 	// 4. D2D 타겟 비트맵 및 SetTarget
-	CreateSwapChainAndD2DTarget();
+	//CreateSwapChainAndD2DTarget();
+	CreateAfterEffectScreenRenderTarget();
 
 	// 7. SpriteBatch 생성
 	hr = m_d2dDeviceContext->CreateSpriteBatch(m_spriteBatch.GetAddressOf());
 	assert(SUCCEEDED(hr));
 
 	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
+
+	hr = CreateBitmapFromFile(L"../Resource/BackGround/BG_CS_Arona_04.png", m_overlayBitmap.GetAddressOf());
+	assert(SUCCEEDED(hr));
+
+
+	// 이것들 동적으로 사용할 수 있게 리팩 필요
+
+	// 채도
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Saturation, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());     
+	//m_sceneEffect->SetValue(D2D1_SATURATION_PROP_SATURATION, 2.0f);	
+
+	// 투명도 -
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Opacity, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_OPACITY_PROP_OPACITY, 0.9);
+
+	// 흐림 (GaussianBlur)
+	//m_d2dDeviceContext->CreateEffect(CLSID_D2D1GaussianBlur, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 6.0f);  // 블러 강도
+
+	// 방향 흐림 (DirectionalBlur)
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1DirectionalBlur, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, 45.0f); // 각도 (도)
+	//m_sceneEffect->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, 5.0f);
+
+	// 그림자 (Shadow) -
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Shadow, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_SHADOW_PROP_COLOR, D2D1::Vector4F(0.0f, 0.0f, 0.0f, 0.5f)); // 검은 그림자
+	//m_sceneEffect->SetValue(D2D1_SHADOW_PROP_BLUR_STANDARD_DEVIATION, 1.0f); // 흐림 강도
+
+	// 색조 회전 (HueRotation)
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1HueRotation, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_HUEROTATION_PROP_ANGLE, 120.0f);  // 0~360도
+
+	//세피아톤 (Sepia)
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Sepia, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_SEPIA_PROP_INTENSITY, 0.9f);  // 0.0 ~ 1.0
+
+	// 비네트 효과 (Vignette)
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Vignette, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_COLOR, D2D1::Vector4F(0, 0, 0, 1));
+	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_STRENGTH, 0.8f);
+	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_TRANSITION_SIZE, 0.3f);
+
+	// 샤프닝 (Sharpen)
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Sharpen, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_SHARPNESS, 5.0f);   // 0.0 ~ 10.0
+	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // 엣지 강조 임계값
+
+
+	// 두 효과를 이어서 만드는 방법
+	// 비네트 효과 (Vignette)
+	//ComPtr<ID2D1Effect> vignetteEffect;
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Vignette, vignetteEffect.GetAddressOf());
+	//vignetteEffect->SetInput(0, m_screenBitmap.Get());
+	//vignetteEffect->SetValue(D2D1_VIGNETTE_PROP_COLOR, D2D1::Vector4F(0, 0, 0, 1));
+	//vignetteEffect->SetValue(D2D1_VIGNETTE_PROP_STRENGTH, 0.8f);
+	//vignetteEffect->SetValue(D2D1_VIGNETTE_PROP_TRANSITION_SIZE, 0.3f);
+	//
+	//// 샤프닝 (Sharpen)
+	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Sharpen, m_sceneEffect.GetAddressOf());
+	//m_sceneEffect->SetInputEffect(0, vignetteEffect.Get());
+	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_SHARPNESS, 5.0f);   // 0.0 ~ 10.0
+	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // 엣지 강조 임계값
+
 }
 
 void D2DRenderManager::UnInitialize()
@@ -114,7 +204,11 @@ void D2DRenderManager::UnInitialize()
 	m_d3dDevice = nullptr;
 	m_dxgiSwapChain = nullptr;
 	m_d2dDeviceContext = nullptr;
-	m_d2dBitmapTarget = nullptr;
+	m_screenBitmap = nullptr;
+
+	m_bitmapTarget = nullptr;
+	m_overlayBitmap = nullptr;
+	m_sceneEffect = nullptr;
 
 	// For DrawText
 	m_dWriteFactory = nullptr;
@@ -137,7 +231,7 @@ void D2DRenderManager::CreateSwapChainAndD2DTarget()
 	{
 		m_d2dDeviceContext->SetTarget(nullptr);
 	}
-	m_d2dBitmapTarget.Reset();
+	m_screenBitmap.Reset();
 
 	// 2. SwapChain 재설정
 	if (m_dxgiSwapChain) {
@@ -166,14 +260,14 @@ void D2DRenderManager::CreateSwapChainAndD2DTarget()
 	);
 
 	// 5. DeviceContext에 바인딩할 ID2D1Bitmap1 생성
-	hr = m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, &m_d2dBitmapTarget);
+	hr = m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, &m_screenBitmap);
 	if (FAILED(hr)) {
 		OutputError(hr);
 		return;
 	}
 
 	// 6. 컨텍스트에 SetTarget
-	m_d2dDeviceContext->SetTarget(m_d2dBitmapTarget.Get());
+	m_d2dDeviceContext->SetTarget(m_screenBitmap.Get());
 }
 
 void D2DRenderManager::OutputError(HRESULT hr)
@@ -229,4 +323,100 @@ void D2DRenderManager::DrawDebugText(
 		&layoutRect,
 		m_pBrush.Get()
 	);
+}
+
+void D2DRenderManager::CreateAfterEffectScreenRenderTarget()
+{
+	D2D1_BITMAP_PROPERTIES1 bmpProps =
+		D2D1::BitmapProperties1(
+			D2D1_BITMAP_OPTIONS_TARGET,
+			D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
+		);
+
+	FVector2 size = GetApplicationSize();
+
+	m_d2dDeviceContext->CreateBitmap(
+		D2D1::SizeU((UINT32)size.x, (UINT32)size.y),
+		nullptr,
+		0,
+		&bmpProps,
+		&m_screenBitmap);
+}
+
+void D2DRenderManager::LoadGradientTextrue()
+{
+	ComPtr<IWICBitmapDecoder> decoder;
+	ComPtr<IWICBitmapFrameDecode> frame;
+	ComPtr<IWICFormatConverter> converter;
+
+	m_wicFactory->CreateDecoderFromFilename(
+		L"Resources/gradient.png", nullptr, GENERIC_READ,
+		WICDecodeMetadataCacheOnLoad, &decoder);
+
+	decoder->GetFrame(0, &frame);
+
+	m_wicFactory->CreateFormatConverter(&converter);
+	converter->Initialize(frame.Get(), GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone, nullptr, 0.0, WICBitmapPaletteTypeCustom);
+
+	m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), nullptr, &m_overlayBitmap);
+}
+
+void D2DRenderManager::LoadEffectShader()
+{
+	//std::vector<BYTE> shaderBytes = FileHelper::LoadBinaryFile(L"MyShader.cso");
+	//GUID myShaderGUID = { /* 생성한 GUID */ };
+	//
+	//ComPtr<ID2D1DeviceContext4> context4;
+	//m_d2dDeviceContext.As(&context4);
+	//
+	//context4->LoadPixelShader(
+	//	myShaderGUID,
+	//	shaderBytes.data(),
+	//	(UINT32)shaderBytes.size()
+	//);
+	//
+	//m_d2dDeviceContext->CreateEffect(CLSID_D2D1DrawPixelShader, &shaderEffect);
+	//shaderEffect->SetValue(D2D1_DRAW_PIXEL_SHADER_PROP_SHADER_GUID, myShaderGUID);
+}
+
+HRESULT D2DRenderManager::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap)
+{
+	ComPtr<IWICBitmapDecoder>     decoder;
+	ComPtr<IWICBitmapFrameDecode> frame;
+	ComPtr<IWICFormatConverter>   converter;
+
+	// ① 디코더 생성
+	HRESULT hr = m_wicFactory->CreateDecoderFromFilename(
+		path, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
+	if (FAILED(hr)) return hr;
+
+	// ② 첫 프레임 얻기
+	hr = decoder->GetFrame(0, &frame);
+	if (FAILED(hr)) return hr;
+
+	// ③ 포맷 변환기 생성
+	hr = m_wicFactory->CreateFormatConverter(&converter);
+	if (FAILED(hr)) return hr;
+
+	// ④ GUID_WICPixelFormat32bppPBGRA로 변환
+	hr = converter->Initialize(
+		frame.Get(),
+		GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone,
+		nullptr,
+		0.0f,
+		WICBitmapPaletteTypeCustom
+	);
+	if (FAILED(hr)) return hr;
+
+	// ⑤ Direct2D 비트맵 속성 (premultiplied alpha, B8G8R8A8_UNORM)
+	D2D1_BITMAP_PROPERTIES1 bmpProps = D2D1::BitmapProperties1(
+		D2D1_BITMAP_OPTIONS_NONE,
+		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
+	);
+
+	// ⑥ DeviceContext에서 WIC 비트맵으로부터 D2D1Bitmap1 생성
+	hr = m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, outBitmap);
+	return hr;
 }
