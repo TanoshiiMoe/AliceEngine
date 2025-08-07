@@ -56,6 +56,9 @@
     <Filter Include="Scripts\Enemy">
       <UniqueIdentifier>{1da6b723-0835-409f-9932-b22729aa232d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Weapon">
+      <UniqueIdentifier>{9634cc17-4f05-4b89-90df-3372689afb28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -168,7 +171,7 @@
     </ClInclude>
     <ClInclude Include="Scripts\TitleAudioScript.h">
       <Filter>Scripts</Filter>
-	 </ClInclude>
+    </ClInclude>
     <ClInclude Include="Prefab\EnemyBike.h">
       <Filter>Prefab</Filter>
     </ClInclude>
@@ -187,8 +190,11 @@
     <ClInclude Include="Scene\KangScene\KangScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="TitleAudioScript.h">
-      <Filter>PreCompiledHeader</Filter>
+    <ClInclude Include="Scripts\Weapon\Bullet.h">
+      <Filter>Scripts\Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Weapon\BulletManager.h">
+      <Filter>Scripts\Weapon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -313,11 +319,15 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\Car.cpp">
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="TitleAudioScript.cpp">
-   </ClCompile>
+    <ClCompile Include="Scripts\Weapon\Bullet.cpp">
+      <Filter>Scripts\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Weapon\BulletManager.cpp">
+      <Filter>Scripts\Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

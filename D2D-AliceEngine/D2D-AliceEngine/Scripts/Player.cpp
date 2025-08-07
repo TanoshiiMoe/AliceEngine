@@ -17,12 +17,17 @@
 #include <Component/Rigidbody2D.h>
 #include "Effect/Prism.h"
 #include <Manager/SceneManager.h>
+#include <Core/Singleton.h>
 
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
 
 #include <Manager/TimerManager.h>
 #include <Scripts/Bike/LaneController.h>
+
+#include <Scripts/Weapon/BulletManager.h>
+
+#include <Helpers/CoordHelper.h>
 
 void Player::Initialize()
 {
@@ -124,6 +129,15 @@ void Player::Update(const float& deltaSeconds)
 		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1f * deltaSeconds;
 		SceneManager::GetCamera()->SetScale(pos);
 	}
+
+	// 마우스 클릭 감지
+	if (Input::IsMouseLeftPressed())
+	{
+		FVector2 mousePos = Input::GetMousePosition();
+		FVector2 ownerPos = CoordHelper::ConvertD2DToUnity(owner->GetPosition());
+		BulletManager::GetInstance().FireBullet(ownerPos, mousePos);
+	}
+
 }
 
 void Player::LateUpdate(const float& deltaSeconds)

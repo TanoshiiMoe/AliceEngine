@@ -11,6 +11,7 @@
 #include <System/ScriptSystem.h>
 #include <Manager/SceneManager.h>
 #include <Helpers/CoordHelper.h>
+#include <Scripts/Weapon/BulletManager.h>
 
 void Aru::Initialize()
 {
@@ -33,7 +34,18 @@ void Aru::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
+	// 
+	// 마우스 클릭 감지
+	if (Input::IsMouseLeftDown())
+	{
+		FVector2 mousePos = CoordHelper::ConvertD2DToUnity(Input::GetMousePosition());
+		FVector2 ownerPos = owner->GetPosition();
 
+		FVector2 cameraWorldPos = GetCamera()->GetPosition();
+		FVector2 worldMousePos = cameraWorldPos + mousePos; // 마우스의 실제 월드 좌표
+
+		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos);
+	}
 }
 
 void Aru::LateUpdate(const float& deltaSeconds)

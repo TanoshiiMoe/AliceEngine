@@ -11,10 +11,11 @@
 /*-----���� �ΰ��Ӿ��� �߰��մϴ�-----*/
 #include "Scene/TitleScene.h"
 #include <Scene/KangScene/KangScene.h>
+#include <Scripts/Weapon/BulletManager.h>
 
 DemoGameApp::DemoGameApp()
 {
-
+	BulletManager::Create();
 }
 
 DemoGameApp::~DemoGameApp()
@@ -33,7 +34,7 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<TitleScene>(L"TitleScene");
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
 	SceneManager::AddScene<KangScene>(L"KangTest");
-	SceneManager::ChangeScene(L"KangTest");
+	SceneManager::ChangeScene(L"aruScene");
 }
 
 void DemoGameApp::Run()
