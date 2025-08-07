@@ -33,7 +33,7 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<TitleScene>(L"TitleScene");
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
 	SceneManager::AddScene<KangScene>(L"KangTest");
-	SceneManager::ChangeScene(L"KangTest");
+	SceneManager::ChangeScene(L"TitleScene");
 }
 
 void DemoGameApp::Run()
