@@ -2,8 +2,7 @@
 #include <Component/ScriptComponent.h>
 
 class gameObject;
-class AudioComponent;
-class TitleAudioScript : public ScriptComponent
+class SelectWidgetScript : public ScriptComponent
 {
 public:
 	void Initialize() override;
@@ -15,6 +14,4 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
-	AudioComponent* m_Audio;
 };
-

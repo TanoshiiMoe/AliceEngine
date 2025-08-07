@@ -196,6 +196,12 @@
     <ClInclude Include="Scripts\Weapon\BulletManager.h">
       <Filter>Scripts\Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\SelectScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Widget\SelectWidgetScript.h">
+      <Filter>Scripts\Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -315,9 +321,6 @@
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -329,6 +332,13 @@
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\Car.cpp">
       <Filter>Scripts\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp" />
+    <ClCompile Include="Scene\SelectScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Widget\SelectWidgetScript.cpp">
+      <Filter>Scripts\Widget</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
