@@ -231,6 +231,7 @@
     </ClInclude>
     <ClInclude Include="Scripts\Weapon\Drone.h">
       <Filter>Scripts\Weapon</Filter>
+    </ClInclude>
     <ClInclude Include="Scene\SelectScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -349,8 +350,6 @@
     </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
     </ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
