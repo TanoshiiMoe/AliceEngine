@@ -67,6 +67,7 @@
     </Filter>
     <Filter Include="Prefab\Enemy\Core">
       <UniqueIdentifier>{b81ab542-aa9a-4f68-8904-be6b00cfd23b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Scripts\Weapon">
       <UniqueIdentifier>{9634cc17-4f05-4b89-90df-3372689afb28}</UniqueIdentifier>
     </Filter>
@@ -221,6 +222,7 @@
     </ClInclude>
     <ClInclude Include="Scripts\Enemy\SpawnCollider.h">
       <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
     <ClInclude Include="Scripts\Weapon\Bullet.h">
       <Filter>Scripts\Weapon</Filter>
     </ClInclude>
@@ -229,6 +231,11 @@
     </ClInclude>
     <ClInclude Include="Scripts\Weapon\Drone.h">
       <Filter>Scripts\Weapon</Filter>
+    <ClInclude Include="Scene\SelectScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Widget\SelectWidgetScript.h">
+      <Filter>Scripts\Widget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -350,6 +357,7 @@
     </ClCompile>
     <ClCompile Include="Prefab\Enemy\EnemyBike.cpp">
       <Filter>Prefab\Enemy</Filter>
+    </ClCompile>
     <ClCompile Include="Scripts\Weapon\Bullet.cpp">
       <Filter>Scripts\Weapon</Filter>
     </ClCompile>
@@ -358,6 +366,12 @@
     </ClCompile>
     <ClCompile Include="Scripts\Weapon\Drone.cpp">
       <Filter>Scripts\Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SelectScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Widget\SelectWidgetScript.cpp">
+      <Filter>Scripts\Widget</Filter>
     </ClCompile>
     <ClCompile Include="Prefab\Player\PlayerBike.cpp">
       <Filter>Prefab\Player</Filter>

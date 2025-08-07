@@ -28,13 +28,14 @@ void TitleAudioScript::Awake()
 void TitleAudioScript::OnStart()
 {
 	m_owner = GetOwner();
-	auto audio = m_owner->AddComponent<AudioComponent>();
-	audio->Load(L"Bg_music_maintitle.wav",AudioMode::StreamLoop);
-	audio->Play(0,0.5);
+	m_Audio = m_owner->AddComponent<AudioComponent>();
+	m_Audio->Load(L"Bg_music_maintitle.wav",AudioMode::StreamLoop);
+	m_Audio->Play(0,0.5);
 }
 
 void TitleAudioScript::OnEnd()
 {
+	m_Audio->Stop();
 }
 
 void TitleAudioScript::OnDestroy()
