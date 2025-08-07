@@ -54,6 +54,11 @@ void Aru::LateUpdate(const float& deltaSeconds)
 
 }
 
+void Aru::Invoke()
+{
+
+}
+
 void Aru::OnStart()
 {
 	TimerManager::GetInstance().SetTimer(
@@ -67,6 +72,7 @@ void Aru::OnStart()
 		true,
 		0.0f
 	);
+
 	// 여기에 OnStart에 대한 로직 작성
 	m_aru = GetOwner();
 	m_aru->transform()->SetPosition(0, 0);

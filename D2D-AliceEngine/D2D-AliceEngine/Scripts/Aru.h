@@ -26,6 +26,7 @@ public:
 	void Update(const float& deltaSeconds) override;
 	void LateUpdate(const float& deltaSeconds);
 
+	void Invoke();
 	virtual void OnStart() override;
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
