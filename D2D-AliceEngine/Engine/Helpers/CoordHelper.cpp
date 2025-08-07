@@ -46,3 +46,11 @@ D2D1_MATRIX_3X2_F CoordHelper::GetSkewMatrix(const FVector2& _angle, const float
 		D2D1::Matrix3x2F::Translation(xOffset, 0);
 	return skewTransform;
 }
+
+FVector2 CoordHelper::ConvertD2DToUnity(const FVector2& d2dPos)
+{
+	return FVector2(
+		d2dPos.x - Define::SCREEN_WIDTH * 0.5f,
+		-(d2dPos.y - Define::SCREEN_HEIGHT * 0.5f)
+	);
+}
