@@ -13,12 +13,13 @@ BulletManager::~BulletManager()
 
 void BulletManager::FireBullet(const FVector2& start, const FVector2& target, const FVector2& initVelocity)
 {
-	Scene* curScene =SceneManager::GetInstance().GetWorld();
+	Scene* curScene = SceneManager::GetInstance().GetWorld();
 	auto bulletObj = curScene->NewObject<gameObject>(L"bullet");
 	bulletObj->SetPosition(start);
 	bulletObj->SetScale(FVector2(0.2, 0.2));
 	auto bullet = bulletObj->AddComponent<Bullet>();
 	bullet->inheritedVelocity = initVelocity;
+	bullet->bulletType = EBulletType::Linear; // 기본적으로 BezierCurve로 설정
 
 	FVector2 dir = target - start;
 	float distance = dir.Length();

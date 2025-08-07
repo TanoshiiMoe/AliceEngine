@@ -12,8 +12,11 @@ void TimerManager::UpdateTime()
 {
 	QueryPerformanceCounter(&currentCounter);
 	deltaTime = static_cast<float>(currentCounter.QuadPart - prevCounter.QuadPart) / frequency.QuadPart;
+	deltaTime *= globalTimeScale;
 	prevCounter = currentCounter;
-	accumulator += deltaTime * globalTimeScale;
+
+	// 밑에는 일단은 안쓰임. 디버그용FPS로만 쓰임
+	accumulator += deltaTime;
 	//OutputDebugStringW((L"DeltaTime : " + std::to_wstring(deltaTime) + L"\n").c_str());
 
 	frameCount++;
@@ -25,7 +28,6 @@ void TimerManager::UpdateTime()
 		timeSinceLastFps = 0.0f;
 		ShowFPSDebug();
 	}
-
 
 	std::vector<size_t> TimersToRemove;
 

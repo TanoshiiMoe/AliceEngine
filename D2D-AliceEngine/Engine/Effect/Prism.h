@@ -2,10 +2,12 @@
 
 #include "Component/ScriptComponent.h"
 #include "Component/Animator.h"
+#include <Manager/TimerManager.h>
 
 class Prism : public ScriptComponent
 {
 private:
+	bool bReady = false;
 	bool isActive = true;
 	bool isEnabled = true;
 	bool isDirty = false;
@@ -40,5 +42,7 @@ public:
 	bool IsActive();
 	void SetPrismTransform(gameObject* go); // 스프라이트 렌더러를 넣을 게임오브젝트 좌표 설정
 	void SetSpriteRenderer(gameObject* go); // 스프라이트 렌더러 설정
+
+	FTimerHandle timer;
 };
 

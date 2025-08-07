@@ -46,6 +46,7 @@ void Drone::Update(const float& deltaSeconds)
 		FVector2 speed{ currentSpeed , 0 };
 		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, speed);
 		bCanFire = false;
+		TimerManager::GetInstance().SetGlobalTimeScale(1);
 	}
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <Component/ScriptComponent.h>
+#include <Manager/TimerManager.h>
 
 enum class EBulletType
 {
@@ -49,11 +50,14 @@ public:
 	FVector2 moveDir; // 총알의 직진 방향 (Normalized)
 	FVector2 startPos;
 	FVector2 currentPos;
-	float moveSpeed = 2.0f; // 총알 속도
+	float moveSpeed = 5.0f; // 총알 속도
 
 	float waveAmplitude = 0.2f; // 흔들림 크기
 	float waveFrequency = 2.0f;  // 흔들림 속도
 
 	EBulletType bulletType = EBulletType::BezierCurve;
+
+	FTimerHandle handle;
+	bool bCameraCulling = false;
 };
 

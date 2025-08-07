@@ -31,10 +31,12 @@
 #include <Scripts/Camera/CameraMover.h>
 #include <Prefab/Player/PlayerBike.h>
 #include "Scripts/TileMap/TileMapManager.h"
+#include <Scripts/Weapon/BulletManager.h>
 
 void KangScene::Initialize()
 {
 	__super::Initialize();
+	TimerManager::GetInstance().SetGlobalTimeScale(0);
 }
 
 void KangScene::Release()
@@ -56,6 +58,7 @@ void KangScene::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
+	BulletManager::GetInstance().SetPlayer(m_player);
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
