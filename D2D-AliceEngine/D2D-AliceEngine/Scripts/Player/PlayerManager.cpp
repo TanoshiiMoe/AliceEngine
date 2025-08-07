@@ -50,7 +50,7 @@ void PlayerManager::OnStart()
 	owner->GetComponent<Collider>()->SetBoxSize(FVector2(35, 10));
 	if (auto collider = owner->GetComponent<Collider>())
 	{
-		collider->SetLayer(2);
+		collider->SetLayer(0);
 		collider->boxComponent->SetRelativePosition(FVector2(0, -20));
 	}
 

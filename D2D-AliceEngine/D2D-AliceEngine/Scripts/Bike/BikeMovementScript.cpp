@@ -107,8 +107,8 @@ void BikeMovementScript::OnCollisionEnter2D(Collision2D* collider)
 
 void BikeMovementScript::OnCollisionStay2D(Collision2D* collider)
 {
-	std::cout << "OnCollisionStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionStay2D È£ÃâµÊ\n");
+	/*std::cout << "OnCollisionStay2D È£ÃâµÊ" << std::endl;
+	OutputDebugStringW(L"OnCollisionStay2D È£ÃâµÊ\n");*/
 }
 
 void BikeMovementScript::OnCollisionExit2D(Collision2D* collider)
@@ -125,8 +125,8 @@ void BikeMovementScript::OnTriggerEnter2D(Collider* collider)
 
 void BikeMovementScript::OnTriggerStay2D(Collider* collider)
 {
-	std::cout << "OnTriggerStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerStay2D È£ÃâµÊ\n");
+	/*std::cout << "OnTriggerStay2D È£ÃâµÊ" << std::endl;
+	OutputDebugStringW(L"OnTriggerStay2D È£ÃâµÊ\n");*/
 }
 
 void BikeMovementScript::OnTriggerExit2D(Collider* collider)
