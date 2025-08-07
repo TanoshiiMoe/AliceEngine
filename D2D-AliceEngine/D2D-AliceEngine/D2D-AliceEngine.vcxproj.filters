@@ -168,6 +168,7 @@
     </ClInclude>
     <ClInclude Include="Scripts\TitleAudioScript.h">
       <Filter>Scripts</Filter>
+	 </ClInclude>
     <ClInclude Include="Prefab\EnemyBike.h">
       <Filter>Prefab</Filter>
     </ClInclude>
@@ -311,12 +312,12 @@
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp" />
-    </ClCompile>
+    <ClCompile Include="Scripts\Enemy\Car.cpp">
+	</ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="TitleAudioScript.cpp" />
+    <ClCompile Include="TitleAudioScript.cpp">
    </ClCompile>
   </ItemGroup>
 </Project>
