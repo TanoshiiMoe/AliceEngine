@@ -113,6 +113,7 @@ public:
 	TransformComponent* transform() const { return m_transformComponent.lock(); }
 	void AddChildObject(const gameObject* obj);
 	void AddChildTransform(TransformComponent* transform);
+	void SetParent(TransformComponent* transform);
 	void RemoveFromParent();
 
 	// 좌표, 스케일, 회전 관련 함수들

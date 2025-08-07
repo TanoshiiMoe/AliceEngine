@@ -1,17 +1,17 @@
 #pragma once
 #include "Component/ScriptComponent.h"
-class Car : public ScriptComponent
+
+class Collider;
+class SpawnCollider : public ScriptComponent
 {
 public:
-	float moveSpeed = 0.0f;
-
 	void Initialize() override;
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
 
-	void Move(const float& dt);
-	void Stop();
+	void OnTriggerEnter2D(Collider* collider) override;
 private:
-	float isMoving = true;
+	Collider* co;
+	WeakObjectPtr<gameObject> player;
 };
 

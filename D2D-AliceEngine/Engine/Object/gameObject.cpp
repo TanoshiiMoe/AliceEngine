@@ -81,6 +81,13 @@ void gameObject::AddChildTransform(TransformComponent* transform)
 	}
 }
 
+void gameObject::SetParent(TransformComponent* transform)
+{
+	if (transform) {
+		transform->AddChildObject(this->transform());
+	}
+}
+
 void gameObject::RemoveFromParent()
 {
 	if (auto transformComp = m_transformComponent.lock())

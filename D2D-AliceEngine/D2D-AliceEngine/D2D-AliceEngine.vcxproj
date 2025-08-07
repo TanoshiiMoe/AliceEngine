@@ -163,13 +163,18 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Enemy\EnemySpawner.h" />
+    <ClInclude Include="Scripts\Enemy\EnemyManager.h" />
+    <ClInclude Include="Prefab\Enemy\NormalCar.h" />
+    <ClInclude Include="Prefab\Enemy\JumpTruck.h" />
+    <ClInclude Include="Prefab\Enemy\NormalTruck.h" />
     <ClInclude Include="Scripts\Weapon\BulletManager.h" />
     <ClInclude Include="Scripts\Weapon\Bullet.h" />
     <ClInclude Include="Scene\KangScene\KangScene.h" />
-    <ClInclude Include="Scripts\Enemy\Car.h" />
+    <ClInclude Include="Prefab\Enemy\Core\Car.h" />
     <ClInclude Include="Scripts\Player\PlayerManager.h" />
-    <ClInclude Include="Prefab\PlayerBike.h" />
-    <ClInclude Include="Prefab\EnemyBike.h" />
+    <ClInclude Include="Prefab\Player\PlayerBike.h" />
+    <ClInclude Include="Prefab\Enemy\EnemyBike.h" />
     <ClInclude Include="Scripts\BackGroundRender.h" />
     <ClInclude Include="Scripts\Camera\CameraMover.h" />
     <ClInclude Include="Scripts\Bike\BikeMovementScript.h" />
@@ -197,26 +202,33 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scripts\SolarScene\Sun.h" />
     <ClInclude Include="d2dengine_pch.h" />
+    <ClInclude Include="Scripts\Enemy\SpawnCollider.h" />
     <ClInclude Include="Spine2D\SpineRenderer.h" />
     <ClInclude Include="Scene\SpineScene.h" />
     <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\Video\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
-    <ClInclude Include="Scripts\Truck.h" />
+    <ClInclude Include="Prefab\Truck.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
     <ClInclude Include="Scripts\TitleAudioScript.h" />
+    <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyManager.cpp" />
+    <ClCompile Include="Prefab\Enemy\NormalCar.cpp" />
+    <ClCompile Include="Prefab\Enemy\JumpTruck.cpp" />
+    <ClCompile Include="Prefab\Enemy\NormalTruck.cpp" />
     <ClCompile Include="Scripts\Weapon\BulletManager.cpp" />
     <ClCompile Include="Scripts\Weapon\Bullet.cpp" />
     <ClCompile Include="Scene\KangScene\KangScene.cpp" />
-    <ClCompile Include="Scripts\Enemy\Car.cpp" />
+    <ClCompile Include="Prefab\Enemy\Core\Car.cpp" />
     <ClCompile Include="Scripts\Player\PlayerManager.cpp" />
-    <ClCompile Include="Prefab\PlayerBike.cpp" />
-    <ClCompile Include="Prefab\EnemyBike.cpp" />
+    <ClCompile Include="Prefab\Player\PlayerBike.cpp" />
+    <ClCompile Include="Prefab\Enemy\EnemyBike.cpp" />
     <ClCompile Include="Scripts\BackGroundRender.cpp" />
     <ClCompile Include="Scripts\Camera\CameraMover.cpp" />
     <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp" />
@@ -248,14 +260,16 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\SolarScene\Sun.cpp" />
     <ClCompile Include="Scripts\Video\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
-    <ClCompile Include="Scripts\Truck.cpp" />
+    <ClCompile Include="Prefab\Truck.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scripts\TitleUIScript.cpp" />
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Enemy\SpawnCollider.cpp" />
     <ClCompile Include="Spine2D\SpineRenderer.cpp" />
     <ClCompile Include="Scene\SpineScene.cpp" />
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
     <ClCompile Include="Scripts\TitleAudioScript.cpp" />
+    <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
