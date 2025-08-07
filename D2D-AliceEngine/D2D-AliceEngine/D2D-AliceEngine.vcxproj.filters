@@ -169,6 +169,7 @@
     <ClInclude Include="Scripts\TitleAudioScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
+	 </ClInclude>
     <ClInclude Include="Prefab\EnemyBike.h">
       <Filter>Prefab</Filter>
     </ClInclude>
@@ -315,5 +316,11 @@
     <ClCompile Include="Scripts\Enemy\Car.cpp">
       <Filter>Scripts\Enemy</Filter>
     </ClCompile>
+	</ClCompile>
+    <ClCompile Include="Scripts\TitleAudioScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleAudioScript.cpp">
+   </ClCompile>
   </ItemGroup>
 </Project>
