@@ -9,7 +9,7 @@ public:
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
 
-	void Move();
+	void Move(const float& dt);
 	void Stop();
 private:
 	float isMoving = true;

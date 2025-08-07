@@ -11,6 +11,7 @@ public:
 	//TransformComponent transform;
 
 	float zPos = 0.0f;
+	bool autoLayer = true;
 	
 	const FVector2 GetOffset();
 	const FVector2 GetRealPos() { return realPos; }
@@ -28,5 +29,6 @@ private:
 	float prevzPos = -21359786.0f;
 
 	float GetSkew();
+	void SetRenderLayer();
 };
 
