@@ -50,7 +50,7 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 	{
 		// 직선 이동
 		FVector2 pos = moveDir * inheritedVelocity.x * deltaSeconds;
-		GetOwner()->transform()->AddPosition(pos.x, pos.y);
+		GetOwner()->transform()->AddPosition(pos);
 		break;
 	}
 	case EBulletType::BezierCurve:
@@ -64,10 +64,6 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 			{
 				t = 1.0f;
 				bBezierFinished = true;
-
-				// 베지에 마지막 방향 계산: P1 → P2
-				float bulletSpeed = 2.0f; // 원하는 속도 설정
-				linearVelocity = moveDir * bulletSpeed;
 			}
 
 			FVector2 bezierPos = Math::QuadraticBezier<float>(P0, P1, P2, t);
@@ -76,9 +72,8 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 		else
 		{
 			// 직선 이동
-			FVector2 pos = GetOwner()->transform()->GetPosition();
-			pos += linearVelocity * deltaSeconds;
-			GetOwner()->transform()->SetPosition(pos);
+			FVector2 pos = inheritedVelocity * moveDir * deltaSeconds;
+			GetOwner()->transform()->AddPosition(pos);
 		}
 		break;
 	}
@@ -112,9 +107,11 @@ void Bullet::UpdateCameraCulling()
 	float halfH = Define::SCREEN_HEIGHT * 0.5f;
 	FVector2 bulletPos = GetOwner()->transform()->GetPosition();
 
-	float margin = 50.0f;
-	if (bulletPos.x < camPos.x - halfW - margin || bulletPos.x > camPos.x + halfW + margin ||
-		bulletPos.y < camPos.y - halfH - margin || bulletPos.y > camPos.y + halfH + margin)
+	float marginX = 100.0f;
+	float marginY = 50.0f;
+
+	if (bulletPos.x < camPos.x - halfW - marginX || bulletPos.x > camPos.x + halfW + marginX ||
+		bulletPos.y < camPos.y - halfH - marginY || bulletPos.y > camPos.y + halfH + marginY)
 	{
 		isActive = false;
 		GetWorld()->RemoveObject(GetOwner());

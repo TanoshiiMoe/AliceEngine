@@ -45,7 +45,6 @@ public:
 	FVector2 inheritedVelocity; // 플레이어 속도 저장용
 	FVector2 accumulatedOffset; // 속도 누적 위치
 	bool bBezierFinished = false;
-	FVector2 linearVelocity;
 
 	FVector2 moveDir; // 총알의 직진 방향 (Normalized)
 	FVector2 startPos;
@@ -55,6 +54,6 @@ public:
 	float waveAmplitude = 0.2f; // 흔들림 크기
 	float waveFrequency = 2.0f;  // 흔들림 속도
 
-	EBulletType bulletType = EBulletType::Linear;
+	EBulletType bulletType = EBulletType::BezierCurve;
 };
 

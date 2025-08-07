@@ -176,6 +176,12 @@ void TransformComponent::AddPosition(const float& _x, const float& _y)
 	SetDirty();
 }
 
+void TransformComponent::AddPosition(const FVector2& _v)
+{
+	m_localTransform.SetPosition(m_localTransform.GetPosition().x +_v.x, m_localTransform.GetPosition().y +_v.y);
+	SetDirty();
+}
+
 void TransformComponent::SetPivot(const float& _x, const float& _y)
 {
 	m_pivot.x = _x;

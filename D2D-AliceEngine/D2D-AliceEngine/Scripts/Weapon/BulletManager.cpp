@@ -30,7 +30,7 @@ void BulletManager::FireBullet(const FVector2& start, const FVector2& target, co
 	FVector2 mid = (start + target) * randMultiply;
 
 	// 거리 기반으로 휘는 정도 비율 계산 (예: 거리의 10%)
-	float randCurveMultiply = FRandom::GetRandomInRange(0.00005f, 0.00007f);
+	float randCurveMultiply = FRandom::GetRandomInRange(0.05f, 0.07f);
 	float curveRatio = randCurveMultiply; // 이걸 낮추면 덜 휨
 	float curveAmount = distance * curveRatio;
 
