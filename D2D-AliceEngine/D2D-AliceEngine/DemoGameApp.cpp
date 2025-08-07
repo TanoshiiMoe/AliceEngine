@@ -11,10 +11,11 @@
 /*-----���� �ΰ��Ӿ��� �߰��մϴ�-----*/
 #include "Scene/TitleScene.h"
 #include <Scene/KangScene/KangScene.h>
+#include <Scripts/Weapon/BulletManager.h>
 
 DemoGameApp::DemoGameApp()
 {
-
+	BulletManager::Create();
 }
 
 DemoGameApp::~DemoGameApp()
