@@ -180,7 +180,7 @@ void UI_Script::OnStart()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			//SceneManager::ChangeScene(L"TitleScene");
+			SceneManager::ChangeScene(L"TitleScene");
 		});
 
 	/*Canvas* canvas = GetWorld()->CreateCanvas<Canvas>(L"Canvas");

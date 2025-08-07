@@ -52,6 +52,8 @@ void TitleWidgetScript::OnStart()
 
 	auto startText = m_owner->AddComponent<TextRenderComponent>();
 	auto startButton = m_owner->AddComponent<ButtonComponent>();
+	//startButton->RemoveFromParent();
+	//GetCamera()->AddChildObject(startButton);
 
 	auto continueText = m_owner->AddComponent<TextRenderComponent>();
 	auto continueButton = m_owner->AddComponent<ButtonComponent>();

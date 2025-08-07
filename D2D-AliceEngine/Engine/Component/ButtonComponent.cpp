@@ -10,6 +10,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Core/Input.h>
 #include <Helpers/FileHelper.h>
+#include <Helpers/CoordHelper.h>
 
 ButtonComponent::ButtonComponent()
 {
@@ -36,8 +37,7 @@ void ButtonComponent::Update(const float& deltaSeconds)
 
 	bool mouseDown = Input::IsMouseLeftDown();
 	bool mouseUp = Input::IsMouseLeftReleased();
-
-	FVector2 mousePos = Input::GetMousePosition();
+	FVector2 mousePos = Input::GetMouseWorldPositionInCanvas();
 	FVector2 relativePos = FVector2(
 		relativeTransform.GetPosition().x,
 		relativeTransform.GetPosition().y
