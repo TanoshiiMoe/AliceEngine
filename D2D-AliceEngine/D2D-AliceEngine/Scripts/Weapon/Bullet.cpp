@@ -22,7 +22,9 @@ void Bullet::Initialize()
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 
 	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
-	owner->AddComponent<SpriteRenderer>()->LoadData(L"wallet.png");
+	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
+	sp->LoadData(L"wallet.png");
+	sp->m_layer = 20000;
 }
 
 void Bullet::FixedUpdate(const float& deltaSeconds)
@@ -36,19 +38,87 @@ void Bullet::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
-	// 여기에 Update에 대한 로직 작성
-	time += deltaSeconds;
-	if (time >= duration)
+	UpdatePositionByType(deltaSeconds);
+	UpdateCameraCulling(); // 카메라 컬링 체크
+}
+
+void Bullet::UpdatePositionByType(const float& deltaSeconds)
+{
+	switch (bulletType)
 	{
-		isActive = false;
-		return;
+	case EBulletType::Linear:
+	{
+		// 직선 이동
+		FVector2 pos = moveDir * inheritedVelocity.x * deltaSeconds;
+		GetOwner()->transform()->AddPosition(pos.x, pos.y);
+		break;
+	}
+	case EBulletType::BezierCurve:
+	{
+		if (!bBezierFinished)
+		{
+			time += deltaSeconds;
+
+			float t = time / duration;
+			if (t >= 1.0f)
+			{
+				t = 1.0f;
+				bBezierFinished = true;
+
+				// 베지에 마지막 방향 계산: P1 → P2
+				float bulletSpeed = 2.0f; // 원하는 속도 설정
+				linearVelocity = moveDir * bulletSpeed;
+			}
+
+			FVector2 bezierPos = Math::QuadraticBezier<float>(P0, P1, P2, t);
+			GetOwner()->transform()->SetPosition(bezierPos);
+		}
+		else
+		{
+			// 직선 이동
+			FVector2 pos = GetOwner()->transform()->GetPosition();
+			pos += linearVelocity * deltaSeconds;
+			GetOwner()->transform()->SetPosition(pos);
+		}
+		break;
+	}
+	case EBulletType::SinCurve:
+	{
+		time += deltaSeconds;
+
+		// 앞으로 나아가기
+		FVector2 forward = moveDir * (moveSpeed * deltaSeconds);
+		currentPos += forward;
+
+		// 수직 방향 흔들림 적용
+		FVector2 perp(moveDir.y, -moveDir.x); // 정확한 수직 벡터
+		float wave = std::sin(time * waveFrequency) * waveAmplitude;
+		FVector2 offset = perp * wave;
+
+		FVector2 finalPos = currentPos + offset;
+		GetOwner()->transform()->SetPosition(finalPos);
+		break;
+	}
+	default:
+		break;
 	}
 
-	float t = time / duration;
-	FVector2 pos = Math::QuadraticBezier<float>(P0, P1, P2, t);
+}
 
-	// 그리기 위치 계산
-	GetOwner()->transform()->SetPosition(pos);
+void Bullet::UpdateCameraCulling()
+{
+	FVector2 camPos = GetCamera()->GetPosition(); // Unity 좌표
+	float halfW = Define::SCREEN_WIDTH * 0.5f;
+	float halfH = Define::SCREEN_HEIGHT * 0.5f;
+	FVector2 bulletPos = GetOwner()->transform()->GetPosition();
+
+	float margin = 50.0f;
+	if (bulletPos.x < camPos.x - halfW - margin || bulletPos.x > camPos.x + halfW + margin ||
+		bulletPos.y < camPos.y - halfH - margin || bulletPos.y > camPos.y + halfH + margin)
+	{
+		isActive = false;
+		GetWorld()->RemoveObject(GetOwner());
+	}
 }
 
 void Bullet::LateUpdate(const float& deltaSeconds)
@@ -66,7 +136,6 @@ void Bullet::OnStart()
 {
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
-
 	
 }
 
