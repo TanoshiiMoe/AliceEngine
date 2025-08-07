@@ -28,5 +28,5 @@ public:
 
 	bool dirty = true;
 	float collisionDelay = 0.1f;
-	int m_layer = -999;
+	int m_layer = 0;
 };
