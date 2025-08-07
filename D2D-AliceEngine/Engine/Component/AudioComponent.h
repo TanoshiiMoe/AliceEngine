@@ -5,16 +5,23 @@
 class AudioComponent : public Component
 {
 public:
-	AudioComponent();
+	AudioComponent() { m_name = L""; }
+	AudioComponent(const std::wstring& name);
 	~AudioComponent();
 
 	void Initialize() override;
 
-	void Load(
+	void LoadData(
 		const std::wstring& audioPath,
-		AudioMode audioMode);
+		AudioMode audioMode, SoundType type);
 
 	void Play(float sec = 0,
+		float volume = 0.3f,
+		bool paused = false);
+
+	void PlayByName(
+		const std::wstring& name,
+		float sec = 0,
 		float volume = 0.3f,
 		bool paused = false);
 
@@ -26,23 +33,35 @@ public:
 	void AddVolume(float volume);
 	float GetVolume();
 
+	void SetVolumeByType(SoundType type, float volume);
+	void AddVolumeByType(SoundType type, float volume);
+	float GetVolume(SoundType type);
+
 	bool IsPlaying() const;
 
-	void Pause(bool paused = true);
+	void PauseByName(const std::wstring& name, bool paused = true);
+	void ResumeByName(const std::wstring& name);
+	void StopByName(const std::wstring& name);
 
+	void PauseByType(SoundType type, bool paused);
+	void ResumeByType(SoundType type);
+	void StopByType(SoundType type);
+
+	void Pause();
 	void Resume();
-
 	void Stop();
 
 	float GetPlayTime() const;
 
 private:
-	FMOD::Sound* m_Sound = nullptr;
+	SoundData* m_Sound = nullptr;
 	FMOD::Channel* m_Channel = nullptr;
 
 	bool isLoaded = false;
 
 	float m_volume = 0.3f;
 	float m_MasterVolume = 1.0f;
+
+	std::wstring m_name;
 };
 

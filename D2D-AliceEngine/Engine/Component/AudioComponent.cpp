@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "AudioComponent.h"
+#include <Helpers/StringHelper.h>
 
-AudioComponent::AudioComponent()
+AudioComponent::AudioComponent(const std::wstring& name)
 {
+	m_name = name;
 }
 
 AudioComponent::~AudioComponent()
@@ -17,21 +19,31 @@ void AudioComponent::Initialize()
 	m_Channel = nullptr;
 }
 
-void AudioComponent::Load(const std::wstring& audioPath, AudioMode audioMode)
+void AudioComponent::LoadData(const std::wstring& audioPath, AudioMode audioMode, SoundType type)
 {
 	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"Sound\\" + audioPath);
-	AudioManager::GetInstance().LoadSound(filePath, audioMode, &m_Sound);
+
+	AudioManager::GetInstance().LoadSound(m_name, filePath, audioMode, type, &m_Sound);
 }
 
 void AudioComponent::Play(float sec, float volume, bool paused)
 {
-	m_volume = volume;
+	//m_volume = volume;
 
 	int startSec = sec * 1000;	// s -> ms
 
 	if (!m_Sound) return;
 
-	AudioManager::GetInstance().PlaySound(m_Sound, &m_Channel, volume, startSec, paused);
+	//AudioManager::GetInstance().PlaySound(&m_Sound, &m_Channel, volume, startSec, paused);
+}
+
+void AudioComponent::PlayByName(const std::wstring& name, float sec, float volume, bool paused)
+{
+	int startSec = sec * 1000;	// s -> ms
+
+	if (!m_Sound) return;
+
+	AudioManager::GetInstance().PlaySoundByName(name, &m_Channel, volume, startSec, paused);
 }
 
 void AudioComponent::SetMasterVolume(float volume)
@@ -64,6 +76,70 @@ float AudioComponent::GetVolume()
 	return this->m_volume;
 }
 
+void AudioComponent::SetVolumeByType(SoundType type, float volume)
+{
+	if (volume > 1.0f) volume = 1.0f;
+	if (volume < 0.0f) volume = 0.0f;
+
+	switch (type)
+	{
+	case SoundType::BGM:
+		AudioManager::GetInstance().SetBGMVolume(volume);
+		break;
+	case SoundType::SFX:
+		AudioManager::GetInstance().SetSFXVolume(volume);
+		break;
+	case SoundType::UI:
+		AudioManager::GetInstance().SetUIVolume(volume);
+		break;
+	}
+}
+
+void AudioComponent::AddVolumeByType(SoundType type, float volume)
+{
+	float currentVolume = GetVolume(type);
+	currentVolume += volume;
+
+	if (currentVolume > 1.0f) currentVolume = 1.0f;
+	if (currentVolume < 0.0f) currentVolume = 0.0f;
+
+	switch (type)
+	{
+	case SoundType::BGM:
+		AudioManager::GetInstance().SetBGMVolume(currentVolume);
+		break;
+	case SoundType::SFX:
+		AudioManager::GetInstance().SetSFXVolume(currentVolume);
+		break;
+	case SoundType::UI:
+		AudioManager::GetInstance().SetUIVolume(currentVolume);
+		break;
+	}
+}
+
+float AudioComponent::GetVolume(SoundType type)
+{
+	float volume = 0.0f;
+
+	switch (type)
+	{
+	case SoundType::BGM:
+		volume = AudioManager::GetInstance().GetBGMVolume();
+		break;
+	case SoundType::SFX:
+		volume = AudioManager::GetInstance().GetSFXVolume();
+		break;
+	case SoundType::UI:
+		volume = AudioManager::GetInstance().GetUIVolume();
+		break;
+
+	default:
+		break;
+	}
+
+	return volume;
+}
+
 void AudioComponent::AddVolume(float volume)
 {
 	m_volume += volume;
@@ -85,21 +161,63 @@ bool AudioComponent::IsPlaying() const
 	return isPlaying;
 }
 
-void AudioComponent::Pause(bool paused)
+void AudioComponent::PauseByName(const std::wstring& name, bool paused)
 {
-	if (m_Channel)
-		AudioManager::GetInstance().PauseSound(m_Channel, paused);
+	AudioManager::GetInstance().PauseSoundByName(name, paused);
+}
+
+void AudioComponent::ResumeByName(const std::wstring& name)
+{
+	PauseByName(name, false);
+}
+
+void AudioComponent::StopByName(const std::wstring& name)
+{
+	AudioManager::GetInstance().StopSoundByName(name);
+}
+
+void AudioComponent::PauseByType(SoundType type, bool paused)
+{
+	switch (type)
+	{
+	case SoundType::BGM:
+		AudioManager::GetInstance().PauseSoundByType(type, paused);
+		break;
+	case SoundType::SFX:
+		AudioManager::GetInstance().PauseSoundByType(type, paused);
+		break;
+	case SoundType::UI:
+		AudioManager::GetInstance().PauseSoundByType(type, paused);
+		break;
+
+	default:
+		break;
+	}
+}
+
+void AudioComponent::ResumeByType(SoundType type)
+{
+	PauseByType(type, false);
+}
+
+void AudioComponent::StopByType(SoundType type)
+{
+	AudioManager::GetInstance().StopSoundByType(type);
+}
+
+void AudioComponent::Pause()
+{
+	AudioManager::GetInstance().PauseAll();
 }
 
 void AudioComponent::Resume()
 {
-	Pause(false);
+	AudioManager::GetInstance().ResumeAll();
 }
 
 void AudioComponent::Stop()
 {
-	if (m_Channel)
-		AudioManager::GetInstance().StopSound(m_Channel);
+	AudioManager::GetInstance().StopAll();
 }
 
 float AudioComponent::GetPlayTime() const
