@@ -96,12 +96,12 @@ void TitleWidgetScript::OnStart()
 	volumeValue->m_layer = -1000;
 	volumeValue->SetDrawType(EDrawType::WorldSpace);
 	float finalPos = -SCREEN_WIDTH / 2.0f
-		+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume() - 1);
+		+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
 	volumeValue->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
-	volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
+	volumeValue->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * guargeSize, guargeSize));
 
-	auto uiSound = m_owner->AddComponent<AudioComponent>();
-	uiSound->Load(L"UI_interact_sound.wav", AudioMode::Memory);
+	auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
+	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::UI);
 
 	auto tutorial = m_owner->AddComponent<VideoComponent>();
 	tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm",30,L"jpg",95,true);
@@ -400,9 +400,9 @@ void TitleWidgetScript::OnStart()
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 
 		if (uiSound->IsPlaying())
-			uiSound->Stop();
+			uiSound->StopByName(L"UISound");
 		
-		uiSound->Play(0.45);
+		uiSound->PlayByName(L"UISound",0.45f);
 
 		// 다른 버튼 비활성화
 		startButton->SetActive(false);
@@ -426,12 +426,13 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 
-			SceneManager::ChangeScene(L"SelectScene");
-
 			if (uiSound->IsPlaying())
-				uiSound->Stop();
+				uiSound->StopByName(L"UISound");
 
-			uiSound->Play(0.45);
+			uiSound->PlayByName(L"UISound", 0.45f);
+			
+			// 여기에 몇 초 뒤 씬 전환 넣으면 될 거 같음
+			SceneManager::ChangeScene(L"SelectScene");
 
 			// 다른 버튼 비활성화
 			//startButton->SetActive(false);
@@ -459,9 +460,9 @@ void TitleWidgetScript::OnStart()
 			//SceneManager::ChangeScene(L"HiroScene");
 
 			if (uiSound->IsPlaying())
-				uiSound->Stop();
+				uiSound->StopByName(L"UISound");
 
-			uiSound->Play(0.45);
+			uiSound->PlayByName(L"UISound", 0.45f);
 
 			// 모두 활성화
 			startButton->SetActive(true);
@@ -503,9 +504,9 @@ void TitleWidgetScript::OnStart()
 			//SceneManager::ChangeScene(L"HiroScene");
 			
 			if (uiSound->IsPlaying())
-				uiSound->Stop();
+				uiSound->StopByName(L"UISound");
 
-			uiSound->Play(0.45);
+			uiSound->PlayByName(L"UISound", 0.45f);
 
 			// 다른 버튼 비활성화
 			startButton->SetActive(false);
@@ -539,9 +540,9 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 			
 			if (uiSound->IsPlaying())
-				uiSound->Stop();
+				uiSound->StopByName(L"UISound");
 
-			uiSound->Play(0.45);
+			uiSound->PlayByName(L"UISound", 0.45f);
 
 			// 다른 버튼 비활성화
 			startButton->SetActive(false);
@@ -564,16 +565,18 @@ void TitleWidgetScript::OnStart()
 	soundMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize, uiSound]
 		{
 			if (uiSound->IsPlaying())
-				uiSound->Stop();
+				uiSound->StopByName(L"UISound");
 
-			uiSound->Play(0.45);
+			uiSound->PlayByName(L"UISound", 0.45f);
 
-			bgm->AddVolume(-0.1f);
+			bgm->AddVolumeByType(SoundType::BGM, -0.1);
 
-			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
+			//bgm->AddVolume(-0.1f);
+
+			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * guargeSize, guargeSize));
 
 			float finalPos = -SCREEN_WIDTH / 2.0f
-				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume() - 1);
+				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
 
 			volumeValue->SetRelativePosition(FVector2(finalPos,-SCREEN_HEIGHT / 2.0f -10));
 		});
@@ -581,16 +584,17 @@ void TitleWidgetScript::OnStart()
 	soundPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize, uiSound]
 		{
 			if (uiSound->IsPlaying())
-				uiSound->Stop();
+				uiSound->StopByName(L"UISound");
 
-			uiSound->Play(0.45);
+			uiSound->PlayByName(L"UISound", 0.45f);
 
-			bgm->AddVolume(0.1f);
+			bgm->AddVolumeByType(SoundType::BGM, 0.1);
+			//bgm->AddVolume(0.1f);
 
-			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
+			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * guargeSize, guargeSize));
 
 			float finalPos = -SCREEN_WIDTH / 2.0f
-				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume() - 1);
+				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
 
 			volumeValue->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
 		});
