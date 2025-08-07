@@ -16,6 +16,7 @@
 #include <Component/SkewTransform.h>
 #include <scripts/Weapon/BulletManager.h>
 #include <Component/Collider.h>
+#include <Scripts/Bike/BikeMovementScript.h>
 
 void Bullet::Initialize()
 {
@@ -58,6 +59,11 @@ void Bullet::Update(const float& deltaSeconds)
 
 void Bullet::UpdatePositionByType(const float& deltaSeconds)
 {
+	//FVector2 acceleration;
+	//if (BikeMovementScript* bms = owner->GetComponent<BikeMovementScript>())
+	//{
+	//	acceleration += bms->GetAcceleration();
+	//}
 	switch (bulletType)
 	{
 	case EBulletType::Linear:

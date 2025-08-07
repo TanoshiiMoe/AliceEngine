@@ -35,6 +35,47 @@ public:
 
 	void Input();
 
+	// Owner
+	gameObject* GetOwnerObject() const { return m_owner; }
+	void SetOwnerObject(gameObject* owner) { m_owner = owner; }
+
+	// Initial Speed
+	float GetInitialSpeed() const { return m_initialSpeed; }
+	void SetInitialSpeed(float speed) { m_initialSpeed = speed; }
+
+	// Max Speed
+	float GetMaxSpeed() const { return m_maxSpeed; }
+	void SetMaxSpeed(float speed) { m_maxSpeed = speed; }
+
+	// Acceleration
+	float GetAcceleration() const { return m_acceleration; }
+	void SetAcceleration(float acceleration) { m_acceleration = acceleration; }
+
+	// Current Speed
+	float GetCurrentSpeed() const { return m_currentSpeed; }
+	void SetCurrentSpeed(float speed) { m_currentSpeed = speed; }
+
+	// Hit Reaction
+	bool IsHitReaction() const { return m_hitReaction; }
+	void SetHitReaction(bool hit) { m_hitReaction = hit; }
+
+	// Hit Reaction Time
+	float GetHitReactionTime() const { return m_hitReactionTime; }
+	void SetHitReactionTime(float time) { m_hitReactionTime = time; }
+
+	// Hit Timer
+	float GetHitTimer() const { return m_hitTimer; }
+	void SetHitTimer(float time) { m_hitTimer = time; }
+
+	// Speed Modifier
+	float GetSpeedModifierValue() const { return m_speedModifier; }
+	void SetSpeedModifierValue(float modifier) { m_speedModifier = modifier; }
+
+	// Modifier Duration
+	float GetModifierDuration() const { return m_modifierDuration; }
+	void SetModifierDuration(float duration) { m_modifierDuration = duration; }
+
+
 private:
 	gameObject* m_owner = nullptr;
 
