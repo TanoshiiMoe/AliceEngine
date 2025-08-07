@@ -72,7 +72,7 @@ void KangScene::OnEnter()
 	m_tile->GetComponent<TileMapComponent>()->SetSkew({ 45, 0 });
 	m_tile->GetComponent<TileMapComponent>()->CreateTileRenderers();
 	m_tile->GetComponent<TileMapComponent>()->CreateTileCollision();
-	m_tile->GetComponent<TileMapComponent>()->SetTileLayer(3);	// 타일 레이어를 3으로 설정
+	m_tile->GetComponent<TileMapComponent>()->SetTileLayer(-5000);	// 타일 레이어를 3으로 설정
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
