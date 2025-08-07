@@ -26,7 +26,8 @@ public:
 
 	void Input();
 
-	gameObject* m_owner;
+	gameObject* m_player = nullptr;
+	gameObject* m_owner = nullptr;
 
 	FTimerHandle timer;
 	bool bCanFire = true;

@@ -14,6 +14,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Helpers/CoordHelper.h>
 #include <Component/SkewTransform.h>
+#include <scripts/Weapon/BulletManager.h>
 
 void Bullet::Initialize()
 {
@@ -23,10 +24,13 @@ void Bullet::Initialize()
 	REGISTER_SCRIPT_METHOD(OnEnd);
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
 	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
 	sp->LoadData(L"wallet.png");
 	sp->m_layer = 20000;
+
+	TimerManager::GetInstance().ClearTimer(handle); // 이전 타이머 제거
+	TimerManager::GetInstance().SetTimer(handle, [this]() { bCameraCulling = true; }, 0, false, 1.0f);
 }
 
 void Bullet::FixedUpdate(const float& deltaSeconds)
@@ -51,7 +55,7 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 	case EBulletType::Linear:
 	{
 		// 직선 이동
-		FVector2 pos = moveDir * inheritedVelocity.x * deltaSeconds;
+		FVector2 pos = moveDir * inheritedVelocity.x * moveSpeed * deltaSeconds;
 		GetOwner()->transform()->AddPosition(pos);
 		break;
 	}
@@ -104,18 +108,14 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 
 void Bullet::UpdateCameraCulling()
 {
+	if (!bCameraCulling) return;
 	FVector2 camPos = GetCamera()->GetPosition(); // Unity 좌표
 	float halfW = Define::SCREEN_WIDTH * 0.5f;
 	float halfH = Define::SCREEN_HEIGHT * 0.5f;
 	FVector2 bulletPos = GetOwner()->transform()->GetPosition();
-	if (SkewTransform* skew = GetOwner()->GetComponent<SkewTransform>())
-	{
-		bulletPos = skew->GetRealPos();
-	}
 
 	float marginX = 100.0f;
 	float marginY = 50.0f;
-
 	if (bulletPos.x < camPos.x - halfW - marginX || bulletPos.x > camPos.x + halfW + marginX ||
 		bulletPos.y < camPos.y - halfH - marginY || bulletPos.y > camPos.y + halfH + marginY)
 	{
@@ -149,6 +149,7 @@ void Bullet::OnEnd()
 
 void Bullet::OnDestroy()
 {
+	TimerManager::GetInstance().ClearTimer(handle);
 }
 
 void Bullet::OnCollisionEnter2D(Collision2D* collider)
