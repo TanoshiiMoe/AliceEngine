@@ -9,7 +9,8 @@
 #include <Manager/TimerManager.h>
 
 /*-----���� �ΰ��Ӿ��� �߰��մϴ�-----*/
-#include "Scene/TitleScene.h"
+#include <Scene/TitleScene.h>
+#include <Scene/SelectScene.h>
 #include <Scene/KangScene/KangScene.h>
 #include <Scripts/Weapon/BulletManager.h>
 
@@ -31,10 +32,11 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
 	SceneManager::AddScene<DemoScene4>(L"HiroScene");
-	SceneManager::AddScene<TitleScene>(L"TitleScene");
+	SceneManager::AddScene<TitleScene>(L"TitleScene");		// title
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
-	SceneManager::AddScene<KangScene>(L"KangTest");
-	SceneManager::ChangeScene(L"KangTest");
+  SceneManager::AddScene<KangScene>(L"KangTest");
+	SceneManager::AddScene<SelectScene>(L"SelectScene");	// stage select
+	SceneManager::ChangeScene(L"TitleScene");
 }
 
 void DemoGameApp::Run()

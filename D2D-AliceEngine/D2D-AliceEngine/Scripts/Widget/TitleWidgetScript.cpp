@@ -393,7 +393,7 @@ void TitleWidgetScript::OnStart()
 	// ======================== Delegete
 	startButton->SetStateAction(Define::EButtonState::Pressed, [
 		tutorial, startButton, quitButton, staffButton, optionButton, closeButton, closeText,
-		uiSound
+		uiSound, continueButton
 	]()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
@@ -409,6 +409,7 @@ void TitleWidgetScript::OnStart()
 		quitButton->SetActive(false);
 		staffButton->SetActive(false);
 		optionButton->SetActive(false);
+		continueButton->SetActive(false);
 
 		closeButton->m_layer = 503;
 		closeButton->SetActive(true);
@@ -425,25 +426,27 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 
+			SceneManager::ChangeScene(L"SelectScene");
+
 			if (uiSound->IsPlaying())
 				uiSound->Stop();
 
 			uiSound->Play(0.45);
 
 			// 다른 버튼 비활성화
-			startButton->SetActive(false);
-			continueButton->SetActive(false);
-			quitButton->SetActive(false);
-			staffButton->SetActive(false);
-			optionButton->SetActive(false);
+			//startButton->SetActive(false);
+			//continueButton->SetActive(false);
+			//quitButton->SetActive(false);
+			//staffButton->SetActive(false);
+			//optionButton->SetActive(false);
 
-			closeButton->m_layer = 503;
-			closeButton->SetActive(true);
-			closeText->m_layer = 504;
+			//closeButton->m_layer = 503;
+			//closeButton->SetActive(true);
+			//closeText->m_layer = 504;
 
-			continueTabText->m_layer = 503;
+			//continueTabText->m_layer = 503;
 
-			PopupTab->m_layer = 502;
+			//PopupTab->m_layer = 502;
 		});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
@@ -558,8 +561,13 @@ void TitleWidgetScript::OnStart()
 		});
 
 	// bgmVolume
-	soundMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize]
+	soundMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize, uiSound]
 		{
+			if (uiSound->IsPlaying())
+				uiSound->Stop();
+
+			uiSound->Play(0.45);
+
 			bgm->AddVolume(-0.1f);
 
 			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
@@ -570,8 +578,13 @@ void TitleWidgetScript::OnStart()
 			volumeValue->SetRelativePosition(FVector2(finalPos,-SCREEN_HEIGHT / 2.0f -10));
 		});
 
-	soundPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize]
+	soundPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize, uiSound]
 		{
+			if (uiSound->IsPlaying())
+				uiSound->Stop();
+
+			uiSound->Play(0.45);
+
 			bgm->AddVolume(0.1f);
 
 			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume() * guargeSize, guargeSize));
@@ -598,6 +611,7 @@ void TitleWidgetScript::OnStart()
 void TitleWidgetScript::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+	
 }
 
 void TitleWidgetScript::OnDestroy()
