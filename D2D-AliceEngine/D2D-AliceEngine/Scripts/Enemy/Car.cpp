@@ -15,7 +15,10 @@ void Car::Initialize()
 
 void Car::OnStart()
 {
-	owner->AddComponent<Animator>();
+	//애니메이터 있을시
+	//owner->AddComponent<Animator>();
+	owner->AddComponent<SpriteRenderer>();
+
 	owner->AddComponent<SkewTransform>();
 	owner->AddComponent<LaneController>();
 }
@@ -31,7 +34,34 @@ void Car::Move(const float& dt)
 	owner->transform()->AddPosition(moveSpeed * dt, 0.0f);
 }
 
-void Car::Stop()
+void Car::MoveUp()
 {
+	if (auto lc = owner->GetComponent<LaneController>())
+		lc->MoveUp();
+}
 
+void Car::MoveDown()
+{
+	if (auto lc = owner->GetComponent<LaneController>())
+		lc->MoveDown();
+}
+
+void Car::Die()
+{
+	dieActions.BroadCast();
+}
+
+void Car::AddDieAction(ObjectHandle _handle, std::function<void()> _func)
+{
+	dieActions.Add(_handle, _func);
+}
+
+void Car::RemoveDieAction(ObjectHandle _handle)
+{
+	dieActions.Remove(_handle);
+}
+
+void Car::ClearDieAction()
+{
+	dieActions.Clear();
 }

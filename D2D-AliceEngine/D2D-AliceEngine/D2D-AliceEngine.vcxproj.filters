@@ -56,6 +56,15 @@
     <Filter Include="Scripts\Enemy">
       <UniqueIdentifier>{1da6b723-0835-409f-9932-b22729aa232d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Enemy\Base">
+      <UniqueIdentifier>{8a8dcfcf-aa43-4636-8cc1-ec14b673afe8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prefab\Enemy">
+      <UniqueIdentifier>{0f4905bc-40fc-4225-b582-b79602769c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prefab\Player">
+      <UniqueIdentifier>{6c9b3d07-5f59-4b28-b349-bc129b91e778}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -115,9 +124,6 @@
     <ClInclude Include="Scripts\UI_Script.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Truck.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\TitleUIScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
@@ -169,24 +175,35 @@
     <ClInclude Include="Scripts\TitleAudioScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-	 </ClInclude>
-    <ClInclude Include="Prefab\EnemyBike.h">
-      <Filter>Prefab</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Player\PlayerManager.h">
       <Filter>Scripts\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Prefab\PlayerBike.h">
-      <Filter>Prefab</Filter>
     </ClInclude>
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Scene\GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Enemy\Car.h">
-      <Filter>Scripts\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\KangScene\KangScene.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Car.h">
+      <Filter>Scripts\Enemy\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\Enemy\EnemyBike.h">
+      <Filter>Prefab\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\Player\PlayerBike.h">
+      <Filter>Prefab\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\Truck.h">
+      <Filter>Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\Enemy\JumpTruck.h">
+      <Filter>Prefab\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\Enemy\NormalCar.h">
+      <Filter>Prefab\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Prefab\Enemy\NormalTruck.h">
+      <Filter>Prefab\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -241,9 +258,6 @@
     <ClCompile Include="Scripts\UI_Script.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Truck.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\TitleUIScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
@@ -292,14 +306,8 @@
     <ClCompile Include="Scripts\Camera\CameraMover.cpp">
       <Filter>Scripts\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Prefab\EnemyBike.cpp">
-      <Filter>Prefab</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Player\PlayerManager.cpp">
       <Filter>Scripts\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Prefab\PlayerBike.cpp">
-      <Filter>Prefab</Filter>
     </ClCompile>
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
@@ -307,20 +315,32 @@
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\Car.cpp">
       <Filter>Scripts\Enemy</Filter>
     </ClCompile>
-	</ClCompile>
-    <ClCompile Include="Scripts\TitleAudioScript.cpp">
-      <Filter>Scripts</Filter>
+    <ClCompile Include="Scripts\Enemy\Car.cpp">
+      <Filter>Scripts\Enemy\Base</Filter>
     </ClCompile>
-    <ClCompile Include="TitleAudioScript.cpp">
-   </ClCompile>
+    <ClCompile Include="Prefab\Enemy\EnemyBike.cpp">
+      <Filter>Prefab\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\Player\PlayerBike.cpp">
+      <Filter>Prefab\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\Enemy\JumpTruck.cpp">
+      <Filter>Prefab\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\Enemy\NormalCar.cpp">
+      <Filter>Prefab\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\Enemy\NormalTruck.cpp">
+      <Filter>Prefab\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Prefab\Truck.cpp">
+      <Filter>Prefab</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

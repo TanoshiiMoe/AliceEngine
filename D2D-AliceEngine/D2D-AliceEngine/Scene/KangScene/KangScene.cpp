@@ -16,7 +16,7 @@
 #include "../../Scripts/Audio.h"
 #include "../../Scripts/UI_Script.h"
 #include "../../Scripts/BackGroundVideo.h"
-#include "../../Scripts/Truck.h"
+#include "../../Prefab/Truck.h"
 #include "../../Scripts/BackGroundRender.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
@@ -29,7 +29,7 @@
 #include <Component/ButtonComponent.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Camera/CameraMover.h>
-#include <Prefab/PlayerBike.h>
+#include <Prefab/Player/PlayerBike.h>
 
 void KangScene::Initialize()
 {

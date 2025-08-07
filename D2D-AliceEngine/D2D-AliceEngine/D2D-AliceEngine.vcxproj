@@ -163,11 +163,14 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Prefab\Enemy\NormalCar.h" />
+    <ClInclude Include="Prefab\Enemy\JumpTruck.h" />
+    <ClInclude Include="Prefab\Enemy\NormalTruck.h" />
     <ClInclude Include="Scene\KangScene\KangScene.h" />
     <ClInclude Include="Scripts\Enemy\Car.h" />
     <ClInclude Include="Scripts\Player\PlayerManager.h" />
-    <ClInclude Include="Prefab\PlayerBike.h" />
-    <ClInclude Include="Prefab\EnemyBike.h" />
+    <ClInclude Include="Prefab\Player\PlayerBike.h" />
+    <ClInclude Include="Prefab\Enemy\EnemyBike.h" />
     <ClInclude Include="Scripts\BackGroundRender.h" />
     <ClInclude Include="Scripts\Camera\CameraMover.h" />
     <ClInclude Include="Scripts\Bike\BikeMovementScript.h" />
@@ -201,18 +204,21 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\Video\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
-    <ClInclude Include="Scripts\Truck.h" />
+    <ClInclude Include="Prefab\Truck.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
     <ClInclude Include="Scripts\TitleAudioScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Prefab\Enemy\NormalCar.cpp" />
+    <ClCompile Include="Prefab\Enemy\JumpTruck.cpp" />
+    <ClCompile Include="Prefab\Enemy\NormalTruck.cpp" />
     <ClCompile Include="Scene\KangScene\KangScene.cpp" />
     <ClCompile Include="Scripts\Enemy\Car.cpp" />
     <ClCompile Include="Scripts\Player\PlayerManager.cpp" />
-    <ClCompile Include="Prefab\PlayerBike.cpp" />
-    <ClCompile Include="Prefab\EnemyBike.cpp" />
+    <ClCompile Include="Prefab\Player\PlayerBike.cpp" />
+    <ClCompile Include="Prefab\Enemy\EnemyBike.cpp" />
     <ClCompile Include="Scripts\BackGroundRender.cpp" />
     <ClCompile Include="Scripts\Camera\CameraMover.cpp" />
     <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp" />
@@ -244,7 +250,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\SolarScene\Sun.cpp" />
     <ClCompile Include="Scripts\Video\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
-    <ClCompile Include="Scripts\Truck.cpp" />
+    <ClCompile Include="Prefab\Truck.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Scripts\TitleUIScript.cpp" />
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />

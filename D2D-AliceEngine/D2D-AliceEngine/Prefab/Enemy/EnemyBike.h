@@ -1,6 +1,7 @@
 #pragma once
 #include "Object/gameObject.h"
-class EnemyBike : public gameObject
+#include "Scripts/Enemy/Car.h"
+class EnemyBike : public Car
 {
 	void Initialize() override;
 };
