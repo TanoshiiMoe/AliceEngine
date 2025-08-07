@@ -36,6 +36,7 @@
 void KangScene::Initialize()
 {
 	__super::Initialize();
+	TimerManager::GetInstance().SetGlobalTimeScale(0);
 }
 
 void KangScene::Release()
