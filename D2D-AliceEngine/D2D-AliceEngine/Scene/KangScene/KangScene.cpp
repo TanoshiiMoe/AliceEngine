@@ -16,7 +16,7 @@
 #include "../../Scripts/Audio.h"
 #include "../../Scripts/UI_Script.h"
 #include "../../Scripts/BackGroundVideo.h"
-#include "../../Scripts/Truck.h"
+#include "../../Prefab/Truck.h"
 #include "../../Scripts/BackGroundRender.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
@@ -29,7 +29,8 @@
 #include <Component/ButtonComponent.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Camera/CameraMover.h>
-#include <Prefab/PlayerBike.h>
+#include <Prefab/Player/PlayerBike.h>
+#include "Scripts/TileMap/TileMapManager.h"
 
 void KangScene::Initialize()
 {
@@ -55,8 +56,6 @@ void KangScene::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
-	//m_player->AddComponent<Player>();
-	//m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
@@ -65,15 +64,14 @@ void KangScene::OnEnter()
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
-	m_tile = NewObject<gameObject>(L"TileMap");
-	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/stage01_real/stage01_real.tmj");
-	m_tile->GetComponent<TileMapComponent>()->LoadTileSetData(L"TileMap/stage01_real/Tile_Road.tsj");
-	m_tile->GetComponent<TileMapComponent>()->LoadTileCollisionData(L"TileMap/TileMapColiderInfo.json");
-	m_tile->GetComponent<TileMapComponent>()->SetSkew({ 45, 0 });
-	m_tile->GetComponent<TileMapComponent>()->CreateTileRenderers();
-	m_tile->GetComponent<TileMapComponent>()->CreateTileCollision();
-	m_tile->GetComponent<TileMapComponent>()->SetTileLayer(-5000);	// 타일 레이어를 3으로 설정
 
+	// 타일맵 추가
+	m_tile = NewObject<gameObject>(L"TileMap");
+	m_tile->AddComponent<TileMapComponent>();
+	m_tile->AddComponent<TileMapManager>();
+
+	// 적 스포너 매니저 생
+	
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();

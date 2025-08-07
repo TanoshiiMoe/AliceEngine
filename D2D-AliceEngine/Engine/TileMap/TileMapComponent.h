@@ -30,7 +30,7 @@ public:
 	std::vector<WeakObjectPtr<TileMapRenderer>> m_TileRenderers;
 	TileMap tileMap;
 	TileSet tileSet;
-	std::unordered_map<int,int> tileCollision;
+	std::unordered_map<int,CollData> tileCollision;
 	std::wstring filePath; // 파일의 경로
 
 	FVector2 skewAngle;
