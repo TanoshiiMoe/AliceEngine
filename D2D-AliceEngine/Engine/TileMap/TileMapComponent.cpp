@@ -103,6 +103,7 @@ void TileMapComponent::CreateTileCollision()
 			collisionGo->transform()->SetPosition({ topLeft.x, topLeft.y });
 			collisionGo->transform()->SetPivot(0.5f, 0.5f);
 			collisionGo->AddComponent<Collider>();
+
 			if (auto collider = collisionGo->GetComponent<Collider>())
 			{
 				collider->SetBoxSize(FVector2(tileWidth, tileHeight));

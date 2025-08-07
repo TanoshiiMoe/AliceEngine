@@ -1,6 +1,9 @@
 #pragma once
-#include "Scripts/Enemy/Car.h"
+#include "Core/Car.h"
 class NormalCar : public Car
 {
+public:
+	void Initialize() override;
+	void OnStart() override;
 };
 

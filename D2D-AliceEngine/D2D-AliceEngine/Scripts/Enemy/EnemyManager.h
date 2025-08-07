@@ -1,15 +1,17 @@
 #pragma once
 #include "Component/ScriptComponent.h"
-#include <Core/Delegate.h>
-class Car : public ScriptComponent
+#include "Core/Delegate.h"
+class EnemyManager : public ScriptComponent
 {
+public:
+	void Initialize() override;
+	void OnStart() override;
+
+	void Update(const float& deltaSeconds) override;
+
 public:
 	float moveSpeed = 50.0f;
 	float isMoving = true;
-
-	void Initialize() override;
-	void OnStart() override;
-	void Update(const float& deltaSeconds) override;
 
 	void Move(const float& dt);
 	void MoveUp();

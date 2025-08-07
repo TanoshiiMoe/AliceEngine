@@ -55,8 +55,6 @@ void KangScene::OnEnter()
 
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
-	//m_player->AddComponent<Player>();
-	//m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
@@ -64,6 +62,7 @@ void KangScene::OnEnter()
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
+
 
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>()->LoadTileMapData(L"TileMap/stage01_real/stage01_real.tmj");
@@ -73,6 +72,9 @@ void KangScene::OnEnter()
 	m_tile->GetComponent<TileMapComponent>()->CreateTileRenderers();
 	m_tile->GetComponent<TileMapComponent>()->CreateTileCollision();
 	m_tile->GetComponent<TileMapComponent>()->SetTileLayer(-5000);	// 타일 레이어를 3으로 설정
+
+	FVector2 screenSize = D2DRenderManager::GetInstance().GetApplicationSize();
+	m_tile->GetComponent<TileMapComponent>()->m_tile->transform()->AddPosition(0.0f, -(screenSize.y / 2));
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

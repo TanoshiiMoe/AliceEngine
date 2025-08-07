@@ -1,4 +1,5 @@
 #pragma once
+#define ZPOSINIT -21359786
 
 #include "Component/ScriptComponent.h"
 #include "Component/TransformComponent.h"
@@ -19,6 +20,9 @@ public:
 	void Initialize() override;
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
+
+	// x,y 좌표를 skewTransform 좌표로 변환해주는 함수
+	void ToSkewPos();
 private:
 	TransformComponent* renderTransform = nullptr;
 	std::pair<float, float> clamp = { 0.0f, 0.0f };
@@ -26,7 +30,7 @@ private:
 	FVector2 offset = { 0.0f, 0.0f };
 	FVector2 realPos = { 0.0f, 0.0f };
 	float skewDeg = 0.0f;
-	float prevzPos = -21359786.0f;
+	float prevzPos = ZPOSINIT;
 
 	float GetSkew();
 	void SetRenderLayer();

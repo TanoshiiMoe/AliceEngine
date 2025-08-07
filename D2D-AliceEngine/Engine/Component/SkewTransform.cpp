@@ -71,6 +71,25 @@ void SkewTransform::Update(const float& deltaSeconds)
 
 }
 
+void SkewTransform::ToSkewPos()
+{
+	if (zPos != ZPOSINIT)
+		return;
+	else {
+		std::wstring message = owner->GetName() + L" : 이미 zPos가 설정되어있어서 변환을 거부합니다!!\n";
+		OutputDebugStringW(message.c_str());
+	}
+
+	skewDeg = GetSkew();
+
+	float rad = Math::Deg2Rad(skewDeg);
+	float z = owner->GetPosition().y / std::sin(rad);
+	float xOffset = std::cos(rad) * z;
+
+	owner->AddPosition(FVector2(xOffset, -(owner->GetPosition().y)));
+	zPos = z;
+}
+
 float SkewTransform::GetSkew()
 {
 	if (groundTile)

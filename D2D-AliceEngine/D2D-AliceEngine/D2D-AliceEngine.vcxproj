@@ -163,11 +163,13 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Enemy\EnemySpawner.h" />
+    <ClInclude Include="Scripts\Enemy\EnemyManager.h" />
     <ClInclude Include="Prefab\Enemy\NormalCar.h" />
     <ClInclude Include="Prefab\Enemy\JumpTruck.h" />
     <ClInclude Include="Prefab\Enemy\NormalTruck.h" />
     <ClInclude Include="Scene\KangScene\KangScene.h" />
-    <ClInclude Include="Scripts\Enemy\Car.h" />
+    <ClInclude Include="Prefab\Enemy\Core\Car.h" />
     <ClInclude Include="Scripts\Player\PlayerManager.h" />
     <ClInclude Include="Prefab\Player\PlayerBike.h" />
     <ClInclude Include="Prefab\Enemy\EnemyBike.h" />
@@ -211,11 +213,13 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\TitleAudioScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Prefab\Enemy\NormalCar.cpp" />
     <ClCompile Include="Prefab\Enemy\JumpTruck.cpp" />
     <ClCompile Include="Prefab\Enemy\NormalTruck.cpp" />
     <ClCompile Include="Scene\KangScene\KangScene.cpp" />
-    <ClCompile Include="Scripts\Enemy\Car.cpp" />
+    <ClCompile Include="Prefab\Enemy\Core\Car.cpp" />
     <ClCompile Include="Scripts\Player\PlayerManager.cpp" />
     <ClCompile Include="Prefab\Player\PlayerBike.cpp" />
     <ClCompile Include="Prefab\Enemy\EnemyBike.cpp" />
