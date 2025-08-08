@@ -1,4 +1,4 @@
-#include "NormalTruck.h"
+ï»¿#include "NormalTruck.h"
 #include <System/ScriptSystem.h>
 #include "Object/gameObject.h"
 #include "Animation/AnimationController.h"
@@ -29,7 +29,7 @@ void NormalTruck::OnStart()
 		anim->Play();
 		anim->OnStart();
 
-		// ½ºÄÉÀÏ Á¶Á¤
+		// ìŠ¤ì¼€ì¼ ì¡°ì •
 		anim->SetRelativeScale(scale);
 
 		float height = anim->GetSpriteSizeY() * scale.y;
