@@ -11,10 +11,10 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../Scripts/BackGroundImage.h"
-#include "../Scripts/Aru.h"
-#include "../Scripts/Aru2.h"
-#include "../Scripts/Player.h"
-#include "../Scripts/CameraController.h"
+#include "../Scripts/Legacy/Aru.h"
+#include "../Scripts/Legacy/Aru2.h"
+#include "../Scripts/Legacy/Player.h"
+#include "../Scripts/Legacy/CameraController.h"
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Spine2D/SpineScript.h>
 

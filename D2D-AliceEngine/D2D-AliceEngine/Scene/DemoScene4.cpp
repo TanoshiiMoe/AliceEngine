@@ -1,4 +1,4 @@
-#include "DemoScene4.h"
+﻿#include "DemoScene4.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -12,10 +12,10 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../Scripts/BackGroundImage.h"
-#include "../Scripts/Aru.h"
-#include "../Scripts/Aru2.h"
-#include "../Scripts/Player.h"
-#include "../Scripts/Enemy.h"
+#include "../Scripts/Legacy/Aru.h"
+#include "../Scripts/Legacy/Aru2.h"
+#include "../Scripts/Legacy/Player.h"
+#include "../Scripts/Legacy/Enemy.h"
 #include "../Scripts/Audio.h"
 #include "../Scripts/UI_Script.h"
 #include "../Scripts/BackGroundVideo.h"

@@ -1,4 +1,4 @@
-#include "KangScene.h"
+ï»¿#include "KangScene.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -12,7 +12,6 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../../Scripts/BackGroundImage.h"
-#include "../../Scripts/Player.h"
 #include "../../Scripts/Audio.h"
 #include "../../Scripts/UI_Script.h"
 #include "../../Scripts/BackGroundVideo.h"
@@ -64,26 +63,26 @@ void KangScene::OnEnter()
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
 
-	// ¿Àµğ¿À Ãß°¡, ¿Àµğ¿À °ü·Ã ½ºÅ©¸³Æ® ³Ö±â
+	// ì˜¤ë””ì˜¤ ì¶”ê°€, ì˜¤ë””ì˜¤ ê´€ë ¨ ìŠ¤í¬ë¦½íŠ¸ ë„£ê¸°
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
 
-	// Å¸ÀÏ¸Ê Ãß°¡
+	// íƒ€ì¼ë§µ ì¶”ê°€
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>();
 	m_tile->AddComponent<TileMapManager>();
 
-	// Àû ½ºÆ÷³Ê ¸Å´ÏÀú »ı¼º
+	// ì  ìŠ¤í¬ë„ˆ ë§¤ë‹ˆì € ìƒì„±
 	gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
 	eSpwaner->AddComponent<EnemySpawner>();
 
 	
-	// Truck(Á¡ÇÁ´ë)
+	// Truck(ì í”„ëŒ€)
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();
 
-	// ¾À ÀüÈ¯
+	// ì”¬ ì „í™˜
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
 		if (Input::IsKeyPressed(VK_3)) {

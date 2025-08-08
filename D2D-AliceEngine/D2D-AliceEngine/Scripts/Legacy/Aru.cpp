@@ -13,8 +13,8 @@
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Weapon/BulletManager.h>
 #include <Manager/TimerManager.h>
-#include "Weapon/Drone.h"
 #include "Aru2.h"
+#include <Scripts/Weapon/Drone.h>
 
 void Aru::Initialize()
 {
