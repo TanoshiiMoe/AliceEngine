@@ -13,6 +13,7 @@
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Weapon/BulletManager.h>
 #include <Manager/TimerManager.h>
+#include <Component/Collider.h>
 
 void BikeStatScript::Initialize()
 {
@@ -98,10 +99,29 @@ void BikeStatScript::OnStart()
 	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
 
 	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
+	m_BikeStatTextCmp->SetText(L"직전체력");
+	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
+	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
+	m_BikeStatTextCmp->SetFontSize(8);
+	m_BikeStatTextCmp->SetColor(FColor::Green);
+	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+
+	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
 	m_BikeStatTextCmp->SetText(L"test");
 	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
+	m_BikeStatTextCmp->SetColor(FColor::Green);
+	m_BikeStatTextCmp->SetFontSize(8);
+	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+
+	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
+	m_BikeStatTextCmp->SetText(L"현재체력");
+	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
+	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
+	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
+	m_BikeStatTextCmp->SetColor(FColor::Green);
 	m_BikeStatTextCmp->SetFontSize(8);
 	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
 
@@ -110,22 +130,7 @@ void BikeStatScript::OnStart()
 	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
-
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"test");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
-
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"test");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
+	m_BikeStatTextCmp->SetColor(FColor::Green);
 	m_BikeStatTextCmp->SetFontSize(8);
 	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
 
@@ -154,17 +159,18 @@ void BikeStatScript::OnStart()
 	m_bikeStat->OnChangeStatMap["HP"].Add(m_bikeStat->GetHandle(), [this](float oldVal, float newVal)
 		{
 			if (newVal <= 0)	// 죽는 시점
-			{
+			{ 
 				owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
-				owner->GetComponent<SpriteRenderer>()->LoadData(L"dead.png");
-				owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
+				owner->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
+				owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
+				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
 			}
-			else if (oldVal <= 0)	// 부활하는 시점
-			{
-				owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
-				owner->GetComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
-				owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
-			}
+			//else if (oldVal <= 0)	// 부활하는 시점
+			//{
+				//owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
+				//owner->GetComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
+				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
+			//}
 			m_BikeNameTexts[1]->SetTextFormat(L"직전 체력 : ", oldVal);
 			m_BikeNameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);
 		});;
