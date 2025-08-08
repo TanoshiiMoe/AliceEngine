@@ -164,7 +164,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Weapon\Drone.h" />
-    <ClInclude Include="Scripts\Enemy\EnemySpawner.h" />
+    <ClInclude Include="Scripts\Enemy\Spawn\EnemySpawner.h" />
     <ClInclude Include="Scripts\Enemy\EnemyManager.h" />
     <ClInclude Include="Prefab\Enemy\NormalCar.h" />
     <ClInclude Include="Prefab\Enemy\JumpTruck.h" />
@@ -205,7 +205,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="d2dengine_pch.h" />
     <ClInclude Include="Scene\SelectScene.h" />
     <ClInclude Include="Scripts\Widget\SelectWidgetScript.h" />
-    <ClInclude Include="Scripts\Enemy\SpawnCollider.h" />
+    <ClInclude Include="Scripts\Enemy\Spawn\SpawnCollider.h" />
+    <ClInclude Include="Scripts\Enemy\Spawn\SpawnData.h" />
     <ClInclude Include="Spine2D\SpineRenderer.h" />
     <ClInclude Include="Scene\SpineScene.h" />
     <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
@@ -221,7 +222,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scripts\Weapon\Drone.cpp" />
-    <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Prefab\Enemy\NormalCar.cpp" />
     <ClCompile Include="Prefab\Enemy\JumpTruck.cpp" />
@@ -270,7 +271,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
     <ClCompile Include="Scene\SelectScene.cpp" />
     <ClCompile Include="Scripts\Widget\SelectWidgetScript.cpp" />
-    <ClCompile Include="Scripts\Enemy\SpawnCollider.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\SpawnCollider.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
     <ClCompile Include="Spine2D\SpineRenderer.cpp" />
     <ClCompile Include="Scene\SpineScene.cpp" />
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />

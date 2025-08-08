@@ -5,6 +5,9 @@
 #include "Manager/SceneManager.h"
 #include <System/ScriptSystem.h>
 #include "Manager/UpdateTaskManager.h"
+#include "EnemySpawner.h"
+#include <TileMap/TileMapLoader.h>
+#include "SpawnData.h"
 
 void SpawnCollider::Initialize()
 {
@@ -21,9 +24,11 @@ void SpawnCollider::OnStart()
 	//owner->SetParent(SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player")->transform());
 
 	co->SetBoxSize(FVector2(500.0f, 500.0f));
-	co->SetLayer(0);
+	co->SetLayer(1);
 
 	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
+
+	enemySpawner = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"EnemySpawner")->GetComponent<EnemySpawner>();
 }
 
 void SpawnCollider::Update(const float& deltaSeconds)
@@ -35,4 +40,9 @@ void SpawnCollider::OnTriggerEnter2D(Collider* collider)
 {
 	std::wstring message = collider->GetOwner()->GetName() + L" : 스포너 콜라이더 Enter!!\n";
 	OutputDebugStringW(message.c_str());
+
+	if (collider->GetOwner()->GetTag() == L"EnemySpawn") {
+		int etype = collider->GetOwner()->GetComponent<SpawnData>()->GetCollData().enemyType;
+		enemySpawner->SpawnEnemySkewPos(etype, collider->GetOwner()->GetPosition());
+	}
 }
