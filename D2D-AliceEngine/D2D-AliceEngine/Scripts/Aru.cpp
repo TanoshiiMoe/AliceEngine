@@ -1,4 +1,4 @@
-#include "Aru.h"
+ï»¿#include "Aru.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -14,6 +14,7 @@
 #include <Scripts/Weapon/BulletManager.h>
 #include <Manager/TimerManager.h>
 #include "Weapon/Drone.h"
+#include "Aru2.h"
 
 void Aru::Initialize()
 {
@@ -28,21 +29,21 @@ void Aru::Initialize()
 void Aru::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void Aru::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	// 
-	// ¸¶¿ì½º Å¬¸¯ °¨Áö
+	// ë§ˆìš°ìŠ¤ í´ë¦­ ê°ì§€
 
 	if (Input::IsMouseLeftDown() && bCanFire)
 	{
 		FVector2 ownerPos = owner->GetPosition();
-		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ¸¶¿ì½ºÀÇ ½ÇÁ¦ ¿ùµå ÁÂÇ¥
+		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ë§ˆìš°ìŠ¤ì˜ ì‹¤ì œ ì›”ë“œ ì¢Œí‘œ
 		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, 300, EDroneType::Player);
 		bCanFire = false;
 	}
@@ -51,7 +52,7 @@ void Aru::Update(const float& deltaSeconds)
 void Aru::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -67,14 +68,14 @@ void Aru::OnStart()
 		[this]()
 		{
 			bCanFire = true;
-			OutputDebugStringW(L"¶÷´Ù Å¸ÀÌ¸Ó È£ÃâµÊ!\n");
+			OutputDebugStringW(L"ëŒë‹¤ íƒ€ì´ë¨¸ í˜¸ì¶œë¨!\n");
 		}, 
 		0.1f,
 		true,
 		0.0f
 	);
 
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	m_aru = GetOwner();
 	m_aru->transform()->SetPosition(0, 0);
 	m_aru->transform()->SetRotation(0);
@@ -85,7 +86,7 @@ void Aru::OnStart()
 	m_aru->GetComponent<BoxComponent>()->SetIgnoreOwnerScale(false);
 
 	/*
-	* °ÔÀÓ¿ÀºêÁ§Æ®¿¡ TextRenderComponent¸¦ ºÙÀÌ´Â ¿¹½Ã
+	* ê²Œì„ì˜¤ë¸Œì íŠ¸ì— TextRenderComponentë¥¼ ë¶™ì´ëŠ” ì˜ˆì‹œ
 	*/
 
 	TextRenderComponent* m_aruTextCmp = m_aru->AddComponent<TextRenderComponent>();
@@ -132,16 +133,16 @@ void Aru::OnStart()
 
 
 	/*
-	* Ä¿½ºÅÒ ±¸Á¶Ã¼·Î µ¨¸®°ÔÀÌÆ®¸¦ ¹ÙÀÎµù ÇÏ´Â ¿¹Á¦
+	* ì»¤ìŠ¤í…€ êµ¬ì¡°ì²´ë¡œ ë¸ë¦¬ê²Œì´íŠ¸ë¥¼ ë°”ì¸ë”© í•˜ëŠ” ì˜ˆì œ
 	*/
 	m_aruStat = m_aru->AddComponent<StatComponent<AruStat>>();
 	m_aruStat->SetStat("HP", 30);
 	m_aruStat->SetStat("MAXHP", 30);
 	m_aruStat->SetStat("MP", 200);
-	m_aruNameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", m_aruStat->GetStat("HP"));
-	m_aruNameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", m_aruStat->GetStat("HP"));
-	m_aruNameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", m_aruStat->GetStat("MAXHP"));
-	m_aruNameTexts[4]->SetTextFormat(L"¸¶³ª : ", m_aruStat->GetStat("MP"));
+	m_aruNameTexts[1]->SetTextFormat(L"ì§ì „ ì²´ë ¥ : ", m_aruStat->GetStat("HP"));
+	m_aruNameTexts[2]->SetTextFormat(L"í˜„ì¬ ì²´ë ¥ : ", m_aruStat->GetStat("HP"));
+	m_aruNameTexts[3]->SetTextFormat(L"ìµœëŒ€ ì²´ë ¥ : ", m_aruStat->GetStat("MAXHP"));
+	m_aruNameTexts[4]->SetTextFormat(L"ë§ˆë‚˜ : ", m_aruStat->GetStat("MP"));
 
 	widgetSize = m_aruNameTexts[1]->GetRelativeSize();
 	m_aruNameTexts[1]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 1.0)));
@@ -154,30 +155,30 @@ void Aru::OnStart()
 
 	m_aruStat->OnChangeStatMap["HP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
-		if (newVal <= 0)	// Á×´Â ½ÃÁ¡
+		if (newVal <= 0)	// ì£½ëŠ” ì‹œì 
 		{
 			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
 			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"dead.png");
 			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
 		}
-		else if (oldVal <= 0)	// ºÎÈ°ÇÏ´Â ½ÃÁ¡
+		else if (oldVal <= 0)	// ë¶€í™œí•˜ëŠ” ì‹œì 
 		{
 			m_aru->RemoveComponent<BoxComponent>(m_aru->GetComponent<BoxComponent>());
 			m_aru->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
 			m_aru->AddComponent<BoxComponent>(m_aru->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
 		}
-		m_aruNameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", oldVal);
-		m_aruNameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", newVal);
+		m_aruNameTexts[1]->SetTextFormat(L"ì§ì „ ì²´ë ¥ : ", oldVal);
+		m_aruNameTexts[2]->SetTextFormat(L"í˜„ì¬ ì²´ë ¥ : ", newVal);
 	});;
 
 	m_aruStat->OnChangeStatMap["MAXHP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
-		m_aruNameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", newVal);
+		m_aruNameTexts[3]->SetTextFormat(L"ìµœëŒ€ ì²´ë ¥ : ", newVal);
 	});;
 
 	m_aruStat->OnChangeStatMap["MP"].Add(m_aru->GetHandle(), [this](float oldVal, float newVal)
 	{
-		m_aruNameTexts[4]->SetTextFormat(L"¸¶³ª : ", newVal);
+		m_aruNameTexts[4]->SetTextFormat(L"ë§ˆë‚˜ : ", newVal);
 	});;
 
 	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { Input(); });
@@ -185,7 +186,7 @@ void Aru::OnStart()
 
 void Aru::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	TimerManager::GetInstance().ClearTimer(timer);
 }
 
@@ -196,12 +197,12 @@ void Aru::OnDestroy()
 
 void Aru::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 	if (Input::IsKeyPressed(VK_4))
 	{
 		if (m_aru->GetComponent<TextRenderComponent>()->GetText() == L"aru")
-			m_aru->GetComponent<TextRenderComponent>()->SetText(L"¾Æ·ç");
+			m_aru->GetComponent<TextRenderComponent>()->SetText(L"ì•„ë£¨");
 		else
 			m_aru->GetComponent<TextRenderComponent>()->SetText(L"aru");
 	}
@@ -223,11 +224,13 @@ void Aru::Input()
 	}
 	if (Input::IsKeyDown(VK_5))
 	{
-		// »ı¼ºÀÚ·Î ³ÖÀ» ¼öµµ ÀÖÀ½
+		// ìƒì„±ìë¡œ ë„£ì„ ìˆ˜ë„ ìˆìŒ
 		gameObject* gun = GetWorld()->NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
-		gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
+		gun->SetPosition(FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)));
+		//gun->AddComponent<SpriteRenderer>()->LoadData(L"Gun.png");
+		gun->AddComponent<Aru2>();
 
-		// ÁÖ¼®µÈ ¿¹½Ã´Â transformÀ» ÇÏ³ª¾¿ setÇÏ´Â ¹æ¹ı
+		// ì£¼ì„ëœ ì˜ˆì‹œëŠ” transformì„ í•˜ë‚˜ì”© setí•˜ëŠ” ë°©ë²•
 		//gameObject* gun = NewObject<gameObject>(L"gun", FVector2(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512)), FRandom::GetRandomInRange(0, 90), FVector2(FRandom::GetRandomInRange(0.3f, 0.8f), FRandom::GetRandomInRange(0.3f, 0.8f)), FVector2(0.5f));
 		//gun->transform()->SetPosition(FRandom::GetRandomInRange(-512, 512), FRandom::GetRandomInRange(-512, 512));
 		//gun->transform()->SetRotation(FRandom::GetRandomInRange(0, 90));
