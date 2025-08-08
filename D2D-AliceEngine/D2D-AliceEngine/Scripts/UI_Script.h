@@ -1,5 +1,6 @@
 #pragma once
 #include <Component/ScriptComponent.h>
+#include <Manager/TimerManager.h>
 
 class TextRenderComponent;
 class gameObject;
@@ -35,4 +36,6 @@ private:
 	float m_realTimer = 0.0f;
 	float m_accelTimer = 0.0f;    // 가속준비중 ...
 	int m_dotCount = 0;      // 현재 점 개수 (0~3)
+
+	FTimerHandle timer;
 };

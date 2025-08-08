@@ -46,7 +46,7 @@ void TitleWidgetScript::OnStart()
 
 	GetCamera()->AddChildObject(m_owner);
 
-	float guargeSize = 0.7f;
+	float guargeSize = 1.0f;
 
 	auto background = m_owner->AddComponent<SpriteRenderer>();
 
@@ -85,20 +85,25 @@ void TitleWidgetScript::OnStart()
 	auto bgm = obj->GetComponent<AudioComponent>();
 
 	auto volumeGuarge = m_owner->AddComponent<SpriteRenderer>();
-	volumeGuarge->LoadData(L"UI\\UI_Volume.png");
+	volumeGuarge->LoadData(L"UI\\UI_SoundControl.png");
 	volumeGuarge->m_layer = -1000;
 	volumeGuarge->SetRelativeScale(0.7);
 	volumeGuarge->SetDrawType(EDrawType::WorldSpace);
 	volumeGuarge->SetRelativePosition(FVector2(-960, -550));
 
 	auto volumeValue = m_owner->AddComponent<SpriteRenderer>();
-	volumeValue->LoadData(L"UI\\Volume_Guarge.png");
+	volumeValue->LoadData(L"UI\\SFXControl.png");
 	volumeValue->m_layer = -1000;
 	volumeValue->SetDrawType(EDrawType::WorldSpace);
 	float finalPos = -SCREEN_WIDTH / 2.0f
 		+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
 	volumeValue->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
 	volumeValue->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * guargeSize, guargeSize));
+
+	auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
+	bgmControl->LoadData(L"UI\\BGMControl.png");
+
+
 
 	auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
 	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::UI);
@@ -112,6 +117,12 @@ void TitleWidgetScript::OnStart()
 	PopupTab->LoadData(L"UI\\PopupTab.png");
 	PopupTab->m_layer = -1000;
 	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f));
+
+	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
+	soundControl->LoadData(L"UI\\UI_SoundControl.png");
+	soundControl->SetDrawType(EDrawType::ScreenSpace);
+	soundControl->SetRelativePosition(FVector2(0, 0));
+	soundControl->m_layer = -1000;
 
 	if (!startText || !startButton) return;
 	if (!continueText || !continueButton || !continueTabText) return;
@@ -496,7 +507,8 @@ void TitleWidgetScript::OnStart()
 
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		uiSound, optionTabText, soundMinusButton, soundPlusButton, volumeValue, volumeGuarge
+		uiSound, optionTabText, soundMinusButton, soundPlusButton, volumeValue, volumeGuarge,
+		soundControl
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -528,7 +540,7 @@ void TitleWidgetScript::OnStart()
 			volumeValue->m_layer = 503;
 			volumeGuarge->m_layer = 504;
 
-			PopupTab->m_layer = 502;
+			soundControl->m_layer = 502;
 		});
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
