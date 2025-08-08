@@ -15,6 +15,7 @@
 
 #include <Manager/UpdateTaskManager.h>
 #include <Scripts/Weapon/Drone.h>
+#include <Scripts/Bike/BikeStatScript.h>
 
 void PlayerBike::Initialize()
 {
@@ -29,7 +30,7 @@ void PlayerBike::Initialize()
 	owner->AddComponent<InputComponent>();
 	owner->AddComponent<Prism>(10, 0.1f);
 	owner->AddComponent<Drone>();
-	
+	owner->AddComponent<BikeStatScript>();
 
 	// 게임 스크립트 컴포넌트
 	owner->AddComponent<PlayerManager>();

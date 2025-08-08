@@ -10,6 +10,8 @@
 #include "Prefab/Enemy/NormalTruck.h"
 #include "Prefab/Enemy/JumpTruck.h"
 #include "Prefab/Enemy/NormalCar.h"
+#include <Component/Collider.h>
+#include <Scripts/Bike/BikeStatScript.h>
 
 void EnemySpawner::Initialize()
 {
@@ -48,25 +50,55 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 	gameObject* enemy = GetWorld()->NewObject<gameObject>(name);
 	EnemyType etype = static_cast<EnemyType>(_enemyTypeId);
 
+	
+	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
+
 	switch (etype)
 	{
 	case EnemySpawner::Bike:
+		enemy->SetTag(L"Enemy");
 		enemy->AddComponent<EnemyBike>();
+		enemy->AddComponent<BikeStatScript>();
 		break;
 	case EnemySpawner::Truck:
+		enemy->SetTag(L"Obstacle");
 		enemy->AddComponent<NormalTruck>();
 		break;
 	case EnemySpawner::JTruck:
+		enemy->SetTag(L"JumpTrigger");
 		enemy->AddComponent<JumpTruck>();
 		break;
 	case EnemySpawner::Car:
+		enemy->SetTag(L"Obstacle");
 		enemy->AddComponent<NormalCar>();
 		break;
 	case EnemySpawner::Boss:
+		enemy->SetTag(L"Enemy");
+		enemy->AddComponent<BikeStatScript>();
 		break;
 	default:
 		break;
 	}
 
 	enemy->transform()->SetPosition(_position);
+}
+
+
+void EnemySpawner::SetStat(EnemyType type)
+{
+	switch (type)
+	{
+	case EnemySpawner::Bike:
+		break;
+	case EnemySpawner::Truck:
+		break;
+	case EnemySpawner::JTruck:
+		break;
+	case EnemySpawner::Car:
+		break;
+	case EnemySpawner::Boss:
+		break;
+	default:
+		break;
+	}
 }

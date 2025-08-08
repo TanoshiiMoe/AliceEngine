@@ -35,7 +35,7 @@ void Bullet::Initialize()
 	if (Collider* co = owner->AddComponent<Collider>())
 	{
 		co->SetBoxSize(FVector2(40, 40));
-		co->SetLayer(-10);
+		//co->SetLayer(0);
 	}
 
 	TimerManager::GetInstance().ClearTimer(handle); // ¿Ã¿¸ ≈∏¿Ã∏” ¡¶∞≈
@@ -169,28 +169,12 @@ void Bullet::OnDestroy()
 	TimerManager::GetInstance().ClearTimer(handle);
 }
 
-void Bullet::OnCollisionEnter2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionEnter2D »£√‚µ " << std::endl;
-	OutputDebugStringW(L"OnCollisionEnter2D »£√‚µ \n");
-}
-
-void Bullet::OnCollisionStay2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionStay2D »£√‚µ " << std::endl;
-	OutputDebugStringW(L"OnCollisionStay2D »£√‚µ \n");
-}
-
-void Bullet::OnCollisionExit2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionExit2D »£√‚µ " << std::endl;
-	OutputDebugStringW(L"OnCollisionExit2D »£√‚µ \n");
-}
-
 void Bullet::OnTriggerEnter2D(Collider* collider)
 {
 	std::cout << "OnTriggerEnter2D »£√‚µ " << std::endl;
 	OutputDebugStringW(L"OnTriggerEnter2D »£√‚µ \n");
+	if(collider->GetOwner()->GetTag() == L"Enemy")
+		GetWorld()->RemoveObject(collider->GetOwner());
 }
 
 void Bullet::OnTriggerStay2D(Collider* collider)

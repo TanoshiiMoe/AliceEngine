@@ -110,7 +110,6 @@ void Drone::OnStart()
 		[this]()
 		{
 			bCanFire = true;
-			OutputDebugStringW(L"람다 타이머 호출됨!\n");
 		},
 		0.1f,
 		true,
