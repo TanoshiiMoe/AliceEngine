@@ -10,6 +10,7 @@
 #include "Prefab/Enemy/NormalTruck.h"
 #include "Prefab/Enemy/JumpTruck.h"
 #include "Prefab/Enemy/NormalCar.h"
+#include <Component/Collider.h>
 
 void EnemySpawner::Initialize()
 {
@@ -47,6 +48,9 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 	// Àû ½ºÆù
 	gameObject* enemy = GetWorld()->NewObject<gameObject>(name);
 	EnemyType etype = static_cast<EnemyType>(_enemyTypeId);
+
+	enemy->SetTag(L"Enemy");
+	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(70, 70));
 
 	switch (etype)
 	{
