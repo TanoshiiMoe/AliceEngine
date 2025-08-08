@@ -13,6 +13,7 @@
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Weapon/BulletManager.h>
 #include <Manager/TimerManager.h>
+#include "Weapon/Drone.h"
 
 void Aru::Initialize()
 {
@@ -42,7 +43,7 @@ void Aru::Update(const float& deltaSeconds)
 	{
 		FVector2 ownerPos = owner->GetPosition();
 		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
-		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, 300);
+		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, 300, EDroneType::Player);
 		bCanFire = false;
 	}
 }

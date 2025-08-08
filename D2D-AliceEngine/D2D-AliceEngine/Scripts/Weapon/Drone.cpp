@@ -29,6 +29,18 @@ void Drone::Initialize()
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 
 	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+
+	TimerManager::GetInstance().ClearTimer(timer);
+	TimerManager::GetInstance().SetTimer(
+		timer,
+		[this]()
+		{
+			bWaitForSecond = false;
+		},
+		0.0f,
+		false,
+		0.2f
+	);
 }
 
 void Drone::FixedUpdate(const float& deltaSeconds)
@@ -41,6 +53,7 @@ void Drone::FixedUpdate(const float& deltaSeconds)
 void Drone::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	if (bWaitForSecond) return;
 
 	// 여기에 Update에 대한 로직 작성
 	// Skew랑은 상관없음.
@@ -51,7 +64,7 @@ void Drone::Update(const float& deltaSeconds)
 	FVector2 dirNormal = dir.Normalize();
 	
 	Floating(deltaSeconds, dirNormal);
-	MouseButton(bodyPos, worldMousePos, dirNormal);
+	AttackAction(bodyPos, worldMousePos, dirNormal);
 }
 
 void Drone::Floating(const float& deltaSeconds, const FVector2& dirNormal)
@@ -84,28 +97,121 @@ void Drone::Floating(const float& deltaSeconds, const FVector2& dirNormal)
 	body->SetRelativePosition(initBodyPos + FVector2(0, pos.y));
 }
 
-void Drone::MouseButton(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal)
+void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal)
 {
-	if (droneType == EDroneType::Enemy) return;
-	// 각도(라디안) 계산
-	float angleRad = atan2(dirNormal.y, dirNormal.x);
-	// 라디안을 도(degree)로 변환 (엔진이 degree 단위라면)
-	float angleDeg = angleRad * (180.0f / PI);
-	arm->SetRelativeRotation(angleDeg);
-
-	if (Input::IsMouseLeftDown() && bCanFire)
+	switch (droneType)
 	{
-		FVector2 cameraPos = GetCamera()->GetPosition();
-		float currentSpeed = 0;
-		if (auto Bike = owner->GetComponent<BikeMovementScript>())
+	case EDroneType::Player:
+	{
+		// float 버전 사용 + 항상 초기화
+		const float angleRad = std::atan2f(dirNormal.y, dirNormal.x);
+		const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;
+		arm->SetRelativeRotation(angleDeg);
+
+		if (Input::IsMouseLeftDown() && bCanFire)
 		{
-			currentSpeed = Bike->GetCurrSpeed();
+			float currentSpeed = 0.0f;
+			if (auto bike = owner->GetComponent<BikeMovementScript>())
+				currentSpeed = bike->GetCurrSpeed();
+
+			const FVector2 speed{ currentSpeed, 0.0f };
+			BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed, droneType);
+
+			bCanFire = false;
+			TimerManager::GetInstance().SetGlobalTimeScale(1);
 		}
-		FVector2 speed{ currentSpeed , 0 };
-		BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed);
-		bCanFire = false;
-		TimerManager::GetInstance().SetGlobalTimeScale(1);
+		break;
 	}
+	case EDroneType::Enemy:
+	{
+		if (auto player = BulletManager::GetInstance().GetPlayer())
+		{
+			// 1발짜리
+			
+			//FVector2 targetPos = player->transform() ? player->transform()->GetPosition()
+			//	: FVector2{ 0.0f, 0.0f };
+			//float currentSpeed = 0.0f;
+			//FVector2 dir = bodyPos - targetPos;
+			//FVector2 _dirNormal = dir.Normalize();
+			//// float 버전 사용 + 항상 초기화
+			//const float angleRad = std::atan2f(_dirNormal.y, _dirNormal.x);
+			//const float angleDeg = angleRad * 180.0f / Define::PI;
+			//arm->SetRelativeRotation(angleDeg);
+
+			//if (bCanFire)
+			//{
+			//	if (auto bike = player->GetComponent<BikeMovementScript>())
+			//	{
+			//		// 안전하게 접근
+			//		if (auto ownerGO = bike->GetOwner())
+			//			targetPos = ownerGO->transform() ? ownerGO->transform()->GetPosition() : targetPos;
+
+			//		currentSpeed = bike->GetCurrSpeed();
+			//	}
+
+			//	const FVector2 speed{ currentSpeed, 0.0f };
+			//	BulletManager::GetInstance().FireBullet(bodyPos, targetPos, speed, droneType);
+			//	bCanFire = false;
+			//}
+
+			// 3발짜리
+			FVector2 targetPos = player->transform() ? player->transform()->GetPosition()
+				: FVector2{ 0.0f, 0.0f };
+			float currentSpeed = 0.0f;
+
+			FVector2 dir = bodyPos - targetPos; // 적 → 플레이어 방향
+			FVector2 dirNormal = dir.Normalize();
+
+			const float angleRad = std::atan2f(dirNormal.y, dirNormal.x);
+			const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;;
+			arm->SetRelativeRotation(angleDeg);
+
+			if (bCanFire)
+			{
+				if (auto bike = player->GetComponent<BikeMovementScript>())
+				{
+					if (auto ownerGO = bike->GetOwner())
+						targetPos = ownerGO->transform() ? ownerGO->transform()->GetPosition() : targetPos;
+
+					currentSpeed = bike->GetCurrSpeed();
+				}
+
+				const FVector2 speed{ currentSpeed, 0.0f };
+
+				// 0도(원본)
+				BulletManager::GetInstance().FireBullet(bodyPos, targetPos, speed, droneType);
+
+				// 회전 함수
+				auto RotateVector = [](const FVector2& v, float degree) -> FVector2 {
+					float rad = degree * Define::PI / 180.0f;
+					float cs = std::cos(rad);
+					float sn = std::sin(rad);
+					return {   v.y * sn - v.x * cs, v.y * cs - v.x * sn };
+					};
+
+				// +30도
+				{
+					FVector2 dir30 = RotateVector(dirNormal, 30.0f);
+					FVector2 newTarget = bodyPos + dir30 * 1000.0f; // 먼 위치로 타겟
+					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+				}
+
+				// -30도
+				{
+					FVector2 dirNeg30 = RotateVector(dirNormal, -30.0f);
+					FVector2 newTarget = bodyPos + dirNeg30 * 1000.0f;
+					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+				}
+
+				bCanFire = false;
+			}
+		}
+		break;
+	}
+	default:
+		break;
+	}
+	
 }
 
 void Drone::LateUpdate(const float& deltaSeconds)
@@ -130,7 +236,7 @@ void Drone::OnStart()
 		{
 			bCanFire = true;
 		},
-		0.1f,
+		attackDelay,
 		true,
 		0.0f
 	);
@@ -152,28 +258,11 @@ void Drone::OnStart()
 void Drone::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+	TimerManager::GetInstance().ClearTimer(timer);
 }
 
 void Drone::OnDestroy()
 {
-}
-
-void Drone::OnCollisionEnter2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionEnter2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnCollisionEnter2D 호출됨\n");
-}
-
-void Drone::OnCollisionStay2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionStay2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnCollisionStay2D 호출됨\n");
-}
-
-void Drone::OnCollisionExit2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionExit2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnCollisionExit2D 호출됨\n");
 }
 
 void Drone::OnTriggerEnter2D(Collider* collider)

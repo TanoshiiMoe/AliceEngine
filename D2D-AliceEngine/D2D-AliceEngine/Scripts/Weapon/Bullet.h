@@ -1,6 +1,7 @@
 #pragma once
 #include <Component/ScriptComponent.h>
 #include <Manager/TimerManager.h>
+#include "Drone.h"
 
 enum class EBulletType
 {
@@ -34,6 +35,11 @@ public:
 
 	gameObject* m_owner;
 
+	EDroneType GetDroneType() const { return droneType; }
+	void SetDroneType(EDroneType type) { droneType = type; }
+	const std::wstring& GetSpritePath() const { return spritePath; }
+	void SetSpritePath(const std::wstring& path) { spritePath = path; }
+
 public:
 	FVector2 P0, P1, P2;
 	float time = 0.0f;
@@ -53,6 +59,8 @@ public:
 	float waveFrequency = 2.0f;  // 흔들림 속도
 
 	EBulletType bulletType = EBulletType::BezierCurve;
+	EDroneType droneType = EDroneType::Player; // 드론 타입
+	std::wstring spritePath = L"wallet.png";
 
 	FTimerHandle handle;
 	bool bCameraCulling = false;
