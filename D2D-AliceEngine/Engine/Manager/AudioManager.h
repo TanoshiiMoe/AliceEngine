@@ -12,7 +12,7 @@ enum class AudioMode : uint32_t
 	StreamLoop = FMOD_CREATESTREAM | FMOD_LOOP_NORMAL | FMOD_2D // 긴 배경음 반복
 };
 
-enum class SoundType { BGM, SFX, UI };
+enum class SoundType { BGM, SFX };
 
 struct SoundData
 {
@@ -86,22 +86,22 @@ public:
 	float GetSFXVolume() const;
 	void SetSFXVolume(float volume);
 
-	float GetUIVolume() const;
-	void SetUIVolume(float volume);
+	//float GetUIVolume() const;
+	//void SetUIVolume(float volume);
 	
 	std::wstring fileDirPath; // 오디오 파일 경로
 
 private:
 	FMOD::System* m_System = nullptr;
 	FMOD::ChannelGroup* m_MasterGroup = nullptr;
-	FMOD::ChannelGroup* m_UIGroup = nullptr;
 	FMOD::ChannelGroup* m_BGMGroup = nullptr;
 	FMOD::ChannelGroup* m_SFXGroup = nullptr;
+	//FMOD::ChannelGroup* m_UIGroup = nullptr;
 
-	float m_masterVolume = 1.0f;
+	float m_masterVolume;
 	float m_bgmVolume = 0.5f;
-	float m_sfxVolume = 0.3f;
-	float m_UIVolume = 0.3f;
+	float m_sfxVolume = 0.5f;
+	//float m_UIVolume = 0.3f;
 	// 필요시 추가
 };
 

@@ -23,6 +23,19 @@ void UI_Script::Initialize()
 	REGISTER_SCRIPT_METHOD(OnStart);
 	REGISTER_SCRIPT_METHOD(OnEnd);
 	REGISTER_SCRIPT_METHOD(OnDestroy);
+	TimerManager::GetInstance().ClearTimer(timer);
+	TimerManager::GetInstance().SetTimer(
+		timer,
+		[this]()
+		{
+			m_dotCount = (m_dotCount + 1) % 3;
+			std::wstring dots(m_dotCount, L'.');
+			m_accel->SetTextFormat(L"가속준비중", dots);
+		},
+		0.5f,
+		true,
+		0
+	);
 }
 
 void UI_Script::Update(const float& deltaSeconds)
@@ -46,6 +59,7 @@ void UI_Script::Update(const float& deltaSeconds)
 	std::wstring dots(m_dotCount, L'.');
 
 	m_accel->SetText(L"가속준비중 ." + dots);
+	m_accel->SetTextFormat(L"가속준비중", dots);
 
 	m_RealTime->SetText(m_realTimer);
 }
@@ -205,6 +219,7 @@ void UI_Script::OnStart()
 void UI_Script::OnEnd()
 {
 	// 여기에 OnEnd에 대한 로직 작성
+	TimerManager::GetInstance().ClearTimer(timer);
 }
 
 void UI_Script::OnDestroy()

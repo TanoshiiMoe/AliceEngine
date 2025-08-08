@@ -29,7 +29,7 @@ void TitleAudioScript::OnStart()
 {
 	m_owner = GetOwner();
 	m_Audio = m_owner->AddComponent<AudioComponent>(L"TitleBGM");
-	m_Audio->LoadData(L"Bg_music_maintitle.wav",AudioMode::StreamLoop, SoundType::BGM);
+	m_Audio->LoadData(L"Bg_music_Maintitle.wav",AudioMode::StreamLoop, SoundType::BGM);
 	m_Audio->PlayByName(L"TitleBGM", 0, 0.5);
 }
 
