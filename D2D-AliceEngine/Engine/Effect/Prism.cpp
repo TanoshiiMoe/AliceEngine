@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Prism.h"
 
 #include "Object/gameObject.h"
@@ -12,7 +12,7 @@
 Prism::~Prism()
 {
 	ClearObjects();
-	TimerManager::GetInstance().ClearTimer(timer); // Å¸ÀÌ¸Ó Á¦°Å
+	TimerManager::GetInstance().ClearTimer(timer); // íƒ€ì´ë¨¸ ì œê±°
 }
 
 void Prism::Initialize()
@@ -21,13 +21,13 @@ void Prism::Initialize()
 		animator = owner->GetComponent<Animator>();
 	else 
 	{
-		OutputDebugStringW(L"ÇÁ¸®Áò ÄÄÆ÷³ÍÆ®¿¡¼­ Animator¸¦ Ã£À»¼ö ¾ø½À´Ï´Ù!!");
+		OutputDebugStringW(L"í”„ë¦¬ì¦˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ Animatorë¥¼ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!");
 		return;
 	}
 
-	// ´ÙÀ½ ÇÁ·¹ÀÓÀÇ Ã¹ ½ÃÀÛ½Ã¿¡ ¹Ù·Î »ı¼º½ÃÄÑ¼­ Æ®·£½ºÆûÀÇ Áö¿¬À» ¸·±â
+	// ë‹¤ìŒ í”„ë ˆì„ì˜ ì²« ì‹œì‘ì‹œì— ë°”ë¡œ ìƒì„±ì‹œì¼œì„œ íŠ¸ëœìŠ¤í¼ì˜ ì§€ì—°ì„ ë§‰ê¸°
 	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
-	TimerManager::GetInstance().ClearTimer(timer); // ÀÌÀü Å¸ÀÌ¸Ó Á¦°Å
+	TimerManager::GetInstance().ClearTimer(timer); // ì´ì „ íƒ€ì´ë¨¸ ì œê±°
 	TimerManager::GetInstance().SetTimer(
 		timer,
 		[this]() 
@@ -50,17 +50,17 @@ void Prism::Update(const float& deltaSeconds)
 	if (!isActive)
 		return;
 
-	// ´õÆ¼¸é ´Ù Âû½Ã isEnabled¸¦ false·Î
+	// ë”í‹°ë©´ ë‹¤ ì°°ì‹œ isEnabledë¥¼ falseë¡œ
 	if (isEnabled && isDirty && objects.size() == prismCount)
 		isEnabled = false;
 
-	// count || intervalÀÌ 0º¸´Ù ÀÛÀ¸¸é ½ÇÇà¾ÈÇÔ
+	// count || intervalì´ 0ë³´ë‹¤ ì‘ìœ¼ë©´ ì‹¤í–‰ì•ˆí•¨
 	if (prismCount <= 0 || interval <= 0.0f) {
 		isActive = false;
 		return;
 	}
 
-	// ¾Ö´Ï¸ŞÀÌÅÍ ¾øÀ»½Ã ¸®ÅÏ
+	// ì• ë‹ˆë©”ì´í„° ì—†ì„ì‹œ ë¦¬í„´
 	if (animator == nullptr) {
 		isActive = false;
 		return;
@@ -71,7 +71,7 @@ void Prism::Update(const float& deltaSeconds)
 	if (ellipsedTime >= interval) {
 		ellipsedTime -= interval;
 
-		// TODO::»êµ¥ºñ½ºÅº »ı¼º
+		// TODO::ì‚°ë°ë¹„ìŠ¤íƒ„ ìƒì„±
 		if(isEnabled)
 			MakeEffect();
 		ChangeColor();
@@ -81,7 +81,7 @@ void Prism::Update(const float& deltaSeconds)
 
 void Prism::GetSpriteInfo()
 {
-	// ¾Ö´Ï¸ŞÀÌÅÍ ¾øÀ»½Ã ¸®ÅÏ
+	// ì• ë‹ˆë©”ì´í„° ì—†ì„ì‹œ ë¦¬í„´
 	if (animator == nullptr) {
 		return;
 	}
@@ -95,7 +95,7 @@ void Prism::GetSpriteInfo()
 
 void Prism::GetCurrBitmap()
 {
-	// ¾Ö´Ï¸ŞÀÌÅÍ ¾øÀ»½Ã ¸®ÅÏ
+	// ì• ë‹ˆë©”ì´í„° ì—†ì„ì‹œ ë¦¬í„´
 	if (animator == nullptr) {
 		return;
 	}
@@ -109,29 +109,29 @@ void Prism::MakeEffect()
 	GetCurrBitmap();
 
 	if (!owner) {
-		OutputDebugStringW(L"ÇÁ¸®Áò ÄÄÆ÷³ÍÆ®¿¡¼­ owner¸¦ Ã£À»¼ö ¾ø½À´Ï´Ù!!");
+		OutputDebugStringW(L"í”„ë¦¬ì¦˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ ownerë¥¼ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!");
 		return;
 	}
 		
 
 	if (spriteInfo == nullptr) {
-		OutputDebugStringW(L"ÇÁ¸®Áò ÄÄÆ÷³ÍÆ®¿¡¼­ spriteInfo¸¦ Ã£À»¼ö ¾ø½À´Ï´Ù!!");
+		OutputDebugStringW(L"í”„ë¦¬ì¦˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ spriteInfoë¥¼ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!");
 		return;
 	}
 
 	if (bitmap.expired()) {
-		OutputDebugStringW(L"ÇÁ¸®Áò ÄÄÆ÷³ÍÆ®¿¡¼­ bitmapÀ» Ã£À»¼ö ¾ø½À´Ï´Ù!!");
+		OutputDebugStringW(L"í”„ë¦¬ì¦˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ bitmapì„ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!");
 		return;
 	}
 
 	if (WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObject<gameObject>(L"effect")){
 		SetSpriteRenderer(temp.Get());
-		SetPrismTransform(temp.Get()); // Æ®·£½ºÆû ¼³Á¤
+		SetPrismTransform(temp.Get()); // íŠ¸ëœìŠ¤í¼ ì„¤ì •
 
-		// ÀÓ½Ã ¿ÀºêÁ§Æ® Å¥¿¡ ÀúÀå
+		// ì„ì‹œ ì˜¤ë¸Œì íŠ¸ íì— ì €ì¥
 		objects.push_back(temp);
 
-		// ¿ÀºêÁ§Æ®µé ·»´õ¼ø¼­ º¯°æ
+		// ì˜¤ë¸Œì íŠ¸ë“¤ ë Œë”ìˆœì„œ ë³€ê²½
 		for (auto& object : objects) {
 			if (object) {
 				object->GetComponent<SpriteRenderer>()->m_layer -= 1;
@@ -139,14 +139,14 @@ void Prism::MakeEffect()
 		}
 	}
 	else {
-		OutputDebugStringW(L"ÇÁ¸®Áò ÄÄÆ÷³ÍÆ®¿¡¼­ gameObject¸¦ »ı¼ºÇÒ¼ö ¾ø½À´Ï´Ù!!");
+		OutputDebugStringW(L"í”„ë¦¬ì¦˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ gameObjectë¥¼ ìƒì„±í• ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!");
 		return;
 	}
 }
 
 void Prism::ChangeColor()
 {
-	// µÚ¿¡¼­ºÎÅÍ ½ÃÀÛÇØ¾ßÇÔ
+	// ë’¤ì—ì„œë¶€í„° ì‹œì‘í•´ì•¼í•¨
 	auto it = objects.rbegin();
 
 	while (it != objects.rend()) {
@@ -157,7 +157,7 @@ void Prism::ChangeColor()
 
 				D2DRenderManager::GetD2DDevice()->CreateEffect(CLSID_D2D1ColorMatrix, &colorEffect);
 
-				//¿øº» ÀÌ¹ÌÁö ÀÔ·Â
+				//ì›ë³¸ ì´ë¯¸ì§€ ì…ë ¥
 				colorEffect->SetInput(0, sr->m_bitmap.get());
 				
 				int distance = std::distance(objects.rbegin(), it);
@@ -166,20 +166,20 @@ void Prism::ChangeColor()
 				float red = 0.0f;
 				float alpha = 0.0f;
 
-				// »ö»ó enable¿¡ µû¶ó Á¤ÇÏ±â
+				// ìƒ‰ìƒ enableì— ë”°ë¼ ì •í•˜ê¸°
 				if (isEnabled) {
 					blue = (1.0f / (float)prismCount) * (prismCount - distance);
 					red = (1.0f / (float)prismCount) * distance;
-					alpha = 0.8f - red;
+					alpha = 0.5f - (red * 0.5f);
 				}
 				else {
 					blue = (1.0f / (float)prismCount) * (prismCount - (distance + (prismCount - objects.size())));
 					red = (1.0f / (float)prismCount) * (distance + (prismCount - objects.size()));
-					alpha = 0.8f - red;
+					alpha = 0.5f - (red * 0.5f);
 				}
 
 
-				// »ö»ó Çà·Ä ¼³Á¤ (¿¹ : »¡°­ °­Á¶)
+				// ìƒ‰ìƒ í–‰ë ¬ ì„¤ì • (ì˜ˆ : ë¹¨ê°• ê°•ì¡°)
 				D2D1_MATRIX_5X4_F colorMatrix = {
 					red, 0.0f, blue, 0.0f, // R
 					0.0f, 0.5f, 0.0f, 0.0f, // G
@@ -194,7 +194,7 @@ void Prism::ChangeColor()
 				//sr->m_effect->SetInputEffect(0, colorEffect.Get());
 			}
 			else {
-				OutputDebugStringW(L"ÇÁ¸®Áò ÄÄÆ÷³ÍÆ®¿¡¼­ object¸¦ Ã£À»¼ö ¾ø½À´Ï´Ù!!");
+				OutputDebugStringW(L"í”„ë¦¬ì¦˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ objectë¥¼ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!");
 			}
 		}
 		++it;
@@ -209,14 +209,14 @@ void Prism::ChangeColor()
 	//			ComPtr<ID2D1Effect> colorEffect;
 	//			D2DRenderManager::GetD2DDevice()->CreateEffect(CLSID_D2D1ColorMatrix, &colorEffect);
 
-	//			// ¿øº» ÀÌ¹ÌÁö ÀÔ·Â
+	//			// ì›ë³¸ ì´ë¯¸ì§€ ì…ë ¥
 	//			colorEffect->SetInput(0, sr->m_bitmap.get());
 	//			
 	//			float red = (1.0f / (float)prismCount) * (prismCount - it);
 	//			float blue = (1.0f / (float)prismCount) * it;
 	//			float alpha = 0.8f - red;
 
-	//			// »ö»ó Çà·Ä ¼³Á¤ (¿¹ : »¡°­ °­Á¶)
+	//			// ìƒ‰ìƒ í–‰ë ¬ ì„¤ì • (ì˜ˆ : ë¹¨ê°• ê°•ì¡°)
 	//			D2D1_MATRIX_5X4_F colorMatrix = {
 	//				red, 0.0f, blue, 0.0f, // R
 	//				0.0f, 0.5f, 0.0f, 0.0f, // G
@@ -230,7 +230,7 @@ void Prism::ChangeColor()
 	//			sr->m_effect = colorEffect;
 	//		}
 	//		else {
-	//			OutputDebugStringW(L"ÇÁ¸®Áò ÄÄÆ÷³ÍÆ®¿¡¼­ object¸¦ Ã£À»¼ö ¾ø½À´Ï´Ù!!");
+	//			OutputDebugStringW(L"í”„ë¦¬ì¦˜ ì»´í¬ë„ŒíŠ¸ì—ì„œ objectë¥¼ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!");
 	//		}
 	//	}
 	//	++it;
@@ -240,7 +240,7 @@ void Prism::ChangeColor()
 void Prism::DeleteLast()
 {
 	if (isEnabled) {
-		// °¹¼ö ³Ñ¾î°¡¸é »èÁ¦
+		// ê°¯ìˆ˜ ë„˜ì–´ê°€ë©´ ì‚­ì œ
 		while (objects.size() > prismCount) {
 			SceneManager::GetInstance().GetWorld()->RemoveObject(objects.front().Get());
 			objects.front().reset();
@@ -248,7 +248,7 @@ void Prism::DeleteLast()
 		}
 	}
 	else if (!objects.empty()) {
-		// ¾Õ¿¡°ÍºÎÅÍ Â÷·Ê´ë·Î »èÁ¦
+		// ì•ì—ê²ƒë¶€í„° ì°¨ë¡€ëŒ€ë¡œ ì‚­ì œ
 		SceneManager::GetInstance().GetWorld()->RemoveObject(objects.front().Get());
 		objects.front().reset();
 		objects.pop_front();
@@ -294,14 +294,14 @@ void Prism::SetPrismTransform(gameObject* go)
 	go->transform()->SetScale(owner->transform()->GetScale());
 }
 
-// ½ºÇÁ¶óÀÌÆ® ·»´õ·¯ ¼³Á¤
+// ìŠ¤í”„ë¼ì´íŠ¸ ë Œë”ëŸ¬ ì„¤ì •
 void Prism::SetSpriteRenderer(gameObject* go)
 {
 	SpriteRenderer* sr = go->AddComponent<SpriteRenderer>();
 	sr->m_bitmap = bitmap.lock();
 	sr->m_layer = animator->m_layer;
 	sr->SetFlip(animator->bFlip);
-	// y°ª¿¡ ¿Ö Height¸¸Å­ »©¾ßÇÔ????????????????? <- x,y Á¡ÀÌ ÁÂÇÏ´Ü¿¡ ÂïÈ÷±â ¶§¹®¿¡ - height ÇØ¾ß Á¤»óÈ­µÈ´Ù.
+	// yê°’ì— ì™œ Heightë§Œí¼ ë¹¼ì•¼í•¨????????????????? <- x,y ì ì´ ì¢Œí•˜ë‹¨ì— ì°íˆê¸° ë•Œë¬¸ì— - height í•´ì•¼ ì •ìƒí™”ëœë‹¤.
 	sr->SetSlice(spriteInfo->x, spriteInfo->y - spriteInfo->height, spriteInfo->width, spriteInfo->height);
 	//sr->spriteInfo = *spriteInfo;
 }
