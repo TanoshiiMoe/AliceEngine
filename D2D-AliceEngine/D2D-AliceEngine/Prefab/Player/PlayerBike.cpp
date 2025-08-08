@@ -21,6 +21,7 @@ void PlayerBike::Initialize()
 {
 	__super::Initialize();
 
+	owner->SetTag(L"Player");
 	// 여기에 컴포넌트 추가	
 	owner->AddComponent<AnimatorInstance>();
 	//owner->AddComponent<BackGroundRender>();
@@ -34,8 +35,11 @@ void PlayerBike::Initialize()
 		L"Player/drone/drone_killdong_body.png",
 		L"Player/drone/drone_killdong_arm.png"
 	);
-	if(Drone* drone = owner->AddComponent<Drone>(dronePath))
+	if (Drone* drone = owner->AddComponent<Drone>(dronePath))
+	{
 		drone->SetDroneType(EDroneType::Player);
+		drone->SetAttackDelay(0.2f);
+	}
 	owner->AddComponent<BikeStatScript>();
 
 	// 게임 스크립트 컴포넌트

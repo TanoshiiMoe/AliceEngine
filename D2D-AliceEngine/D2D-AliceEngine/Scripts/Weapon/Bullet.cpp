@@ -28,11 +28,7 @@ void Bullet::Initialize()
 	REGISTER_SCRIPT_METHOD(OnDestroy);
 
 	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
-	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
-	sp->LoadData(L"wallet.png");
-	sp->m_layer = 20000;
 
-	
 	if (Collider* co = owner->AddComponent<Collider>())
 	{
 		co->SetBoxSize(FVector2(40, 40));
@@ -157,7 +153,10 @@ void Bullet::OnStart()
 {
 	// 여기에 OnStart에 대한 로직 작성
 	m_owner = GetOwner();
-	
+
+	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
+	sp->LoadData(spritePath);
+	sp->m_layer = 20000;
 }
 
 void Bullet::OnEnd()
@@ -174,18 +173,41 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 {
 	std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
 	OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
-	if (collider->GetOwner()->GetTag() == L"Enemy")
+
+	switch (droneType)
 	{
-		if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+	case EDroneType::Player:
+		if (collider->GetOwner()->GetTag() == L"Enemy")
 		{
-			bs->m_bikeStat->DecreaseAbility("HP", 5);
+			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+			{
+				bs->m_bikeStat->DecreaseAbility("HP", 5);
+			}
+			else
+			{
+				GetWorld()->RemoveObject(collider->GetOwner());
+			}
+			GetWorld()->RemoveObject(GetOwner());
 		}
-		else
+		break;
+	case EDroneType::Enemy:
+		if (collider->GetOwner()->GetTag() == L"Player")
 		{
-			GetWorld()->RemoveObject(collider->GetOwner());
+			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+			{
+				bs->m_bikeStat->DecreaseAbility("HP", 2);
+			}
+			else
+			{
+				GetWorld()->RemoveObject(collider->GetOwner());
+			}
+			GetWorld()->RemoveObject(GetOwner());
 		}
-		GetWorld()->RemoveObject(GetOwner());
+		break;
+	default:
+		break;
 	}
+	
 }
 
 void Bullet::OnTriggerStay2D(Collider* collider)
