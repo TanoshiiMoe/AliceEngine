@@ -77,6 +77,7 @@ void ButtonComponent::Update(const float& deltaSeconds)
 void ButtonComponent::Release()
 {
 	__super::Release();
+	stateActionSlots.clear();
 }
 
 void ButtonComponent::Render()

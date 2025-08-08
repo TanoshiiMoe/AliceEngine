@@ -238,6 +238,9 @@
     <ClInclude Include="Scripts\Widget\SelectWidgetScript.h">
       <Filter>Scripts\Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Widget\StageWidgetScript.h">
+      <Filter>Scripts\Widget</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -345,9 +348,6 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
-      <Filter>Scripts\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -394,5 +394,8 @@
     <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
     <ClCompile Include="Scripts\Enemy\SpawnCollider.cpp" />
+    <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp">
+      <Filter>Scripts\Widget</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

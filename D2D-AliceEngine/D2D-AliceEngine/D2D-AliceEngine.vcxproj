@@ -209,6 +209,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Spine2D\SpineRenderer.h" />
     <ClInclude Include="Scene\SpineScene.h" />
     <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
+    <ClInclude Include="Scripts\Widget\StageWidgetScript.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\Video\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
@@ -276,6 +277,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
     <ClCompile Include="Scripts\TitleAudioScript.cpp" />
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
+    <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

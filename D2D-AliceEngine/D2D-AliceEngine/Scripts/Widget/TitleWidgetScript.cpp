@@ -610,6 +610,8 @@ void TitleWidgetScript::OnStart()
 			// 임시 씬 전환
 			SceneManager::ChangeScene(L"HiroScene");
 		});
+
+	
 }
 
 void TitleWidgetScript::OnEnd()

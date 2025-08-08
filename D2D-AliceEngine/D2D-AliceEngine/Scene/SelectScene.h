@@ -14,6 +14,8 @@ public:
 	void OnEnter() override;
 	void OnExit() override;
 
+	void Input();
+
 	gameObject* m_camera;
 	gameObject* m_UI;
 };

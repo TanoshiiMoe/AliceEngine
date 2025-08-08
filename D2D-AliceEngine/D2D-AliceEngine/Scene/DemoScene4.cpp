@@ -33,6 +33,7 @@
 #include <Scripts/Camera/CameraMover.h>
 #include <Prefab/Player/PlayerBike.h>
 #include <Prefab/Truck.h>
+#include <Scripts/Widget/StageWidgetScript.h>
 
 void DemoScene4::Initialize()
 {
@@ -99,8 +100,8 @@ void DemoScene4::OnEnter()
 	//m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
 	m_UI = NewObject<gameObject>(L"UI");
-	m_UI->AddComponent<UI_Script>();
-
+	//m_UI->AddComponent<UI_Script>();
+	m_UI->AddComponent<StageWidgetScript>();
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();
@@ -111,7 +112,7 @@ void DemoScene4::OnEnter()
 	//m_wall->AddComponent<Collider>()->SetBoxSize(FVector2(5500, 200));
 
 	//RemoveObject(m_wall);
-	//m_player->GetComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
+	m_player->GetComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
 	//m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput();  });
 }
 
@@ -124,7 +125,8 @@ void DemoScene4::PlayerInput()
 {
 	if (Input::IsKeyPressed(VK_3))
 	{
-		SceneManager::ChangeScene(L"aruScene");
+		//SceneManager::ChangeScene(L"aruScene");
+		SceneManager::ChangeScene(L"TitleScene");
 	}
 }
 
