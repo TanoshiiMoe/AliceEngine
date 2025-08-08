@@ -51,6 +51,9 @@ void SelectWidgetScript::OnStart()
 	auto continueText = m_owner->AddComponent<TextRenderComponent>();
 	auto closeText = m_owner->AddComponent<TextRenderComponent>();
 
+	//auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
+	//uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::UI);
+
 	// Close
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
 
@@ -128,19 +131,19 @@ void SelectWidgetScript::OnStart()
 	stage1->SetStateAction(Define::EButtonState::Pressed, []{
 		
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
-		SceneManager::ChangeScene(L"KangTest");
+		
 		});
 
 	stage2->SetStateAction(Define::EButtonState::Pressed, [] {
 
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
-		SceneManager::ChangeScene(L"HiroScene");
+		
 		});
 
 	stage3->SetStateAction(Define::EButtonState::Pressed, [] {
 		
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
-		SceneManager::ChangeScene(L"aruScene");
+		
 		});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed,[] {
