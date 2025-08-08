@@ -25,6 +25,8 @@ public:
 		float volume = 0.3f,
 		bool paused = false);
 
+	void RestartByName(const std::wstring& name, float sec = 0, float volume = 0.3f);
+
 	void SetMasterVolume(float volume);
 	void AddMasterVolume(float volume);
 	float GetMasterVolume();

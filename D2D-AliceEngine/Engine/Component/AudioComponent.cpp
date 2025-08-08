@@ -46,6 +46,12 @@ void AudioComponent::PlayByName(const std::wstring& name, float sec, float volum
 	AudioManager::GetInstance().PlaySoundByName(name, &m_Channel, volume, startSec, paused);
 }
 
+void AudioComponent::RestartByName(const std::wstring& name, float sec, float volume)
+{
+	StopByName(name);
+	PlayByName(name, sec, volume);
+}
+
 void AudioComponent::SetMasterVolume(float volume)
 {
 	AudioManager::GetInstance().SetMasterVolume(volume);
@@ -89,9 +95,6 @@ void AudioComponent::SetVolumeByType(SoundType type, float volume)
 	case SoundType::SFX:
 		AudioManager::GetInstance().SetSFXVolume(volume);
 		break;
-	case SoundType::UI:
-		AudioManager::GetInstance().SetUIVolume(volume);
-		break;
 	}
 }
 
@@ -110,9 +113,7 @@ void AudioComponent::AddVolumeByType(SoundType type, float volume)
 		break;
 	case SoundType::SFX:
 		AudioManager::GetInstance().SetSFXVolume(currentVolume);
-		break;
-	case SoundType::UI:
-		AudioManager::GetInstance().SetUIVolume(currentVolume);
+
 		break;
 	}
 }
@@ -128,9 +129,6 @@ float AudioComponent::GetVolume(SoundType type)
 		break;
 	case SoundType::SFX:
 		volume = AudioManager::GetInstance().GetSFXVolume();
-		break;
-	case SoundType::UI:
-		volume = AudioManager::GetInstance().GetUIVolume();
 		break;
 
 	default:
@@ -184,9 +182,6 @@ void AudioComponent::PauseByType(SoundType type, bool paused)
 		AudioManager::GetInstance().PauseSoundByType(type, paused);
 		break;
 	case SoundType::SFX:
-		AudioManager::GetInstance().PauseSoundByType(type, paused);
-		break;
-	case SoundType::UI:
 		AudioManager::GetInstance().PauseSoundByType(type, paused);
 		break;
 

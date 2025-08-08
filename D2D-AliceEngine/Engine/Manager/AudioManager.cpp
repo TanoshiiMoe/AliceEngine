@@ -46,12 +46,12 @@ void AudioManager::Initialize()
 	// 하위 그룹 생성
 	m_System->createChannelGroup("BGM", &m_BGMGroup);
 	m_System->createChannelGroup("SFX", &m_SFXGroup);
-	m_System->createChannelGroup("UI", &m_UIGroup);
+	//m_System->createChannelGroup("UI", &m_UIGroup);
 
 	// 마스터 그룹에 각각 붙임
 	m_MasterGroup->addGroup(m_BGMGroup);
 	m_MasterGroup->addGroup(m_SFXGroup);
-	m_MasterGroup->addGroup(m_UIGroup);
+	//m_MasterGroup->addGroup(m_UIGroup);
 }
 
 void AudioManager::Update()
@@ -146,7 +146,6 @@ void AudioManager::PlaySoundByName(
 	{
 	case SoundType::BGM: group = m_BGMGroup; break;
 	case SoundType::SFX: group = m_SFXGroup; break;
-	case SoundType::UI:  group = m_UIGroup; break;
 	}
 
 	FMOD::Channel* channel = nullptr;
@@ -331,19 +330,19 @@ void AudioManager::SetSFXVolume(float volume)
 	}
 }
 
-float AudioManager::GetUIVolume() const
-{
-	return m_UIVolume;
-}
+//float AudioManager::GetUIVolume() const
+//{
+//	return m_UIVolume;
+//}
 
-void AudioManager::SetUIVolume(float volume)
-{
-	if (volume > 1.0f) volume = 1.0f;
-	if (volume < 0.0f) volume = 0.0f;
-
-	if (m_UIGroup)
-	{
-		m_UIVolume = volume;
-		m_UIGroup->setVolume(volume);
-	}
-}
+//void AudioManager::SetUIVolume(float volume)
+//{
+//	if (volume > 1.0f) volume = 1.0f;
+//	if (volume < 0.0f) volume = 0.0f;
+//
+//	if (m_UIGroup)
+//	{
+//		m_UIVolume = volume;
+//		m_UIGroup->setVolume(volume);
+//	}
+//}
