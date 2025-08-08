@@ -38,11 +38,20 @@ void SpawnCollider::Update(const float& deltaSeconds)
 
 void SpawnCollider::OnTriggerEnter2D(Collider* collider)
 {
-	std::wstring message = collider->GetOwner()->GetName() + L" : 스포너 콜라이더 Enter!!\n";
-	OutputDebugStringW(message.c_str());
+	// 디버깅
+	/*std::wstring message = collider->GetOwner()->GetName() + L" : 스포너 콜라이더 Enter!!\n";
+	OutputDebugStringW(message.c_str());*/
 
 	if (collider->GetOwner()->GetTag() == L"EnemySpawn") {
-		int etype = collider->GetOwner()->GetComponent<SpawnData>()->GetCollData().enemyType;
-		enemySpawner->SpawnEnemySkewPos(etype, collider->GetOwner()->GetPosition());
+		CollData temp = collider->GetOwner()->GetComponent<SpawnData>()->GetCollData();
+
+		if (temp.isUsable) {
+			temp.isUsable = false;
+			int etype = temp.enemyType;
+			collider->GetOwner()->GetComponent<SpawnData>()->SetCollData(temp);
+
+			FVector2 pos = collider->GetOwner()->GetPosition();
+			enemySpawner->SpawnEnemySkewPos(etype, pos);
+		}
 	}
 }

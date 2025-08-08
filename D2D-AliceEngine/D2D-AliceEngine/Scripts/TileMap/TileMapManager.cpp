@@ -6,10 +6,16 @@
 #include "Manager/SceneManager.h"
 #include <Scripts/Enemy/Spawn/SpawnCollider.h>
 
+TileMapManager* TileMapManager::instance = nullptr;
+
 void TileMapManager::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(OnStart);
 
+	if (instance == nullptr)
+		instance = this;
+	else
+		SceneManager::GetInstance().GetWorld()->RemoveObject(this->owner.lock());
 	/*gameObject* coll = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"SpawnCollider");
 	spawnerCollider = coll->AddComponent<Collider>();
 	spawnerCollider->SetBoxSize(FVector2(00.0f, 500.0f));*/
@@ -48,4 +54,9 @@ void TileMapManager::OnStart()
 		std::wstring message = owner->GetName() + L" : TileMapManager에서 TileMapComponent를 가져오는데 실패했습니다!!!\n";
 		OutputDebugStringW(message.c_str());
 	}
+}
+
+TileMapComponent* TileMapManager::GetTileMapComponent()
+{
+	return owner->GetComponent<TileMapComponent>();
 }

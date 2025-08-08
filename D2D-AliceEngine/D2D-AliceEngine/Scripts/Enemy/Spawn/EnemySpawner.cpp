@@ -80,7 +80,7 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 		break;
 	}
 
-	enemy->SetPosition(_position);
+	enemy->transform()->SetPosition(_position);
 }
 
 

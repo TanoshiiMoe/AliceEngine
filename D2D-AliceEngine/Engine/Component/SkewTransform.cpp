@@ -73,12 +73,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 
 void SkewTransform::ToSkewPos()
 {
-	if (zPos != ZPOSINIT) {
-		std::wstring message = owner->GetName() + L" : 이미 zPos가 설정되어있어서 변환을 거부합니다!!\n";
-		OutputDebugStringW(message.c_str());
-		return;
-	}
-
+	zPos = 0.0f;
 	skewDeg = GetSkew();
 
 	float rad = Math::Deg2Rad(skewDeg);
