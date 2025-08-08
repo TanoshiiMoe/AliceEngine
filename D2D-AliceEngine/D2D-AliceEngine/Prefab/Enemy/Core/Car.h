@@ -7,5 +7,6 @@ public:
 	virtual ~Car() {}
 
 	void Initialize() override;
+	void OnStart() override;
 };
 

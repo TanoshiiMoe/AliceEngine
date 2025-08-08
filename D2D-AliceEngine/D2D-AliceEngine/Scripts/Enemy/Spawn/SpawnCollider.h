@@ -2,6 +2,7 @@
 #include "Component/ScriptComponent.h"
 
 class Collider;
+class EnemySpawner;
 class SpawnCollider : public ScriptComponent
 {
 public:
@@ -13,5 +14,6 @@ public:
 private:
 	Collider* co;
 	WeakObjectPtr<gameObject> player;
+	EnemySpawner* enemySpawner;
 };
 

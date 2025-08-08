@@ -4,15 +4,11 @@
 #include "Object/gameObject.h"
 #include "Manager/D2DRenderManager.h"
 #include "Manager/SceneManager.h"
-#include <Scripts/Enemy/SpawnCollider.h>
+#include <Scripts/Enemy/Spawn/SpawnCollider.h>
 
 void TileMapManager::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(OnStart);
-
-	// 플레이어한테 붙일 콜라이더 생성
-	gameObject* coll = GetWorld()->NewObject<gameObject>(L"SpawnCollider");
-	coll->AddComponent<SpawnCollider>();
 
 	/*gameObject* coll = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"SpawnCollider");
 	spawnerCollider = coll->AddComponent<Collider>();

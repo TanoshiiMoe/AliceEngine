@@ -15,6 +15,7 @@
 #include <Helpers/CoordHelper.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Component/BoxComponent.h>
+#include "../../D2D-AliceEngine/Scripts/Enemy/Spawn/SpawnData.h"
 
 TileMapComponent::TileMapComponent()
 {
@@ -106,6 +107,10 @@ void TileMapComponent::CreateTileCollision()
 
 			// 태그 설정
 			collisionGo->SetTag(L"EnemySpawn");
+
+			// 스폰데이터 설정
+			collisionGo->AddComponent<SpawnData>()->SetCollData(tileCollision[tileId + 1]);
+
 
 			if (auto collider = collisionGo->GetComponent<Collider>())
 			{
