@@ -77,13 +77,10 @@ void BikeStatScript::OnStart()
 
 	// 여기에 OnStart에 대한 로직 작성
 	//m_BikeStat = GetOwner();
-	owner->transform()->SetPosition(0, 0);
-	owner->transform()->SetRotation(0);
-	owner->transform()->SetScale(0.25f, 0.25f);
 	owner->AddComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
-	owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetRelativeSize(), FColor::Blue);
-	owner->GetComponent<BoxComponent>()->SetSize(owner->GetComponent<SpriteRenderer>()->GetRelativeSize());
-	owner->GetComponent<BoxComponent>()->SetIgnoreOwnerScale(false);
+	BoxComponent* box = owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetRelativeSize(), FColor::Blue);
+	box->SetSize(owner->GetComponent<SpriteRenderer>()->GetRelativeSize());
+	box->SetIgnoreOwnerScale(false);
 
 	/*
 	* 게임오브젝트에 TextRenderComponent를 붙이는 예시
@@ -94,6 +91,7 @@ void BikeStatScript::OnStart()
 	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_BikeStatTextCmp->SetFontSize(8);
+	m_BikeStatTextCmp->SetColor(FColor::Gold);
 	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
 	FVector2 widgetSize = m_BikeStatTextCmp->GetRelativeSize();
 	m_BikeStatTextCmp->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 5.2f)));
