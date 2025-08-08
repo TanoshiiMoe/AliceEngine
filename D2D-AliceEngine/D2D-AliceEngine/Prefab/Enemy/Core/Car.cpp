@@ -4,10 +4,13 @@
 #include <Scripts/Bike/LaneController.h>
 #include "Component/SpriteRenderer.h"
 #include "Scripts/Enemy/EnemyManager.h"
+#include "System/ScriptSystem.h"
+#include "Manager/SceneManager.h"
 
 void Car::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(OnStart);
 
 	//애니메이터 있을시
 	//owner->AddComponent<Animator>();
@@ -18,4 +21,12 @@ void Car::Initialize()
 
 	// 스크립트
 	owner->AddComponent<EnemyManager>();
+}
+
+void Car::OnStart()
+{
+	// SkewTransform으로 변환하기
+	SkewTransform* st = owner->GetComponent<SkewTransform>();
+	st->groundTile = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"TileMap");
+	st->ToSkewPos();
 }

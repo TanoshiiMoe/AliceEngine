@@ -71,11 +71,11 @@ void PlayerManager::Update(const float& deltaSeconds)
 		animInstance->SetFlip(true);
 		animInstance->SetFloat("speed", 5.0f);
 	}
-	if (Input::IsKeyDown(VK_DOWN))
+	if (Input::IsKeyDown(VK_S))
 	{
 		owner->GetComponent<SkewTransform>()->zPos -= 100.0f * deltaSeconds;
 	}
-	if (Input::IsKeyDown(VK_UP))
+	if (Input::IsKeyDown(VK_W))
 	{
 		owner->GetComponent<SkewTransform>()->zPos += 100.0f * deltaSeconds;
 	}

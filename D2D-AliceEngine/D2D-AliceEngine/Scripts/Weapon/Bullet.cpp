@@ -35,7 +35,7 @@ void Bullet::Initialize()
 	if (Collider* co = owner->AddComponent<Collider>())
 	{
 		co->SetBoxSize(FVector2(40, 40));
-		co->SetLayer(-10);
+		//co->SetLayer(0);
 	}
 
 	TimerManager::GetInstance().ClearTimer(handle); // ÀÌÀü Å¸ÀÌ¸Ó Á¦°Å
@@ -59,11 +59,14 @@ void Bullet::Update(const float& deltaSeconds)
 
 void Bullet::UpdatePositionByType(const float& deltaSeconds)
 {
-	//FVector2 acceleration;
-	//if (BikeMovementScript* bms = owner->GetComponent<BikeMovementScript>())
-	//{
-	//	acceleration += bms->GetAcceleration();
-	//}
+	FVector2 acceleration;
+	if (WeakObjectPtr<gameObject> player = BulletManager::GetInstance().GetPlayer())
+	{
+		if (BikeMovementScript* bms = player->GetComponent<BikeMovementScript>())
+		{
+			acceleration += bms->GetPrevMoveAmount();
+		}
+	}
 	switch (bulletType)
 	{
 	case EBulletType::Linear:
@@ -166,28 +169,12 @@ void Bullet::OnDestroy()
 	TimerManager::GetInstance().ClearTimer(handle);
 }
 
-void Bullet::OnCollisionEnter2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionEnter2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionEnter2D È£ÃâµÊ\n");
-}
-
-void Bullet::OnCollisionStay2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionStay2D È£ÃâµÊ\n");
-}
-
-void Bullet::OnCollisionExit2D(Collision2D* collider)
-{
-	std::cout << "OnCollisionExit2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionExit2D È£ÃâµÊ\n");
-}
-
 void Bullet::OnTriggerEnter2D(Collider* collider)
 {
 	std::cout << "OnTriggerEnter2D È£ÃâµÊ" << std::endl;
 	OutputDebugStringW(L"OnTriggerEnter2D È£ÃâµÊ\n");
+	if(collider->GetOwner()->GetTag() == L"Enemy")
+		GetWorld()->RemoveObject(collider->GetOwner());
 }
 
 void Bullet::OnTriggerStay2D(Collider* collider)

@@ -12,5 +12,7 @@ void NormalTruck::Initialize()
 
 void NormalTruck::OnStart()
 {
+	__super::OnStart();
 	owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Porter/porter.png");
+	owner->transform()->SetScale(0.6f, 0.6f);
 }

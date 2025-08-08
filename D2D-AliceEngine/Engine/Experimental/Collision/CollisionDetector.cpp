@@ -30,37 +30,65 @@ void Physics::FCollisionDetector::BruteForceOverlapCheck(std::vector<WeakObjectP
 
 std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects)
 {
-    // Sweep and Prune을 위한 정렬
-    std::sort(objects.begin(), objects.end(), &FCollisionDetector::CompareColliderMinX);
-    
-    std::unordered_set<Rigidbody2D*> overlappedRigdBodies;
-    CollisionSystem::GetInstance().currentCollisions.clear();
-    for (size_t i = 0; i < objects.size(); ++i)
-    {
-        auto src = objects[i];
-		if (CheckCollisionCondition(src)) continue;
+	struct Entry
+	{
+		WeakObjectPtr<Collider> weak;
+		float minX;
+		float maxX;
+	};
 
-        for (size_t j = i + 1; j < objects.size(); ++j)
-        {
-			auto tar = objects[j];
-			if (CheckCollisionCondition(tar)) continue;
+	std::vector<Entry> active;
+	active.reserve(objects.size());
 
-            // Prune: 더 이상 겹칠 수 없으면 break
-            if (tar->aabb.minVector.x > src->aabb.maxVector.x)
-                break;
+	// 살아있는 콜라이더만 스냅샷 생성
+	for (auto& w : objects)
+	{
+		if (w.expired()) continue;
+		if (CheckCollisionCondition(w)) continue;
 
-            // 실제 충돌 검사
-            if (IsOverlapped(src, tar))
-            {
-				if (src.expired() || tar.expired()) continue;
-                PushOverlappedArea(src.Get(), tar.Get());
-				SavePreviousCollisionData(src.Get(), tar.Get(), overlappedRigdBodies);
-            }
-        }
-    }
+		Collider* c = w.Get();
+		active.push_back(Entry{ w, c->aabb.minVector.x, c->aabb.maxVector.x });
+	}
+
+	// minX로 정렬
+	std::sort(active.begin(), active.end(),
+		[](const Entry& a, const Entry& b) {
+			return a.minX < b.minX;
+		});
+
+	std::unordered_set<Rigidbody2D*> overlappedRigidBodies;
+	CollisionSystem::GetInstance().currentCollisions.clear();
+
+	// Sweep & Prune
+	for (size_t i = 0; i < active.size(); ++i)
+	{
+		auto& A = active[i];
+		if (A.weak.expired()) continue;
+
+		for (size_t j = i + 1; j < active.size(); ++j)
+		{
+			auto& B = active[j];
+			if (B.weak.expired()) continue;
+
+			// Prune
+			if (B.minX > A.maxX)
+				break;
+
+			// 실제 충돌 판정
+			if (IsOverlapped(A.weak, B.weak))
+			{
+				Collider* ca = A.weak.Get();
+				Collider* cb = B.weak.Get();
+				if (!ca || !cb) continue;
+
+				PushOverlappedArea(ca, cb);
+				SavePreviousCollisionData(ca, cb, overlappedRigidBodies);
+			}
+		}
+	}
+
 	LoadPreviousCollisions();
-
-    return overlappedRigdBodies;
+	return overlappedRigidBodies;
 }
 
 bool Physics::FCollisionDetector::CheckCollisionCondition(WeakObjectPtr<Collider>& _object)

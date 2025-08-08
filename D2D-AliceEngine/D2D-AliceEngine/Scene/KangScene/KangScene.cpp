@@ -32,6 +32,7 @@
 #include <Prefab/Player/PlayerBike.h>
 #include "Scripts/TileMap/TileMapManager.h"
 #include <Scripts/Weapon/BulletManager.h>
+#include "Scripts/Enemy/Spawn/EnemySpawner.h"
 
 void KangScene::Initialize()
 {
@@ -73,11 +74,22 @@ void KangScene::OnEnter()
 	m_tile->AddComponent<TileMapComponent>();
 	m_tile->AddComponent<TileMapManager>();
 
-	// 적 스포너 매니저 생
+	// 적 스포너 매니저 생성
+	gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
+	eSpwaner->AddComponent<EnemySpawner>();
+
 	
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();
+
+	// 씬 전환
+	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
+	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
+		if (Input::IsKeyPressed(VK_3)) {
+			SceneManager::ChangeScene(L"TitleScene");
+		}
+		});
 }
 
 void KangScene::OnExit()

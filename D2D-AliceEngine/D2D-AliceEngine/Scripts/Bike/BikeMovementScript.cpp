@@ -62,7 +62,7 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 
 	// 최종 속도 = 현재속도 * 효과배율
 	float finalSpeed = m_currentSpeed * m_speedModifier;
-
+	m_prevMoveAmount = finalSpeed;
 	// 오른쪽으로 이동
 	if (auto transform = m_owner->transform())
 		transform->AddPosition(finalSpeed * deltaSeconds, 0);

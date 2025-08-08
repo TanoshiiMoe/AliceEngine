@@ -26,9 +26,6 @@ public:
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
 
-	virtual void OnCollisionEnter2D(Collision2D* collider) override;
-	virtual void OnCollisionStay2D(Collision2D* collider) override;
-	virtual void OnCollisionExit2D(Collision2D* collider) override;
 	virtual void OnTriggerEnter2D(Collider* collider) override;
 	virtual void OnTriggerStay2D(Collider* collider) override;
 	virtual void OnTriggerExit2D(Collider* collider) override;
@@ -50,7 +47,7 @@ public:
 	FVector2 moveDir; // 총알의 직진 방향 (Normalized)
 	FVector2 startPos;
 	FVector2 currentPos;
-	float moveSpeed = 5.0f; // 총알 속도
+	float moveSpeed = 8.1f; // 총알 속도
 
 	float waveAmplitude = 0.2f; // 흔들림 크기
 	float waveFrequency = 2.0f;  // 흔들림 속도

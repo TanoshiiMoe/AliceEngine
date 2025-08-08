@@ -12,6 +12,8 @@ void EnemyBike::Initialize()
 
 void EnemyBike::OnStart()
 {
+	__super::OnStart();
 	owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Bike/bike.png");
+	owner->transform()->SetScale(0.6f, 0.6f);
 }
 
