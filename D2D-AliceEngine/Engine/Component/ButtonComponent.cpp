@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ButtonComponent.h"
 #include <Component/Component.h>
 #include <Manager/D2DRenderManager.h>
@@ -11,6 +11,7 @@
 #include <Core/Input.h>
 #include <Helpers/FileHelper.h>
 #include <Helpers/CoordHelper.h>
+#include <Manager/TimerManager.h>
 
 ButtonComponent::ButtonComponent()
 {
@@ -19,7 +20,7 @@ ButtonComponent::ButtonComponent()
 
 ButtonComponent::~ButtonComponent()
 {
-	PackageResourceManager::GetInstance().UnloadData(filePath); // ºñÆ®¸Ê ¾ğ·Îµå
+	PackageResourceManager::GetInstance().UnloadData(filePath); // ë¹„íŠ¸ë§µ ì–¸ë¡œë“œ
 }
 
 void ButtonComponent::Initialize()
@@ -32,46 +33,60 @@ void ButtonComponent::Initialize()
 void ButtonComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-
 	if (!bActive) return;
 
-	bool mouseDown = Input::IsMouseLeftDown();
-	bool mouseUp = Input::IsMouseLeftReleased();
-	FVector2 mousePos = Input::GetMouseWorldPositionInCanvas();
-	FVector2 relativePos = FVector2(
+	const bool mouseDown = Input::IsMouseLeftDown();
+	const bool mouseUp = Input::IsMouseLeftReleased();
+
+	const FVector2 mousePos = Input::GetMouseWorldPositionInCanvas();
+	const FVector2 relativePos(
 		relativeTransform.GetPosition().x,
 		relativeTransform.GetPosition().y
 	);
 
-	FVector2 uiSize = GetRelativeSize();
-	FVector2 finalUIPos = relativePos + FVector2(-uiSize.x * GetOwnerPivot()->x, -uiSize.y * GetOwnerPivot()->y);
+	const FVector2 uiSize = GetRelativeSize();
+	const FVector2 finalUIPos = relativePos + FVector2(-uiSize.x * GetOwnerPivot()->x,
+		-uiSize.y * GetOwnerPivot()->y);
 
-	// UI ¿µ¿ª ³» ¸¶¿ì½º Å¬¸¯ È®ÀÎ
-	if (IsMouseInUIArea(mousePos, finalUIPos, uiSize))
+	const bool inArea = IsMouseInUIArea(mousePos, finalUIPos, uiSize);
+
+	if (inArea)
 	{
-		// ¸¶¿ì½º°¡ UI ¿µ¿ª ¾È¿¡ ÀÖÀ» ¶§¸¸ ÇÔ¼ö È£Ãâ
+		// (ì„ íƒ) ì§„ì… ì´ë²¤íŠ¸ê°€ í•„ìš”í•˜ë©´ ì—¬ê¸°ì„œ HoverEnter ë°œí–‰:
+		// if (!m_prevInArea) SetCurrentState(Define::EButtonState::HoverEnter);
+
 		SetCursor(LoadCursorW(nullptr, IDC_HAND));
 
-		if (mouseUp && m_prevMouseDown) // ¸¶¿ì½º°¡ ¶¼¾îÁ³°í ÀÌÀü¿¡ ´­·ÁÀÖ¾ú´Ù¸é Release »óÅÂ
+		if (mouseUp && m_prevMouseDown)
 		{
-			SetCurrentState(EButtonState::Release);
+			SetCurrentState(Define::EButtonState::Release);
 		}
-		else if (mouseDown) // ¸¶¿ì½º°¡ ´­·ÁÀÖÀ¸¸é Pressed »óÅÂ
+		else if (mouseDown)
 		{
-			SetCurrentState(EButtonState::Pressed);
+			SetCurrentState(Define::EButtonState::Pressed);
 		}
 		else
 		{
-			SetCurrentState(EButtonState::Hover); // ¸¶¿ì½º°¡ ¿Ã¶ó°¡ÀÖÁö¸¸ ´­¸®Áö ¾Ê¾ÒÀ¸¸é Hover »óÅÂ
+			SetCurrentState(Define::EButtonState::Hover);
 		}
 	}
 	else
 	{
-		SetCurrentState(EButtonState::Idle);
+		// ì§ì „ í”„ë ˆì„ì—” ì•ˆì— ìˆì—ˆê³  ì´ë²ˆ í”„ë ˆì„ì— ë‚˜ê°”ë‹¤ë©´ HoverLeave 1íšŒ ë°œí–‰
+		if (m_prevInArea)
+		{
+			SetCurrentState(Define::EButtonState::HoverLeave);
+		}
+		else
+		{
+			SetCurrentState(Define::EButtonState::Idle);
+		}
+
 		SetCursor(LoadCursorW(nullptr, IDC_ARROW));
 	}
 
 	m_prevMouseDown = mouseDown;
+	m_prevInArea = inArea;
 }
 
 void ButtonComponent::Release()
@@ -114,11 +129,11 @@ FVector2 ButtonComponent::GetRelativeSize()
 
 void ButtonComponent::LoadData(Define::EButtonState state, const std::wstring& path)
 {
-	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // ÆÄÀÏ ÀÌ¸§¸¸ ÀúÀå
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // íŒŒì¼ ì´ë¦„ë§Œ ì €ì¥
 	m_bitmaps[state] = PackageResourceManager::GetInstance().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str());
 	
-	// ÇöÀç »óÅÂÀÇ ÀÌ¹ÌÁö¶ó¸é m_bitmapµµ ¾÷µ¥ÀÌÆ®
+	// í˜„ì¬ ìƒíƒœì˜ ì´ë¯¸ì§€ë¼ë©´ m_bitmapë„ ì—…ë°ì´íŠ¸
 	if (state == m_state)
 	{
 		m_bitmap = m_bitmaps[state];
@@ -138,14 +153,14 @@ void ButtonComponent::ExecuteStateAction(Define::EButtonState state)
 	auto it = stateActionSlots.find(state);
 	if (it != stateActionSlots.end())
 	{
-		// ºÎ¸ğ °´Ã¼°¡ À¯È¿ÇÑÁö È®ÀÎ
+		// ë¶€ëª¨ ê°ì²´ê°€ ìœ íš¨í•œì§€ í™•ì¸
 		if (!it->second.weakPtr.expired())
 		{
-			it->second.func(); // ÇØ´ç »óÅÂÀÇ ÇÔ¼ö ½ÇÇà
+			it->second.func(); // í•´ë‹¹ ìƒíƒœì˜ í•¨ìˆ˜ ì‹¤í–‰
 		}
 		else
 		{
-			// ºÎ¸ğ °´Ã¼°¡ ÆÄ±«µÇ¾úÀ¸¸é ½½·Ô Á¦°Å
+			// ë¶€ëª¨ ê°ì²´ê°€ íŒŒê´´ë˜ì—ˆìœ¼ë©´ ìŠ¬ë¡¯ ì œê±°
 			stateActionSlots.erase(it);
 		}
 	}
@@ -153,22 +168,63 @@ void ButtonComponent::ExecuteStateAction(Define::EButtonState state)
 
 void ButtonComponent::SetCurrentState(Define::EButtonState state)
 {
-	// ÀÌÀü »óÅÂ¿Í ´Ù¸£¸é »óÅÂ º¯°æ
+	// ì´ì „ ìƒíƒœì™€ ë‹¤ë¥´ë©´ ìƒíƒœ ë³€ê²½
 	if (m_state != state)
 	{
-		// ÀÌÀü »óÅÂÀÇ Á¾·á ÇÔ¼ö ½ÇÇà (ÀÖ´Â °æ¿ì)
-		ExecuteStateAction(static_cast<Define::EButtonState>(static_cast<int>(m_state) + 100)); // Á¾·á »óÅÂ´Â +100À¸·Î °¡Á¤
+		// ì´ì „ ìƒíƒœì˜ ì¢…ë£Œ í•¨ìˆ˜ ì‹¤í–‰ (ìˆëŠ” ê²½ìš°)
+		ExecuteStateAction(static_cast<Define::EButtonState>(static_cast<int>(m_state) + 100)); // ì¢…ë£Œ ìƒíƒœëŠ” +100ìœ¼ë¡œ ê°€ì •
 		
 		m_state = state;
 		
-		// »õ »óÅÂÀÇ ½ÃÀÛ ÇÔ¼ö ½ÇÇà
+		// ìƒˆ ìƒíƒœì˜ ì‹œì‘ í•¨ìˆ˜ ì‹¤í–‰
 		ExecuteStateAction(state);
 		
-		// ÇöÀç »óÅÂ¿¡ ¸Â´Â ÀÌ¹ÌÁö·Î m_bitmap ¾÷µ¥ÀÌÆ®
+		// í˜„ì¬ ìƒíƒœì— ë§ëŠ” ì´ë¯¸ì§€ë¡œ m_bitmap ì—…ë°ì´íŠ¸
 		auto it = m_bitmaps.find(state);
 		if (it != m_bitmaps.end() && it->second)
 		{
 			m_bitmap = it->second;
 		}
 	}
+}
+
+void ButtonComponent::StartHoverPulse(float period, float amp)
+{
+	m_hoverPeriod = (period > 0.f) ? period : 0.8f;
+	m_hoverAmp = amp;
+	m_hoverT = 0.f;
+
+	// í˜„ì¬ ìŠ¤ì¼€ì¼ì„ ê¸°ì¤€ ìŠ¤ì¼€ì¼ë¡œ ì €ì¥
+	// (ì—”ì§„ APIì— ë§ì¶°ì„œ GetScale/SetScale ë˜ëŠ” relativeTransform ì‚¬ìš©)
+	m_hoverBaseScale = relativeTransform.GetScale();
+
+	auto weakThis = WeakFromThis<ButtonComponent>(); // ì—†ë‹¤ë©´ ownerë¥¼ í†µí•´ ì•ˆì „ê²€ì‚¬
+	TimerManager::GetInstance().SetTimerDt(m_hoverTimer, [weakThis](float dt) mutable
+	{
+		if (auto self = weakThis.lock())
+		{
+			self->m_hoverT += dt;
+
+			// 0..1 êµ¬ê°„ ì‹œê°„ ì¢Œí‘œ
+			const float u = std::fmod(self->m_hoverT, self->m_hoverPeriod) / self->m_hoverPeriod;
+
+			// [-1,1] ëª¨ì–‘ê°’
+			const float wave = Math::eased_triangle_pulse(u, self->m_hoverSharpness, self->m_hoverEase);
+
+			// 1 Â± amp ë¡œ ìŠ¤ì¼€ì¼ ë³€í™˜
+			const float s = 1.0f + self->m_hoverAmp * wave;
+
+			const FVector2 newScale(self->m_hoverBaseScale.x * s,
+				self->m_hoverBaseScale.y * s);
+
+			self->relativeTransform.SetScale(newScale);
+		}
+	});
+}
+
+void ButtonComponent::StopHoverPulse()
+{
+	TimerManager::GetInstance().ClearTimer(m_hoverTimer);
+	// ê¸°ì¤€ ìŠ¤ì¼€ì¼ë¡œ ë³µì›
+	relativeTransform.SetScale(m_hoverBaseScale);
 }

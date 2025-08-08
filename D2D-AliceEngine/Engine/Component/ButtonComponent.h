@@ -1,9 +1,10 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/RenderComponent.h>
 #include <Core/ObjectHandler.h>
 #include <Define/Define.h>
 #include <unordered_map>
 #include <functional>
+#include <Manager/TimerManager.h>
 
 class Transform;
 class ButtonComponent : public RenderComponent
@@ -26,11 +27,11 @@ public:
 	void ExecuteStateAction(Define::EButtonState state);
 	void SetCurrentState(Define::EButtonState state);
 
-	std::wstring filePath; // ÆÄÀÏÀÇ °æ·Î
+	std::wstring filePath; // íŒŒì¼ì˜ ê²½ë¡œ
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 	std::unordered_map<Define::EButtonState, std::shared_ptr<ID2D1Bitmap1>> m_bitmaps;
 
-	// »óÅÂº° ÇÔ¼ö ¼³Á¤ (¾ÈÀüÇÑ ¹öÀü)
+	// ìƒíƒœë³„ í•¨ìˆ˜ ì„¤ì • (ì•ˆì „í•œ ë²„ì „)
 	template<typename F>
 	void SetStateAction(Define::EButtonState state, F&& action)
 	{
@@ -41,7 +42,7 @@ public:
 	bool GetActive() const { return bActive; }
 	
 private:
-	// UI ¿µ¿ª ³» ¸¶¿ì½º À§Ä¡ È®ÀÎ ÇïÆÛ ¸Ş¼­µå
+	// UI ì˜ì—­ ë‚´ ë§ˆìš°ìŠ¤ ìœ„ì¹˜ í™•ì¸ í—¬í¼ ë©”ì„œë“œ
 	bool IsMouseInUIArea(const FVector2& mousePos, const FVector2& uiPos, const FVector2& uiSize);
 	
 	struct ClickFunctionSlot
@@ -52,8 +53,27 @@ private:
 	Define::EButtonState m_state = Define::EButtonState::Idle;
 	bool m_prevMouseDown = false;
 	
-	// »óÅÂº° ÇÔ¼ö ÀúÀåÀ» À§ÇÑ unordered_map (¾ÈÀüÇÑ ¹öÀü)
+	// ìƒíƒœë³„ í•¨ìˆ˜ ì €ì¥ì„ ìœ„í•œ unordered_map (ì•ˆì „í•œ ë²„ì „)
 	std::unordered_map<Define::EButtonState, ClickFunctionSlot> stateActionSlots;
 
 	bool bActive = true;
+
+private:
+	// HoverLeave ìš©
+	bool m_prevInArea = false;
+
+	// ì—°ì¶œ
+private:
+	FTimerHandle m_hoverTimer;
+	float m_hoverT{ 0.f };
+	float m_hoverAmp{ 0.08f };
+	float m_hoverPeriod{ 0.8f };
+	float m_hoverSharpness{ 1.2f }; // â† ëª¨ì–‘ ì¡°ì ˆ
+	float m_hoverEase{ 0.7f };      // â† ëª¨ì–‘ ì¡°ì ˆ
+	FVector2 m_hoverBaseScale{ 1.f, 1.f };
+
+public:
+	// í•„ìš”ì‹œ íŒŒë¼ë¯¸í„°ë¡œ ì¡°ì ˆ ê°€ëŠ¥
+	void StartHoverPulse(float period = 0.8f, float amp = 0.08f);
+	void StopHoverPulse();
 };
