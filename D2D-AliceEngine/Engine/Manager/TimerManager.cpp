@@ -11,8 +11,8 @@ void TimerManager::Initialize()
 void TimerManager::UpdateTime()
 {
 	QueryPerformanceCounter(&currentCounter);
-	deltaTime = static_cast<float>(currentCounter.QuadPart - prevCounter.QuadPart) / frequency.QuadPart;
-	deltaTime *= globalTimeScale;
+	float unscaledDeltaTime = static_cast<float>(currentCounter.QuadPart - prevCounter.QuadPart) / frequency.QuadPart;
+	deltaTime = unscaledDeltaTime * globalTimeScale;
 	prevCounter = currentCounter;
 
 	// 밑에는 일단은 안쓰임. 디버그용FPS로만 쓰임
@@ -38,8 +38,8 @@ void TimerManager::UpdateTime()
 		if (Data.bPaused)
 			continue;
 
-		Data.TimeRemaining -= deltaTime;
-		Data.Elapsed += deltaTime;
+		Data.TimeRemaining -= unscaledDeltaTime;
+		Data.Elapsed += unscaledDeltaTime;
 
 		if (Data.TimeRemaining <= 0.0f)
 		{
@@ -203,7 +203,7 @@ void TimerManager::SetTimer(FTimerHandle& OutHandle, std::function<void()> InCal
 
 	TimerData Data;
 	Data.Callback = InCallback;
-	Data.TimeRemaining = FirstDelay > 0 ? FirstDelay : Rate;
+	Data.TimeRemaining = (FirstDelay > 0.0f) ? FirstDelay : Rate;
 	Data.OriginalRate = Rate;
 	Data.bLooping = bLoop;
 

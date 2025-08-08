@@ -11,13 +11,28 @@ BulletManager::~BulletManager()
 {
 }
 
-void BulletManager::FireBullet(const FVector2& start, const FVector2& target, const FVector2& initVelocity)
+void BulletManager::FireBullet(const FVector2& start, const FVector2& target, const FVector2& initVelocity, const EDroneType& dronType)
 {
 	Scene* curScene = SceneManager::GetInstance().GetWorld();
 	auto bulletObj = curScene->NewObject<gameObject>(L"bullet");
+	auto bullet = bulletObj->AddComponent<Bullet>();
+
 	bulletObj->SetPosition(start);
 	bulletObj->SetScale(FVector2(0.2, 0.2));
-	auto bullet = bulletObj->AddComponent<Bullet>();
+
+	switch (dronType)
+	{
+	case EDroneType::Player :
+		bullet->SetSpritePath(L"wallet.png");
+		break;
+	case EDroneType::Enemy :
+		bullet->SetSpritePath(L"Gun.png");
+		break;
+	default:
+		break;
+	}
+
+	bullet->SetDroneType(dronType);
 	bullet->inheritedVelocity = initVelocity;
 	bullet->bulletType = EBulletType::Linear; // 기본적으로 BezierCurve로 설정
 
