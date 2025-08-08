@@ -77,7 +77,7 @@ void SkewTransform::ToSkewPos()
 	skewDeg = GetSkew();
 
 	float rad = Math::Deg2Rad(skewDeg);
-	float z = owner->GetPosition().y / std::sin(rad);
+	float z = owner->transform()->GetPosition().y / std::sin(rad);
 	float xOffset = std::cos(rad) * z;
 
 	owner->AddPosition(FVector2(xOffset, -(owner->GetPosition().y)));
