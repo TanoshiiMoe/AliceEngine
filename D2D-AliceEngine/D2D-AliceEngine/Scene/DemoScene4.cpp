@@ -100,8 +100,8 @@ void DemoScene4::OnEnter()
 	//m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
 	m_UI = NewObject<gameObject>(L"UI");
-	//m_UI->AddComponent<UI_Script>();
-	m_UI->AddComponent<StageWidgetScript>();
+	m_UI->AddComponent<UI_Script>();
+	//m_UI->AddComponent<StageWidgetScript>();
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();

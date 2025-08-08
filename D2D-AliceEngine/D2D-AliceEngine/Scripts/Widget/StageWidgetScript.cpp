@@ -58,7 +58,7 @@ void StageWidgetScript::OnStart()
 	auto SpeedText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto sound = m_owner->AddComponent<AudioComponent>(L"UISound");
-	sound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::UI);
+	sound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);
 
 	auto popUpTab = m_owner->AddComponent<SpriteRenderer>();
 	popUpTab->SetDrawType(EDrawType::ScreenSpace);

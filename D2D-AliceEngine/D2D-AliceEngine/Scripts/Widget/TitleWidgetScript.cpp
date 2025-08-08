@@ -1,4 +1,4 @@
-#include "TitleWidgetScript.h"
+ï»¿#include "TitleWidgetScript.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -32,7 +32,7 @@ void TitleWidgetScript::Initialize()
 void TitleWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 void TitleWidgetScript::Awake()
@@ -47,6 +47,7 @@ void TitleWidgetScript::OnStart()
 	GetCamera()->AddChildObject(m_owner);
 
 	float guargeSize = 1.0f;
+	float soundUISize = 1.0f;
 
 	auto background = m_owner->AddComponent<SpriteRenderer>();
 
@@ -73,40 +74,48 @@ void TitleWidgetScript::OnStart()
 
 	auto closeText = m_owner->AddComponent<TextRenderComponent>();
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
+	auto smallClose = m_owner->AddComponent<ButtonComponent>();
 
 	auto mainTitle = m_owner->AddComponent<TextRenderComponent>();
 	auto subTitle = m_owner->AddComponent<TextRenderComponent>();
 
-	auto soundPlusButton = m_owner->AddComponent<ButtonComponent>();
-	auto soundMinusButton = m_owner->AddComponent<ButtonComponent>();
+	auto bgmPlusButton = m_owner->AddComponent<ButtonComponent>();
+	auto bgmMinusButton = m_owner->AddComponent<ButtonComponent>();
+	auto sfxPlusButton = m_owner->AddComponent<ButtonComponent>();
+	auto sfxMinusButton = m_owner->AddComponent<ButtonComponent>();
 
-	auto obj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
-	if (!obj) return;
-	auto bgm = obj->GetComponent<AudioComponent>();
+	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
+	if (!bgmObj) return;
+	auto bgm = bgmObj->GetComponent<AudioComponent>();
+	
+	float bgmVolume = AudioManager::GetInstance().GetBGMVolume();
+	float sfxVolume = AudioManager::GetInstance().GetSFXVolume();
 
-	auto volumeGuarge = m_owner->AddComponent<SpriteRenderer>();
-	volumeGuarge->LoadData(L"UI\\UI_SoundControl.png");
-	volumeGuarge->m_layer = -1000;
-	volumeGuarge->SetRelativeScale(0.7);
-	volumeGuarge->SetDrawType(EDrawType::WorldSpace);
-	volumeGuarge->SetRelativePosition(FVector2(-960, -550));
-
-	auto volumeValue = m_owner->AddComponent<SpriteRenderer>();
-	volumeValue->LoadData(L"UI\\SFXControl.png");
-	volumeValue->m_layer = -1000;
-	volumeValue->SetDrawType(EDrawType::WorldSpace);
-	float finalPos = -SCREEN_WIDTH / 2.0f
-		+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
-	volumeValue->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
-	volumeValue->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * guargeSize, guargeSize));
+	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
+	soundControl->LoadData(L"UI\\UI_SoundControl.png");
+	soundControl->m_layer = -1000;
+	soundControl->SetRelativeScale(soundUISize);
+	soundControl->SetDrawType(EDrawType::ScreenSpace);
+	soundControl->SetRelativePosition(FVector2(300, 45));
 
 	auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
 	bgmControl->LoadData(L"UI\\BGMControl.png");
+	bgmControl->m_layer = -1000;
+	bgmControl->SetDrawType(EDrawType::ScreenSpace);
+	bgmControl->SetRelativeScale(FVector2(bgmVolume * soundUISize, soundUISize));
 
-
+	auto sfxControl = m_owner->AddComponent<SpriteRenderer>();
+	sfxControl->LoadData(L"UI\\SFXControl.png");
+	sfxControl->m_layer = -1000;
+	sfxControl->SetDrawType(EDrawType::WorldSpace);
+	float finalPos = -SCREEN_WIDTH / 2.0f
+		+ (sfxControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
+	sfxControl->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
+	//sfxControl->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::SFX) * soundUISize, soundUISize));
+	sfxControl->SetSlice(0,0, sfxControl->GetBitmapSizeX() * sfxVolume,-1);
 
 	auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
-	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::UI);
+	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
 
 	auto tutorial = m_owner->AddComponent<VideoComponent>();
 	tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm",30,L"jpg",95,true);
@@ -117,12 +126,6 @@ void TitleWidgetScript::OnStart()
 	PopupTab->LoadData(L"UI\\PopupTab.png");
 	PopupTab->m_layer = -1000;
 	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f));
-
-	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
-	soundControl->LoadData(L"UI\\UI_SoundControl.png");
-	soundControl->SetDrawType(EDrawType::ScreenSpace);
-	soundControl->SetRelativePosition(FVector2(0, 0));
-	soundControl->m_layer = -1000;
 
 	if (!startText || !startButton) return;
 	if (!continueText || !continueButton || !continueTabText) return;
@@ -205,29 +208,57 @@ void TitleWidgetScript::OnStart()
 	closeButton->SetActive(false);
 	closeButton->m_layer = -1000;
 
-	// ======================== soundButton
-	soundPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
-	soundPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_Pause.png");
-	soundPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_Pause.png");
-	soundPlusButton->LoadData(Define::EButtonState::Release, L"UI\\UI_Pause.png");
-	soundPlusButton->SetRelativePosition(FVector2(400, 0));
-	soundPlusButton->SetRelativeScale(FVector2(1, 1));
-	soundPlusButton->SetActive(false);
-	soundPlusButton->m_layer = -1000;
+	smallClose->LoadData(Define::EButtonState::Idle, L"UI\\Close.png");
+	smallClose->LoadData(Define::EButtonState::Hover, L"UI\\Close.png");
+	smallClose->LoadData(Define::EButtonState::Pressed, L"UI\\Close.png");
+	smallClose->LoadData(Define::EButtonState::Release, L"UI\\Close.png");
+	smallClose->SetDrawType(EDrawType::ScreenSpace);
+	smallClose->SetRelativeScale(0.43f);
+	smallClose->SetActive(false);
+	smallClose->m_layer = -1000;
+	smallClose->SetRelativePosition(FVector2(279 + soundControl->GetBitmapSizeX() / 2.0f, 68 - soundControl->GetBitmapSizeY()/ 2.0f));
 
-	soundMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
-	soundMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_Pause.png");
-	soundMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_Pause.png");
-	soundMinusButton->LoadData(Define::EButtonState::Release, L"UI\\UI_Pause.png");
-	soundMinusButton->SetRelativePosition(FVector2(-400, 0));
-	soundMinusButton->SetRelativeScale(FVector2(1, 1));
-	soundMinusButton->SetActive(false);
-	soundMinusButton->m_layer = -1000;
+	// ======================== soundButton
+	bgmPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
+	bgmPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
+	bgmPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundPlus_Pressed.png");
+	bgmPlusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundPlus_Idle.png");
+	bgmPlusButton->SetRelativePosition(FVector2(300, 0));
+	bgmPlusButton->SetRelativeScale(FVector2(1, 1));
+	bgmPlusButton->SetActive(false);
+	bgmPlusButton->m_layer = -1000;
+
+	bgmMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundMinus_Idle.png");
+	bgmMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
+	bgmMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundMinus_Pressed.png");
+	bgmMinusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundMinus_Idle.png");
+	bgmMinusButton->SetRelativePosition(FVector2(-300, 0));
+	bgmMinusButton->SetRelativeScale(FVector2(1, 1));
+	bgmMinusButton->SetActive(false);
+	bgmMinusButton->m_layer = -1000;
+
+	sfxPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
+	sfxPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
+	sfxPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundPlus_Pressed.png");
+	sfxPlusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundPlus_Idle.png");
+	sfxPlusButton->SetRelativePosition(FVector2(300, -50));
+	sfxPlusButton->SetRelativeScale(FVector2(1, 1));
+	sfxPlusButton->SetActive(false);
+	sfxPlusButton->m_layer = -1000;
+
+	sfxMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundMinus_Idle.png");
+	sfxMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
+	sfxMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundMinus_Pressed.png");
+	sfxMinusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundMinus_Idle.png");
+	sfxMinusButton->SetRelativePosition(FVector2(-300, -50));
+	sfxMinusButton->SetRelativeScale(FVector2(1, 1));
+	sfxMinusButton->SetActive(false);
+	sfxMinusButton->m_layer = -1000;
 
 	// ======================== mainTitle
 	mainTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	mainTitle->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	mainTitle->SetText(L"³ô´Ù¶ô±æÀÇ ÁúÁÖ");
+	mainTitle->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	mainTitle->SetText(L"ë†’ë‹¤ë½ê¸¸ì˜ ì§ˆì£¼");
 	mainTitle->SetFontSize(120.0f);
 	mainTitle->SetColor(FColor(242, 207, 238, 255));
 	FVector2 mainTitleRectSize = mainTitle->GetRelativeSize();
@@ -238,8 +269,8 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== subTitle
 	subTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	subTitle->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	subTitle->SetText(L"~È°ºóÀº µÎ·ÉÀ» ¦i´Â´Ù~");
+	subTitle->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	subTitle->SetText(L"~í™œë¹ˆì€ ë‘ë ¹ì„ ì«’ëŠ”ë‹¤~");
 	subTitle->SetFontSize(60.0f);
 	subTitle->SetColor(FColor(242, 207, 238, 255));
 	FVector2 subTitleRectSize = subTitle->GetRelativeSize();
@@ -250,8 +281,8 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== startText
 	startText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	startText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	startText->SetText(L"½ÃÀÛÇÏ±â");
+	startText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	startText->SetText(L"ì‹œì‘í•˜ê¸°");
 	startText->SetFontSize(55.0f);
 	startText->SetColor(FColor::White);
 	FVector2 startTextRectSize = startText->GetRelativeSize();
@@ -264,8 +295,8 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== continueText
 	continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	continueText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	continueText->SetText(L"ÀÌ¾îÇÏ±â");
+	continueText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	continueText->SetText(L"ì´ì–´í•˜ê¸°");
 	continueText->SetFontSize(55.0f);
 	continueText->SetColor(FColor::White);
 	FVector2 continueTextRectSize = continueText->GetRelativeSize();
@@ -277,8 +308,8 @@ void TitleWidgetScript::OnStart()
 	continueButton->AddChildComponent(continueText);
 
 	continueTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	continueTabText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	continueTabText->SetText(L"ÀÌ¾îÇÏ±â");
+	continueTabText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	continueTabText->SetText(L"ì´ì–´í•˜ê¸°");
 	continueTabText->SetFontSize(70.0f);
 	continueTabText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 continueTabTextRectSize = continueTabText->GetRelativeSize();
@@ -291,8 +322,8 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== optionText
 	optionText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	optionText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	optionText->SetText(L"À½·® Á¶Á¤");
+	optionText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	optionText->SetText(L"ìŒëŸ‰ ì¡°ì •");
 	optionText->SetFontSize(55.0f);
 	optionText->SetColor(FColor::White);
 	FVector2 optionTextRectSize = optionText->GetRelativeSize();
@@ -304,8 +335,8 @@ void TitleWidgetScript::OnStart()
 	optionButton->AddChildComponent(optionText);
 
 	optionTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	optionTabText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	optionTabText->SetText(L"À½·® Á¶Àı");
+	optionTabText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	optionTabText->SetText(L"ìŒëŸ‰ ì¡°ì ˆ");
 	optionTabText->SetFontSize(70.0f);
 	optionTabText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 optionTabTextRectSize = optionTabText->GetRelativeSize();
@@ -318,8 +349,8 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== staffText
 	staffText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	staffText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	staffText->SetText(L"Á¦ÀÛÁø");
+	staffText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	staffText->SetText(L"ì œì‘ì§„");
 	staffText->SetFontSize(55.0f);
 	staffText->SetColor(FColor::White);
 	FVector2 staffTextRectSize = continueText->GetRelativeSize();
@@ -331,8 +362,8 @@ void TitleWidgetScript::OnStart()
 	staffButton->AddChildComponent(staffText);
 
 	staffTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	staffTabText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	staffTabText->SetText(L"Á¦ÀÛÁø");
+	staffTabText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	staffTabText->SetText(L"ì œì‘ì§„");
 	staffTabText->SetFontSize(70.0f);
 	staffTabText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 staffTabTextSize = staffTabText->GetRelativeSize();
@@ -344,16 +375,16 @@ void TitleWidgetScript::OnStart()
 	staffTabText->m_layer = -1000;
 
 	staffNameText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	staffNameText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
+	staffNameText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
 	staffNameText->SetText(
-		L"±âÈ¹\n"
-		L"ÀÌÀ¯¼º | ½Å¼Ò¿µ\n"
+		L"ê¸°íš\n"
+		L"ì´ìœ ì„± | ì‹ ì†Œì˜\n"
 		L"\n"
-		L"¾ÆÆ®\n"
-		L"°­¿¬ÁÖ | ¹ÎÁöÀÎ\n"
+		L"ì•„íŠ¸\n"
+		L"ê°•ì—°ì£¼ | ë¯¼ì§€ì¸\n"
 		L"\n"
-		L"ÇÁ·Î±×·¡¹Ö\n"
-		L"ÀÌÃ¢Áø | °­¼º±Ù | È²ÅÂÇö\n"
+		L"í”„ë¡œê·¸ë˜ë°\n"
+		L"ì´ì°½ì§„ | ê°•ì„±ê·¼ | í™©íƒœí˜„\n"
 	);
 	staffNameText->SetFontSize(55.0f);
 	staffNameText->SetColor(FColor::Black);
@@ -366,8 +397,8 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== quitText
 	quitText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	quitText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	quitText->SetText(L"¿À¶ô Á¾·á");
+	quitText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	quitText->SetText(L"ì˜¤ë½ ì¢…ë£Œ");
 	quitText->SetFontSize(55.0f);
 	quitText->SetColor(FColor::White);
 	FVector2 quitTextRectSize = quitText->GetRelativeSize();
@@ -380,8 +411,8 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== closeText
 	closeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	closeText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	closeText->SetText(L"´İ±â");
+	closeText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	closeText->SetText(L"ë‹«ê¸°");
 	closeText->SetFontSize(55.0f);
 	closeText->SetColor(FColor::White);
 	FVector2 closeTextRectSize = closeText->GetRelativeSize();
@@ -415,7 +446,7 @@ void TitleWidgetScript::OnStart()
 		
 		uiSound->PlayByName(L"UISound",0.45f);
 
-		// ´Ù¸¥ ¹öÆ° ºñÈ°¼ºÈ­
+		// ë‹¤ë¥¸ ë²„íŠ¼ ë¹„í™œì„±í™”
 		startButton->SetActive(false);
 		quitButton->SetActive(false);
 		staffButton->SetActive(false);
@@ -442,10 +473,10 @@ void TitleWidgetScript::OnStart()
 
 			uiSound->PlayByName(L"UISound", 0.45f);
 			
-			// ¿©±â¿¡ ¸î ÃÊ µÚ ¾À ÀüÈ¯ ³ÖÀ¸¸é µÉ °Å °°À½
+			// ì—¬ê¸°ì— ëª‡ ì´ˆ ë’¤ ì”¬ ì „í™˜ ë„£ìœ¼ë©´ ë  ê±° ê°™ìŒ
 			SceneManager::ChangeScene(L"SelectScene");
 
-			// ´Ù¸¥ ¹öÆ° ºñÈ°¼ºÈ­
+			// ë‹¤ë¥¸ ë²„íŠ¼ ë¹„í™œì„±í™”
 			//startButton->SetActive(false);
 			//continueButton->SetActive(false);
 			//quitButton->SetActive(false);
@@ -463,7 +494,7 @@ void TitleWidgetScript::OnStart()
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		tutorial, startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
-		uiSound, continueTabText, optionTabText, staffTabText, staffNameText, soundMinusButton, soundPlusButton, volumeValue, volumeGuarge
+		uiSound, continueTabText, optionTabText, staffTabText, staffNameText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -475,7 +506,7 @@ void TitleWidgetScript::OnStart()
 
 			uiSound->PlayByName(L"UISound", 0.45f);
 
-			// ¸ğµÎ È°¼ºÈ­
+			// ëª¨ë‘ í™œì„±í™”
 			startButton->SetActive(true);
 			continueButton->SetActive(true);
 			quitButton->SetActive(true);
@@ -487,17 +518,9 @@ void TitleWidgetScript::OnStart()
 			closeText->m_layer = -1000;
 
 			continueTabText->m_layer = -1000;
-			optionTabText->m_layer = -1000;
+			//optionTabText->m_layer = -1000;
 			staffTabText->m_layer = -1000;
 			staffNameText->m_layer = -1000;
-
-			soundMinusButton->SetActive(false);
-			soundPlusButton->SetActive(false);
-			soundMinusButton->m_layer = -1000;
-			soundPlusButton->m_layer = -1000;
-
-			volumeValue->m_layer = -1000;
-			volumeGuarge->m_layer = -1000;
 
 			tutorial->m_layer = -1000;
 			tutorial->Stop();
@@ -505,10 +528,39 @@ void TitleWidgetScript::OnStart()
 			PopupTab->m_layer = -1000;
 		});
 
+	smallClose->SetStateAction(Define::EButtonState::Pressed, [
+		startButton, continueButton, quitButton, staffButton, optionButton, smallClose,
+		bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
+		sfxControl, bgmControl, soundControl
+	] {
+		startButton->SetActive(true);
+		continueButton->SetActive(true);
+		quitButton->SetActive(true);
+		staffButton->SetActive(true);
+		optionButton->SetActive(true);
+
+		smallClose->m_layer = -1000;
+		smallClose->SetActive(false);
+
+		bgmMinusButton->SetActive(false);
+		bgmPlusButton->SetActive(false);
+		bgmMinusButton->m_layer = -1000;
+		bgmPlusButton->m_layer = -1000;
+
+		sfxPlusButton->SetActive(false);
+		sfxMinusButton->SetActive(false);
+		sfxPlusButton->m_layer = -1000;
+		sfxMinusButton->m_layer = -1000;
+
+		sfxControl->m_layer = -1000;
+		bgmControl->m_layer = -1000;
+		soundControl->m_layer = -1000;
+		});
+
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
-		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		uiSound, optionTabText, soundMinusButton, soundPlusButton, volumeValue, volumeGuarge,
-		soundControl
+		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab,
+		uiSound, optionTabText, bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
+		sfxControl, bgmControl, soundControl, smallClose
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -520,26 +572,29 @@ void TitleWidgetScript::OnStart()
 
 			uiSound->PlayByName(L"UISound", 0.45f);
 
-			// ´Ù¸¥ ¹öÆ° ºñÈ°¼ºÈ­
+			// ë‹¤ë¥¸ ë²„íŠ¼ ë¹„í™œì„±í™”
 			startButton->SetActive(false);
 			continueButton->SetActive(false);
 			quitButton->SetActive(false);
 			staffButton->SetActive(false);
 			optionButton->SetActive(false);
 			
-			closeButton->m_layer = 503;
-			closeButton->SetActive(true);
-			closeText->m_layer = 504;
+			smallClose->SetActive(true);
+			smallClose->m_layer = 504;
 
-			optionTabText->m_layer = 503;
-			soundMinusButton->SetActive(true);
-			soundPlusButton->SetActive(true);
-			soundMinusButton->m_layer = 503;
-			soundPlusButton->m_layer = 503;
+			//optionTabText->m_layer = 503;
+			bgmMinusButton->SetActive(true);
+			bgmPlusButton->SetActive(true);
+			bgmMinusButton->m_layer = 503;
+			bgmPlusButton->m_layer = 503;
 
-			volumeValue->m_layer = 503;
-			volumeGuarge->m_layer = 504;
+			sfxPlusButton->SetActive(true);
+			sfxMinusButton->SetActive(true);
+			sfxPlusButton->m_layer = 503;
+			sfxMinusButton->m_layer = 503;
 
+			sfxControl->m_layer = 503;
+			bgmControl->m_layer = 503;
 			soundControl->m_layer = 502;
 		});
 
@@ -556,7 +611,7 @@ void TitleWidgetScript::OnStart()
 
 			uiSound->PlayByName(L"UISound", 0.45f);
 
-			// ´Ù¸¥ ¹öÆ° ºñÈ°¼ºÈ­
+			// ë‹¤ë¥¸ ë²„íŠ¼ ë¹„í™œì„±í™”
 			startButton->SetActive(false);
 			continueButton->SetActive(false);
 			quitButton->SetActive(false);
@@ -574,42 +629,75 @@ void TitleWidgetScript::OnStart()
 		});
 
 	// bgmVolume
-	soundMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize, uiSound]
+	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, sfxControl, soundUISize, uiSound]
 		{
 			if (uiSound->IsPlaying())
-				uiSound->StopByName(L"UISound");
-
-			uiSound->PlayByName(L"UISound", 0.45f);
+			{
+				uiSound->PlayByName(L"UISound", 0.45f);
+			}
+			else
+				uiSound->RestartByName(L"UISound", 0.45f);
 
 			bgm->AddVolumeByType(SoundType::BGM, -0.1);
 
 			//bgm->AddVolume(-0.1f);
 
-			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * guargeSize, guargeSize));
+			sfxControl->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * soundUISize, soundUISize));
 
 			float finalPos = -SCREEN_WIDTH / 2.0f
-				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
+				+ (sfxControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
 
-			volumeValue->SetRelativePosition(FVector2(finalPos,-SCREEN_HEIGHT / 2.0f -10));
+			sfxControl->SetRelativePosition(FVector2(finalPos,-SCREEN_HEIGHT / 2.0f -10));
 		});
 
-	soundPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, volumeValue, guargeSize, uiSound]
+	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, sfxControl, soundUISize, uiSound]
 		{
 			if (uiSound->IsPlaying())
-				uiSound->StopByName(L"UISound");
-
-			uiSound->PlayByName(L"UISound", 0.45f);
+			{
+				uiSound->PlayByName(L"UISound", 0.45f);
+			}
+			else
+				uiSound->RestartByName(L"UISound", 0.45f);
 
 			bgm->AddVolumeByType(SoundType::BGM, 0.1);
 			//bgm->AddVolume(0.1f);
 
-			volumeValue->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * guargeSize, guargeSize));
+			sfxControl->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * soundUISize, soundUISize));
 
 			float finalPos = -SCREEN_WIDTH / 2.0f
-				+ (volumeValue->GetBitmapSizeX() * guargeSize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
+				+ (sfxControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
 
-			volumeValue->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
+			sfxControl->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
 		});
+
+	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [
+		uiSound
+	] {
+			//if (uiSound->IsPlaying())
+			//	uiSound->StopByName(L"UISound");
+
+			uiSound->PlayByName(L"UISound", 0.45f);
+
+			uiSound->AddVolumeByType(SoundType::SFX, -0.1);
+		});
+
+
+	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [
+		uiSound
+	] {
+			//if (uiSound->IsPlaying())
+			//	uiSound->StopByName(L"UISound");
+
+			uiSound->PlayByName(L"UISound", 0.45f);
+		
+			uiSound->AddVolumeByType(SoundType::SFX, 0.1);
+
+		});
+
+
+
+
+
 
 	quitButton->SetStateAction(Define::EButtonState::Pressed, []()
 		{
@@ -619,7 +707,7 @@ void TitleWidgetScript::OnStart()
 			//uiSound->Play(0.45);
 			// Quit
 			//PostQuitMessage(0);
-			// ÀÓ½Ã ¾À ÀüÈ¯
+			// ì„ì‹œ ì”¬ ì „í™˜
 			SceneManager::ChangeScene(L"HiroScene");
 		});
 
@@ -628,7 +716,7 @@ void TitleWidgetScript::OnStart()
 
 void TitleWidgetScript::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	
 }
 
