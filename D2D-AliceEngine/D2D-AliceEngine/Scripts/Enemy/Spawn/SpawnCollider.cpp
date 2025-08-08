@@ -23,7 +23,7 @@ void SpawnCollider::OnStart()
 	owner->transform()->SetPivot(0.5f, 0.5f);
 	//owner->SetParent(SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player")->transform());
 
-	co->SetBoxSize(FVector2(500.0f, 500.0f));
+	co->SetBoxSize(FVector2(1500.0f, 1500.0f));
 	co->SetLayer(1);
 
 	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");

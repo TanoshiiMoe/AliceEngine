@@ -18,5 +18,6 @@ public:
 	void OnStart();
 
 	void SpawnEnemySkewPos(int _enemyTypeId = 0, FVector2 _position = {0.0f ,0.0f});
+	void SetStat(EnemyType type);
 };
 
