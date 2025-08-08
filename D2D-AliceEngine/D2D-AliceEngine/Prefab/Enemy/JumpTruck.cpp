@@ -14,5 +14,5 @@ void JumpTruck::OnStart()
 {
 	__super::OnStart();
 	owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Jumporter/jumporter.png");
-	owner->transform()->SetScale(0.5f, 0.5f);
+	owner->transform()->SetScale(0.35f, 0.35f);
 }

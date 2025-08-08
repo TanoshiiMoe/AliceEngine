@@ -58,7 +58,6 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 	case EnemySpawner::Bike:
 		enemy->SetTag(L"Enemy");
 		enemy->AddComponent<EnemyBike>();
-		enemy->AddComponent<BikeStatScript>();
 		break;
 	case EnemySpawner::Truck:
 		enemy->SetTag(L"Obstacle");
