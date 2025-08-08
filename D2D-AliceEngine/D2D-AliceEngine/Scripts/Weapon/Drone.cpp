@@ -39,16 +39,51 @@ void Drone::Update(const float& deltaSeconds)
 
 	// 여기에 Update에 대한 로직 작성
 	// Skew랑은 상관없음.
+	FVector2 bodyPos = arm->GetRelativePosition();
+	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
+	FVector2 dir = worldMousePos - bodyPos;
+	FVector2 dirNormal = dir.Normalize();
+
+	// 각도(라디안) 계산
+	float angleRad = atan2(dirNormal.y, dirNormal.x);
+	// 라디안을 도(degree)로 변환 (엔진이 degree 단위라면)
+	float angleDeg = angleRad * (180.0f / PI);
+	arm->SetRelativeRotation(angleDeg);
+
+	//body->SetRelativePosition(FVector2(27, 6));
+	//// 시간 누적
+	elapsed += deltaSeconds;
+	// 구간이 끝나면 방향 전환
+	if (elapsed >= duration)
+	{
+		elapsed = 0.0f;
+		goingUp = !goingUp;
+	}
+
+	float currY;
+	if (goingUp)
+	{
+		// 위로 이동
+		currY = Math::EaseInOut(startY, endY, elapsed, duration);
+	}
+	else
+	{
+		// 아래로 이동
+		currY = Math::EaseInOut(endY, startY, elapsed, duration);
+	}
+
+	// 오브젝트 Y좌표 적용
+	auto pos = body->GetRelativePosition();
+	pos.y = currY;
+	body->SetRelativePosition(initBodyPos + FVector2(0,pos.y));
+
+
 	if (Input::IsMouseLeftDown() && bCanFire)
 	{
-		FVector2 ownerPos = owner->GetPosition();
-		//owner->GetComponent<SkewTransform>()->ToSkewPos();
-		//FVector2 ownerPos = owner->GetComponent<SkewTransform>()->GetRealPos();
 		FVector2 cameraPos = GetCamera()->GetPosition();
-		FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
 		float currentSpeed = owner->GetComponent<BikeMovementScript>()->GetCurrSpeed();
 		FVector2 speed{ currentSpeed , 0 };
-		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, speed);
+		BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed);
 		bCanFire = false;
 		TimerManager::GetInstance().SetGlobalTimeScale(1);
 	}
@@ -81,6 +116,17 @@ void Drone::OnStart()
 		true,
 		0.0f
 	);
+
+	body = owner->AddComponent<SpriteRenderer>();
+	body->LoadData(L"Enemy/drone/drone_killdong_body.png");
+	body->SetRelativeScale(FVector2(0.7f, 0.7f));
+	body->SetRelativePosition(initBodyPos);
+
+	arm = owner->AddComponent<SpriteRenderer>();
+	arm->LoadData(L"Enemy/drone/drone_killdong_arm.png");
+	arm->SetRelativeScale(FVector2(1.0f, 1.0f));
+	arm->RemoveFromParent();
+	body->AddChildComponent(arm);
 }
 
 void Drone::OnEnd()

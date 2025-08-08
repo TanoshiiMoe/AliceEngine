@@ -36,5 +36,4 @@ public:
 		float srcX{ 0 }, srcY{ 0 };
 		float srcW{ -1 }, srcH{ -1 };
 	} slice;
-
 };

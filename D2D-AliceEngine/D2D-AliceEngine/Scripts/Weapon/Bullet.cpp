@@ -59,11 +59,14 @@ void Bullet::Update(const float& deltaSeconds)
 
 void Bullet::UpdatePositionByType(const float& deltaSeconds)
 {
-	//FVector2 acceleration;
-	//if (BikeMovementScript* bms = owner->GetComponent<BikeMovementScript>())
-	//{
-	//	acceleration += bms->GetAcceleration();
-	//}
+	FVector2 acceleration;
+	if (WeakObjectPtr<gameObject> player = BulletManager::GetInstance().GetPlayer())
+	{
+		if (BikeMovementScript* bms = player->GetComponent<BikeMovementScript>())
+		{
+			acceleration += bms->GetPrevMoveAmount();
+		}
+	}
 	switch (bulletType)
 	{
 	case EBulletType::Linear:
