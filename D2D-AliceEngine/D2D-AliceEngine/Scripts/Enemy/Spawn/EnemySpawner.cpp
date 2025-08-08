@@ -12,12 +12,13 @@
 #include "Prefab/Enemy/NormalCar.h"
 #include <Component/Collider.h>
 #include <Scripts/Bike/BikeStatScript.h>
+#include <Scripts/Weapon/Drone.h>
 
 void EnemySpawner::Initialize()
 {
 	__super::Initialize();
 
-	// ÇÃ·¹ÀÌ¾îÇÑÅ× ºÙÀÏ ÄÝ¶óÀÌ´õ »ý¼º
+	// í”Œë ˆì´ì–´í•œí…Œ ë¶™ì¼ ì½œë¼ì´ë” ìƒì„±
 	gameObject* coll = GetWorld()->NewObject<gameObject>(L"SpawnCollider");
 	coll->AddComponent<SpawnCollider>();
 
@@ -31,7 +32,7 @@ void EnemySpawner::OnStart()
 
 void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _position /*= {0.0f ,0.0f}*/)
 {
-	// ÀÌ¸§ Á¤ÇÏ±â
+	// ì´ë¦„ ì •í•˜ê¸°
 	std::wstring name = L"";
 	switch (_enemyTypeId)
 	{ 
@@ -46,18 +47,30 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 		break;
 	}
 
-	// Àû ½ºÆù
+	// ì  ìŠ¤í°
 	gameObject* enemy = GetWorld()->NewObject<gameObject>(name);
 	EnemyType etype = static_cast<EnemyType>(_enemyTypeId);
 
-	
 	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
+
+	FDroneSpritePath dronePath(
+		L"Enemy/drone/enermy_Drone_body.png",
+		L"Enemy/drone/enermy_Drone_arm.png"
+	);
 
 	switch (etype)
 	{
 	case EnemySpawner::Bike:
 		enemy->SetTag(L"Enemy");
 		enemy->AddComponent<EnemyBike>();
+		enemy->AddComponent<BikeStatScript>();
+		
+		if (Drone* drone = enemy->AddComponent<Drone>(dronePath))
+		{
+			drone->initBodyPos = FVector2(-60.0f, 80.0f);
+			drone->initBodySize = FVector2(1.2f, 1.2f);
+			drone->SetDroneType(EDroneType::Enemy);
+		}
 		break;
 	case EnemySpawner::Truck:
 		enemy->SetTag(L"Obstacle");
@@ -74,6 +87,12 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 	case EnemySpawner::Boss:
 		enemy->SetTag(L"Enemy");
 		enemy->AddComponent<BikeStatScript>();
+
+		if (Drone* drone = enemy->AddComponent<Drone>(dronePath))
+		{
+			drone->initBodyPos = FVector2(50.0f, 40.0f);
+			drone->SetDroneType(EDroneType::Enemy);
+		}
 		break;
 	default:
 		break;

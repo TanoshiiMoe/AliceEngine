@@ -195,6 +195,8 @@ bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collid
 
 bool Physics::FCollisionDetector::IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
 {
+	if (!a.Get()) return false;
+	if (!b.Get()) return false;
 	return !(a.Get()->aabb.minVector.x > b.Get()->aabb.maxVector.x ||
 		a.Get()->aabb.minVector.y > b.Get()->aabb.maxVector.y ||
 		a.Get()->aabb.maxVector.x < b.Get()->aabb.minVector.x ||

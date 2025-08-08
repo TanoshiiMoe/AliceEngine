@@ -5,6 +5,8 @@
 #include <Component/SpriteRenderer.h>
 #include <Component/AudioComponent.h>
 #include <Scripts/TitleAudioScript.h>
+#include <Core/Input.h>
+#include <Component/InputComponent.h>
 
 void TitleScene::Initialize()
 {

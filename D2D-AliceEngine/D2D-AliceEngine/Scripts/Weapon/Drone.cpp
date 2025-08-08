@@ -15,6 +15,11 @@
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Component/SkewTransform.h>
 
+Drone::Drone(FDroneSpritePath path)
+{
+	spritePath = path;
+}
+
 void Drone::Initialize()
 {
 	__super::Initialize();
@@ -39,17 +44,18 @@ void Drone::Update(const float& deltaSeconds)
 
 	// 여기에 Update에 대한 로직 작성
 	// Skew랑은 상관없음.
+	if (!arm) return;
 	FVector2 bodyPos = arm->GetRelativePosition();
 	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // 마우스의 실제 월드 좌표
 	FVector2 dir = worldMousePos - bodyPos;
 	FVector2 dirNormal = dir.Normalize();
+	
+	Floating(deltaSeconds, dirNormal);
+	MouseButton(bodyPos, worldMousePos, dirNormal);
+}
 
-	// 각도(라디안) 계산
-	float angleRad = atan2(dirNormal.y, dirNormal.x);
-	// 라디안을 도(degree)로 변환 (엔진이 degree 단위라면)
-	float angleDeg = angleRad * (180.0f / PI);
-	arm->SetRelativeRotation(angleDeg);
-
+void Drone::Floating(const float& deltaSeconds, const FVector2& dirNormal)
+{
 	//body->SetRelativePosition(FVector2(27, 6));
 	//// 시간 누적
 	elapsed += deltaSeconds;
@@ -75,13 +81,26 @@ void Drone::Update(const float& deltaSeconds)
 	// 오브젝트 Y좌표 적용
 	auto pos = body->GetRelativePosition();
 	pos.y = currY;
-	body->SetRelativePosition(initBodyPos + FVector2(0,pos.y));
+	body->SetRelativePosition(initBodyPos + FVector2(0, pos.y));
+}
 
+void Drone::MouseButton(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal)
+{
+	if (droneType == EDroneType::Enemy) return;
+	// 각도(라디안) 계산
+	float angleRad = atan2(dirNormal.y, dirNormal.x);
+	// 라디안을 도(degree)로 변환 (엔진이 degree 단위라면)
+	float angleDeg = angleRad * (180.0f / PI);
+	arm->SetRelativeRotation(angleDeg);
 
 	if (Input::IsMouseLeftDown() && bCanFire)
 	{
 		FVector2 cameraPos = GetCamera()->GetPosition();
-		float currentSpeed = owner->GetComponent<BikeMovementScript>()->GetCurrSpeed();
+		float currentSpeed = 0;
+		if (auto Bike = owner->GetComponent<BikeMovementScript>())
+		{
+			currentSpeed = Bike->GetCurrSpeed();
+		}
 		FVector2 speed{ currentSpeed , 0 };
 		BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed);
 		bCanFire = false;
@@ -117,12 +136,14 @@ void Drone::OnStart()
 	);
 
 	body = owner->AddComponent<SpriteRenderer>();
-	body->LoadData(L"Enemy/drone/drone_killdong_body.png");
-	body->SetRelativeScale(FVector2(0.7f, 0.7f));
+	body->m_layer = 10000;
+	body->LoadData(spritePath.body);
+	body->SetRelativeScale(initBodySize);
 	body->SetRelativePosition(initBodyPos);
 
 	arm = owner->AddComponent<SpriteRenderer>();
-	arm->LoadData(L"Enemy/drone/drone_killdong_arm.png");
+	arm->m_layer = 10001;
+	arm->LoadData(spritePath.arm);
 	arm->SetRelativeScale(FVector2(1.0f, 1.0f));
 	arm->RemoveFromParent();
 	body->AddChildComponent(arm);
