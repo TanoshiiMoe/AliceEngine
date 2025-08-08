@@ -3,6 +3,7 @@
 #include <Manager/TimerManager.h>
 
 class gameObject;
+class SpriteRenderer;
 class Drone : public ScriptComponent
 {
 public:
@@ -29,6 +30,18 @@ public:
 	gameObject* m_player = nullptr;
 	gameObject* m_owner = nullptr;
 
+	SpriteRenderer* body = nullptr;
+	SpriteRenderer* arm = nullptr;
+
+	FVector2 initBodyPos = FVector2(-50.0f, 40.0f);
+
 	FTimerHandle timer;
 	bool bCanFire = true;
+
+	// 위아래 진폭과 속도
+	float elapsed = 0.0f;
+	float duration = 1.0f; // 위→아래 한 번 이동하는데 걸리는 시간
+	float startY = 0.0f;
+	float endY = 7.0f;    // 위로 5만큼 이동
+	bool goingUp = true;
 };

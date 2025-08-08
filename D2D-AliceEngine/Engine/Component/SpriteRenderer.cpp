@@ -79,7 +79,7 @@ void SpriteRenderer::Render()
 	if (!m_effect)
 	{
 		FVector2 relativeSize = GetBitmapSize();
-		D2D1_RECT_F destRect = D2D1::RectF(-relativeSize.x/2, -relativeSize.y/2, relativeSize.x/2, relativeSize.y/2);
+		D2D1_RECT_F destRect = D2D1::RectF(-relativeSize.x / 2, -relativeSize.y / 2, relativeSize.x / 2, relativeSize.y / 2);
 		context->DrawBitmap(m_bitmap.get(), destRect);
 	}
 	else {
