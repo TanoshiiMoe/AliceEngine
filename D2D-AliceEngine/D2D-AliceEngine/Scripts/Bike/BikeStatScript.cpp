@@ -14,6 +14,7 @@
 #include <Scripts/Weapon/BulletManager.h>
 #include <Manager/TimerManager.h>
 #include <Component/Collider.h>
+#include <Manager/D2DRenderManager.h>
 
 void BikeStatScript::Initialize()
 {
@@ -164,6 +165,8 @@ void BikeStatScript::OnStart()
 				owner->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
 				owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
 				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
+				GetWorld()->RemoveObject(owner.Get());
+				return;
 			}
 			//else if (oldVal <= 0)	// 부활하는 시점
 			//{

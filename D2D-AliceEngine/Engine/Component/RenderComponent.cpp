@@ -143,6 +143,7 @@ FVector2 RenderComponent::GetRelativeSize()
 		relativeScale.y
 	);
 }
+
 void RenderComponent::AddChildComponent(WeakObjectPtr<RenderComponent> rc)
 {
 	if (!rc.expired())

@@ -132,50 +132,113 @@ void Physics::FCollisionDetector::LoadPreviousCollisions()
 
 void Physics::FCollisionDetector::SavePreviousCollisionData(Collider* src, Collider* tar, std::unordered_set<Rigidbody2D*>& overlappedRigdBodies)
 {
-	// 사용할 변수들 선언부터 해주자.
-	Collider* a = src;
-	Collider* b = tar;
-	Rigidbody2D* rbA = src->GetOwner()->GetComponent<Rigidbody2D>();
-	Rigidbody2D* rbB = tar->GetOwner()->GetComponent<Rigidbody2D>();
-	std::vector<ScriptComponent*> scA = a->GetOwner()->GetComponents<ScriptComponent>();
-	std::vector<ScriptComponent*> scB = b->GetOwner()->GetComponents<ScriptComponent>();
+	// 약한 핸들 스냅샷(중간 파괴 안전)
+	WeakObjectPtr<Collider> wa = src ? src->WeakFromThis<Collider>() : WeakObjectPtr<Collider>{};
+	WeakObjectPtr<Collider> wb = tar ? tar->WeakFromThis<Collider>() : WeakObjectPtr<Collider>{};
 
-	auto pair = std::minmax(a, b);
-	CollisionSystem::GetInstance().currentCollisions.insert(pair);
+	// 리지드바디는 "현재 살아있으면" 즉시 셋에 추가 (파괴되면 다음 프레임에 자동 정리됨)
+	if (auto a = wa.lock()) if (auto rb = a->GetOwner()->GetComponent<Rigidbody2D>()) overlappedRigdBodies.insert(rb);
+	if (auto b = wb.lock()) if (auto rb = b->GetOwner()->GetComponent<Rigidbody2D>()) overlappedRigdBodies.insert(rb);
 
-	if (rbA) overlappedRigdBodies.insert(rbA);
-	if (rbB) overlappedRigdBodies.insert(rbB);
-
-	// 충돌이 일어난 정보를 담아서 건내주자.
-	Collision2D collision2D;
-	collision2D.collider = a;
-	collision2D.otherCollider = b;
-	collision2D.rigidbody = rbA;
-	collision2D.otherRigidbody = rbB;
-	collision2D.transform = a->GetOwnerTransform();
-
-	// 이전 충돌정보와 비교해서 Enter인지 Stay인지 검증하자.
-	if (CollisionSystem::GetInstance().previousCollisions.find(pair) == CollisionSystem::GetInstance().previousCollisions.end())
-	{
-		if (rbA && rbA->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && rbB && rbB->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
+	// 충돌 페어는 Collider* 주소쌍을 쓰고 있었으므로, 현재 살아있을 때만 등록
+	if (auto a = wa.lock())
+		if (auto b = wb.lock())
 		{
-			for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionEnter2D(&collision2D);
-			for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionEnter2D(&collision2D);
+			auto pair = std::minmax(a, b);
+			CollisionSystem::GetInstance().currentCollisions.insert(pair);
+
+			// 스크립트들 약한 핸들로 스냅샷
+			std::vector<WeakObjectPtr<ScriptComponent>> wScA, wScB;
+			{
+				auto list = a->GetOwner()->GetComponents<ScriptComponent>();
+				wScA.reserve(list.size());
+				for (auto* sc : list) if (sc) wScA.emplace_back(sc->WeakFromThis<ScriptComponent>());
+			}
+			{
+				auto list = b->GetOwner()->GetComponents<ScriptComponent>();
+				wScB.reserve(list.size());
+				for (auto* sc : list) if (sc) wScB.emplace_back(sc->WeakFromThis<ScriptComponent>());
+			}
+
+			const bool isNew =
+				(CollisionSystem::GetInstance().previousCollisions.find(pair) ==
+					CollisionSystem::GetInstance().previousCollisions.end());
+
+			auto safeLayerEq = [&]() -> bool {
+				auto aa = wa.lock(); auto bb = wb.lock();
+				return aa && bb && (aa->GetLayer() == bb->GetLayer());
+				};
+
+			auto callCollision = [&](auto memfn)
+				{
+					// 콜백 직전마다 생존 확인 + Collision2D 재구성(중간 파괴 안전)
+					if (!safeLayerEq()) return;
+					auto aa = wa.lock(); auto bb = wb.lock();
+					if (!aa || !bb) return;
+
+					Rigidbody2D* rbA = aa->GetOwner()->GetComponent<Rigidbody2D>();
+					Rigidbody2D* rbB = bb->GetOwner()->GetComponent<Rigidbody2D>();
+
+					Collision2D c{};
+					c.collider = aa;
+					c.otherCollider = bb;
+					c.rigidbody = rbA;
+					c.otherRigidbody = rbB;
+					c.transform = aa->GetOwnerTransform();
+
+					// A 쪽
+					for (auto& wsc : wScA)
+						if (auto sc = wsc.lock())
+							if (safeLayerEq())
+								(sc->*memfn)(&c);
+					// B 쪽
+					for (auto& wsc : wScB)
+						if (auto sc = wsc.lock())
+							if (safeLayerEq())
+								(sc->*memfn)(&c);
+				};
+
+			auto callTrigger = [&](auto memfn)
+				{
+					if (!safeLayerEq()) return;
+					auto aa = wa.lock(); auto bb = wb.lock();
+					if (!aa || !bb) return;
+
+					// A 쪽
+					for (auto& wsc : wScA)
+						if (auto sc = wsc.lock())
+							if (safeLayerEq())
+								(sc->*memfn)(bb);
+					// B 쪽
+					for (auto& wsc : wScB)
+						if (auto sc = wsc.lock())
+							if (safeLayerEq())
+								(sc->*memfn)(aa);
+				};
+
+			const bool bothDynamic =
+				(a->GetOwner()->GetComponent<Rigidbody2D>() &&
+					b->GetOwner()->GetComponent<Rigidbody2D>() &&
+					a->GetOwner()->GetComponent<Rigidbody2D>()->m_eRigidBodyType == Define::ERigidBodyType::Dynamic &&
+					b->GetOwner()->GetComponent<Rigidbody2D>()->m_eRigidBodyType == Define::ERigidBodyType::Dynamic);
+
+			if (isNew)
+			{
+				if (bothDynamic) {
+					callCollision(&ScriptComponent::OnCollisionEnter2D);
+				}
+				callTrigger(&ScriptComponent::OnTriggerEnter2D);
+			}
+			else
+			{
+				if (bothDynamic) {
+					callCollision(&ScriptComponent::OnCollisionStay2D);
+				}
+				callTrigger(&ScriptComponent::OnTriggerStay2D);
+			}
 		}
-		for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerEnter2D(b);
-		for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerEnter2D(a);
-	}
-	else
-	{
-		if (rbA && rbA->m_eRigidBodyType == Define::ERigidBodyType::Dynamic && rbB && rbB->m_eRigidBodyType == Define::ERigidBodyType::Dynamic)
-		{
-			for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionStay2D(&collision2D);
-			for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnCollisionStay2D(&collision2D);
-		}
-		for (auto sc : scA) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerStay2D(b);
-		for (auto sc : scB) if (a->GetLayer() == b->GetLayer()) sc->OnTriggerStay2D(a);
-	}
 }
+
 
 bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
 {

@@ -174,6 +174,7 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 	std::cout << "OnTriggerEnter2D È£ÃâµÊ" << std::endl;
 	OutputDebugStringW(L"OnTriggerEnter2D È£ÃâµÊ\n");
 
+	if (!collider->GetOwner()) return;
 	switch (droneType)
 	{
 	case EDroneType::Player:
