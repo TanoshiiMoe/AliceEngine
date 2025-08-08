@@ -214,13 +214,13 @@
     <ClInclude Include="Scripts\Enemy\EnemyManager.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Enemy\EnemySpawner.h">
+    <ClInclude Include="Scripts\Enemy\Spawn\EnemySpawner.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\TileMap\TileMapManager.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Enemy\SpawnCollider.h">
+    <ClInclude Include="Scripts\Enemy\Spawn\SpawnCollider.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Weapon\Bullet.h">
@@ -237,6 +237,9 @@
     </ClInclude>
     <ClInclude Include="Scripts\Widget\SelectWidgetScript.h">
       <Filter>Scripts\Widget</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Spawn\SpawnData.h">
+      <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -345,9 +348,6 @@
     <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Enemy\Car.cpp">
-      <Filter>Scripts\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -391,8 +391,9 @@
       <Filter>Prefab\Enemy\Core</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Enemy\EnemyManager.cpp" />
-    <ClCompile Include="Scripts\Enemy\EnemySpawner.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
-    <ClCompile Include="Scripts\Enemy\SpawnCollider.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\SpawnCollider.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
   </ItemGroup>
 </Project>
