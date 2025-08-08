@@ -29,6 +29,7 @@
 
 #include <Helpers/CoordHelper.h>
 #include "Bike/BikeMovementScript.h"
+#include "Weapon/Drone.h"
 
 void Player::Initialize()
 {
@@ -141,7 +142,7 @@ void Player::Update(const float& deltaSeconds)
 		{
 			speed = bikeMovement->GetCurrSpeed();
 		}
-		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, speed);
+		BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, speed, EDroneType::Player);
 	}
 }
 

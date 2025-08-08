@@ -70,6 +70,7 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 			drone->initBodyPos = FVector2(-60.0f, 80.0f);
 			drone->initBodySize = FVector2(1.2f, 1.2f);
 			drone->SetDroneType(EDroneType::Enemy);
+			drone->SetAttackDelay(2.0f);
 		}
 		break;
 	case EnemySpawner::Truck:

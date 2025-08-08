@@ -33,7 +33,7 @@ public:
 	void FixedUpdate(const float& deltaSeconds);
 	void Update(const float& deltaSeconds) override;
 	void Floating(const float& deltaSeconds, const FVector2& dirNormal);
-	void MouseButton(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal);
+	void AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal);
 	void LateUpdate(const float& deltaSeconds);
 
 	virtual void Awake() override;
@@ -41,20 +41,17 @@ public:
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
 
-	virtual void OnCollisionEnter2D(Collision2D* collider) override;
-	virtual void OnCollisionStay2D(Collision2D* collider) override;
-	virtual void OnCollisionExit2D(Collision2D* collider) override;
 	virtual void OnTriggerEnter2D(Collider* collider) override;
 	virtual void OnTriggerStay2D(Collider* collider) override;
 	virtual void OnTriggerExit2D(Collider* collider) override;
 
 	void Input();
 
-	// Getter
 	EDroneType GetDroneType() const{ return droneType;}
-
-	// Setter
 	void SetDroneType(EDroneType type){ droneType = type;}
+	float GetAttackDelay() const { return attackDelay; }
+	void SetAttackDelay(float val) { attackDelay = val; }
+
 
 	gameObject* m_player = nullptr;
 	gameObject* m_owner = nullptr;
@@ -67,6 +64,7 @@ public:
 
 	FTimerHandle timer;
 	bool bCanFire = true;
+	bool bWaitForSecond = true;
 
 	// 위아래 진폭과 속도
 	float elapsed = 0.0f;
@@ -77,4 +75,8 @@ public:
 
 	FDroneSpritePath spritePath;
 	EDroneType droneType = EDroneType::Enemy;
+	float attackDelay = 0.5f;
+
+	// 상대방 바라보는 팔 회전 추가 각도 - 이미지가 회전되어 있을 경우 추가.
+	float armDegree = 0.0f;
 };
