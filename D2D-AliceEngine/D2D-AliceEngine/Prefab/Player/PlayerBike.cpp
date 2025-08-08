@@ -29,7 +29,13 @@ void PlayerBike::Initialize()
 	owner->AddComponent<Collider>();
 	owner->AddComponent<InputComponent>();
 	owner->AddComponent<Prism>(10, 0.1f);
-	owner->AddComponent<Drone>();
+	
+	FDroneSpritePath dronePath(
+		L"Player/drone/drone_killdong_body.png",
+		L"Player/drone/drone_killdong_arm.png"
+	);
+	if(Drone* drone = owner->AddComponent<Drone>(dronePath))
+		drone->SetDroneType(EDroneType::Player);
 	owner->AddComponent<BikeStatScript>();
 
 	// 게임 스크립트 컴포넌트
