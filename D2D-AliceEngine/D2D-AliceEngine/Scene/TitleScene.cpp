@@ -1,4 +1,4 @@
-#include "TitleScene.h"
+﻿#include "TitleScene.h"
 #include <Manager/SceneManager.h>
 #include "Scripts/TitleUIScript.h"
 #include <Scripts/Widget/TitleWidgetScript.h>
@@ -7,10 +7,14 @@
 #include <Scripts/TitleAudioScript.h>
 #include <Core/Input.h>
 #include <Component/InputComponent.h>
+#include <GameManager/GamePlayManager.h>
+#include <Helpers/Logger.h>
 
 void TitleScene::Initialize()
 {
 	__super::Initialize();
+
+    GamePlayManager& GPM = GamePlayManager::GetInstance();
 }
 
 void TitleScene::Release()

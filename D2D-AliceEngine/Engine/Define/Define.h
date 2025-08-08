@@ -1,25 +1,25 @@
-#pragma once
+ï»¿#pragma once
 /*
-* @brief Define ³×ÀÓ½ºÆäÀÌ½º.
-* @details ÀÌ ³×ÀÓ½ºÆäÀÌ½º´Â °ÔÀÓ ¿£ÁøÀÇ Àü¿ª »ó¼ö ¹× ¼³Á¤À» Á¤ÀÇÇÕ´Ï´Ù.
+* @brief Define ë„¤ì„ìŠ¤í˜ì´ìŠ¤.
+* @details ì´ ë„¤ì„ìŠ¤í˜ì´ìŠ¤ëŠ” ê²Œì„ ì—”ì§„ì˜ ì „ì—­ ìƒìˆ˜ ë° ì„¤ì •ì„ ì •ì˜í•©ë‹ˆë‹¤.
 */
 
 namespace Define
 {
-	static const int SCREEN_WIDTH = 1920;	// È­¸é ³Êºñ
-	static const int SCREEN_HEIGHT = 1080;	// È­¸é ³ôÀÌ
-	static const int FRAME_RATE = 60;		// ÇÁ·¹ÀÓ ·¹ÀÌÆ®
-	static const std::wstring WINDOW_CLASS_NAME = L"Sun, Earth, Moon";	// À©µµ¿ì Å¬·¡½º ÀÌ¸§
-	static const std::wstring WINDOW_TITLE = L"Sun, Earth, Moon Title";		// À©µµ¿ì Å¸ÀÌÆ²
-	static const std::wstring MODULE_PATH;		// ¸ğµâ °æ·Î
-	static const std::wstring WORKING_PATH;	// ÀÛ¾÷ µğ·ºÅä¸® °æ·Î
-	static const bool ENABLE_DEBUG_MODE = true; // µğ¹ö±× ¸ğµå È°¼ºÈ­ ¿©ºÎ
+	static const int SCREEN_WIDTH = 1920;	// í™”ë©´ ë„ˆë¹„
+	static const int SCREEN_HEIGHT = 1080;	// í™”ë©´ ë†’ì´
+	static const int FRAME_RATE = 60;		// í”„ë ˆì„ ë ˆì´íŠ¸
+	static const std::wstring WINDOW_CLASS_NAME = L"Sun, Earth, Moon";	// ìœˆë„ìš° í´ë˜ìŠ¤ ì´ë¦„
+	static const std::wstring WINDOW_TITLE = L"Sun, Earth, Moon Title";		// ìœˆë„ìš° íƒ€ì´í‹€
+	static const std::wstring MODULE_PATH;		// ëª¨ë“ˆ ê²½ë¡œ
+	static const std::wstring WORKING_PATH;	// ì‘ì—… ë””ë ‰í† ë¦¬ ê²½ë¡œ
+	static const bool ENABLE_DEBUG_MODE = true; // ë””ë²„ê·¸ ëª¨ë“œ í™œì„±í™” ì—¬ë¶€
 
 	static const std::wstring BASE_RESOURCE_PATH = L"Resource\\";
 	static const std::wstring BASE_EXTENSION_PATH = L"Extension\\";
 	static const float PI = 3.14159265358979323846264f;
 	static const float GRAVITYCONSTANT = 9.8f;
-	static const float MIN_OVERLAP_EPSILON = 0.001f; // float ¿ÀÂ÷ ¹æÁö¿ë ÃÖ¼Ò °ãÄ§°ª
+	static const float MIN_OVERLAP_EPSILON = 0.001f; // float ì˜¤ì°¨ ë°©ì§€ìš© ìµœì†Œ ê²¹ì¹¨ê°’
 
 	enum class EDrawType
 	{
@@ -48,23 +48,23 @@ namespace Define
 		Max
 	};
 
-	// Unreal ¡ê Unity ÁÖ¿ä Tick/Update ºñ±³
-	// TG_PrePhysics       : EarlyUpdate         // (AI/ÀÔ·Â, UnityÀÇ EarlyUpdate)
-	// TG_StartPhysics     : FixedUpdate ½ÃÀÛ Àü // (Unity¿¡ Á÷Á¢ ´ëÀÀ ¾øÀ½, º¸Åë FixedUpdate ÁØºñ)
-	// TG_DuringPhysics    : FixedUpdate         // (¹°¸® ¿¬»ê, UnityÀÇ FixedUpdate)
-	// TG_EndPhysics       : FixedUpdate Á¾·á ÈÄ // (Unity¿¡ Á÷Á¢ ´ëÀÀ ¾øÀ½, º¸Åë FixedUpdate ÈÄÃ³¸®)
-	// TG_PostPhysics      : Update/LateUpdate   // (°ÔÀÓ·ÎÁ÷, UnityÀÇ Update/LateUpdate)
-	// TG_PostUpdateWork   : PreRender/Render    // (Ä«¸Ş¶ó, ·»´õ¸µ, UnityÀÇ PreRender/Render)
-	// TG_LastDemotable    : (Æ¯¼ö »óÈ²¿ë, ¾ğ¸®¾ó¸¸ÀÇ ´Ü°è)
-	// TG_NewlySpawned     : (»õ °´Ã¼ Ã³¸®¿ë, ¾ğ¸®¾ó¸¸ÀÇ ´Ü°è)
+	// Unreal â†” Unity ì£¼ìš” Tick/Update ë¹„êµ
+	// TG_PrePhysics       : EarlyUpdate         // (AI/ì…ë ¥, Unityì˜ EarlyUpdate)
+	// TG_StartPhysics     : FixedUpdate ì‹œì‘ ì „ // (Unityì— ì§ì ‘ ëŒ€ì‘ ì—†ìŒ, ë³´í†µ FixedUpdate ì¤€ë¹„)
+	// TG_DuringPhysics    : FixedUpdate         // (ë¬¼ë¦¬ ì—°ì‚°, Unityì˜ FixedUpdate)
+	// TG_EndPhysics       : FixedUpdate ì¢…ë£Œ í›„ // (Unityì— ì§ì ‘ ëŒ€ì‘ ì—†ìŒ, ë³´í†µ FixedUpdate í›„ì²˜ë¦¬)
+	// TG_PostPhysics      : Update/LateUpdate   // (ê²Œì„ë¡œì§, Unityì˜ Update/LateUpdate)
+	// TG_PostUpdateWork   : PreRender/Render    // (ì¹´ë©”ë¼, ë Œë”ë§, Unityì˜ PreRender/Render)
+	// TG_LastDemotable    : (íŠ¹ìˆ˜ ìƒí™©ìš©, ì–¸ë¦¬ì–¼ë§Œì˜ ë‹¨ê³„)
+	// TG_NewlySpawned     : (ìƒˆ ê°ì²´ ì²˜ë¦¬ìš©, ì–¸ë¦¬ì–¼ë§Œì˜ ë‹¨ê³„)
 	enum class ETickingGroup
 	{
-		TG_PrePhysics,       // Unity: EarlyUpdate (AI/ÀÔ·Â)
-		TG_StartPhysics,     // Unity: FixedUpdate Á÷Àü
-		TG_DuringPhysics,    // Unity: FixedUpdate (¹°¸® ¿¬»ê)
-		TG_EndPhysics,       // Unity: FixedUpdate Á÷ÈÄ
-		TG_PostPhysics,      // Unity: Update/LateUpdate (°ÔÀÓ·ÎÁ÷)
-		TG_PostUpdateWork,   // Unity: PreRender/Render (Ä«¸Ş¶ó, ·»´õ¸µ)
+		TG_PrePhysics,       // Unity: EarlyUpdate (AI/ì…ë ¥)
+		TG_StartPhysics,     // Unity: FixedUpdate ì§ì „
+		TG_DuringPhysics,    // Unity: FixedUpdate (ë¬¼ë¦¬ ì—°ì‚°)
+		TG_EndPhysics,       // Unity: FixedUpdate ì§í›„
+		TG_PostPhysics,      // Unity: Update/LateUpdate (ê²Œì„ë¡œì§)
+		TG_PostUpdateWork,   // Unity: PreRender/Render (ì¹´ë©”ë¼, ë Œë”ë§)
 		TG_LastDemotable,
 		TG_NewlySpawned,
 		TG_MAX,
@@ -106,7 +106,7 @@ namespace Define
 		BottomCenter,
 		BottomRight
 	};
-	enum class EButtonState { Idle, Hover, Pressed, Release, Max};
+	enum class EButtonState { Idle, Hover, Pressed, Release, HoverLeave, Max};
 
 	enum class ERenderType
 	{
@@ -115,8 +115,8 @@ namespace Define
 
 	enum class ETextSource
 	{
-		System,	// Á¦¾îÆÇ
-		File	// Æ¯Á¤ °æ·Î
+		System,	// ì œì–´íŒ
+		File	// íŠ¹ì • ê²½ë¡œ
 	};
 };
 

@@ -19,6 +19,8 @@
 #include <Helpers/CoordHelper.h>
 #include <Manager/SceneManager.h>
 #include <Component/AudioComponent.h>
+#include <GameManager/GamePlayManager.h>
+#include <Helpers/Logger.h>
 
 void TitleWidgetScript::Initialize()
 {
@@ -692,12 +694,8 @@ void TitleWidgetScript::OnStart()
 		});
 
 
-
-
-
-
-	quitButton->SetStateAction(Define::EButtonState::Pressed, []()
-		{
+	quitButton->SetStateAction(Define::EButtonState::Pressed, [this]()
+	{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 			
@@ -705,9 +703,24 @@ void TitleWidgetScript::OnStart()
 			// Quit
 			//PostQuitMessage(0);
 			// 임시 씬 전환
-			SceneManager::ChangeScene(L"HiroScene");
+			//SceneManager::ChangeScene(L"HiroScene");
+			SceneManager::ChangeScene(L"KangTest");
 		});
 
+	quitButton->SetStateAction(Define::EButtonState::Hover, [quitButton]()
+	{
+		quitButton->StartHoverPulse(0.8f, 0.04f);
+	});
+
+	quitButton->SetStateAction(Define::EButtonState::HoverLeave, [quitButton]()
+	{
+		quitButton->StopHoverPulse();
+	});
+
+	quitButton->SetStateAction(Define::EButtonState::Release, [quitButton]()
+	{
+		quitButton->StopHoverPulse();
+	});
 	
 }
 

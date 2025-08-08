@@ -250,6 +250,9 @@
     <ClInclude Include="Scripts\Legacy\Player.h">
       <Filter>Scripts\Legacy</Filter>
     </ClInclude>
+    <ClInclude Include="GameManager\GamePlayManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -408,5 +411,6 @@
     <ClCompile Include="Scripts\Legacy\Player.cpp">
       <Filter>Scripts\Legacy</Filter>
     </ClCompile>
+    <ClCompile Include="GameManager\GamePlayManager.cpp" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Core/Singleton.h>
 #include <Windows.h>
 #include <functional>
@@ -11,16 +11,6 @@ public:
 
 	bool operator==(const FTimerHandle& Other) const { return InternalHandle == Other.InternalHandle; }
 	bool operator!=(const FTimerHandle& Other) const { return !(*this == Other); }
-};
-
-struct FTimerSlot
-{
-	FTimerHandle handle;
-	std::function<void()> callback;
-	float remainingTime = 0.0f;
-	float loopTime = 0.0f;
-	bool looping = false;
-	bool active = true;
 };
 
 class TimerManager : public Singleton<TimerManager>
@@ -52,9 +42,9 @@ public:
 private:
 	float accumulator{ 0.0f };
 
-	int frameCount = 0;          // 1ÃÊ µ¿¾È ´©ÀûµÈ ÇÁ·¹ÀÓ ¼ö
-	float timeSinceLastFps = 0.0f; // ÃÖ±Ù FPS ÃøÁ¤ ÈÄ °æ°ú½Ã°£
-	float currentFps = 0.0f;     // ÇöÀç FPS °ª
+	int frameCount = 0;          // 1ì´ˆ ë™ì•ˆ ëˆ„ì ëœ í”„ë ˆì„ ìˆ˜
+	float timeSinceLastFps = 0.0f; // ìµœê·¼ FPS ì¸¡ì • í›„ ê²½ê³¼ì‹œê°„
+	float currentFps = 0.0f;     // í˜„ì¬ FPS ê°’
 
 	float timeSinceLastDebug = 0.0f;
 
@@ -63,7 +53,7 @@ private:
 
 public:
 
-	// ÀÏ¹İ SetTimer
+	// ì¼ë°˜ SetTimer
 	template <typename UserClass>
 	void SetTimer(
 		FTimerHandle& OutHandle,
@@ -82,10 +72,13 @@ public:
 	float GetTimerRemaining(FTimerHandle Handle) const;
 	void SetTimer(FTimerHandle& OutHandle, std::function<void()> InCallback, float Rate, bool bLoop, float FirstDelay);
 
+	void SetTimerDt(FTimerHandle& OutHandle, std::function<void(float)> InCallback);
+
 private:
 	struct TimerData
 	{
 		std::function<void()> Callback;
+		std::function<void(float)> TickCallback;
 		float TimeRemaining = 0.0f;
 		float OriginalRate = 0.0f;
 		bool bLooping = false;

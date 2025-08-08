@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "TimerManager.h"
 
 void TimerManager::Initialize()
@@ -15,7 +15,7 @@ void TimerManager::UpdateTime()
 	deltaTime = unscaledDeltaTime * globalTimeScale;
 	prevCounter = currentCounter;
 
-	// ¹Ø¿¡´Â ÀÏ´ÜÀº ¾È¾²ÀÓ. µğ¹ö±×¿ëFPS·Î¸¸ ¾²ÀÓ
+	// ë°‘ì—ëŠ” ì¼ë‹¨ì€ ì•ˆì“°ì„. ë””ë²„ê·¸ìš©FPSë¡œë§Œ ì“°ì„
 	accumulator += deltaTime;
 	//OutputDebugStringW((L"DeltaTime : " + std::to_wstring(deltaTime) + L"\n").c_str());
 
@@ -43,7 +43,10 @@ void TimerManager::UpdateTime()
 
 		if (Data.TimeRemaining <= 0.0f)
 		{
-			Data.Callback();
+			if (Data.TickCallback)
+				Data.TickCallback(Data.Elapsed);
+			else if (Data.Callback)
+				Data.Callback();
 
 			if (Data.bLooping)
 			{
@@ -72,7 +75,7 @@ void TimerManager::UpdateFixedTime(std::function<void(const float&)> f)
 		fixedTime += fixedDeltaTime;
 		accumulator -= fixedDeltaTime;
 
-		// ½ÇÁ¦ FixedUpdate ·ÎÁ÷ È£Ãâ
+		// ì‹¤ì œ FixedUpdate ë¡œì§ í˜¸ì¶œ
 		f(dt);
 	}
 	//OutputDebugStringW((L"accumulator : " + std::to_wstring(accumulator) + L"\n").c_str());
@@ -208,5 +211,21 @@ void TimerManager::SetTimer(FTimerHandle& OutHandle, std::function<void()> InCal
 	Data.bLooping = bLoop;
 
 	Timers[Handle.InternalHandle] = Data;
+	OutHandle = Handle;
+}
+
+void TimerManager::SetTimerDt(FTimerHandle& OutHandle,
+	std::function<void(float)> InCallback)
+{
+	FTimerHandle Handle;
+	Handle.InternalHandle = NextHandle++;
+
+	TimerData Data;
+	Data.TickCallback = std::move(InCallback);
+	Data.TimeRemaining = 0.0f;    // ë§¤ í”„ë ˆì„ ë°œí™”
+	Data.OriginalRate = 0.0f;    // ì‚¬ìš© ì•ˆ í•¨
+	Data.bLooping = true;    // í•­ìƒ ë°˜ë³µ
+
+	Timers[Handle.InternalHandle] = std::move(Data);
 	OutHandle = Handle;
 }

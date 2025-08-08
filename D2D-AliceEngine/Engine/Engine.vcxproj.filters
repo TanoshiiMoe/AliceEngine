@@ -273,6 +273,9 @@
     <ClInclude Include="Component\ButtonComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Helpers\Logger.h">
+      <Filter>Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -478,6 +481,9 @@
     </ClCompile>
     <ClCompile Include="Component\ButtonComponent.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers\Logger.cpp">
+      <Filter>Helper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
