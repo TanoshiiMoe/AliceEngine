@@ -75,6 +75,9 @@ public:
 	float GetModifierDuration() const { return m_modifierDuration; }
 	void SetModifierDuration(float duration) { m_modifierDuration = duration; }
 
+	// m_prevMoveMount
+	float GetPrevMoveAmount() const { return m_prevMoveAmount; }
+	void SetPrevMoveAmount(float amount) { m_prevMoveAmount = amount; }
 
 private:
 	gameObject* m_owner = nullptr;
@@ -95,5 +98,7 @@ private:
 	// 속도 변화 효과
 	float m_speedModifier = 1.0f;
 	float m_modifierDuration = 0.0f;
+
+	float m_prevMoveAmount = 0.0f;
 };
 
