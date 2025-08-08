@@ -5,6 +5,7 @@
 using namespace Microsoft::WRL;
 
 struct ID2D1Bitmap1;
+struct ID2D1Effect;
 class SpriteRenderer : public RenderComponent
 {
 public:

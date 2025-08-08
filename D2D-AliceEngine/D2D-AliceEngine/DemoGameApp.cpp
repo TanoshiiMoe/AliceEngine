@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DemoGameApp.h"
 #include "Scene/DemoScene.h"
 #include "Scene/DemoScene2.h"

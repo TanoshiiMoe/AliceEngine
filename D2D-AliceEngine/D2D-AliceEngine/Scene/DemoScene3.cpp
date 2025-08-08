@@ -1,4 +1,4 @@
-#include "DemoScene3.h"
+ï»¿#include "DemoScene3.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -11,17 +11,17 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../Scripts/BackGroundImage.h"
-#include "../Scripts/Aru.h"
-#include "../Scripts/Aru2.h"
-#include "../Scripts/Player.h"
-#include "../Scripts/Enemy.h"
+#include "../Scripts/Legacy/Aru.h"
+#include "../Scripts/Legacy/Aru2.h"
+#include "../Scripts/Legacy/Player.h"
+#include "../Scripts/Legacy/Enemy.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <Helpers/CoordHelper.h>
 
 /*
-*	NewObject<T>(std::wstring&) : ÇØ´ç ÀÌ¸§ÀÇ °ÔÀÓ¿ÀºêÁ§Æ®¸¦ »ı¼ºÇÏ°í rawPointer¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-*	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : ÁÂÇ¥, È¸Àü, ½ºÄÉÀÏ, ÇÇº¿À» ÁöÁ¤ÇÕ´Ï´Ù.
+*	NewObject<T>(std::wstring&) : í•´ë‹¹ ì´ë¦„ì˜ ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  rawPointerë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+*	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : ì¢Œí‘œ, íšŒì „, ìŠ¤ì¼€ì¼, í”¼ë´‡ì„ ì§€ì •í•©ë‹ˆë‹¤.
 */
 
 void DemoScene3::Initialize()
@@ -152,36 +152,36 @@ void DemoScene3::OnEnter()
 	m_widget4 = NewObject<gameObject>(L"widget4");
 
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
-		L" <ÇÃ·¹ÀÌ¾î> \n"
-		L" [È­»ìÇ¥ »ó,ÇÏ] : ÇÃ·¹ÀÌ¾î À§,¾Æ·¡ ÀÌµ¿\n"
-		L" [È­»ìÇ¥ ÁÂ/¿ì] : ÇÃ·¹ÀÌ¾î ÁÂ,¿ì ÀÌµ¿ \n"
-		L" [z] : °ø°İ \n"
-		L" [SpaceBar] : Á¡ÇÁ (2´Ü Á¡ÇÁ±îÁö °¡´É) \n"
-		L" [k] : ÇÃ·¹ÀÌ¾î ¼Óµµ Áõ°¡ - ÅÍ³Î¸µ °Ë»ç \n"
-		L" [l] : ÇÃ·¹ÀÌ¾î ¼Óµµ °¨¼Ò\n"
-		L" [g] : ÇÃ·¹ÀÌ¾î Áß·Â Áõ°¡ - ÅÍ³Î¸µ °Ë»ç \n"
-		L" [h] : ÇÃ·¹ÀÌ¾î Áß·Â °¨¼Ò\n"
-		L" [u] : ÇÃ·¹ÀÌ¾î ÀÌµ¿ ¹æ½Ä º¯°æ\n"
-		L" [i] : Rigidbody¸¦ KinematicÀ¸·Î ÀüÈ¯\n"
-		L" [o] : Rigidbody¸¦ DynamicÀ¸·Î ÀüÈ¯\n"
-		L" [p] : Rigidbody¸¦ StaticÀ¸·Î ÀüÈ¯\n"
-		L" [t] : Rigidbody2D Á¦°Å\n"
-		L" [y] : Rigidbody2D ºÎÂø\n"
-		L" [8] : Collider Á¦°Å\n"
-		L" [9] : Collider ºÎÂø\n"
+		L" <í”Œë ˆì´ì–´> \n"
+		L" [í™”ì‚´í‘œ ìƒ,í•˜] : í”Œë ˆì´ì–´ ìœ„,ì•„ë˜ ì´ë™\n"
+		L" [í™”ì‚´í‘œ ì¢Œ/ìš°] : í”Œë ˆì´ì–´ ì¢Œ,ìš° ì´ë™ \n"
+		L" [z] : ê³µê²© \n"
+		L" [SpaceBar] : ì í”„ (2ë‹¨ ì í”„ê¹Œì§€ ê°€ëŠ¥) \n"
+		L" [k] : í”Œë ˆì´ì–´ ì†ë„ ì¦ê°€ - í„°ë„ë§ ê²€ì‚¬ \n"
+		L" [l] : í”Œë ˆì´ì–´ ì†ë„ ê°ì†Œ\n"
+		L" [g] : í”Œë ˆì´ì–´ ì¤‘ë ¥ ì¦ê°€ - í„°ë„ë§ ê²€ì‚¬ \n"
+		L" [h] : í”Œë ˆì´ì–´ ì¤‘ë ¥ ê°ì†Œ\n"
+		L" [u] : í”Œë ˆì´ì–´ ì´ë™ ë°©ì‹ ë³€ê²½\n"
+		L" [i] : Rigidbodyë¥¼ Kinematicìœ¼ë¡œ ì „í™˜\n"
+		L" [o] : Rigidbodyë¥¼ Dynamicìœ¼ë¡œ ì „í™˜\n"
+		L" [p] : Rigidbodyë¥¼ Staticìœ¼ë¡œ ì „í™˜\n"
+		L" [t] : Rigidbody2D ì œê±°\n"
+		L" [y] : Rigidbody2D ë¶€ì°©\n"
+		L" [8] : Collider ì œê±°\n"
+		L" [9] : Collider ë¶€ì°©\n"
 		L"\n"
-		L" <ÇÃ·¹ÀÌ¾î »óÅÂ>\n"
-		L" Box »ö»ó : ÃÊ·Ï»ö - ¶¥ À§¿¡ ÀÖÀ½\n"
-		L" Box »ö»ó : ÆÄ¶õ»ö/º¸¶ó»ö - ¶¥ À§¿¡ ÀÖ´Â ¹°Ã¼ À§¿¡ ÀÖÀ½\n"
-		L" Box »ö»ó : »¡°£»ö - °ø±â Áß¿¡ ÀÖÀ½\n"
-		L" Rigidbody Å¸ÀÔ¿¡ µû¶ó ¹°¸® ½Ã¹Ä·¹ÀÌ¼Ç Àû¿ë/¹ÌÀû¿ëÀÌ ´Ş¶óÁı´Ï´Ù.\n"
-		L" - Static : ¿òÁ÷ÀÌÁö ¾ÊÀ½(ÁöÇü/º® µî)\n"
-		L" - Kinematic : Á÷Á¢ Á¦¾î, ¹°¸® Èû ¹«½Ã\n"
-		L" - Dynamic : Áß·Â/Èû µî ¹°¸® Àû¿ë\n"
-		L" [1/2] : D2D, Unity ÁÂÇ¥°è \n"
-		L" [Q] : Ä«¸Ş¶ó¸¦ ÇÃ·¹ÀÌ¾î¿¡°Ô ºÙÀÌ±â \n"
-		L" [E] : Ä«¸Ş¶ó¸¦ ¶¼±â \n"
-		L" [R] : Scene Àç½ÃÀÛ \n"
+		L" <í”Œë ˆì´ì–´ ìƒíƒœ>\n"
+		L" Box ìƒ‰ìƒ : ì´ˆë¡ìƒ‰ - ë•… ìœ„ì— ìˆìŒ\n"
+		L" Box ìƒ‰ìƒ : íŒŒë€ìƒ‰/ë³´ë¼ìƒ‰ - ë•… ìœ„ì— ìˆëŠ” ë¬¼ì²´ ìœ„ì— ìˆìŒ\n"
+		L" Box ìƒ‰ìƒ : ë¹¨ê°„ìƒ‰ - ê³µê¸° ì¤‘ì— ìˆìŒ\n"
+		L" Rigidbody íƒ€ì…ì— ë”°ë¼ ë¬¼ë¦¬ ì‹œë®¬ë ˆì´ì…˜ ì ìš©/ë¯¸ì ìš©ì´ ë‹¬ë¼ì§‘ë‹ˆë‹¤.\n"
+		L" - Static : ì›€ì§ì´ì§€ ì•ŠìŒ(ì§€í˜•/ë²½ ë“±)\n"
+		L" - Kinematic : ì§ì ‘ ì œì–´, ë¬¼ë¦¬ í˜ ë¬´ì‹œ\n"
+		L" - Dynamic : ì¤‘ë ¥/í˜ ë“± ë¬¼ë¦¬ ì ìš©\n"
+		L" [1/2] : D2D, Unity ì¢Œí‘œê³„ \n"
+		L" [Q] : ì¹´ë©”ë¼ë¥¼ í”Œë ˆì´ì–´ì—ê²Œ ë¶™ì´ê¸° \n"
+		L" [E] : ì¹´ë©”ë¼ë¥¼ ë–¼ê¸° \n"
+		L" [R] : Scene ì¬ì‹œì‘ \n"
 		L"\n"
 	);	
 	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(18, 45));
@@ -190,14 +190,14 @@ void DemoScene3::OnEnter()
 	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
 
 	m_widget2->transform()->SetPosition(0, 0);
-	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <¾À> \n [3] : ¾À ÀüÈ¯");
+	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <ì”¬> \n [3] : ì”¬ ì „í™˜");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
 	m_widget2->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen({ 0.9,0 }));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget2->GetComponent<TextRenderComponent>()->m_layer = 20;
 
 	m_widget3->transform()->SetPosition(0, 0);
-	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <ÇöÀç ¾À> " + GetName());
+	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <í˜„ì¬ ì”¬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
 	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
@@ -223,14 +223,14 @@ void DemoScene3::OnEnter()
 		m_enemies[i]->AddComponent<Enemy>();
 		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
 
-		// ÇÃ·¹ÀÌ¾îº¸´Ù Á¶±İ ¶³¾îÁø À§Ä¡¿¡¼­ »ı¼ºµÇ°ÔÇÏ´Â ·ÎÁ÷
+		// í”Œë ˆì´ì–´ë³´ë‹¤ ì¡°ê¸ˆ ë–¨ì–´ì§„ ìœ„ì¹˜ì—ì„œ ìƒì„±ë˜ê²Œí•˜ëŠ” ë¡œì§
 		/*m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInTorus2D(
 				m_player->transform()->GetPosition().x,
 				m_player->transform()->GetPosition().y,
 				200.0f,
 				412.0f));*/
-				// Æ¯Á¤ ÁöÁ¡¿¡¼­ ¿ø ¸ğ¾çÀÌ³»¿¡ ·£´ıÆÇ À§Ä¡¿¡¼­ »ı¼ºµÇ°ÔÇÏ´Â ·ÎÁ÷
+				// íŠ¹ì • ì§€ì ì—ì„œ ì› ëª¨ì–‘ì´ë‚´ì— ëœë¤íŒ ìœ„ì¹˜ì—ì„œ ìƒì„±ë˜ê²Œí•˜ëŠ” ë¡œì§
 		m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInCircle2D(
 				300,

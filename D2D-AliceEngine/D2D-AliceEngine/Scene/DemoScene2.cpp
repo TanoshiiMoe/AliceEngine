@@ -1,4 +1,4 @@
-#include "DemoScene2.h"
+ï»¿#include "DemoScene2.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -11,16 +11,16 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../Scripts/BackGroundImage.h"
-#include "../Scripts/Aru.h"
-#include "../Scripts/Aru2.h"
-#include "../Scripts/Player.h"
-#include "../Scripts/CameraController.h"
+#include "../Scripts/Legacy/Aru.h"
+#include "../Scripts/Legacy/Aru2.h"
+#include "../Scripts/Legacy/Player.h"
+#include "../Scripts/Legacy/CameraController.h"
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Spine2D/SpineScript.h>
 
 /*
-*	NewObject<T>(std::wstring&) : ÇØ´ç ÀÌ¸§ÀÇ °ÔÀÓ¿ÀºêÁ§Æ®¸¦ »ı¼ºÇÏ°í rawPointer¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-*	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : ÁÂÇ¥, È¸Àü, ½ºÄÉÀÏ, ÇÇº¿À» ÁöÁ¤ÇÕ´Ï´Ù.
+*	NewObject<T>(std::wstring&) : í•´ë‹¹ ì´ë¦„ì˜ ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  rawPointerë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+*	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : ì¢Œí‘œ, íšŒì „, ìŠ¤ì¼€ì¼, í”¼ë´‡ì„ ì§€ì •í•©ë‹ˆë‹¤.
 */
 
 void DemoScene2::Initialize()
@@ -55,31 +55,31 @@ void DemoScene2::OnEnter()
 
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
 		L"\n"
-		L" <Ä«¸Ş¶ó> \n"
-		L" [W,A,S,D]  : Ä«¸Ş¶ó »ó,ÇÏ,ÁÂ,¿ì ÀÌµ¿ \n"
-		L" [1/2] : D2D, Unity ÁÂÇ¥°è \n"
-		L" [ [ / ] ] : Ä«¸Ş¶ó Ãà¼Ò, È®´ë\n"
-		L" [Q] : Ä«¸Ş¶ó¸¦ ¾Æ·ç¿¡°Ô ºÙÀÌ±â \n"
-		L" [E] : Ä«¸Ş¶ó¸¦ ¶¼±â \n"
-		L" * Ä«¸Ş¶ó¸¦ ºÙÀÌ¸é È­»ìÇ¥·Î Ä«¸Ş¶ó¸¦ ÀÌµ¿ÇÒ ¼ö ¾ø½À´Ï´Ù. \n"
+		L" <ì¹´ë©”ë¼> \n"
+		L" [W,A,S,D]  : ì¹´ë©”ë¼ ìƒ,í•˜,ì¢Œ,ìš° ì´ë™ \n"
+		L" [1/2] : D2D, Unity ì¢Œí‘œê³„ \n"
+		L" [ [ / ] ] : ì¹´ë©”ë¼ ì¶•ì†Œ, í™•ëŒ€\n"
+		L" [Q] : ì¹´ë©”ë¼ë¥¼ ì•„ë£¨ì—ê²Œ ë¶™ì´ê¸° \n"
+		L" [E] : ì¹´ë©”ë¼ë¥¼ ë–¼ê¸° \n"
+		L" * ì¹´ë©”ë¼ë¥¼ ë¶™ì´ë©´ í™”ì‚´í‘œë¡œ ì¹´ë©”ë¼ë¥¼ ì´ë™í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. \n"
 		L"\n"
-		L" <¾Æ·ç> \n"
-		L" [È­»ìÇ¥ »ó/ÇÏ/ÁÂ/¿ì] : »ó,ÇÏ,ÁÂ,¿ì ÀÌµ¿ \n"
-		L" [C] : ¾Æ·ç º¹Á¦ \n"
-		L" [B/N] : ¾Æ·ç ½ºÄÉÀÏ º¯È¯ \n"
-		L" [R] : ¾Æ·ç È¸Àü º¯È¯ \n"
-		L" [5,6] : ¹«±â ½ºÆù, ¹«±â ÆÄ±« \n"
-		L" [7,8] : Áö°© ½ºÆù, Áö°© ÆÄ±« \n"
-		L" [4] : ¾Æ·ç ÀÌ¸§ ÇÑ¿µ ÀüÈ¯ \n"
+		L" <ì•„ë£¨> \n"
+		L" [í™”ì‚´í‘œ ìƒ/í•˜/ì¢Œ/ìš°] : ìƒ,í•˜,ì¢Œ,ìš° ì´ë™ \n"
+		L" [C] : ì•„ë£¨ ë³µì œ \n"
+		L" [B/N] : ì•„ë£¨ ìŠ¤ì¼€ì¼ ë³€í™˜ \n"
+		L" [R] : ì•„ë£¨ íšŒì „ ë³€í™˜ \n"
+		L" [5,6] : ì•„ë£¨ ìŠ¤í°, ë¬´ê¸° íŒŒê´´ \n"
+		L" [7,8] : ì§€ê°‘ ìŠ¤í°, ì§€ê°‘ íŒŒê´´ \n"
+		L" [4] : ì•„ë£¨ ì´ë¦„ í•œì˜ ì „í™˜ \n"
 		L"\n"
 		L" ::Delegate \n"
-		L" [T] : ¾Æ·ç°¡ ¾Æ·ç2¿¡°Ô µ¥¹ÌÁö ÁÖ±â \n"
-		L" [Y] : ¾Æ·ç 5 È¸º¹ÇÏ±â \n"
-		L" [U] : ¾Æ·ç ÃÖ´ëÃ¼·Â 10 ´Ã¸®±â \n"
+		L" [T] : ì•„ë£¨ê°€ ì•„ë£¨2ì—ê²Œ ë°ë¯¸ì§€ ì£¼ê¸° \n"
+		L" [Y] : ì•„ë£¨ 5 íšŒë³µí•˜ê¸° \n"
+		L" [U] : ì•„ë£¨ ìµœëŒ€ì²´ë ¥ 10 ëŠ˜ë¦¬ê¸° \n"
 		L"\n"
-		L" [G] : ¾Æ·ç2°¡ ¾Æ·ç¿¡°Ô µ¥¹ÌÁö ÁÖ±â \n"
-		L" [H] : ¾Æ·ç2 7 È¸º¹ÇÏ±â \n"
-		L" [J] : ¾Æ·ç ÃÖ´ëÃ¼·Â 15 ´Ã¸®±â"
+		L" [G] : ì•„ë£¨2ê°€ ì•„ë£¨ì—ê²Œ ë°ë¯¸ì§€ ì£¼ê¸° \n"
+		L" [H] : ì•„ë£¨2 7 íšŒë³µí•˜ê¸° \n"
+		L" [J] : ì•„ë£¨ ìµœëŒ€ì²´ë ¥ 15 ëŠ˜ë¦¬ê¸°"
 	);
 	FVector2 widgetSize = m_widget->GetComponent<TextRenderComponent>()->GetRelativeSize();
 	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(0.1, 0.1)));
@@ -88,13 +88,13 @@ void DemoScene2::OnEnter()
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
 	m_widget2->transform()->SetPosition(0, 0);
-	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <¾À> \n [3] : ¾À ÀüÈ¯");
+	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <ì”¬> \n [3] : ì”¬ ì „í™˜");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
 	m_widget2->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.9, 0));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	
 	m_widget3->transform()->SetPosition(0, 0);
-	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <ÇöÀç ¾À> " + GetName());
+	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <í˜„ì¬ ì”¬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
 	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
@@ -141,8 +141,8 @@ void DemoScene2::OnEnter()
 	m_aru2->AddComponent<Aru2>();
 
 	// =======================================  Tag Example  ==========================================
-	// ÅÂ±× º¯ÇÏ´Â°É º¸·Á¸é ¿©±â¼­ m_aru2¸¦ Aru2·Î ¹Ù²ãÁÖ¼¼¿ä.
-	// Áö±İÀº 2°³°¡ Ã£¾ÆÁö´Â °É º¼ ¼ö ÀÖ½À´Ï´Ù.
+	// íƒœê·¸ ë³€í•˜ëŠ”ê±¸ ë³´ë ¤ë©´ ì—¬ê¸°ì„œ m_aru2ë¥¼ Aru2ë¡œ ë°”ê¿”ì£¼ì„¸ìš”.
+	// ì§€ê¸ˆì€ 2ê°œê°€ ì°¾ì•„ì§€ëŠ” ê±¸ ë³¼ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 	m_aru->SetTag(L"Aru");
 	m_aru2->SetTag(L"Aru");
 	//m_aru2->SetTag(L"Aru2");

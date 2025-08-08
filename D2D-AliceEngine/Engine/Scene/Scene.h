@@ -50,6 +50,8 @@ public:
 
 	bool RemoveAllObjectsByName(const std::wstring& name);
 
+	void FlushPendingRemovals();
+
 	template<class T>
 	bool RemoveObjectByType()
 	{
@@ -174,5 +176,9 @@ private:
 	gameObject* m_sysinfoWidget;
 	std::unordered_map<std::wstring, std::unique_ptr<gameObject>> m_objects;
 	std::unordered_map<std::wstring, std::unordered_set<std::wstring>> m_nameToUUIDs;
+
+	std::unordered_set<std::wstring> m_pendingDeleteUUIDs;
+
+	std::wstring FindUUIDByPointer(gameObject* ptr) const;
 };
 

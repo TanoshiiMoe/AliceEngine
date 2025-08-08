@@ -1,9 +1,8 @@
-#include "CameraMover.h"
+﻿#include "CameraMover.h"
 #include "Manager/UpdateTaskManager.h"
 #include <d2dengine_pch.cpp>
 #include "../Bike/BikeMovementScript.h"
 #include "Manager/SceneManager.h"
-#include <Scripts/CameraController.h>
 #include "Component/SkewTransform.h"
 
 void CameraMover::Initialize()

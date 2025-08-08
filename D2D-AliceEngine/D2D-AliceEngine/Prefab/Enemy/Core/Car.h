@@ -1,6 +1,7 @@
 #pragma once
 #include "Component/ScriptComponent.h"
 #include "Animation/AnimationController.h"
+#include <Manager/TimerManager.h>
 class Car : public ScriptComponent
 {
 public:
@@ -11,5 +12,7 @@ public:
 	void OnStart() override;
 protected:
 	AnimatorController animController;
+
+	FTimerHandle timer;
 };
 

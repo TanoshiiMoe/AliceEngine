@@ -6,27 +6,54 @@
 #include "System/ScriptSystem.h"
 #include "Manager/SceneManager.h"
 #include "Animation/AnimatorInstance.h"
+#include <Object/Camera.h>
+#include <Manager/SceneManager.h>
 
 void Car::Initialize()
 {
 	__super::Initialize();
 	REGISTER_SCRIPT_METHOD(OnStart);
 
-	// ¾Ö´Ï¸ŞÀÌÅÍ ÀÖÀ»½Ã
+	//ì• ë‹ˆë©”ì´í„° ìˆì„ì‹œ
+	//owner->AddComponent<Animator>();
+	// ï¿½Ö´Ï¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	owner->AddComponent<AnimatorInstance>();
-	// ¾øÀ»½Ã
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	owner->AddComponent<SpriteRenderer>();
 
 	owner->AddComponent<SkewTransform>();
 	owner->AddComponent<LaneController>();
 
-	// ½ºÅ©¸³Æ®
+	// ìŠ¤í¬ë¦½íŠ¸
 	owner->AddComponent<EnemyManager>();
+
+	TimerManager::GetInstance().ClearTimer(timer);
+	// 2ì´ˆì— í•œë²ˆì”© ì¹´ë©”ë¼ ì»¬ë§ ì²´í¬
+	TimerManager::GetInstance().SetTimer(
+		timer,
+		[weak = WeakFromThis<Car>()]() {
+			if (!weak) return;
+			FVector2 camPos = weak->GetCamera()->GetPosition(); // Unity ì¢Œí‘œ
+			float halfW = Define::SCREEN_WIDTH * 0.5f;
+			float halfH = Define::SCREEN_HEIGHT * 0.5f;
+			FVector2 bulletPos = weak->GetOwner()->transform()->GetPosition();
+
+			float marginX = 100.0f;
+			float marginY = 150.0f;
+			if (bulletPos.x < camPos.x - halfW - marginX || bulletPos.x > camPos.x + halfW + marginX ||
+				bulletPos.y < camPos.y - halfH - marginY || bulletPos.y > camPos.y + halfH + marginY)
+			{
+				weak->GetWorld()->RemoveObject(weak->GetOwner());
+			}
+		},
+		2.0f,
+		true,
+		0.5f);
 }
 
 void Car::OnStart()
 {
-	// SkewTransformÀ¸·Î º¯È¯ÇÏ±â
+	// SkewTransformìœ¼ë¡œ ë³€í™˜í•˜ê¸°
 	SkewTransform* st = owner->GetComponent<SkewTransform>();
 	st->groundTile = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"TileMap");
 	st->ToSkewPos();

@@ -59,6 +59,7 @@ void Scene::Update()
 	UpdateTaskManager::GetInstance().StartFrame();
 	UpdateTaskManager::GetInstance().TickAll();
 	VisibleMemoryInfo();
+	FlushPendingRemovals(); // 프레임 끝에서 삭제 처리
 	UpdateTaskManager::GetInstance().EndFrame();
 }
 
@@ -97,49 +98,70 @@ void Scene::VisibleMemoryInfo()
 
 bool Scene::RemoveObject(gameObject* targetObj)
 {
-	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
-	{
-		if (it->second.get() == targetObj)
-		{
-			m_nameToUUIDs.erase(it->second->GetName());
-			it->second.reset();
-			m_objects.erase(it);
-			return true;
-		}
-	}
-	return false;
+	if (!targetObj) return false;
+	std::wstring uuid = FindUUIDByPointer(targetObj);
+	if (uuid.empty()) return false;
+
+	m_pendingDeleteUUIDs.insert(uuid);
+	return true;
 }
 
 bool Scene::RemoveObjectByName(const std::wstring& objectName)
 {
 	auto it = m_nameToUUIDs.find(objectName);
-	if (it != m_nameToUUIDs.end())
-	{
-		// 예: 첫번째 UUID 삭제 (다른 방식도 가능)
-		auto uuidIt = it->second.begin();
-		m_objects.erase(*uuidIt);
-		it->second.erase(uuidIt);
-		if (it->second.empty())
-			m_nameToUUIDs.erase(it);
-		return true;
-	}
-	return false;
+	if (it == m_nameToUUIDs.end() || it->second.empty())
+		return false;
+
+	m_pendingDeleteUUIDs.insert(*it->second.begin()); // 하나만 삭제
+	return true;
 }
 
 bool Scene::RemoveAllObjectsByName(const std::wstring& name)
 {
 	auto it = m_nameToUUIDs.find(name);
-	if (it != m_nameToUUIDs.end())
-	{
-		for (const auto& uuid : it->second)
-		{
-			m_objects.erase(uuid);
-		}
-		m_nameToUUIDs.erase(it);
-		return true;
-	}
-	return false;
+	if (it == m_nameToUUIDs.end() || it->second.empty())
+		return false;
+
+	for (const auto& uuid : it->second)
+		m_pendingDeleteUUIDs.insert(uuid);
+	return true;
 }
+
+void Scene::FlushPendingRemovals()
+{
+	if (m_pendingDeleteUUIDs.empty()) return;
+
+	for (const auto& uuid : m_pendingDeleteUUIDs)
+	{
+		auto it = m_objects.find(uuid);
+		if (it == m_objects.end()) continue;
+
+		const std::wstring& name = it->second->GetName();
+		auto nameIt = m_nameToUUIDs.find(name);
+		if (nameIt != m_nameToUUIDs.end())
+		{
+			nameIt->second.erase(uuid);
+			if (nameIt->second.empty())
+				m_nameToUUIDs.erase(nameIt);
+		}
+
+		it->second.reset();
+		m_objects.erase(it);
+	}
+	m_pendingDeleteUUIDs.clear();
+}
+
+std::wstring Scene::FindUUIDByPointer(gameObject* ptr) const
+{
+	if (!ptr) return L"";
+	for (const auto& kv : m_objects)
+	{
+		if (kv.second.get() == ptr)
+			return kv.first;
+	}
+	return L"";
+}
+
 
 gameObject* Scene::Instantiate(gameObject* obj)
 {

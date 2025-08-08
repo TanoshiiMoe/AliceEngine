@@ -55,7 +55,7 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 {
-	if (auto ptr = renderer.lock())
+	if (!renderer.expired())
 	{
 		m_renderers.push_back(renderer);
 
@@ -63,7 +63,7 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 		m_renderQueue.emplace_back(
 			renderer->GetHandle(),
 			renderer.Get(),
-			[renderer](){ renderer->Render(); },
+			[w = renderer](){ if(auto weak = w.lock()) weak->Render(); },
 			renderer->drawType,
 			&renderer->m_layer
 		);
