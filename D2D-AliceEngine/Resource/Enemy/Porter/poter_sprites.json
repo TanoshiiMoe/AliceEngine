@@ -1,10 +1,10 @@
 {
-    "texture": "poter-sprite.png",
+    "texture": "Enemy/Porter/porter_sprite.png",
     "textureWidth": 4200,
     "textureHeight": 360,
     "sprites": [
         {
-            "name": "poter-sprite_0",
+            "name": "porter_sprite_0",
             "x": 0.0,
             "y": 360.0,
             "width": 600.0,
@@ -13,7 +13,7 @@
             "pivotY": 0.5
         },
         {
-            "name": "poter-sprite_1",
+            "name": "porter_sprite_1",
             "x": 600.0,
             "y": 360.0,
             "width": 600.0,
@@ -22,7 +22,7 @@
             "pivotY": 0.5
         },
         {
-            "name": "poter-sprite_2",
+            "name": "porter_sprite_2",
             "x": 1200.0,
             "y": 360.0,
             "width": 600.0,
@@ -31,7 +31,7 @@
             "pivotY": 0.5
         },
         {
-            "name": "poter-sprite_3",
+            "name": "porter_sprite_3",
             "x": 1800.0,
             "y": 360.0,
             "width": 600.0,
@@ -40,7 +40,7 @@
             "pivotY": 0.5
         },
         {
-            "name": "poter-sprite_4",
+            "name": "porter_sprite_4",
             "x": 2400.0,
             "y": 360.0,
             "width": 600.0,
@@ -49,7 +49,7 @@
             "pivotY": 0.5
         },
         {
-            "name": "poter-sprite_5",
+            "name": "porter_sprite_5",
             "x": 3000.0,
             "y": 360.0,
             "width": 600.0,
@@ -58,7 +58,7 @@
             "pivotY": 0.5
         },
         {
-            "name": "poter-sprite_6",
+            "name": "porter_sprite_6",
             "x": 3600.0,
             "y": 360.0,
             "width": 600.0,

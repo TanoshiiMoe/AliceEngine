@@ -240,6 +240,7 @@
     </ClInclude>
     <ClInclude Include="Scripts\Widget\StageWidgetScript.h">
       <Filter>Scripts\Widget</Filter>
+    </ClInclude>
     <ClInclude Include="Scripts\Enemy\Spawn\SpawnData.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>

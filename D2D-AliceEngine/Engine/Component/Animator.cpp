@@ -101,6 +101,16 @@ float Animator::GetBitmapSizeY()
 	return static_cast<float>(bmpSize.height);
 }
 
+float Animator::GetSpriteSizeX()
+{
+	return sheet->sprites[0].width;
+}
+
+float Animator::GetSpriteSizeY()
+{
+	return sheet->sprites[0].height;
+}
+
 void Animator::PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<AnimationClip> clip)
 {
 

@@ -14,6 +14,5 @@ public:
 private:
 	Collider* co;
 	WeakObjectPtr<gameObject> player;
-	EnemySpawner* enemySpawner;
 };
 

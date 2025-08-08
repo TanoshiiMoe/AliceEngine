@@ -59,6 +59,9 @@ public:
 	virtual float GetBitmapSizeX() override;
 	virtual float GetBitmapSizeY() override;
 
+	virtual float GetSpriteSizeX();
+	virtual float GetSpriteSizeY();
+
 	// 애니메이션 사전 준비 함수
 	void PlayAnimation(std::weak_ptr<SpriteSheet> sheet, std::weak_ptr<AnimationClip> clip);
 	void LoadSpriteSheet(const std::wstring& filePath);

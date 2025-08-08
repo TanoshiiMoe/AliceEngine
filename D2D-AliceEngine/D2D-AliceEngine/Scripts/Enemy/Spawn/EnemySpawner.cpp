@@ -14,11 +14,13 @@
 #include <Scripts/Bike/BikeStatScript.h>
 #include <Scripts/Weapon/Drone.h>
 
+EnemySpawner* EnemySpawner::instance = nullptr;
+
 void EnemySpawner::Initialize()
 {
 	__super::Initialize();
 
-	// ÇÃ·¹ÀÌ¾îÇÑÅ× ºÙÀÏ ÄÝ¶óÀÌ´õ »ý¼º
+	// í”Œë ˆì´ì–´í•œí…Œ ë¶™ì¼ ì½œë¼ì´ë” ìƒì„±
 	gameObject* coll = GetWorld()->NewObject<gameObject>(L"SpawnCollider");
 	coll->AddComponent<SpawnCollider>();
 
@@ -27,12 +29,15 @@ void EnemySpawner::Initialize()
 
 void EnemySpawner::OnStart()
 {
-	
+	if (instance == nullptr)
+		instance = this;
+	else
+		SceneManager::GetInstance().GetWorld()->RemoveObject(owner.lock());
 }
 
-void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _position /*= {0.0f ,0.0f}*/)
+void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {0.0f ,0.0f}*/)
 {
-	// ÀÌ¸§ Á¤ÇÏ±â
+	// ì´ë¦„ ì •í•˜ê¸°
 	std::wstring name = L"";
 	switch (_enemyTypeId)
 	{ 
@@ -47,7 +52,7 @@ void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _positio
 		break;
 	}
 
-	// Àû ½ºÆù
+	// ì  ìŠ¤í°
 	gameObject* enemy = GetWorld()->NewObject<gameObject>(name);
 	EnemyType etype = static_cast<EnemyType>(_enemyTypeId);
 
