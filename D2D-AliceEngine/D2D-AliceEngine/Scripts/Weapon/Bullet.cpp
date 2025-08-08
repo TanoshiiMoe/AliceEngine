@@ -17,6 +17,7 @@
 #include <scripts/Weapon/BulletManager.h>
 #include <Component/Collider.h>
 #include <Scripts/Bike/BikeMovementScript.h>
+#include <Scripts/Bike/BikeStatScript.h>
 
 void Bullet::Initialize()
 {
@@ -173,8 +174,18 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 {
 	std::cout << "OnTriggerEnter2D È£ÃâµÊ" << std::endl;
 	OutputDebugStringW(L"OnTriggerEnter2D È£ÃâµÊ\n");
-	if(collider->GetOwner()->GetTag() == L"Enemy")
-		GetWorld()->RemoveObject(collider->GetOwner());
+	if (collider->GetOwner()->GetTag() == L"Enemy")
+	{
+		if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+		{
+			bs->m_bikeStat->DecreaseAbility("HP", 5);
+		}
+		else
+		{
+			GetWorld()->RemoveObject(collider->GetOwner());
+		}
+		GetWorld()->RemoveObject(GetOwner());
+	}
 }
 
 void Bullet::OnTriggerStay2D(Collider* collider)

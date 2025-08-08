@@ -50,6 +50,7 @@ public:
 		m_content = oss.str();
 		InitializeFormat();
 		InitializeLayout();
+		m_metricsDirty = true;
 	}
 	void SetColor(const FColor& color);
 	void SetFontSize(const float& _size);
