@@ -1,4 +1,4 @@
-#include "EnemyBike.h"
+﻿#include "EnemyBike.h"
 #include <Scripts/Bike/LaneController.h>
 #include "System/ScriptSystem.h"
 #include <Component/SpriteRenderer.h>
@@ -16,4 +16,3 @@ void EnemyBike::OnStart()
 	owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Bike/bike.png");
 	owner->transform()->SetScale(0.6f, 0.6f);
 }
-
