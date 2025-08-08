@@ -14,6 +14,8 @@
 #include <Scripts/Bike/BikeStatScript.h>
 #include <Scripts/Weapon/Drone.h>
 
+EnemySpawner* EnemySpawner::instance = nullptr;
+
 void EnemySpawner::Initialize()
 {
 	__super::Initialize();
@@ -27,10 +29,13 @@ void EnemySpawner::Initialize()
 
 void EnemySpawner::OnStart()
 {
-	
+	if (instance == nullptr)
+		instance = this;
+	else
+		SceneManager::GetInstance().GetWorld()->RemoveObject(owner.lock());
 }
 
-void EnemySpawner::SpawnEnemySkewPos(int _enemyTypeId /*= 0*/, FVector2 _position /*= {0.0f ,0.0f}*/)
+void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {0.0f ,0.0f}*/)
 {
 	// 이름 정하기
 	std::wstring name = L"";
