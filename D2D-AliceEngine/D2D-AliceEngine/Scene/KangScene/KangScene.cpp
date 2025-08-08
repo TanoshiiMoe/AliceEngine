@@ -82,6 +82,14 @@ void KangScene::OnEnter()
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();
+
+	// 씬 전환
+	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
+	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
+		if (Input::IsKeyPressed(VK_3)) {
+			SceneManager::ChangeScene(L"TitleScene");
+		}
+		});
 }
 
 void KangScene::OnExit()

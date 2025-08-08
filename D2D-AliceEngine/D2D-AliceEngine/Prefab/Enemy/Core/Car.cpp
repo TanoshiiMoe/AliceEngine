@@ -5,6 +5,7 @@
 #include "Component/SpriteRenderer.h"
 #include "Scripts/Enemy/EnemyManager.h"
 #include "System/ScriptSystem.h"
+#include "Manager/SceneManager.h"
 
 void Car::Initialize()
 {
@@ -25,6 +26,7 @@ void Car::Initialize()
 void Car::OnStart()
 {
 	// SkewTransform으로 변환하기
-	if (auto st = owner->GetComponent<SkewTransform>())
-		st->ToSkewPos();
+	SkewTransform* st = owner->GetComponent<SkewTransform>();
+	st->groundTile = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"TileMap");
+	st->ToSkewPos();
 }
