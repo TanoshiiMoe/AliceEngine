@@ -226,6 +226,9 @@
     <ClInclude Include="Scripts\Widget\SelectWidgetScript.h">
       <Filter>Scripts\Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Widget\StageWidgetScript.h">
+      <Filter>Scripts\Widget</Filter>
+    </ClInclude>
     <ClInclude Include="Scripts\Enemy\Spawn\SpawnData.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
@@ -384,6 +387,9 @@
     <ClCompile Include="Scripts\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
+    <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp">
+      <Filter>Scripts\Widget</Filter>
+    </ClCompile>
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnCollider.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
     <ClCompile Include="Scripts\Bike\BikeStatScript.cpp" />

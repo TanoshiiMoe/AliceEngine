@@ -27,8 +27,6 @@ void SpawnCollider::OnStart()
 	co->SetLayer(1);
 
 	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
-
-	enemySpawner = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"EnemySpawner")->GetComponent<EnemySpawner>();
 }
 
 void SpawnCollider::Update(const float& deltaSeconds)
@@ -52,7 +50,7 @@ void SpawnCollider::OnTriggerEnter2D(Collider* collider)
 			collider->GetOwner()->GetComponent<SpawnData>()->SetCollData(temp);
 
 			FVector2 pos = collider->GetOwner()->GetPosition();
-			enemySpawner->SpawnEnemySkewPos(etype, pos);
+			EnemySpawner::instance->SpawnEnemy(etype, pos);
 		}
 	}
 }

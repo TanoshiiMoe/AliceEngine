@@ -1,31 +1,31 @@
 {
-    "clipName": "ticotico",
+    "clipName": "tico_idle",
     "loop": true,
-    "texturePath": "Assets/Image/티코 애니메이션0001 (1).png",
+    "texturePath": "Enemy/Tico/tico_sprite.png",
     "duration": 0.5,
     "frames": [
         {
-            "sprite": "티코 애니메이션0001 (1)_0",
+            "sprite": "tico_sprite_0",
             "time": 0.0
         },
         {
-            "sprite": "티코 애니메이션0001 (1)_1",
+            "sprite": "tico_sprite_1",
             "time": 0.0833333358168602
         },
         {
-            "sprite": "티코 애니메이션0001 (1)_2",
+            "sprite": "tico_sprite_2",
             "time": 0.1666666716337204
         },
         {
-            "sprite": "티코 애니메이션0001 (1)_3",
+            "sprite": "tico_sprite_3",
             "time": 0.25
         },
         {
-            "sprite": "티코 애니메이션0001 (1)_4",
+            "sprite": "tico_sprite_4",
             "time": 0.3333333432674408
         },
         {
-            "sprite": "티코 애니메이션0001 (1)_5",
+            "sprite": "tico_sprite_5",
             "time": 0.4166666567325592
         }
     ],

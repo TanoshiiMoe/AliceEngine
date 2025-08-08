@@ -1,11 +1,11 @@
-﻿#include "Car.h"
-#include <Component/Animator.h>
+#include "Car.h"
 #include <Component/SkewTransform.h>
 #include <Scripts/Bike/LaneController.h>
 #include "Component/SpriteRenderer.h"
 #include "Scripts/Enemy/EnemyManager.h"
 #include "System/ScriptSystem.h"
 #include "Manager/SceneManager.h"
+#include "Animation/AnimatorInstance.h"
 #include <Object/Camera.h>
 #include <Manager/SceneManager.h>
 
@@ -16,6 +16,9 @@ void Car::Initialize()
 
 	//애니메이터 있을시
 	//owner->AddComponent<Animator>();
+	// �ִϸ����� ������
+	owner->AddComponent<AnimatorInstance>();
+	// ������
 	owner->AddComponent<SpriteRenderer>();
 
 	owner->AddComponent<SkewTransform>();
