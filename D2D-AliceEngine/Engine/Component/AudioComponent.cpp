@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "AudioComponent.h"
 #include <Helpers/StringHelper.h>
 
@@ -103,8 +103,8 @@ void AudioComponent::AddVolumeByType(SoundType type, float volume)
 	float currentVolume = GetVolume(type);
 	currentVolume += volume;
 
-	if (currentVolume > 1.0f) currentVolume = 1.0f;
-	if (currentVolume < 0.0f) currentVolume = 0.0f;
+	if (currentVolume > 0.99f) currentVolume = 0.99f;
+	if (currentVolume < 0.01f) currentVolume = 0.01f;
 
 	switch (type)
 	{

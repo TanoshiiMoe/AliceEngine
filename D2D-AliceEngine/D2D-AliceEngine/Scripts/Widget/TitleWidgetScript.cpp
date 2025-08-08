@@ -107,12 +107,13 @@ void TitleWidgetScript::OnStart()
 	auto sfxControl = m_owner->AddComponent<SpriteRenderer>();
 	sfxControl->LoadData(L"UI\\SFXControl.png");
 	sfxControl->m_layer = -1000;
-	sfxControl->SetDrawType(EDrawType::WorldSpace);
-	float finalPos = -SCREEN_WIDTH / 2.0f
+	sfxControl->SetDrawType(EDrawType::ScreenSpace);
+	/*float finalPos = -SCREEN_WIDTH / 2.0f
 		+ (sfxControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
-	sfxControl->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
+	sfxControl->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));*/
 	//sfxControl->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::SFX) * soundUISize, soundUISize));
-	sfxControl->SetSlice(0,0, sfxControl->GetBitmapSizeX() * sfxVolume,-1);
+	
+	sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX() * sfxVolume, sfxControl->GetBitmapSizeY());
 
 	auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
 	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
@@ -223,8 +224,7 @@ void TitleWidgetScript::OnStart()
 	bgmPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
 	bgmPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundPlus_Pressed.png");
 	bgmPlusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundPlus_Idle.png");
-	bgmPlusButton->SetRelativePosition(FVector2(300, 0));
-	bgmPlusButton->SetRelativeScale(FVector2(1, 1));
+	bgmPlusButton->SetRelativePosition(FVector2(445, 50.7));
 	bgmPlusButton->SetActive(false);
 	bgmPlusButton->m_layer = -1000;
 
@@ -232,8 +232,7 @@ void TitleWidgetScript::OnStart()
 	bgmMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
 	bgmMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundMinus_Pressed.png");
 	bgmMinusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundMinus_Idle.png");
-	bgmMinusButton->SetRelativePosition(FVector2(-300, 0));
-	bgmMinusButton->SetRelativeScale(FVector2(1, 1));
+	bgmMinusButton->SetRelativePosition(FVector2(164, 50.7));
 	bgmMinusButton->SetActive(false);
 	bgmMinusButton->m_layer = -1000;
 
@@ -241,8 +240,7 @@ void TitleWidgetScript::OnStart()
 	sfxPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
 	sfxPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundPlus_Pressed.png");
 	sfxPlusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundPlus_Idle.png");
-	sfxPlusButton->SetRelativePosition(FVector2(300, -50));
-	sfxPlusButton->SetRelativeScale(FVector2(1, 1));
+	sfxPlusButton->SetRelativePosition(FVector2(445, 114));
 	sfxPlusButton->SetActive(false);
 	sfxPlusButton->m_layer = -1000;
 
@@ -250,8 +248,7 @@ void TitleWidgetScript::OnStart()
 	sfxMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
 	sfxMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundMinus_Pressed.png");
 	sfxMinusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundMinus_Idle.png");
-	sfxMinusButton->SetRelativePosition(FVector2(-300, -50));
-	sfxMinusButton->SetRelativeScale(FVector2(1, 1));
+	sfxMinusButton->SetRelativePosition(FVector2(164, 114));
 	sfxMinusButton->SetActive(false);
 	sfxMinusButton->m_layer = -1000;
 
@@ -629,7 +626,7 @@ void TitleWidgetScript::OnStart()
 		});
 
 	// bgmVolume
-	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, sfxControl, soundUISize, uiSound]
+	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, bgmControl, soundUISize, uiSound, &bgmVolume]
 		{
 			if (uiSound->IsPlaying())
 			{
@@ -640,17 +637,13 @@ void TitleWidgetScript::OnStart()
 
 			bgm->AddVolumeByType(SoundType::BGM, -0.1);
 
-			//bgm->AddVolume(-0.1f);
-
-			sfxControl->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * soundUISize, soundUISize));
-
 			float finalPos = -SCREEN_WIDTH / 2.0f
-				+ (sfxControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
+				+ (bgmControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgmVolume - 1);
 
-			sfxControl->SetRelativePosition(FVector2(finalPos,-SCREEN_HEIGHT / 2.0f -10));
+			bgmControl->SetRelativePosition(FVector2(finalPos,-SCREEN_HEIGHT / 2.0f -10));
 		});
 
-	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, sfxControl, soundUISize, uiSound]
+	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [bgm, sfxControl, soundUISize, uiSound, &bgmVolume]
 		{
 			if (uiSound->IsPlaying())
 			{
@@ -660,18 +653,15 @@ void TitleWidgetScript::OnStart()
 				uiSound->RestartByName(L"UISound", 0.45f);
 
 			bgm->AddVolumeByType(SoundType::BGM, 0.1);
-			//bgm->AddVolume(0.1f);
-
-			sfxControl->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::BGM) * soundUISize, soundUISize));
 
 			float finalPos = -SCREEN_WIDTH / 2.0f
-				+ (sfxControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgm->GetVolume(SoundType::BGM) - 1);
+				+ (sfxControl->GetBitmapSizeX() * soundUISize / 2.0f) * (bgmVolume - 1);
 
 			sfxControl->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));
 		});
 
 	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [
-		uiSound
+		uiSound, sfxControl, sfxVolume
 	] {
 			//if (uiSound->IsPlaying())
 			//	uiSound->StopByName(L"UISound");
@@ -679,11 +669,13 @@ void TitleWidgetScript::OnStart()
 			uiSound->PlayByName(L"UISound", 0.45f);
 
 			uiSound->AddVolumeByType(SoundType::SFX, -0.1);
+
+			sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX()* AudioManager::GetInstance().GetSFXVolume(), sfxControl->GetBitmapSizeY());
 		});
 
 
 	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [
-		uiSound
+		uiSound, sfxControl
 	] {
 			//if (uiSound->IsPlaying())
 			//	uiSound->StopByName(L"UISound");
@@ -691,6 +683,11 @@ void TitleWidgetScript::OnStart()
 			uiSound->PlayByName(L"UISound", 0.45f);
 		
 			uiSound->AddVolumeByType(SoundType::SFX, 0.1);
+
+			float a = AudioManager::GetInstance().GetSFXVolume();
+			float b = sfxControl->GetBitmapSizeX();
+
+			sfxControl->SetSlice(0, 0, a * b, sfxControl->GetBitmapSizeY());
 
 		});
 
