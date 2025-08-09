@@ -545,10 +545,8 @@ void TitleWidgetScript::OnStart()
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 
-		if (uiSound->IsPlaying())
-			uiSound->StopByName(L"UISound");
-		
-		uiSound->PlayByName(L"UISound",0.45f);
+		uiSound->StopByName(L"UISound");
+		uiSound->PlayByName1(L"UISound", 0.45f);
 
 		// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 		startButton->SetActive(false);
@@ -572,10 +570,8 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 
-			if (uiSound->IsPlaying())
-				uiSound->StopByName(L"UISound");
-
-			uiSound->PlayByName(L"UISound", 0.45f);
+			uiSound->StopByName(L"UISound");
+			uiSound->PlayByName1(L"UISound", 0.45f);
 			
 			// 여기에 몇 초 뒤 씬 전환 넣으면 될 거 같음
 			SceneManager::ChangeScene(L"SelectScene");
@@ -605,10 +601,8 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 			//SceneManager::ChangeScene(L"HiroScene");
 
-			if (uiSound->IsPlaying())
-				uiSound->StopByName(L"UISound");
-
-			uiSound->PlayByName(L"UISound", 0.45f);
+			uiSound->StopByName(L"UISound");
+			uiSound->PlayByName1(L"UISound", 0.45f);
 
 			// 모두 활성화
 			startButton->SetActive(true);
@@ -674,7 +668,7 @@ void TitleWidgetScript::OnStart()
 			if (uiSound->IsPlaying())
 				uiSound->StopByName(L"UISound");
 
-			uiSound->PlayByName(L"UISound", 0.45f);
+			uiSound->PlayByName1(L"UISound", 0.45f);
 
 			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 			startButton->SetActive(false);
@@ -713,7 +707,7 @@ void TitleWidgetScript::OnStart()
 			if (uiSound->IsPlaying())
 				uiSound->StopByName(L"UISound");
 
-			uiSound->PlayByName(L"UISound", 0.45f);
+			uiSound->PlayByName1(L"UISound", 0.45f);
 
 			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 			startButton->SetActive(false);
@@ -735,12 +729,8 @@ void TitleWidgetScript::OnStart()
 	// bgmVolume
     bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [this, bgm, bgmControl, uiSound]
 		{
-			if (uiSound->IsPlaying())
-			{
-				uiSound->PlayByName(L"UISound", 0.45f);
-			}
-			else
-				uiSound->RestartByName(L"UISound", 0.45f);
+			uiSound->StopByName(L"UISound");
+			uiSound->PlayByName1(L"UISound", 0.45f);
 
 			bgm->AddVolumeByType(SoundType::BGM, -0.1);
             const float vol = AudioManager::GetInstance().GetBGMVolume();
@@ -754,12 +744,8 @@ void TitleWidgetScript::OnStart()
 
     bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [this, bgm, bgmControl, uiSound]
 		{
-			if (uiSound->IsPlaying())
-			{
-				uiSound->PlayByName(L"UISound", 0.45f);
-			}
-			else
-				uiSound->RestartByName(L"UISound", 0.45f);
+			uiSound->StopByName(L"UISound");
+			uiSound->PlayByName1(L"UISound", 0.45f);
 
 			bgm->AddVolumeByType(SoundType::BGM, 0.1);
             const float vol = AudioManager::GetInstance().GetBGMVolume();
@@ -774,10 +760,8 @@ void TitleWidgetScript::OnStart()
     sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [
         this, uiSound, sfxControl
     ] {
-			//if (uiSound->IsPlaying())
-			//	uiSound->StopByName(L"UISound");
-
-			uiSound->PlayByName(L"UISound", 0.45f);
+			uiSound->StopByName(L"UISound");
+			uiSound->PlayByName1(L"UISound", 0.45f);
 
             uiSound->AddVolumeByType(SoundType::SFX, -0.1);
             const float vol = AudioManager::GetInstance().GetSFXVolume();
@@ -793,10 +777,8 @@ void TitleWidgetScript::OnStart()
     sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [
         this, uiSound, sfxControl
     ] {
-			//if (uiSound->IsPlaying())
-			//	uiSound->StopByName(L"UISound");
-
-			uiSound->PlayByName(L"UISound", 0.45f);
+			uiSound->StopByName(L"UISound");
+			uiSound->PlayByName1(L"UISound", 0.45f);
 		
             uiSound->AddVolumeByType(SoundType::SFX, 0.1);
             const float vol = AudioManager::GetInstance().GetSFXVolume();

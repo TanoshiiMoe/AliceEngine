@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Component/Component.h>
 #include <Manager/AudioManager.h>
 
@@ -24,9 +24,12 @@ public:
 		float sec = 0,
 		float volume = 0.3f,
 		bool paused = false);
+    
+    void PlayByName1(const std::wstring& name, float volume);
+    void RestartByName1(const std::wstring& name, float volume);
 
 	void RestartByName(const std::wstring& name, float sec = 0, float volume = 0.3f);
-
+   
 	void SetMasterVolume(float volume);
 	void AddMasterVolume(float volume);
 	float GetMasterVolume();
