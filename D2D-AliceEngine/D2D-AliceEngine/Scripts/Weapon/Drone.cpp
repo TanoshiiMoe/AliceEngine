@@ -127,9 +127,8 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 		if (auto player = BulletManager::GetInstance().GetPlayer())
 		{
 			// 1발짜리
-			
-			//FVector2 targetPos = player->transform() ? player->transform()->GetPosition()
-			//	: FVector2{ 0.0f, 0.0f };
+			//FVector2 targetPos = player->transform() ? player->transform()->GetPosition() : FVector2(0,0);
+			////	: FVector2{ 0.0f, 0.0f };
 			//float currentSpeed = 0.0f;
 			//FVector2 dir = bodyPos - targetPos;
 			//FVector2 _dirNormal = dir.Normalize();
@@ -205,34 +204,37 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 
 			//	bCanFire = false;
 			//}
+			// 
+			// 평시 포신은 플레이어 대략 조준(시각용)
 
-			if (auto player = BulletManager::GetInstance().GetPlayer())
-			{
-				// 평시 포신은 플레이어 대략 조준(시각용)
-				{
-					FVector2 bodyPos = arm ? arm->GetRelativePosition() : FVector2{ 0,0 };
-					FVector2 targetPos = player->transform() ? player->transform()->GetPosition() : FVector2{ 0,0 };
-					FVector2 dir = (targetPos - bodyPos).Normalize();
-					const float angleRad = std::atan2f(dir.y, dir.x);
-					const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;
-					if (arm) arm->SetRelativeRotation(angleDeg);
-				}
+			// 동그랗게 3발 
+			FVector2 targetPos = player->transform() ? player->transform()->GetPosition() : FVector2{ 0,0 };
+			FVector2 dir = targetPos - bodyPos ;
+			FVector2 _dirNormal = -dir.Normalize();
+			// arm 회전
+			const float angleRad = std::atan2f(_dirNormal.y, _dirNormal.x);
+			const float angleDeg = angleRad * 180.0f / Define::PI;
+			if (arm) arm->SetRelativeRotation(angleDeg);
 
-				// bCanFire가 true일 때만 버스트 시작(1회에 3발)
-				if (bCanFire)
-				{
-					bCanFire = false;       // 외부 쿨다운 타이머로 다시 켜짐(기존 OnStart의 timer)
-					burstRemaining = 3;     // 연속 3발
-					// 첫 발 즉시 발사
-					TimerManager::GetInstance().SetTimer(
-						burstTimer,
-						[this]() { FireOneBurstShot(); },
-						0.0f,  
-						false, 
-						0.0f   
-					);
-				}
-			}
+			 //bCanFire가 true일 때만 버스트 시작(1회에 3발)
+            if (bCanFire)
+            {
+                bCanFire = false;       // 외부 쿨다운 타이머로 다시 켜짐(기존 OnStart의 timer)
+                burstRemaining = 3;     // 연속 3발
+                // 첫 발 즉시 발사
+                FireOneBurstShot();
+                // 이후 남은 발은 간격을 두고 순차 발사
+                if (burstRemaining > 0)
+                {
+                    TimerManager::GetInstance().SetTimer(
+                        burstTimer,
+                        [this]() { FireOneBurstShot(); },
+                        burstInterval,
+                        true,              // 루프: 남은 발이 0이 되면 내부에서 타이머 정리
+                        burstInterval      // 첫 지연도 동일 간격으로 설정
+                    );
+                }
+            }
 		}
 		break;
 	}
@@ -255,14 +257,6 @@ void Drone::FireOneBurstShot()
 	const auto rnd = FRandom::GetRandomPointInCircle2D(targetPos.x, targetPos.y, spreadRadius);
 	const FVector2 aimedTarget{ rnd.x, rnd.y };
 
-	// 포신 회전(조준)
-	{
-		FVector2 aimDir = (aimedTarget - bodyPos).Normalize();
-		const float angleRad = std::atan2f(aimDir.y, aimDir.x);
-		const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;
-		if (arm) arm->SetRelativeRotation(angleDeg);
-	}
-
 	// 속도 반영(플레이어 바이크 이동속도)
 	float currentSpeed = 0.0f;
 	if (auto bike = player->GetComponent<BikeMovementScript>())
@@ -274,16 +268,11 @@ void Drone::FireOneBurstShot()
 	BulletManager::GetInstance().FireBullet(bodyPos, aimedTarget, speed, droneType);
 
 	// 남은 발 관리 및 다음 타이머
-	if (--burstRemaining > 0)
-	{
-		TimerManager::GetInstance().SetTimer(
-			burstTimer,
-			[this]() { FireOneBurstShot(); },
-			0.0f,      // rate(미사용)
-			false,     // 루프 아님
-			burstInterval // 다음 발까지 대기 시간
-		);
-	}
+    if (--burstRemaining <= 0)
+    {
+        // 더 이상 남은 발이 없으면 반복 타이머 중지
+        TimerManager::GetInstance().ClearTimer(burstTimer);
+    }
 }
 
 void Drone::LateUpdate(const float& deltaSeconds)

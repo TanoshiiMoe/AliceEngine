@@ -128,3 +128,23 @@ void SpriteRenderer::SetSkewing(bool _isSkewing, FVector2 _skewAngle /*= FVector
 {
 	
 }
+
+void SpriteRenderer::SetOpacity(float alpha)
+{
+    ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+    if (!context || !m_bitmap) {
+        m_effect.Reset();
+        return;
+    }
+
+    // 0..1 clamp
+    const float a = (alpha < 0.f) ? 0.f : (alpha > 1.f ? 1.f : alpha);
+
+    ComPtr<ID2D1Effect> opacityEffect;
+    if (SUCCEEDED(context->CreateEffect(CLSID_D2D1Opacity, &opacityEffect)))
+    {
+        opacityEffect->SetValue(D2D1_OPACITY_PROP_OPACITY, a);
+        opacityEffect->SetInput(0, m_bitmap.get());
+        m_effect = opacityEffect; // Render 단계에서 DrawImage로 그려짐
+    }
+}

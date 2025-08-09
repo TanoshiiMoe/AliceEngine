@@ -9,6 +9,7 @@
 #include <Component/InputComponent.h>
 #include <GameManager/GamePlayManager.h>
 #include <Helpers/Logger.h>
+#include <Scripts/Widget/CutSceneWidgetScript.h>
 
 void TitleScene::Initialize()
 {
@@ -38,6 +39,9 @@ void TitleScene::OnEnter()
 	m_UI = NewObject<gameObject>(L"UI");
 	//m_UI->AddComponent<TitleUIScript>();
 	m_UI->AddComponent<TitleWidgetScript>();
+
+	// 테스트용 컷씬 위젯. 이걸 켜서 확인할 것.
+	//m_UI->AddComponent<CutSceneWidgetScript>();
 }
 
 void TitleScene::OnExit()

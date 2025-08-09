@@ -163,6 +163,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Widget\CutSceneWidgetScript.h" />
     <ClInclude Include="GameManager\GamePlayManager.h" />
     <ClInclude Include="Scripts\Bike\BikeStatScript.h" />
     <ClInclude Include="Scripts\Weapon\Drone.h" />
@@ -224,6 +225,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Widget\CutSceneWidgetScript.cpp" />
     <ClCompile Include="GameManager\GamePlayManager.cpp" />
     <ClCompile Include="Scripts\Bike\BikeStatScript.cpp" />
     <ClCompile Include="Scripts\Weapon\Drone.cpp" />

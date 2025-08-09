@@ -85,6 +85,6 @@ public:
 	// 플레이어 원형으로 쏠 변수
 	FTimerHandle burstTimer;
 	int   burstRemaining = 0;
-	float burstInterval = 0.25f;   // 연속 발사 간격(초)
+    float burstInterval = 0.2f;    // 연속 발사 간격(초)
 	float spreadRadius = 340.0f;  // 플레이어 주변 랜덤 조준 반경
 };
