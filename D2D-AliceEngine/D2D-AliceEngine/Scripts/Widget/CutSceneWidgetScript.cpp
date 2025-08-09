@@ -16,6 +16,7 @@
 #include <Helpers/CoordHelper.h>
 #include <Manager/SceneManager.h>
 #include <Helpers/Logger.h>
+#include <GameManager/GamePlayManager.h>
 
 void CutSceneWidgetScript::Initialize()
 {
@@ -47,7 +48,7 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
     // 진행 중인 전환 스텝 처리
     if (m_isTransitioning)
     {
-        StepTransition(deltaSeconds);
+        StepTransition(TimerManager::GetInstance().unscaledDeltaTime);
     }
 }
 
@@ -67,7 +68,10 @@ void CutSceneWidgetScript::OnStart()
 	m_currentImageIndex = 0;
 
 	// 컴포넌트들 생성
-	m_background = m_owner->AddComponent<SpriteRenderer>();
+    // 월드 가림용 백드롭을 가장 먼저 생성하여 항상 뒤를 완전 차단
+    EnsureBackdropOverlay();
+
+    m_background = m_owner->AddComponent<SpriteRenderer>();
 	m_nextButton = m_owner->AddComponent<ButtonComponent>();
 	m_prevButton = m_owner->AddComponent<ButtonComponent>();
 	m_skipButton = m_owner->AddComponent<ButtonComponent>();
@@ -87,8 +91,8 @@ void CutSceneWidgetScript::OnStart()
     const float targetW = 1920.f;
     const float targetH = 1080.f;
     // 아직 비트맵이 로드되지 않았으므로, 첫 ShowImage에서 실제 스케일을 적용합니다.
-    // 임시로 layer만 설정
-    m_background->m_layer = 0;
+    // 임시로 layer만 설정 (상대 레이어 적용)
+    m_background->m_layer = 0 + m_relativeLayer;
 
 	// Next 버튼 설정
 	m_nextButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -97,7 +101,7 @@ void CutSceneWidgetScript::OnStart()
 	m_nextButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	m_nextButton->SetRelativePosition(FVector2(400, 350));
 	m_nextButton->SetRelativeScale(FVector2(0.8f, 0.8f));
-	m_nextButton->m_layer = 100;
+    m_nextButton->m_layer = 100 + m_relativeLayer;
 
 	// Prev 버튼 설정
 	m_prevButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -106,7 +110,7 @@ void CutSceneWidgetScript::OnStart()
 	m_prevButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	m_prevButton->SetRelativePosition(FVector2(-400, 350));
 	m_prevButton->SetRelativeScale(FVector2(0.8f, 0.8f));
-	m_prevButton->m_layer = 100;
+    m_prevButton->m_layer = 100 + m_relativeLayer;
 
 	// Skip 버튼 설정
 	m_skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -115,7 +119,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	m_skipButton->SetRelativePosition(FVector2(0, 400));
 	m_skipButton->SetRelativeScale(FVector2(0.8f, 0.8f));
-	m_skipButton->m_layer = 100;
+    m_skipButton->m_layer = 100 + m_relativeLayer;
 
 	// 텍스트 설정
 	m_nextText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -125,7 +129,7 @@ void CutSceneWidgetScript::OnStart()
 	m_nextText->SetColor(FColor::White);
 	FVector2 nextTextSize = m_nextText->GetRelativeSize();
 	m_nextText->SetRelativePosition(CoordHelper::RatioCoordToScreen(nextTextSize, FVector2(-0.5, -0.5)));
-	m_nextText->m_layer = 101;
+    m_nextText->m_layer = 101 + m_relativeLayer;
 	m_nextText->RemoveFromParent();
 	m_nextButton->AddChildComponent(m_nextText);
 
@@ -136,7 +140,7 @@ void CutSceneWidgetScript::OnStart()
 	m_prevText->SetColor(FColor::White);
 	FVector2 prevTextSize = m_prevText->GetRelativeSize();
 	m_prevText->SetRelativePosition(CoordHelper::RatioCoordToScreen(prevTextSize, FVector2(-0.5, -0.5)));
-	m_prevText->m_layer = 101;
+    m_prevText->m_layer = 101 + m_relativeLayer;
 	m_prevText->RemoveFromParent();
 	m_prevButton->AddChildComponent(m_prevText);
 
@@ -147,34 +151,32 @@ void CutSceneWidgetScript::OnStart()
 	m_skipText->SetColor(FColor::White);
 	FVector2 skipTextSize = m_skipText->GetRelativeSize();
 	m_skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextSize, FVector2(-0.5, -0.5)));
-	m_skipText->m_layer = 101;
+    m_skipText->m_layer = 101 + m_relativeLayer;
 	m_skipText->RemoveFromParent();
 	m_skipButton->AddChildComponent(m_skipText);
 
 	// 버튼 이벤트 설정
 	m_nextButton->SetStateAction(Define::EButtonState::Pressed, [this]()
 	{
-		if (m_uiSound->IsPlaying())
-			m_uiSound->StopByName(L"UISound");
-		m_uiSound->PlayByName(L"UISound", 0.45f);
+		m_uiSound->StopByName(L"UISound");
+		m_uiSound->PlayByName1(L"UISound", 0.45f);
 
 		NextImage();
 	});
 
 	m_prevButton->SetStateAction(Define::EButtonState::Pressed, [this]()
 	{
-		if (m_uiSound->IsPlaying())
-			m_uiSound->StopByName(L"UISound");
-		m_uiSound->PlayByName(L"UISound", 0.45f);
+		m_uiSound->StopByName(L"UISound");
+		m_uiSound->PlayByName1(L"UISound", 0.45f);
 
 		PrevImage();
 	});
 
 	m_skipButton->SetStateAction(Define::EButtonState::Pressed, [this]()
 	{
-		if (m_uiSound->IsPlaying())
-			m_uiSound->StopByName(L"UISound");
-		m_uiSound->PlayByName(L"UISound", 0.45f);
+		m_uiSound->StopByName(L"UISound");
+		m_uiSound->PlayByName1(L"UISound", 0.45f);
+        GamePlayManager::GetInstance().StartGame();
 
 		SkipCutScene();
 	});
@@ -303,36 +305,40 @@ void CutSceneWidgetScript::ShowImage(int index)
                 spr->SetRelativeScale(FVector2(desc.size.x / w, desc.size.y / h));
             }
             spr->SetRelativePosition(desc.position);
-            spr->m_layer = desc.layer;
+            spr->m_layer = desc.layer + m_relativeLayer;
             m_activeOverlays.push_back(spr);
         }
     }
 
-	// 버튼 활성화/비활성화 업데이트 (SetActive(false)가 자동으로 애니메이션 중지)
-	{
-		const bool hasPrev = index > 0;
-		const bool hasNext = index < static_cast<int>(m_cutSceneImages.size()) - 1;
+    // 버튼 활성화/텍스트 업데이트
+    {
+        const bool hasPrev = index > 0;
+        const bool isLast = index >= static_cast<int>(m_cutSceneImages.size()) - 1;
 
-		if (!hasPrev)
-		{
-			m_prevButton->StopAllAnimations();
-			m_prevButton->SetActive(false);
-		}
-		else
-		{
-			m_prevButton->SetActive(true);
-		}
+        if (!hasPrev)
+        {
+            m_prevButton->StopAllAnimations();
+            m_prevButton->SetActive(false);
+        }
+        else
+        {
+            m_prevButton->SetActive(true);
+        }
 
-		if (!hasNext)
-		{
-			m_nextButton->StopAllAnimations();
-			m_nextButton->SetActive(false);
-		}
-		else
-		{
-			m_nextButton->SetActive(true);
-		}
-	}
+        // 마지막 컷에서는 Next 버튼 텍스트를 "시작하기"로 변경하고 버튼은 활성 유지
+        m_nextButton->SetActive(true);
+        if (isLast)
+        {
+            m_nextText->SetText(L"시작하기");
+        }
+        else
+        {
+            m_nextText->SetText(L"다음");
+        }
+        // 텍스트 변경에 따라 중앙 정렬 재계산
+        FVector2 nextTextSize = m_nextText->GetRelativeSize();
+        m_nextText->SetRelativePosition(CoordHelper::RatioCoordToScreen(nextTextSize, FVector2(-0.5f, -0.5f)));
+    }
 
 	OutputDebugStringW((L"Showing cutscene image: " + std::to_wstring(index + 1) + L"/" + std::to_wstring(m_cutSceneImages.size()) + L"\n").c_str());
 }
@@ -346,8 +352,32 @@ void CutSceneWidgetScript::NextImage()
     }
 	else
 	{
-		// 마지막 이미지에서 다음 버튼을 누르면 컷씬 종료
-		SkipCutScene();
+        // 마지막 이미지에서 다음 버튼을 누르면 컷씬 종료
+        GamePlayManager::GetInstance().StartGame();
+        TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
+        // 리소스 정리 및 컴포넌트 파괴
+        m_isTransitioning = false;
+        ClearOpacityOnAll();
+        ClearOverlays();
+        if (m_fadeOverlay)
+        {
+            m_fadeOverlay->RemoveFromParent();
+            m_fadeOverlay->Release();
+            m_fadeOverlay = nullptr;
+        }
+        if (m_backdropOverlay)
+        {
+            m_backdropOverlay->RemoveFromParent();
+            m_backdropOverlay->Release();
+            m_backdropOverlay = nullptr;
+        }
+        if (m_background)
+        {
+            m_background->RemoveFromParent();
+            m_background->Release();
+            m_background = nullptr;
+        }
+        GetWorld()->RemoveObject(owner.Get());
 	}
 }
 
@@ -364,7 +394,35 @@ void CutSceneWidgetScript::SkipCutScene()
 {
 	// 컷씬 종료 - 다음 씬으로 이동 (예: 게임 씬 또는 타이틀 씬)
 	OutputDebugStringW(L"CutScene skipped or finished!\n");
-	SceneManager::ChangeScene(L"TitleScene"); // 또는 다른 씬으로 이동
+    // 외부에서 지정한 다음 씬으로 이동
+    //SceneManager::ChangeScene(m_nextSceneName.c_str());
+    // 글로벌 타임스케일 복구
+    TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
+
+    // 리소스 정리 및 컴포넌트 파괴
+    m_isTransitioning = false;
+    ClearOpacityOnAll();
+    ClearOverlays();
+    if (m_fadeOverlay)
+    {
+        m_fadeOverlay->RemoveFromParent();
+        m_fadeOverlay->Release();
+        m_fadeOverlay = nullptr;
+    }
+    if (m_backdropOverlay)
+    {
+        m_backdropOverlay->RemoveFromParent();
+        m_backdropOverlay->Release();
+        m_backdropOverlay = nullptr;
+    }
+    if (m_background)
+    {
+        m_background->RemoveFromParent();
+        m_background->Release();
+        m_background = nullptr;
+    }
+    // 자신 제거
+    GetWorld()->RemoveObject(owner.Get());
 }
 
 // 모든 관련 스프라이트에 동일 Opacity 적용 (배경 + 오버레이)
@@ -395,11 +453,12 @@ void CutSceneWidgetScript::StartTransitionTo(int targetIndex, float durationSec)
     // 초기 상태: 완전 가시 상태
     ApplyOpacityToAll(1.f);
     EnsureFadeOverlay();
-    if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = 9999; }
+    if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = 9999 + m_relativeLayer; }
 }
 
 void CutSceneWidgetScript::StepTransition(float dt)
 {
+    // 컷씬 진행 중에는 타임스케일 0이더라도 자체 dt로 동작해야 하므로 전달된 dt만 사용
     m_transitionElapsed += dt;
     float t = Math::Clamp(m_transitionElapsed / m_transitionHalf, 0.f, 1.f);
     float eased = t * t * (3.f - 2.f * t);
@@ -466,5 +525,24 @@ void CutSceneWidgetScript::EnsureFadeOverlay()
         m_fadeOverlay->SetRelativeScale(FVector2(Define::SCREEN_WIDTH / w, Define::SCREEN_HEIGHT / h));
     }
     m_fadeOverlay->SetRelativePosition(FVector2(0, 0));
-    m_fadeOverlay->m_layer = 9999;
+    // 페이드 오버레이는 컷씬 요소들보다 위 (상대 레이어 적용)
+    m_fadeOverlay->m_layer = 9999 + m_relativeLayer;
+}
+
+void CutSceneWidgetScript::EnsureBackdropOverlay()
+{
+    if (m_backdropOverlay) return;
+    // 전체 화면을 덮는 검은 1x1 텍스처를 가장 뒤 레이어에 깔아 월드를 완전히 차단
+    m_backdropOverlay = m_owner->AddComponent<SpriteRenderer>();
+    m_backdropOverlay->SetDrawType(Define::EDrawType::ScreenSpace);
+    m_backdropOverlay->LoadData(L"CutScene\\White.png");
+    const float bw = m_backdropOverlay->GetBitmapSizeX();
+    const float bh = m_backdropOverlay->GetBitmapSizeY();
+    if (bw > 0 && bh > 0)
+    {
+        m_backdropOverlay->SetRelativeScale(FVector2(Define::SCREEN_WIDTH / bw, Define::SCREEN_HEIGHT / bh));
+    }
+    m_backdropOverlay->SetRelativePosition(FVector2(0, 0));
+    // 컷씬 전체보다 뒤에 위치 (상대 레이어 적용)
+    m_backdropOverlay->m_layer = -10000 + m_relativeLayer;
 }

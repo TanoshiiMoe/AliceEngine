@@ -32,11 +32,11 @@
 #include "Scripts/TileMap/TileMapManager.h"
 #include <Scripts/Weapon/BulletManager.h>
 #include "Scripts/Enemy/Spawn/EnemySpawner.h"
+#include <Scripts/Widget/CutSceneWidgetScript.h>
 
 void KangScene::Initialize()
 {
 	__super::Initialize();
-	TimerManager::GetInstance().SetGlobalTimeScale(0);
 }
 
 void KangScene::Release()
@@ -52,6 +52,15 @@ void KangScene::Update()
 void KangScene::OnEnter()
 {
 	__super::OnEnter();
+
+	m_UI = NewObject<gameObject>(L"UI");
+	//m_UI->AddComponent<TitleUIScript>();
+	// 진입 시 글로벌 타임스케일 0으로 두고 컷씬 먼저 재생
+	TimerManager::GetInstance().SetGlobalTimeScale(0.0f);
+	// 컷씬 위젯 추가 및 다음 씬 이름 주입
+	if (CutSceneWidgetScript* cut = m_UI->AddComponent<CutSceneWidgetScript>())
+		cut->m_nextSceneName = m_nextSceneName;
+
 
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraMover>();

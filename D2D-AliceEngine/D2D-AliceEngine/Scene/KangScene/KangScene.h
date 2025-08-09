@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
 
 class Canvas;
@@ -27,8 +27,11 @@ public:
 	gameObject* m_UI;
 	gameObject* m_button;
 
-	gameObject* m_bg;	// �ӽ� ���
+	gameObject* m_bg;	// 임시 배경
 
 	gameObject* m_truck;
+
+	// 컷씬 종료 후 전환할 씬명
+	std::wstring m_nextSceneName = L"KangeTest";
 };
 

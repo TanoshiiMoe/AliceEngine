@@ -14,6 +14,7 @@
 #include <Scripts/Weapon/BulletManager.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Component/SkewTransform.h>
+#include <GameManager/GamePlayManager.h>
 
 Drone::Drone(FDroneSpritePath path)
 {
@@ -53,6 +54,7 @@ void Drone::FixedUpdate(const float& deltaSeconds)
 void Drone::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	if (!GamePlayManager::GetInstance().IsPlaying()) return;
 	if (bWaitForSecond) return;
 
 	// 여기에 Update에 대한 로직 작성
@@ -118,7 +120,6 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 			BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed, droneType);
 
 			bCanFire = false;
-			TimerManager::GetInstance().SetGlobalTimeScale(1);
 		}
 		break;
 	}

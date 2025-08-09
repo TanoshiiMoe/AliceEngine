@@ -13,6 +13,8 @@ class AudioComponent;
 class CutSceneWidgetScript : public ScriptComponent
 {
 public:
+    // 컷씬 종료 시 전환할 씬 이름
+    std::wstring m_nextSceneName = L"KangeTest";
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;
 
@@ -51,6 +53,8 @@ private:
 
     // 페이드용 오버레이
     SpriteRenderer* m_fadeOverlay{ nullptr };
+    // 월드 가림용 백드롭(항상 컷씬 뒤에서 월드를 완전 차단)
+    SpriteRenderer* m_backdropOverlay{ nullptr };
 
 	void LoadCutSceneImages();
 	void ShowImage(int index);
@@ -66,10 +70,12 @@ private:
     void ApplyOpacityToAll(float alpha);
     void ClearOpacityOnAll();
     void EnsureFadeOverlay();
+    void EnsureBackdropOverlay();
 
     bool m_isTransitioning{ false };
     float m_transitionElapsed{ 0.f };
     bool m_transitionSwitchover{ false };
     float m_transitionHalf{ 0.3f };
     int m_targetIndex{ -1 };
+    int m_relativeLayer{ 50000 };
 };
