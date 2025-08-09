@@ -38,7 +38,7 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
 	SceneManager::AddScene<KangScene>(L"KangTest");
 	SceneManager::AddScene<SelectScene>(L"SelectScene");	// stage select
-	SceneManager::ChangeScene(L"TitleScene");
+	SceneManager::ChangeScene(L"aruScene");
 }
 
 void DemoGameApp::Run()
