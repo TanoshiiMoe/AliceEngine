@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Core/Singleton.h>
 #include <Math/TMath.h>
 #include <Core/ObjectHandler.h>
