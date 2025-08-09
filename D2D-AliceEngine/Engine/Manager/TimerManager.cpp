@@ -29,75 +29,84 @@ void TimerManager::UpdateTime()
 		ShowFPSDebug();
 	}
 
-	// 타이머 업데이트 - 스레드 안전
-	{
-		std::lock_guard<std::mutex> lock(TimersMutex);
-		
-		TimersToRemove.clear(); // 재사용을 위해 클리어
+    // 타이머 업데이트 - 콜백 실행은 잠금 해제 상태에서 수행하여 재진입(타이머 추가/삭제)을 허용
+    {
+        std::unique_lock<std::mutex> lock(TimersMutex);
 
-		// 타이머 복사본 생성하여 안전하게 순회
-		std::unordered_map<size_t, TimerData> TimersCopy = Timers;
-		
-		for (auto& Pair : TimersCopy)
-		{
-			size_t timerId = Pair.first;
-			auto timerIt = Timers.find(timerId);
-			
-			// 타이머가 이미 삭제되었는지 확인
-			if (timerIt == Timers.end())
-				continue;
-				
-			auto& Data = timerIt->second;
+        TimersToRemove.clear(); // 재사용을 위해 클리어
 
-			if (Data.bPaused)
-				continue;
+        // 타이머 복사본 생성하여 안전하게 순회
+        std::unordered_map<size_t, TimerData> TimersCopy = Timers;
 
-			Data.TimeRemaining -= unscaledDeltaTime;
-			Data.Elapsed += unscaledDeltaTime;
+        for (auto& Pair : TimersCopy)
+        {
+            const size_t timerId = Pair.first;
+            auto timerIt = Timers.find(timerId);
 
-			if (Data.TimeRemaining <= 0.0f)
-			{
-				// 콜백 실행 전에 타이머가 여전히 유효한지 재확인
-				if (Timers.find(timerId) != Timers.end())
-				{
-					try 
-					{
-						if (Data.TickCallback)
-							Data.TickCallback(Data.Elapsed);
-						else if (Data.Callback)
-							Data.Callback();
-					}
-					catch (...)
-					{
-						// 콜백 실행 중 예외 발생 시 해당 타이머 제거
-						TimersToRemove.push_back(timerId);
-						continue;
-					}
-				}
+            // 타이머가 이미 삭제되었는지 확인
+            if (timerIt == Timers.end())
+                continue;
 
-				// 다시 한번 타이머 존재 확인 (콜백에서 삭제될 수 있음)
-				timerIt = Timers.find(timerId);
-				if (timerIt != Timers.end())
-				{
-					if (timerIt->second.bLooping)
-					{
-						timerIt->second.TimeRemaining = timerIt->second.OriginalRate;
-						timerIt->second.Elapsed = 0.0f;
-					}
-					else
-					{
-						TimersToRemove.push_back(timerId);
-					}
-				}
-			}
-		}
+            auto& Data = timerIt->second;
 
-		// 삭제 예정 타이머들 제거
-		for (size_t Id : TimersToRemove)
-		{
-			Timers.erase(Id);
-		}
-	}
+            if (Data.bPaused)
+                continue;
+
+            Data.TimeRemaining -= unscaledDeltaTime;
+            Data.Elapsed += unscaledDeltaTime;
+
+            if (Data.TimeRemaining <= 0.0f)
+            {
+                // 콜백 실행 전에 타이머가 여전히 유효한지 재확인
+                timerIt = Timers.find(timerId);
+                if (timerIt != Timers.end())
+                {
+                    // 콜백 복사 후 잠금 해제 → 실행 → 다시 잠금
+                    auto tickCb = timerIt->second.TickCallback;
+                    auto cb     = timerIt->second.Callback;
+                    float elapsed = timerIt->second.Elapsed;
+
+                    lock.unlock();
+                    try
+                    {
+                        if (tickCb)
+                            tickCb(elapsed);
+                        else if (cb)
+                            cb();
+                    }
+                    catch (...)
+                    {
+                        lock.lock();
+                        TimersToRemove.push_back(timerId);
+                        // 다음 타이머로 진행
+                        continue;
+                    }
+                    lock.lock();
+                }
+
+                // 다시 한번 타이머 존재 확인 (콜백에서 삭제/추가되었을 수 있음)
+                timerIt = Timers.find(timerId);
+                if (timerIt != Timers.end())
+                {
+                    if (timerIt->second.bLooping)
+                    {
+                        timerIt->second.TimeRemaining = timerIt->second.OriginalRate;
+                        timerIt->second.Elapsed = 0.0f;
+                    }
+                    else
+                    {
+                        TimersToRemove.push_back(timerId);
+                    }
+                }
+            }
+        }
+
+        // 삭제 예정 타이머들 제거
+        for (size_t Id : TimersToRemove)
+        {
+            Timers.erase(Id);
+        }
+    }
 }
 
 void TimerManager::UpdateFixedTime(std::function<void(const float&)> f)

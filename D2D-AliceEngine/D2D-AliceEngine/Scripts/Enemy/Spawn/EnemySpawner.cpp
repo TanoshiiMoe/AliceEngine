@@ -1,4 +1,4 @@
-#include "EnemySpawner.h"
+﻿#include "EnemySpawner.h"
 #include "System/ScriptSystem.h"
 #include "TileMap/TileMapComponent.h"
 #include "Object/gameObject.h"
@@ -59,8 +59,8 @@ void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {
 	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
 
 	FDroneSpritePath dronePath(
-		L"Enemy/drone/enermy_Drone_body.png",
-		L"Enemy/drone/enermy_Drone_arm.png"
+		L"Enemy/Drone/enermy_Drone_body.png",
+		L"Enemy/Drone/enermy_Drone_arm.png"
 	);
 
 	switch (etype)
