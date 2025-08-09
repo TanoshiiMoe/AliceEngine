@@ -106,6 +106,9 @@ void TitleWidgetScript::OnStart()
 	auto sfxPlusButton = m_owner->AddComponent<ButtonComponent>();
 	auto sfxMinusButton = m_owner->AddComponent<ButtonComponent>();
 
+	auto skipText = m_owner->AddComponent<TextRenderComponent>();
+	auto skipButton = m_owner->AddComponent<ButtonComponent>();
+
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
 	auto bgm = bgmObj->GetComponent<AudioComponent>();
@@ -122,8 +125,8 @@ void TitleWidgetScript::OnStart()
     soundControl->SetRelativePosition(FVector2(0.f, 0.f));
 
     auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
-    bgmControl->LoadData(L"UI\\BGMControl.png");
-    bgmControl->m_layer = -1000;
+    bgmControl->LoadData(L"UI\\ControlBar.png");
+    bgmControl->m_layer = 1000;
     bgmControl->SetDrawType(EDrawType::ScreenSpace);
     // 게이지는 슬라이스로 표현하고, 스케일은 UI 전체 배율만 적용
     bgmControl->SetRelativeScale(FVector2(soundUISize, soundUISize));
@@ -135,8 +138,8 @@ void TitleWidgetScript::OnStart()
     }
 
     auto sfxControl = m_owner->AddComponent<SpriteRenderer>();
-	sfxControl->LoadData(L"UI\\SFXControl.png");
-	sfxControl->m_layer = -1000;
+	sfxControl->LoadData(L"UI\\ControlBar.png");
+	sfxControl->m_layer = 1000;
 	sfxControl->SetDrawType(EDrawType::ScreenSpace);
     // 게이지는 슬라이스로 표현하고, 스케일은 UI 전체 배율만 적용
     sfxControl->SetRelativeScale(FVector2(soundUISize, soundUISize));
@@ -258,6 +261,15 @@ void TitleWidgetScript::OnStart()
         smallClose->SetRelativePosition(FVector2(hw - margin, -hh + margin));
     }
 
+	// ======================== skipButton
+	skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	skipButton->SetRelativePosition(FVector2(0, 350));
+	skipButton->SetRelativeScale(FVector2(1, 1));
+	skipButton->m_layer = -1000;
+
 	// ======================== soundButton
 	bgmPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
 	bgmPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
@@ -360,10 +372,10 @@ void TitleWidgetScript::OnStart()
     }
 
 	// ======================== mainTitle
+	mainTitle->SetFontSize(120.0f);
 	mainTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	mainTitle->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	mainTitle->SetText(L"높다락길의 질주");
-	mainTitle->SetFontSize(120.0f);
 	mainTitle->SetColor(FColor(242, 207, 238, 255));
 	FVector2 mainTitleRectSize = mainTitle->GetRelativeSize();
 	mainTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(mainTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, -300));
@@ -372,10 +384,10 @@ void TitleWidgetScript::OnStart()
 	mainTitle->m_layer = 501;
 
 	// ======================== subTitle
+	subTitle->SetFontSize(60.0f);
 	subTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	subTitle->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	subTitle->SetText(L"~활빈은 두령을 쫒는다~");
-	subTitle->SetFontSize(60.0f);
 	subTitle->SetColor(FColor(242, 207, 238, 255));
 	FVector2 subTitleRectSize = subTitle->GetRelativeSize();
 	subTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(subTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, 0));
@@ -384,10 +396,10 @@ void TitleWidgetScript::OnStart()
 	subTitle->m_layer = 501;
 
 	// ======================== startText
+	startText->SetFontSize(55.0f);
 	startText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	startText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	startText->SetText(L"시작하기");
-	startText->SetFontSize(55.0f);
 	startText->SetColor(FColor::White);
 	FVector2 startTextRectSize = startText->GetRelativeSize();
 	startText->SetRelativePosition(CoordHelper::RatioCoordToScreen(startTextRectSize, FVector2(-0.5, -0.5)));
@@ -398,10 +410,10 @@ void TitleWidgetScript::OnStart()
 	startButton->AddChildComponent(startText);
 
 	// ======================== continueText
+	continueText->SetFontSize(55.0f);
 	continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	continueText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	continueText->SetText(L"이어하기");
-	continueText->SetFontSize(55.0f);
+	continueText->SetText(L"임무 선택");
 	continueText->SetColor(FColor::White);
 	FVector2 continueTextRectSize = continueText->GetRelativeSize();
 	continueText->SetRelativePosition(CoordHelper::RatioCoordToScreen(continueTextRectSize, FVector2(-0.5, -0.5)));
@@ -411,24 +423,24 @@ void TitleWidgetScript::OnStart()
 	continueText->RemoveFromParent();
 	continueButton->AddChildComponent(continueText);
 
-	continueTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	continueTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	continueTabText->SetText(L"이어하기");
-	continueTabText->SetFontSize(70.0f);
-	continueTabText->SetColor(FColor(0, 234, 255, 255));
-	FVector2 continueTabTextRectSize = continueTabText->GetRelativeSize();
-	continueTabText->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(continueTabTextRectSize, FVector2(-0.5, -0.5))
-		+ FVector2(0, -350)
-	);
-	continueTabText->SetRelativeRotation(0);
-	continueTabText->m_layer = -1000;
+	//continueTabText->SetFontSize(70.0f);
+	//continueTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	//continueTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	//continueTabText->SetText(L"임무 선택");
+	//continueTabText->SetColor(FColor(0, 234, 255, 255));
+	//FVector2 continueTabTextRectSize = continueTabText->GetRelativeSize();
+	//continueTabText->SetRelativePosition(
+	//	CoordHelper::RatioCoordToScreen(continueTabTextRectSize, FVector2(-0.5, -0.5))
+	//	+ FVector2(0, -350)
+	//);
+	//continueTabText->SetRelativeRotation(0);
+	//continueTabText->m_layer = -1000;
 
 	// ======================== optionText
+	optionText->SetFontSize(55.0f);
 	optionText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	optionText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	optionText->SetText(L"음량 조정");
-	optionText->SetFontSize(55.0f);
 	optionText->SetColor(FColor::White);
 	FVector2 optionTextRectSize = optionText->GetRelativeSize();
 	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionTextRectSize, FVector2(-0.5, -0.5)));
@@ -438,10 +450,10 @@ void TitleWidgetScript::OnStart()
 	optionText->RemoveFromParent();
 	optionButton->AddChildComponent(optionText);
 
+	optionTabText->SetFontSize(70.0f);
 	optionTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	optionTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	optionTabText->SetText(L"음량 조절");
-	optionTabText->SetFontSize(70.0f);
+	optionTabText->SetText(L"음량 조정");
 	optionTabText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 optionTabTextRectSize = optionTabText->GetRelativeSize();
 	optionTabText->SetRelativePosition(
@@ -452,23 +464,23 @@ void TitleWidgetScript::OnStart()
 	optionTabText->m_layer = -1000;
 
 	// ======================== staffText
+	staffText->SetFontSize(55.0f);
 	staffText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	staffText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	staffText->SetText(L"제작진");
-	staffText->SetFontSize(55.0f);
 	staffText->SetColor(FColor::White);
 	FVector2 staffTextRectSize = continueText->GetRelativeSize();
-	staffText->SetRelativePosition(CoordHelper::RatioCoordToScreen(staffTextRectSize, FVector2(-0.4, -0.5)));
+	staffText->SetRelativePosition(CoordHelper::RatioCoordToScreen(staffTextRectSize, FVector2(-0.5, -0.5)) + FVector2(20,0));
 	staffText->SetRelativeScale(FVector2(1, 1));
 	staffText->SetRelativeRotation(0);
 	staffText->m_layer = 501;
 	staffText->RemoveFromParent();
 	staffButton->AddChildComponent(staffText);
 
+	staffTabText->SetFontSize(70.0f);
 	staffTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	staffTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	staffTabText->SetText(L"제작진");
-	staffTabText->SetFontSize(70.0f);
 	staffTabText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 staffTabTextSize = staffTabText->GetRelativeSize();
 	staffTabText->SetRelativePosition(
@@ -478,6 +490,7 @@ void TitleWidgetScript::OnStart()
 	staffTabText->SetRelativeRotation(0);
 	staffTabText->m_layer = -1000;
 
+	staffNameText->SetFontSize(55.0f);
 	staffNameText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	staffNameText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	staffNameText->SetText(
@@ -490,7 +503,6 @@ void TitleWidgetScript::OnStart()
 		L"프로그래밍\n"
 		L"이창진 | 강성근 | 황태현\n"
 	);
-	staffNameText->SetFontSize(55.0f);
 	staffNameText->SetColor(FColor::Black);
 	FVector2 staffNameTextSize = staffNameText->GetRelativeSize();
 	staffNameText->SetRelativePosition(
@@ -500,10 +512,10 @@ void TitleWidgetScript::OnStart()
 	staffNameText->m_layer = -1000;
 
 	// ======================== quitText
+	quitText->SetFontSize(55.0f);
 	quitText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	quitText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	quitText->SetText(L"오락 종료");
-	quitText->SetFontSize(55.0f);
 	quitText->SetColor(FColor::White);
 	FVector2 quitTextRectSize = quitText->GetRelativeSize();
 	quitText->SetRelativePosition(CoordHelper::RatioCoordToScreen(quitTextRectSize, FVector2(-0.5, -0.5)));
@@ -514,10 +526,10 @@ void TitleWidgetScript::OnStart()
 	quitButton->AddChildComponent(quitText);
 
 	// ======================== closeText
+	closeText->SetFontSize(55.0f);
 	closeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	closeText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	closeText->SetText(L"닫기");
-	closeText->SetFontSize(55.0f);
 	closeText->SetColor(FColor::White);
 	FVector2 closeTextRectSize = closeText->GetRelativeSize();
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
@@ -527,6 +539,21 @@ void TitleWidgetScript::OnStart()
 	closeButton->SetActive(false);
 	closeText->RemoveFromParent();
 	closeButton->AddChildComponent(closeText);
+
+	// ======================== skipText
+	skipText->SetFontSize(55.0f);
+	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	skipText->SetText(L"건너뛰기");
+	skipText->SetColor(FColor::White);
+	FVector2 skipTextRectSize = skipText->GetRelativeSize();
+	skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextRectSize, FVector2(-0.5, -0.5)));
+	skipText->SetRelativeScale(FVector2(1, 1));
+	skipText->SetRelativeRotation(0);
+	skipText->m_layer = -1000;
+	skipButton->SetActive(false);
+	skipText->RemoveFromParent();
+	skipButton->AddChildComponent(skipText);
 
 	// ======================== background
 	background->LoadData(L"tree.jpg");
@@ -539,7 +566,7 @@ void TitleWidgetScript::OnStart()
 	// ======================== Delegete
 	startButton->SetStateAction(Define::EButtonState::Pressed, [
 		tutorial, startButton, quitButton, staffButton, optionButton, closeButton, closeText,
-		uiSound, continueButton
+		uiSound, continueButton, skipButton, skipText
 	]()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
@@ -555,13 +582,25 @@ void TitleWidgetScript::OnStart()
 		optionButton->SetActive(false);
 		continueButton->SetActive(false);
 
-		closeButton->m_layer = 503;
-		closeButton->SetActive(true);
-		closeText->m_layer = 504;
+		//closeButton->m_layer = 503;
+		//closeButton->SetActive(true);
+		//closeText->m_layer = 504;
+
+		skipButton->m_layer = 503;
+		skipButton->SetActive(true);
+		skipText->m_layer = 504;
 
 		tutorial->m_layer = 502;
 		tutorial->Play();
 	});
+
+	skipButton->SetStateAction(Define::EButtonState::Pressed, []()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+			SceneManager::ChangeScene(L"KangTest");
+		});
+
 
 	continueButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText, PopupTab,
@@ -665,8 +704,8 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 			//SceneManager::ChangeScene(L"HiroScene");
 			
-			if (uiSound->IsPlaying())
-				uiSound->StopByName(L"UISound");
+			//if (uiSound->IsPlaying())
+			uiSound->StopByName(L"UISound");
 
 			uiSound->PlayByName1(L"UISound", 0.45f);
 
@@ -704,8 +743,8 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 			
-			if (uiSound->IsPlaying())
-				uiSound->StopByName(L"UISound");
+			//if (uiSound->IsPlaying())
+			uiSound->StopByName(L"UISound");
 
 			uiSound->PlayByName1(L"UISound", 0.45f);
 
@@ -799,10 +838,10 @@ void TitleWidgetScript::OnStart()
 			
 			//uiSound->Play(0.45);
 			// Quit
-			//PostQuitMessage(0);
+			PostQuitMessage(0);
 			// 임시 씬 전환
 			//SceneManager::ChangeScene(L"HiroScene");
-			SceneManager::ChangeScene(L"KangTest");
+			//SceneManager::ChangeScene(L"KangTest");
 		});
 
 	quitButton->SetStateAction(Define::EButtonState::Hover, [quitButton]()

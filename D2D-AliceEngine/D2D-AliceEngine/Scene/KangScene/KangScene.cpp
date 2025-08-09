@@ -33,6 +33,7 @@
 #include <Scripts/Weapon/BulletManager.h>
 #include "Scripts/Enemy/Spawn/EnemySpawner.h"
 #include <Scripts/Widget/CutSceneWidgetScript.h>
+#include <Scripts/Widget/StageWidgetScript.h>
 
 void KangScene::Initialize()
 {
@@ -86,6 +87,9 @@ void KangScene::OnEnter()
 	gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
 	eSpwaner->AddComponent<EnemySpawner>();
 
+	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
+	m_button = NewObject<gameObject>(L"PauseButton");
+	m_button->AddComponent<StageWidgetScript>();
 	
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

@@ -16,6 +16,7 @@ void TitleScene::Initialize()
 	__super::Initialize();
 
     GamePlayManager& GPM = GamePlayManager::GetInstance();
+	GPM.StartGame();
 }
 
 void TitleScene::Release()

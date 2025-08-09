@@ -1,4 +1,4 @@
-#include "StageWidgetScript.h"
+﻿#include "StageWidgetScript.h"
 
 #include <Object/gameObject.h>
 #include <Core/StatTraits.h>
@@ -14,6 +14,8 @@
 #include <Component/ButtonComponent.h>
 #include <Manager/SceneManager.h>
 #include <Component/AudioComponent.h>
+
+#include <GameManager/GamePlayManager.h>
 
 void StageWidgetScript::Initialize()
 {
@@ -48,6 +50,12 @@ void StageWidgetScript::OnStart()
 	auto toRestart = m_owner->AddComponent<ButtonComponent>();
 	auto toSelect = m_owner->AddComponent<ButtonComponent>();
 
+	auto pauseText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionText = m_owner->AddComponent<TextRenderComponent>();
+	auto mainText = m_owner->AddComponent<TextRenderComponent>();
+	auto restartText = m_owner->AddComponent<TextRenderComponent>();
+	auto selectText = m_owner->AddComponent<TextRenderComponent>();
+
 	auto UI_Timer = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_HP = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_Dashboard = m_owner->AddComponent<SpriteRenderer>();
@@ -62,18 +70,38 @@ void StageWidgetScript::OnStart()
 
 	auto popUpTab = m_owner->AddComponent<SpriteRenderer>();
 	popUpTab->SetDrawType(EDrawType::ScreenSpace);
-	popUpTab->LoadData(L"UI\\UI_PauseTab.png");
-	//popUpTab->LoadData(L"UI\\UI_Tab.png");	// �ؽ�Ʈ�� ���ưŸ� �̰ŷ� ���
+	//popUpTab->LoadData(L"UI\\UI_PauseTab.png");
+	popUpTab->LoadData(L"UI\\UI_Tab.png");	// 텍스트를 넣읗거면 이거로 사용
 	popUpTab->SetRelativePosition(FVector2(0, 0));
 	popUpTab->m_layer = -1000;
 
 	UI_Timer->LoadData(L"UI\\UI_Time.png");
 	UI_Timer->SetDrawType(EDrawType::ScreenSpace);
-	FVector2 HUDSize = UI_Timer->GetRelativeSize();
+	FVector2 TimerSize = UI_Timer->GetRelativeSize();
 	UI_Timer->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(HUDSize, FVector2(0, 0))
+		CoordHelper::RatioCoordToScreen(TimerSize, FVector2(0, 0))
 		+ FVector2(-820, -SCREEN_HEIGHT / 2.0f + 80));
-	UI_Timer->m_layer = 50;
+	UI_Timer->m_layer = 1000;
+
+	UI_Dashboard->LoadData(L"UI\\UI_Dashboard.png");
+	UI_Dashboard->SetDrawType(EDrawType::ScreenSpace);
+	FVector2 DashboardSize = UI_Dashboard->GetRelativeSize();
+	UI_Dashboard->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(DashboardSize, FVector2(0, 0))
+		+ FVector2(-670, SCREEN_HEIGHT / 2.0f - 210)
+	);
+	UI_Dashboard->m_layer = 1000;
+
+	pauseText->SetFontSize(75.f);
+	pauseText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	pauseText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	pauseText->SetText(L"일시정지");
+	pauseText->SetColor(FColor::White);
+	pauseText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(pauseText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(0, -250)
+	);
+	pauseText->m_layer = -2000;
 
 	// ========================== pauseButton
 	pauseButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
@@ -145,48 +173,57 @@ void StageWidgetScript::OnStart()
 	// ========================= Delegate
 	pauseButton->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, popUpTab,
-		toMain, toOption, toRestart, toSelect, sound
+		toMain, toOption, toRestart, toSelect, sound, pauseText
 	] {
 		sound->PlayByName(L"UISound", 0.45);
+
+		GamePlayManager::GetInstance().PauseGame();
+
 		pauseButton->SetActive(false);
-		popUpTab->m_layer = 1001;
+		popUpTab->m_layer = 2001;
+
+		pauseText->m_layer = 2002;
 		closeButton->SetActive(true);
-		closeButton->m_layer = 1002;
+		closeButton->m_layer = 2002;
 
 		toMain->SetActive(true);
-		toMain->m_layer = 1002;
+		toMain->m_layer = 2002;
 
 		toRestart->SetActive(true);
-		toRestart->m_layer = 1002;
+		toRestart->m_layer = 2002;
 
 		toOption->SetActive(true);
-		toOption->m_layer = 1002;
+		toOption->m_layer = 2002;
 
 		toSelect->SetActive(true);
-		toSelect->m_layer = 1002;
+		toSelect->m_layer = 2002;
 		});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, popUpTab,
-		toMain, toOption, toRestart, toSelect, sound
+		toMain, toOption, toRestart, toSelect, sound, pauseText
 	] {
 		sound->PlayByName(L"UISound", 0.45);
+		
+		GamePlayManager::GetInstance().ResumeGame();
+
+		pauseText->m_layer = -2000;
 		pauseButton->SetActive(true);
-		popUpTab->m_layer = -1000;
+		popUpTab->m_layer = -2000;
 		closeButton->SetActive(false);
-		closeButton->m_layer = -1000;
+		closeButton->m_layer = -2000;
 
 		toMain->SetActive(false);
-		toMain->m_layer = -1000;
+		toMain->m_layer = -2000;
 
 		toRestart->SetActive(false);
-		toRestart->m_layer = -1000;
+		toRestart->m_layer = -2000;
 
 		toOption->SetActive(false);
-		toOption->m_layer = -1000;
+		toOption->m_layer = -2000;
 
 		toSelect->SetActive(false);
-		toSelect->m_layer = -1000;
+		toSelect->m_layer = -2000;
 		});
 
 	toMain->SetStateAction(Define::EButtonState::Pressed, [] {
