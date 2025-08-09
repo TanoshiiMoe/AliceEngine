@@ -37,6 +37,8 @@ public:
 	void AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal);
 	void FireOneBurstShot();
 	void LateUpdate(const float& deltaSeconds);
+	// 사망 연출: 스프라이트를 페이드 아웃시키고 1초 뒤 삭제, 그동안 공격 금지
+	void DelayDestroy();
 
 	virtual void Awake() override;
 	virtual void OnStart() override;
@@ -67,6 +69,10 @@ public:
 	FTimerHandle timer;
 	bool bCanFire = true;
 	bool bWaitForSecond = true;
+	bool bDelayDestroying = false;
+  // 공개 페이드 파라미터 (인스턴스별 조절 가능)
+	float fadeDuration = 1.0f;  // 페이드 시간(초)
+	float fadeElapsed  = 0.0f;  // 진행 시간(초)
 
 	// 위아래 진폭과 속도
 	float elapsed = 0.0f;

@@ -65,8 +65,13 @@ void TextRenderComponent::Render()
 	
 	InitializeLayout();
 
-	D2D1_POINT_2F textPosition = D2D1::Point2F(0, 0); // destRect의 중앙 (0,0)을 기준점으로 사용
-	context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
+    // 브러시 투명도 적용
+    if (m_pBrush)
+        m_pBrush->SetOpacity(m_opacity);
+
+    D2D1_POINT_2F textPosition = D2D1::Point2F(0, 0); // destRect의 중앙 (0,0)을 기준점으로 사용
+    context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
+
 	//FVector2 relativeSize = GetRelativeSize();
 	//D2D1_POINT_2F textPosition = D2D1::Point2F(-relativeSize.x / 2, -relativeSize.y / 2);
 	//context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
@@ -326,4 +331,12 @@ void TextRenderComponent::SetFontFromFile(const std::wstring& filePath)
 void TextRenderComponent::SetIgnoreCameraTransform(bool bIgnore)
 {
 	bIgnoreCameraTransform = bIgnore;
+}
+
+void TextRenderComponent::SetOpacity(float alpha)
+{
+    // 0..1 clamp
+    if (alpha < 0.f) alpha = 0.f;
+    if (alpha > 1.f) alpha = 1.f;
+    m_opacity = alpha;
 }

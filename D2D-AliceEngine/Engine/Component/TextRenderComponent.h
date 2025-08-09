@@ -57,6 +57,8 @@ public:
 	void SetFont(const std::wstring& _fontName, const std::wstring& _fontLocale);
 	void SetFontFromFile(const std::wstring& filePath);
 	void SetIgnoreCameraTransform(bool bIgnore);
+  // Text opacity 0..1
+  void SetOpacity(float alpha);
 
 public:
 	ETransformType m_eTransformType = ETransformType::D2D;
@@ -76,5 +78,7 @@ public:
     bool m_privateFontLoaded = false;
 private:
 	bool bIgnoreCameraTransform = false;
+  float m_opacity = 1.0f;
+
 };
 
