@@ -1,4 +1,4 @@
-#include "Drone.h"
+ï»¿#include "Drone.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -46,7 +46,7 @@ void Drone::Initialize()
 void Drone::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -55,11 +55,11 @@ void Drone::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 	if (bWaitForSecond) return;
 
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
-	// Skew¶ûÀº »ó°ü¾øÀ½.
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// Skewë‘ì€ ìƒê´€ì—†ìŒ.
 	if (!arm) return;
 	FVector2 bodyPos = arm->GetRelativePosition();
-	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ¸¶¿ì½ºÀÇ ½ÇÁ¦ ¿ùµå ÁÂÇ¥
+	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ë§ˆìš°ìŠ¤ì˜ ì‹¤ì œ ì›”ë“œ ì¢Œí‘œ
 	FVector2 dir = worldMousePos - bodyPos;
 	FVector2 dirNormal = dir.Normalize();
 	
@@ -70,9 +70,9 @@ void Drone::Update(const float& deltaSeconds)
 void Drone::Floating(const float& deltaSeconds, const FVector2& dirNormal)
 {
 	//body->SetRelativePosition(FVector2(27, 6));
-	//// ½Ã°£ ´©Àû
+	//// ì‹œê°„ ëˆ„ì 
 	elapsed += deltaSeconds;
-	// ±¸°£ÀÌ ³¡³ª¸é ¹æÇâ ÀüÈ¯
+	// êµ¬ê°„ì´ ëë‚˜ë©´ ë°©í–¥ ì „í™˜
 	if (elapsed >= duration)
 	{
 		elapsed = 0.0f;
@@ -82,16 +82,16 @@ void Drone::Floating(const float& deltaSeconds, const FVector2& dirNormal)
 	float currY;
 	if (goingUp)
 	{
-		// À§·Î ÀÌµ¿
+		// ìœ„ë¡œ ì´ë™
 		currY = Math::EaseInOut(startY, endY, elapsed, duration);
 	}
 	else
 	{
-		// ¾Æ·¡·Î ÀÌµ¿
+		// ì•„ë˜ë¡œ ì´ë™
 		currY = Math::EaseInOut(endY, startY, elapsed, duration);
 	}
 
-	// ¿ÀºêÁ§Æ® YÁÂÇ¥ Àû¿ë
+	// ì˜¤ë¸Œì íŠ¸ Yì¢Œí‘œ ì ìš©
 	auto pos = body->GetRelativePosition();
 	pos.y = currY;
 	body->SetRelativePosition(initBodyPos + FVector2(0, pos.y));
@@ -103,7 +103,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 	{
 	case EDroneType::Player:
 	{
-		// float ¹öÀü »ç¿ë + Ç×»ó ÃÊ±âÈ­
+		// float ë²„ì „ ì‚¬ìš© + í•­ìƒ ì´ˆê¸°í™”
 		const float angleRad = std::atan2f(dirNormal.y, dirNormal.x);
 		const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;
 		arm->SetRelativeRotation(angleDeg);
@@ -126,14 +126,14 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 	{
 		if (auto player = BulletManager::GetInstance().GetPlayer())
 		{
-			// 1¹ßÂ¥¸®
+			// 1ë°œì§œë¦¬
 			
 			//FVector2 targetPos = player->transform() ? player->transform()->GetPosition()
 			//	: FVector2{ 0.0f, 0.0f };
 			//float currentSpeed = 0.0f;
 			//FVector2 dir = bodyPos - targetPos;
 			//FVector2 _dirNormal = dir.Normalize();
-			//// float ¹öÀü »ç¿ë + Ç×»ó ÃÊ±âÈ­
+			//// float ë²„ì „ ì‚¬ìš© + í•­ìƒ ì´ˆê¸°í™”
 			//const float angleRad = std::atan2f(_dirNormal.y, _dirNormal.x);
 			//const float angleDeg = angleRad * 180.0f / Define::PI;
 			//arm->SetRelativeRotation(angleDeg);
@@ -142,7 +142,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 			//{
 			//	if (auto bike = player->GetComponent<BikeMovementScript>())
 			//	{
-			//		// ¾ÈÀüÇÏ°Ô Á¢±Ù
+			//		// ì•ˆì „í•˜ê²Œ ì ‘ê·¼
 			//		if (auto ownerGO = bike->GetOwner())
 			//			targetPos = ownerGO->transform() ? ownerGO->transform()->GetPosition() : targetPos;
 
@@ -154,56 +154,84 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 			//	bCanFire = false;
 			//}
 
-			// 3¹ßÂ¥¸®
-			FVector2 targetPos = player->transform() ? player->transform()->GetPosition()
-				: FVector2{ 0.0f, 0.0f };
-			float currentSpeed = 0.0f;
+			//// 3ë°œì§œë¦¬
+			//FVector2 targetPos = player->transform() ? player->transform()->GetPosition()
+			//	: FVector2{ 0.0f, 0.0f };
+			//float currentSpeed = 0.0f;
 
-			FVector2 dir = bodyPos - targetPos; // Àû ¡æ ÇÃ·¹ÀÌ¾î ¹æÇâ
-			FVector2 dirNormal = dir.Normalize();
+			//FVector2 dir = bodyPos - targetPos; // ì  â†’ í”Œë ˆì´ì–´ ë°©í–¥
+			//FVector2 dirNormal = dir.Normalize();
 
-			const float angleRad = std::atan2f(dirNormal.y, dirNormal.x);
-			const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;;
-			arm->SetRelativeRotation(angleDeg);
+			//const float angleRad = std::atan2f(dirNormal.y, dirNormal.x);
+			//const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;;
+			//arm->SetRelativeRotation(angleDeg);
 
-			if (bCanFire)
+			//if (bCanFire)
+			//{
+			//	if (auto bike = player->GetComponent<BikeMovementScript>())
+			//	{
+			//		if (auto ownerGO = bike->GetOwner())
+			//			targetPos = ownerGO->transform() ? ownerGO->transform()->GetPosition() : targetPos;
+
+			//		currentSpeed = bike->GetCurrSpeed();
+			//	}
+
+			//	const FVector2 speed{ currentSpeed, 0.0f };
+
+			//	// 0ë„(ì›ë³¸)
+			//	BulletManager::GetInstance().FireBullet(bodyPos, targetPos, speed, droneType);
+
+			//	// íšŒì „ í•¨ìˆ˜
+			//	auto RotateVector = [](const FVector2& v, float degree) -> FVector2 {
+			//		float rad = degree * Define::PI / 180.0f;
+			//		float cs = std::cos(rad);
+			//		float sn = std::sin(rad);
+			//		return {   v.y * sn - v.x * cs, v.y * cs - v.x * sn };
+			//		};
+
+			//	// +30ë„
+			//	{
+			//		FVector2 dir30 = RotateVector(dirNormal, 30.0f);
+			//		FVector2 newTarget = bodyPos + dir30 * 1000.0f; // ë¨¼ ìœ„ì¹˜ë¡œ íƒ€ê²Ÿ
+			//		BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+			//	}
+
+			//	// -30ë„
+			//	{
+			//		FVector2 dirNeg30 = RotateVector(dirNormal, -30.0f);
+			//		FVector2 newTarget = bodyPos + dirNeg30 * 1000.0f;
+			//		BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+			//	}
+
+			//	bCanFire = false;
+			//}
+
+			if (auto player = BulletManager::GetInstance().GetPlayer())
 			{
-				if (auto bike = player->GetComponent<BikeMovementScript>())
+				// í‰ì‹œ í¬ì‹ ì€ í”Œë ˆì´ì–´ ëŒ€ëµ ì¡°ì¤€(ì‹œê°ìš©)
 				{
-					if (auto ownerGO = bike->GetOwner())
-						targetPos = ownerGO->transform() ? ownerGO->transform()->GetPosition() : targetPos;
-
-					currentSpeed = bike->GetCurrSpeed();
+					FVector2 bodyPos = arm ? arm->GetRelativePosition() : FVector2{ 0,0 };
+					FVector2 targetPos = player->transform() ? player->transform()->GetPosition() : FVector2{ 0,0 };
+					FVector2 dir = (targetPos - bodyPos).Normalize();
+					const float angleRad = std::atan2f(dir.y, dir.x);
+					const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;
+					if (arm) arm->SetRelativeRotation(angleDeg);
 				}
 
-				const FVector2 speed{ currentSpeed, 0.0f };
-
-				// 0µµ(¿øº»)
-				BulletManager::GetInstance().FireBullet(bodyPos, targetPos, speed, droneType);
-
-				// È¸Àü ÇÔ¼ö
-				auto RotateVector = [](const FVector2& v, float degree) -> FVector2 {
-					float rad = degree * Define::PI / 180.0f;
-					float cs = std::cos(rad);
-					float sn = std::sin(rad);
-					return {   v.y * sn - v.x * cs, v.y * cs - v.x * sn };
-					};
-
-				// +30µµ
+				// bCanFireê°€ trueì¼ ë•Œë§Œ ë²„ìŠ¤íŠ¸ ì‹œì‘(1íšŒì— 3ë°œ)
+				if (bCanFire)
 				{
-					FVector2 dir30 = RotateVector(dirNormal, 30.0f);
-					FVector2 newTarget = bodyPos + dir30 * 1000.0f; // ¸Õ À§Ä¡·Î Å¸°Ù
-					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+					bCanFire = false;       // ì™¸ë¶€ ì¿¨ë‹¤ìš´ íƒ€ì´ë¨¸ë¡œ ë‹¤ì‹œ ì¼œì§(ê¸°ì¡´ OnStartì˜ timer)
+					burstRemaining = 3;     // ì—°ì† 3ë°œ
+					// ì²« ë°œ ì¦‰ì‹œ ë°œì‚¬
+					TimerManager::GetInstance().SetTimer(
+						burstTimer,
+						[this]() { FireOneBurstShot(); },
+						0.0f,  
+						false, 
+						0.0f   
+					);
 				}
-
-				// -30µµ
-				{
-					FVector2 dirNeg30 = RotateVector(dirNormal, -30.0f);
-					FVector2 newTarget = bodyPos + dirNeg30 * 1000.0f;
-					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
-				}
-
-				bCanFire = false;
 			}
 		}
 		break;
@@ -211,13 +239,57 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 	default:
 		break;
 	}
-	
+}
+
+// í•œ ë°œ ì˜ê³ , ë‚¨ì•˜ìœ¼ë©´ ë‹¤ìŒ ë°œ íƒ€ì´ë¨¸ ì˜ˆì•½
+void Drone::FireOneBurstShot()
+{
+	auto player = BulletManager::GetInstance().GetPlayer();
+	if (!player) { burstRemaining = 0; return; }
+
+	// í˜„ì¬ ìœ„ì¹˜ë“¤ ê°±ì‹ 
+	const FVector2 bodyPos = arm ? arm->GetRelativePosition() : FVector2{ 0,0 };
+	FVector2 targetPos = player->transform() ? player->transform()->GetPosition() : FVector2{ 0,0 };
+
+	// ëœë¤ ëª©í‘œì (í”Œë ˆì´ì–´ ì£¼ë³€ ì›)
+	const auto rnd = FRandom::GetRandomPointInCircle2D(targetPos.x, targetPos.y, spreadRadius);
+	const FVector2 aimedTarget{ rnd.x, rnd.y };
+
+	// í¬ì‹  íšŒì „(ì¡°ì¤€)
+	{
+		FVector2 aimDir = (aimedTarget - bodyPos).Normalize();
+		const float angleRad = std::atan2f(aimDir.y, aimDir.x);
+		const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;
+		if (arm) arm->SetRelativeRotation(angleDeg);
+	}
+
+	// ì†ë„ ë°˜ì˜(í”Œë ˆì´ì–´ ë°”ì´í¬ ì´ë™ì†ë„)
+	float currentSpeed = 0.0f;
+	if (auto bike = player->GetComponent<BikeMovementScript>())
+		currentSpeed = bike->GetCurrSpeed();
+
+	const FVector2 speed{ currentSpeed, 0.0f };
+
+	// ë°œì‚¬
+	BulletManager::GetInstance().FireBullet(bodyPos, aimedTarget, speed, droneType);
+
+	// ë‚¨ì€ ë°œ ê´€ë¦¬ ë° ë‹¤ìŒ íƒ€ì´ë¨¸
+	if (--burstRemaining > 0)
+	{
+		TimerManager::GetInstance().SetTimer(
+			burstTimer,
+			[this]() { FireOneBurstShot(); },
+			0.0f,      // rate(ë¯¸ì‚¬ìš©)
+			false,     // ë£¨í”„ ì•„ë‹˜
+			burstInterval // ë‹¤ìŒ ë°œê¹Œì§€ ëŒ€ê¸° ì‹œê°„
+		);
+	}
 }
 
 void Drone::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -227,7 +299,7 @@ void Drone::Awake()
 
 void Drone::OnStart()
 {
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	m_owner = GetOwner();
 
 	TimerManager::GetInstance().SetTimer(
@@ -257,33 +329,36 @@ void Drone::OnStart()
 
 void Drone::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	TimerManager::GetInstance().ClearTimer(timer);
+	TimerManager::GetInstance().ClearTimer(burstTimer);
 }
 
 void Drone::OnDestroy()
 {
+	TimerManager::GetInstance().ClearTimer(timer);
+	TimerManager::GetInstance().ClearTimer(burstTimer);
 }
 
 void Drone::OnTriggerEnter2D(Collider* collider)
 {
-	std::cout << "OnTriggerEnter2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerEnter2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerEnter2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerEnter2D í˜¸ì¶œë¨\n");
 }
 
 void Drone::OnTriggerStay2D(Collider* collider)
 {
-	std::cout << "OnTriggerStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerStay2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerStay2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerStay2D í˜¸ì¶œë¨\n");
 }
 
 void Drone::OnTriggerExit2D(Collider* collider)
 {
-	std::cout << "OnTriggerExit2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerExit2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerExit2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerExit2D í˜¸ì¶œë¨\n");
 }
 
 void Drone::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
