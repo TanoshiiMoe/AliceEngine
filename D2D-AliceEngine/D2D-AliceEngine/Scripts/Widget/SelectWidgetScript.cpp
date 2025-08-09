@@ -127,12 +127,51 @@ void SelectWidgetScript::OnStart()
 	stage3->SetRelativeScale(FVector2(1, 1));
 	stage3->m_layer = 300;
 
-	// ====================== Delegate
+	// ====================== Delegate & Hover Effects
+	
+	// stage1 Button 효과 (초록색 글로우 - 쉬운 스테이지)
+	stage1->SetStateAction(Define::EButtonState::Hover, [stage1]()
+	{
+		stage1->StartHoverPulse(0.8f, 0.04f);
+		stage1->StartEffectAnimation(0.3f, 1.2f, FColor::Green);
+	});
+
+	stage1->SetStateAction(Define::EButtonState::HoverLeave, [stage1]()
+	{
+		stage1->StopHoverPulse();
+		stage1->StartEffectAnimation(0.2f, 0.0f, FColor::Green);
+	});
+
+	stage1->SetStateAction(Define::EButtonState::Release, [stage1]()
+	{
+		stage1->StopHoverPulse();
+		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::Green);
+	});
+
 	stage1->SetStateAction(Define::EButtonState::Pressed, []{
 		
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
 		
 		});
+
+	// stage2 Button 효과 (노란색 글로우 - 보통 스테이지)
+	stage2->SetStateAction(Define::EButtonState::Hover, [stage2]()
+	{
+		stage2->StartHoverPulse(0.8f, 0.04f);
+		stage2->StartEffectAnimation(0.3f, 1.2f, FColor::Yellow);
+	});
+
+	stage2->SetStateAction(Define::EButtonState::HoverLeave, [stage2]()
+	{
+		stage2->StopHoverPulse();
+		stage2->StartEffectAnimation(0.2f, 0.0f, FColor::Yellow);
+	});
+
+	stage2->SetStateAction(Define::EButtonState::Release, [stage2]()
+	{
+		stage2->StopHoverPulse();
+		stage2->StartEffectAnimation(0.1f, 0.0f, FColor::Yellow);
+	});
 
 	stage2->SetStateAction(Define::EButtonState::Pressed, [] {
 
@@ -140,11 +179,49 @@ void SelectWidgetScript::OnStart()
 		
 		});
 
+	// stage3 Button 효과 (빨간색 글로우 - 어려운 스테이지/보스)
+	stage3->SetStateAction(Define::EButtonState::Hover, [stage3]()
+	{
+		stage3->StartHoverPulse(0.8f, 0.04f);
+		stage3->StartEffectAnimation(0.3f, 1.2f, FColor::Red);
+	});
+
+	stage3->SetStateAction(Define::EButtonState::HoverLeave, [stage3]()
+	{
+		stage3->StopHoverPulse();
+		stage3->StartEffectAnimation(0.2f, 0.0f, FColor::Red);
+	});
+
+	stage3->SetStateAction(Define::EButtonState::Release, [stage3]()
+	{
+		stage3->StopHoverPulse();
+		stage3->StartEffectAnimation(0.1f, 0.0f, FColor::Red);
+	});
+
 	stage3->SetStateAction(Define::EButtonState::Pressed, [] {
 		
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
 		
 		});
+
+	// closeButton 효과 (주황색 글로우)
+	closeButton->SetStateAction(Define::EButtonState::Hover, [closeButton]()
+	{
+		closeButton->StartHoverPulse(0.8f, 0.04f);
+		closeButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+	});
+
+	closeButton->SetStateAction(Define::EButtonState::HoverLeave, [closeButton]()
+	{
+		closeButton->StopHoverPulse();
+		closeButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+	});
+
+	closeButton->SetStateAction(Define::EButtonState::Release, [closeButton]()
+	{
+		closeButton->StopHoverPulse();
+		closeButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+	});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed,[] {
 		

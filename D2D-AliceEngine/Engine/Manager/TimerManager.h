@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <functional>
 #include <unordered_map>
+#include <mutex>
+#include <vector>
 
 class FTimerHandle
 {
@@ -88,5 +90,11 @@ private:
 
 	std::unordered_map<size_t, TimerData> Timers;
 	size_t NextHandle = 1;
+	
+	// 스레드 안전성을 위한 뮤텍스
+	mutable std::mutex TimersMutex;
+	
+	// 삭제 예정 타이머들 (Update 중 삭제를 위해)
+	std::vector<size_t> TimersToRemove;
 };
 

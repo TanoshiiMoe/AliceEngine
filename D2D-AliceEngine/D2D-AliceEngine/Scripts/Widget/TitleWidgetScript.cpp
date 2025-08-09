@@ -445,7 +445,7 @@ void TitleWidgetScript::OnStart()
 		
 		uiSound->PlayByName(L"UISound",0.45f);
 
-		// 다른 버튼 비활성화
+		// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 		startButton->SetActive(false);
 		quitButton->SetActive(false);
 		staffButton->SetActive(false);
@@ -571,7 +571,7 @@ void TitleWidgetScript::OnStart()
 
 			uiSound->PlayByName(L"UISound", 0.45f);
 
-			// 다른 버튼 비활성화
+			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 			startButton->SetActive(false);
 			continueButton->SetActive(false);
 			quitButton->SetActive(false);
@@ -610,7 +610,7 @@ void TitleWidgetScript::OnStart()
 
 			uiSound->PlayByName(L"UISound", 0.45f);
 
-			// 다른 버튼 비활성화
+			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 			startButton->SetActive(false);
 			continueButton->SetActive(false);
 			quitButton->SetActive(false);
@@ -710,16 +710,191 @@ void TitleWidgetScript::OnStart()
 	quitButton->SetStateAction(Define::EButtonState::Hover, [quitButton]()
 	{
 		quitButton->StartHoverPulse(0.8f, 0.04f);
+		quitButton->StartEffectAnimation(0.3f, 1.2f, FColor::White);
 	});
 
 	quitButton->SetStateAction(Define::EButtonState::HoverLeave, [quitButton]()
 	{
 		quitButton->StopHoverPulse();
+		quitButton->StartEffectAnimation(0.2f, 0.0f, FColor::White);
 	});
 
 	quitButton->SetStateAction(Define::EButtonState::Release, [quitButton]()
 	{
 		quitButton->StopHoverPulse();
+		quitButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
+	});
+
+	// optionButton Hover 효과 (노란색 글로우)
+	optionButton->SetStateAction(Define::EButtonState::Hover, [optionButton]()
+	{
+		optionButton->StartHoverPulse(0.8f, 0.04f);
+		optionButton->StartEffectAnimation(0.3f, 1.2f, FColor::Yellow);
+	});
+
+	optionButton->SetStateAction(Define::EButtonState::HoverLeave, [optionButton]()
+	{
+		optionButton->StopHoverPulse();
+		optionButton->StartEffectAnimation(0.2f, 0.0f, FColor::Yellow);
+	});
+
+	optionButton->SetStateAction(Define::EButtonState::Release, [optionButton]()
+	{
+		optionButton->StopHoverPulse();
+		optionButton->StartEffectAnimation(0.1f, 0.0f, FColor::Yellow);
+	});
+
+	// staffButton Hover 효과 (보라색 글로우)
+	staffButton->SetStateAction(Define::EButtonState::Hover, [staffButton]()
+	{
+		staffButton->StartHoverPulse(0.8f, 0.04f);
+		staffButton->StartEffectAnimation(0.3f, 1.2f, FColor::Purple);
+	});
+
+	staffButton->SetStateAction(Define::EButtonState::HoverLeave, [staffButton]()
+	{
+		staffButton->StopHoverPulse();
+		staffButton->StartEffectAnimation(0.2f, 0.0f, FColor::Purple);
+	});
+
+	staffButton->SetStateAction(Define::EButtonState::Release, [staffButton]()
+	{
+		staffButton->StopHoverPulse();
+		staffButton->StartEffectAnimation(0.1f, 0.0f, FColor::Purple);
+	});
+
+	// continueButton Hover 효과 (초록색 글로우)
+	continueButton->SetStateAction(Define::EButtonState::Hover, [continueButton]()
+	{
+		continueButton->StartHoverPulse(0.8f, 0.04f);
+		continueButton->StartEffectAnimation(0.3f, 1.2f, FColor::Green);
+	});
+
+	continueButton->SetStateAction(Define::EButtonState::HoverLeave, [continueButton]()
+	{
+		continueButton->StopHoverPulse();
+		continueButton->StartEffectAnimation(0.2f, 0.0f, FColor::Green);
+	});
+
+	continueButton->SetStateAction(Define::EButtonState::Release, [continueButton]()
+	{
+		continueButton->StopHoverPulse();
+		continueButton->StartEffectAnimation(0.1f, 0.0f, FColor::Green);
+	});
+
+	// closeButton Hover 효과 (주황색 글로우)
+	closeButton->SetStateAction(Define::EButtonState::Hover, [closeButton]()
+	{
+		closeButton->StartHoverPulse(0.8f, 0.04f);
+		closeButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+	});
+
+	closeButton->SetStateAction(Define::EButtonState::HoverLeave, [closeButton]()
+	{
+		closeButton->StopHoverPulse();
+		closeButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+	});
+
+	closeButton->SetStateAction(Define::EButtonState::Release, [closeButton]()
+	{
+		closeButton->StopHoverPulse();
+		closeButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+	});
+
+	// bgmPlusButton Hover 효과 (시안색 글로우)
+	bgmPlusButton->SetStateAction(Define::EButtonState::Hover, [bgmPlusButton]()
+	{
+		bgmPlusButton->StartHoverPulse(0.8f, 0.04f);
+		bgmPlusButton->StartEffectAnimation(0.3f, 1.2f, FColor::Cyan);
+	});
+
+	bgmPlusButton->SetStateAction(Define::EButtonState::HoverLeave, [bgmPlusButton]()
+	{
+		bgmPlusButton->StopHoverPulse();
+		bgmPlusButton->StartEffectAnimation(0.2f, 0.0f, FColor::Cyan);
+	});
+
+	bgmPlusButton->SetStateAction(Define::EButtonState::Release, [bgmPlusButton]()
+	{
+		bgmPlusButton->StopHoverPulse();
+		bgmPlusButton->StartEffectAnimation(0.1f, 0.0f, FColor::Cyan);
+	});
+
+	// bgmMinusButton Hover 효과 (마젠타색 글로우)
+	bgmMinusButton->SetStateAction(Define::EButtonState::Hover, [bgmMinusButton]()
+	{
+		bgmMinusButton->StartHoverPulse(0.8f, 0.04f);
+		bgmMinusButton->StartEffectAnimation(0.3f, 1.2f, FColor::Magenta);
+	});
+
+	bgmMinusButton->SetStateAction(Define::EButtonState::HoverLeave, [bgmMinusButton]()
+	{
+		bgmMinusButton->StopHoverPulse();
+		bgmMinusButton->StartEffectAnimation(0.2f, 0.0f, FColor::Magenta);
+	});
+
+	bgmMinusButton->SetStateAction(Define::EButtonState::Release, [bgmMinusButton]()
+	{
+		bgmMinusButton->StopHoverPulse();
+		bgmMinusButton->StartEffectAnimation(0.1f, 0.0f, FColor::Magenta);
+	});
+
+	// sfxPlusButton Hover 효과 (금색 글로우)
+	sfxPlusButton->SetStateAction(Define::EButtonState::Hover, [sfxPlusButton]()
+	{
+		sfxPlusButton->StartHoverPulse(0.8f, 0.04f);
+		sfxPlusButton->StartEffectAnimation(0.3f, 1.2f, FColor::Gold);
+	});
+
+	sfxPlusButton->SetStateAction(Define::EButtonState::HoverLeave, [sfxPlusButton]()
+	{
+		sfxPlusButton->StopHoverPulse();
+		sfxPlusButton->StartEffectAnimation(0.2f, 0.0f, FColor::Gold);
+	});
+
+	sfxPlusButton->SetStateAction(Define::EButtonState::Release, [sfxPlusButton]()
+	{
+		sfxPlusButton->StopHoverPulse();
+		sfxPlusButton->StartEffectAnimation(0.1f, 0.0f, FColor::Gold);
+	});
+
+	// sfxMinusButton Hover 효과 (분홍색 글로우)
+	sfxMinusButton->SetStateAction(Define::EButtonState::Hover, [sfxMinusButton]()
+	{
+		sfxMinusButton->StartHoverPulse(0.8f, 0.04f);
+		sfxMinusButton->StartEffectAnimation(0.3f, 1.2f, FColor::Pink);
+	});
+
+	sfxMinusButton->SetStateAction(Define::EButtonState::HoverLeave, [sfxMinusButton]()
+	{
+		sfxMinusButton->StopHoverPulse();
+		sfxMinusButton->StartEffectAnimation(0.2f, 0.0f, FColor::Pink);
+	});
+
+	sfxMinusButton->SetStateAction(Define::EButtonState::Release, [sfxMinusButton]()
+	{
+		sfxMinusButton->StopHoverPulse();
+		sfxMinusButton->StartEffectAnimation(0.1f, 0.0f, FColor::Pink);
+	});
+
+	// startButton Hover 효과 (펄스 + 글로우 이펙트)
+	startButton->SetStateAction(Define::EButtonState::Hover, [startButton]()
+	{
+		startButton->StartHoverPulse(0.8f, 0.04f);
+		// 빨간색 글로우 - 훨씬 간단해짐!
+		startButton->StartEffectAnimation(0.3f, 1.2f, FColor::Red);
+	});
+
+	startButton->SetStateAction(Define::EButtonState::HoverLeave, [startButton]()
+	{
+		startButton->StopHoverPulse();
+		startButton->StartEffectAnimation(0.2f, 0.0f, FColor::Red);
+	});
+
+	startButton->SetStateAction(Define::EButtonState::Release, [startButton]()
+	{
+		startButton->StopHoverPulse();
+		startButton->StartEffectAnimation(0.1f, 0.0f, FColor::Red); 
 	});
 	
 }

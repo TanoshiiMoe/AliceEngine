@@ -1,4 +1,4 @@
-#include "Bullet.h"
+ï»¿#include "Bullet.h"
 #include "Bullet.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
@@ -35,14 +35,14 @@ void Bullet::Initialize()
 		//co->SetLayer(0);
 	}
 
-	TimerManager::GetInstance().ClearTimer(handle); // ÀÌÀü Å¸ÀÌ¸Ó Á¦°Å
+	TimerManager::GetInstance().ClearTimer(handle); // ì´ì „ íƒ€ì´ë¨¸ ì œê±°
 	TimerManager::GetInstance().SetTimer(handle, [this]() { bCameraCulling = true; }, 0, false, 1.0f);
 }
 
 void Bullet::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -51,7 +51,7 @@ void Bullet::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 
 	UpdatePositionByType(deltaSeconds);
-	UpdateCameraCulling(); // Ä«¸Ş¶ó ÄÃ¸µ Ã¼Å©
+	UpdateCameraCulling(); // ì¹´ë©”ë¼ ì»¬ë§ ì²´í¬
 }
 
 void Bullet::UpdatePositionByType(const float& deltaSeconds)
@@ -68,7 +68,7 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 	{
 	case EBulletType::Linear:
 	{
-		// Á÷¼± ÀÌµ¿
+		// ì§ì„  ì´ë™
 		FVector2 pos = moveDir * inheritedVelocity.x * moveSpeed * deltaSeconds;
 		GetOwner()->transform()->AddPosition(pos);
 		break;
@@ -91,7 +91,7 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 		}
 		else
 		{
-			// Á÷¼± ÀÌµ¿
+			// ì§ì„  ì´ë™
 			FVector2 pos = inheritedVelocity * moveDir * deltaSeconds;
 			GetOwner()->transform()->AddPosition(pos);
 		}
@@ -101,12 +101,12 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 	{
 		time += deltaSeconds;
 
-		// ¾ÕÀ¸·Î ³ª¾Æ°¡±â
+		// ì•ìœ¼ë¡œ ë‚˜ì•„ê°€ê¸°
 		FVector2 forward = moveDir * (moveSpeed * deltaSeconds);
 		currentPos += forward;
 
-		// ¼öÁ÷ ¹æÇâ Èçµé¸² Àû¿ë
-		FVector2 perp(moveDir.y, -moveDir.x); // Á¤È®ÇÑ ¼öÁ÷ º¤ÅÍ
+		// ìˆ˜ì§ ë°©í–¥ í”ë“¤ë¦¼ ì ìš©
+		FVector2 perp(moveDir.y, -moveDir.x); // ì •í™•í•œ ìˆ˜ì§ ë²¡í„°
 		float wave = std::sin(time * waveFrequency) * waveAmplitude;
 		FVector2 offset = perp * wave;
 
@@ -123,7 +123,7 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 void Bullet::UpdateCameraCulling()
 {
 	if (!bCameraCulling) return;
-	FVector2 camPos = GetCamera()->GetPosition(); // Unity ÁÂÇ¥
+	FVector2 camPos = GetCamera()->GetPosition(); // Unity ì¢Œí‘œ
 	float halfW = Define::SCREEN_WIDTH * 0.5f;
 	float halfH = Define::SCREEN_HEIGHT * 0.5f;
 	FVector2 bulletPos = GetOwner()->transform()->GetPosition();
@@ -141,7 +141,7 @@ void Bullet::UpdateCameraCulling()
 void Bullet::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -151,17 +151,21 @@ void Bullet::Awake()
 
 void Bullet::OnStart()
 {
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	m_owner = GetOwner();
 
 	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
 	sp->LoadData(spritePath);
 	sp->m_layer = 20000;
+
+	const float angleRad = std::atan2f(moveDir.y, moveDir.x);
+	const float angleDeg = angleRad * 180.0f / Define::PI;
+	sp->SetRelativeRotation(angleDeg);
 }
 
 void Bullet::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 void Bullet::OnDestroy()
@@ -171,8 +175,8 @@ void Bullet::OnDestroy()
 
 void Bullet::OnTriggerEnter2D(Collider* collider)
 {
-	std::cout << "OnTriggerEnter2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerEnter2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerEnter2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerEnter2D í˜¸ì¶œë¨\n");
 
 	if (!collider->GetOwner()) return;
 	switch (droneType)
@@ -213,17 +217,17 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 
 void Bullet::OnTriggerStay2D(Collider* collider)
 {
-	std::cout << "OnTriggerStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerStay2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerStay2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerStay2D í˜¸ì¶œë¨\n");
 }
 
 void Bullet::OnTriggerExit2D(Collider* collider)
 {
-	std::cout << "OnTriggerExit2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerExit2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerExit2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerExit2D í˜¸ì¶œë¨\n");
 }
 
 void Bullet::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }

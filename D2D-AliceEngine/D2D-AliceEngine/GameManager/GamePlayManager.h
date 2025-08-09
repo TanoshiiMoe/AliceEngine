@@ -3,85 +3,75 @@
 #include <Manager/TimerManager.h>
 #include <string>
 #include <functional>
-#include <vector>
 
-enum class EGamePlayState : uint8_t {
-    Idle,
-    Running,
-    Transitioning
+// 게임 상태(전역)
+enum class EGameRunState : uint8_t {
+    Boot,        // 초기 부팅/런처 직후
+    Loading,     // 리소스/씬 로딩 중
+    InGame,      // 실제 플레이 중
+    Paused,      // 일시정지
+    GameOver,    // 패배
+    Victory,     // 승리
+    Transitioning// 씬 전환 중(외부(UI)가 처리)
 };
 
 class GamePlayManager : public Singleton<GamePlayManager>
 {
 public:
-    void Initialize();
-    void OnDestroy();
+    GamePlayManager();
+    ~GamePlayManager();
 
-    // 상태 조회
-    EGamePlayState GetState() const { return m_State; }
+    // ===== 조회 =====
+    EGameRunState GetState() const { return m_State; }
+    bool IsPlaying()        const { return m_State == EGameRunState::InGame; }
+    bool IsPaused()         const { return m_State == EGameRunState::Paused; }
+    bool IsBusy()           const { return m_State == EGameRunState::Transitioning || m_State == EGameRunState::Loading; }
+
     const std::wstring& GetCurrentScene() const { return m_CurrentScene; }
-    bool IsBusy() const { return m_State == EGamePlayState::Transitioning; }
+    const std::wstring& GetPendingScene() const { return m_PendingScene; }
 
-    /**
-     * @brief 기본 전환 (진행률 콜백 포함)
-     * @param nextScene 전환할 씬 이름
-     * @param durationSeconds 전환 시간(초)
-     * @param splitPoint 0~1 구간 중 씬 교체 시점 (기본 0.5f)
-     * @param onTick 진행률 콜백(t:0~1)
-     */
-    void TransitionToScene(const std::wstring& nextScene,
-        float durationSeconds,
-        float splitPoint = 0.5f,
-        std::function<void(float)> onTick = nullptr);
+    // ===== 상태 변경(외부(UI)에서 호출) =====
+    // 플레이 시작: InGame 진입
+    void StartGame();
 
-    /**
-     * @brief 페이드 연출이 자동으로 들어가는 간편 전환
-     * SetFadeSetter()로 페이드 적용 함수를 먼저 지정해 두면, onTick 없이도 동작합니다.
-     * @param nextScene 전환할 씬 이름
-     * @param durationSeconds 전환 시간(초)
-     * @param splitPoint 0~1 구간 중 씬 교체 시점 (기본 0.5f)
-     */
-    void TransitionWithFade(const std::wstring& nextScene,
-        float durationSeconds,
-        float splitPoint = 0.5f);
+    // 일시정지/재개 (글로벌 타임스케일 제어만 수행)
+    void PauseGame();
+    void ResumeGame();
+    void TogglePause();
 
-    /**
-     * @brief 외부의 페이드 적용 함수를 등록 (0~1 알파)
-     * 예: UIManager::SetFadeAlpha(float)
-     */
-    void SetFadeSetter(std::function<void(float)> setter) { m_FadeSetter = std::move(setter); }
+    // 종료(게임오버/승리)
+    void EndGameAsGameOver();
+    void EndGameAsVictory();
 
-    /**
-     * @brief 간단 지연 실행 (버튼 연출용)
-     * @param seconds 지연(초)
-     * @param cb 지연 후 실행할 콜백
-     * @param outHandle (옵션) 핸들이 필요하면 포인터로 받기
-     */
-    void RunAfter(float seconds, std::function<void()> cb, FTimerHandle* outHandle = nullptr);
+    // ===== 씬 전환: 타이머/연출 없음. UI가 연출/타이머 처리하고, 여기엔 마킹만 =====
+    // 전환 시작: 상태를 Transitioning으로 두고 PendingScene 기록
+    void MarkTransitionBegin(const std::wstring& nextScene);
+    // 전환 실제 완료 시(UI에서 씬 교체 후) 호출: 현재 씬 갱신 + 상태 복귀
+    void MarkTransitionComplete();
+
+    // 로딩 구간(선택): UI가 로딩 시작/완료를 알릴 수 있음
+    void MarkLoadingBegin();
+    void MarkLoadingComplete();
+
+    // 상태 변경 콜백(선택): (prev, now)
+    void SetOnStateChanged(std::function<void(EGameRunState, EGameRunState)> cb) { m_OnStateChanged = std::move(cb); }
+
+    // 전역 타임스케일 Get/Set (필요하면 사용)
+    float GetSavedTimeScale() const { return m_PrevTimeScale; }
 
 private:
-    void SafeChangeScene();
-    void EndTransition();
-    void CancelTransition();
-
-    // 기본 이징 (스무스)
-    static float EaseInOutQuad(float x);
+    void SetState(EGameRunState newState);
+    void ApplyPauseTimescale(bool paused); // TimerManager의 GlobalTimeScale만 제어
 
 private:
-    EGamePlayState m_State = EGamePlayState::Idle;
-    std::wstring   m_CurrentScene;
-    std::wstring   m_PendingScene;
+    EGameRunState m_State = EGameRunState::Boot;
 
-    bool   m_HasActiveTransition = false;
-    bool   m_SwitchedAtSplit = false;
-    float  m_Duration = 0.0f;
-    float  m_SplitPoint = 0.5f;
+    std::wstring  m_CurrentScene; // 현재 활성 씬명(외부가 바꾼 뒤 MarkTransitionComplete에서 세팅)
+    std::wstring  m_PendingScene; // 전환 예정 씬명(외부가 MarkTransitionBegin로 세팅)
 
-    FTimerHandle m_TransitionTimer;
+    // 일시정지/재개용 이전 타임스케일 저장
+    float m_PrevTimeScale = 1.0f;
 
-    // 선택: 자동 페이드용
-    std::function<void(float)> m_FadeSetter = nullptr;
-
-    // 임시 지연용 핸들들(매니저 소멸 시 정리)
-    std::vector<FTimerHandle> m_TempDelayHandles;
+    // 상태 변경 이벤트(옵션)
+    std::function<void(EGameRunState, EGameRunState)> m_OnStateChanged = nullptr;
 };
