@@ -100,9 +100,21 @@ void ButtonComponent::Render()
 	if (!m_bitmap) return;
 	__super::Render();
 
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!context) return;
+
 	FVector2 relativeSize = FVector2(GetBitmapSizeX(), GetBitmapSizeY());
 	D2D1_RECT_F destRect = D2D1::RectF(-relativeSize.x / 2, -relativeSize.y / 2, relativeSize.x / 2, relativeSize.y / 2);
-	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), destRect);
+	
+	// 먼저 글로우 이펙트를 뒤에 그리기 (있는 경우)
+	if (m_effect)
+	{
+		D2D1_POINT_2F glowPos = D2D1::Point2F(-relativeSize.x / 2, -relativeSize.y / 2);
+		context->DrawImage(m_effect.Get(), &glowPos);
+	}
+	
+	// 그 다음 기존 버튼 이미지를 위에 그리기
+	context->DrawBitmap(m_bitmap.get(), destRect);
 }
 
 float ButtonComponent::GetBitmapSizeX()
@@ -227,4 +239,120 @@ void ButtonComponent::StopHoverPulse()
 	TimerManager::GetInstance().ClearTimer(m_hoverTimer);
 	// 기준 스케일로 복원
 	relativeTransform.SetScale(m_hoverBaseScale);
+}
+
+void ButtonComponent::CreateGlowEffect(float intensity, FColor color)
+{
+	if (intensity <= 0.0f)
+	{
+		m_effect = nullptr;
+		return;
+	}
+
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!context || !m_bitmap) return;
+
+	try
+	{
+		// 그림자 이펙트 생성 (글로우 효과)
+		ComPtr<ID2D1Effect> shadowEffect;
+		HRESULT hr = context->CreateEffect(CLSID_D2D1Shadow, &shadowEffect);
+		
+		if (SUCCEEDED(hr) && shadowEffect)
+		{
+			// 그림자 색상 설정 (FColor를 0~1 범위로 변환)
+			D2D1_VECTOR_4F shadowColor = { 
+				color.r / 255.0f, 
+				color.g / 255.0f, 
+				color.b / 255.0f, 
+				intensity * 1.5f 
+			};
+			shadowEffect->SetValue(D2D1_SHADOW_PROP_COLOR, shadowColor);
+			
+			// 블러 반지름 설정 (더 큰 글로우 크기)
+			shadowEffect->SetValue(D2D1_SHADOW_PROP_BLUR_STANDARD_DEVIATION, 20.0f);
+
+			// 입력 이미지 설정
+			shadowEffect->SetInput(0, m_bitmap.get());
+			
+			m_effect = shadowEffect;
+		}
+		else
+		{
+			// 이펙트 생성 실패 시 이펙트 제거
+			m_effect = nullptr;
+		}
+	}
+	catch (...)
+	{
+		// 예외 발생 시 이펙트 제거
+		m_effect = nullptr;
+	}
+}
+
+void ButtonComponent::StartEffectAnimation(float duration, float targetIntensity, FColor glowColor)
+{
+	m_effectDuration = duration;
+	m_effectStartIntensity = m_currentEffectIntensity;
+	m_effectTargetIntensity = targetIntensity;
+	m_effectColor = glowColor;
+	m_effectT = 0.f;
+
+	// 글로우 이펙트 생성
+	CreateGlowEffect(m_currentEffectIntensity, m_effectColor);
+
+	auto weakThis = WeakFromThis<ButtonComponent>();
+	TimerManager::GetInstance().SetTimerDt(m_effectTimer, [weakThis](float dt) mutable
+	{
+		if (auto self = weakThis.lock())
+		{
+			self->m_effectT += dt;
+			
+			// 0..1 구간의 진행률
+			float progress = Math::Clamp(self->m_effectT / self->m_effectDuration, 0.f, 1.f);
+			
+			// 부드러운 보간 (easeInOut)
+			float easedProgress = progress * progress * (3.0f - 2.0f * progress);
+			
+			// 현재 강도 계산
+			self->m_currentEffectIntensity = Math::Lerp(
+				self->m_effectStartIntensity, 
+				self->m_effectTargetIntensity, 
+				easedProgress
+			);
+			
+			// 이펙트 업데이트 (색상 포함)
+			self->CreateGlowEffect(self->m_currentEffectIntensity, self->m_effectColor);
+			
+			// 애니메이션 완료 시 타이머 정리
+			if (progress >= 1.0f)
+			{
+				TimerManager::GetInstance().ClearTimer(self->m_effectTimer);
+			}
+		}
+	});
+}
+
+void ButtonComponent::StopEffectAnimation()
+{
+	TimerManager::GetInstance().ClearTimer(m_effectTimer);
+	m_effect = nullptr;
+	m_currentEffectIntensity = 0.f;
+}
+
+void ButtonComponent::StopAllAnimations()
+{
+	// 모든 타이머 중지
+	TimerManager::GetInstance().ClearTimer(m_hoverTimer);
+	TimerManager::GetInstance().ClearTimer(m_effectTimer);
+	
+	// 이펙트 제거
+	m_effect = nullptr;
+	m_currentEffectIntensity = 0.f;
+	
+	// 스케일 원상복구
+	if (owner && owner->transform())
+	{
+		relativeTransform.SetScale(m_hoverBaseScale);
+	}
 }

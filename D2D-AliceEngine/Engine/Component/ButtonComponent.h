@@ -30,6 +30,7 @@ public:
 	std::wstring filePath; // 파일의 경로
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 	std::unordered_map<Define::EButtonState, std::shared_ptr<ID2D1Bitmap1>> m_bitmaps;
+	ComPtr<ID2D1Effect> m_effect;	// 이펙트 이미지
 
 	// 상태별 함수 설정 (안전한 버전)
 	template<typename F>
@@ -38,8 +39,23 @@ public:
 		stateActionSlots[state] = { owner, action };
 	}
 
-	void SetActive(bool _active) { bActive = _active; }
+	void SetActive(bool _active) { 
+		bActive = _active; 
+		if (!_active) {
+			StopAllAnimations(); // 비활성화 시 모든 애니메이션 중지
+		}
+	}
 	bool GetActive() const { return bActive; }
+
+	// 이펙트 관련 메서드
+	void SetEffect(ComPtr<ID2D1Effect> effect) { m_effect = effect; }
+	ComPtr<ID2D1Effect> GetEffect() const { return m_effect; }
+	
+	// 이펙트 애니메이션 메서드
+	void StartEffectAnimation(float duration = 0.3f, float targetIntensity = 1.0f, FColor glowColor = FColor::Blue);
+	void StopEffectAnimation();
+	void StopAllAnimations(); // 모든 애니메이션 즉시 중지
+	void CreateGlowEffect(float intensity = 0.5f, FColor color = FColor::Blue);
 	
 private:
 	// UI 영역 내 마우스 위치 확인 헬퍼 메서드
@@ -71,6 +87,15 @@ private:
 	float m_hoverSharpness{ 1.2f }; // ← 모양 조절
 	float m_hoverEase{ 0.7f };      // ← 모양 조절
 	FVector2 m_hoverBaseScale{ 1.f, 1.f };
+
+	// 이펙트 애니메이션
+	FTimerHandle m_effectTimer;
+	float m_effectT{ 0.f };
+	float m_effectDuration{ 0.3f };
+	float m_effectStartIntensity{ 0.f };
+	float m_effectTargetIntensity{ 1.f };
+	float m_currentEffectIntensity{ 0.f };
+	FColor m_effectColor{ FColor::Blue }; // 글로우 색상
 
 public:
 	// 필요시 파라미터로 조절 가능

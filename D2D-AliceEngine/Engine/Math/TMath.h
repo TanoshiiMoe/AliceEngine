@@ -219,6 +219,20 @@ namespace Math
 		return (v < lo) ? lo : (hi < v) ? hi : v;
 	}
 
+	// Clamp 함수 (대소문자 구분)
+	template <typename T>
+	constexpr const T& Clamp(const T& v, const T& lo, const T& hi) 
+	{
+		return (v < lo) ? lo : (hi < v) ? hi : v;
+	}
+
+	// Lerp 함수 (선형 보간)
+	template <typename T>
+	constexpr T Lerp(const T& a, const T& b, float t)
+	{
+		return a + (b - a) * t;
+	}
+
 	// EaseInOut
 	inline float EaseInOut(float a, float b, float elapsedTime, float duration) {
 		// 보간 계수 t 계산
