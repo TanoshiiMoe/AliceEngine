@@ -32,14 +32,14 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 
 	// 키보드 입력으로도 조작 가능
-    if (!m_isTransitioning && (Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_SPACE)))
+    if (!m_isTransitioning && m_canAdvance && (Input::IsKeyDown(VK_RETURN)))
 	{
 		NextImage();
 	}
-    else if (!m_isTransitioning && Input::IsKeyDown(VK_LEFT))
-	{
-		PrevImage();
-	}
+    //else if (!m_isTransitioning && Input::IsKeyDown(VK_LEFT))
+    //{
+    //    PrevImage();
+    //}
     else if (!m_isTransitioning && Input::IsKeyDown(VK_ESCAPE))
 	{
 		SkipCutScene();
@@ -72,12 +72,12 @@ void CutSceneWidgetScript::OnStart()
     EnsureBackdropOverlay();
 
     m_background = m_owner->AddComponent<SpriteRenderer>();
-	m_nextButton = m_owner->AddComponent<ButtonComponent>();
-	m_prevButton = m_owner->AddComponent<ButtonComponent>();
+    //m_nextButton = m_owner->AddComponent<ButtonComponent>();
+    //m_prevButton = m_owner->AddComponent<ButtonComponent>();
 	m_skipButton = m_owner->AddComponent<ButtonComponent>();
 
-	m_nextText = m_owner->AddComponent<TextRenderComponent>();
-	m_prevText = m_owner->AddComponent<TextRenderComponent>();
+    //m_nextText = m_owner->AddComponent<TextRenderComponent>();
+    //m_prevText = m_owner->AddComponent<TextRenderComponent>();
 	m_skipText = m_owner->AddComponent<TextRenderComponent>();
 
 	m_uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
@@ -95,22 +95,10 @@ void CutSceneWidgetScript::OnStart()
     m_background->m_layer = 0 + m_relativeLayer;
 
 	// Next 버튼 설정
-	m_nextButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	m_nextButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	m_nextButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	m_nextButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	m_nextButton->SetRelativePosition(FVector2(400, 350));
-	m_nextButton->SetRelativeScale(FVector2(0.8f, 0.8f));
-    m_nextButton->m_layer = 100 + m_relativeLayer;
+    // Next 버튼 주석 처리
 
 	// Prev 버튼 설정
-	m_prevButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	m_prevButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	m_prevButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	m_prevButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	m_prevButton->SetRelativePosition(FVector2(-400, 350));
-	m_prevButton->SetRelativeScale(FVector2(0.8f, 0.8f));
-    m_prevButton->m_layer = 100 + m_relativeLayer;
+    // Prev 버튼 주석 처리
 
 	// Skip 버튼 설정
 	m_skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -122,27 +110,9 @@ void CutSceneWidgetScript::OnStart()
     m_skipButton->m_layer = 100 + m_relativeLayer;
 
 	// 텍스트 설정
-	m_nextText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	m_nextText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	m_nextText->SetText(L"다음");
-	m_nextText->SetFontSize(45.0f);
-	m_nextText->SetColor(FColor::White);
-	FVector2 nextTextSize = m_nextText->GetRelativeSize();
-	m_nextText->SetRelativePosition(CoordHelper::RatioCoordToScreen(nextTextSize, FVector2(-0.5, -0.5)));
-    m_nextText->m_layer = 101 + m_relativeLayer;
-	m_nextText->RemoveFromParent();
-	m_nextButton->AddChildComponent(m_nextText);
+    // Next 텍스트 주석 처리
 
-	m_prevText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	m_prevText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	m_prevText->SetText(L"이전");
-	m_prevText->SetFontSize(45.0f);
-	m_prevText->SetColor(FColor::White);
-	FVector2 prevTextSize = m_prevText->GetRelativeSize();
-	m_prevText->SetRelativePosition(CoordHelper::RatioCoordToScreen(prevTextSize, FVector2(-0.5, -0.5)));
-    m_prevText->m_layer = 101 + m_relativeLayer;
-	m_prevText->RemoveFromParent();
-	m_prevButton->AddChildComponent(m_prevText);
+    // Prev 텍스트 주석 처리
 
 	m_skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	m_skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
@@ -155,22 +125,27 @@ void CutSceneWidgetScript::OnStart()
 	m_skipText->RemoveFromParent();
 	m_skipButton->AddChildComponent(m_skipText);
 
+    // 안내 문구 생성 (초기 비가시, 스킵 버튼 오른쪽에 배치)
+    m_guideText = m_owner->AddComponent<TextRenderComponent>();
+    m_guideText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+    m_guideText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+    m_guideText->SetText(L"엔터를 눌러 다음으로 넘어가세요");
+    m_guideText->SetFontSize(40.0f);
+    m_guideText->SetColor(FColor::White);
+    FVector2 guideSize = m_guideText->GetRelativeSize();
+    // 스킵 버튼 오른쪽(오프셋 220,0)
+    m_guideText->SetRelativePosition(FVector2(340, -10));
+    m_guideText->m_layer = 101 + m_relativeLayer;
+    m_guideText->RemoveFromParent();
+    m_skipButton->AddChildComponent(m_guideText);
+    // 시작 시 감춤
+    m_guideAlpha = 0.0f;
+    m_guideText->SetOpacity(0.0f);
+
 	// 버튼 이벤트 설정
-	m_nextButton->SetStateAction(Define::EButtonState::Pressed, [this]()
-	{
-		m_uiSound->StopByName(L"UISound");
-		m_uiSound->PlayByName1(L"UISound", 0.45f);
+    // Next 버튼 핸들러 주석 처리
 
-		NextImage();
-	});
-
-	m_prevButton->SetStateAction(Define::EButtonState::Pressed, [this]()
-	{
-		m_uiSound->StopByName(L"UISound");
-		m_uiSound->PlayByName1(L"UISound", 0.45f);
-
-		PrevImage();
-	});
+    // Prev 버튼 핸들러 주석 처리
 
 	m_skipButton->SetStateAction(Define::EButtonState::Pressed, [this]()
 	{
@@ -183,42 +158,42 @@ void CutSceneWidgetScript::OnStart()
 
 	// 호버 효과 추가
 	// Next Button 효과 (파란색 글로우)
-	m_nextButton->SetStateAction(Define::EButtonState::Hover, [this]()
-	{
-		m_nextButton->StartHoverPulse(0.8f, 0.04f);
-		m_nextButton->StartEffectAnimation(0.3f, 1.2f, FColor::Blue);
-	});
-
-	m_nextButton->SetStateAction(Define::EButtonState::HoverLeave, [this]()
-	{
-		m_nextButton->StopHoverPulse();
-		m_nextButton->StartEffectAnimation(0.2f, 0.0f, FColor::Blue);
-	});
-
-	m_nextButton->SetStateAction(Define::EButtonState::Release, [this]()
-	{
-		m_nextButton->StopHoverPulse();
-		m_nextButton->StartEffectAnimation(0.1f, 0.0f, FColor::Blue);
-	});
-
-	// Prev Button 효과 (주황색 글로우)
-	m_prevButton->SetStateAction(Define::EButtonState::Hover, [this]()
-	{
-		m_prevButton->StartHoverPulse(0.8f, 0.04f);
-		m_prevButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
-	});
-
-	m_prevButton->SetStateAction(Define::EButtonState::HoverLeave, [this]()
-	{
-		m_prevButton->StopHoverPulse();
-		m_prevButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
-	});
-
-	m_prevButton->SetStateAction(Define::EButtonState::Release, [this]()
-	{
-		m_prevButton->StopHoverPulse();
-		m_prevButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
-	});
+	//m_nextButton->SetStateAction(Define::EButtonState::Hover, [this]()
+	//{
+	//	m_nextButton->StartHoverPulse(0.8f, 0.04f);
+	//	m_nextButton->StartEffectAnimation(0.3f, 1.2f, FColor::Blue);
+	//});
+    //
+	//m_nextButton->SetStateAction(Define::EButtonState::HoverLeave, [this]()
+	//{
+	//	m_nextButton->StopHoverPulse();
+	//	m_nextButton->StartEffectAnimation(0.2f, 0.0f, FColor::Blue);
+	//});
+    //
+	//m_nextButton->SetStateAction(Define::EButtonState::Release, [this]()
+	//{
+	//	m_nextButton->StopHoverPulse();
+	//	m_nextButton->StartEffectAnimation(0.1f, 0.0f, FColor::Blue);
+	//});
+    //
+	//// Prev Button 효과 (주황색 글로우)
+	//m_prevButton->SetStateAction(Define::EButtonState::Hover, [this]()
+	//{
+	//	m_prevButton->StartHoverPulse(0.8f, 0.04f);
+	//	m_prevButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+	//});
+    //
+	//m_prevButton->SetStateAction(Define::EButtonState::HoverLeave, [this]()
+	//{
+	//	m_prevButton->StopHoverPulse();
+	//	m_prevButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+	//});
+    //
+	//m_prevButton->SetStateAction(Define::EButtonState::Release, [this]()
+	//{
+	//	m_prevButton->StopHoverPulse();
+	//	m_prevButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+	//});
 
 	// Skip Button 효과 (빨간색 글로우)
 	m_skipButton->SetStateAction(Define::EButtonState::Hover, [this]()
@@ -241,6 +216,9 @@ void CutSceneWidgetScript::OnStart()
 
 	// 첫 번째 이미지 표시
 	ShowImage(0);
+
+    // 각 컷마다 2초 지연 후 가이드 표시
+    ShowGuideAfterDelay();
 }
 
 void CutSceneWidgetScript::OnEnd()
@@ -249,6 +227,9 @@ void CutSceneWidgetScript::OnEnd()
 
 void CutSceneWidgetScript::OnDestroy()
 {
+    TimerManager::GetInstance().ClearTimer(m_guideDelayTimer);
+    TimerManager::GetInstance().ClearTimer(m_guideFadeTimer);
+    TimerManager::GetInstance().ClearTimer(m_guideBlinkTimer);
 }
 
 void CutSceneWidgetScript::LoadCutSceneImages()
@@ -310,34 +291,21 @@ void CutSceneWidgetScript::ShowImage(int index)
         }
     }
 
-    // 버튼 활성화/텍스트 업데이트
+    // 버튼 활성화/텍스트 업데이트 (Next/Prev는 현재 주석 처리)
     {
         const bool hasPrev = index > 0;
         const bool isLast = index >= static_cast<int>(m_cutSceneImages.size()) - 1;
 
-        if (!hasPrev)
+        // 진행 가능 여부 초기화 및 가이드 리셋
+        m_canAdvance = false;
+        StopGuideTimers();
+        if (m_guideText)
         {
-            m_prevButton->StopAllAnimations();
-            m_prevButton->SetActive(false);
+            m_guideAlpha = 0.0f;
+            m_guideText->SetOpacity(0.0f);
         }
-        else
-        {
-            m_prevButton->SetActive(true);
-        }
-
-        // 마지막 컷에서는 Next 버튼 텍스트를 "시작하기"로 변경하고 버튼은 활성 유지
-        m_nextButton->SetActive(true);
-        if (isLast)
-        {
-            m_nextText->SetText(L"시작하기");
-        }
-        else
-        {
-            m_nextText->SetText(L"다음");
-        }
-        // 텍스트 변경에 따라 중앙 정렬 재계산
-        FVector2 nextTextSize = m_nextText->GetRelativeSize();
-        m_nextText->SetRelativePosition(CoordHelper::RatioCoordToScreen(nextTextSize, FVector2(-0.5f, -0.5f)));
+        // 2초 뒤 가이드 출력
+        ShowGuideAfterDelay();
     }
 
 	OutputDebugStringW((L"Showing cutscene image: " + std::to_wstring(index + 1) + L"/" + std::to_wstring(m_cutSceneImages.size()) + L"\n").c_str());
@@ -423,6 +391,79 @@ void CutSceneWidgetScript::SkipCutScene()
     }
     // 자신 제거
     GetWorld()->RemoveObject(owner.Get());
+}
+
+void CutSceneWidgetScript::ShowGuideAfterDelay()
+{
+    TimerManager::GetInstance().ClearTimer(m_guideDelayTimer);
+    TimerManager::GetInstance().SetTimer(
+        m_guideDelayTimer,
+        [this]() {
+            // 2초 경과 후 가이드 페이드 인 시작 및 입력 허용
+            m_canAdvance = true;
+            StartGuideFadeIn(0.3f);
+        },
+        2.0f,
+        false,
+        2.0f
+    );
+}
+
+void CutSceneWidgetScript::StartGuideFadeIn(float durationSec)
+{
+    TimerManager::GetInstance().ClearTimer(m_guideFadeTimer);
+    m_guideAlpha = 0.0f;
+    TimerManager::GetInstance().SetTimer(
+        m_guideFadeTimer,
+        [this, durationSec]() mutable {
+            static float elapsed = 0.0f;
+            const float dt = 1.0f / 60.0f;
+            elapsed += dt;
+            float t = elapsed / durationSec;
+            if (t > 1.0f) t = 1.0f;
+            m_guideAlpha = t;
+            SetGuideAlpha(m_guideAlpha);
+            if (t >= 1.0f)
+            {
+                TimerManager::GetInstance().ClearTimer(m_guideFadeTimer);
+                // 페이드 인 완료 후 반짝임 시작
+                elapsed = 0.0f;
+            }
+        },
+        0.0f,
+        true,
+        0.0f
+    );
+}
+
+void CutSceneWidgetScript::StartGuideBlink(float intervalSec)
+{
+    TimerManager::GetInstance().ClearTimer(m_guideBlinkTimer);
+    // 0.5초마다 토글
+    TimerManager::GetInstance().SetTimer(
+        m_guideBlinkTimer,
+        [this, visible = true]() mutable {
+            visible = !visible;
+            SetGuideAlpha(visible ? 1.0f : 0.3f);
+        },
+        intervalSec,
+        true,
+        intervalSec
+    );
+}
+
+void CutSceneWidgetScript::StopGuideTimers()
+{
+    TimerManager::GetInstance().ClearTimer(m_guideDelayTimer);
+    TimerManager::GetInstance().ClearTimer(m_guideFadeTimer);
+    TimerManager::GetInstance().ClearTimer(m_guideBlinkTimer);
+}
+
+void CutSceneWidgetScript::SetGuideAlpha(float a01)
+{
+    if (!m_guideText) return;
+    if (a01 < 0.f) a01 = 0.f; if (a01 > 1.f) a01 = 1.f;
+    m_guideText->SetOpacity(a01);
 }
 
 // 모든 관련 스프라이트에 동일 Opacity 적용 (배경 + 오버레이)
