@@ -37,6 +37,7 @@ public:
 	LARGE_INTEGER prevCounter;
 	LARGE_INTEGER currentCounter;
 	LARGE_INTEGER initCounter;
+	float unscaledDeltaTime{0};
 	float deltaTime{0};
 	float fixedTime{0};
 

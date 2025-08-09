@@ -11,7 +11,7 @@ void TimerManager::Initialize()
 void TimerManager::UpdateTime()
 {
 	QueryPerformanceCounter(&currentCounter);
-	float unscaledDeltaTime = static_cast<float>(currentCounter.QuadPart - prevCounter.QuadPart) / frequency.QuadPart;
+	unscaledDeltaTime = static_cast<float>(currentCounter.QuadPart - prevCounter.QuadPart) / frequency.QuadPart;
 	deltaTime = unscaledDeltaTime * globalTimeScale;
 	prevCounter = currentCounter;
 

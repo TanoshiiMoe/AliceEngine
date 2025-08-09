@@ -12,7 +12,7 @@ GamePlayManager::GamePlayManager()
 
     // 초기 타임스케일 보정
     m_PrevTimeScale = TimerManager::GetInstance().GetGlobalTimeScale();
-    if (m_PrevTimeScale <= 0.0f) m_PrevTimeScale = 1.0f;
+    if (m_PrevTimeScale <= 0.0f) TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
 }
 
 GamePlayManager::~GamePlayManager()
