@@ -9,6 +9,7 @@
 #include <Component/InputComponent.h>
 #include <GameManager/GamePlayManager.h>
 #include <Helpers/Logger.h>
+#include <Scripts/Widget/CutSceneWidgetScript.h>
 
 void TitleScene::Initialize()
 {
@@ -37,7 +38,8 @@ void TitleScene::OnEnter()
 
 	m_UI = NewObject<gameObject>(L"UI");
 	//m_UI->AddComponent<TitleUIScript>();
-	m_UI->AddComponent<TitleWidgetScript>();
+	//m_UI->AddComponent<TitleWidgetScript>();
+	m_UI->AddComponent<CutSceneWidgetScript>();
 }
 
 void TitleScene::OnExit()

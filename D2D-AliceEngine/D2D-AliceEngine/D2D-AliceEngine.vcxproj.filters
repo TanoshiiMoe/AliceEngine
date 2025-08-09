@@ -253,6 +253,9 @@
     <ClInclude Include="GameManager\GamePlayManager.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Widget\CutSceneWidgetScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -412,5 +415,6 @@
       <Filter>Scripts\Legacy</Filter>
     </ClCompile>
     <ClCompile Include="GameManager\GamePlayManager.cpp" />
+    <ClCompile Include="Scripts\Widget\CutSceneWidgetScript.cpp" />
   </ItemGroup>
 </Project>
