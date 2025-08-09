@@ -71,6 +71,9 @@ public:
 
 	ETextSource m_eTextSource = ETextSource::System;
 	std::wstring m_filePath;
+    // 커스텀 폰트를 프로세스에 Private로 등록했는지 추적
+    std::wstring m_fontFileAbsolutePath;
+    bool m_privateFontLoaded = false;
 private:
 	bool bIgnoreCameraTransform = false;
 };
