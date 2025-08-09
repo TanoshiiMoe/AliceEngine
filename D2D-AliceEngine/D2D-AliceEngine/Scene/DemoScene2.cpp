@@ -17,6 +17,7 @@
 #include "../Scripts/Legacy/CameraController.h"
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Spine2D/SpineScript.h>
+#include <Component/ProgressBarComponent.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -36,6 +37,27 @@ void DemoScene2::Release()
 void DemoScene2::Update()
 {
 	__super::Update();
+    // ProgressBar 테스트 애니메이션 (1 -> 0 반복)
+    static ProgressBarComponent* s_progress = nullptr;
+    static bool s_initialized = false;
+    static float s_p = 1.0f;
+    static float s_dir = -1.0f;
+
+    if (!s_initialized)
+    {
+        if (auto go = FindObjectByName<gameObject>(L"ProgressBarTest"))
+        {
+            s_progress = go->GetComponent<ProgressBarComponent>();
+            s_initialized = (s_progress != nullptr);
+        }
+    }
+    if (s_progress)
+    {
+        s_p += s_dir * 0.01f; // 약 2초 주기로 변화
+        if (s_p <= 0.0f) { s_p = 0.0f; s_dir = 1.0f; }
+        if (s_p >= 1.0f) { s_p = 1.0f; s_dir = -1.0f; }
+        s_progress->SetProgress(s_p);
+    }
 }
 
 void DemoScene2::OnEnter()
@@ -149,6 +171,21 @@ void DemoScene2::OnEnter()
 
 	m_aru->AddComponent<InputComponent>()->SetAction(m_aru->GetHandle(), [this]() { aruInput(); });
 	m_aru2->AddComponent<InputComponent>()->SetAction(m_aru2->GetHandle(), [this]() { aru2Input(); });
+	m_aru2->SetScale(FVector2(0.4f, 0.4f));
+	m_aru2->SetPosition(FVector2(400, 100));
+
+    // ProgressBar 테스트 생성
+    if (auto go = NewObject<gameObject>(L"ProgressBarTest"))
+    {
+        auto* bar = go->AddComponent<ProgressBarComponent>();
+        bar->SetDrawType(Define::EDrawType::ScreenSpace);
+        bar->LoadData(L"UI\\UI_ToOption.png");
+        bar->SetType(EProgressBarType::Linear);
+        bar->SetRelativeScale(FVector2(0.8f, 0.8f));
+        bar->SetRelativePosition(FVector2(500, 300));
+        bar->SetProgress(1.0f);
+		bar->m_layer = 30000;
+    }
 }
 
 void DemoScene2::OnExit()

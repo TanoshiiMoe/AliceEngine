@@ -276,6 +276,7 @@
     <ClInclude Include="Helpers\Logger.h">
       <Filter>Helper</Filter>
     </ClInclude>
+    <ClInclude Include="Component\ProgressBarComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -485,6 +486,7 @@
     <ClCompile Include="Helpers\Logger.cpp">
       <Filter>Helper</Filter>
     </ClCompile>
+    <ClCompile Include="Component\ProgressBarComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GradationShader.hlsl">
