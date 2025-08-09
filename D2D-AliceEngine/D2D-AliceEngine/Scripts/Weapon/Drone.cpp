@@ -76,7 +76,20 @@ void Drone::Update(const float& deltaSeconds)
 	FVector2 dir = worldMousePos - bodyPos;
 	FVector2 dirNormal = dir.Normalize();
 	
-	Floating(deltaSeconds, dirNormal);
+    // 반동 복귀 처리 (총을 안 쏘는 동안 서서히 원래 위치로)
+    if (recoilOffset.x != 0.0f || recoilOffset.y != 0.0f)
+    {
+        FVector2 toOrigin = FVector2(0.0f, 0.0f) - recoilOffset;
+        float len = toOrigin.Length();
+        if (len > 0.0f)
+        {
+            FVector2 step = toOrigin.Normalize() * (recoilReturnSpeed * deltaSeconds);
+            if (step.Length() >= len) recoilOffset = FVector2(0.0f, 0.0f);
+            else recoilOffset = recoilOffset + step;
+        }
+    }
+
+    Floating(deltaSeconds, dirNormal);
 	AttackAction(bodyPos, worldMousePos, dirNormal);
 }
 
@@ -107,7 +120,8 @@ void Drone::Floating(const float& deltaSeconds, const FVector2& dirNormal)
 	// 오브젝트 Y좌표 적용
 	auto pos = body->GetRelativePosition();
 	pos.y = currY;
-	body->SetRelativePosition(initBodyPos + FVector2(0, pos.y));
+    // 반동 오프셋을 최종 위치에 가산
+    body->SetRelativePosition(initBodyPos + FVector2(0, pos.y) + recoilOffset);
 }
 
 void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal)
@@ -129,6 +143,19 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 
 			const FVector2 speed{ currentSpeed, 0.0f };
 			BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed, droneType);
+
+			// Player 반동 적용: 발사 방향의 반대쪽으로 recoilImpulse 누적 (최대거리 제한)
+			{
+				FVector2 fireDir = (worldMousePos - bodyPos).Normalize();
+				if (fireDir.Length() > 0.0f)
+				{
+					recoilDir = fireDir * -1.0f;
+					FVector2 candidate = recoilOffset + recoilDir * recoilImpulse;
+					if (candidate.Length() > recoilMaxDistance)
+						candidate = candidate.Normalize() * recoilMaxDistance;
+					recoilOffset = candidate;
+				}
+			}
 
 			bCanFire = false;
 		}
@@ -276,8 +303,19 @@ void Drone::FireOneBurstShot()
 
 	const FVector2 speed{ currentSpeed, 0.0f };
 
-	// 발사
+    // 발사
 	BulletManager::GetInstance().FireBullet(bodyPos, aimedTarget, speed, droneType);
+
+    // 반동 업데이트: 발사 방향의 반대편으로 recoilImpulse만큼 이동 누적 (최대 반경 제한)
+    FVector2 fireDir = (aimedTarget - bodyPos).Normalize();
+    if (fireDir.Length() > 0.0f)
+    {
+        recoilDir = fireDir * -1.0f;
+        FVector2 candidate = recoilOffset + recoilDir * recoilImpulse;
+        if (candidate.Length() > recoilMaxDistance)
+            candidate = candidate.Normalize() * recoilMaxDistance;
+        recoilOffset = candidate;
+    }
 
 	// 남은 발 관리 및 다음 타이머
     if (--burstRemaining <= 0)

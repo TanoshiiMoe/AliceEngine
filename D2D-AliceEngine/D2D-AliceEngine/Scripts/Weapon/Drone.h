@@ -74,6 +74,13 @@ public:
 	float fadeDuration = 1.0f;  // 페이드 시간(초)
 	float fadeElapsed  = 0.0f;  // 진행 시간(초)
 
+	// Recoil(반동) 파라미터
+	FVector2 recoilOffset = FVector2(0.0f, 0.0f);   // 현재 누적 반동 오프셋 (발사 방향의 반대)
+	FVector2 recoilDir    = FVector2(0.0f, 0.0f);   // 마지막 반동 방향(단위 벡터)
+	float    recoilMaxDistance = 24.0f;             // 최대 밀려나는 거리(px)
+	float    recoilImpulse     = 6.0f;              // 1회 발사 시 추가되는 반동 거리(px)
+	float    recoilReturnSpeed = 22.0f;             // 원위치 복귀 속도(px/s)
+
 	// 위아래 진폭과 속도
 	float elapsed = 0.0f;
 	float duration = 1.0f; // 위→아래 한 번 이동하는데 걸리는 시간
