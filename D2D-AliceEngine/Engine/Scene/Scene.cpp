@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Scene.h"
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
@@ -53,13 +53,13 @@ void Scene::Release()
 	PhysicsSystem::GetInstance().Release();
 }
 
-// Ã¹ ÇÁ·¹ÀÓ¿¡¼­ ScriptSystemÀÇ Start¸¦ call
+// ì²« í”„ë ˆìž„ì—ì„œ ScriptSystemì˜ Startë¥¼ call
 void Scene::Update()
 {
 	UpdateTaskManager::GetInstance().StartFrame();
 	UpdateTaskManager::GetInstance().TickAll();
 	VisibleMemoryInfo();
-	FlushPendingRemovals(); // ÇÁ·¹ÀÓ ³¡¿¡¼­ »èÁ¦ Ã³¸®
+	FlushPendingRemovals(); // í”„ë ˆìž„ ëì—ì„œ ì‚­ì œ ì²˜ë¦¬
 	UpdateTaskManager::GetInstance().EndFrame();
 }
 
@@ -112,7 +112,7 @@ bool Scene::RemoveObjectByName(const std::wstring& objectName)
 	if (it == m_nameToUUIDs.end() || it->second.empty())
 		return false;
 
-	m_pendingDeleteUUIDs.insert(*it->second.begin()); // ÇÏ³ª¸¸ »èÁ¦
+	m_pendingDeleteUUIDs.insert(*it->second.begin()); // í•˜ë‚˜ë§Œ ì‚­ì œ
 	return true;
 }
 
@@ -182,7 +182,7 @@ gameObject* Scene::Instantiate(gameObject* obj)
 				{
 					ClassManager::GetInstance().ReplicateAllMembers(createdComp, objComp);
 				}
-				// AddComponentÀÇ ·ÎÁ÷À» ¿©±â¿¡ ³ÖÀ¸¸é µË´Ï´Ù.
+				// AddComponentì˜ ë¡œì§ì„ ì—¬ê¸°ì— ë„£ìœ¼ë©´ ë©ë‹ˆë‹¤.
 				createdComp->Initialize();
 				createdComp->SetOwner(target);
 				target->m_components.push_back(createdComp);

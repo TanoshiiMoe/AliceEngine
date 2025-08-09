@@ -18,6 +18,7 @@
 #include <Component/Collider.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Bike/BikeStatScript.h>
+#include <Prefab/Enemy/Core/Car.h>
 
 void Bullet::Initialize()
 {
@@ -188,10 +189,6 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			{
 				bs->m_bikeStat->DecreaseAbility("HP", 5);
 			}
-			else
-			{
-				GetWorld()->RemoveObject(collider->GetOwner());
-			}
 			GetWorld()->RemoveObject(GetOwner());
 		}
 		break;
@@ -201,10 +198,6 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 			{
 				bs->m_bikeStat->DecreaseAbility("HP", 2);
-			}
-			else
-			{
-				GetWorld()->RemoveObject(collider->GetOwner());
 			}
 			GetWorld()->RemoveObject(GetOwner());
 		}

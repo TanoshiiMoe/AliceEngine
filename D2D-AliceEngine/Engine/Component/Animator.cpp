@@ -68,6 +68,7 @@ void Animator::Render()
 {
 	if (sheet.get() == nullptr) return;
 	if (m_bitmap == nullptr) return;
+    if (!m_visible) return;
 	if (curAnimationClip != nextAnimationClip) return;
 	auto& sprite = sheet.get()->sprites[animationClips[curAnimationClip]->frames[m_curFrame].spriteSheetIndex];
 

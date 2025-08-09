@@ -54,8 +54,19 @@ void Drone::FixedUpdate(const float& deltaSeconds)
 void Drone::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	if (!GamePlayManager::GetInstance().IsPlaying()) return;
-	if (bWaitForSecond) return;
+    if (!GamePlayManager::GetInstance().IsPlaying()) return;
+    if (bDelayDestroying) {
+        // 페이드 아웃 진행 (Update 기반, 타이머는 삭제만 담당)
+        if (body) {
+            fadeElapsed += deltaSeconds;
+            float t = fadeElapsed / fadeDuration;
+            if (t > 1.0f) t = 1.0f;
+            body->SetOpacity(1.0f - t);
+            if (arm) arm->SetOpacity(1.0f - t);
+        }
+        return; // 소멸 중에는 로직 중단
+    }
+    if (bWaitForSecond) return;
 
 	// 여기에 Update에 대한 로직 작성
 	// Skew랑은 상관없음.
@@ -274,6 +285,16 @@ void Drone::FireOneBurstShot()
         // 더 이상 남은 발이 없으면 반복 타이머 중지
         TimerManager::GetInstance().ClearTimer(burstTimer);
     }
+}
+
+void Drone::DelayDestroy()
+{
+    if (bDelayDestroying) return;
+    bDelayDestroying = true;
+  
+    bCanFire = false; // 더 이상 공격 불가
+    TimerManager::GetInstance().ClearTimer(burstTimer); // 즉시 잔여 타이머 정리
+    fadeElapsed = 0.0f;  // 페이드 파라미터 초기화
 }
 
 void Drone::LateUpdate(const float& deltaSeconds)

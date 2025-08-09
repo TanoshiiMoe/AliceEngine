@@ -29,7 +29,7 @@ void EnemyBike::OnStart()
 		anim->Play();
 		anim->OnStart();
 
-		// ½ºÄÉÀÏ Á¶Á¤
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		anim->SetRelativeScale(scale);
 
 		float height = anim->GetSpriteSizeY() * scale.y;

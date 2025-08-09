@@ -41,6 +41,7 @@ private:
 	TextRenderComponent* m_nextText;
 	TextRenderComponent* m_prevText;
 	TextRenderComponent* m_skipText;
+    TextRenderComponent* m_guideText{ nullptr };
 	AudioComponent* m_uiSound;
 
 	// 컷씬 관련
@@ -61,6 +62,11 @@ private:
 	void NextImage();
 	void PrevImage();
 	void SkipCutScene();
+    void ShowGuideAfterDelay();
+    void StartGuideFadeIn(float durationSec = 0.3f);
+    void StartGuideBlink(float intervalSec = 0.5f);
+    void StopGuideTimers();
+    void SetGuideAlpha(float a01);
 
     void ClearOverlays();
 
@@ -78,4 +84,11 @@ private:
     float m_transitionHalf{ 0.3f };
     int m_targetIndex{ -1 };
     int m_relativeLayer{ 50000 };
+
+    // Guide control
+    bool m_canAdvance{ false };
+    float m_guideAlpha{ 0.f };
+    FTimerHandle m_guideDelayTimer;
+    FTimerHandle m_guideFadeTimer;
+    FTimerHandle m_guideBlinkTimer;
 };
