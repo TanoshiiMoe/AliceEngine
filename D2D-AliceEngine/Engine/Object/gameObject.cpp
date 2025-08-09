@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "gameObject.h"
 #include <Math/Transform.h>
 #include <Component/SpriteRenderer.h>
@@ -16,16 +16,22 @@ gameObject::gameObject(const FVector2& position = FVector2(0.0f), const float& r
 
 gameObject::~gameObject()
 {
-	for (auto& component : m_components)
-	{
-		if (WeakObjectPtr<Component> comp = component)
-		{
-			comp.lock()->OnDestroy();
-			delete component;
-		}
-	}
-	m_components.clear();
-	m_transformComponent.reset();
+    // ëª¨ë“  ì»´í¬ë„ŒíŠ¸ì— ëŒ€í•´ OnDestroyë¥¼ ë¨¼ì € í˜¸ì¶œ
+    for (auto& component : m_components)
+    {
+        if (WeakObjectPtr<Component> comp = component)
+        {
+            comp.lock()->OnDestroy();
+        }
+    }
+
+    // ê·¸ ë‹¤ìŒ ì „ë¶€ ì‚­ì œ
+    for (auto& component : m_components)
+    {
+        delete component;
+    }
+    m_components.clear();
+    m_transformComponent.reset();
 }
 
 void gameObject::OnStart()
@@ -92,12 +98,12 @@ void gameObject::RemoveFromParent()
 {
 	if (auto transformComp = m_transformComponent.lock())
 	{
-		// ºÎ¸ğ·ÎºÎÅÍ ÀÚ½ÅÀ» Á¦°Å
+		// éº?ï§â‘¤ì¤ˆéº??ê½£ ?ì˜„?ë–Š?ì“£ ?ì £å«„?
 		transformComp->RemoveFromParent();
 	}
 }
 
-// ÁÂÇ¥, ½ºÄÉÀÏ, È¸Àü °ü·Ã ÇÔ¼öµé
+// é†«ëš°ëª´, ?ë’ªè€³??ì”ª, ?ì‰¶?ìŸ¾ æ„¿??ì ´ ?ë¸¿?ë‹”?ë±¾
 void gameObject::SetPosition(const FVector2& _pos)
 {
 	if (auto transformComp = m_transformComponent.lock())
