@@ -114,10 +114,10 @@ void CutSceneWidgetScript::OnStart()
 
     // Prev 텍스트 주석 처리
 
+	m_skipText->SetFontSize(45.0f);
 	m_skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	m_skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	m_skipText->SetText(L"건너뛰기");
-	m_skipText->SetFontSize(45.0f);
 	m_skipText->SetColor(FColor::White);
 	FVector2 skipTextSize = m_skipText->GetRelativeSize();
 	m_skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextSize, FVector2(-0.5, -0.5)));
@@ -127,14 +127,14 @@ void CutSceneWidgetScript::OnStart()
 
     // 안내 문구 생성 (초기 비가시, 스킵 버튼 오른쪽에 배치)
     m_guideText = m_owner->AddComponent<TextRenderComponent>();
+    m_guideText->SetFontSize(40.0f);
     m_guideText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
     m_guideText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
     m_guideText->SetText(L"엔터를 눌러 다음으로 넘어가세요");
-    m_guideText->SetFontSize(40.0f);
     m_guideText->SetColor(FColor::White);
     FVector2 guideSize = m_guideText->GetRelativeSize();
     // 스킵 버튼 오른쪽(오프셋 220,0)
-    m_guideText->SetRelativePosition(FVector2(340, -10));
+    m_guideText->SetRelativePosition(FVector2(340, -20));
     m_guideText->m_layer = 101 + m_relativeLayer;
     m_guideText->RemoveFromParent();
     m_skipButton->AddChildComponent(m_guideText);
