@@ -1,4 +1,4 @@
-#include "BikeStatScript.h"
+ï»¿#include "BikeStatScript.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -15,6 +15,8 @@
 #include <Manager/TimerManager.h>
 #include <Component/Collider.h>
 #include <Manager/D2DRenderManager.h>
+#include <Prefab/Enemy/Core/Car.h>
+#include <Scripts/Weapon/Drone.h>
 
 void BikeStatScript::Initialize()
 {
@@ -31,21 +33,21 @@ void BikeStatScript::Initialize()
 void BikeStatScript::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void BikeStatScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	// 
-	// ¸¶¿ì½º Å¬¸¯ °¨Áö
+	// ë§ˆìš°ìŠ¤ í´ë¦­ ê°ì§€
 
 	//if (Input::IsMouseLeftDown() && bCanFire)
 	//{
 	//	FVector2 ownerPos = owner->GetPosition();
-	//	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ¸¶¿ì½ºÀÇ ½ÇÁ¦ ¿ùµå ÁÂÇ¥
+	//	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ë§ˆìš°ìŠ¤ì˜ ì‹¤ì œ ì›”ë“œ ì¢Œí‘œ
 	//	BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, 300);
 	//	bCanFire = false;
 	//}
@@ -54,7 +56,7 @@ void BikeStatScript::Update(const float& deltaSeconds)
 void BikeStatScript::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -70,14 +72,14 @@ void BikeStatScript::OnStart()
 	//	[this]()
 	//	{
 	//		bCanFire = true;
-	//		OutputDebugStringW(L"¶÷´Ù Å¸ÀÌ¸Ó È£ÃâµÊ!\n");
+	//		OutputDebugStringW(L"ëŒë‹¤ íƒ€ì´ë¨¸ í˜¸ì¶œë¨!\n");
 	//	},
 	//	0.1f,
 	//	true,
 	//	0.0f
 	//);
 
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	//m_BikeStat = GetOwner();
 	owner->AddComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
 	BoxComponent* box = owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetRelativeSize(), FColor::Blue);
@@ -85,7 +87,7 @@ void BikeStatScript::OnStart()
 	box->SetIgnoreOwnerScale(false);
 
 	/*
-	* °ÔÀÓ¿ÀºêÁ§Æ®¿¡ TextRenderComponent¸¦ ºÙÀÌ´Â ¿¹½Ã
+	* ê²Œì„ì˜¤ë¸Œì íŠ¸ì— TextRenderComponentë¥¼ ë¶™ì´ëŠ” ì˜ˆì‹œ
 	*/
 
 	TextRenderComponent* m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
@@ -100,7 +102,7 @@ void BikeStatScript::OnStart()
 	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
 
 	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"Á÷ÀüÃ¼·Â");
+	m_BikeStatTextCmp->SetText(L"ì§ì „ì²´ë ¥");
 	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
@@ -118,7 +120,7 @@ void BikeStatScript::OnStart()
 	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
 
 	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"ÇöÀçÃ¼·Â");
+	m_BikeStatTextCmp->SetText(L"í˜„ì¬ì²´ë ¥");
 	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
 	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
 	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
@@ -137,16 +139,16 @@ void BikeStatScript::OnStart()
 
 
 	/*
-	* Ä¿½ºÅÒ ±¸Á¶Ã¼·Î µ¨¸®°ÔÀÌÆ®¸¦ ¹ÙÀÎµù ÇÏ´Â ¿¹Á¦
+	* ì»¤ìŠ¤í…€ êµ¬ì¡°ì²´ë¡œ ë¸ë¦¬ê²Œì´íŠ¸ë¥¼ ë°”ì¸ë”© í•˜ëŠ” ì˜ˆì œ
 	*/
 	m_bikeStat = owner->AddComponent<StatComponent<BikeStat>>();
 	m_bikeStat->SetStat("HP", 30);
 	m_bikeStat->SetStat("MAXHP", 30);
 	m_bikeStat->SetStat("MP", 200);
-	m_BikeNameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", m_bikeStat->GetStat("HP"));
-	m_BikeNameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", m_bikeStat->GetStat("HP"));
-	m_BikeNameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", m_bikeStat->GetStat("MAXHP"));
-	m_BikeNameTexts[4]->SetTextFormat(L"¹èÅÍ¸® : ", m_bikeStat->GetStat("BATTERY"));
+	m_BikeNameTexts[1]->SetTextFormat(L"ì§ì „ ì²´ë ¥ : ", m_bikeStat->GetStat("HP"));
+	m_BikeNameTexts[2]->SetTextFormat(L"í˜„ì¬ ì²´ë ¥ : ", m_bikeStat->GetStat("HP"));
+	m_BikeNameTexts[3]->SetTextFormat(L"ìµœëŒ€ ì²´ë ¥ : ", m_bikeStat->GetStat("MAXHP"));
+	m_BikeNameTexts[4]->SetTextFormat(L"ë°°í„°ë¦¬ : ", m_bikeStat->GetStat("BATTERY"));
 
 	widgetSize = m_BikeNameTexts[1]->GetRelativeSize();
 	m_BikeNameTexts[1]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 1.0)));
@@ -159,28 +161,33 @@ void BikeStatScript::OnStart()
 
 	m_bikeStat->OnChangeStatMap["HP"].Add(m_bikeStat->GetHandle(), [this](float oldVal, float newVal)
 		{
-			if (newVal <= 0)	// Á×´Â ½ÃÁ¡
+			if (newVal <= 0)	// ì£½ëŠ” ì‹œì 
 			{ 
 				owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
-				owner->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
+				//owner->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
 				owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
 				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
-				GetWorld()->RemoveObject(owner.Get());
+
+				if (auto car = owner->GetComponent<Car>())
+					car->DelayDestroy();
+				if (auto drone = owner->GetComponent<Drone>())
+					drone->DelayDestroy();
+				//GetWorld()->RemoveObject(owner.Get());
 				return;
 			}
-			//else if (oldVal <= 0)	// ºÎÈ°ÇÏ´Â ½ÃÁ¡
+			//else if (oldVal <= 0)	// ë¶€í™œí•˜ëŠ” ì‹œì 
 			//{
 				//owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
 				//owner->GetComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
 				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
 			//}
-			m_BikeNameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", oldVal);
-			m_BikeNameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", newVal);
+			m_BikeNameTexts[1]->SetTextFormat(L"ì§ì „ ì²´ë ¥ : ", oldVal);
+			m_BikeNameTexts[2]->SetTextFormat(L"í˜„ì¬ ì²´ë ¥ : ", newVal);
 		});;
 
 	m_bikeStat->OnChangeStatMap["MAXHP"].Add(owner->GetHandle(), [this](float oldVal, float newVal)
 		{
-			m_BikeNameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", newVal);
+			m_BikeNameTexts[3]->SetTextFormat(L"ìµœëŒ€ ì²´ë ¥ : ", newVal);
 		});;
 
 	m_bikeStat->OnChangeStatMap["MP"].Add(owner->GetHandle(), [this](float oldVal, float newVal)
@@ -193,7 +200,7 @@ void BikeStatScript::OnStart()
 
 void BikeStatScript::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	TimerManager::GetInstance().ClearTimer(timer);
 }
 
@@ -204,5 +211,5 @@ void BikeStatScript::OnDestroy()
 
 void BikeStatScript::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
