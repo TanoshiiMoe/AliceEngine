@@ -93,20 +93,26 @@ void TitleWidgetScript::OnStart()
 	float bgmVolume = AudioManager::GetInstance().GetBGMVolume();
 	float sfxVolume = AudioManager::GetInstance().GetSFXVolume();
 
-	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
-	soundControl->LoadData(L"UI\\UI_SoundControl.png");
-	soundControl->m_layer = -1000;
-	soundControl->SetRelativeScale(soundUISize);
-	soundControl->SetDrawType(EDrawType::ScreenSpace);
-	soundControl->SetRelativePosition(FVector2(300, 45));
+    auto soundControl = m_owner->AddComponent<SpriteRenderer>();
+    soundControl->LoadData(L"UI\\UI_SoundControl.png");
+    soundControl->m_layer = -1000;
+    soundControl->SetRelativeScale(soundUISize);
+    soundControl->SetDrawType(EDrawType::ScreenSpace);
+    // 중앙 배치
+    soundControl->SetRelativePosition(FVector2(0.f, 0.f));
 
-	auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
+    auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
 	bgmControl->LoadData(L"UI\\BGMControl.png");
 	bgmControl->m_layer = -1000;
 	bgmControl->SetDrawType(EDrawType::ScreenSpace);
 	bgmControl->SetRelativeScale(FVector2(bgmVolume * soundUISize, soundUISize));
+    // 중앙 기준 위쪽 라인 위치
+    {
+        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
+        bgmControl->SetRelativePosition(FVector2(0.f, -panelH * 0.25f));
+    }
 
-	auto sfxControl = m_owner->AddComponent<SpriteRenderer>();
+    auto sfxControl = m_owner->AddComponent<SpriteRenderer>();
 	sfxControl->LoadData(L"UI\\SFXControl.png");
 	sfxControl->m_layer = -1000;
 	sfxControl->SetDrawType(EDrawType::ScreenSpace);
@@ -115,7 +121,12 @@ void TitleWidgetScript::OnStart()
 	sfxControl->SetRelativePosition(FVector2(finalPos, -SCREEN_HEIGHT / 2.0f - 10));*/
 	//sfxControl->SetRelativeScale(FVector2(bgm->GetVolume(SoundType::SFX) * soundUISize, soundUISize));
 	
-	sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX() * sfxVolume, sfxControl->GetBitmapSizeY());
+    sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX() * sfxVolume, sfxControl->GetBitmapSizeY());
+    // 중앙 기준 아래쪽 라인 위치
+    {
+        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
+        sfxControl->SetRelativePosition(FVector2(0.f, panelH * 0.25f));
+    }
 
 	auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
 	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
@@ -215,18 +226,31 @@ void TitleWidgetScript::OnStart()
 	smallClose->LoadData(Define::EButtonState::Hover, L"UI\\Close.png");
 	smallClose->LoadData(Define::EButtonState::Pressed, L"UI\\Close.png");
 	smallClose->LoadData(Define::EButtonState::Release, L"UI\\Close.png");
-	smallClose->SetDrawType(EDrawType::ScreenSpace);
-	smallClose->SetRelativeScale(0.43f);
-	smallClose->SetActive(false);
-	smallClose->m_layer = -1000;
-	smallClose->SetRelativePosition(FVector2(279 + soundControl->GetBitmapSizeX() / 2.0f, 68 - soundControl->GetBitmapSizeY()/ 2.0f));
+    smallClose->SetDrawType(EDrawType::ScreenSpace);
+    smallClose->SetRelativeScale(0.43f);
+    smallClose->SetActive(false);
+    smallClose->m_layer = -1000;
+    // 패널 우상단 모서리 근처에 배치
+    {
+        const float hw = soundControl->GetBitmapSizeX() * soundUISize * 0.5f;
+        const float hh = soundControl->GetBitmapSizeY() * soundUISize * 0.5f;
+        const float margin = 20.f;
+        smallClose->SetRelativePosition(FVector2(hw - margin, -hh + margin));
+    }
 
 	// ======================== soundButton
 	bgmPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
 	bgmPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
 	bgmPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundPlus_Pressed.png");
 	bgmPlusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundPlus_Idle.png");
-	bgmPlusButton->SetRelativePosition(FVector2(445, 50.7));
+    {
+        const float hw = soundControl->GetBitmapSizeX() * soundUISize * 0.5f;
+        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
+		const float marginX = 100.f;
+		const float marginY = 82.5f;
+        const float rowY = -panelH * 0.25f; // 위쪽 라인
+        bgmPlusButton->SetRelativePosition(FVector2(hw - marginX, rowY + marginY));
+    }
 	bgmPlusButton->SetActive(false);
 	bgmPlusButton->m_layer = -1000;
 
@@ -234,7 +258,13 @@ void TitleWidgetScript::OnStart()
 	bgmMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
 	bgmMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundMinus_Pressed.png");
 	bgmMinusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundMinus_Idle.png");
-	bgmMinusButton->SetRelativePosition(FVector2(164, 50.7));
+    {
+        const float hw = soundControl->GetBitmapSizeX() * soundUISize * 0.5f;
+        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
+        const float marginX = 60.f;
+        const float rowY = -panelH * 0.25f;
+        bgmMinusButton->SetRelativePosition(FVector2(-hw + marginX, rowY));
+    }
 	bgmMinusButton->SetActive(false);
 	bgmMinusButton->m_layer = -1000;
 
@@ -242,7 +272,13 @@ void TitleWidgetScript::OnStart()
 	sfxPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
 	sfxPlusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundPlus_Pressed.png");
 	sfxPlusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundPlus_Idle.png");
-	sfxPlusButton->SetRelativePosition(FVector2(445, 114));
+    {
+        const float hw = soundControl->GetBitmapSizeX() * soundUISize * 0.5f;
+        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
+        const float marginX = 60.f;
+        const float rowY = panelH * 0.25f; // 아래쪽 라인
+        sfxPlusButton->SetRelativePosition(FVector2(hw - marginX, rowY));
+    }
 	sfxPlusButton->SetActive(false);
 	sfxPlusButton->m_layer = -1000;
 
@@ -250,7 +286,13 @@ void TitleWidgetScript::OnStart()
 	sfxMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
 	sfxMinusButton->LoadData(Define::EButtonState::Pressed, L"UI\\SoundMinus_Pressed.png");
 	sfxMinusButton->LoadData(Define::EButtonState::Release, L"UI\\SoundMinus_Idle.png");
-	sfxMinusButton->SetRelativePosition(FVector2(164, 114));
+    {
+        const float hw = soundControl->GetBitmapSizeX() * soundUISize * 0.5f;
+        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
+        const float marginX = 60.f;
+        const float rowY = panelH * 0.25f;
+        sfxMinusButton->SetRelativePosition(FVector2(-hw + marginX, rowY));
+    }
 	sfxMinusButton->SetActive(false);
 	sfxMinusButton->m_layer = -1000;
 

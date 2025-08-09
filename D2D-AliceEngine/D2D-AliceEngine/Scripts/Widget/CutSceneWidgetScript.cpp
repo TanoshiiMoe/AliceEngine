@@ -31,18 +31,24 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 
 	// 키보드 입력으로도 조작 가능
-	if (Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_SPACE))
+    if (!m_isTransitioning && (Input::IsKeyDown(VK_RIGHT) || Input::IsKeyDown(VK_SPACE)))
 	{
 		NextImage();
 	}
-	else if (Input::IsKeyDown(VK_LEFT))
+    else if (!m_isTransitioning && Input::IsKeyDown(VK_LEFT))
 	{
 		PrevImage();
 	}
-	else if (Input::IsKeyDown(VK_ESCAPE))
+    else if (!m_isTransitioning && Input::IsKeyDown(VK_ESCAPE))
 	{
 		SkipCutScene();
 	}
+
+    // 진행 중인 전환 스텝 처리
+    if (m_isTransitioning)
+    {
+        StepTransition(deltaSeconds);
+    }
 }
 
 void CutSceneWidgetScript::Awake()
@@ -73,9 +79,16 @@ void CutSceneWidgetScript::OnStart()
 	m_uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
 	m_uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);
 
-	m_background->SetDrawType(Define::EDrawType::ScreenSpace);
-	m_background->SetRelativePosition(FVector2(0, 0));
-	m_background->m_layer = 0;
+    m_background->SetDrawType(Define::EDrawType::ScreenSpace);
+    m_background->SetRelativePosition(FVector2(0, 0));
+    // 배경 사이즈를 원하는 값으로 지정 (예: 1920x1080)
+    // SpriteRenderer 엔진 전역 변경 없이, 여기서 스케일을 직접 계산해 적용
+    // 원본 비트맵 크기 대비 목표 픽셀 크기로 스케일을 정합니다.
+    const float targetW = 1920.f;
+    const float targetH = 1080.f;
+    // 아직 비트맵이 로드되지 않았으므로, 첫 ShowImage에서 실제 스케일을 적용합니다.
+    // 임시로 layer만 설정
+    m_background->m_layer = 0;
 
 	// Next 버튼 설정
 	m_nextButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -257,8 +270,43 @@ void CutSceneWidgetScript::ShowImage(int index)
 
 	m_currentImageIndex = index;
 
-	// 배경 이미지 변경 - SpriteRenderer가 자동으로 화면에 맞게 조정
-	m_background->LoadData(m_cutSceneImages[index]);
+    // 배경 이미지 변경하고 원하는 픽셀 사이즈(1920x1080)로 스케일 적용
+    m_background->LoadData(m_cutSceneImages[index]);
+    {
+        const float targetW = 1920.f;
+        const float targetH = 1080.f;
+        const float bmpW = m_background->GetBitmapSizeX();
+        const float bmpH = m_background->GetBitmapSizeY();
+        if (bmpW > 0.f && bmpH > 0.f)
+        {
+            const FVector2 scale(targetW / bmpW, targetH / bmpH);
+            m_background->SetRelativeScale(scale);
+        }
+    }
+
+    // 이전 오버레이 제거
+    ClearOverlays();
+    // 해당 페이지에 등록된 추가 스프라이트 생성
+    auto it = m_pageOverlays.find(index);
+    if (it != m_pageOverlays.end())
+    {
+        for (const auto& desc : it->second)
+        {
+            auto* spr = m_owner->AddComponent<SpriteRenderer>();
+            spr->SetDrawType(Define::EDrawType::ScreenSpace);
+            spr->LoadData(desc.path);
+            // 사이즈 지정이 있으면 스케일로 적용
+            const float w = spr->GetBitmapSizeX();
+            const float h = spr->GetBitmapSizeY();
+            if (w > 0.f && h > 0.f && desc.size.x > 0.f && desc.size.y > 0.f)
+            {
+                spr->SetRelativeScale(FVector2(desc.size.x / w, desc.size.y / h));
+            }
+            spr->SetRelativePosition(desc.position);
+            spr->m_layer = desc.layer;
+            m_activeOverlays.push_back(spr);
+        }
+    }
 
 	// 버튼 활성화/비활성화 업데이트 (SetActive(false)가 자동으로 애니메이션 중지)
 	{
@@ -291,16 +339,11 @@ void CutSceneWidgetScript::ShowImage(int index)
 
 void CutSceneWidgetScript::NextImage()
 {
-	if (m_currentImageIndex < m_cutSceneImages.size() - 1)
-	{
-		ShowImage(m_currentImageIndex + 1);
-
-		// 마지막 이미지에 도달하면 Next 버튼 효과 중지
-		if (m_currentImageIndex >= m_cutSceneImages.size() - 1)
-		{
-			m_nextButton->StopAllAnimations();
-		}
-	}
+    if (m_isTransitioning) return;
+    if (m_currentImageIndex < m_cutSceneImages.size() - 1)
+    {
+        StartTransitionTo(m_currentImageIndex + 1, 0.8f);
+    }
 	else
 	{
 		// 마지막 이미지에서 다음 버튼을 누르면 컷씬 종료
@@ -310,16 +353,11 @@ void CutSceneWidgetScript::NextImage()
 
 void CutSceneWidgetScript::PrevImage()
 {
-	if (m_currentImageIndex > 0)
-	{
-		ShowImage(m_currentImageIndex - 1);
-
-		// 첫 번째 이미지에 도달하면 Prev 버튼 효과 중지
-		if (m_currentImageIndex <= 0)
-		{
-			m_prevButton->StopAllAnimations();
-		}
-	}
+    if (m_isTransitioning) return;
+    if (m_currentImageIndex > 0)
+    {
+        StartTransitionTo(m_currentImageIndex - 1, 0.8f);
+    }
 }
 
 void CutSceneWidgetScript::SkipCutScene()
@@ -327,4 +365,106 @@ void CutSceneWidgetScript::SkipCutScene()
 	// 컷씬 종료 - 다음 씬으로 이동 (예: 게임 씬 또는 타이틀 씬)
 	OutputDebugStringW(L"CutScene skipped or finished!\n");
 	SceneManager::ChangeScene(L"TitleScene"); // 또는 다른 씬으로 이동
+}
+
+// 모든 관련 스프라이트에 동일 Opacity 적용 (배경 + 오버레이)
+void CutSceneWidgetScript::ApplyOpacityToAll(float alpha)
+{
+    if (m_background) m_background->SetOpacity(alpha);
+    for (auto* spr : m_activeOverlays)
+        if (spr) spr->SetOpacity(alpha);
+}
+
+void CutSceneWidgetScript::ClearOpacityOnAll()
+{
+    if (m_background) m_background->ClearEffect();
+    for (auto* spr : m_activeOverlays)
+        if (spr) spr->ClearEffect();
+}
+
+// 페이드 아웃하고 나서 페이지 갱신 그 이후 페이드 인
+void CutSceneWidgetScript::StartTransitionTo(int targetIndex, float durationSec)
+{
+    if (targetIndex < 0 || targetIndex >= (int)m_cutSceneImages.size()) return;
+    m_isTransitioning = true;
+    m_transitionHalf = durationSec * 0.5f;
+    m_transitionElapsed = 0.f;
+    m_transitionSwitchover = false;
+    m_targetIndex = targetIndex;
+
+    // 초기 상태: 완전 가시 상태
+    ApplyOpacityToAll(1.f);
+    EnsureFadeOverlay();
+    if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = 9999; }
+}
+
+void CutSceneWidgetScript::StepTransition(float dt)
+{
+    m_transitionElapsed += dt;
+    float t = Math::Clamp(m_transitionElapsed / m_transitionHalf, 0.f, 1.f);
+    float eased = t * t * (3.f - 2.f * t);
+
+    if (!m_transitionSwitchover)
+    {
+        // 1 - 0 페이드 아웃
+        ApplyOpacityToAll(1.f - eased);
+        if (m_fadeOverlay) m_fadeOverlay->SetOpacity(eased * 0.4f);
+        if (t >= 1.f)
+        {
+            ShowImage(m_targetIndex);
+            m_transitionElapsed = 0.f;
+            m_transitionSwitchover = true;
+        }
+    }
+    else
+    {
+        // 0 - 1 페이드 인
+        ApplyOpacityToAll(eased);
+        if (m_fadeOverlay) m_fadeOverlay->SetOpacity((1.f - eased) * 0.4f);
+        if (t >= 1.f)
+        {
+            ClearOpacityOnAll();
+            if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = -1000; }
+            m_isTransitioning = false;
+            m_transitionElapsed = 0.f;
+            m_transitionSwitchover = false;
+            m_targetIndex = -1;
+        }
+    }
+}
+
+// 오버레이 관리 유틸
+void CutSceneWidgetScript::ClearOverlays()
+{
+    for (auto* spr : m_activeOverlays)
+    {
+        if (spr)
+        {
+            spr->RemoveFromParent();
+            spr->Release();
+        }
+    }
+    m_activeOverlays.clear();
+}
+
+void CutSceneWidgetScript::AddSpriteToPage(int pageIndex, const CutSpriteDesc& desc)
+{
+    m_pageOverlays[pageIndex].push_back(desc);
+}
+
+void CutSceneWidgetScript::EnsureFadeOverlay()
+{
+    if (m_fadeOverlay) return;
+    // 전체 화면을 덮는 검은 1x1 텍스처 필요: CutScene\\Black.png
+    m_fadeOverlay = m_owner->AddComponent<SpriteRenderer>();
+    m_fadeOverlay->SetDrawType(Define::EDrawType::ScreenSpace);
+    m_fadeOverlay->LoadData(L"CutScene\\Black.png");
+    const float w = m_fadeOverlay->GetBitmapSizeX();
+    const float h = m_fadeOverlay->GetBitmapSizeY();
+    if (w > 0 && h > 0)
+    {
+        m_fadeOverlay->SetRelativeScale(FVector2(Define::SCREEN_WIDTH / w, Define::SCREEN_HEIGHT / h));
+    }
+    m_fadeOverlay->SetRelativePosition(FVector2(0, 0));
+    m_fadeOverlay->m_layer = 9999;
 }
