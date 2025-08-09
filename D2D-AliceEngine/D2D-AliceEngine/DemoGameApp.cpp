@@ -14,6 +14,7 @@
 #include <Scene/KangScene/KangScene.h>
 #include <Scripts/Weapon/BulletManager.h>
 #include <GameManager/GamePlayManager.h>
+#include <Scene/EffectTestScene.h>
 
 DemoGameApp::DemoGameApp()
 {
@@ -34,11 +35,12 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
 	SceneManager::AddScene<DemoScene4>(L"HiroScene");
+	SceneManager::AddScene<EffectTestScene>(L"EffectTestScene");
 	SceneManager::AddScene<TitleScene>(L"TitleScene");		// title
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
 	SceneManager::AddScene<KangScene>(L"KangTest");
 	SceneManager::AddScene<SelectScene>(L"SelectScene");	// stage select
-	SceneManager::ChangeScene(L"aruScene");
+	SceneManager::ChangeScene(L"EffectTestScene");
 }
 
 void DemoGameApp::Run()

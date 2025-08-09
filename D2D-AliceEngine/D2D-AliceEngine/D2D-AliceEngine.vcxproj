@@ -163,6 +163,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scene\EffectTestScene.h" />
+    <ClInclude Include="Scripts\Widget\BlackOutWidgetScript.h" />
     <ClInclude Include="Scripts\Widget\CutSceneWidgetScript.h" />
     <ClInclude Include="GameManager\GamePlayManager.h" />
     <ClInclude Include="Scripts\Bike\BikeStatScript.h" />
@@ -223,8 +225,11 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
     <ClInclude Include="Scripts\TitleAudioScript.h" />
     <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
+    <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scene\EffectTestScene.cpp" />
+    <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\CutSceneWidgetScript.cpp" />
     <ClCompile Include="GameManager\GamePlayManager.cpp" />
     <ClCompile Include="Scripts\Bike\BikeStatScript.cpp" />
@@ -286,6 +291,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\TitleAudioScript.cpp" />
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
     <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
