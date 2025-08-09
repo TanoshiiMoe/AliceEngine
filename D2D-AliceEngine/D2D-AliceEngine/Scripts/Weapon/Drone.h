@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/ScriptComponent.h>
 #include <Manager/TimerManager.h>
 
@@ -19,7 +19,8 @@ struct FDroneSpritePath
 enum class EDroneType
 {
 	Player,
-	Enemy
+	Enemy,
+	Boss
 };
 class gameObject;
 class SpriteRenderer;
@@ -34,6 +35,7 @@ public:
 	void Update(const float& deltaSeconds) override;
 	void Floating(const float& deltaSeconds, const FVector2& dirNormal);
 	void AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal);
+	void FireOneBurstShot();
 	void LateUpdate(const float& deltaSeconds);
 
 	virtual void Awake() override;
@@ -66,17 +68,23 @@ public:
 	bool bCanFire = true;
 	bool bWaitForSecond = true;
 
-	// À§¾Æ·¡ ÁøÆø°ú ¼Óµµ
+	// ìœ„ì•„ë˜ ì§„í­ê³¼ ì†ë„
 	float elapsed = 0.0f;
-	float duration = 1.0f; // À§¡æ¾Æ·¡ ÇÑ ¹ø ÀÌµ¿ÇÏ´Âµ¥ °É¸®´Â ½Ã°£
+	float duration = 1.0f; // ìœ„â†’ì•„ë˜ í•œ ë²ˆ ì´ë™í•˜ëŠ”ë° ê±¸ë¦¬ëŠ” ì‹œê°„
 	float startY = 0.0f;
-	float endY = 7.0f;    // À§·Î 5¸¸Å­ ÀÌµ¿
+	float endY = 7.0f;    // ìœ„ë¡œ 5ë§Œí¼ ì´ë™
 	bool goingUp = true;
 
 	FDroneSpritePath spritePath;
 	EDroneType droneType = EDroneType::Enemy;
 	float attackDelay = 0.5f;
 
-	// »ó´ë¹æ ¹Ù¶óº¸´Â ÆÈ È¸Àü Ãß°¡ °¢µµ - ÀÌ¹ÌÁö°¡ È¸ÀüµÇ¾î ÀÖÀ» °æ¿ì Ãß°¡.
+	// ìƒëŒ€ë°© ë°”ë¼ë³´ëŠ” íŒ” íšŒì „ ì¶”ê°€ ê°ë„ - ì´ë¯¸ì§€ê°€ íšŒì „ë˜ì–´ ìˆì„ ê²½ìš° ì¶”ê°€.
 	float armDegree = 0.0f;
+
+	// í”Œë ˆì´ì–´ ì›í˜•ìœ¼ë¡œ ì  ë³€ìˆ˜
+	FTimerHandle burstTimer;
+	int   burstRemaining = 0;
+	float burstInterval = 0.25f;   // ì—°ì† ë°œì‚¬ ê°„ê²©(ì´ˆ)
+	float spreadRadius = 340.0f;  // í”Œë ˆì´ì–´ ì£¼ë³€ ëœë¤ ì¡°ì¤€ ë°˜ê²½
 };
