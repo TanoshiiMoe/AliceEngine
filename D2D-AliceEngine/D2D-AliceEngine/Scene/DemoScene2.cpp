@@ -18,6 +18,7 @@
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Spine2D/SpineScript.h>
 #include <Component/ProgressBarComponent.h>
+#include <Scripts/Widget/VignetteWidgetScript.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -57,6 +58,18 @@ void DemoScene2::Update()
         if (s_p <= 0.0f) { s_p = 0.0f; s_dir = 1.0f; }
         if (s_p >= 1.0f) { s_p = 1.0f; s_dir = -1.0f; }
         s_progress->SetProgress(s_p);
+    }
+
+    // SpaceBar로 비네트 연출 테스트 생성
+    if (Input::IsKeyPressed(VK_SPACE))
+    {
+		//GetWorld()->RemoveObjectByName(L"VignetteOverlay");
+        if (auto go = NewObject<gameObject>(L"VignetteOverlay")) 
+        {
+            auto* vig = go->AddComponent<VignetteWidgetScript>();
+            vig->SetDuration(2.4f);
+            vig->SetMaxEdgeAlpha(1.0f);
+        }
     }
 }
 
@@ -145,8 +158,8 @@ void DemoScene2::OnEnter()
 	m_widget7->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(480, 220));
 	m_widget7->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 
-	m_backgroundImage = NewObject<gameObject>(L"yuuka");
-	m_backgroundImage->AddComponent<BackGroundImage>();
+	//m_backgroundImage = NewObject<gameObject>(L"yuuka");
+	//m_backgroundImage->AddComponent<BackGroundImage>();
 
 	//m_alice = NewObject<gameObject>(L"alice");
 	//m_alice->transform()->SetPosition(-300, 0);

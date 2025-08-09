@@ -256,6 +256,15 @@
     <ClInclude Include="Scripts\Widget\CutSceneWidgetScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Widget\BlackOutWidgetScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\EffectTestScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -416,5 +425,8 @@
     </ClCompile>
     <ClCompile Include="GameManager\GamePlayManager.cpp" />
     <ClCompile Include="Scripts\Widget\CutSceneWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
+    <ClCompile Include="Scene\EffectTestScene.cpp" />
   </ItemGroup>
 </Project>
