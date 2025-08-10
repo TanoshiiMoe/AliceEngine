@@ -5,6 +5,7 @@
 #include <Component/TransformComponent.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/SpriteRenderer.h>
+#include <Component/ProgressBarComponent.h>
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Component/StatComponent.h>
@@ -79,121 +80,81 @@ void BikeStatScript::OnStart()
 	//	0.0f
 	//);
 
-	// 여기에 OnStart에 대한 로직 작성
-	//m_BikeStat = GetOwner();
+    // 여기에 OnStart에 대한 로직 작성
 	owner->AddComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
 	BoxComponent* box = owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetRelativeSize(), FColor::Blue);
 	box->SetSize(owner->GetComponent<SpriteRenderer>()->GetRelativeSize());
 	box->SetIgnoreOwnerScale(false);
 
-	/*
-	* 게임오브젝트에 TextRenderComponent를 붙이는 예시
-	*/
+    // 스탯 컴포넌트 생성
+    m_bikeStat = owner->AddComponent<StatComponent<BikeStat>>();
+    m_bikeStat->SetStat("HP", 30);
+    m_bikeStat->SetStat("MAXHP", 30);
+    m_bikeStat->SetStat("BATTERY", 50);
 
-	TextRenderComponent* m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(owner->GetName());
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeStatTextCmp->SetColor(FColor::Gold);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	FVector2 widgetSize = m_BikeStatTextCmp->GetRelativeSize();
-	m_BikeStatTextCmp->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 5.2f)));
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    // 체력바 배경
+    m_hpBarBack = owner->AddComponent<ProgressBarComponent>();
+    m_hpBarBack->LoadData(L"UI/HealthBar_White.png");
+    m_hpBarBack->SetType(EProgressBarType::Linear);
+    m_hpBarBack->SetProgress(1.0f);
+    m_hpBarBack->SetOpacity(0.6f);
+    m_hpBarBack->SetRelativeScale(FVector2(0.6f, 0.4f));
+    {
+        FVector2 size = m_hpBarBack->GetRelativeSize();
+        m_hpBarBack->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
+    }
+	m_hpBarBack->m_layer = 10004;
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"직전체력");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    // 체력바 전경(채워지는 부분)
+    m_hpBarFill = owner->AddComponent<ProgressBarComponent>();
+    m_hpBarFill->LoadData(L"UI/HealthBar_Red.png");
+    m_hpBarFill->SetType(EProgressBarType::Linear);
+    m_hpBarFill->SetProgress(1.0f);
+    m_hpBarFill->SetRelativeScale(FVector2(0.6f, 0.4f));
+    {
+        FVector2 size = m_hpBarFill->GetRelativeSize();
+        m_hpBarFill->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
+    }
+	m_hpBarFill->m_layer = m_hpBarBack->m_layer + 1;
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"test");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    // 델리게이트: HP, MAXHP 변경 시 진행도 갱신
+    m_bikeStat->OnChangeStatMap["HP"].Add(m_bikeStat->GetHandle(), [this](float /*oldVal*/, float newVal)
+    {
+        if (m_hpBarFill && m_bikeStat)
+        {
+            float maxv = m_bikeStat->GetStat("MAXHP");
+            if (maxv <= 0.0f) maxv = 0.0001f;
+            m_hpBarFill->SetProgress(newVal / maxv);
+        }
+        if (newVal <= 0)
+        {
+            owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
+            owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
+            if (auto car = owner->GetComponent<Car>()) car->DelayDestroy();
+            if (auto drone = owner->GetComponent<Drone>()) drone->DelayDestroy();
+            return;
+        }
+    });
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"현재체력");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    m_bikeStat->OnChangeStatMap["MAXHP"].Add(owner->GetHandle(), [this](float /*oldVal*/, float /*newVal*/)
+    {
+        if (m_hpBarFill && m_bikeStat)
+        {
+            float cur = m_bikeStat->GetStat("HP");
+            float maxv = m_bikeStat->GetStat("MAXHP");
+            if (maxv <= 0.0f) maxv = 0.0001f;
+            m_hpBarFill->SetProgress(cur / maxv);
+        }
+    });
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"test");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
-
-
-	/*
-	* 커스텀 구조체로 델리게이트를 바인딩 하는 예제
-	*/
-	m_bikeStat = owner->AddComponent<StatComponent<BikeStat>>();
-	m_bikeStat->SetStat("HP", 30);
-	m_bikeStat->SetStat("MAXHP", 30);
-	m_bikeStat->SetStat("MP", 200);
-	m_BikeNameTexts[1]->SetTextFormat(L"직전 체력 : ", m_bikeStat->GetStat("HP"));
-	m_BikeNameTexts[2]->SetTextFormat(L"현재 체력 : ", m_bikeStat->GetStat("HP"));
-	m_BikeNameTexts[3]->SetTextFormat(L"최대 체력 : ", m_bikeStat->GetStat("MAXHP"));
-	m_BikeNameTexts[4]->SetTextFormat(L"배터리 : ", m_bikeStat->GetStat("BATTERY"));
-
-	widgetSize = m_BikeNameTexts[1]->GetRelativeSize();
-	m_BikeNameTexts[1]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 1.0)));
-	widgetSize = m_BikeNameTexts[2]->GetRelativeSize();
-	m_BikeNameTexts[2]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 2.0f)));
-	widgetSize = m_BikeNameTexts[3]->GetRelativeSize();
-	m_BikeNameTexts[3]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 3.0f)));
-	widgetSize = m_BikeNameTexts[4]->GetRelativeSize();
-	m_BikeNameTexts[4]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 0.0f)));
-
-	m_bikeStat->OnChangeStatMap["HP"].Add(m_bikeStat->GetHandle(), [this](float oldVal, float newVal)
-		{
-			if (newVal <= 0)	// 죽는 시점
-			{ 
-				owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
-				//owner->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
-				owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
-				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
-
-				if (auto car = owner->GetComponent<Car>())
-					car->DelayDestroy();
-				if (auto drone = owner->GetComponent<Drone>())
-					drone->DelayDestroy();
-				//GetWorld()->RemoveObject(owner.Get());
-				return;
-			}
-			//else if (oldVal <= 0)	// 부활하는 시점
-			//{
-				//owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
-				//owner->GetComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
-				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
-			//}
-			m_BikeNameTexts[1]->SetTextFormat(L"직전 체력 : ", oldVal);
-			m_BikeNameTexts[2]->SetTextFormat(L"현재 체력 : ", newVal);
-		});;
-
-	m_bikeStat->OnChangeStatMap["MAXHP"].Add(owner->GetHandle(), [this](float oldVal, float newVal)
-		{
-			m_BikeNameTexts[3]->SetTextFormat(L"최대 체력 : ", newVal);
-		});;
-
-	m_bikeStat->OnChangeStatMap["MP"].Add(owner->GetHandle(), [this](float oldVal, float newVal)
-		{
-			m_BikeNameTexts[4]->SetTextFormat(L"BATTERY : ", newVal);
-		});;
+    // 초기 진행도 반영
+    if (m_hpBarFill && m_bikeStat)
+    {
+        float cur = m_bikeStat->GetStat("HP");
+        float maxv = m_bikeStat->GetStat("MAXHP");
+        if (maxv <= 0.0f) maxv = 0.0001f;
+        m_hpBarFill->SetProgress(cur / maxv);
+    }
 
 	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), [this]() { Input(); });
 }
@@ -206,7 +167,7 @@ void BikeStatScript::OnEnd()
 
 void BikeStatScript::OnDestroy()
 {
-	m_BikeNameTexts.clear();
+    // 리소스 해제는 엔진 컴포넌트 파이프라인에 위임
 }
 
 void BikeStatScript::Input()

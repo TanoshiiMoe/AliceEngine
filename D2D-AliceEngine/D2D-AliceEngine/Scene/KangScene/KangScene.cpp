@@ -69,6 +69,7 @@ void KangScene::OnEnter()
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
 	BulletManager::GetInstance().SetPlayer(m_player);
+	//m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);

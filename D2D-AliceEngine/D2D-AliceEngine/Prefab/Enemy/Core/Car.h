@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Component/ScriptComponent.h"
 #include "Animation/AnimationController.h"
 #include <Manager/TimerManager.h>
@@ -13,22 +13,22 @@ public:
     void OnDestroy() override;
     void Update(const float& deltaSeconds) override;
 
-    // ÃÑ¾Ë µîÀ¸·Î »ç¸Á ½Ã Áö¿¬ ÆÄ±«
+    // ì´ì•Œ ë“±ìœ¼ë¡œ ì‚¬ë§ ì‹œ ì§€ì—° íŒŒê´´
     void DelayDestroy();
 protected:
 	AnimatorController animController;
 
 	FTimerHandle timer;
-    // Áö¿¬ ÆÄ±« »óÅÂ
+    // ì§€ì—° íŒŒê´´ ìƒíƒœ
     bool m_isDelaying = false;
     bool m_skipGhostOnDestroy = false;
     FTimerHandle m_fadeHandle;
 
-    // ÆäÀÌµå Á¦¾î
+    // í˜ì´ë“œ ì œì–´
     bool m_isFading = false;
     float m_fadeDuration = 1.0f;
     float m_fadeElapsed = 0.0f;
-    class SpriteRenderer* m_fadeTargetSR = nullptr; // °í½ºÆ® ¶Ç´Â Æú¹é ´ë»ó
-    class gameObject* m_ghostGO = nullptr;          // »ı¼ºµÈ °í½ºÆ® ¿ÀºêÁ§Æ®
+    class SpriteRenderer* m_fadeTargetSR = nullptr; // ê³ ìŠ¤íŠ¸ ë˜ëŠ” í´ë°± ëŒ€ìƒ
+    class gameObject* m_ghostGO = nullptr;          // ìƒì„±ëœ ê³ ìŠ¤íŠ¸ ì˜¤ë¸Œì íŠ¸
 };
 
