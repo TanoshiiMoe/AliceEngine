@@ -40,25 +40,16 @@ void BackGroundRender::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
-	// 플레이어 참조를 캐싱해두자
-	static gameObject* playerObj = nullptr;
-	static BikeMovementScript* playerMove = nullptr;
-	if (!playerObj)
-	{
-		WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player");
-		if (!player.expired())
-		{
-			playerObj = player.Get();
-			playerMove = playerObj->GetComponent<BikeMovementScript>();
-		}
-	}
-
-	float playerX = 0.0f;
-	float playerSpeed = 0.0f;
-	if (playerObj && playerObj->transform())
-		playerX = playerObj->transform()->GetPosition().x;
-	if (playerMove)
-		playerSpeed = playerMove->GetCurrentSpeed() * playerMove->GetSpeedModifierValue();
+    // 매 프레임 안전하게 플레이어 가져오기 (씬 전환 대응)
+    float playerX = 0.0f;
+    float playerSpeed = 0.0f;
+    if (WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player"))
+    {
+        if (player->transform())
+            playerX = player->transform()->GetPosition().x;
+        if (BikeMovementScript* pm = player->GetComponent<BikeMovementScript>())
+            playerSpeed = pm->GetCurrentSpeed() * pm->GetSpeedModifierValue();
+    }
 
     // tiles 기반으로 +x 방향 진행, 플레이어 기준 뒤로 흐르는 효과
     for (auto& layer : m_loopingLayers)
