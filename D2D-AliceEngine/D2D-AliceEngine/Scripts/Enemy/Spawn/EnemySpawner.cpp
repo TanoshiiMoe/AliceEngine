@@ -14,7 +14,7 @@
 #include <Scripts/Bike/BikeStatScript.h>
 #include <Scripts/Enemy/EnemyStatScript.h>
 #include <Scripts/Weapon/Drone.h>
-#include <Scripts/Enemy/EnemyDataManager.h>
+#include <GameManager/EnemyDataManager.h>
 
 EnemySpawner* EnemySpawner::instance = nullptr;
 

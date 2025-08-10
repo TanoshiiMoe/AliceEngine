@@ -28,7 +28,7 @@ void BackGroundRender::Initialize()
     // 컬링 스케일을 넉넉하게 키움
     if (auto cam = SceneManager::GetCamera())
     {
-        cam->SetCullingScale(3.0f, 1.5f);
+        cam->SetCullingScale(2.0f, 1.5f);
     }
 }
 

@@ -14,7 +14,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Helpers/CoordHelper.h>
 #include <Component/SkewTransform.h>
-#include <scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 #include <Component/Collider.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Bike/BikeStatScript.h>
