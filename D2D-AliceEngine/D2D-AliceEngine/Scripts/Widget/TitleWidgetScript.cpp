@@ -598,7 +598,7 @@ void TitleWidgetScript::OnStart()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			SceneManager::ChangeScene(L"KangTest");
+			SceneManager::ChangeScene(Define::Scene_Stage1);
 		});
 
 
@@ -841,7 +841,7 @@ void TitleWidgetScript::OnStart()
 			PostQuitMessage(0);
 			// 임시 씬 전환
 			//SceneManager::ChangeScene(L"HiroScene");
-			//SceneManager::ChangeScene(L"KangTest");
+			//SceneManager::ChangeScene(Define::Scene_Stage1);
 		});
 
 	quitButton->SetStateAction(Define::EButtonState::Hover, [quitButton]()

@@ -48,7 +48,7 @@ void TitleScene::OnEnter()
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
-		if (Input::IsKeyDown(VK_3)) {
+		if (Input::IsKeyPressed(VK_3)) {
 			SceneManager::ChangeScene(L"KangTest");
 		}
 	});

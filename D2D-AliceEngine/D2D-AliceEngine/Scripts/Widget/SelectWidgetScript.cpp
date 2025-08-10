@@ -152,7 +152,7 @@ void SelectWidgetScript::OnStart()
 	stage1->SetStateAction(Define::EButtonState::Pressed, []{
 		
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
-		
+		SceneManager::ChangeScene(Define::Scene_Stage1);
 		});
 
 	// stage2 Button 효과 (노란색 글로우 - 보통 스테이지)
@@ -177,7 +177,7 @@ void SelectWidgetScript::OnStart()
 	stage2->SetStateAction(Define::EButtonState::Pressed, [] {
 
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
-		
+		SceneManager::ChangeScene(Define::Scene_Stage2);
 		});
 
 	// stage3 Button 효과 (빨간색 글로우 - 어려운 스테이지/보스)
@@ -202,7 +202,7 @@ void SelectWidgetScript::OnStart()
 	stage3->SetStateAction(Define::EButtonState::Pressed, [] {
 		
 		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
-		
+		SceneManager::ChangeScene(Define::Scene_Stage3);
 		});
 
 	// closeButton 효과 (주황색 글로우)
