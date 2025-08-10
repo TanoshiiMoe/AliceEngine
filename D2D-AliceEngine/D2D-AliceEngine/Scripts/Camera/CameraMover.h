@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/ScriptComponent.h>
 #include <Object/gameObject.h>
 #include "Object/Camera.h"
@@ -14,14 +14,15 @@ public:
 	void Update(const float& deltaSeconds) override;
 private:
 	WeakObjectPtr<SkewTransform> playerST;
+	WeakObjectPtr<gameObject> player;
 	Camera* camera;
 
 	float xPos{0};
 	float yPos{0};
 
-	// Ä«¸Ş¶ó ÀÌµ¿ ¼Óµµ Á¦¾î
+	// ì¹´ë©”ë¼ ì´ë™ ì†ë„ ì œì–´
 	float lerpSpeed = 5.0f;
-	// Dead zone (Ä«¸Ş¶ó ³»ºÎ¿¡¼­ ÇÃ·¹ÀÌ¾î°¡ ÀÚÀ¯·Ó°Ô ¿òÁ÷ÀÏ ¼ö ÀÖ´Â ¿µ¿ª)
+	// Dead zone (ì¹´ë©”ë¼ ë‚´ë¶€ì—ì„œ í”Œë ˆì´ì–´ê°€ ììœ ë¡­ê²Œ ì›€ì§ì¼ ìˆ˜ ìˆëŠ” ì˜ì—­)
 	float deadZoneX = 50.0f;
 	float deadZoneY = 30.0f;
 };
