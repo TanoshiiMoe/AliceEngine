@@ -40,8 +40,10 @@ void DemoGameApp::Initialize()
 	GamePlayManager::Create();
 	EnemyDataManager::Create();
 	EnemyDataManager::GetInstance().LoadData(L"Enemy/EnemyData.json");
+ 	EnemyDataManager::GetInstance().LoadSpawnData(L"TileMap/TileMapColiderInfo.json");
 	PlayerDataManager::Create();
 	PlayerDataManager::GetInstance().LoadData(L"Player/PlayerData.json");
+
 	SceneManager::AddScene<DemoScene2>(L"aruScene");
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");

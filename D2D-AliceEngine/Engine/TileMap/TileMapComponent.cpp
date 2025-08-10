@@ -104,6 +104,12 @@ void TileMapComponent::CreateTileCollision()
 			collisionGo->transform()->SetPosition({ topLeft.x, topLeft.y });
 			collisionGo->transform()->SetPivot(0.5f, 0.5f);
 			collisionGo->AddComponent<Collider>();
+			if (auto collider = collisionGo->GetComponent<Collider>())
+			{
+				collider->SetBoxSize(FVector2(tileWidth, tileHeight));
+				collider->boxComponent->SetSkewAngle(FVector2(30, 0));
+				collider->SetLayer(tileCollision[tileId+1].collisionChannel); // 실제 위치를 반환하기 위해 -1 했던것을 다시 +1
+			}
 
 			// 태그 설정
 			collisionGo->SetTag(L"EnemySpawn");
@@ -111,13 +117,6 @@ void TileMapComponent::CreateTileCollision()
 			// 스폰데이터 설정
 			collisionGo->AddComponent<SpawnData>()->SetCollData(tileCollision[tileId + 1]);
 
-
-			if (auto collider = collisionGo->GetComponent<Collider>())
-			{
-				collider->SetBoxSize(FVector2(tileWidth, tileHeight));
-				collider->boxComponent->SetSkewAngle(FVector2(30, 0));
-				collider->SetLayer(tileCollision[tileId+1].collisionChannel); // 실제 위치를 반환하기 위해 -1 했던것을 다시 +1
-			}
 			go.push_back(collisionGo);
 		}
 	}

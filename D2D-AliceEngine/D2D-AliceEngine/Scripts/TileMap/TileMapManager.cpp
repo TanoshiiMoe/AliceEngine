@@ -12,10 +12,12 @@ void TileMapManager::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(OnStart);
 
-	if (instance == nullptr)
-		instance = this;
-	else
-		SceneManager::GetInstance().GetWorld()->RemoveObject(this->owner.lock());
+	// 싱글톤으로 따로 빼서 사용하기로 함.
+	//if (instance == nullptr)
+	//	instance = this;
+	//else
+	//	SceneManager::GetInstance().GetWorld()->RemoveObject(this->owner.lock());
+
 	/*gameObject* coll = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"SpawnCollider");
 	spawnerCollider = coll->AddComponent<Collider>();
 	spawnerCollider->SetBoxSize(FVector2(00.0f, 500.0f));*/

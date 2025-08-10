@@ -289,6 +289,9 @@
     <ClInclude Include="Scene\GameScene\GameClearScene.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -460,5 +463,6 @@
     <ClCompile Include="GameManager\PlayerDataManager.cpp" />
     <ClCompile Include="Scene\GameScene\GameOverScene.cpp" />
     <ClCompile Include="Scene\GameScene\GameClearScene.cpp" />
+    <ClCompile Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.cpp" />
   </ItemGroup>
 </Project>
