@@ -1,4 +1,4 @@
-#include "PlayerBike.h"
+ï»¿#include "PlayerBike.h"
 #include "Object/gameObject.h"
 #include <Scripts/Player.h>
 #include <Scripts/BackGroundRender.h>
@@ -16,13 +16,14 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Scripts/Weapon/Drone.h>
 #include <Scripts/Bike/BikeStatScript.h>
+#include "Scripts/Player/PlayerMovement.h"
 
 void PlayerBike::Initialize()
 {
 	__super::Initialize();
 
 	owner->SetTag(L"Player");
-	// ¿©±â¿¡ ÄÄÆ÷³ÍÆ® Ãß°¡	
+	// ì—¬ê¸°ì— ì»´í¬ë„ŒíŠ¸ ì¶”ê°€	
 	owner->AddComponent<AnimatorInstance>();
 	//owner->AddComponent<BackGroundRender>();
 	owner->AddComponent<SkewTransform>();
@@ -42,6 +43,7 @@ void PlayerBike::Initialize()
 	}
 	owner->AddComponent<BikeStatScript>();
 
-	// °ÔÀÓ ½ºÅ©¸³Æ® ÄÄÆ÷³ÍÆ®
+	// ê²Œìž„ ìŠ¤í¬ë¦½íŠ¸ ì»´í¬ë„ŒíŠ¸
 	owner->AddComponent<PlayerManager>();
+	owner->AddComponent<PlayerMovement>();
 }

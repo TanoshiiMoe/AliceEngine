@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "SkewTransform.h"
 #include "Manager/UpdateTaskManager.h"
 #include <TileMap/TileMapComponent.h>
@@ -26,7 +26,7 @@ void SkewTransform::OnStart()
 	__super::OnStart();
 
 	if (!owner) {
-		OutputDebugStringW(L"SkewTransform ÄÄÆ÷³ÍÆ®ÀÇ owner°¡ ¾ø½À´Ï´Ù!!!!\n");
+		OutputDebugStringW(L"SkewTransform ì»´í¬ë„ŒíŠ¸ì˜ ownerê°€ ì—†ìŠµë‹ˆë‹¤!!!!\n");
 		return;
 	}
 		
@@ -40,17 +40,17 @@ void SkewTransform::Update(const float& deltaSeconds)
 	if (!renderTransform)
 		return;
 
-	// ¿ÀÇÁ¼Â ¾ÈÇÑ Æ®·£½ºÆû ÀúÀåÇÏ±â
+	// ì˜¤í”„ì…‹ ì•ˆí•œ íŠ¸ëœìŠ¤í¼ ì €ì¥í•˜ê¸°
 	realPos = renderTransform->GetPosition() - offset;
 
 	if (!Math::Approximately(prevzPos, zPos)) {
 
-		// prevPos¿¡ ÀúÀåÇÏ±â
+		// prevPosì— ì €ì¥í•˜ê¸°
 		prevzPos = zPos;
 
 		skewDeg = GetSkew();
 
-		// ¿ø·¡´ë·Î µ¹·Á³õ±â
+		// ì›ë˜ëŒ€ë¡œ ëŒë ¤ë†“ê¸°
 		renderTransform->AddPosition(-offset.x, -offset.y);
 
 		float rad = Math::Deg2Rad(skewDeg);
@@ -58,15 +58,15 @@ void SkewTransform::Update(const float& deltaSeconds)
 		offset.x = -std::sin(rad) * zPos;
 		offset.y = std::cos(rad) * zPos;
 
-		// Æ®·£½ºÆû Àû¿ëÇÏ±â
+		// íŠ¸ëœìŠ¤í¼ ì ìš©í•˜ê¸°
 		renderTransform->AddPosition(offset.x, offset.y);
 
-		// ·»´õ ·¹ÀÌ¾î ¼³Á¤ÇÏ±â
+		// ë Œë” ë ˆì´ì–´ ì„¤ì •í•˜ê¸°
 		SetRenderLayer();
 
-		// µğ¹ö±ë¿ë
-		std::wstring message = owner->GetName() + L" : Zpos = " + std::to_wstring(zPos) + L"\n";
-		OutputDebugStringW(message.c_str());
+		// ë””ë²„ê¹…ìš©
+		/*std::wstring message = owner->GetName() + L" : Zpos = " + std::to_wstring(zPos) + L"\n";
+		OutputDebugStringW(message.c_str());*/
 	}
 
 }
@@ -89,7 +89,7 @@ float SkewTransform::GetSkew()
 	if (groundTile)
 		return groundTile->GetComponent<TileMapComponent>()->skewAngle.x;
 	
-	std::wstring message = owner->GetName() + L" : SkewTransform ÄÄÆ÷³ÍÆ®¿¡ groundTile ¿ÀºêÁ§Æ®°¡ µî·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù!!!\n";
+	std::wstring message = owner->GetName() + L" : SkewTransform ì»´í¬ë„ŒíŠ¸ì— groundTile ì˜¤ë¸Œì íŠ¸ê°€ ë“±ë¡ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!!!\n";
 
 	OutputDebugStringW(message.c_str());
 	return 0.0f;
@@ -105,7 +105,7 @@ void SkewTransform::SetRenderLayer()
 		else if (auto spr = owner->GetComponent<SpriteRenderer>())
 			spr->m_layer = layer;
 		else {
-			std::wstring message = owner->GetName() + L" : SkewTransform¿¡¼­ Animator³ª SpriteRenderer¸¦ Ã£À»¼ö ¾ø½À´Ï´Ù!!\n";
+			std::wstring message = owner->GetName() + L" : SkewTransformì—ì„œ Animatorë‚˜ SpriteRendererë¥¼ ì°¾ì„ìˆ˜ ì—†ìŠµë‹ˆë‹¤!!\n";
 			OutputDebugStringW(message.c_str());
 		}
 	}

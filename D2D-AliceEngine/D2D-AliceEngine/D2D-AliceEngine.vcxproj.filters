@@ -247,6 +247,9 @@
     <ClInclude Include="Scripts\Bike\BikeStatScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Player\PlayerMovement.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -405,5 +408,6 @@
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnCollider.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
     <ClCompile Include="Scripts\Bike\BikeStatScript.cpp" />
+    <ClCompile Include="Scripts\Player\PlayerMovement.cpp" />
   </ItemGroup>
 </Project>

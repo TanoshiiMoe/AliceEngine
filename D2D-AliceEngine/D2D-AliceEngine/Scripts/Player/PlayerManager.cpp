@@ -10,6 +10,9 @@
 #include "Manager/TimerManager.h"
 #include <Component/InputComponent.h>
 #include "Manager/UpdateTaskManager.h"
+#include "../Bike/BikeMovementScript.h"
+
+PlayerManager* PlayerManager::instance = nullptr;
 
 void PlayerManager::Initialize()
 {
@@ -22,6 +25,12 @@ void PlayerManager::Initialize()
 void PlayerManager::OnStart()
 {
 	__super::Initialize();
+
+	// instance 설정
+	if (instance == nullptr)
+		instance = this;
+	else
+		SceneManager::GetInstance().GetWorld()->RemoveObject(this->owner.lock());
 
 	// SkewTransform 설정
 	if (auto st = owner->GetComponent<SkewTransform>())
@@ -64,11 +73,15 @@ void PlayerManager::Update(const float& deltaSeconds)
 
 	if (Input::IsKeyDown(VK_S))
 	{
-		owner->GetComponent<SkewTransform>()->zPos -= 100.0f * deltaSeconds;
+		auto st = owner->GetComponent<SkewTransform>();
+		if(st && st->zPos > minZ)
+			st->zPos -= 100.0f * playerDeltaSeconds;
 	}
 	if (Input::IsKeyDown(VK_W))
 	{
-		owner->GetComponent<SkewTransform>()->zPos += 100.0f * deltaSeconds;
+		auto st = owner->GetComponent<SkewTransform>();
+		if (st && st->zPos < maxZ)
+			st->zPos += 100.0f * playerDeltaSeconds;
 	}
 
 	if (Input::IsKeyDown(VK_OEM_4))
@@ -77,7 +90,7 @@ void PlayerManager::Update(const float& deltaSeconds)
 		//fov -= 5.0f * deltaSeconds;
 		//SceneManager::GetCamera()->SetFieldOfView(fov);
 
-		FVector2 pos = SceneManager::GetCamera()->GetScale() + 1.1f * deltaSeconds;
+		FVector2 pos = SceneManager::GetCamera()->GetScale() + 1.1f * playerDeltaSeconds;
 		SceneManager::GetCamera()->SetScale(pos);
 	}
 	if (Input::IsKeyDown(VK_OEM_6))
@@ -86,11 +99,17 @@ void PlayerManager::Update(const float& deltaSeconds)
 		//fov += 5.0f * deltaSeconds;
 		//SceneManager::GetCamera()->SetFieldOfView(fov);
 
-		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1f * deltaSeconds;
+		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1f * playerDeltaSeconds;
 		SceneManager::GetCamera()->SetScale(pos);
 	}
 }
 
+void PlayerManager::SetZClamp(float _min, float _max)
+{
+	_min = minZ;
+	_max = maxZ;
+}
+ 
 void PlayerManager::Input()
 {
 	// 여기에 Input에 대한 로직 작성
@@ -105,18 +124,6 @@ void PlayerManager::Input()
 			owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
 	}
 
-	if (Input::IsKeyDown(VK_C))
-	{
-		//m_owner->stateMachine->SetNextState(L"Idle");
-	}
-	if (Input::IsKeyDown(VK_Z))
-	{
-		animInstance->SetBool("attack", true);
-	}
-	else
-	{
-		animInstance->SetBool("attack", false);
-	}
 
 	// 산데비스탄 테스트
 	if (Input::IsKeyPressed(VK_G)) {
