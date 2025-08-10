@@ -1,4 +1,4 @@
-#include "EffectTestScene.h"
+ï»¿#include "EffectTestScene.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -29,7 +29,7 @@ void EffectTestScene::OnEnter()
 {
     __super::OnEnter();
 
-    // °£´ÜÇÑ ¾È³» ÅØ½ºÆ® UI
+    // ê°„ë‹¨í•œ ì•ˆë‚´ í…ìŠ¤íŠ¸ UI
     if (auto ui = NewObject<gameObject>(L"EffectUI"))
     {
         auto* txt = ui->AddComponent<TextRenderComponent>();
@@ -76,7 +76,7 @@ void EffectTestScene::HandleInput()
     }
     if (Input::IsKeyPressed(VK_SPACE))
     {
-        // ÀüºÎ Á¦°Å
+        // ì „ë¶€ ì œê±°
         GetWorld()->RemoveObjectByName(L"VignetteOverlay");
         GetWorld()->RemoveObjectByName(L"BlackOutOverlay");
     }

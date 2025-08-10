@@ -283,6 +283,12 @@
     <ClInclude Include="GameManager\PlayerDataManager.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scene\GameScene\GameOverScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\GameClearScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -452,5 +458,7 @@
     <ClCompile Include="Scene\GameScene\Scene_Stage2.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage3.cpp" />
     <ClCompile Include="GameManager\PlayerDataManager.cpp" />
+    <ClCompile Include="Scene\GameScene\GameOverScene.cpp" />
+    <ClCompile Include="Scene\GameScene\GameClearScene.cpp" />
   </ItemGroup>
 </Project>

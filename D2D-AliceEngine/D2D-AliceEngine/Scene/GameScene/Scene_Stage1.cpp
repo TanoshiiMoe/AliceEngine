@@ -34,6 +34,8 @@
 #include "Scripts/Enemy/Spawn/EnemySpawner.h"
 #include <Scripts/Widget/CutSceneWidgetScript.h>
 #include <Scripts/Widget/StageWidgetScript.h>
+#include <Scripts/Enemy/Spawn/SpawnCollider.h>
+#include <GameManager/GamePlayManager.h>
 
 void Scene_Stage1::Initialize()
 {
@@ -89,6 +91,8 @@ void Scene_Stage1::OnEnter()
 	}
 
 	// 적 스포너 매니저 생성
+	gameObject* coll = NewObject<gameObject>(L"SpawnCollider");
+	coll->AddComponent<SpawnCollider>();
 	gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
 	eSpwaner->AddComponent<EnemySpawner>();
 
@@ -105,6 +109,20 @@ void Scene_Stage1::OnEnter()
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
 		if (Input::IsKeyPressed(VK_3)) {
 			SceneManager::ChangeScene(L"TitleScene");
+		}
+	});
+
+	gameObject* clearGame = NewObject<gameObject>(L"SceneChanger2");
+	clearGame->AddComponent<InputComponent>()->SetAction(clearGame->GetHandle(), [this]() {
+		if (Input::IsKeyPressed(VK_4)) {
+			GamePlayManager::GetInstance().GameClear();
+		}
+	});
+
+	gameObject* overGame = NewObject<gameObject>(L"SceneChanger2");
+	overGame->AddComponent<InputComponent>()->SetAction(overGame->GetHandle(), [this]() {
+		if (Input::IsKeyPressed(VK_5)) {
+			GamePlayManager::GetInstance().GameOver();
 		}
 	});
 }

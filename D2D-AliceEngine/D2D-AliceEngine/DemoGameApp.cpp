@@ -13,6 +13,8 @@
 #include <Scene/GameScene/Scene_Stage1.h>
 #include <Scene/GameScene/Scene_Stage2.h>
 #include <Scene/GameScene/Scene_Stage3.h>
+#include <Scene/GameScene/GameClearScene.h>
+#include <Scene/GameScene/GameOverScene.h>
 #include <Scene/SelectScene.h>
 #include <Scene/KangScene/KangScene.h>
 #include <GameManager/BulletManager.h>
@@ -52,6 +54,8 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<Scene_Stage1>(Define::Scene_Stage1);	// stage select
 	SceneManager::AddScene<Scene_Stage2>(Define::Scene_Stage2);	// stage select
 	SceneManager::AddScene<Scene_Stage3>(Define::Scene_Stage3);	// stage select
+	SceneManager::AddScene<GameClearScene>(Define::Scene_GameClear);	// stage select
+	SceneManager::AddScene<GameOverScene>(Define::Scene_GameOver);	// stage select
 	SceneManager::ChangeScene(L"TitleScene");
 }
 

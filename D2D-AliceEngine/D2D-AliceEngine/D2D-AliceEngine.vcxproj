@@ -163,7 +163,9 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scene\GameScene\GameClearScene.h" />
     <ClInclude Include="GameManager\PlayerDataManager.h" />
+    <ClInclude Include="Scene\GameScene\GameOverScene.h" />
     <ClInclude Include="Scene\GameScene\Scene_Stage2.h" />
     <ClInclude Include="Scene\GameScene\Scene_Stage3.h" />
     <ClInclude Include="GameManager\EnemyDataManager.h" />
@@ -234,7 +236,9 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scene\GameScene\GameClearScene.cpp" />
     <ClCompile Include="GameManager\PlayerDataManager.cpp" />
+    <ClCompile Include="Scene\GameScene\GameOverScene.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage2.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage3.cpp" />
     <ClCompile Include="GameManager\EnemyDataManager.cpp" />

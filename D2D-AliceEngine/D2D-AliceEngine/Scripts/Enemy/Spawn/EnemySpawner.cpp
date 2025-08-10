@@ -22,13 +22,6 @@ void EnemySpawner::Initialize()
 {
 	__super::Initialize();
 
-	// 스폰 콜라이더가 이미 존재하면 재생성하지 않음
-	if (GetWorld()->FindObjectByName<gameObject>(L"SpawnCollider").expired())
-	{
-		gameObject* coll = GetWorld()->NewObject<gameObject>(L"SpawnCollider");
-		coll->AddComponent<SpawnCollider>();
-	}
-
 	REGISTER_SCRIPT_METHOD(OnStart);
 }
 

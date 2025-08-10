@@ -3,6 +3,8 @@
 #include <Manager/SceneManager.h>  // 실제 씬 변경은 UI/외부가 하고, 여기선 이름만 관리
 #include <Helpers/Logger.h>
 #include <utility>
+#include <Scripts/Widget/BlackOutWidgetScript.h>
+#include <Scripts/Widget/VignetteWidgetScript.h>
 
 GamePlayManager::GamePlayManager()
 {
@@ -62,6 +64,75 @@ void GamePlayManager::StartGame()
     ApplyPauseTimescale(false);
     SetState(EGameRunState::InGame);
 }
+
+void GamePlayManager::GameOver()
+{
+    SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::VignetteOnly), true, 2.0f, 1.0f);
+    TimerManager::GetInstance().ClearTimer(gameOverTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTimer, [this]() 
+    {
+        SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::SpotDiffuse), true, 2.0f, 1.0f);
+    }, 
+    0, 
+    false,
+    1.0f);
+
+    TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
+    {
+        SceneManager::ChangeScene(Define::Scene_GameOver);
+    },
+    0,
+    false,
+    3.0f);
+}
+
+void GamePlayManager::GameClear()
+{
+    SpawnVignette(2.0f, 1.0f);
+    TimerManager::GetInstance().ClearTimer(gameOverTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTimer, [this]()
+    {
+        SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::PointDiffuse), true, 2.0f, 1.0f);
+    },
+        0,
+        false,
+        1.0f);
+
+    TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
+    {
+        SceneManager::ChangeScene(Define::Scene_GameClear);
+    },
+        0,
+        false,
+        3.0f);
+}
+
+void GamePlayManager::SpawnVignette(float durationSec, float maxAlpha)
+{
+    if (auto go = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"VignetteOverlay"))
+    {
+        SceneManager::GetInstance().GetCamera()->AddChildObject(go);
+        auto* vig = go->AddComponent<VignetteWidgetScript>();
+        vig->SetDuration(durationSec);
+        vig->SetMaxEdgeAlpha(maxAlpha);
+    }
+}
+
+void GamePlayManager::SpawnBlackOut(int modeIndex, bool useCrossFade, float durationSec, float maxAlpha)
+{
+    if (auto go = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"BlackOutOverlay"))
+    {
+        SceneManager::GetInstance().GetCamera()->AddChildObject(go);
+        auto* bo = go->AddComponent<BlackOutWidgetScript>();
+        bo->SetDuration(durationSec);
+        bo->SetMaxEdgeAlpha(maxAlpha);
+        bo->SetMode(static_cast<EBlackOutLightingMode>(modeIndex));
+        bo->UseCrossFade(useCrossFade);
+    }
+}
+
 
 void GamePlayManager::PauseGame()
 {

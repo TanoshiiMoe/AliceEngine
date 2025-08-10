@@ -211,14 +211,14 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 
 void Bullet::OnTriggerStay2D(Collider* collider)
 {
-	std::cout << "OnTriggerStay2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnTriggerStay2D 호출됨\n");
+	//std::cout << "OnTriggerStay2D 호출됨" << std::endl;
+	//OutputDebugStringW(L"OnTriggerStay2D 호출됨\n");
 }
 
 void Bullet::OnTriggerExit2D(Collider* collider)
 {
-	std::cout << "OnTriggerExit2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnTriggerExit2D 호출됨\n");
+	//std::cout << "OnTriggerExit2D 호출됨" << std::endl;
+	//OutputDebugStringW(L"OnTriggerExit2D 호출됨\n");
 }
 
 void Bullet::Input()
