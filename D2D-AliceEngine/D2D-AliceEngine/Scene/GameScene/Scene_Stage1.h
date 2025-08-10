@@ -32,6 +32,6 @@ public:
 	gameObject* m_truck;
 
 	// 컷씬 종료 후 전환할 씬명
-	std::wstring m_nextSceneName = L"KangeTest";
+	std::wstring m_nextSceneName = L"Scene_Stage1";
 };
 

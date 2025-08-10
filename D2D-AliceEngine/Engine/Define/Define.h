@@ -21,6 +21,7 @@ namespace Define
 	static const float GRAVITYCONSTANT = 9.8f;
 	static const float MIN_OVERLAP_EPSILON = 0.001f; // float 오차 방지용 최소 겹침값
 
+	static const std::wstring Scene_Title = L"TitleScene";
 	static const std::wstring Scene_Stage1 = L"Scene_Stage1";
 	static const std::wstring Scene_Stage2 = L"Scene_Stage2";
 	static const std::wstring Scene_Stage3 = L"Scene_Stage3";

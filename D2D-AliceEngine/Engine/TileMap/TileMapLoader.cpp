@@ -1,10 +1,10 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "TileMapLoader.h"
 #include <fstream>
 #include <stdexcept>
 #include <Helpers/StringHelper.h>
 
-// TileSet ±¸Á¶Ã¼¿¡ ´ëÇÑ JSON ¸ÅÇÎ ÇÔ¼ö
+// TileSet êµ¬ì¡°ì²´ì— ëŒ€í•œ JSON ë§¤í•‘ í•¨ìˆ˜
 void from_json(const nlohmann::json& j, TileSet& ts)
 {
 	j.at("columns").get_to(ts.columns);
@@ -39,7 +39,7 @@ void to_json(nlohmann::json& j, const TileSet& ts)
 	j["version"] = ts.version;
 }
 
-// ÆÄÀÏ¿¡¼­ TileSet ·ÎµåÇÏ´Â ÇÔ¼ö
+// íŒŒì¼ì—ì„œ TileSet ë¡œë“œí•˜ëŠ” í•¨ìˆ˜
 void TileMapLoader::LoadTileSet(const std::wstring& filePath, TileSet& tileSet)
 {
 	std::ifstream inFile(filePath);
@@ -48,7 +48,7 @@ void TileMapLoader::LoadTileSet(const std::wstring& filePath, TileSet& tileSet)
 		inFile >> j;
 		inFile.close();
 
-		// JSON¿¡¼­ TileSet ±¸Á¶Ã¼·Î ÀÚµ¿ º¯È¯
+		// JSONì—ì„œ TileSet êµ¬ì¡°ì²´ë¡œ ìë™ ë³€í™˜
 		tileSet = j.get<TileSet>();
 	}
 	else {
@@ -95,7 +95,7 @@ std::unordered_map<int, CollData> TileMapLoader::LoadTileMapColliderInfo(const s
 	}
 }
 
-// TileLayer JSON ¸ÅÇÎ
+// TileLayer JSON ë§¤í•‘
 void from_json(const json& j, TileMapLayer& tl) {
 	j.at("data").get_to(tl.data);
 	j.at("height").get_to(tl.height);
@@ -123,7 +123,7 @@ void to_json(json& j, const TileMapLayer& tl) {
 		{"y", tl.y}
 	};
 }
-// TileMap JSON ¸ÅÇÎ
+// TileMap JSON ë§¤í•‘
 void from_json(const json& j, TileMap& tm) {
 	j.at("compressionlevel").get_to(tm.compressionlevel);
 	j.at("height").get_to(tm.height);

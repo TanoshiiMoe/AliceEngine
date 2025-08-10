@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/RenderComponent.h>
 #include <Component/TileMapRenderer.h>
 #include <TileMap/TileMapLoader.h>
@@ -16,6 +16,7 @@ public:
 	void LoadTileCollisionData(const std::wstring& path);
 	void CreateTileCollision();
 	void CreateTileRenderers();
+	int GetTileLayer();
 	void SetTileLayer(const int& layer);
 	void Release() override;
 	void Render() override;
@@ -31,7 +32,7 @@ public:
 	TileMap tileMap;
 	TileSet tileSet;
 	std::unordered_map<int,CollData> tileCollision;
-	std::wstring filePath; // ÆÄÀÏÀÇ °æ·Î
+	std::wstring filePath; // íŒŒì¼ì˜ ê²½ë¡œ
 
 	FVector2 skewAngle;
 
