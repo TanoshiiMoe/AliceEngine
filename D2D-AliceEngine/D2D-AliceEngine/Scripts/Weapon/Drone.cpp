@@ -11,7 +11,7 @@
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
 #include <Manager/UpdateTaskManager.h>
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Component/SkewTransform.h>
 #include <GameManager/GamePlayManager.h>
@@ -391,20 +391,20 @@ void Drone::OnDestroy()
 
 void Drone::OnTriggerEnter2D(Collider* collider)
 {
-	std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
+	//std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
+	//OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
 }
 
 void Drone::OnTriggerStay2D(Collider* collider)
 {
-	std::cout << "OnTriggerStay2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnTriggerStay2D 호출됨\n");
+	//std::cout << "OnTriggerStay2D 호출됨" << std::endl;
+	//OutputDebugStringW(L"OnTriggerStay2D 호출됨\n");
 }
 
 void Drone::OnTriggerExit2D(Collider* collider)
 {
-	std::cout << "OnTriggerExit2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnTriggerExit2D 호출됨\n");
+	//std::cout << "OnTriggerExit2D 호출됨" << std::endl;
+	//OutputDebugStringW(L"OnTriggerExit2D 호출됨\n");
 }
 
 void Drone::Input()

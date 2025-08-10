@@ -1,0 +1,10 @@
+[
+  {
+    "maxHP": 30.0,
+    "hp": 30.0,
+    "battery": 10.0,
+    "moveSpeed": 50.0,
+    "attackDelay": 2.0,
+    "damage": 5.0
+  }
+]

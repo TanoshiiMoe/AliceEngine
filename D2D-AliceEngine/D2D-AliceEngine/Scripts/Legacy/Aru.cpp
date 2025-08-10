@@ -11,7 +11,7 @@
 #include <System/ScriptSystem.h>
 #include <Manager/SceneManager.h>
 #include <Helpers/CoordHelper.h>
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 #include <Manager/TimerManager.h>
 #include "Aru2.h"
 #include <Scripts/Weapon/Drone.h>

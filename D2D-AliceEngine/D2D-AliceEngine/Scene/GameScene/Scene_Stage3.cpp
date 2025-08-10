@@ -16,7 +16,7 @@
 #include <Scripts/Audio.h>
 #include <Scripts/Enemy/Spawn/EnemySpawner.h>
 #include <Prefab/Truck.h>
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 
 void Scene_Stage3::Initialize()
 {

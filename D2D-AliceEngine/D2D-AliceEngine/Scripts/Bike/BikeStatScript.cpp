@@ -12,12 +12,13 @@
 #include <System/ScriptSystem.h>
 #include <Manager/SceneManager.h>
 #include <Helpers/CoordHelper.h>
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 #include <Manager/TimerManager.h>
 #include <Component/Collider.h>
 #include <Manager/D2DRenderManager.h>
 #include <Prefab/Enemy/Core/Car.h>
 #include <Scripts/Weapon/Drone.h>
+#include <GameManager/PlayerDataManager.h>
 
 void BikeStatScript::Initialize()
 {
@@ -87,10 +88,11 @@ void BikeStatScript::OnStart()
 	box->SetIgnoreOwnerScale(false);
 
     // 스탯 컴포넌트 생성
+    FPlayerStats stat = PlayerDataManager::GetInstance().GetStats();
     m_bikeStat = owner->AddComponent<StatComponent<BikeStat>>();
-    m_bikeStat->SetStat("HP", 30);
-    m_bikeStat->SetStat("MAXHP", 30);
-    m_bikeStat->SetStat("BATTERY", 50);
+    m_bikeStat->SetStat("HP", stat.hp);
+    m_bikeStat->SetStat("MAXHP", stat.maxHP);
+    m_bikeStat->SetStat("BATTERY", stat.battery);
 
     // 체력바 배경
     m_hpBarBack = owner->AddComponent<ProgressBarComponent>();

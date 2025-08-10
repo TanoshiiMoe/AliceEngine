@@ -44,8 +44,10 @@ void Car::Initialize()
 
 			float marginX = 100.0f;
 			float marginY = 150.0f;
-			if (bulletPos.x < camPos.x - halfW - marginX || bulletPos.x > camPos.x + halfW + marginX ||
-				bulletPos.y < camPos.y - halfH - marginY || bulletPos.y > camPos.y + halfH + marginY)
+			bool outLeft      = bulletPos.x < camPos.x - halfW - marginX;
+			bool outVertical  = (bulletPos.y < camPos.y - halfH - marginY) || (bulletPos.y > camPos.y + halfH + marginY);
+
+			if (outLeft || outVertical)
 			{
 				weak->GetWorld()->RemoveObject(weak->GetOwner());
 			}
@@ -65,6 +67,7 @@ void Car::OnStart()
 
 void Car::OnDestroy()
 {
+    TimerManager::GetInstance().ClearTimer(timer);
     if (m_skipGhostOnDestroy) return; // DelayDestroy로 이미 처리한 경우 스킵
     // 기존: 즉시 잔상 생성 페이드. 현재는 DelayDestroy로 대체되어 일반 OnDestroy에서는 생략
 }

@@ -34,6 +34,13 @@ public:
     // 플레이 시작: InGame 진입
     void StartGame();
 
+    void GameOver();
+    void GameClear();
+
+    void SpawnVignette(float durationSec, float maxAlpha);
+
+    void SpawnBlackOut(int modeIndex, bool useCrossFade, float durationSec, float maxAlpha);
+
     // 일시정지/재개 (글로벌 타임스케일 제어만 수행)
     void PauseGame();
     void ResumeGame();
@@ -74,4 +81,7 @@ private:
 
     // 상태 변경 이벤트(옵션)
     std::function<void(EGameRunState, EGameRunState)> m_OnStateChanged = nullptr;
+
+    FTimerHandle gameOverTimer;
+    FTimerHandle gameOverTransitionTimer;
 };

@@ -25,7 +25,7 @@
 #include <Manager/TimerManager.h>
 #include <Scripts/Bike/LaneController.h>
 
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Bike/BikeMovementScript.h>
