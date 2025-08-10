@@ -50,6 +50,7 @@ void Scene::Release()
 		it->second.reset();
 	}
 	m_objects.clear();
+	m_nameToUUIDs.clear();
 	UpdateTaskManager::GetInstance().ClearWorld();
 	CollisionSystem::GetInstance().Release();
 	PhysicsSystem::GetInstance().Release();

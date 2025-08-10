@@ -61,7 +61,7 @@ void Car::OnStart()
 {
 	// SkewTransform?쑝濡? 蹂??솚?븯湲?
 	SkewTransform* st = owner->GetComponent<SkewTransform>();
-	st->groundTile = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"TileMap");
+	st->groundTile = GetWorld()->FindObjectByName<gameObject>(L"TileMap");
 	st->ToSkewPos();
 }
 

@@ -163,6 +163,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.h" />
     <ClInclude Include="Scene\GameScene\GameClearScene.h" />
     <ClInclude Include="GameManager\PlayerDataManager.h" />
     <ClInclude Include="Scene\GameScene\GameOverScene.h" />
@@ -236,6 +237,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.cpp" />
     <ClCompile Include="Scene\GameScene\GameClearScene.cpp" />
     <ClCompile Include="GameManager\PlayerDataManager.cpp" />
     <ClCompile Include="Scene\GameScene\GameOverScene.cpp" />

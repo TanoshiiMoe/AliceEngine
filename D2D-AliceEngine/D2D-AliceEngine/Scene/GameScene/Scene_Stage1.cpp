@@ -36,6 +36,7 @@
 #include <Scripts/Widget/StageWidgetScript.h>
 #include <Scripts/Enemy/Spawn/SpawnCollider.h>
 #include <GameManager/GamePlayManager.h>
+#include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 
 void Scene_Stage1::Initialize()
 {
@@ -91,10 +92,16 @@ void Scene_Stage1::OnEnter()
 	}
 
 	// 적 스포너 매니저 생성
-	gameObject* coll = NewObject<gameObject>(L"SpawnCollider");
-	coll->AddComponent<SpawnCollider>();
-	gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
-	eSpwaner->AddComponent<EnemySpawner>();
+	//gameObject* coll = NewObject<gameObject>(L"SpawnCollider");
+	//coll->AddComponent<SpawnCollider>();
+	//gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
+	//eSpwaner->AddComponent<EnemySpawner>();
+
+	enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
+	auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
+	tb->SetBox(FVector2(1000.0f, 600.0f), 1);
+	//owner->transform()->SetPivot(0.5f, 0.5f);
+
 
 	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
 	m_button = NewObject<gameObject>(L"PauseButton");
@@ -130,4 +137,5 @@ void Scene_Stage1::OnEnter()
 void Scene_Stage1::OnExit()
 {
 	__super::OnExit();
+	BulletManager::GetInstance().SetPlayer(nullptr);
 }
