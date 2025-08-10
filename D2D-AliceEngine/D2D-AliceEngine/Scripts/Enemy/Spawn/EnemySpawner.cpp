@@ -12,7 +12,9 @@
 #include "Prefab/Enemy/NormalCar.h"
 #include <Component/Collider.h>
 #include <Scripts/Bike/BikeStatScript.h>
+#include <Scripts/Enemy/EnemyStatScript.h>
 #include <Scripts/Weapon/Drone.h>
+#include <Scripts/Enemy/EnemyDataManager.h>
 
 EnemySpawner* EnemySpawner::instance = nullptr;
 
@@ -52,7 +54,7 @@ void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {
 		break;
 	}
 
-	// 적 스폰
+    // 적 스폰
 	gameObject* enemy = GetWorld()->NewObject<gameObject>(name);
 	EnemyType etype = static_cast<EnemyType>(_enemyTypeId);
 
@@ -63,12 +65,17 @@ void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {
 		L"Enemy/Drone/enermy_Drone_arm.png"
 	);
 
-	switch (etype)
+    switch (etype)
 	{
 	case EnemySpawner::Bike:
 		enemy->SetTag(L"Enemy");
 		enemy->AddComponent<EnemyBike>();
-		enemy->AddComponent<BikeStatScript>();
+        // BikeStatScript(); // 기존 플레이어 스탯 스크립트는 적에 미부착
+
+		if (auto* statScript = enemy->AddComponent<EnemyStatScript>())
+		{
+			statScript->SetEnemyTypeId(_enemyTypeId);
+		}
 		
 		if (Drone* drone = enemy->AddComponent<Drone>(dronePath))
 		{
@@ -92,7 +99,12 @@ void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {
 		break;
 	case EnemySpawner::Boss:
 		enemy->SetTag(L"Enemy");
-		enemy->AddComponent<BikeStatScript>();
+        // Boss도 EnemyStatScript에서 스탯 관리
+
+		if (auto* statScript = enemy->AddComponent<EnemyStatScript>())
+		{
+			statScript->SetEnemyTypeId(_enemyTypeId);
+		}
 
 		if (Drone* drone = enemy->AddComponent<Drone>(dronePath))
 		{
