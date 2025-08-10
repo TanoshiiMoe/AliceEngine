@@ -35,7 +35,7 @@ void SelectScene::OnEnter()
 	m_UI = NewObject<gameObject>(L"UI");
 	m_UI->AddComponent<SelectWidgetScript>();
 
-	m_UI->AddComponent<InputComponent>()->SetAction(m_UI->GetHandle(), [this]() {Input(); });
+	m_UI->AddComponent<InputComponent>()->SetAction(m_UI->GetHandle(), [this] () {Input(); });
 }
 
 void SelectScene::OnExit()

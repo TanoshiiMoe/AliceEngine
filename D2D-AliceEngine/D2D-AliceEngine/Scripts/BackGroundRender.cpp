@@ -33,28 +33,39 @@ void BackGroundRender::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
-	float playerPosY = m_owner->transform()->GetPosition().y;
+	// 플레이어 이동 스크립트 캐싱
+	if (!m_playerMove)
+	{
+		WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player");
+		if (!player.expired())
+			m_playerMove = player.Get()->GetComponent<BikeMovementScript>();
+	}
 
-	//for (auto& layer : m_loopingLayers)
-	//{
-	//	if (!layer.obj1 || !layer.obj2) return;
+	float playerSpeed = 0.0f;
+	if (m_playerMove)
+		playerSpeed = m_playerMove->GetCurrentSpeed() * m_playerMove->GetSpeedModifierValue();
 
-	//	FVector2 pos1 = layer.obj1->transform()->GetPosition();
-	//	FVector2 pos2 = layer.obj2->transform()->GetPosition();
+	// ScreenSpace로 그리므로 카메라 이동과 무관, X만 패럴랙스 스크롤
+	for (auto& layer : m_loopingLayers)
+	{
+		if (!layer.obj1 || !layer.obj2) continue;
 
-	//	pos1.x -= layer.speed * deltaSeconds;
-	//	pos2.x -= layer.speed * deltaSeconds;
+		FVector2 pos1 = layer.obj1->transform()->GetPosition();
+		FVector2 pos2 = layer.obj2->transform()->GetPosition();
 
-	//	float restX = layer.width;
+		float move = playerSpeed * layer.speed * deltaSeconds;
+		pos1.x -= move;
+		pos2.x -= move;
 
-	//	if (pos1.x <= -restX)
-	//		pos1.x = pos2.x + restX;
-	//	else if (pos2.x <= -restX)
-	//		pos2.x = pos1.x + restX;
+		const float restX = layer.width;
+		if (pos1.x <= -restX)
+			pos1.x = pos2.x + restX;
+		else if (pos2.x <= -restX)
+			pos2.x = pos1.x + restX;
 
-	//	layer.obj1->transform()->SetPosition(FVector2(pos1.x, pos1.y));
-	//	layer.obj2->transform()->SetPosition(FVector2(pos2.x, pos2.y));
-	//}
+		layer.obj1->transform()->SetPosition(FVector2(pos1.x, layer.y));
+		layer.obj2->transform()->SetPosition(FVector2(pos2.x, layer.y));
+	}
 }
 
 void BackGroundRender::LateUpdate(const float& deltaSeconds)
@@ -70,46 +81,10 @@ void BackGroundRender::OnStart()
 	m_owner = GetOwner();
 	//GetCamera()->AddChildObject(m_owner);
 
-	m_sky = GetWorld()->NewObject<gameObject>(L"Sky");
-	GetCamera()->AddChildObject(m_sky);
-	auto sky = m_sky->AddComponent<SpriteRenderer>();
-	sky->LoadData(L"BackGround\\BG_Sky.png");
-	sky->SetDrawType(EDrawType::ScreenSpace);
-	sky->SetRelativePosition(FVector2(960,550));
-	sky->m_layer = -10;
-
-	m_building = GetWorld()->NewObject<gameObject>(L"Building");
-	//GetCamera()->AddChildObject(m_building);
-	auto building = m_building->AddComponent<SpriteRenderer>();
-	building->LoadData(L"BackGround\\BG_Building.png");
-	building->SetDrawType(EDrawType::ScreenSpace);
-	float width = building->GetBitmapSizeX();
-	building->SetRelativePosition(FVector2(0, 390));
-	building->m_layer = -5;
-	
-	auto m_building2 = GetWorld()->NewObject<gameObject>(L"Building2");
-	//GetCamera()->AddChildObject(m_building);
-	auto building2 = m_building2->AddComponent<SpriteRenderer>();
-	building2->LoadData(L"BackGround\\BG_Building.png");
-	building2->SetDrawType(EDrawType::ScreenSpace);
-	building2->SetRelativePosition(FVector2(width, 390));
-	building2->m_layer = -5;
-
-	auto m_building3 = GetWorld()->NewObject<gameObject>(L"Building3");
-	//GetCamera()->AddChildObject(m_building);
-	auto building3 = m_building3->AddComponent<SpriteRenderer>();
-	building3->LoadData(L"BackGround\\BG_Building.png");
-	building3->SetDrawType(EDrawType::ScreenSpace);
-	building3->SetRelativePosition(FVector2(2 * width, 390));
-	building3->m_layer = -5;
-
-	auto m_building4 = GetWorld()->NewObject<gameObject>(L"Building4");
-	//GetCamera()->AddChildObject(m_building);
-	auto building4 = m_building4->AddComponent<SpriteRenderer>();
-	building4->LoadData(L"BackGround\\BG_Building.png");
-	building4->SetDrawType(EDrawType::ScreenSpace);
-	building4->SetRelativePosition(FVector2(3 * width, 390));
-	building->m_layer = -5;
+	// 패럴랙스 레이어 구성 (위 3, 아래 3)
+	AddLooping(L"Sky",       L"BackGround\\BG_Sky.png",       -10, 550.0f, 0.2f); // 가장 먼 상단
+	AddLooping(L"Clouds",    L"BackGround\\BG_Building.png",  -7,  470.0f, 0.4f); // 중간 상단(임시 리소스)
+	AddLooping(L"Building",  L"BackGround\\BG_Building.png",  -5,  390.0f, 0.6f); // 가까운 상단
 
 	//m_bridge = GetWorld()->NewObject<gameObject>(L"Bridge");
 	//auto bridge = m_bridge->AddComponent<SpriteRenderer>();
@@ -151,15 +126,9 @@ void BackGroundRender::OnStart()
 		BikeMovementScript* bs = player.Get()->GetComponent<BikeMovementScript>();
 		// 여기에 Get함수로 속도 받아오기
 	}
-	// 맨 뒷 숫자가 속도임
-	//AddLooping(L"Building", L"BackGround\\BG_Building.png", -5, 340, 30);
-
-	//AddLooping(L"GuardRail", L"BackGround\\BG_GuardRail.png", 12, 310, 450);
-	//AddLooping(L"BackBarrier", L"BackGround\\BG_BackBarrier.png", 10, 250, 450);
-
-	//AddLooping(L"Bridge", L"BackGround\\BG_Bridge.png", 4, 1190, 450);
-	//AddLooping(L"Market", L"BackGround\\BG_Market.png", 5, 1140, 450);
-	//AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740, 450);
+	AddLooping(L"BackBarrier", L"BackGround\\BG_BackBarrier.png", 10, 250.0f, 0.9f); // 중간 하단
+	AddLooping(L"GuardRail",  L"BackGround\\BG_GuardRail.png",  12, 310.0f, 1.0f); // 가장 가까운 하단
+	//AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740.0f, 1.2f);
 }
 
 void BackGroundRender::OnEnd()
