@@ -80,15 +80,21 @@ void Scene_Stage1::OnEnter()
 	// 타일맵 추가
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>();
-	m_tile->AddComponent<TileMapManager>();
+	if (auto* tileMgr = m_tile->AddComponent<TileMapManager>())
+	{
+		tileMgr->SetTilePaths(
+			L"TileMap/stage01_real/stage01_real.tmj",
+			L"TileMap/stage01_real/Tile_Road.tsj",
+			L"TileMap/TileMapColiderInfo.json");
+	}
 
 	// 적 스포너 매니저 생성
 	gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
 	eSpwaner->AddComponent<EnemySpawner>();
 
 	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
-	m_button = NewObject<gameObject>(L"PauseButton");
-	m_button->AddComponent<StageWidgetScript>();
+	//m_button = NewObject<gameObject>(L"PauseButton");
+	//m_button->AddComponent<StageWidgetScript>();
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

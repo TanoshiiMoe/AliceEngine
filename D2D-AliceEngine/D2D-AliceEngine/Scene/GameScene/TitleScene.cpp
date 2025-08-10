@@ -49,7 +49,7 @@ void TitleScene::OnEnter()
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
 		if (Input::IsKeyPressed(VK_3)) {
-			SceneManager::ChangeScene(L"KangTest");
+			SceneManager::ChangeScene(Define::Scene_Stage1);
 		}
 	});
 }

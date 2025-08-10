@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
 
+class gameObject;
 class Scene_Stage2 : public Scene
 {
 public:
@@ -14,8 +15,25 @@ public:
     void OnEnter() override;
     void OnExit() override;
 
+    gameObject* m_cameraController;
+
+    gameObject* m_player;
+    gameObject* m_sound;
+    gameObject* m_tile;	// = 3
+    gameObject* m_wall;
+
+    gameObject* m_UI;
+    gameObject* m_button;
+
+    gameObject* m_bg;	// 임시 배경
+
+    gameObject* m_truck;
+
 private:
     gameObject* m_textGO{ nullptr };
+
+    // 컷씬 종료 후 전환할 씬명
+    std::wstring m_nextSceneName = L"Scene_Stage2";
 };
 
 

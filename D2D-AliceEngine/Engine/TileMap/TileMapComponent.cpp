@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "TileMapComponent.h"
 #include <Component/Component.h>
 #include <Manager/D2DRenderManager.h>
@@ -45,13 +45,13 @@ void TileMapComponent::Update(const float& deltaSeconds)
 
 void TileMapComponent::LoadTileMapData(const std::wstring& path)
 {
-	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // ÆÄÀÏ ÀÌ¸§¸¸ ÀúÀå
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // íŒŒì¼ ì´ë¦„ë§Œ ì €ìž¥
 	TileMapLoader::LoadTileMap(filePath, tileMap);
 }
 
 void TileMapComponent::LoadTileSetData(const std::wstring& path)
 {
-	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // ÆÄÀÏ ÀÌ¸§¸¸ ÀúÀå
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // íŒŒì¼ ì´ë¦„ë§Œ ì €ìž¥
 	TileMapLoader::LoadTileSet(filePath, tileSet);
 }
 
@@ -105,10 +105,10 @@ void TileMapComponent::CreateTileCollision()
 			collisionGo->transform()->SetPivot(0.5f, 0.5f);
 			collisionGo->AddComponent<Collider>();
 
-			// ÅÂ±× ¼³Á¤
+			// íƒœê·¸ ì„¤ì •
 			collisionGo->SetTag(L"EnemySpawn");
 
-			// ½ºÆùµ¥ÀÌÅÍ ¼³Á¤
+			// ìŠ¤í°ë°ì´í„° ì„¤ì •
 			collisionGo->AddComponent<SpawnData>()->SetCollData(tileCollision[tileId + 1]);
 
 
@@ -116,7 +116,7 @@ void TileMapComponent::CreateTileCollision()
 			{
 				collider->SetBoxSize(FVector2(tileWidth, tileHeight));
 				collider->boxComponent->SetSkewAngle(FVector2(30, 0));
-				collider->SetLayer(tileCollision[tileId+1].collisionChannel); // ½ÇÁ¦ À§Ä¡¸¦ ¹ÝÈ¯ÇÏ±â À§ÇØ -1 Çß´ø°ÍÀ» ´Ù½Ã +1
+				collider->SetLayer(tileCollision[tileId+1].collisionChannel); // ì‹¤ì œ ìœ„ì¹˜ë¥¼ ë°˜í™˜í•˜ê¸° ìœ„í•´ -1 í–ˆë˜ê²ƒì„ ë‹¤ì‹œ +1
 			}
 			go.push_back(collisionGo);
 		}
@@ -127,7 +127,6 @@ void TileMapComponent::CreateTileRenderers()
 {
 	m_tile = GetWorld()->NewObject<gameObject>(L"tileSprite");
 	TileMapRenderer* tileRenderer = m_tile->AddComponent<TileMapRenderer>();
-	//tileRenderer->m_layer = 1;
 	tileRenderer->LoadData(StringHelper::string_to_wstring(tileSet.image));
 	tileRenderer->SetSkew(skewAngle);
 	tileRenderer->SetMapInfo(tileMap, tileSet);
@@ -146,9 +145,9 @@ void TileMapComponent::Release()
 }
 
 /*
-* @briefs : º¯È¯Çà·ÄÀ» Àû¿ëÇÏ¿© ºñÆ®¸ÊÀ» ¿øÇÏ´Â À§Ä¡¿¡ ±×¸³´Ï´Ù.
+* @briefs : ë³€í™˜í–‰ë ¬ì„ ì ìš©í•˜ì—¬ ë¹„íŠ¸ë§µì„ ì›í•˜ëŠ” ìœ„ì¹˜ì— ê·¸ë¦½ë‹ˆë‹¤.
 * @details
-*	ETransformType : ÁÂÇ¥°è ±¸ºÐ
+*	ETransformType : ì¢Œí‘œê³„ êµ¬ë¶„
 */
 
 void TileMapComponent::Render()
@@ -173,5 +172,14 @@ void TileMapComponent::SetSkew(const FVector2& angle)
 
 FVector2 TileMapComponent::GetSize()
 {
-	return FVector2(0, 0); // TODO: ½ÇÁ¦ Å©±â °è»ê ·ÎÁ÷ Ãß°¡)
+	return FVector2(0, 0); // TODO: ì‹¤ì œ í¬ê¸° ê³„ì‚° ë¡œì§ ì¶”ê°€)
+}
+
+int TileMapComponent::GetTileLayer()
+{
+	if (TileMapRenderer* tileRenderer = m_tile->GetComponent<TileMapRenderer>())
+	{
+		return tileRenderer->m_layer;
+	}
+	return -1;
 }
