@@ -14,6 +14,8 @@
 #include <Prefab/Enemy/NormalCar.h>
 #include <Scripts/Enemy/Spawn/SpawnData.h>
 #include <GameManager/BulletManager.h>
+#include <GameManager/GamePlayManager.h>
+#include <Component/SpriteRenderer.h>
 
 void EnemySpawnTriggerBox::Initialize()
 {
@@ -29,7 +31,7 @@ void EnemySpawnTriggerBox::OnStart()
         m_collider->SetBoxSize(m_boxSize);
         m_collider->SetLayer(m_boxLayer);
     }
-    m_initialized = true;
+    m_bSpawnable = true;
 }
 
 void EnemySpawnTriggerBox::Update(const float& /*deltaSeconds*/)
@@ -40,6 +42,50 @@ void EnemySpawnTriggerBox::Update(const float& /*deltaSeconds*/)
     {
         owner->SetPosition(player->GetPosition());
     }
+}
+
+// 일단 12번으로 보스가 나온다고 가정
+void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
+{
+    // 이름 정하기
+    std::wstring name = L"Boss";
+    gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
+
+    if (auto player = GamePlayManager::GetInstance().GetPlayer())
+    {
+        player->AddChildObject(enemy);
+    }
+
+    enemy->AddComponent<Car>();
+    enemy->AddComponent<SpriteRenderer>()->LoadData(L"Enemy/Durang/boss_idle_notfix.png");
+    enemy->AddComponent<Collider>()->SetBoxSize(FVector2(280, 280));
+    enemy->SetScale(FVector2(1.4f, 1.4f));
+
+    FDroneSpritePath dronePath(
+        L"Enemy/Drone/enermy_Drone_body.png",
+        L"Enemy/Drone/enermy_Drone_arm.png"
+    );
+
+    enemy->SetTag(L"Enemy");
+
+    if (auto* statScript = enemy->AddComponent<EnemyStatScript>())
+        statScript->SetEnemyTypeId(12);
+
+    if (auto* drone = enemy->AddComponent<Drone>(dronePath))
+    {
+        drone->initBodyPos = FVector2(-50.0f, 40.0f);
+        drone->initBodySize = FVector2(0.85f, 0.85f);
+        drone->SetDroneType(EDroneType::Enemy);
+    }
+
+    if (auto* drone = enemy->AddComponent<Drone>(dronePath))
+    {
+        drone->initBodyPos = FVector2(-50.0f, -40.0f);
+        drone->initBodySize = FVector2(0.85f, 0.85f);
+        drone->SetDroneType(EDroneType::Enemy);
+    }
+
+    enemy->transform()->SetPosition(worldPos);
 }
 
 void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldPos)
@@ -110,7 +156,7 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
 
 void EnemySpawnTriggerBox::OnTriggerEnter2D(Collider* collider)
 {
-    if (!m_initialized || !collider) return;
+    if (!m_bSpawnable || !collider) return;
 
     if (collider->GetOwner()->GetTag() == L"EnemySpawn")
     {

@@ -19,6 +19,7 @@
 #include <Prefab/Enemy/Core/Car.h>
 #include <Scripts/Weapon/Drone.h>
 #include <GameManager/PlayerDataManager.h>
+#include <Scripts/Player/PlayerManager.h>
 
 void BikeStatScript::Initialize()
 {
@@ -132,7 +133,7 @@ void BikeStatScript::OnStart()
         {
             owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
             owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
-            if (auto car = owner->GetComponent<Car>()) car->DelayDestroy();
+            if (auto player = owner->GetComponent<PlayerManager>()) player->DelayDestroy();
             if (auto drone = owner->GetComponent<Drone>()) drone->DelayDestroy();
             return;
         }

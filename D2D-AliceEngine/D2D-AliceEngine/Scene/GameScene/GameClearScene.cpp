@@ -5,6 +5,7 @@
 #include <Core/Input.h>
 #include <Component/SpriteRenderer.h>
 #include <Helpers/CoordHelper.h>
+#include <GameManager/GamePlayManager.h>
 
 void GameClearScene::Initialize()
 {
@@ -53,4 +54,5 @@ void GameClearScene::OnEnter()
 void GameClearScene::OnExit()
 {
     __super::OnExit();
+    GamePlayManager::GetInstance().ReleaseTimers();
 }

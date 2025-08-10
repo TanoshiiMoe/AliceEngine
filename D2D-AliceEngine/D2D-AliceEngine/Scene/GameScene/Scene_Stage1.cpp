@@ -71,6 +71,7 @@ void Scene_Stage1::OnEnter()
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
 	BulletManager::GetInstance().SetPlayer(m_player);
+	GamePlayManager::GetInstance().SetPlayer(m_player);
 	m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
@@ -92,14 +93,9 @@ void Scene_Stage1::OnEnter()
 	}
 
 	// 적 스포너 매니저 생성
-	//gameObject* coll = NewObject<gameObject>(L"SpawnCollider");
-	//coll->AddComponent<SpawnCollider>();
-	//gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
-	//eSpwaner->AddComponent<EnemySpawner>();
-
 	enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
 	auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
-	tb->SetBox(FVector2(1000.0f, 600.0f), 1);
+	tb->SetBox(FVector2(1500.0f, 700.0f), 1);
 	//owner->transform()->SetPivot(0.5f, 0.5f);
 
 
@@ -117,19 +113,14 @@ void Scene_Stage1::OnEnter()
 		if (Input::IsKeyPressed(VK_3)) {
 			SceneManager::ChangeScene(L"TitleScene");
 		}
-	});
-
-	gameObject* clearGame = NewObject<gameObject>(L"SceneChanger2");
-	clearGame->AddComponent<InputComponent>()->SetAction(clearGame->GetHandle(), [this]() {
 		if (Input::IsKeyPressed(VK_4)) {
 			GamePlayManager::GetInstance().GameClear();
 		}
-	});
-
-	gameObject* overGame = NewObject<gameObject>(L"SceneChanger2");
-	overGame->AddComponent<InputComponent>()->SetAction(overGame->GetHandle(), [this]() {
 		if (Input::IsKeyPressed(VK_5)) {
 			GamePlayManager::GetInstance().GameOver();
+		}
+		if (Input::IsKeyPressed(VK_6)) {
+			GamePlayManager::GetInstance().PlayBossMode();
 		}
 	});
 }
@@ -137,5 +128,7 @@ void Scene_Stage1::OnEnter()
 void Scene_Stage1::OnExit()
 {
 	__super::OnExit();
+	GamePlayManager::GetInstance().ReleaseTimers();
 	BulletManager::GetInstance().SetPlayer(nullptr);
+	GamePlayManager::GetInstance().SetPlayer(nullptr);
 }

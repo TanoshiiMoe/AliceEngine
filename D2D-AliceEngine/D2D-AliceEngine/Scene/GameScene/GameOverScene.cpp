@@ -5,6 +5,7 @@
 #include <Core/Input.h>
 #include <Component/SpriteRenderer.h>
 #include <Helpers/CoordHelper.h>
+#include <GameManager/GamePlayManager.h>
 
 void GameOverScene::Initialize()
 {
@@ -55,4 +56,5 @@ void GameOverScene::OnEnter()
 void GameOverScene::OnExit()
 {
     __super::OnExit();
+    GamePlayManager::GetInstance().ReleaseTimers();
 }

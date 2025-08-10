@@ -5,6 +5,8 @@
 #include <utility>
 #include <Scripts/Widget/BlackOutWidgetScript.h>
 #include <Scripts/Widget/VignetteWidgetScript.h>
+#include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
+#include <Scene/Scene.h>
 
 GamePlayManager::GamePlayManager()
 {
@@ -109,6 +111,28 @@ void GamePlayManager::GameClear()
         3.0f);
 }
 
+
+void GamePlayManager::PlayBossMode()
+{
+    if (WeakObjectPtr<gameObject> triggerBox = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"EnemySpawnTriggerBox"))
+    {
+        if (triggerBox.expired()) return;
+        if (EnemySpawnTriggerBox* es = triggerBox->GetComponent<EnemySpawnTriggerBox>())
+        {
+            es->SetSpawnable(false);
+            es->SpawnBossAt(FVector2(400, 0));
+
+            //TimerManager::GetInstance().SetTimer(bossSpawnTimer, [this]()
+            //{
+            //    EnemySpawnTriggerBox::SpawnEnemyAt(0, m_player->GetPosition() + FVector2(500,0));
+            //},
+            //    3.0f,
+            //    true,
+            //    1.0f);
+        }
+    }
+}
+
 void GamePlayManager::SpawnVignette(float durationSec, float maxAlpha)
 {
     if (auto go = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"VignetteOverlay"))
@@ -194,4 +218,14 @@ void GamePlayManager::MarkLoadingComplete()
     // 로딩 완료 후 기본은 InGame로(필요 시 UI에서 Pause/Start를 별도로 호출 가능)
     if (m_State == EGameRunState::Loading)
         SetState(EGameRunState::InGame);
+}
+
+// 모든 내부 타이머 클리어 (씬 전환 종료 시 호출)
+void GamePlayManager::ReleaseTimers()
+{
+    auto& TM = TimerManager::GetInstance();
+    TM.ClearTimer(gameOverTimer);
+    TM.ClearTimer(gameOverTransitionTimer);
+    TM.ClearTimer(bossSpawnTimer);
+    TM.ClearTimer(m_bossFlickerTimer);
 }

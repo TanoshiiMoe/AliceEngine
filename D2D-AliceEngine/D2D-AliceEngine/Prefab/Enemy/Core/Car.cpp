@@ -11,12 +11,14 @@
 #include <memory>
 #include <Helpers/StringHelper.h>
 #include <Manager/UpdateTaskManager.h>
+#include <GameManager/GamePlayManager.h>
 
 void Car::Initialize()
 {
 	__super::Initialize();
 	REGISTER_SCRIPT_METHOD(OnStart);
-    REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_NewlySpawned);
+    // 보스 위치 보정을 위해 매 프레임 갱신 필요
+    REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
 
 	//?븷?땲硫붿씠?꽣 ?엳?쓣?떆
 	//owner->AddComponent<Animator>();
@@ -81,6 +83,16 @@ void Car::Update(const float& deltaSeconds)
         float t = m_fadeElapsed / m_fadeDuration;
         if (t > 1.0f) t = 1.0f;
         m_fadeTargetSR->SetOpacity(1.0f - t);
+    }
+
+    if (owner && owner->GetName() == L"Boss")
+    {
+        if (auto player = GamePlayManager::GetInstance().GetPlayer())
+        {
+            const FVector2 ppos = player->GetPosition();
+            // 월드에서 Y=0으로 고정, X는 플레이어 +400
+            owner->transform()->SetPosition(FVector2(400, -ppos.y));
+        }
     }
 }
 
