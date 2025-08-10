@@ -3,16 +3,8 @@
 #include "Core/Delegate.h"
 #include <unordered_map>
 
-// 적 스탯 구조체: JSON으로부터 주입되는 데이터 보관
-struct FEnemyStats
-{
-    int   maxHP      = 0;
-    int   hp         = 0;
-    float battery    = 0.0f;
-    float moveSpeed  = 0.0f;
-    float attackDelay= 0.0f;
-    float damage     = 0.0f;
-};
+// 적 스탯 구조체는 EnemyDataManager에서 정의/관리
+struct FEnemyStats;
 
 class EnemyManager : public ScriptComponent
 {
@@ -35,11 +27,7 @@ public:
 	void RemoveDieAction(ObjectHandle _handle);
 	void ClearDieAction();
 
-    // JSON 기반 적 데이터 파싱/조회 (정적 전역 캐시)
-    static void EnsureStatsLoaded();
-    static bool LoadStatsFromJson(const std::wstring& relativePath);
-    static bool GetStats(int enemyTypeId, FEnemyStats& outStats);
-    static bool HasStats(int enemyTypeId);
+    // 이동/행동 관련만 담당. 데이터는 EnemyDataManager를 통해 관리
 private:
 	MultiDelegate<> dieActions;
 

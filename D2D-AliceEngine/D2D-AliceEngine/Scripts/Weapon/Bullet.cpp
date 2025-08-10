@@ -19,6 +19,7 @@
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Bike/BikeStatScript.h>
 #include <Prefab/Enemy/Core/Car.h>
+#include <Scripts/Enemy/EnemyStatScript.h>
 
 void Bullet::Initialize()
 {
@@ -185,9 +186,9 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 	case EDroneType::Player:
 		if (collider->GetOwner()->GetTag() == L"Enemy")
 		{
-			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+			if (EnemyStatScript* bs = collider->GetOwner()->GetComponent<EnemyStatScript>())
 			{
-				bs->m_bikeStat->DecreaseAbility("HP", 5);
+				bs->m_enemyStat->DecreaseAbility("HP", 5);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 		}

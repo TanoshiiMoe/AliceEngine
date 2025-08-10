@@ -54,6 +54,7 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
 
 void CutSceneWidgetScript::Awake()
 {
+    m_isAlive = true;
 }
 
 void CutSceneWidgetScript::OnStart()
@@ -141,6 +142,7 @@ void CutSceneWidgetScript::OnStart()
     // 시작 시 감춤
     m_guideAlpha = 0.0f;
     m_guideText->SetOpacity(0.0f);
+    m_guideFadeElapsed = 0.0f;
 
 	// 버튼 이벤트 설정
     // Next 버튼 핸들러 주석 처리
@@ -223,13 +225,15 @@ void CutSceneWidgetScript::OnStart()
 
 void CutSceneWidgetScript::OnEnd()
 {
+    m_isAlive = false;
+    StopGuideTimers();
 }
 
 void CutSceneWidgetScript::OnDestroy()
 {
-    TimerManager::GetInstance().ClearTimer(m_guideDelayTimer);
-    TimerManager::GetInstance().ClearTimer(m_guideFadeTimer);
-    TimerManager::GetInstance().ClearTimer(m_guideBlinkTimer);
+    m_isAlive = false;
+    StopGuideTimers();
+    m_guideText = nullptr;
 }
 
 void CutSceneWidgetScript::LoadCutSceneImages()
@@ -399,6 +403,7 @@ void CutSceneWidgetScript::ShowGuideAfterDelay()
     TimerManager::GetInstance().SetTimer(
         m_guideDelayTimer,
         [this]() {
+            if (!m_isAlive) { TimerManager::GetInstance().ClearTimer(m_guideDelayTimer); return; }
             // 2초 경과 후 가이드 페이드 인 시작 및 입력 허용
             m_canAdvance = true;
             StartGuideFadeIn(0.3f);
@@ -413,13 +418,14 @@ void CutSceneWidgetScript::StartGuideFadeIn(float durationSec)
 {
     TimerManager::GetInstance().ClearTimer(m_guideFadeTimer);
     m_guideAlpha = 0.0f;
+    m_guideFadeElapsed = 0.0f;
     TimerManager::GetInstance().SetTimer(
         m_guideFadeTimer,
         [this, durationSec]() mutable {
-            static float elapsed = 0.0f;
+            if (!m_isAlive) { TimerManager::GetInstance().ClearTimer(m_guideFadeTimer); return; }
             const float dt = 1.0f / 60.0f;
-            elapsed += dt;
-            float t = elapsed / durationSec;
+            m_guideFadeElapsed += dt;
+            float t = m_guideFadeElapsed / durationSec;
             if (t > 1.0f) t = 1.0f;
             m_guideAlpha = t;
             SetGuideAlpha(m_guideAlpha);
@@ -427,7 +433,6 @@ void CutSceneWidgetScript::StartGuideFadeIn(float durationSec)
             {
                 TimerManager::GetInstance().ClearTimer(m_guideFadeTimer);
                 // 페이드 인 완료 후 반짝임 시작
-                elapsed = 0.0f;
             }
         },
         0.0f,
@@ -443,6 +448,7 @@ void CutSceneWidgetScript::StartGuideBlink(float intervalSec)
     TimerManager::GetInstance().SetTimer(
         m_guideBlinkTimer,
         [this, visible = true]() mutable {
+            if (!m_isAlive) { TimerManager::GetInstance().ClearTimer(m_guideBlinkTimer); return; }
             visible = !visible;
             SetGuideAlpha(visible ? 1.0f : 0.3f);
         },
@@ -491,7 +497,7 @@ void CutSceneWidgetScript::StartTransitionTo(int targetIndex, float durationSec)
     m_transitionSwitchover = false;
     m_targetIndex = targetIndex;
 
-    // 초기 상태: 완전 가시 상태
+    // 초기 상태
     ApplyOpacityToAll(1.f);
     EnsureFadeOverlay();
     if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = 9999 + m_relativeLayer; }

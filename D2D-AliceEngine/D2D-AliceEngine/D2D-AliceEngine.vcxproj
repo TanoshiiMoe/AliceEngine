@@ -163,6 +163,10 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scene\GameScene\Scene_Stage2.h" />
+    <ClInclude Include="Scene\GameScene\Scene_Stage3.h" />
+    <ClInclude Include="Scripts\Enemy\EnemyDataManager.h" />
+    <ClInclude Include="Scripts\Enemy\EnemyStatScript.h" />
     <ClInclude Include="Scene\EffectTestScene.h" />
     <ClInclude Include="Scripts\Widget\BlackOutWidgetScript.h" />
     <ClInclude Include="Scripts\Widget\CutSceneWidgetScript.h" />
@@ -216,11 +220,12 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scene\SpineScene.h" />
     <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
     <ClInclude Include="Scripts\Widget\StageWidgetScript.h" />
+    <ClInclude Include="Scene\GameScene\Scene_Stage1.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\Video\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
     <ClInclude Include="Prefab\Truck.h" />
-    <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Scene\GameScene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
     <ClInclude Include="Scripts\TitleAudioScript.h" />
@@ -228,6 +233,10 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scene\GameScene\Scene_Stage2.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage3.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyDataManager.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyStatScript.cpp" />
     <ClCompile Include="Scene\EffectTestScene.cpp" />
     <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\CutSceneWidgetScript.cpp" />
@@ -278,7 +287,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\Video\YuukaVideo.cpp" />
     <ClCompile Include="Scripts\UI_Script.cpp" />
     <ClCompile Include="Prefab\Truck.cpp" />
-    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Scene\GameScene\TitleScene.cpp" />
     <ClCompile Include="Scripts\TitleUIScript.cpp" />
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
     <ClCompile Include="Scene\SelectScene.cpp" />
@@ -292,6 +301,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
     <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

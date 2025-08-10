@@ -172,7 +172,7 @@
     <ClInclude Include="Scripts\Player\PlayerManager.h">
       <Filter>Scripts\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TitleScene.h">
+    <ClInclude Include="Scene\GameScene\TitleScene.h">
       <Filter>Scene\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\KangScene\KangScene.h">
@@ -265,6 +265,21 @@
     <ClInclude Include="Scene\EffectTestScene.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\EnemyStatScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\EnemyDataManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\Scene_Stage1.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\Scene_Stage2.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\Scene_Stage3.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -354,7 +369,7 @@
     <ClCompile Include="Scripts\Player\PlayerManager.cpp">
       <Filter>Scripts\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\TitleScene.cpp">
+    <ClCompile Include="Scene\GameScene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
@@ -428,5 +443,10 @@
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
     <ClCompile Include="Scene\EffectTestScene.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyStatScript.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyDataManager.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage2.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage3.cpp" />
   </ItemGroup>
 </Project>

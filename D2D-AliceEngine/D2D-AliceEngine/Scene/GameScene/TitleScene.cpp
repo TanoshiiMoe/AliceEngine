@@ -43,6 +43,15 @@ void TitleScene::OnEnter()
 
 	// 테스트용 컷씬 위젯. 이걸 켜서 확인할 것.
 	//m_UI->AddComponent<CutSceneWidgetScript>();
+
+
+	// 디버그용 씬 전환
+	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
+	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
+		if (Input::IsKeyPressed(VK_3)) {
+			SceneManager::ChangeScene(L"KangTest");
+		}
+	});
 }
 
 void TitleScene::OnExit()

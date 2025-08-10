@@ -1,4 +1,4 @@
-﻿#include "KangScene.h"
+﻿#include "Scene_Stage1.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -35,22 +35,22 @@
 #include <Scripts/Widget/CutSceneWidgetScript.h>
 #include <Scripts/Widget/StageWidgetScript.h>
 
-void KangScene::Initialize()
+void Scene_Stage1::Initialize()
 {
 	__super::Initialize();
 }
 
-void KangScene::Release()
+void Scene_Stage1::Release()
 {
 	__super::Release();
 }
 
-void KangScene::Update()
+void Scene_Stage1::Update()
 {
 	__super::Update();
 }
 
-void KangScene::OnEnter()
+void Scene_Stage1::OnEnter()
 {
 	__super::OnEnter();
 
@@ -61,7 +61,6 @@ void KangScene::OnEnter()
 	// 컷씬 위젯 추가 및 다음 씬 이름 주입
 	if (CutSceneWidgetScript* cut = m_UI->AddComponent<CutSceneWidgetScript>())
 		cut->m_nextSceneName = m_nextSceneName;
-
 
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraMover>();
@@ -78,7 +77,6 @@ void KangScene::OnEnter()
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<Audio>();
 
-
 	// 타일맵 추가
 	m_tile = NewObject<gameObject>(L"TileMap");
 	m_tile->AddComponent<TileMapComponent>();
@@ -91,7 +89,7 @@ void KangScene::OnEnter()
 	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
 	m_button = NewObject<gameObject>(L"PauseButton");
 	m_button->AddComponent<StageWidgetScript>();
-	
+
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();
@@ -99,13 +97,13 @@ void KangScene::OnEnter()
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
-		if (Input::IsKeyDown(VK_3)) {
+		if (Input::IsKeyPressed(VK_3)) {
 			SceneManager::ChangeScene(L"TitleScene");
 		}
-		});
+	});
 }
 
-void KangScene::OnExit()
+void Scene_Stage1::OnExit()
 {
 	__super::OnExit();
 }

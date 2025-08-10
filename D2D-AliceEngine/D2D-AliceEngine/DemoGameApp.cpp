@@ -9,12 +9,16 @@
 #include <Manager/TimerManager.h>
 
 /*-----���� �ΰ��Ӿ��� �߰��մϴ�-----*/
-#include <Scene/TitleScene.h>
+#include <Scene/GameScene/TitleScene.h>
+#include <Scene/GameScene/Scene_Stage1.h>
+#include <Scene/GameScene/Scene_Stage2.h>
+#include <Scene/GameScene/Scene_Stage3.h>
 #include <Scene/SelectScene.h>
 #include <Scene/KangScene/KangScene.h>
 #include <Scripts/Weapon/BulletManager.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scene/EffectTestScene.h>
+#include <Scripts/Enemy/EnemyDataManager.h>
 
 DemoGameApp::DemoGameApp()
 {
@@ -31,6 +35,8 @@ void DemoGameApp::Initialize()
 	__super::Initialize();
 
 	GamePlayManager::Create();
+	EnemyDataManager::Create();
+	EnemyDataManager::GetInstance().LoadData(L"Enemy/EnemyData.json");
 	SceneManager::AddScene<DemoScene2>(L"aruScene");
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
@@ -40,6 +46,9 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<SpineScene>(L"SpineScene");
 	SceneManager::AddScene<KangScene>(L"KangTest");
 	SceneManager::AddScene<SelectScene>(L"SelectScene");	// stage select
+	SceneManager::AddScene<Scene_Stage1>(Define::Scene_Stage1);	// stage select
+	SceneManager::AddScene<Scene_Stage2>(Define::Scene_Stage2);	// stage select
+	SceneManager::AddScene<Scene_Stage3>(Define::Scene_Stage3);	// stage select
 	SceneManager::ChangeScene(L"TitleScene");
 }
 
