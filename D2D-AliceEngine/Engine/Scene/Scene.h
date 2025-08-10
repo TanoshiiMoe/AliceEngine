@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Object/gameObject.h>
 #include <Object/Camera.h>
 #include <Helpers/StringHelper.h>

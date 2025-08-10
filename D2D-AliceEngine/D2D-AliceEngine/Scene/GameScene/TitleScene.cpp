@@ -57,6 +57,8 @@ void TitleScene::OnEnter()
 void TitleScene::OnExit()
 {
 	__super::OnExit();
+
+	GamePlayManager::GetInstance().ReleaseTimers();
 }
 
 void TitleScene::PlayerInput()
