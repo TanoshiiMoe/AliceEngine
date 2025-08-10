@@ -1,4 +1,4 @@
-#include "BikeMovementScript.h"
+ï»¿#include "BikeMovementScript.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -11,6 +11,8 @@
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
 #include <Manager/UpdateTaskManager.h>
+#include <Component/SkewTransform.h>
+#include <Animation/AnimatorInstance.h>
 
 void BikeMovementScript::Initialize()
 {
@@ -26,14 +28,14 @@ void BikeMovementScript::Initialize()
 void BikeMovementScript::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 void BikeMovementScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
-	// ½½·Î¿ì/ºÎ½ºÆ® È¿°ú ½Ã°£ °¨¼Ò
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	// ìŠ¬ë¡œìš°/ë¶€ìŠ¤íŠ¸ íš¨ê³¼ ì‹œê°„ ê°ì†Œ
 	if (m_modifierDuration > 0.0f)
 	{
 		m_modifierDuration -= deltaSeconds;
@@ -44,7 +46,7 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 		}
 	}
 
-	// Ãæµ¹ ¹İÀÀ Ã³¸®
+	// ì¶©ëŒ ë°˜ì‘ ì²˜ë¦¬
 	if (m_hitReaction)
 	{
 		m_hitTimer -= deltaSeconds;
@@ -53,25 +55,76 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 			m_hitReaction = false;
 			m_hitTimer = 0.0f;
 		}
-		return; // ¿òÂñ ÁßÀÏ ¶© Á¤Áö
+		return; // ì›€ì°” ì¤‘ì¼ ë• ì •ì§€
 	}
 
-	// °¡¼Óµµ Àû¿ë
+	// ê°€ì†ë„ ì ìš©
 	m_currentSpeed += m_acceleration * deltaSeconds;
 	m_currentSpeed = min(m_currentSpeed, m_maxSpeed);
 
-	// ÃÖÁ¾ ¼Óµµ = ÇöÀç¼Óµµ * È¿°ú¹èÀ²
+	// ìµœì¢… ì†ë„ = í˜„ì¬ì†ë„ * íš¨ê³¼ë°°ìœ¨
 	float finalSpeed = m_currentSpeed * m_speedModifier;
 	m_prevMoveAmount = finalSpeed;
-	// ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿
+	// ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™
 	if (auto transform = m_owner->transform())
 		transform->AddPosition(finalSpeed * deltaSeconds, 0);
+
+	// ì í”„ ì…ë ¥ ì²˜ë¦¬ (ìŠ¤í˜ì´ìŠ¤ë°”)
+	if (Input::IsKeyPressed(VK_SPACE) && !m_isJumping && !m_hitReaction)
+	{
+		m_isJumping = true;
+		m_groundY = owner->GetPosition().y;
+		m_jumpVelocity = m_jumpInitialVelocity;
+
+		if (auto anim = owner->GetComponent<AnimatorInstance>())
+		{
+			m_jumpPrevLayer = anim->m_layer;
+			anim->m_layer = 70000;
+		}
+
+		// íšŒì „ ì ìš© (60ë„)
+		if (auto tr = m_owner->transform())
+			tr->SetRotation(60.0f);
+	}
+
+	// ì í”„ ì¤‘ ë¬¼ë¦¬ ì²˜ë¦¬
+	if (m_isJumping)
+	{
+		// ìˆ˜ì§ ì†ë„ì— ì¤‘ë ¥ ì ìš©
+		m_jumpVelocity += m_jumpGravity * deltaSeconds;
+
+		float dy = m_jumpVelocity * deltaSeconds;
+
+		if (auto tr = m_owner->transform())
+		{
+			FVector2 pos = tr->GetPosition();
+			pos.y += dy;
+
+			// ì°©ì§€ ì²´í¬
+			if (pos.y <= m_groundY)
+			{
+				pos.y = m_groundY;
+				m_isJumping = false;
+				m_jumpVelocity = 0.0f;
+				tr->SetRotation(0.0f);
+
+				if (auto anim = owner->GetComponent<AnimatorInstance>())
+				{
+					anim->m_layer = m_jumpPrevLayer;
+				}
+			}
+
+			tr->SetPosition(pos);
+			if (auto transform = m_owner->transform())
+				transform->AddPosition((finalSpeed + m_jumpWeightX) * deltaSeconds, 0);
+		}
+	}
 }
 
 void BikeMovementScript::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -81,15 +134,17 @@ void BikeMovementScript::Awake()
 
 void BikeMovementScript::OnStart()
 {
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	m_owner = GetOwner();
 	m_currentSpeed = m_initialSpeed;
+	if (m_owner && m_owner->transform())
+		m_groundY = m_owner->transform()->GetPosition().y;
 
 }
 
 void BikeMovementScript::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 void BikeMovementScript::OnDestroy()
@@ -98,8 +153,8 @@ void BikeMovementScript::OnDestroy()
 
 void BikeMovementScript::OnCollisionEnter2D(Collision2D* collider)
 {
-	std::cout << "OnCollisionEnter2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionEnter2D È£ÃâµÊ\n");
+	std::cout << "OnCollisionEnter2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnCollisionEnter2D í˜¸ì¶œë¨\n");
 
 	m_hitReaction = true;
 	m_hitTimer = m_hitReactionTime;
@@ -107,48 +162,48 @@ void BikeMovementScript::OnCollisionEnter2D(Collision2D* collider)
 
 void BikeMovementScript::OnCollisionStay2D(Collision2D* collider)
 {
-	/*std::cout << "OnCollisionStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionStay2D È£ÃâµÊ\n");*/
+	/*std::cout << "OnCollisionStay2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnCollisionStay2D í˜¸ì¶œë¨\n");*/
 }
 
 void BikeMovementScript::OnCollisionExit2D(Collision2D* collider)
 {
-	std::cout << "OnCollisionExit2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionExit2D È£ÃâµÊ\n");
+	std::cout << "OnCollisionExit2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnCollisionExit2D í˜¸ì¶œë¨\n");
 }
 
 void BikeMovementScript::OnTriggerEnter2D(Collider* collider)
 {
-	std::cout << "OnTriggerEnter2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerEnter2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerEnter2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerEnter2D í˜¸ì¶œë¨\n");
 }
 
 void BikeMovementScript::OnTriggerStay2D(Collider* collider)
 {
-	/*std::cout << "OnTriggerStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerStay2D È£ÃâµÊ\n");*/
+	/*std::cout << "OnTriggerStay2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerStay2D í˜¸ì¶œë¨\n");*/
 }
 
 void BikeMovementScript::OnTriggerExit2D(Collider* collider)
 {
-	std::cout << "OnTriggerExit2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerExit2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerExit2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerExit2D í˜¸ì¶œë¨\n");
 }
 
 void BikeMovementScript::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 
 void BikeMovementScript::ApplySlow(float slowFactor, float duration)
 {
-	m_speedModifier = slowFactor;      // ¿¹: 0.5f ¡æ Àı¹İ ¼Óµµ
+	m_speedModifier = slowFactor;      // ì˜ˆ: 0.5f â†’ ì ˆë°˜ ì†ë„
 	m_modifierDuration = duration;
 }
 
 void BikeMovementScript::ApplyBoost(float boostFactor, float duration)
 {
-	m_speedModifier = boostFactor;     // ¿¹: 1.5f ¡æ 50% Áõ°¡
+	m_speedModifier = boostFactor;     // ì˜ˆ: 1.5f â†’ 50% ì¦ê°€
 	m_modifierDuration = duration;
 }

@@ -1,4 +1,4 @@
-#include "PlayerManager.h"
+ï»¿#include "PlayerManager.h"
 #include "System/ScriptSystem.h"
 #include "Component/SkewTransform.h"
 #include "Manager/SceneManager.h"
@@ -23,17 +23,17 @@ void PlayerManager::OnStart()
 {
 	__super::Initialize();
 
-	// SkewTransform ¼³Á¤
+	// SkewTransform ì„¤ì •
 	if (auto st = owner->GetComponent<SkewTransform>())
 		st->groundTile = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"TileMap");
 
-	// SRT ¼³Á¤
+	// SRT ì„¤ì •
 	owner->transform()->SetPosition(0, 0);
 	owner->transform()->SetRotation(0);
 	owner->transform()->SetScale(1.5f, 1.5f);
 	owner->transform()->SetPivot(0.5f);
 
-	// ¾Ö´Ï¸ÞÀÌÅÍ ¼³Á¤
+	// ì• ë‹ˆë©”ì´í„° ì„¤ì •
 	AnimatorController::LoadAnimatorController(L"Zero/Zero_AnimController.json", animController);
 	animInstance = owner->GetComponent<AnimatorInstance>();
 	animInstance->SetAnimatorController(&animController);
@@ -46,7 +46,7 @@ void PlayerManager::OnStart()
 	animInstance->m_layer = 5;
 	animInstance->OnStart();
 
-	// ÄÝ¶óÀÌ´õ ¼³Á¤
+	// ì½œë¼ì´ë” ì„¤ì •
 	owner->GetComponent<Collider>()->SetBoxSize(FVector2(35, 10));
 	if (auto collider = owner->GetComponent<Collider>())
 	{
@@ -54,14 +54,14 @@ void PlayerManager::OnStart()
 		collider->boxComponent->SetRelativePosition(FVector2(0, -20));
 	}
 
-	// ÀÎÇ² ÄÄÆ÷³ÍÆ®
+	// ì¸í’‹ ì»´í¬ë„ŒíŠ¸
 	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), [this]() { Input(); });
 }
 
 void PlayerManager::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ìž‘ì„±
 
 	float playerDeltaSeconds = deltaSeconds * playerTimeScale;
 
@@ -102,7 +102,7 @@ void PlayerManager::Update(const float& deltaSeconds)
 
 void PlayerManager::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ìž‘ì„±
 
 	if (Input::IsKeyDown(VK_8))
 	{
@@ -127,7 +127,7 @@ void PlayerManager::Input()
 		animInstance->SetBool("attack", false);
 	}
 
-	// »êµ¥ºñ½ºÅº Å×½ºÆ®
+	// ì‚°ë°ë¹„ìŠ¤íƒ„ í…ŒìŠ¤íŠ¸
 	if (Input::IsKeyPressed(VK_G)) {
 		if (auto prism = owner->GetComponent<Prism>())
 		{
