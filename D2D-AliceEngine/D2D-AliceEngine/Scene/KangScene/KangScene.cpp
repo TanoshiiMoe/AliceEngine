@@ -69,7 +69,7 @@ void KangScene::OnEnter()
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
 	BulletManager::GetInstance().SetPlayer(m_player);
-	//m_player->AddComponent<BackGroundRender>();
+	m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
@@ -96,10 +96,10 @@ void KangScene::OnEnter()
 	m_truck = NewObject<gameObject>(L"Truck");
 	m_truck->AddComponent<Truck>();
 
-	// 씬 전환
+	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
-		if (Input::IsKeyPressed(VK_3)) {
+		if (Input::IsKeyDown(VK_3)) {
 			SceneManager::ChangeScene(L"TitleScene");
 		}
 		});

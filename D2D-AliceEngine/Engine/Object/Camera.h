@@ -72,5 +72,11 @@ public:
 	gameObject* owner = nullptr;
 	TransformComponent relativeTransform;
 	bool bDebug = true;
+  
+  	// 카메라 컬링 스케일 조절
+  	void SetCullingScale(const FVector2& scale) { cullingScale = scale; }
+  	void SetCullingScale(float scaleX, float scaleY) { cullingScale = FVector2(scaleX, scaleY); }
+  	FVector2 GetCullingScale() const { return cullingScale; }
+  	FVector2 cullingScale{ 1.0f, 1.0f };
 };
 

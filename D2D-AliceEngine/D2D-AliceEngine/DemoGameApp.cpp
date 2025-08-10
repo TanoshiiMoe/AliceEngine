@@ -15,6 +15,7 @@
 #include <Scripts/Weapon/BulletManager.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scene/EffectTestScene.h>
+#include <Scripts/Enemy/EnemyDataManager.h>
 
 DemoGameApp::DemoGameApp()
 {
@@ -31,6 +32,8 @@ void DemoGameApp::Initialize()
 	__super::Initialize();
 
 	GamePlayManager::Create();
+	EnemyDataManager::Create();
+	EnemyDataManager::GetInstance().LoadData(L"Enemy/EnemyData.json");
 	SceneManager::AddScene<DemoScene2>(L"aruScene");
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");
 	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");

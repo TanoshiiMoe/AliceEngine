@@ -1,4 +1,4 @@
-#include "BackGroundRender.h"
+ï»¿#include "BackGroundRender.h"
 #include <Manager/SceneManager.h>
 #include <Scene/Scene.h>
 #include <Math/Transform.h>
@@ -14,6 +14,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Helpers/CoordHelper.h>
 #include <Component/BackGroundComponent.h>
+#include <cmath>
 #include "Bike/BikeMovementScript.h"
 
 void BackGroundRender::Initialize()
@@ -23,6 +24,12 @@ void BackGroundRender::Initialize()
 	REGISTER_SCRIPT_METHOD(OnStart);
 	REGISTER_SCRIPT_METHOD(OnEnd);
 	REGISTER_SCRIPT_METHOD(OnDestroy);
+
+    // ì»¬ë§ ìŠ¤ì¼€ì¼ì„ ë„‰ë„‰í•˜ê²Œ í‚¤ì›€
+    if (auto cam = SceneManager::GetCamera())
+    {
+        cam->SetCullingScale(3.0f, 1.5f);
+    }
 }
 
 void BackGroundRender::FixedUpdate(const float& deltaSeconds)
@@ -33,39 +40,71 @@ void BackGroundRender::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
-	// ÇÃ·¹ÀÌ¾î ÀÌµ¿ ½ºÅ©¸³Æ® Ä³½Ì
-	if (!m_playerMove)
+	// í”Œë ˆì´ì–´ ì°¸ì¡°ë¥¼ ìºì‹±í•´ë‘ì
+	static gameObject* playerObj = nullptr;
+	static BikeMovementScript* playerMove = nullptr;
+	if (!playerObj)
 	{
 		WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player");
 		if (!player.expired())
-			m_playerMove = player.Get()->GetComponent<BikeMovementScript>();
+		{
+			playerObj = player.Get();
+			playerMove = playerObj->GetComponent<BikeMovementScript>();
+		}
 	}
 
+	float playerX = 0.0f;
 	float playerSpeed = 0.0f;
-	if (m_playerMove)
-		playerSpeed = m_playerMove->GetCurrentSpeed() * m_playerMove->GetSpeedModifierValue();
+	if (playerObj && playerObj->transform())
+		playerX = playerObj->transform()->GetPosition().x;
+	if (playerMove)
+		playerSpeed = playerMove->GetCurrentSpeed() * playerMove->GetSpeedModifierValue();
 
-	// ScreenSpace·Î ±×¸®¹Ç·Î Ä«¸Ş¶ó ÀÌµ¿°ú ¹«°ü, X¸¸ ÆĞ·²·¢½º ½ºÅ©·Ñ
-	for (auto& layer : m_loopingLayers)
-	{
-		if (!layer.obj1 || !layer.obj2) continue;
+    // tiles ê¸°ë°˜ìœ¼ë¡œ +x ë°©í–¥ ì§„í–‰, í”Œë ˆì´ì–´ ê¸°ì¤€ ë’¤ë¡œ íë¥´ëŠ” íš¨ê³¼
+    for (auto& layer : m_loopingLayers)
+    {
+        if (layer.tiles.size() < 3) continue;
 
-		FVector2 pos1 = layer.obj1->transform()->GetPosition();
-		FVector2 pos2 = layer.obj2->transform()->GetPosition();
+        float width = layer.width;
+        if (width <= 0.0f)
+        {
+            if (auto sr = layer.tiles[0]->GetComponent<SpriteRenderer>())
+                width = sr->GetBitmapSizeX();
+            layer.width = width;
+        }
 
-		float move = playerSpeed * layer.speed * deltaSeconds;
-		pos1.x -= move;
-		pos2.x -= move;
+        // í”Œë ˆì´ì–´ ì†ë„ì— ë¹„ë¡€í•´ ë°°ê²½ì„ ì™¼ìª½ìœ¼ë¡œ ì´ë™
+        const float move = playerSpeed * layer.speed * deltaSeconds;
+        for (auto* tile : layer.tiles)
+        {
+            if (!tile) continue;
+            FVector2 p = tile->transform()->GetPosition();
+            p.x -= move;
+            tile->transform()->SetPosition(FVector2(std::round(p.x), layer.y));
+        }
 
-		const float restX = layer.width;
-		if (pos1.x <= -restX)
-			pos1.x = pos2.x + restX;
-		else if (pos2.x <= -restX)
-			pos2.x = pos1.x + restX;
+        // 2â†’3 ê²½ê³„ì—ì„œ 1ì„ 3ì˜ ì˜¤ë¥¸ìª½ ë + width/2ë¡œ ì´ë™
+        gameObject* t1 = layer.tiles[0];
+        gameObject* t2 = layer.tiles[1];
+        gameObject* t3 = layer.tiles[2];
+        FVector2 p2 = t2->transform()->GetPosition();
+        FVector2 p3 = t3->transform()->GetPosition();
+        const float seam = 0.5f * (p2.x + p3.x);
+        const float prevSeam = seam + move;
+        if (playerX >= seam && playerX >= prevSeam)
+        {
+            const float w3 = t3->GetComponent<SpriteRenderer>()->GetBitmapSizeX();
+            const float w1 = t1->GetComponent<SpriteRenderer>()->GetBitmapSizeX();
+            const float newX = p3.x + 0.5f * (w3 + w1);
+            FVector2 p1 = t1->transform()->GetPosition();
+            p1.x = newX;
+            t1->transform()->SetPosition(FVector2(std::round(p1.x), layer.y));
 
-		layer.obj1->transform()->SetPosition(FVector2(pos1.x, layer.y));
-		layer.obj2->transform()->SetPosition(FVector2(pos2.x, layer.y));
-	}
+            // (1,2,3) -> (2,3,1) ë¡œí…Œì´íŠ¸
+            // ì˜¤ì¼€ì´ ì—¬ê¸°ì„œ ìœ„ì¹˜ë¥¼ ì˜®ê¸°ì 
+            std::rotate(layer.tiles.begin(), layer.tiles.begin() + 1, layer.tiles.begin() + 3);
+        }
+    }
 }
 
 void BackGroundRender::LateUpdate(const float& deltaSeconds)
@@ -79,56 +118,16 @@ void BackGroundRender::Awake()
 void BackGroundRender::OnStart()
 {
 	m_owner = GetOwner();
-	//GetCamera()->AddChildObject(m_owner);
 
-	// ÆĞ·²·¢½º ·¹ÀÌ¾î ±¸¼º (À§ 3, ¾Æ·¡ 3)
-	AddLooping(L"Sky",       L"BackGround\\BG_Sky.png",       -10, 550.0f, 0.2f); // °¡Àå ¸Õ »ó´Ü
-	AddLooping(L"Clouds",    L"BackGround\\BG_Building.png",  -7,  470.0f, 0.4f); // Áß°£ »ó´Ü(ÀÓ½Ã ¸®¼Ò½º)
-	AddLooping(L"Building",  L"BackGround\\BG_Building.png",  -5,  390.0f, 0.6f); // °¡±î¿î »ó´Ü
-
-	//m_bridge = GetWorld()->NewObject<gameObject>(L"Bridge");
-	//auto bridge = m_bridge->AddComponent<SpriteRenderer>();
-	//bridge->LoadData(L"BackGround\\BG_Bridge.png");
-	//bridge->SetDrawType(EDrawType::ScreenSpace);
-	//bridge->SetRelativePosition(FVector2(bridge->GetBitmapSizeX() / 2.0f, 1190));
-	//bridge->m_layer = 4;
-
-	//m_market = GetWorld()->NewObject<gameObject>(L"Market");
-	//auto market = m_market->AddComponent<SpriteRenderer>();
-	//market->LoadData(L"BackGround\\BG_Market.png");
-	//market->SetDrawType(EDrawType::ScreenSpace);
-	//market->SetRelativePosition(FVector2(market->GetBitmapSizeX() / 2.0f, 1140));
-	//market->m_layer = 5;
-
-	//m_backBarrier = GetWorld()->NewObject<gameObject>(L"BackBarrier");
-	//auto backBarrier = m_backBarrier->AddComponent<SpriteRenderer>();
-	//backBarrier->LoadData(L"BackGround\\BG_BackBarrier.png");
-	//backBarrier->SetDrawType(EDrawType::ScreenSpace);
-	//backBarrier->SetRelativePosition(FVector2(backBarrier->GetBitmapSizeX() / 2.0f, 250));
-	//backBarrier->m_layer = 10;
-
-	//m_frontBarrier = GetWorld()->NewObject<gameObject>(L"FrontBarrier");
-	//auto frontBarrier = m_frontBarrier->AddComponent<SpriteRenderer>();
-	//frontBarrier->LoadData(L"BackGround\\BG_Barrier.png");
-	//frontBarrier->SetDrawType(EDrawType::ScreenSpace);
-	//frontBarrier->SetRelativePosition(FVector2(frontBarrier->GetBitmapSizeX() / 2.0f, -200));
-	//frontBarrier->m_layer = 11;
-
-	//m_guardrail = GetWorld()->NewObject<gameObject>(L"GuardRail");
-	//auto guardrail = m_guardrail->AddComponent<SpriteRenderer>();
-	//guardrail->LoadData(L"BackGround\\BG_GuardRail.png");
-	//guardrail->SetDrawType(EDrawType::ScreenSpace);
-	//guardrail->SetRelativePosition(FVector2(guardrail->GetBitmapSizeX() / 2.0f, 240));
-	//guardrail->m_layer = 12;
-	WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player");
-	if (!player.expired())
-	{
-		BikeMovementScript* bs = player.Get()->GetComponent<BikeMovementScript>();
-		// ¿©±â¿¡ GetÇÔ¼ö·Î ¼Óµµ ¹Ş¾Æ¿À±â
-	}
-	AddLooping(L"BackBarrier", L"BackGround\\BG_BackBarrier.png", 10, 250.0f, 0.9f); // Áß°£ ÇÏ´Ü
-	AddLooping(L"GuardRail",  L"BackGround\\BG_GuardRail.png",  12, 310.0f, 1.0f); // °¡Àå °¡±î¿î ÇÏ´Ü
-	//AddLooping(L"FrontBarrier", L"BackGround\\BG_Barrier.png", 13, 740.0f, 1.2f);
+    // y=0ì„ ì¤‘ì‹¬ìœ¼ë¡œ ìœ„(+Y) 3ì¥, ì•„ë˜(-Y) 3ì¥ êµ¬ì„±í•´ë³´ì
+    // speed íŒŒë¼ë¯¸í„°ëŠ” ê³„ìˆ˜ í”Œë ˆì´ì–´ ì†ë„ì— ë¹„ë¡€í•´ì„œ ì´ë™í•˜ê²Œ
+    AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png",         -10 + m_backgroundRelativeLayer, 400.0f, 0.2f);
+    AddLooping(L"TopMid",    L"BackGround\\BG_Building.png",    -7  + m_topRelativeLayer, 500.0f, 0.4f);
+    AddLooping(L"TopNear",   L"BackGround\\BG_BackBarrier.png", 5  + m_topRelativeLayer, 330.0f, 1.5f);
+    // =========================== Playerê°€ ì—¬ê¸°ì— ìˆê³ , ìœ„ ì•„ë˜ ë°°ê²½ì´ë¼ëŠ” ëœ» ===================================
+    AddLooping(L"BotNear",   L"BackGround\\BG_GuardRail.png",  5  + m_bottomRelativeLayer, -180.0f, 1.5f);
+    AddLooping(L"BotMid",    L"BackGround\\BG_Bridge.png",     3  + m_bottomRelativeLayer, -640.0f, 0.9f);
+    AddLooping(L"BotFar",    L"BackGround\\BG_Market.png",     -2   + m_backgroundRelativeLayer, -440.0f, 0.8f);
 }
 
 void BackGroundRender::OnEnd()
@@ -141,23 +140,36 @@ void BackGroundRender::OnDestroy()
 
 void BackGroundRender::AddLooping(const std::wstring& name, const std::wstring& texturePath, int layer, float y, float speed)
 {
-	auto obj1 = GetWorld()->NewObject<gameObject>(name + L"_1");
-	auto* sr1 = obj1->AddComponent<SpriteRenderer>();
-	//GetCamera()->AddChildObject(obj1);
-	sr1->LoadData(texturePath);
-	sr1->SetDrawType(EDrawType::ScreenSpace);
-	float width = sr1->GetBitmapSizeX();
-	sr1->m_layer = layer;
+    // 3ì¥ë§Œ ìƒì„±í•˜ì—¬ ìˆœí™˜(1,2,3)
+    LoopingBackGround bg;
+    bg.speed = speed;
+    bg.y = y;
+    bg.baseLayer = layer - m_backgroundRelativeLayer;
+    bg.x = 0.0f;
 
-	auto obj2 = GetWorld()->NewObject<gameObject>(name + L"_2");
-	auto* sr2 = obj2->AddComponent<SpriteRenderer>();
-	//GetCamera()->AddChildObject(obj2);
-	sr2->LoadData(texturePath);
-	sr2->SetDrawType(EDrawType::ScreenSpace);
-	sr2->m_layer = layer;
+    auto makeTile = [&](int idx, float xpos)
+    {
+        auto obj = GetWorld()->NewObject<gameObject>(name + L"_" + std::to_wstring(idx));
+        auto* sr = obj->AddComponent<SpriteRenderer>();
+        sr->LoadData(texturePath);
+        sr->SetDrawType(EDrawType::WorldSpace);
+        sr->m_layer = layer + m_backgroundRelativeLayer;
+        obj->transform()->SetPosition(FVector2(xpos, y));
+        bg.tiles.push_back(obj);
+        if (bg.width <= 0.0f) bg.width = sr->GetBitmapSizeX();
+    };
 
-	sr1->SetRelativePosition(FVector2(0, y));
-	sr2->SetRelativePosition(FVector2(width, y));
+    // í”Œë ˆì´ì–´ X ê¸°ì¤€ ì •ë ¬: [1,2,3]ì„ ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ì–´ì„œ ë°°ì¹˜
+    float playerX0 = 0.0f;
+    {
+        WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player");
+        if (!player.expired() && player.Get()->transform())
+            playerX0 = player.Get()->transform()->GetPosition().x;
+    }
 
-	m_loopingLayers.push_back({ obj1, obj2, speed, width, y });
+    makeTile(1, playerX0);
+    makeTile(2, playerX0 + bg.width);
+    makeTile(3, playerX0 + 2.0f * bg.width);
+
+    m_loopingLayers.push_back(std::move(bg));
 }

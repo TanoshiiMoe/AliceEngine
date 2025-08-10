@@ -20,6 +20,7 @@ public:
 	virtual void OnExit();
 
 	void VisibleMemoryInfo();
+    void UpdateDebugHUD(float deltaTime);
 
 	Camera* GetCamera()
 	{
@@ -174,6 +175,8 @@ public:
 
 private:
 	gameObject* m_sysinfoWidget;
+    gameObject* m_fpsWidget{ nullptr };
+    bool m_debugHudVisible{ true };
 	std::unordered_map<std::wstring, std::unique_ptr<gameObject>> m_objects;
 	std::unordered_map<std::wstring, std::unordered_set<std::wstring>> m_nameToUUIDs;
 

@@ -1,8 +1,9 @@
-#pragma once
+ï»¿#pragma once
+
 class FileHelper
 {
 	/*
-	* ÆÄÀÏ °ü·ÃÀÔ´Ï´Ù. Resource ÆÄÀÏÀ» º¹»çÇÕ´Ï´Ù.
+	* íŒŒì¼ ê´€ë ¨ì…ë‹ˆë‹¤. Resource íŒŒì¼ì„ ë³µì‚¬í•©ë‹ˆë‹¤.
 	*/
 public:
 
@@ -16,25 +17,23 @@ public:
 	static std::wstring ToAbsolutePath(const std::wstring& baseDir);
 
 	static bool CreateDirectoryRecursive(const std::wstring& path);
-	// ÆÄÀÏ º¹»ç ÇÔ¼ö (µ¤¾î¾²±â)
+	// íŒŒì¼ ë³µì‚¬ í•¨ìˆ˜ (ë®ì–´ì“°ê¸°)
 	static bool CopyFileOverwrite(const std::wstring& src, const std::wstring& dst);
-	// µğ·ºÅä¸® Àç±Í º¹»ç ÇÔ¼ö
+	// ë””ë ‰í† ë¦¬ ì¬ê·€ ë³µì‚¬ í•¨ìˆ˜
 	static bool CopyDirectoryRecursive(const std::wstring& sourceDir, const std::wstring& targetDir);
 
 	static void CopyFilesToBuildPath(const std::wstring& _str);
 
-	// Àç±ÍÀûÀ¸·Î ÆÄÀÏ °æ·Î¸¦ ¼öÁıÇÏ´Â ÇÔ¼ö
+	// ì¬ê·€ì ìœ¼ë¡œ íŒŒì¼ ê²½ë¡œë¥¼ ìˆ˜ì§‘í•˜ëŠ” í•¨ìˆ˜
 	static void CollectFilePathsRecursive(const std::wstring& directory, std::vector<std::wstring>& outFiles);
 	static void ResourceFilesInBuildPath(const std::wstring& _str, std::vector<std::wstring>& filesPaths);
-	// ÆÄÀÏ ÀÌ¸§°ú È®ÀåÀÚ¸¦ ÃßÃâÇÏ´Â ÇÔ¼ö
-	// ¹İÈ¯°ª: {ÆÄÀÏÀÌ¸§, È®ÀåÀÚ}
+	// íŒŒì¼ ì´ë¦„ê³¼ í™•ì¥ìë¥¼ ì¶”ì¶œí•˜ëŠ” í•¨ìˆ˜
+	// ë°˜í™˜ê°’: {íŒŒì¼ì´ë¦„, í™•ì¥ì}
 	static std::pair<std::wstring, std::wstring> ExtractFileNameAndExtension(const std::wstring& absPath);
-	// ÇØ´ç °æ·ÎÀÇ Æú´õ¿Í ÀÌ¸§À» ºĞ¸®ÇÏ´Â ÇÔ¼ö
+	// í•´ë‹¹ ê²½ë¡œì˜ í´ë”ì™€ ì´ë¦„ì„ ë¶„ë¦¬í•˜ëŠ” í•¨ìˆ˜
 	static std::pair<std::wstring, std::wstring> ExtractFileDirectoryAndName(const std::wstring& absPath);
-	// ÆÄÀÏ °æ·Î¿¡¼­ ÇØ´ç Æú´õ¸¸ °¡Á®¿À´Â ÇÔ¼ö (std::wstring ¹öÀü)
+	// íŒŒì¼ ê²½ë¡œì—ì„œ í•´ë‹¹ í´ë”ë§Œ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜ (std::wstring ë²„ì „)
 	// "\\Resource\\content\\video\\aru.mp4" -> "\\Resource\\content\\video"
 	static std::wstring get_folder_path(const std::wstring& filepath);
-
-	static std::vector<BYTE> LoadBinaryFile(const std::wstring& filePath);
 };
 

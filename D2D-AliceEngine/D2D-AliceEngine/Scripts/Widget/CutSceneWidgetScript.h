@@ -88,6 +88,8 @@ private:
     // Guide control
     bool m_canAdvance{ false };
     float m_guideAlpha{ 0.f };
+    float m_guideFadeElapsed{ 0.f };
+    bool m_isAlive{ false };
     FTimerHandle m_guideDelayTimer;
     FTimerHandle m_guideFadeTimer;
     FTimerHandle m_guideBlinkTimer;

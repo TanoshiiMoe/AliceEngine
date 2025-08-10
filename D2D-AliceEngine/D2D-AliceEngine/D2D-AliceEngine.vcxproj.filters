@@ -265,6 +265,12 @@
     <ClInclude Include="Scene\EffectTestScene.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\EnemyStatScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\EnemyDataManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -428,5 +434,7 @@
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
     <ClCompile Include="Scene\EffectTestScene.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyStatScript.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyDataManager.cpp" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,8 @@
 #include <Manager/D2DRenderManager.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Manager/ClassManager.h>
+#include <Manager/TimerManager.h>
+#include <Core/Input.h>
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 
@@ -58,6 +60,14 @@ void Scene::Update()
 {
 	UpdateTaskManager::GetInstance().StartFrame();
 	UpdateTaskManager::GetInstance().TickAll();
+    // F2 토글
+    if (Input::IsKeyPressed(VK_F2)) {
+        m_debugHudVisible = !m_debugHudVisible;
+        if (m_sysinfoWidget) m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
+        if (m_fpsWidget) m_fpsWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
+    }
+    // FPS 갱신 (TimerManager 값을 그대로 사용)
+    UpdateDebugHUD(0.0f);
 	VisibleMemoryInfo();
 	FlushPendingRemovals(); // 프레임 끝에서 삭제 처리
 	UpdateTaskManager::GetInstance().EndFrame();
@@ -70,12 +80,21 @@ void Scene::OnEnter()
 		it->second->OnStart();
 	}
 
-	m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
-	GetCamera()->AddChildObject(m_sysinfoWidget);
-	m_sysinfoWidget->AddComponent<TextRenderComponent>();
+    m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
+    //GetCamera()->AddChildObject(m_sysinfoWidget);
+    auto* sysText = m_sysinfoWidget->AddComponent<TextRenderComponent>();
+    sysText->SetDrawType(Define::EDrawType::ScreenSpace);
+    sysText->SetColor(FColor(200, 0, 0, 255));
+    // ScreenSpace 좌표 (좌상단 0,0)
+    sysText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.1f));
 
-	FVector2 pos = D2DRenderManager::GetInstance().GetApplicationSize();
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(pos.x * 0.7f, pos.y * 0.1f));
+    // FPS 위젯
+    m_fpsWidget = NewObject<gameObject>(L"FPSWidget");
+    //GetCamera()->AddChildObject(m_fpsWidget);
+    auto* fpsText = m_fpsWidget->AddComponent<TextRenderComponent>();
+    fpsText->SetDrawType(Define::EDrawType::ScreenSpace);
+    fpsText->SetColor(FColor(0, 255, 0, 255));
+    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.18f));
 }
 
 void Scene::OnExit()
@@ -90,10 +109,22 @@ void Scene::OnExit()
 
 void Scene::VisibleMemoryInfo()
 {
-	FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetText(L"VRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetColor(FColor(200, 0, 0, 255));
+    FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
+    if (m_sysinfoWidget)
+    {
+        auto* t = m_sysinfoWidget->GetComponent<TextRenderComponent>();
+        t->SetText(L"VRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
+    }
+}
 
+void Scene::UpdateDebugHUD(float /*deltaTime*/)
+{
+    if (m_fpsWidget)
+    {
+        const float fps = TimerManager::GetInstance().GetCurrentFPS();
+        auto* t = m_fpsWidget->GetComponent<TextRenderComponent>();
+        t->SetText(L"FPS: " + std::to_wstring(static_cast<int>(std::round(fps))));
+    }
 }
 
 bool Scene::RemoveObject(gameObject* targetObj)

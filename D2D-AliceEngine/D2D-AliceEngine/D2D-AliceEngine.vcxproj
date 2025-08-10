@@ -163,6 +163,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Enemy\EnemyDataManager.h" />
+    <ClInclude Include="Scripts\Enemy\EnemyStatScript.h" />
     <ClInclude Include="Scene\EffectTestScene.h" />
     <ClInclude Include="Scripts\Widget\BlackOutWidgetScript.h" />
     <ClInclude Include="Scripts\Widget\CutSceneWidgetScript.h" />
@@ -228,6 +230,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Enemy\EnemyDataManager.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyStatScript.cpp" />
     <ClCompile Include="Scene\EffectTestScene.cpp" />
     <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\CutSceneWidgetScript.cpp" />
