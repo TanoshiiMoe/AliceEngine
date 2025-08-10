@@ -1,4 +1,4 @@
-#include "GameOverScene.h"
+ï»¿#include "GameOverScene.h"
 #include <Manager/SceneManager.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/InputComponent.h>
@@ -27,23 +27,23 @@ void GameOverScene::OnEnter()
 
     m_textGO = NewObject<gameObject>(L"GameOverLabel");
     auto* text = m_textGO->AddComponent<TextRenderComponent>();
-    text->SetText(L"<ÇöÀç ¾À> GameOverScene");
+    text->SetText(L"<í˜„ì¬ ì”¬> GameOverScene");
     text->SetTextAlignment(ETextFormat::TopLeft);
     text->SetRelativePosition(FVector2(20, 10));
     text->SetFontSize(32.0f);
 
-    // Áß¾Ó Å¬¶ó¿ìµå ÀÌ¹ÌÁö
+    // ì¤‘ì•™ í´ë¼ìš°ë“œ ì´ë¯¸ì§€
     if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))
     {
         auto* sr = cloudObj->AddComponent<SpriteRenderer>();
         sr->SetDrawType(Define::EDrawType::ScreenSpace);
         sr->LoadData(L"cloud.jpg");
-        // Áß¾Ó ¹èÄ¡
+        // ì¤‘ì•™ ë°°ì¹˜
         sr->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
-        // ±âº» ºñÀ² À¯Áö (¿øº» »çÀÌÁî)
+        // ê¸°ë³¸ ë¹„ìœ¨ ìœ ì§€ (ì›ë³¸ ì‚¬ì´ì¦ˆ)
     }
 
-    // VK_3 ´­·¯ TitleScene º¹±Í
+    // VK_3 ëˆŒëŸ¬ TitleScene ë³µê·€
     auto* input = m_textGO->AddComponent<InputComponent>();
     input->SetAction(m_textGO->GetHandle(), []() {
         if (Input::IsKeyDown(VK_3)) {
