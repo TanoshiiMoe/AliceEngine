@@ -1,4 +1,4 @@
-#include "GameClearScene.h"
+ï»¿#include "GameClearScene.h"
 #include <Manager/SceneManager.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/InputComponent.h>
@@ -27,21 +27,21 @@ void GameClearScene::OnEnter()
 
     m_textGO = NewObject<gameObject>(L"GameClearLabel");
     auto* text = m_textGO->AddComponent<TextRenderComponent>();
-    text->SetText(L"<ÇöÀç ¾À> GameClearScene");
+    text->SetText(L"<í˜„ì¬ ì”¬> GameClearScene");
     text->SetTextAlignment(ETextFormat::TopLeft);
     text->SetRelativePosition(FVector2(20, 10));
     text->SetFontSize(32.0f);
 
-    // Áß¾Ó Å¬¶ó¿ìµå ÀÌ¹ÌÁö
+    // ì¤‘ì•™ í´ë¼ìš°ë“œ ì´ë¯¸ì§€
     if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))
     {
         auto* sr = cloudObj->AddComponent<SpriteRenderer>();
         sr->SetDrawType(Define::EDrawType::ScreenSpace);
-        sr->LoadData(L"cloud.jpg");
+        sr->LoadData(L"UI/UI_Score.png");
         sr->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
+    // VK_3 ëˆŒëŸ¬ TitleScene ë³µê·€
     }
 
-    // VK_3 ´­·¯ TitleScene º¹±Í
     auto* input = m_textGO->AddComponent<InputComponent>();
     input->SetAction(m_textGO->GetHandle(), []() {
         if (Input::IsKeyDown(VK_3)) {
