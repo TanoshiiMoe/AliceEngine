@@ -286,18 +286,18 @@ void ParticleComponent::EmitPortalSwirl(const FVector2& pos, int count)
 
 // 내부 구현 -----------------------------------------------------------------
 void ParticleComponent::emitBurstCommon(const FVector2& pos,
-                                        int count,
-                                        float speedMin,
-                                        float speedMax,
-                                        float sizeMin,
-                                        float sizeMax,
-                                        float lifeMin,
-                                        float lifeMax,
-                                        const D2D1_COLOR_F& colorA,
-                                        const D2D1_COLOR_F& colorB,
-                                        float drag,
-                                        float gravity,
-                                        float spreadRadians)
+    int count,
+    float speedMin,
+    float speedMax,
+    float sizeMin,
+    float sizeMax,
+    float lifeMin,
+    float lifeMax,
+    const D2D1_COLOR_F& colorA,
+    const D2D1_COLOR_F& colorB,
+    float drag,
+    float gravity,
+    float spreadRadians)
 {
     for (int i = 0; i < count; ++i)
     {

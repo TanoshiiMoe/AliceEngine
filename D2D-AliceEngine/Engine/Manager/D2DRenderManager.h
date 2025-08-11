@@ -1,10 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "pch.h"
 #include <Core/Singleton.h>
 #include <d2d1effectauthor.h>
 #include <d2d1_3.h>
-#include <d2d1effects.h>
-#include <d2d1effecthelpers.h>
 
 /*
 * @briefs : 

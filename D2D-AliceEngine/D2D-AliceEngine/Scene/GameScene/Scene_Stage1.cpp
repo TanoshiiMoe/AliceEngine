@@ -37,6 +37,7 @@
 #include <Scripts/Enemy/Spawn/SpawnCollider.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
+#include <Component/Effect/ParticleComponent.h>
 
 void Scene_Stage1::Initialize()
 {
@@ -65,6 +66,7 @@ void Scene_Stage1::Update()
 void Scene_Stage1::OnEnter()
 {
 	__super::OnEnter();
+	m_mouseParticle->ToggleMouseTrail();
 	
 	// 스테이지 진입 시 마우스 상태 초기화
 	Input::ResetMouseState();
