@@ -30,6 +30,28 @@ namespace Define
 	static const std::wstring Scene_GameOver = L"Scene_Over";
 	static const std::wstring Scene_GameClear = L"Scene_Clear";
 
+	// ========== Layer List ==========
+	static const int CutSceneLayer = 50001;
+	// UI : 50000 ~
+	static const int NormalTextLayer = 50010;
+	static const int ButtonLayer = 50020;
+	static const int ButtonTextLayer = 50021;
+	static const int PopupLayer = 50030;
+	static const int PopupButtonLayer = 50031;
+	static const int PopupTextLayer = 50032;
+	static const int PopupObjectLayer = 50033;
+
+	// Player
+	static const int HUDLayer = 50000;
+
+	// BackGround
+	static const int TileLayer = -300;
+
+	// Enemy
+
+	// Delete : -50000
+	static const int Disable = -50000;
+
 	enum class EDrawType
 	{
 		ScreenSpace,

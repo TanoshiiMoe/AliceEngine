@@ -43,7 +43,7 @@ void TileMapManager::OnStart()
 		tc->SetSkew({ 45, 0 });
 		tc->CreateTileRenderers();
 		tc->CreateTileCollision();
-		tc->SetTileLayer(-5000);	// 타일 레이어를 3으로 설정
+		tc->SetTileLayer(Define::TileLayer);
 
 		// 타일맵 위치 조절
 		int t_height = tc->tileMap.tileHeight;

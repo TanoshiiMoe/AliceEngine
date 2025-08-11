@@ -1,4 +1,4 @@
-#include "UI_Script.h"
+ï»¿#include "UI_Script.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -30,7 +30,7 @@ void UI_Script::Initialize()
 		{
 			m_dotCount = (m_dotCount + 1) % 3;
 			std::wstring dots(m_dotCount, L'.');
-			m_accel->SetTextFormat(L"°¡¼ÓÁØºñÁß", dots);
+			m_accel->SetTextFormat(L"ê°€ì†ì¤€ë¹„ì¤‘", dots);
 		},
 		0.5f,
 		true,
@@ -41,25 +41,25 @@ void UI_Script::Initialize()
 void UI_Script::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 	if (!m_accel)
 		return;
 
 	m_accelTimer += deltaSeconds;
 	m_realTimer += deltaSeconds;
-	// 0.5ÃÊ¸¶´Ù Á¡ °³¼ö º¯°æ
+	// 0.5ì´ˆë§ˆë‹¤ ì  ê°œìˆ˜ ë³€ê²½
 	if (m_accelTimer >= 0.5f)
 	{
 		m_accelTimer = 0.0f;
-		m_dotCount = (m_dotCount + 1) % 3;  // 0,1,2 ¹İº¹
+		m_dotCount = (m_dotCount + 1) % 3;  // 0,1,2 ë°˜ë³µ
 	}
 
-	// Á¡(.) ¹®ÀÚ¿­ ¸¸µé±â
+	// ì (.) ë¬¸ìì—´ ë§Œë“¤ê¸°
 	std::wstring dots(m_dotCount, L'.');
 
-	m_accel->SetText(L"°¡¼ÓÁØºñÁß ." + dots);
-	m_accel->SetTextFormat(L"°¡¼ÓÁØºñÁß", dots);
+	m_accel->SetText(L"ê°€ì†ì¤€ë¹„ì¤‘ ." + dots);
+	m_accel->SetTextFormat(L"ê°€ì†ì¤€ë¹„ì¤‘", dots);
 
 	m_RealTime->SetText(m_realTimer);
 }
@@ -128,7 +128,7 @@ void UI_Script::OnStart()
 	BoardText->SetFontSize(30.0);
 	BoardText->SetColor(FColor(0, 234, 255, 255));
 	BoardText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	BoardText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
+	BoardText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
 	BoardText->SetDrawType(EDrawType::ScreenSpace);
 	FVector2 BoardTextSize = BoardText->GetRelativeSize();
 	BoardText->SetRelativePosition(
@@ -154,7 +154,7 @@ void UI_Script::OnStart()
 	SpeedText->SetFontSize(60.0);
 	SpeedText->SetColor(FColor(0, 234, 255, 255));
 	SpeedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	SpeedText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
+	SpeedText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
 	SpeedText->SetDrawType(EDrawType::ScreenSpace);
 	SpeedText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(BoadSize, FVector2(0.5, 0.5))
@@ -218,7 +218,7 @@ void UI_Script::OnStart()
 
 void UI_Script::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	TimerManager::GetInstance().ClearTimer(timer);
 }
 

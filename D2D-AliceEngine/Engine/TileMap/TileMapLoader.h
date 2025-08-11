@@ -1,6 +1,6 @@
-// ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡
+ï»¿// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // TileParser.h
-// ¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 #pragma once
 #include <Extension/json.hpp>
 #include <unordered_map>
@@ -8,7 +8,7 @@
 #include <string>
 using json = nlohmann::json;
 
-// Àû ½ºÆù µ¥ÀÌÅÍ
+// ì  ìŠ¤í° ë°ì´í„°
 struct CollData {
 	int index = -1;
 	int collisionChannel = -1;
@@ -16,29 +16,29 @@ struct CollData {
 	bool isUsable = true;
 };
 
-// blocks.tsj ÆÄÀÏ¿¡ ´ëÀÀÇÏ´Â ±¸Á¶Ã¼
+// blocks.tsj íŒŒì¼ì— ëŒ€ì‘í•˜ëŠ” êµ¬ì¡°ì²´
 struct TileSet {
-	int columns;                 // Å¸ÀÏ¼ÂÀÇ ¿­ ¼ö
-	std::string image;           // ÀÌ¹ÌÁö ÆÄÀÏ °æ·Î
-	int imageheight;             // ÀÌ¹ÌÁö ³ôÀÌ
-	int imagewidth;              // ÀÌ¹ÌÁö ³Êºñ
-	int margin;                  // ÀÌ¹ÌÁö °¡ÀåÀÚ¸® ¿©¹é
-	std::string name;            // Å¸ÀÏ¼Â ÀÌ¸§
-	int spacing;                 // Å¸ÀÏ °£ °£°İ
-	int tilecount;               // ÀüÃ¼ Å¸ÀÏ °³¼ö
-	std::string tiledversion;    // Tiled ¹öÀü
-	int tileheight;              // °³º° Å¸ÀÏ ³ôÀÌ
-	int tilewidth;               // °³º° Å¸ÀÏ ³Êºñ
-	std::string type;            // Å¸ÀÔ ("tileset")
-	std::string version;         // ÆÄÀÏ Æ÷¸Ë ¹öÀü
+	int columns;                 // íƒ€ì¼ì…‹ì˜ ì—´ ìˆ˜
+	std::string image;           // ì´ë¯¸ì§€ íŒŒì¼ ê²½ë¡œ
+	int imageheight;             // ì´ë¯¸ì§€ ë†’ì´
+	int imagewidth;              // ì´ë¯¸ì§€ ë„ˆë¹„
+	int margin;                  // ì´ë¯¸ì§€ ê°€ì¥ìë¦¬ ì—¬ë°±
+	std::string name;            // íƒ€ì¼ì…‹ ì´ë¦„
+	int spacing;                 // íƒ€ì¼ ê°„ ê°„ê²©
+	int tilecount;               // ì „ì²´ íƒ€ì¼ ê°œìˆ˜
+	std::string tiledversion;    // Tiled ë²„ì „
+	int tileheight;              // ê°œë³„ íƒ€ì¼ ë†’ì´
+	int tilewidth;               // ê°œë³„ íƒ€ì¼ ë„ˆë¹„
+	std::string type;            // íƒ€ì… ("tileset")
+	std::string version;         // íŒŒì¼ í¬ë§· ë²„ì „
 };
 
-/* ¦¡¦¡¦¡¦¡¦¡ Å¸ÀÏ¸Ê(Map) ¦¡¦¡¦¡¦¡¦¡ */
+/* â”€â”€â”€â”€â”€ íƒ€ì¼ë§µ(Map) â”€â”€â”€â”€â”€ */
 struct TileMapLayer {
 	std::string name;
 	int width{}, height{};
 	int id;
-	std::vector<int> data;            // GID ¸®½ºÆ® (row-major)
+	std::vector<int> data;            // GID ë¦¬ìŠ¤íŠ¸ (row-major)
 	bool visible{ true };
 	float opacity{ 1.f };
 	std::string type;
@@ -46,34 +46,34 @@ struct TileMapLayer {
 };
 
 struct TileMap {
-	std::string mapName;              // ÆÄÀÏ¸í µî
-	int compressionlevel{ 0 };       // ¾ĞÃà ·¹º§ (0 = ¾øÀ½)
-	bool infinite{ false };           // ¹«ÇÑ ¸Ê ¿©ºÎ
-	int nextlayerid{ 0 };            // ´ÙÀ½ ·¹ÀÌ¾î ID
-	int nextobjectid{ 0 }; 		 // ´ÙÀ½ ¿ÀºêÁ§Æ® ID
-	std::string version;         // Tiled ¹öÀü
+	std::string mapName;              // íŒŒì¼ëª… ë“±
+	int compressionlevel{ 0 };       // ì••ì¶• ë ˆë²¨ (0 = ì—†ìŒ)
+	bool infinite{ false };           // ë¬´í•œ ë§µ ì—¬ë¶€
+	int nextlayerid{ 0 };            // ë‹¤ìŒ ë ˆì´ì–´ ID
+	int nextobjectid{ 0 }; 		 // ë‹¤ìŒ ì˜¤ë¸Œì íŠ¸ ID
+	std::string version;         // Tiled ë²„ì „
 	int width{}, height{};
 	int tileWidth{}, tileHeight{};
-	std::string orientation;          // "orthogonal"¡¦
-	std::string renderorder;          // "right-down" µî
-	std::string type;        // "map" °íÁ¤
+	std::string orientation;          // "orthogonal"â€¦
+	std::string renderorder;          // "right-down" ë“±
+	std::string type;        // "map" ê³ ì •
 	std::vector<TileMapLayer> layers;
-	std::vector<int> usedGIDs;        // Áßº¹ Á¦°ÅµÈ GID ÁıÇÕ
+	std::vector<int> usedGIDs;        // ì¤‘ë³µ ì œê±°ëœ GID ì§‘í•©
 };
 
 struct TileMapColiderInfo 
 {
-	int index;						// 1¹øºÎÅÍ ½ÃÀÛ
-	int collisionChannel;			// Äİ¸®Àü ·¹ÀÌ¾î
-	int enemyType;					// Àû Å¸ÀÔ
+	int index;						// 1ë²ˆë¶€í„° ì‹œì‘
+	int collisionChannel;			// ì½œë¦¬ì „ ë ˆì´ì–´
+	int enemyType;					// ì  íƒ€ì…
 };
 
-/* ¦¡¦¡¦¡¦¡¦¡ ·Î´õ(Á¤Àû À¯Æ¿) ¦¡¦¡¦¡¦¡¦¡ */
+/* â”€â”€â”€â”€â”€ ë¡œë”(ì •ì  ìœ í‹¸) â”€â”€â”€â”€â”€ */
 class TileMapLoader {
 public:
 	static void LoadTileSet(const std::wstring& filePath, TileSet& tileSet);
-	static void LoadTileMap(const std::wstring& filePath, TileMap& tileMap); // TileMapµµ LoadÇÔ¼ö¿Í ParseÇÔ¼ö Ãß°¡
-	static std::unordered_map<int, CollData> LoadTileMapColliderInfo(const std::wstring& filePath); // TileMapµµ LoadÇÔ¼ö¿Í ParseÇÔ¼ö Ãß°¡
+	static void LoadTileMap(const std::wstring& filePath, TileMap& tileMap); // TileMapë„ Loadí•¨ìˆ˜ì™€ Parseí•¨ìˆ˜ ì¶”ê°€
+	static std::unordered_map<int, CollData> LoadTileMapColliderInfo(const std::wstring& filePath); // TileMapë„ Loadí•¨ìˆ˜ì™€ Parseí•¨ìˆ˜ ì¶”ê°€
 };
 
 void from_json(const nlohmann::json& j, TileSet& ts);
