@@ -18,4 +18,6 @@ private:
     gameObject* m_textGO{ nullptr };
 	gameObject* m_passedTimeText{ nullptr };
 	gameObject* m_killEnemyText{ nullptr };
+
+    gameObject* m_widget;
 };
