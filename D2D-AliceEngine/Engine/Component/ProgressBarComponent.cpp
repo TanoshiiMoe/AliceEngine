@@ -57,49 +57,48 @@ void ProgressBarComponent::Render()
     }
     else // Radial
     {
-        // 진행도 0 = 0, 1이면 360;
-        float progressAngle = 360.0f * m_progress;
+        // 진행도 0 = 0, 1이면 360(2PI);
+        float progressAngle = 2 * Define::PI * m_progress;
         if (!m_clockwise) progressAngle = -progressAngle;
 
         float startAngleRad = m_startAngleDeg * (Define::PI / 180.0f);
-        float endAngleRad = startAngleRad + progressAngle * (Define::PI / 180.0f);
+        float endAngleRad = startAngleRad + progressAngle;
 
-        ComPtr<ID2D1Geometry> pieGeometry;
+        float centerX = cropW * 0.5f;
+        float centerY = cropH * 0.5f;
 
-        //D2DRenderManager::GetD2DDevice()->CreateFilledGeometryRealization(&pieGeometry);
-
-
-
-
-
-
-
-
-
-
-
-
-        // 간단한 원형 마스크: 진행 각도만큼 부채꼴로 클리핑 (고정 파이프라인 내에서 간이 구현)
-        // 주의: 고급 마스킹은 별도 효과/레이어 필요. 여기서는 간단히 DrawImage 효과 기반의 Clip은 생략하고,
-        // 진행율을 8분할 근사로 표현 (필요 시 확장)
-
-        // 일단 Linear와 동일하게 전체 그리기 (기본 버전)
-        // TODO: 향후 ID2D1CommandList 또는 Geometry로 파이 마스크 적용 확대 가능
         D2D1_RECT_F srcRect = {
             srcL,
             srcT,
             srcL + cropW,
             srcT + cropH
         };
-        const float offsetX = -cropW * spriteInfo.pivotX;
-        const float offsetY = -cropH * spriteInfo.pivotY;
         D2D1_RECT_F destRect = {
-            offsetX,
-            offsetY,
-            offsetX + cropW,
-            offsetY + cropH
+            0,
+            0,
+            cropW,
+            cropH
         };
-        D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+
+        ComPtr<ID2D1Geometry> pieGeometry = D2DRenderManager::GetInstance().CreatePieGeometry(
+            centerX, centerY, centerX, centerY,
+            startAngleRad, endAngleRad, m_clockwise);
+
+        if (pieGeometry)
+        {
+            context->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), pieGeometry.Get()), nullptr);
+        }
+
+        // 클리핑 영역 설정
+        //context->SetTransform(D2D1::Matrix3x2F::Translation(-cropW * spriteInfo.pivotX, -cropH * spriteInfo.pivotY));
+        context->DrawBitmap(m_bitmap.get(), destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &srcRect);
+       
+        // 클리핑 해제 설정
+        if (pieGeometry)
+        {
+            context->PopLayer();
+        }
+
         return;
     }
 }

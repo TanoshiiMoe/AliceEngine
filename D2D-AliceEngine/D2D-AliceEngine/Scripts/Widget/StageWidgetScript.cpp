@@ -18,6 +18,8 @@
 #include <GameManager/GamePlayManager.h>
 #include <Component/ProgressBarComponent.h>
 
+#include <Scripts/Bike/BikeMovementScript.h>
+
 void StageWidgetScript::Initialize()
 {
 	__super::Initialize();
@@ -51,13 +53,25 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 
 	if (batteryCount >= 1.0f) batteryCount = 1.0f; // Battery : 0~1
 	
-	if (auto go = GetOwner())
+	m_batteryProgress->SetProgress(batteryCount);
+
+	// 속도 연동
+
+	float playerSpeed = 0.0f;
+	if (WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player"))
 	{
-		if (auto progress = go->GetComponent<ProgressBarComponent>())
-		{
-			progress->SetProgress(batteryCount);
-		}
+		if (BikeMovementScript* pm = player->GetComponent<BikeMovementScript>())
+			playerSpeed = pm->GetCurrentSpeed() * pm->GetSpeedModifierValue();
 	}
+
+	float finalSpeed = playerSpeed / 600.0f;
+
+	if (finalSpeed > 1.0f) finalSpeed = 0.999999f;	// 어느정도 허용치를 둠
+
+	m_speedProgress->SetProgress(finalSpeed);
+
+	m_speedText->SetText(playerSpeed);
+	m_speedText->m_layer = Define::NormalTextLayer;
 }
 
 void StageWidgetScript::Awake()
@@ -102,13 +116,13 @@ void StageWidgetScript::OnStart()
 	auto UI_HP = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_Dashboard = m_owner->AddComponent<SpriteRenderer>();
 
-	auto UI_Battery = m_owner->AddComponent<ProgressBarComponent>();
-	auto UI_Speed = m_owner->AddComponent<ProgressBarComponent>();
+	m_batteryProgress = m_owner->AddComponent<ProgressBarComponent>();
+	m_speedProgress = m_owner->AddComponent<ProgressBarComponent>();
 	auto bgmControl = m_owner->AddComponent<ProgressBarComponent>();
 	auto sfxControl = m_owner->AddComponent<ProgressBarComponent>();
 
-	auto DashboardText = m_owner->AddComponent<TextRenderComponent>();
-	auto SpeedText = m_owner->AddComponent<TextRenderComponent>();
+	m_dashboardText = m_owner->AddComponent<TextRenderComponent>();
+	m_speedText = m_owner->AddComponent<TextRenderComponent>();
 
 	// ================== Sprite
 	auto popUpTab = m_owner->AddComponent<SpriteRenderer>();
@@ -137,26 +151,27 @@ void StageWidgetScript::OnStart()
 	UI_Dashboard->m_layer = Define::HUDLayer;
 
 	// Progress bar
-	UI_Battery->SetDrawType(Define::EDrawType::ScreenSpace);
-	UI_Battery->LoadData(L"UI\\UI_2_Battery.png");
-	UI_Battery->SetType(EProgressBarType::Linear);
-	UI_Battery->SetRelativeScale(FVector2(1, 1));
-	UI_Battery->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(UI_Battery->GetRelativeSize(), FVector2(0, 0))
+	m_batteryProgress->SetDrawType(Define::EDrawType::ScreenSpace);
+	m_batteryProgress->LoadData(L"UI\\UI_2_Battery.png");
+	m_batteryProgress->SetType(EProgressBarType::Linear);
+	m_batteryProgress->SetRelativeScale(FVector2(1, 1));
+	m_batteryProgress->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(m_batteryProgress->GetRelativeSize(), FVector2(0, 0))
 		+ FVector2(-596, SCREEN_HEIGHT / 2.0f - 169));
-	UI_Battery->SetProgress(0);
-	UI_Battery->m_layer = Define::HUDLayer + 10;
+	m_batteryProgress->SetProgress(0);
+	m_batteryProgress->m_layer = Define::HUDLayer + 10;
 
-	// Progress bar - 보류(원형 프로그레스 미구현)
-	UI_Speed->SetDrawType(Define::EDrawType::ScreenSpace);
-	UI_Speed->LoadData(L"UI\\UI_2_Speed.png");
-	UI_Speed->SetType(EProgressBarType::Radial);
-	UI_Speed->SetRelativeScale(FVector2(1, 1));
-	UI_Speed->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(UI_Battery->GetRelativeSize(), FVector2(0, 0))
+	// Progress bar - (원형 프로그레스)
+	m_speedProgress->SetDrawType(Define::EDrawType::ScreenSpace);
+	m_speedProgress->LoadData(L"UI\\UI_2_Speed.png");
+	m_speedProgress->SetType(EProgressBarType::Radial);
+	m_speedProgress->SetRelativeScale(FVector2(1, 1));
+	m_speedProgress->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(m_speedProgress->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(-SCREEN_WIDTH / 2.0f + 139, SCREEN_HEIGHT / 2.0f - 210));
-	UI_Speed->SetStartAngleDeg(90);
-	UI_Speed->m_layer = Define::HUDLayer + 10;
+	m_speedProgress->SetStartAngleDeg(0);
+	m_speedProgress->SetProgress(1);
+	m_speedProgress->m_layer = Define::HUDLayer + 10;
 
 	// 사운드 관련
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");

@@ -60,6 +60,11 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	D2D1_FACTORY_OPTIONS options = {};
 	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, options, d2dFactory.GetAddressOf());
 
+	// 생성한 지역변수를 멤버변수에 대입
+	m_d2dFactory = d2dFactory;
+
+	//D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&m_d2dFactory));
+
 	ComPtr<IDXGIDevice> dxgiDevice;
 	m_d3dDevice.As(&dxgiDevice);
 
