@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 #include "Component/ScriptComponent.h"
 #include "Core/Delegate.h"
 
-class Battery : public ScriptComponent
+class UI_Battery : public ScriptComponent
 {
 public:
 	enum ActionType {
