@@ -37,6 +37,7 @@ namespace Define
 	static const int PopupLayer = 50030;
 	static const int PopupButtonLayer = 50031;
 	static const int PopupTextLayer = 50032;
+	static const int PopupObjectLayer = 50033;
 
 	// Player
 	static const int HUDLayer = 50000;

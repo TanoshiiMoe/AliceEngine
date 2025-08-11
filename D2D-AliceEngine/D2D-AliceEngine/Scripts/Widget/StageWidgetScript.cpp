@@ -80,7 +80,7 @@ void StageWidgetScript::OnStart()
 	//popUpTab->LoadData(L"UI\\UI_PauseTab.png");
 	popUpTab->LoadData(L"UI\\UI_Tab.png");	// 텍스트를 넣읗거면 이거로 사용
 	popUpTab->SetRelativePosition(FVector2(0, 0));
-	popUpTab->m_layer = -1000;
+	popUpTab->m_layer = Define::Disable;
 	popUpTab->SetOpacity(0);
 
 	UI_Timer->LoadData(L"UI\\UI_Time.png");
