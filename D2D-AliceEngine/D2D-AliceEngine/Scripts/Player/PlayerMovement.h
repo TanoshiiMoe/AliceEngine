@@ -24,6 +24,8 @@ public:
 	// 부스트 설정
 	void SetBoost(bool _val);
 
+	// 표시속도 가져오기
+	float GetRealSpeed();
 private:
 	BikeMovementScript* bMovement;
 	float initSpeed;					// 기본 스피드

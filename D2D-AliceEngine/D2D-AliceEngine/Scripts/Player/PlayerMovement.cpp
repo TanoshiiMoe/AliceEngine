@@ -72,6 +72,11 @@ void PlayerMovement::SetBoost(bool _val)
 		
 }
 
+float PlayerMovement::GetRealSpeed()
+{
+	return bMovement->GetMaxSpeed() * 0.3f;
+}
+
 void PlayerMovement::Input()
 {
 	moveDir = { 0.0f, 0.0f };
