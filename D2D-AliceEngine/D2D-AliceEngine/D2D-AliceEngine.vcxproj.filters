@@ -236,6 +236,8 @@
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Player\PlayerMovement.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
     <ClInclude Include="Scripts\Legacy\Aru.h">
       <Filter>Scripts\Legacy</Filter>
     </ClInclude>

@@ -23,12 +23,9 @@ void CameraMover::OnStart()
 	// 플레이어 찾아서 넣기
 	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
 
-	FVector2 initPos;
-
 	camera = GetCamera();
 
 	if (player) {
-		initPos = player->transform()->GetPosition();
 		playerST = player->GetComponent<SkewTransform>();
 
 		player->RemoveFromParent();
@@ -37,9 +34,6 @@ void CameraMover::OnStart()
 		GetCamera()->SetRelativePosition(FVector2(0, 0));
 		GetCamera()->RemoveFromParent();
 	}
-
-	xPos = initPos.x;
-	yPos = initPos.y;
 }
 
 void CameraMover::Update(const float& dt)
@@ -57,8 +51,16 @@ void CameraMover::Update(const float& dt)
 	if (!playerST) return;
 	if (!player) return;
 
-	//FVector2 targetPos = playerST->GetRealPos();
-	FVector2 targetPos = player->GetPosition();
+	FVector2 playerPos = playerST->GetRealPos();
+
+
+	//FVector2 targetPos = playerST->GetRealPos() + camOffSet;
+	//FVector2 targetPos = player->GetPosition() + camOffSet;
+
+	FVector2 targetPos;
+	targetPos.x = playerPos.x + camOffSet.x;
+	targetPos.y = player->GetPosition().y + camOffSet.y;
+
 	FVector2 cameraPos = camera->GetPosition();  // camera는 이 스크립트의 owner임
 
 	FVector2 delta = targetPos - cameraPos;

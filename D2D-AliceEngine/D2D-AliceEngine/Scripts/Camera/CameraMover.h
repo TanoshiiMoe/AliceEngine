@@ -12,13 +12,13 @@ public:
 	void Awake() override;
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
+
+	FVector2 camOffSet = { 500.0f, 0.0f };
+
 private:
 	WeakObjectPtr<SkewTransform> playerST;
 	WeakObjectPtr<gameObject> player;
 	Camera* camera;
-
-	float xPos{0};
-	float yPos{0};
 
 	// 카메라 이동 속도 제어
 	float lerpSpeed = 5.0f;
