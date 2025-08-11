@@ -14,6 +14,7 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include <Math/TMath.h>
+#include <Component/ButtonComponent.h>
 
 Scene::Scene()
 {
@@ -76,6 +77,9 @@ void Scene::Update()
 
 void Scene::OnEnter()
 {
+	// 씬 진입 시 마우스 상태 초기화
+	Input::ResetMouseState();
+	
 	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 	{
 		it->second->OnStart();
@@ -100,12 +104,40 @@ void Scene::OnEnter()
 
 void Scene::OnExit()
 {
+	// 씬 종료 시 마우스 상태 초기화
+	Input::ResetMouseState();
+	
 	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
 	{
 		it->second->OnEnd();
 	}
 	D2DRenderManager::GetInstance().m_dxgiDevice->Trim();
 	PackageResourceManager::GetInstance().UnloadData();
+}
+
+void Scene::OnSceneTransition()
+{
+	// 씬 전환 시 마우스 상태 초기화
+	Input::ResetMouseState();
+	
+	// 모든 ButtonComponent의 마우스 상태도 초기화
+	for (auto& object : m_objects)
+	{
+		if (auto gameObj = object.second.get())
+		{
+			// 모든 컴포넌트에서 ButtonComponent를 찾아서 초기화
+			for (auto& component : gameObj->m_components)
+			{
+				if (auto buttonComp = dynamic_cast<ButtonComponent*>(component))
+				{
+					buttonComp->ResetMouseState();
+				}
+			}
+		}
+	}
+	
+	// 추가 안전장치: 모든 오브젝트의 OnStart 호출 전에 마우스 상태 초기화
+	// 이는 새로 생성되는 컴포넌트들도 초기화하기 위함
 }
 
 void Scene::VisibleMemoryInfo()

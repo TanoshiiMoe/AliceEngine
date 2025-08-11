@@ -58,6 +58,9 @@ void Scene_Stage1::Update()
 void Scene_Stage1::OnEnter()
 {
 	__super::OnEnter();
+	
+	// 스테이지 진입 시 마우스 상태 초기화
+	Input::ResetMouseState();
 
 	m_UI = NewObject<gameObject>(L"UI");
 	//m_UI->AddComponent<TitleUIScript>();
@@ -132,6 +135,10 @@ void Scene_Stage1::OnEnter()
 void Scene_Stage1::OnExit()
 {
 	__super::OnExit();
+	
+	// 스테이지 종료 시 마우스 상태 초기화
+	Input::ResetMouseState();
+	
 	GamePlayManager::GetInstance().ReleaseTimers();
 	BulletManager::GetInstance().SetPlayer(nullptr);
 	GamePlayManager::GetInstance().SetPlayer(nullptr);

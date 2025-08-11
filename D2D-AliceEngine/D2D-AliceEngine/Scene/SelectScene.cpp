@@ -31,6 +31,9 @@ void SelectScene::Update()
 void SelectScene::OnEnter()
 {
 	__super::OnEnter();
+	
+	// 씬 진입 시 마우스 상태 초기화
+	Input::ResetMouseState();
 
 	m_UI = NewObject<gameObject>(L"UI");
 	m_UI->AddComponent<SelectWidgetScript>();
@@ -40,6 +43,10 @@ void SelectScene::OnEnter()
 
 void SelectScene::OnExit()
 {
+	__super::OnExit();
+	
+	// 씬 종료 시 마우스 상태 초기화
+	Input::ResetMouseState();
 }
 
 void SelectScene::Input()
