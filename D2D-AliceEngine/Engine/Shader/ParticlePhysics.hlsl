@@ -92,7 +92,7 @@ float2 calculateBuoyancy(float2 pos, float2 surface, float buoyancy)
 }
 
 // ∏ﬁ¿Œ «»ºø ºŒ¿Ã¥ı
-float4 main(PSInput input) : SV_TARGET
+float4 D2DMain(PSInput input) : SV_TARGET
 {
     float time = timeData.x;
     float lifeRatio = input.lifeRatio;

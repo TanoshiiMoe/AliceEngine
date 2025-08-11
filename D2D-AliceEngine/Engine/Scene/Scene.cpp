@@ -15,6 +15,7 @@
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 #include <Component/ButtonComponent.h>
+#include <Component/Effect/ParticleComponent.h>
 
 Scene::Scene()
 {
@@ -71,6 +72,9 @@ void Scene::Update()
 	if (Input::IsKeyPressed(VK_F3)) {
 		D2DRenderManager::GetInstance().bRenderedBoxRect = !D2DRenderManager::GetInstance().bRenderedBoxRect;
 	}
+	if (Input::IsKeyPressed(VK_F4)) {
+		m_mouseParticle->ToggleMouseTrail();
+	}
     // FPS 갱신 (TimerManager 값을 그대로 사용)
     UpdateDebugHUD(0.0f);
 	VisibleMemoryInfo();
@@ -103,8 +107,15 @@ void Scene::OnEnter()
     auto* fpsText = m_fpsWidget->AddComponent<TextRenderComponent>();
     fpsText->SetDrawType(Define::EDrawType::ScreenSpace);
     fpsText->SetColor(FColor(0, 255, 0, 255));
-    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.23f));
+    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.27f));
 	fpsText->m_layer = 987654321;
+
+
+	m_mouseTrail = NewObject<gameObject>(L"ParticleScreen");
+	m_mouseParticle = m_mouseTrail->AddComponent<ParticleComponent>();
+	m_mouseParticle->SetDrawType(Define::EDrawType::ScreenSpace);
+	m_mouseParticle->ToggleMouseTrail(true);
+
 }
 
 void Scene::OnExit()
@@ -151,7 +162,7 @@ void Scene::VisibleMemoryInfo()
     if (m_sysinfoWidget)
     {
         auto* t = m_sysinfoWidget->GetComponent<TextRenderComponent>();
-        t->SetText(L"[F2] : 디버그 창 닫기 \n[F3] : 박스 컴포넌트 끄기/켜기 \nVRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
+        t->SetText(L"[F2] : 디버그 창 닫기 \n[F3] : 박스 컴포넌트 끄기/켜기 \n[F4] : 마우스 트레일 끄기/켜기 \nVRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
     }
 }
 

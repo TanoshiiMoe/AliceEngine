@@ -78,6 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
@@ -115,6 +116,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
@@ -145,6 +147,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Component\Effect\ParticleComponent.h" />
+    <ClInclude Include="Component\Effect\ShaderParticleComponent.h" />
     <ClInclude Include="Component\ButtonComponent.h" />
     <ClInclude Include="Component\BackGroundComponent.h" />
     <ClInclude Include="Component\AudioComponent.h" />
@@ -183,6 +187,7 @@
     <ClInclude Include="Manager\PackageResourceManager.h" />
     <ClInclude Include="Component\SkewTransform.h" />
     <ClInclude Include="Component\ProgressBarComponent.h" />
+    <ClInclude Include="Component\Effect\PixelShaderRenderer.h" />
     <ClInclude Include="Component\ParticleComponent.h" />
     <ClInclude Include="System\PhysicsSystem.h" />
     <ClInclude Include="System\CollisionSystem.h" />
@@ -217,8 +222,12 @@
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="UI\UIText.h" />
     <ClInclude Include="UI\UIImage.h" />
+    <ClInclude Include="Component\Effect\VertexShaderRenderer.h" />
+    <ClInclude Include="Component\RippleComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component\Effect\ParticleComponent.cpp" />
+    <ClCompile Include="Component\Effect\ShaderParticleComponent.cpp" />
     <ClCompile Include="Component\ButtonComponent.cpp" />
     <ClCompile Include="Component\BackGroundComponent.cpp" />
     <ClCompile Include="Component\AudioComponent.cpp" />
@@ -256,6 +265,7 @@
     <ClCompile Include="Manager\PackageResourceManager.cpp" />
     <ClCompile Include="Component\SkewTransform.cpp" />
     <ClCompile Include="Component\ProgressBarComponent.cpp" />
+    <ClCompile Include="Component\Effect\PixelShaderRenderer.cpp" />
     <ClCompile Include="Component\ParticleComponent.cpp" />
     <ClCompile Include="System\PhysicsSystem.cpp" />
     <ClCompile Include="System\CollisionSystem.cpp" />
@@ -295,6 +305,8 @@
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="UI\UIText.cpp" />
     <ClCompile Include="UI\UIImage.cpp" />
+    <ClCompile Include="Component\Effect\VertexShaderRenderer.cpp" />
+    <ClCompile Include="Component\RippleComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GradationShader.hlsl">
@@ -307,6 +319,65 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Shader\ParticleBlending.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D2DMain</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D2DMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </CompileD2DCustomEffect>
+      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </CompileD2DCustomEffect>
+    </FxCompile>
+    <FxCompile Include="Shader\ParticleColorChange.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D2DMain</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D2DMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </CompileD2DCustomEffect>
+      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </CompileD2DCustomEffect>
+    </FxCompile>
+    <FxCompile Include="Shader\ParticleDistortion.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D2DMain</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D2DMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </CompileD2DCustomEffect>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </CompileD2DCustomEffect>
+    </FxCompile>
+    <FxCompile Include="Shader\ParticleEnvironment.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D2DMain</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D2DMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shader\ParticlePhysics.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D2DMain</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D2DMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shader\ParticleSpecial.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D2DMain</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D2DMain</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
     <FxCompile Include="Shader\ParticleColorChange.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>

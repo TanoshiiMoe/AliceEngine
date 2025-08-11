@@ -77,7 +77,7 @@ float3 calculateRefraction(float3 viewDir, float3 normal, float ior)
 }
 
 // ∏ﬁ¿Œ «»ºø ºŒ¿Ã¥ı
-float4 main(PSInput input) : SV_TARGET
+float4 D2DMain(PSInput input) : SV_TARGET
 {
     float time = timeData.x;
     float lifeRatio = input.lifeRatio;

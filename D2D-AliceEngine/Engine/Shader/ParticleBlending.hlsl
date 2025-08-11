@@ -79,7 +79,7 @@ float calculateDOFBlur(float depth, float focus, float range)
 }
 
 // 메인 픽셀 셰이더
-float4 main(PSInput input) : SV_TARGET
+float4 D2DMain(PSInput input) : SV_TARGET
 {
     float time = timeData.x;
     float lifeRatio = input.lifeRatio;
@@ -89,29 +89,35 @@ float4 main(PSInput input) : SV_TARGET
     
     // 블렌딩 모드 적용
     float3 blendedColor = baseColor.rgb;
-    int blendMode = (int)blendData.x;
+    int blendMode = (int) blendData.x;
     
     // 생명에 따른 색상 변화
     float3 lifeColor = lerp(float3(1.0, 0.3, 0.0), float3(0.0, 0.7, 1.0), lifeRatio);
     
-    switch (blendMode)
+    
+    if (blendMode == 0)
     {
         case 0: // Add
             blendedColor = blendAdd(blendedColor, lifeColor * 0.3);
-            break;
-        case 1: // Multiply
+    }
+    else if (blendMode == 1)
+    {
             blendedColor = blendMultiply(blendedColor, lifeColor);
-            break;
-        case 2: // Screen
+    }
+    else if (blendMode == 2)
+    {
             blendedColor = blendScreen(blendedColor, lifeColor * 0.5);
-            break;
-        case 3: // Overlay
+    }
+    else if (blendMode == 3)
+    {
             blendedColor = blendOverlay(blendedColor, lifeColor);
-            break;
-        case 4: // Soft Light
+    }
+    else if (blendMode == 4)
+    {
             blendedColor = blendSoftLight(blendedColor, lifeColor);
-            break;
-        default:
+    }
+    else
+    {
             blendedColor = blendAdd(blendedColor, lifeColor * 0.2);
             break;
     }

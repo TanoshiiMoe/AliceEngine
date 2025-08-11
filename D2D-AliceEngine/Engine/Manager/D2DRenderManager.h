@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "pch.h"
 #include <Core/Singleton.h>
 #include <d2d1effectauthor.h>
@@ -38,20 +38,7 @@ public:
 
 	void LoadGradientTextrue();
 	void LoadEffectShader();
-	
-	// 고급 쉐이더 효과 메서드들
-	void SetupAdvancedShaderEffects();
-	void CreateShaderChain();
-	void ApplyShaderEffect(ID2D1Effect* effect, ID2D1Bitmap1* input, ID2D1Bitmap1* output);
-	
-	// 개별 쉐이더 효과들
-	void CreateColorMatrixEffect();
-	void CreateGaussianBlurEffect();
-	void CreateBlendEffect();
-	void CreateTurbulenceEffect();
-	void CreateMorphologyEffect();
-	void CreateDisplacementEffect();
-	void CreateArithmeticComposite();
+    bool LoadAndRegisterPixelShader(const std::wstring& hlslPath, const GUID& shaderGuid, const char* entry = "D2DMain");
 
 	HRESULT CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap);
 
