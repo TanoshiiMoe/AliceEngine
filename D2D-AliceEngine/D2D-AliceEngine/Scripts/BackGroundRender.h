@@ -30,7 +30,7 @@ public:
 	gameObject* m_owner;
 
 	// 이 값을 조절하여 전체 배경 레이어를 상대적으로 이동시킬 수 있습니다.
-	int m_backgroundRelativeLayer = -9000;
+	int m_backgroundRelativeLayer = -3000;
 	int m_bottomRelativeLayer = 45910;
 	int m_topRelativeLayer = 5910;
 

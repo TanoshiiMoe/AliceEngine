@@ -5,6 +5,7 @@
 #include "Manager/D2DRenderManager.h"
 #include "Manager/SceneManager.h"
 #include <Scripts/Enemy/Spawn/SpawnCollider.h>
+#include <GameManager/GamePlayManager.h>
 
 TileMapManager* TileMapManager::instance = nullptr;
 
@@ -43,7 +44,7 @@ void TileMapManager::OnStart()
 		tc->SetSkew({ 45, 0 });
 		tc->CreateTileRenderers();
 		tc->CreateTileCollision();
-		tc->SetTileLayer(-5000);	// 타일 레이어를 3으로 설정
+		tc->SetTileLayer(Define::TileLayer);
 
 		// 타일맵 위치 조절
 		int t_height = tc->tileMap.tileHeight;
@@ -60,6 +61,8 @@ void TileMapManager::OnStart()
 		for (auto& obj : tc->go) {
 			obj->transform()->AddPosition(offSet.x, offSet.y);
 		}
+
+		GamePlayManager::GetInstance().SetStopXAxis(tc->tileMap.tileWidth * tc->tileMap.layers[0].width);
 	}
 	else {
 		std::wstring message = owner->GetName() + L" : TileMapManager에서 TileMapComponent를 가져오는데 실패했습니다!!!\n";

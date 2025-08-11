@@ -51,15 +51,12 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
     std::wstring name = L"Boss";
     gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
 
-    if (auto player = GamePlayManager::GetInstance().GetPlayer())
-    {
-        player->AddChildObject(enemy);
-    }
-
     enemy->AddComponent<Car>();
     enemy->AddComponent<SpriteRenderer>()->LoadData(L"Enemy/Durang/boss_idle_notfix.png");
-    enemy->AddComponent<Collider>()->SetBoxSize(FVector2(280, 280));
+    enemy->GetComponent<SpriteRenderer>()->m_layer = 19999;
+    enemy->AddComponent<Collider>()->SetBoxSize(FVector2(180, 180));
     enemy->SetScale(FVector2(1.4f, 1.4f));
+   
 
     FDroneSpritePath dronePath(
         L"Enemy/Drone/enermy_Drone_body.png",
@@ -69,7 +66,7 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
     enemy->SetTag(L"Enemy");
 
     if (auto* statScript = enemy->AddComponent<EnemyStatScript>())
-        statScript->SetEnemyTypeId(12);
+        statScript->SetEnemyTypeId(4);
 
     if (auto* drone = enemy->AddComponent<Drone>(dronePath))
     {
@@ -85,7 +82,47 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
         drone->SetDroneType(EDroneType::Enemy);
     }
 
-    enemy->transform()->SetPosition(worldPos);
+    //enemy->SetPosition(worldPos);
+
+	FVector2 playerPos = 0;
+	if (auto player = GamePlayManager::GetInstance().GetPlayer())
+	{
+		playerPos += player->GetPosition();
+	}
+	enemy->SetPosition(playerPos + worldPos);
+}
+
+void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
+{
+	// 이름 정하기
+	std::wstring name = L"BossDrone";
+	gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
+
+	if (auto player = GamePlayManager::GetInstance().GetPlayer())
+	{
+		player->AddChildObject(enemy);
+	}
+
+	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(140, 140));
+
+	FDroneSpritePath dronePath(
+		L"Enemy/Drone/enermy_Drone_body.png",
+		L"Enemy/Drone/enermy_Drone_arm.png"
+	);
+
+	enemy->SetTag(L"Enemy");
+
+	if (auto* statScript = enemy->AddComponent<EnemyStatScript>())
+		statScript->SetEnemyTypeId(999);
+
+	if (auto* drone = enemy->AddComponent<Drone>(dronePath))
+	{
+		drone->initBodyPos = FVector2(0.0f, 0.0f);
+		drone->initBodySize = FVector2(0.85f, 0.85f);
+		drone->SetDroneType(EDroneType::Boss);
+	}
+
+	enemy->SetPosition(worldPos);
 }
 
 void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldPos)
@@ -120,7 +157,7 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
         if (auto* drone = enemy->AddComponent<Drone>(dronePath))
         {
             drone->initBodyPos = FVector2(-60.0f, 80.0f);
-            drone->initBodySize = FVector2(1.2f, 1.2f);
+            drone->initBodySize = FVector2(0.7f, 0.7f);
             drone->SetDroneType(EDroneType::Enemy);
             drone->SetAttackDelay(2.0f);
         }

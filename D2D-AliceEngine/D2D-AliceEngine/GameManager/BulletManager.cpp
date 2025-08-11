@@ -1,4 +1,4 @@
-#include "BulletManager.h"
+ï»¿#include "BulletManager.h"
 #include <Scripts/Weapon/Bullet.h>
 #include <Manager/SceneManager.h>
 #include <Math/TMath.h>
@@ -18,15 +18,15 @@ void BulletManager::FireBullet(const FVector2& start, const FVector2& target, co
 	auto bullet = bulletObj->AddComponent<Bullet>();
 
 	bulletObj->SetPosition(start);
-	bulletObj->SetScale(FVector2(0.2, 0.2));
+	bulletObj->SetScale(FVector2(1.2, 1.2));
 
 	switch (dronType)
 	{
 	case EDroneType::Player :
-		bullet->SetSpritePath(L"wallet.png");
+		bullet->SetSpritePath(L"Player/bullet_blue_final.png");
 		break;
 	case EDroneType::Enemy :
-		bullet->SetSpritePath(L"Gun.png");
+		bullet->SetSpritePath(L"Enemy/bullet_red_final.png");
 		break;
 	default:
 		break;
@@ -34,23 +34,23 @@ void BulletManager::FireBullet(const FVector2& start, const FVector2& target, co
 
 	bullet->SetDroneType(dronType);
 	bullet->inheritedVelocity = initVelocity;
-	bullet->bulletType = EBulletType::Linear; // ±âº»ÀûÀ¸·Î BezierCurve·Î ¼³Á¤
+	bullet->bulletType = EBulletType::Linear; // ê¸°ë³¸ì ìœ¼ë¡œ BezierCurveë¡œ ì„¤ì •
 
 	FVector2 dir = target - start;
 	float distance = dir.Length();
 	FVector2 dirNormal = dir.Normalize();
-	FVector2 perp(-dirNormal.y, dirNormal.x); // ¼öÁ÷ ¹æÇâ
+	FVector2 perp(-dirNormal.y, dirNormal.x); // ìˆ˜ì§ ë°©í–¥
 
 	float randMultiply = FRandom::GetRandomInRange(0.1, 0.9);
-	//ÄÁÆ®·Ñ Æ÷ÀÎÆ® °è»ê: ½ÃÀÛÁ¡°ú ³¡Á¡ Áß°£¿¡¼­ À§·Î ¿Ã¸²
+	//ì»¨íŠ¸ë¡¤ í¬ì¸íŠ¸ ê³„ì‚°: ì‹œì‘ì ê³¼ ëì  ì¤‘ê°„ì—ì„œ ìœ„ë¡œ ì˜¬ë¦¼
 	FVector2 mid = (start + target) * randMultiply;
 
-	// °Å¸® ±â¹İÀ¸·Î ÈÖ´Â Á¤µµ ºñÀ² °è»ê (¿¹: °Å¸®ÀÇ 10%)
+	// ê±°ë¦¬ ê¸°ë°˜ìœ¼ë¡œ íœ˜ëŠ” ì •ë„ ë¹„ìœ¨ ê³„ì‚° (ì˜ˆ: ê±°ë¦¬ì˜ 10%)
 	float randCurveMultiply = FRandom::GetRandomInRange(0.05f, 0.07f);
-	float curveRatio = randCurveMultiply; // ÀÌ°É ³·Ãß¸é ´ú ÈÚ
+	float curveRatio = randCurveMultiply; // ì´ê±¸ ë‚®ì¶”ë©´ ëœ íœ¨
 	float curveAmount = distance * curveRatio;
 
-	// ÁÂ¿ì ·£´ı ÈÖ±â
+	// ì¢Œìš° ëœë¤ íœ˜ê¸°
 	float sign = (rand() % 2 == 0) ? 1.0f : -1.0f;
 	FVector2 offset = perp * curveAmount * sign;
 

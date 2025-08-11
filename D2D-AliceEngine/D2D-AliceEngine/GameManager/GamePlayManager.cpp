@@ -63,6 +63,7 @@ void GamePlayManager::ApplyPauseTimescale(bool paused)
 void GamePlayManager::StartGame()
 {
     // 게임을 시작하면 InGame으로 전환하고 타임스케일 복구
+    GamePlayManager::GetInstance().SetPassedTime(0);
     ApplyPauseTimescale(false);
     SetState(EGameRunState::InGame);
 }
@@ -120,15 +121,21 @@ void GamePlayManager::PlayBossMode()
         if (EnemySpawnTriggerBox* es = triggerBox->GetComponent<EnemySpawnTriggerBox>())
         {
             es->SetSpawnable(false);
-            es->SpawnBossAt(FVector2(400, 0));
+            es->SpawnBossAt(FVector2(1890, 0));
 
-            //TimerManager::GetInstance().SetTimer(bossSpawnTimer, [this]()
-            //{
-            //    EnemySpawnTriggerBox::SpawnEnemyAt(0, m_player->GetPosition() + FVector2(500,0));
-            //},
-            //    3.0f,
-            //    true,
-            //    1.0f);
+            TimerManager::GetInstance().SetTimer(bossSpawnTimer, 
+                [this]()
+            {
+					/*FVector2 center = m_player->GetPosition();
+					FVector2 randomPoint = FRandom::GetRandomPointInCircle2D(center.x, center.y, 20);
+					EnemySpawnTriggerBox::SpawnEnemyAt(0, randomPoint + FVector2(600, 0));*/
+
+                    FVector2 randomPoint = FRandom::GetRandomPointInTorus2D(0, 0, 400, 700);
+                    EnemySpawnTriggerBox::SpawnBossDroneAt(randomPoint + FVector2(300, 0));
+            },
+                3.0f,
+                true,
+                1.0f);
         }
     }
 }

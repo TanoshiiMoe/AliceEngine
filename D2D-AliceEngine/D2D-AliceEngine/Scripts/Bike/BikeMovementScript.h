@@ -36,24 +36,25 @@ public:
 	void Input();
 
 	// Owner
-	gameObject* GetOwnerObject() const { return m_owner; }
-	void SetOwnerObject(gameObject* owner) { m_owner = owner; }
-
 	// Initial Speed
 	float GetInitialSpeed() const { return m_initialSpeed; }
 	void SetInitialSpeed(float speed) { m_initialSpeed = speed; }
+	void AddInitialSpeed(float delta) { m_initialSpeed += delta; }
 
 	// Max Speed
 	float GetMaxSpeed() const { return m_maxSpeed; }
 	void SetMaxSpeed(float speed) { m_maxSpeed = speed; }
+	void AddMaxSpeed(float delta) { m_maxSpeed += delta; }
 
 	// Acceleration
 	float GetAcceleration() const { return m_acceleration; }
 	void SetAcceleration(float acceleration) { m_acceleration = acceleration; }
+	void AddAcceleration(float delta) { m_acceleration += delta; }
 
 	// Current Speed
 	float GetCurrentSpeed() const { return m_currentSpeed; }
 	void SetCurrentSpeed(float speed) { m_currentSpeed = speed; }
+	void AddCurrentSpeed(float delta) { m_currentSpeed += delta; }
 
 	// Hit Reaction
 	bool IsHitReaction() const { return m_hitReaction; }
@@ -62,22 +63,27 @@ public:
 	// Hit Reaction Time
 	float GetHitReactionTime() const { return m_hitReactionTime; }
 	void SetHitReactionTime(float time) { m_hitReactionTime = time; }
+	void AddHitReactionTime(float delta) { m_hitReactionTime += delta; }
 
 	// Hit Timer
 	float GetHitTimer() const { return m_hitTimer; }
 	void SetHitTimer(float time) { m_hitTimer = time; }
+	void AddHitTimer(float delta) { m_hitTimer += delta; }
 
 	// Speed Modifier
 	float GetSpeedModifierValue() const { return m_speedModifier; }
 	void SetSpeedModifierValue(float modifier) { m_speedModifier = modifier; }
+	void AddSpeedModifierValue(float delta) { m_speedModifier += delta; }
 
 	// Modifier Duration
 	float GetModifierDuration() const { return m_modifierDuration; }
 	void SetModifierDuration(float duration) { m_modifierDuration = duration; }
+	void AddModifierDuration(float delta) { m_modifierDuration += delta; }
 
-	// m_prevMoveMount
+	// Prev Move Amount
 	float GetPrevMoveAmount() const { return m_prevMoveAmount; }
 	void SetPrevMoveAmount(float amount) { m_prevMoveAmount = amount; }
+	void AddPrevMoveAmount(float delta) { m_prevMoveAmount += delta; }
 
 private:
 	gameObject* m_owner = nullptr;

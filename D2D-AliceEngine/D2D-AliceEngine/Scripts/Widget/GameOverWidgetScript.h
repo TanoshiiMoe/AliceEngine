@@ -2,8 +2,7 @@
 #include <Component/ScriptComponent.h>
 
 class gameObject;
-class TextRenderComponent;
-class StageWidgetScript : public ScriptComponent
+class GameOverWidgetScript : public ScriptComponent
 {
 public:
 	void Initialize() override;
@@ -15,9 +14,5 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
-
-	TextRenderComponent* m_passedTimeText;
-	TextRenderComponent* m_killEnemyText;
-
 };
 

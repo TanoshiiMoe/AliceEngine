@@ -6,8 +6,6 @@
 
 namespace Define
 {
-	// 플레이어, 적은 도로너비에 따라 -220 ~ 380까지 사용합니다.
-
 	static const int SCREEN_WIDTH = 1920;	// 화면 너비
 	static const int SCREEN_HEIGHT = 1080;	// 화면 높이
 	static const int FRAME_RATE = 60;		// 프레임 레이트
@@ -29,6 +27,32 @@ namespace Define
 	static const std::wstring Scene_Stage3 = L"Scene_Stage3";
 	static const std::wstring Scene_GameOver = L"Scene_Over";
 	static const std::wstring Scene_GameClear = L"Scene_Clear";
+
+	// ========== Layer List ==========
+
+// Scene : 350000 ~ 359999
+	static const int CutSceneLayer = 350001;
+	// UI : 50000 ~
+	static const int NormalTextLayer = 50010;
+	static const int ButtonLayer = 50020;
+	static const int ButtonTextLayer = 50021;
+	static const int PopupLayer = 50030;
+	static const int PopupPopLayer = 50031;
+	static const int PopupObjectLayer = 50032;
+	static const int PopupButtonLayer = 50033;
+	static const int PopupTextLayer = 50034;
+
+	// Player
+	static const int HUDLayer = 50000;
+	// 플레이어, 적은 도로너비에 따라 -220 ~ 380까지 사용합니다.
+
+	// BackGround
+	static const int TileLayer = -300;
+
+	// Enemy
+
+	// Delete : -50000
+	static const int Disable = -50000;
 
 	enum class EDrawType
 	{

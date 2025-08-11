@@ -1,4 +1,4 @@
-#include "NormalCar.h"
+ï»¿#include "NormalCar.h"
 #include <System/ScriptSystem.h>
 #include "Component/SpriteRenderer.h"
 #include "Object/gameObject.h"
@@ -27,8 +27,8 @@ void NormalCar::OnStart()
 
 		anim->Play();
 		anim->OnStart();
-
-		// ½ºÄÉÀÏ Á¶Á¤
+		anim->m_layer = 19999;
+		// ìŠ¤ì¼€ì¼ ì¡°ì •
 		anim->SetRelativeScale(scale);
 
 		float height = anim->GetSpriteSizeY() * scale.y;

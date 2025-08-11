@@ -51,11 +51,23 @@ void Scene_Stage1::Release()
 void Scene_Stage1::Update()
 {
 	__super::Update();
+
+	GamePlayManager::GetInstance().AddPassedTime(TimerManager::GetInstance().unscaledDeltaTime);
+	if (m_player)
+	{
+		if (m_player->GetPosition().x >= GamePlayManager::GetInstance().GetStopXAxis())
+		{
+			GamePlayManager::GetInstance().GameClear();
+		}
+	}
 }
 
 void Scene_Stage1::OnEnter()
 {
 	__super::OnEnter();
+	
+	// 스테이지 진입 시 마우스 상태 초기화
+	Input::ResetMouseState();
 
 	m_UI = NewObject<gameObject>(L"UI");
 	//m_UI->AddComponent<TitleUIScript>();
@@ -72,6 +84,8 @@ void Scene_Stage1::OnEnter()
 	m_player->AddComponent<PlayerBike>();
 	BulletManager::GetInstance().SetPlayer(m_player);
 	GamePlayManager::GetInstance().SetPlayer(m_player);
+	GamePlayManager::GetInstance().SetPassedTime(0);
+	GamePlayManager::GetInstance().SetKillEnemyAmount(0);
 	m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
@@ -83,7 +97,7 @@ void Scene_Stage1::OnEnter()
 
 	// 타일맵 추가
 	m_tile = NewObject<gameObject>(L"TileMap");
-	m_tile->AddComponent<TileMapComponent>();
+	m_tileMapComponent = m_tile->AddComponent<TileMapComponent>();
 	if (auto* tileMgr = m_tile->AddComponent<TileMapManager>())
 	{
 		tileMgr->SetTilePaths(
@@ -95,9 +109,8 @@ void Scene_Stage1::OnEnter()
 	// 적 스포너 매니저 생성
 	enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
 	auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
-	tb->SetBox(FVector2(1500.0f, 700.0f), 1);
+	tb->SetBox(FVector2(3300.0f, 800.0f), 1);
 	//owner->transform()->SetPivot(0.5f, 0.5f);
-
 
 	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
 	m_button = NewObject<gameObject>(L"PauseButton");
@@ -122,12 +135,28 @@ void Scene_Stage1::OnEnter()
 		if (Input::IsKeyPressed(VK_6)) {
 			GamePlayManager::GetInstance().PlayBossMode();
 		}
+		if (Input::IsKeyPressed(VK_P)) {
+			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
+			{
+				t->AddMaxSpeed(50);
+			}
+		}
+		if (Input::IsKeyPressed(VK_O)) {
+			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
+			{
+				t->AddMaxSpeed(-50);
+			}
+		}
 	});
 }
 
 void Scene_Stage1::OnExit()
 {
 	__super::OnExit();
+	
+	// 스테이지 종료 시 마우스 상태 초기화
+	Input::ResetMouseState();
+	
 	GamePlayManager::GetInstance().ReleaseTimers();
 	BulletManager::GetInstance().SetPlayer(nullptr);
 	GamePlayManager::GetInstance().SetPlayer(nullptr);

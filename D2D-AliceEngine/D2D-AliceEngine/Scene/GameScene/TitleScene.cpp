@@ -69,6 +69,9 @@ void TitleScene::OnEnter()
 void TitleScene::OnExit()
 {
 	__super::OnExit();
+	
+	// 타이틀 씬 종료 시 마우스 상태 초기화
+	Input::ResetMouseState();
 
 	GamePlayManager::GetInstance().ReleaseTimers();
 }

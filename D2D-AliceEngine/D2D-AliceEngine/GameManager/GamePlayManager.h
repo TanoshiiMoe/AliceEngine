@@ -95,6 +95,23 @@ public:
     gameObject* GetPlayer() const { return m_player; }
     void SetPlayer(gameObject* player) { m_player = player; }
 
+	float GetPassedTime() const { return m_passedTime; }
+	void SetPassedTime(float time) { m_passedTime = time; }
+    void AddPassedTime(float delta) { m_passedTime += delta; }
+	int GetKillEnemyAmount() const { return m_killEnemyAmount; }
+	void SetKillEnemyAmount(int amount) { m_killEnemyAmount = amount; }
+	void AddKillEnemyAmount(int delta) { m_killEnemyAmount += delta; }
+
+	int GetStopXAxis() const { return m_stopXAxis; }
+	void SetStopXAxis(int value) { m_stopXAxis = value; }
+	void AddStopXAxis(int delta) { m_stopXAxis += delta; }
+
 private:
     gameObject* m_player = nullptr;
+
+    float m_passedTime{ 0 };
+
+    int m_killEnemyAmount{ 0 };
+
+    int m_stopXAxis{10200};
 };

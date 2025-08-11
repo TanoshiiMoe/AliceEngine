@@ -33,6 +33,26 @@ void GameClearScene::OnEnter()
     text->SetRelativePosition(FVector2(20, 10));
     text->SetFontSize(32.0f);
 
+	m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
+    {
+        auto* text = m_passedTimeText->AddComponent<TextRenderComponent>();
+        text->SetText(std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
+        text->SetTextAlignment(ETextFormat::TopLeft);
+        text->SetRelativePosition(FVector2(350, 585));
+        text->SetFontSize(28.0f);
+        text->SetColor(FColor::Gold);
+    }
+
+    m_killEnemyText = NewObject<gameObject>(L"m_killEnemyText");
+	{
+		auto* text = m_killEnemyText->AddComponent<TextRenderComponent>();
+		text->SetText(std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+		text->SetTextAlignment(ETextFormat::TopLeft);
+		text->SetRelativePosition(FVector2(350, 553));
+		text->SetFontSize(28.0f);
+		text->SetColor(FColor::Gold);
+	}
+
     // 중앙 클라우드 이미지
     if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))
     {
@@ -49,6 +69,9 @@ void GameClearScene::OnEnter()
             SceneManager::ChangeScene(Define::Scene_Title);
         }
     });
+
+    m_widget = NewObject<gameObject>(L"Widget");
+    //m_widget->AddComponent<GameClearWidgetScript>();
 }
 
 void GameClearScene::OnExit()

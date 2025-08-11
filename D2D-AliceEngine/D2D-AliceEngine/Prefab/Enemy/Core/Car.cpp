@@ -87,12 +87,12 @@ void Car::Update(const float& deltaSeconds)
 
     if (owner && owner->GetName() == L"Boss")
     {
-        if (auto player = GamePlayManager::GetInstance().GetPlayer())
-        {
-            const FVector2 ppos = player->GetPosition();
-            // 월드에서 Y=0으로 고정, X는 플레이어 +400
-            owner->transform()->SetPosition(FVector2(400, -ppos.y));
-        }
+		FVector2 playerPos = 0;
+		if (auto player = GamePlayManager::GetInstance().GetPlayer())
+		{
+			playerPos += player->GetPosition();
+		}
+        owner->SetPosition(FVector2(playerPos.x + 900, 0));
     }
 }
 

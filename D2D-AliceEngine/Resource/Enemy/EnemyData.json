@@ -1,8 +1,8 @@
 [
   {
     "typeId": 0.0,
-    "maxHP": 100.0,
-    "hp": 100.0,
+    "maxHP": 30.0,
+    "hp": 30.0,
     "battery": 10.0,
     "moveSpeed": 50.0,
     "attackDelay": 2.0,
@@ -36,9 +36,18 @@
     "damage": 7.0
   },
   {
-    "typeId": 12.0,
-    "maxHP": 800.0,
-    "hp": 800.0,
+    "typeId": 4.0,
+    "maxHP": 600.0,
+    "hp": 600.0,
+    "battery": 20.0,
+    "moveSpeed": 35.0,
+    "attackDelay": 1.5,
+    "damage": 12.0
+  },
+  {
+    "typeId": 999.0,
+    "maxHP": 20.0,
+    "hp": 20.0,
     "battery": 20.0,
     "moveSpeed": 35.0,
     "attackDelay": 1.5,

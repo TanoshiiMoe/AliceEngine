@@ -71,7 +71,7 @@ void SelectWidgetScript::OnStart()
 	continueText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(continueText->GetRelativeSize(),FVector2(-0.5,-0.5))
 		+FVector2(0,-350));
-	continueText->m_layer = 300;
+	continueText->m_layer = Define::NormalTextLayer;
 
 	// ======================== closeText
 	closeText->SetFontSize(55.0f);
@@ -83,7 +83,7 @@ void SelectWidgetScript::OnStart()
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
 	closeText->SetRelativeScale(FVector2(1, 1));
 	closeText->SetRelativeRotation(0);
-	closeText->m_layer = 301;
+	closeText->m_layer = Define::NormalTextLayer;
 	closeText->RemoveFromParent();
 	closeButton->AddChildComponent(closeText);
 
@@ -105,7 +105,7 @@ void SelectWidgetScript::OnStart()
 		+ FVector2(-500, 0)
 	);
 	stage1->SetRelativeScale(FVector2(1, 1));
-	stage1->m_layer = 300;
+	stage1->m_layer = Define::NormalTextLayer;
 
 	// ===================== stage2
 	stage2->LoadData(Define::EButtonState::Idle, L"UI\\MapSelectReal.png");
@@ -113,7 +113,7 @@ void SelectWidgetScript::OnStart()
 	stage2->LoadData(Define::EButtonState::Pressed, L"UI\\MapSelectReal.png");
 	stage2->LoadData(Define::EButtonState::Release, L"UI\\MapSelectReal.png");
 	stage2->SetRelativePosition(FVector2(0,0));
-	stage2->m_layer = 300;
+	stage2->m_layer = Define::NormalTextLayer;
 
 	// ===================== stage3
 	stage3->LoadData(Define::EButtonState::Idle, L"UI\\MapSelectBoss.png");
@@ -126,7 +126,7 @@ void SelectWidgetScript::OnStart()
 		+ FVector2(500, 0)
 	);
 	stage3->SetRelativeScale(FVector2(1, 1));
-	stage3->m_layer = 300;
+	stage3->m_layer = Define::NormalTextLayer;
 
 	// ====================== Delegate & Hover Effects
 	
