@@ -65,7 +65,7 @@ private:
 
         // 오오라: 중심을 기준으로 공전
         bool    isOrbital = false;
-        FVector2 orbitalCenter{0,0};
+        FVector2 orbitalCenter{ 0,0 };
         float   orbitalRadius = 0.0f;
         float   orbitalAngularSpeed = 0.0f; // deg/sec
         float   orbitalAngleDeg = 0.0f;     // 현재 각도
@@ -73,18 +73,18 @@ private:
 
 private:
     void emitBurstCommon(const FVector2& pos,
-                         int count,
-                         float speedMin,
-                         float speedMax,
-                         float sizeMin,
-                         float sizeMax,
-                         float lifeMin,
-                         float lifeMax,
-                         const D2D1_COLOR_F& colorA,
-                         const D2D1_COLOR_F& colorB,
-                         float drag = 0.0f,
-                         float gravity = 0.0f,
-                         float spreadRadians = 3.1415926f * 2.0f);
+        int count,
+        float speedMin,
+        float speedMax,
+        float sizeMin,
+        float sizeMax,
+        float lifeMin,
+        float lifeMax,
+        const D2D1_COLOR_F& colorA,
+        const D2D1_COLOR_F& colorB,
+        float drag = 0.0f,
+        float gravity = 0.0f,
+        float spreadRadians = 3.1415926f * 2.0f);
 
     void spawnShockwaveRing(const FVector2& pos, float radius, float thickness, float life, const D2D1_COLOR_F& color);
 

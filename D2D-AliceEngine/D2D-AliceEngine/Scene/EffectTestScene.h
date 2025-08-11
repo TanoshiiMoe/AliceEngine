@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <Scene/Scene.h>
 
+class ParticleComponent;
 class EffectTestScene : public Scene
 {
 public:
@@ -14,11 +15,11 @@ public:
     void OnEnter() override;
     void OnExit() override;
 
-private:
+
     void HandleInput();
     void SpawnVignette(float durationSec, float maxAlpha);
     void SpawnBlackOut(int modeIndex, bool useCrossFade, float durationSec, float maxAlpha);
-
+    
     // a~h 테스트용 스포너
     void SpawnParticleExplosion();      // a
     void SpawnParticleImpact();         // b
@@ -28,6 +29,14 @@ private:
     void SpawnParticleAura();           // f (플레이어 오라 가정, 화면 중앙 근처)
     void SpawnParticleElectric();       // g
     void SpawnParticlePortal();         // h
+
+    // 6개의 파티클 효과 핸들
+    ParticleComponent* colorTransformEffect;    // A키 - 색상 변환
+    ParticleComponent* distortionEffect;        // S키 - 왜곡 효과
+    ParticleComponent* blendingEffect;          // D키 - 블렌딩 효과
+    ParticleComponent* physicsEffect;           // F키 - 물리(샘플) 효과
+    ParticleComponent* environmentEffect;       // G키 - 환경 효과
+    ParticleComponent* specialEffect;           // H키 - 특수 효과
 };
 
 

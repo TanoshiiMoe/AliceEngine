@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ParticleComponent.h"
 #include <Manager/D2DRenderManager.h>
 #include <Manager/PackageResourceManager.h>
@@ -10,7 +10,7 @@
 #include <Component/TransformComponent.h>
 #include <Core/StatTraits.h>
 
-// Particle ±¸Á¶Ã¼ ±¸Çö
+// Particle êµ¬ì¡°ì²´ êµ¬í˜„
 void Particle::Initialize(const FVector2& pos, const FVector2& vel, float lifeTime)
 {
     position = pos;
@@ -39,7 +39,7 @@ void Particle::Update(float deltaTime)
 {
     if (!active) return;
     
-    // »ı¸í °¨¼Ò
+    // ìƒëª… ê°ì†Œ
     life -= deltaTime;
     if (life <= 0.0f)
     {
@@ -47,36 +47,36 @@ void Particle::Update(float deltaTime)
         return;
     }
     
-    // »ı¸í ºñÀ² °è»ê
+    // ìƒëª… ë¹„ìœ¨ ê³„ì‚°
     lifeRatio = life / maxLife;
     
-    // À§Ä¡ ¾÷µ¥ÀÌÆ®
+    // ìœ„ì¹˜ ì—…ë°ì´íŠ¸
     velocity += acceleration * deltaTime;
     position += velocity * deltaTime;
     
-    // Å©±â ¾÷µ¥ÀÌÆ®
+    // í¬ê¸° ì—…ë°ì´íŠ¸
     scale += scaleVelocity * deltaTime;
     
-    // È¸Àü ¾÷µ¥ÀÌÆ®
+    // íšŒì „ ì—…ë°ì´íŠ¸
     rotation += rotationSpeed * deltaTime;
     
-    // »ö»ó ¾÷µ¥ÀÌÆ®
+    // ìƒ‰ìƒ ì—…ë°ì´íŠ¸
     color += colorVelocity * deltaTime;
     
-    // Åõ¸íµµ ¾÷µ¥ÀÌÆ®
+    // íˆ¬ëª…ë„ ì—…ë°ì´íŠ¸
     opacity += opacityVelocity * deltaTime;
     
-    // ½¦ÀÌ´õ ÆÄ¶ó¹ÌÅÍ °è»ê
+    // ì‰ì´ë” íŒŒë¼ë¯¸í„° ê³„ì‚°
     CalculateShaderParams();
 }
 
 void Particle::CalculateShaderParams()
 {
-    // »ı¸í¿¡ µû¸¥ »ö»ó°ú Åõ¸íµµ º¸°£
-    // ÀÌ ÇÔ¼ö´Â ½¦ÀÌ´õ¿¡¼­ »ç¿ëÇÒ ÆÄ¶ó¹ÌÅÍµéÀ» ¹Ì¸® °è»ê
+    // ìƒëª…ì— ë”°ë¥¸ ìƒ‰ìƒê³¼ íˆ¬ëª…ë„ ë³´ê°„
+    // ì´ í•¨ìˆ˜ëŠ” ì‰ì´ë”ì—ì„œ ì‚¬ìš©í•  íŒŒë¼ë¯¸í„°ë“¤ì„ ë¯¸ë¦¬ ê³„ì‚°
 }
 
-// ParticleComponent ±¸Çö
+// ParticleComponent êµ¬í˜„
 ParticleComponent::ParticleComponent()
     : m_particleType(EParticleType::BulletHit)
     , m_isPlaying(false)
@@ -88,7 +88,7 @@ ParticleComponent::ParticleComponent()
     , m_needsRebuild(false)
     , m_lastActiveCount(0)
 {
-    // ±âº» ¼³Á¤ Àû¿ë
+    // ê¸°ë³¸ ì„¤ì • ì ìš©
     ApplyTypeConfig(m_particleType);
 }
 
@@ -101,18 +101,18 @@ void ParticleComponent::Initialize()
 {
     __super::Initialize();
     
-    // SpriteBatch »ı¼º
+    // SpriteBatch ìƒì„±
     ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
     if (context)
     {
         HRESULT hr = context->CreateSpriteBatch(&m_spriteBatch);
         if (SUCCEEDED(hr))
         {
-            m_spriteBatch->AddRef(); // ÂüÁ¶ Ä«¿îÆ® Áõ°¡
+            m_spriteBatch->AddRef(); // ì°¸ì¡° ì¹´ìš´íŠ¸ ì¦ê°€
         }
     }
     
-    // ÆÄÆ¼Å¬ Ç® ÃÊ±âÈ­
+    // íŒŒí‹°í´ í’€ ì´ˆê¸°í™”
     m_particles.resize(m_config.maxParticles);
     for (auto& particle : m_particles)
     {
@@ -120,7 +120,7 @@ void ParticleComponent::Initialize()
         m_particlePool.push_back(particle.get());
     }
     
-    // ½¦ÀÌ´õ È¿°ú ¼³Á¤
+    // ì‰ì´ë” íš¨ê³¼ ì„¤ì •
     SetupShaderEffects();
 }
 
@@ -130,7 +130,7 @@ void ParticleComponent::Update(const float& deltaSeconds)
     
     if (!m_isPlaying || m_isPaused) return;
     
-    // ½Ã½ºÅÛ Å¸ÀÌ¸Ó ¾÷µ¥ÀÌÆ®
+    // ì‹œìŠ¤í…œ íƒ€ì´ë¨¸ ì—…ë°ì´íŠ¸
     if (m_config.duration > 0)
     {
         m_systemTimer += deltaSeconds;
@@ -141,7 +141,7 @@ void ParticleComponent::Update(const float& deltaSeconds)
         }
     }
     
-    // ÆÄÆ¼Å¬ »ı¼º
+    // íŒŒí‹°í´ ìƒì„±
     m_emissionTimer += deltaSeconds;
     float emissionInterval = 1.0f / m_config.emissionRate;
     
@@ -151,13 +151,13 @@ void ParticleComponent::Update(const float& deltaSeconds)
         m_emissionTimer -= emissionInterval;
     }
     
-    // ÆÄÆ¼Å¬ ¾÷µ¥ÀÌÆ®
+    // íŒŒí‹°í´ ì—…ë°ì´íŠ¸
     UpdateParticles(deltaSeconds);
     
-    // Á×Àº ÆÄÆ¼Å¬ Á¤¸®
+    // ì£½ì€ íŒŒí‹°í´ ì •ë¦¬
     CleanupDeadParticles();
     
-    // ·»´õ¸µ ÃÖÀûÈ­ Ã¼Å©
+    // ë Œë”ë§ ìµœì í™” ì²´í¬
     if (m_lastActiveCount != m_activeParticles.size())
     {
         m_needsRebuild = true;
@@ -171,7 +171,7 @@ void ParticleComponent::Render()
     
     __super::Render();
     
-    // SpriteBatch¸¦ »ç¿ëÇÑ ¹èÄ¡ ·»´õ¸µ
+    // SpriteBatchë¥¼ ì‚¬ìš©í•œ ë°°ì¹˜ ë Œë”ë§
     if (m_spriteBatch && m_texture)
     {
         RenderParticles();
@@ -180,22 +180,22 @@ void ParticleComponent::Render()
 
 void ParticleComponent::Release()
 {
-    // Å¸ÀÌ¸Ó Á¤¸®
+    // íƒ€ì´ë¨¸ ì •ë¦¬
     m_isPlaying = false;
     
-    // ÆÄÆ¼Å¬ Á¤¸®
+    // íŒŒí‹°í´ ì •ë¦¬
     m_particles.clear();
     m_activeParticles.clear();
     m_particlePool.clear();
     
-    // SpriteBatch ÇØÁ¦
+    // SpriteBatch í•´ì œ
     if (m_spriteBatch)
     {
         m_spriteBatch->Release();
         m_spriteBatch = nullptr;
     }
     
-    // ½¦ÀÌ´õ ÇØÁ¦
+    // ì‰ì´ë” í•´ì œ
     m_colorMatrixEffect.Reset();
     m_blendEffect.Reset();
     m_gaussianBlurEffect.Reset();
@@ -213,7 +213,7 @@ void ParticleComponent::SetConfig(const ParticleSystemConfig& config)
 {
     m_config = config;
     
-    // ÆÄÆ¼Å¬ Ç® Å©±â Á¶Á¤
+    // íŒŒí‹°í´ í’€ í¬ê¸° ì¡°ì •
     if (m_config.maxParticles != m_particles.size())
     {
         m_particles.resize(m_config.maxParticles);
@@ -249,14 +249,14 @@ void ParticleComponent::Stop()
     m_isPlaying = false;
     m_isPaused = false;
     
-    // ¸ğµç ÆÄÆ¼Å¬ ºñÈ°¼ºÈ­
+    // ëª¨ë“  íŒŒí‹°í´ ë¹„í™œì„±í™”
     for (auto* particle : m_activeParticles)
     {
         particle->active = false;
     }
     m_activeParticles.clear();
     
-    // ÆÄÆ¼Å¬ Ç®·Î ¹İÈ¯
+    // íŒŒí‹°í´ í’€ë¡œ ë°˜í™˜
     for (auto& particle : m_particles)
     {
         if (particle->active)
@@ -287,23 +287,23 @@ void ParticleComponent::EmitParticle()
     Particle* particle = GetAvailableParticle();
     if (!particle) return;
     
-    // À§Ä¡ °è»ê (±âº» À§Ä¡ + º¯È­·®)
+    // ìœ„ì¹˜ ê³„ì‚° (ê¸°ë³¸ ìœ„ì¹˜ + ë³€í™”ëŸ‰)
     FVector2 pos = m_config.position;
     pos.x += FRandom::GetRandomInRange(-m_config.positionVariance.x, m_config.positionVariance.x);
     pos.y += FRandom::GetRandomInRange(-m_config.positionVariance.y, m_config.positionVariance.y);
     
-    // ¼Óµµ °è»ê
+    // ì†ë„ ê³„ì‚°
     FVector2 vel;
     vel.x = FRandom::GetRandomInRange(m_config.minVelocity.x, m_config.maxVelocity.x);
     vel.y = FRandom::GetRandomInRange(m_config.minVelocity.y, m_config.maxVelocity.y);
     
-    // »ı¸í °è»ê
+    // ìƒëª… ê³„ì‚°
     float life = FRandom::GetRandomInRange(m_config.minLife, m_config.maxLife);
     
-    // ÆÄÆ¼Å¬ ÃÊ±âÈ­
+    // íŒŒí‹°í´ ì´ˆê¸°í™”
     particle->Initialize(pos, vel, life);
     
-    // ¼³Á¤ Àû¿ë
+    // ì„¤ì • ì ìš©
     particle->acceleration = m_config.acceleration;
     particle->scale = FVector2(
         FRandom::GetRandomInRange(m_config.minScale.x, m_config.maxScale.x),
@@ -312,15 +312,15 @@ void ParticleComponent::EmitParticle()
     particle->scaleVelocity = m_config.scaleVelocity;
     particle->rotationSpeed = FRandom::GetRandomInRange(m_config.minRotationSpeed, m_config.maxRotationSpeed);
     
-    // »ö»ó ¼³Á¤
+    // ìƒ‰ìƒ ì„¤ì •
     particle->color = m_config.startColor;
     particle->colorVelocity = (m_config.endColor - m_config.startColor) / life;
     
-    // Åõ¸íµµ ¼³Á¤
+    // íˆ¬ëª…ë„ ì„¤ì •
     particle->opacity = m_config.startOpacity;
     particle->opacityVelocity = (m_config.endOpacity - m_config.startOpacity) / life;
     
-    // È°¼º ÆÄÆ¼Å¬ ¸ñ·Ï¿¡ Ãß°¡
+    // í™œì„± íŒŒí‹°í´ ëª©ë¡ì— ì¶”ê°€
     m_activeParticles.push_back(particle);
     m_particlesEmitted++;
 }
@@ -348,26 +348,26 @@ void ParticleComponent::SetShaderType(EShaderType type)
 {
 	m_config.shaderType = type;
 	
-	// ½¦ÀÌ´õ Å¸ÀÔ¿¡ µû¸¥ ¼³Á¤ Àû¿ë
+	// ì‰ì´ë” íƒ€ì…ì— ë”°ë¥¸ ì„¤ì • ì ìš©
 	switch (type)
 	{
 	case EShaderType::ColorTransform:
-		// »ö»ó º¯È¯ ½¦ÀÌ´õ ¼³Á¤
+		// ìƒ‰ìƒ ë³€í™˜ ì‰ì´ë” ì„¤ì •
 		break;
 	case EShaderType::Distortion:
-		// ¿Ö°î ½¦ÀÌ´õ ¼³Á¤
+		// ì™œê³¡ ì‰ì´ë” ì„¤ì •
 		break;
 	case EShaderType::Blending:
-		// ºí·»µù ½¦ÀÌ´õ ¼³Á¤
+		// ë¸”ë Œë”© ì‰ì´ë” ì„¤ì •
 		break;
 	case EShaderType::Physics:
-		// ¹°¸® ½¦ÀÌ´õ ¼³Á¤
+		// ë¬¼ë¦¬ ì‰ì´ë” ì„¤ì •
 		break;
 	case EShaderType::Environment:
-		// È¯°æ ½¦ÀÌ´õ ¼³Á¤
+		// í™˜ê²½ ì‰ì´ë” ì„¤ì •
 		break;
 	case EShaderType::SpecialEffects:
-		// Æ¯¼ö È¿°ú ½¦ÀÌ´õ ¼³Á¤
+		// íŠ¹ìˆ˜ íš¨ê³¼ ì‰ì´ë” ì„¤ì •
 		break;
 	default:
 		break;
@@ -413,7 +413,7 @@ void ParticleComponent::SetSpecialEffects(bool useSpecial, float magic, float ex
 	m_config.portalStrength = portal;
 }
 
-// GetBitmapSize ÇÔ¼öµé ±¸Çö
+// GetBitmapSize í•¨ìˆ˜ë“¤ êµ¬í˜„
 float ParticleComponent::GetBitmapSizeX()
 {
 	if (m_texture)
@@ -421,7 +421,7 @@ float ParticleComponent::GetBitmapSizeX()
 		D2D1_SIZE_F size = m_texture->GetSize();
 		return size.width;
 	}
-	return 32.0f; // ±âº» Å©±â
+	return 32.0f; // ê¸°ë³¸ í¬ê¸°
 }
 
 float ParticleComponent::GetBitmapSizeY()
@@ -431,7 +431,7 @@ float ParticleComponent::GetBitmapSizeY()
 		D2D1_SIZE_F size = m_texture->GetSize();
 		return size.height;
 	}
-	return 32.0f; // ±âº» Å©±â
+	return 32.0f; // ê¸°ë³¸ í¬ê¸°
 }
 
 FVector2 ParticleComponent::GetBitmapSize()
@@ -449,7 +449,7 @@ void ParticleComponent::SetEmissionArea(const FVector2& size)
     m_config.positionVariance = size * 0.5f;
 }
 
-// Private ¸Ş¼­µåµé
+// Private ë©”ì„œë“œë“¤
 void ParticleComponent::UpdateParticles(float deltaTime)
 {
     for (auto* particle : m_activeParticles)
@@ -462,10 +462,10 @@ void ParticleComponent::RenderParticles()
 {
     if (!m_spriteBatch || !m_texture) return;
     
-    // SpriteBatch Å¬¸®¾î
+    // SpriteBatch í´ë¦¬ì–´
     m_spriteBatch->Clear();
     
-    // È°¼º ÆÄÆ¼Å¬µéÀ» SpriteBatch¿¡ Ãß°¡
+    // í™œì„± íŒŒí‹°í´ë“¤ì„ SpriteBatchì— ì¶”ê°€
     for (auto* particle : m_activeParticles)
     {
         if (particle->active)
@@ -474,14 +474,14 @@ void ParticleComponent::RenderParticles()
         }
     }
     
-    // ¹èÄ¡ ·»´õ¸µ
+    // ë°°ì¹˜ ë Œë”ë§
     ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
     if (context && m_spriteBatch->GetSpriteCount() > 0)
     {
-        // ½¦ÀÌ´õ È¿°ú Àû¿ë
-        		if (m_config.useShader && m_colorMatrixEffect)
+        // ì‰ì´ë” íš¨ê³¼ ì ìš©
+        	if (m_config.useShader && m_colorMatrixEffect)
 		{
-			context->DrawImage(static_cast<ID2D1Image*>(m_colorMatrixEffect.Get()));
+			context->DrawImage(m_colorMatrixEffect.Get());
 		}
 		else
 		{
@@ -492,7 +492,7 @@ void ParticleComponent::RenderParticles()
 
 void ParticleComponent::CleanupDeadParticles()
 {
-    // Á×Àº ÆÄÆ¼Å¬µéÀ» Ç®·Î ¹İÈ¯
+    // ì£½ì€ íŒŒí‹°í´ë“¤ì„ í’€ë¡œ ë°˜í™˜
     for (auto it = m_activeParticles.begin(); it != m_activeParticles.end();)
     {
         if (!(*it)->active)
@@ -530,10 +530,10 @@ void ParticleComponent::SetupShaderEffects()
     ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
     if (!context) return;
     
-    // »ö»ó ¸ÅÆ®¸¯½º È¿°ú (»ö»ó Á¶Á¤)
+    // ìƒ‰ìƒ ë§¤íŠ¸ë¦­ìŠ¤ íš¨ê³¼ (ìƒ‰ìƒ ì¡°ì •)
     if (SUCCEEDED(context->CreateEffect(CLSID_D2D1ColorMatrix, &m_colorMatrixEffect)))
     {
-        // ±âº» »ö»ó ¸ÅÆ®¸¯½º ¼³Á¤
+        // ê¸°ë³¸ ìƒ‰ìƒ ë§¤íŠ¸ë¦­ìŠ¤ ì„¤ì •
         D2D1_MATRIX_5X4_F colorMatrix = D2D1::Matrix5x4F(
             1.0f, 0.0f, 0.0f, 0.0f,  // Red
             0.0f, 1.0f, 0.0f, 0.0f,  // Green
@@ -544,13 +544,13 @@ void ParticleComponent::SetupShaderEffects()
         m_colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
     }
     
-    // ºí·»µå È¿°ú
+    // ë¸”ë Œë“œ íš¨ê³¼
     if (SUCCEEDED(context->CreateEffect(CLSID_D2D1Blend, &m_blendEffect)))
     {
         m_blendEffect->SetValue(D2D1_BLEND_PROP_MODE, D2D1_BLEND_MODE_MULTIPLY);
     }
     
-    // °¡¿ì½Ã¾È ºí·¯ È¿°ú
+    // ê°€ìš°ì‹œì•ˆ ë¸”ëŸ¬ íš¨ê³¼
     if (SUCCEEDED(context->CreateEffect(CLSID_D2D1GaussianBlur, &m_gaussianBlurEffect)))
     {
         m_gaussianBlurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 2.0f);
@@ -561,13 +561,13 @@ void ParticleComponent::UpdateShaderParameters()
 {
     if (!m_config.useShader) return;
     
-    // ½Ã°£¿¡ µû¸¥ ½¦ÀÌ´õ ÆÄ¶ó¹ÌÅÍ ¾÷µ¥ÀÌÆ®
-    m_config.shaderTime += 0.016f; // 60fps °¡Á¤
+    // ì‹œê°„ì— ë”°ë¥¸ ì‰ì´ë” íŒŒë¼ë¯¸í„° ì—…ë°ì´íŠ¸
+    m_config.shaderTime += 0.016f; // 60fps ê°€ì •
     
-    // »ö»ó ¸ÅÆ®¸¯½º È¿°ú ¾÷µ¥ÀÌÆ®
+    // ìƒ‰ìƒ ë§¤íŠ¸ë¦­ìŠ¤ íš¨ê³¼ ì—…ë°ì´íŠ¸
     if (m_colorMatrixEffect)
     {
-        // ½Ã°£¿¡ µû¸¥ »ö»ó º¯È­
+        // ì‹œê°„ì— ë”°ë¥¸ ìƒ‰ìƒ ë³€í™”
         float time = m_config.shaderTime;
         float intensity = m_config.shaderIntensity;
         
@@ -664,7 +664,7 @@ void ParticleComponent::ApplyTypeConfig(EParticleType type)
         break;
         
     default:
-        // ±âº» ¼³Á¤ À¯Áö
+        // ê¸°ë³¸ ì„¤ì • ìœ ì§€
         break;
     }
 }
@@ -673,13 +673,13 @@ void ParticleComponent::AddParticleToSpriteBatch(const Particle& particle)
 {
     if (!m_spriteBatch || !m_texture) return;
     
-    // ÆÄÆ¼Å¬ÀÇ ¿ùµå À§Ä¡¸¦ È­¸é ÁÂÇ¥·Î º¯È¯
+    // íŒŒí‹°í´ì˜ ì›”ë“œ ìœ„ì¹˜ë¥¼ í™”ë©´ ì¢Œí‘œë¡œ ë³€í™˜
     FVector2 screenPos = CoordHelper::WorldToScreen(particle.position);
     
-    // ÆÄÆ¼Å¬ Å©±â °è»ê
+    // íŒŒí‹°í´ í¬ê¸° ê³„ì‚°
     FVector2 size = particle.scale * GetBitmapSize();
     
-    // ¸ñÀûÁö »ç°¢Çü (È­¸é ÁÂÇ¥)
+    // ëª©ì ì§€ ì‚¬ê°í˜• (í™”ë©´ ì¢Œí‘œ)
     D2D1_RECT_F destRect = D2D1::RectF(
         screenPos.x - size.x * 0.5f,
         screenPos.y - size.y * 0.5f,
@@ -687,11 +687,11 @@ void ParticleComponent::AddParticleToSpriteBatch(const Particle& particle)
         screenPos.y + size.y * 0.5f
     );
     
-    // ¼Ò½º »ç°¢Çü (ÅØ½ºÃ³ ÁÂÇ¥)
+    // ì†ŒìŠ¤ ì‚¬ê°í˜• (í…ìŠ¤ì²˜ ì¢Œí‘œ)
     D2D1_RECT_U srcRect = D2D1::RectU(0, 0, 
         static_cast<UINT32>(GetBitmapSizeX()), 
         static_cast<UINT32>(GetBitmapSizeY()));
     
-    // SpriteBatch¿¡ Ãß°¡
+    // SpriteBatchì— ì¶”ê°€
     m_spriteBatch->AddSprites(1, &destRect, &srcRect, nullptr, nullptr);
 }

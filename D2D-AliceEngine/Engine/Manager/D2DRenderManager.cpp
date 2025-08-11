@@ -8,7 +8,6 @@
 #include <d2d1effectauthor.h>  // LoadPixelShader 관련
 #include <d2d1effecthelpers.h> // 셰이더 헬퍼
 #include <d3dcompiler.h>
-#pragma comment(lib, "d3dcompiler.lib")
 #include <Manager/PackageResourceManager.h>
 
 D2DRenderManager::D2DRenderManager()
@@ -207,8 +206,6 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_SHARPNESS, 5.0f);   // 0.0 ~ 10.0
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // 엣지 강조 임계값
 
-	// 고급 쉐이더 효과들 설정
-	SetupAdvancedShaderEffects();
 }
 
 void D2DRenderManager::UnInitialize()
