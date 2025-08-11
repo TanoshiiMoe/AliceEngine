@@ -21,6 +21,7 @@
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Widget/StageWidgetScript.h>
+#include <Component/Effect/ParticleComponent.h>
 
 void Scene_Stage2::Initialize()
 {
@@ -48,7 +49,7 @@ void Scene_Stage2::Update()
 void Scene_Stage2::OnEnter()
 {
     __super::OnEnter();
-
+    m_mouseParticle->ToggleMouseTrail();
     m_textGO = NewObject<gameObject>(L"Stage2Label");
     auto* text = m_textGO->AddComponent<TextRenderComponent>();
     GetCamera()->AddChildObject(m_textGO);
