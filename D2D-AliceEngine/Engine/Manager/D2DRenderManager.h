@@ -35,6 +35,7 @@ public:
 
 	void LoadGradientTextrue();
 	void LoadEffectShader();
+    bool LoadAndRegisterPixelShader(const std::wstring& hlslPath, const GUID& shaderGuid, const char* entry = "D2DMain");
 
 	HRESULT CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1** outBitmap);
 
