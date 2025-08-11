@@ -3,6 +3,7 @@
 
 class Canvas;
 class TextRenderComponent;
+class TileMapComponent;
 class Scene_Stage1 : public Scene
 {
 public:
@@ -21,6 +22,7 @@ public:
 	gameObject* m_player;
 	gameObject* m_sound;
 	gameObject* m_tile;	// = 3
+	TileMapComponent* m_tileMapComponent;
 	Canvas* m_canvas;
 	gameObject* m_wall;
 

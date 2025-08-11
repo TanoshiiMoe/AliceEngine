@@ -97,7 +97,7 @@ void Scene_Stage2::OnEnter()
     // 적 스포너 매니저 생성
     enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
     auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
-    tb->SetBox(FVector2(1500.0f, 700.0f), 1);
+    tb->SetBox(FVector2(3300.0f, 700.0f), 1);
 
     // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
     //m_button = NewObject<gameObject>(L"PauseButton");

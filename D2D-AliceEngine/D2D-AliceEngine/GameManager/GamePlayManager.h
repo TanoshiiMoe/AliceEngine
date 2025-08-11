@@ -102,10 +102,16 @@ public:
 	void SetKillEnemyAmount(int amount) { m_killEnemyAmount = amount; }
 	void AddKillEnemyAmount(int delta) { m_killEnemyAmount += delta; }
 
+	int GetStopXAxis() const { return m_stopXAxis; }
+	void SetStopXAxis(int value) { m_stopXAxis = value; }
+	void AddStopXAxis(int delta) { m_stopXAxis += delta; }
+
 private:
     gameObject* m_player = nullptr;
 
     float m_passedTime{ 0 };
 
     int m_killEnemyAmount{ 0 };
+
+    int m_stopXAxis{10200};
 };

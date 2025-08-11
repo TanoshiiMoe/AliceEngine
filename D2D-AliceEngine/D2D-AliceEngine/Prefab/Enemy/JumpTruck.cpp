@@ -19,7 +19,7 @@ void JumpTruck::OnStart()
 
 	sr->LoadData(L"Enemy/Jumporter/jumporter.png");
 	//owner->transform()->SetScale(0.35f, 0.35f);
-	
+	sr->m_layer = 19999;
 	// 스케일 조정
 	FVector2 scale = { 0.35f, 0.35f };
 	sr->SetRelativeScale(scale);

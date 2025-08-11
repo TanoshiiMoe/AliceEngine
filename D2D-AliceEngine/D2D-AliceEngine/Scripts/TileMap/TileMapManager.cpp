@@ -5,6 +5,7 @@
 #include "Manager/D2DRenderManager.h"
 #include "Manager/SceneManager.h"
 #include <Scripts/Enemy/Spawn/SpawnCollider.h>
+#include <GameManager/GamePlayManager.h>
 
 TileMapManager* TileMapManager::instance = nullptr;
 
@@ -60,6 +61,8 @@ void TileMapManager::OnStart()
 		for (auto& obj : tc->go) {
 			obj->transform()->AddPosition(offSet.x, offSet.y);
 		}
+
+		GamePlayManager::GetInstance().SetStopXAxis(tc->tileMap.tileWidth * tc->tileMap.layers[0].width);
 	}
 	else {
 		std::wstring message = owner->GetName() + L" : TileMapManager에서 TileMapComponent를 가져오는데 실패했습니다!!!\n";

@@ -58,8 +58,10 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
 
     enemy->AddComponent<Car>();
     enemy->AddComponent<SpriteRenderer>()->LoadData(L"Enemy/Durang/boss_idle_notfix.png");
+    enemy->GetComponent<SpriteRenderer>()->m_layer = 19999;
     enemy->AddComponent<Collider>()->SetBoxSize(FVector2(180, 180));
     enemy->SetScale(FVector2(1.4f, 1.4f));
+   
 
     FDroneSpritePath dronePath(
         L"Enemy/Drone/enermy_Drone_body.png",
@@ -118,7 +120,7 @@ void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
 		drone->SetDroneType(EDroneType::Boss);
 	}
 
-	enemy->transform()->SetPosition(worldPos);
+	enemy->SetPosition(worldPos);
 }
 
 void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldPos)

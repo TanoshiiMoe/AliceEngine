@@ -75,8 +75,8 @@ void SceneManager::PerformSceneChange(const std::wstring& NewobjectName)
         TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
         m_currentScene = searchedScene.Get();
         m_currentScene->Initialize();
-        m_currentScene->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
         SceneManager::GetInstance().GetCamera()->Initialize();
+        m_currentScene->OnEnter();	// 바꾸려는 씬의 OnEnter() 함수를 실행시킵니다.
     }
 }
 
