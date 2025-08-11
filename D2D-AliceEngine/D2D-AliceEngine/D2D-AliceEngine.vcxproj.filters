@@ -235,6 +235,7 @@
     <ClInclude Include="Scripts\Bike\BikeStatScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Player\PlayerMovement.h">
     <ClInclude Include="Scripts\Legacy\Aru.h">
       <Filter>Scripts\Legacy</Filter>
     </ClInclude>
@@ -435,6 +436,7 @@
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnCollider.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
     <ClCompile Include="Scripts\Bike\BikeStatScript.cpp" />
+    <ClCompile Include="Scripts\Player\PlayerMovement.cpp" />
     <ClCompile Include="Scripts\Legacy\Aru.cpp">
       <Filter>Scripts\Legacy</Filter>
     </ClCompile>

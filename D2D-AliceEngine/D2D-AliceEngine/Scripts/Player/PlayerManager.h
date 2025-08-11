@@ -7,10 +7,14 @@
 class PlayerManager : public  ScriptComponent
 {
 public:
+	static PlayerManager* instance;
+
 	void Initialize() override;
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
 
+	// 플레이어 zPos 클램프 설정
+	void SetZClamp(float _min, float _max);
 	// 플레이어를 잔상과 함께 서서히 사라지도록 파괴
 	void DelayDestroy();
 
@@ -19,6 +23,10 @@ private:
 	AnimatorController animController;
 
 	void Input();
+
+
+	float minZ = -230.0f;
+	float maxZ = 410.0f;
 
 	float playerTimeScale = 1.0f;
 
