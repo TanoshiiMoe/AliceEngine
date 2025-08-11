@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Component/ScriptComponent.h>
 
 class gameObject;
@@ -18,8 +18,4 @@ public:
 
 private:
 	//void WidgetClose();
-    SpriteRenderer* m_bgmControl = nullptr;
-    SpriteRenderer* m_sfxControl = nullptr;
-    float m_bgmLeftAnchorX = 0.0f;
-    float m_sfxLeftAnchorX = 0.0f;
 };

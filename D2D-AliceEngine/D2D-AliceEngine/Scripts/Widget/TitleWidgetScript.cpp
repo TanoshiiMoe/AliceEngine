@@ -21,6 +21,7 @@
 #include <Component/AudioComponent.h>
 #include <GameManager/GamePlayManager.h>
 #include <Helpers/Logger.h>
+#include <Component/ProgressBarComponent.h>
 
 void TitleWidgetScript::Initialize()
 {
@@ -34,27 +35,6 @@ void TitleWidgetScript::Initialize()
 void TitleWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-    // 볼륨 변화에 따라 게이지 슬라이스/센터 동기화
-    if (m_bgmControl)
-    {
-        const float vol = AudioManager::GetInstance().GetBGMVolume();
-        const float fullW = m_bgmControl->GetRelativeSize().x;
-        const float visibleW = fullW * vol;
-        const float newCenterX = m_bgmLeftAnchorX + visibleW * 0.5f;
-        const float curY = m_bgmControl->GetRelativePosition().y;
-        m_bgmControl->SetSlice(0, 0, m_bgmControl->GetBitmapSizeX() * vol, m_bgmControl->GetBitmapSizeY());
-        m_bgmControl->SetRelativePosition(FVector2(newCenterX, curY));
-    }
-    if (m_sfxControl)
-    {
-        const float vol = AudioManager::GetInstance().GetSFXVolume();
-        const float fullW = m_sfxControl->GetRelativeSize().x;
-        const float visibleW = fullW * vol;
-        const float newCenterX = m_sfxLeftAnchorX + visibleW * 0.5f;
-        const float curY = m_sfxControl->GetRelativePosition().y;
-        m_sfxControl->SetSlice(0, 0, m_sfxControl->GetBitmapSizeX() * vol, m_sfxControl->GetBitmapSizeY());
-        m_sfxControl->SetRelativePosition(FVector2(newCenterX, curY));
-    }
 }
 
 void TitleWidgetScript::Awake()
@@ -101,6 +81,9 @@ void TitleWidgetScript::OnStart()
 	auto mainTitle = m_owner->AddComponent<TextRenderComponent>();
 	auto subTitle = m_owner->AddComponent<TextRenderComponent>();
 
+	auto bgmControl = m_owner->AddComponent<ProgressBarComponent>();
+	auto sfxControl = m_owner->AddComponent<ProgressBarComponent>();
+
 	auto bgmPlusButton = m_owner->AddComponent<ButtonComponent>();
 	auto bgmMinusButton = m_owner->AddComponent<ButtonComponent>();
 	auto sfxPlusButton = m_owner->AddComponent<ButtonComponent>();
@@ -124,32 +107,25 @@ void TitleWidgetScript::OnStart()
     // 중앙 배치
     soundControl->SetRelativePosition(FVector2(0.f, 0.f));
 
-    auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
-    bgmControl->LoadData(L"UI\\ControlBar.png");
-    bgmControl->m_layer = Define::Disable;
-    bgmControl->SetDrawType(EDrawType::ScreenSpace);
-    // 게이지는 슬라이스로 표현하고, 스케일은 UI 전체 배율만 적용
-    bgmControl->SetRelativeScale(FVector2(soundUISize, soundUISize));
-    bgmControl->SetSlice(0, 0, bgmControl->GetBitmapSizeX() * bgmVolume, bgmControl->GetBitmapSizeY());
-    // 중앙 기준 위쪽 라인 위치
-    {
-        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
-        bgmControl->SetRelativePosition(FVector2(0.f, -panelH * 0.25f));
-    }
+	bgmControl->SetDrawType(Define::EDrawType::ScreenSpace);
+	bgmControl->LoadData(L"UI\\ControlBar.png");
+	bgmControl->SetType(EProgressBarType::Linear);
+	bgmControl->SetRelativeScale(FVector2(1, 1));
+	bgmControl->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(bgmControl->GetRelativeSize(), FVector2(0, 0))
+		+ FVector2(0, 5));
+	bgmControl->SetProgress(bgmVolume);
+	bgmControl->m_layer = Define::Disable;
 
-    auto sfxControl = m_owner->AddComponent<SpriteRenderer>();
+	sfxControl->SetDrawType(Define::EDrawType::ScreenSpace);
 	sfxControl->LoadData(L"UI\\ControlBar.png");
+	sfxControl->SetType(EProgressBarType::Linear);
+	sfxControl->SetRelativeScale(FVector2(1, 1));
+	sfxControl->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(sfxControl->GetRelativeSize(), FVector2(0, 0))
+		+ FVector2(0, 70));
+	sfxControl->SetProgress(sfxVolume);
 	sfxControl->m_layer = Define::Disable;
-	sfxControl->SetDrawType(EDrawType::ScreenSpace);
-    // 게이지는 슬라이스로 표현하고, 스케일은 UI 전체 배율만 적용
-    sfxControl->SetRelativeScale(FVector2(soundUISize, soundUISize));
-	
-    sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX() * sfxVolume, sfxControl->GetBitmapSizeY());
-    // 중앙 기준 아래쪽 라인 위치
-    {
-        const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
-        sfxControl->SetRelativePosition(FVector2(0.f, panelH * 0.25f));
-    }
 
 	auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
 	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
@@ -330,46 +306,6 @@ void TitleWidgetScript::OnStart()
     }
 	sfxMinusButton->SetActive(false);
 	sfxMinusButton->m_layer = Define::Disable;
-
-    // ───────── 중앙점 정렬: 각 게이지를 +/- 버튼의 정확한 중앙에 배치 후, 좌측 고정 앵커 계산 ─────────
-    // 멤버에 보관해 Update에서 지속 갱신
-    m_bgmControl = bgmControl;
-    m_sfxControl = sfxControl;
-    m_bgmLeftAnchorX = 0.0f;
-    m_sfxLeftAnchorX = 0.0f;
-    {
-        const FVector2 bgmMinPos = bgmMinusButton->GetRelativePosition();
-        const FVector2 bgmPlusPos = bgmPlusButton->GetRelativePosition();
-        const FVector2 bgmMid((bgmMinPos.x + bgmPlusPos.x) * 0.5f,
-                              (bgmMinPos.y + bgmPlusPos.y) * 0.5f);
-        bgmControl->SetRelativePosition(bgmMid);
-        // 좌측 고정 앵커 = 현재 중심 - (현재 전체 폭의 절반)
-        const float bgmFullW = bgmControl->GetRelativeSize().x;
-        m_bgmLeftAnchorX = bgmMid.x - (bgmFullW * 0.5f);
-        // 현재 볼륨 기준으로 보이는 폭과 중심 재계산(오른쪽부터 줄어들도록)
-        {
-            const float v = AudioManager::GetInstance().GetBGMVolume();
-            const float visibleW = bgmFullW * v;
-            const float newCenterX = m_bgmLeftAnchorX + visibleW * 0.5f;
-            bgmControl->SetSlice(0, 0, bgmControl->GetBitmapSizeX() * v, bgmControl->GetBitmapSizeY());
-            bgmControl->SetRelativePosition(FVector2(newCenterX, bgmMid.y));
-        }
-
-        const FVector2 sfxMinPos = sfxMinusButton->GetRelativePosition();
-        const FVector2 sfxPlusPos = sfxPlusButton->GetRelativePosition();
-        const FVector2 sfxMid((sfxMinPos.x + sfxPlusPos.x) * 0.5f,
-                              (sfxMinPos.y + sfxPlusPos.y) * 0.5f);
-        sfxControl->SetRelativePosition(sfxMid);
-        const float sfxFullW = sfxControl->GetRelativeSize().x;
-        m_sfxLeftAnchorX = sfxMid.x - (sfxFullW * 0.5f);
-        {
-            const float v = AudioManager::GetInstance().GetSFXVolume();
-            const float visibleW = sfxFullW * v;
-            const float newCenterX = m_sfxLeftAnchorX + visibleW * 0.5f;
-            sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX() * v, sfxControl->GetBitmapSizeY());
-            sfxControl->SetRelativePosition(FVector2(newCenterX, sfxMid.y));
-        }
-    }
 
 	// ======================== mainTitle
 	mainTitle->SetFontSize(120.0f);
@@ -771,14 +707,11 @@ void TitleWidgetScript::OnStart()
 			uiSound->StopByName(L"UISound");
 			uiSound->PlayByName1(L"UISound", 0.45f);
 
-			bgm->AddVolumeByType(SoundType::BGM, -0.1);
-            const float vol = AudioManager::GetInstance().GetBGMVolume();
-            const float fullW = bgmControl->GetRelativeSize().x; // 현재 스케일 기준 전체 폭
-            const float visibleW = fullW * vol;
-            const float newCenterX = this->m_bgmLeftAnchorX + visibleW * 0.5f;
-            bgmControl->SetSlice(0, 0, bgmControl->GetBitmapSizeX() * vol, bgmControl->GetBitmapSizeY());
-            const float curY = bgmControl->GetRelativePosition().y;
-            bgmControl->SetRelativePosition(FVector2(newCenterX, curY));
+			float vol = AudioManager::GetInstance().GetBGMVolume();
+			vol -= 0.1f;
+			AudioManager::GetInstance().SetBGMVolume(vol);
+
+			bgmControl->SetProgress(vol);
 		});
 
     bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [this, bgm, bgmControl, uiSound]
@@ -786,14 +719,11 @@ void TitleWidgetScript::OnStart()
 			uiSound->StopByName(L"UISound");
 			uiSound->PlayByName1(L"UISound", 0.45f);
 
-			bgm->AddVolumeByType(SoundType::BGM, 0.1);
-            const float vol = AudioManager::GetInstance().GetBGMVolume();
-            const float fullW = bgmControl->GetRelativeSize().x;
-            const float visibleW = fullW * vol;
-            const float newCenterX = this->m_bgmLeftAnchorX + visibleW * 0.5f;
-            bgmControl->SetSlice(0, 0, bgmControl->GetBitmapSizeX() * vol, bgmControl->GetBitmapSizeY());
-            const float curY = bgmControl->GetRelativePosition().y;
-            bgmControl->SetRelativePosition(FVector2(newCenterX, curY));
+			float vol = AudioManager::GetInstance().GetBGMVolume();
+			vol += 0.1f;
+			AudioManager::GetInstance().SetBGMVolume(vol);
+
+			bgmControl->SetProgress(vol);
 		});
 
     sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [
@@ -802,14 +732,11 @@ void TitleWidgetScript::OnStart()
 			uiSound->StopByName(L"UISound");
 			uiSound->PlayByName1(L"UISound", 0.45f);
 
-            uiSound->AddVolumeByType(SoundType::SFX, -0.1);
-            const float vol = AudioManager::GetInstance().GetSFXVolume();
-            const float fullW = sfxControl->GetRelativeSize().x;
-            const float visibleW = fullW * vol;
-            const float newCenterX = this->m_sfxLeftAnchorX + visibleW * 0.5f;
-            sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX()* vol, sfxControl->GetBitmapSizeY());
-            const float curY = sfxControl->GetRelativePosition().y;
-            sfxControl->SetRelativePosition(FVector2(newCenterX, curY));
+			float vol = AudioManager::GetInstance().GetSFXVolume();
+			vol -= 0.1f;
+			AudioManager::GetInstance().SetSFXVolume(vol);
+
+			sfxControl->SetProgress(vol);
 		});
 
 
@@ -819,15 +746,11 @@ void TitleWidgetScript::OnStart()
 			uiSound->StopByName(L"UISound");
 			uiSound->PlayByName1(L"UISound", 0.45f);
 		
-            uiSound->AddVolumeByType(SoundType::SFX, 0.1);
-            const float vol = AudioManager::GetInstance().GetSFXVolume();
-            const float fullW = sfxControl->GetRelativeSize().x;
-            const float visibleW = fullW * vol;
-            const float newCenterX = this->m_sfxLeftAnchorX + visibleW * 0.5f;
-            sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX() * vol, sfxControl->GetBitmapSizeY());
-            const float curY = sfxControl->GetRelativePosition().y;
-            sfxControl->SetRelativePosition(FVector2(newCenterX, curY));
+			float vol = AudioManager::GetInstance().GetSFXVolume();
+			vol += 0.1f;
+			AudioManager::GetInstance().SetSFXVolume(vol);
 
+			sfxControl->SetProgress(vol);
 		});
 
 

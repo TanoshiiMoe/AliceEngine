@@ -16,6 +16,7 @@
 #include <Component/AudioComponent.h>
 
 #include <GameManager/GamePlayManager.h>
+#include <Component/ProgressBarComponent.h>
 
 void StageWidgetScript::Initialize()
 {
@@ -29,8 +30,39 @@ void StageWidgetScript::Initialize()
 void StageWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	m_passedTimeText->SetText(L"<지난 시간> " + std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
-	m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+
+	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
+
+	int minutes = static_cast<int>(timeSec) / 60;
+	int seconds = static_cast<int>(timeSec) % 60;
+	int milliseconds = static_cast<int>((timeSec - static_cast<int>(timeSec)) * 100.0f);
+
+	wchar_t buffer[16];
+	swprintf(buffer, 16, L"%02d:%02d:%02d", minutes, seconds, milliseconds);
+
+	m_passedTimeText->SetText(std::wstring(buffer));
+
+	//m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+
+	int killCount = GamePlayManager::GetInstance().GetKillEnemyAmount();
+	float batteryCount = killCount / 5.0f;
+
+	if (batteryCount >= 1.0f) batteryCount = 1.0f; // Battery : 0~1
+	static ProgressBarComponent* s_progress = nullptr;
+	static bool s_initialized = false;
+
+	if (!s_initialized)
+	{
+		if (auto go = GetOwner())
+		{
+			s_progress = go->GetComponent<ProgressBarComponent>();
+			s_initialized = (s_progress != nullptr);
+		}
+	}
+	if (s_progress)
+	{
+		s_progress->SetProgress(batteryCount);
+	}
 }
 
 void StageWidgetScript::Awake()
@@ -73,15 +105,16 @@ void StageWidgetScript::OnStart()
 	auto UI_Timer = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_HP = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_Dashboard = m_owner->AddComponent<SpriteRenderer>();
-	auto UI_Speed = m_owner->AddComponent<SpriteRenderer>();
-	auto UI_Battery = m_owner->AddComponent<SpriteRenderer>();
+
+	auto UI_Battery = m_owner->AddComponent<ProgressBarComponent>();
+	auto UI_Speed = m_owner->AddComponent<ProgressBarComponent>();
+	auto bgmControl = m_owner->AddComponent<ProgressBarComponent>();
+	auto sfxControl = m_owner->AddComponent<ProgressBarComponent>();
 
 	auto DashboardText = m_owner->AddComponent<TextRenderComponent>();
 	auto SpeedText = m_owner->AddComponent<TextRenderComponent>();
 
-	//auto sound = m_owner->AddComponent<AudioComponent>(L"UISound");
-	//sound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);
-
+	// ================== Sprite
 	auto popUpTab = m_owner->AddComponent<SpriteRenderer>();
 	popUpTab->SetDrawType(EDrawType::ScreenSpace);
 	//popUpTab->LoadData(L"UI\\UI_PauseTab.png");
@@ -107,6 +140,28 @@ void StageWidgetScript::OnStart()
 	);
 	UI_Dashboard->m_layer = Define::HUDLayer;
 
+	// Progress bar
+	UI_Battery->SetDrawType(Define::EDrawType::ScreenSpace);
+	UI_Battery->LoadData(L"UI\\UI_2_Battery.png");
+	UI_Battery->SetType(EProgressBarType::Linear);
+	UI_Battery->SetRelativeScale(FVector2(1, 1));
+	UI_Battery->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(UI_Battery->GetRelativeSize(), FVector2(0, 0))
+		+ FVector2(-596, SCREEN_HEIGHT / 2.0f - 169));
+	UI_Battery->SetProgress(0);
+	UI_Battery->m_layer = Define::HUDLayer + 10;
+
+	// Progress bar - 보류(원형 프로그레스 미구현)
+	UI_Speed->SetDrawType(Define::EDrawType::ScreenSpace);
+	UI_Speed->LoadData(L"UI\\UI_2_Speed.png");
+	UI_Speed->SetType(EProgressBarType::Radial);
+	UI_Speed->SetRelativeScale(FVector2(1, 1));
+	UI_Speed->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(UI_Battery->GetRelativeSize(), FVector2(0, 0))
+		+ FVector2(-SCREEN_WIDTH / 2.0f + 139, SCREEN_HEIGHT / 2.0f - 210));
+	UI_Speed->SetStartAngleDeg(90);
+	UI_Speed->m_layer = Define::HUDLayer + 10;
+
 	// 사운드 관련
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
@@ -122,32 +177,26 @@ void StageWidgetScript::OnStart()
 	soundControl->SetDrawType(EDrawType::ScreenSpace);
 	soundControl->SetRelativePosition(FVector2(450.f, 0.f));
 
-	auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
+	// Progress bar
+	bgmControl->SetDrawType(Define::EDrawType::ScreenSpace);
 	bgmControl->LoadData(L"UI\\ControlBar.png");
+	bgmControl->SetType(EProgressBarType::Linear);
+	bgmControl->SetRelativeScale(FVector2(1, 1));
+	bgmControl->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(bgmControl->GetRelativeSize(), FVector2(0, 0))
+		+ FVector2(455, 5));
+	bgmControl->SetProgress(bgmVolume);
 	bgmControl->m_layer = Define::Disable;
-	bgmControl->SetDrawType(EDrawType::ScreenSpace);
-	// 게이지는 슬라이스로 표현하고, 스케일은 UI 전체 배율만 적용
-	bgmControl->SetRelativeScale(FVector2(soundUISize, soundUISize));
-	bgmControl->SetSlice(0, 0, bgmControl->GetBitmapSizeX() * bgmVolume, bgmControl->GetBitmapSizeY());
-	// 중앙 기준 위쪽 라인 위치
-	{
-		const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
-		bgmControl->SetRelativePosition(FVector2(450.f, -panelH * 0.25f));
-	}
 
-	auto sfxControl = m_owner->AddComponent<SpriteRenderer>();
+	sfxControl->SetDrawType(Define::EDrawType::ScreenSpace);
 	sfxControl->LoadData(L"UI\\ControlBar.png");
+	sfxControl->SetType(EProgressBarType::Linear);
+	sfxControl->SetRelativeScale(FVector2(1, 1));
+	sfxControl->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(sfxControl->GetRelativeSize(), FVector2(0, 0))
+		+ FVector2(455, 70));
+	sfxControl->SetProgress(sfxVolume);
 	sfxControl->m_layer = Define::Disable;
-	sfxControl->SetDrawType(EDrawType::ScreenSpace);
-	// 게이지는 슬라이스로 표현하고, 스케일은 UI 전체 배율만 적용
-	sfxControl->SetRelativeScale(FVector2(soundUISize, soundUISize));
-
-	sfxControl->SetSlice(0, 0, sfxControl->GetBitmapSizeX() * sfxVolume, sfxControl->GetBitmapSizeY());
-	// 중앙 기준 아래쪽 라인 위치
-	{
-		const float panelH = soundControl->GetBitmapSizeY() * soundUISize;
-		sfxControl->SetRelativePosition(FVector2(450.f, panelH * 0.25f));
-	}
 
 	pauseText->SetFontSize(85.f);
 	pauseText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -383,7 +432,7 @@ void StageWidgetScript::OnStart()
 			uiSound->StopByName(L"UISound");
 			uiSound->PlayByName(L"UISound", 0.45);
 		
-		//GamePlayManager::GetInstance().ResumeGame();
+		GamePlayManager::GetInstance().ResumeGame();
 
 		pauseText->m_layer = Define::Disable;
 		pauseButton->SetActive(true);
@@ -423,17 +472,19 @@ void StageWidgetScript::OnStart()
 		sfxMinusButton->SetActive(false);
 		});
 
-	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound] {
+	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, bgmControl] {
 		
-		uiSound->StopByName(L"UISound");
+		//uiSound->StopByName(L"UISound");
 		uiSound->PlayByName(L"UISound", 0.45);
 		
 		float vol = AudioManager::GetInstance().GetBGMVolume();
 		vol += 0.1f;
 		AudioManager::GetInstance().SetBGMVolume(vol);
+
+		bgmControl->SetProgress(vol);
 		});
 
-	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound] {
+	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, bgmControl] {
 		
 		uiSound->StopByName(L"UISound");
 		uiSound->PlayByName(L"UISound", 0.45);
@@ -441,9 +492,11 @@ void StageWidgetScript::OnStart()
 		float vol = AudioManager::GetInstance().GetBGMVolume();
 		vol -= 0.1f;
 		AudioManager::GetInstance().SetBGMVolume(vol);
+
+		bgmControl->SetProgress(vol);
 		});
 
-	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound] {
+	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, sfxControl] {
 
 		uiSound->StopByName(L"UISound");
 		uiSound->PlayByName(L"UISound", 0.45);
@@ -451,9 +504,11 @@ void StageWidgetScript::OnStart()
 		float sfx = AudioManager::GetInstance().GetSFXVolume();
 		sfx += 0.1f;
 		AudioManager::GetInstance().SetSFXVolume(sfx);
+
+		sfxControl->SetProgress(sfx);
 		});
 
-	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound] {
+	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, sfxControl] {
 
 		uiSound->StopByName(L"UISound");
 		uiSound->PlayByName(L"UISound", 0.45);
@@ -461,6 +516,8 @@ void StageWidgetScript::OnStart()
 		float sfx = AudioManager::GetInstance().GetSFXVolume();
 		sfx -= 0.1f;
 		AudioManager::GetInstance().SetSFXVolume(sfx);
+
+		sfxControl->SetProgress(sfx);
 		});
 
 	toMain->SetStateAction(Define::EButtonState::Pressed, [] {
@@ -543,9 +600,6 @@ void StageWidgetScript::OnStart()
 	] {
 		uiSound->PlayByName(L"UISound", 0.45);
 
-		// TODO : 재시작 하는 코드 필요? 재시작인지 재개인지 이거도 구분해야될듯
-		GamePlayManager::GetInstance().ResumeGame();
-
 		pauseText->m_layer = Define::Disable;
 		pauseButton->SetActive(true);
 		popUpTab->m_layer = Define::Disable;
@@ -576,21 +630,23 @@ void StageWidgetScript::OnStart()
 		SceneManager::ChangeScene(L"TitleScene");
 		});
 
-
 	m_passedTimeText = m_owner->AddComponent<TextRenderComponent>();
-	m_passedTimeText->SetText(L"<지난 시간> " + std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
+	m_passedTimeText->SetText(std::wstring());
+	m_passedTimeText->SetFontSize(45.0f);
+	m_passedTimeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	m_passedTimeText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	m_passedTimeText->SetTextAlignment(ETextFormat::TopLeft);
-	m_passedTimeText->SetRelativePosition(FVector2(20, 40));
-	m_passedTimeText->SetFontSize(32.0f);
-	m_passedTimeText->SetColor(FColor::Gold);
+	m_passedTimeText->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f + 65, -SCREEN_HEIGHT / 2.0f + 80));
+	m_passedTimeText->SetColor(FColor(0, 234, 255, 255));
+	m_passedTimeText->m_layer = Define::NormalTextLayer;
 
-	m_killEnemyText = owner->AddComponent<TextRenderComponent>();
-	m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
-	m_killEnemyText->SetTextAlignment(ETextFormat::TopLeft);
-	m_killEnemyText->SetRelativePosition(FVector2(20, 80));
-	m_killEnemyText->SetFontSize(32.0f);
-	m_killEnemyText->SetColor(FColor::Gold);
-
+	//m_killEnemyText = owner->AddComponent<TextRenderComponent>();
+	//m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+	//m_killEnemyText->SetTextAlignment(ETextFormat::TopLeft);
+	//m_killEnemyText->SetRelativePosition(FVector2(20, 80));
+	//m_killEnemyText->SetFontSize(32.0f);
+	//m_killEnemyText->SetColor(FColor::Gold);
+	//m_killEnemyText->m_layer = Define::NormalTextLayer;
 }
 
 void StageWidgetScript::OnEnd()

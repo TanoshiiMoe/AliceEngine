@@ -1,6 +1,6 @@
-#include "Battery.h"
+﻿#include "Battery.h"
 
-void Battery::AddBattery(int _val)
+void UI_Battery::AddBattery(int _val)
 {
 	battery += _val;
 	Math::clamp<int>(_val, minSize, maxSize);
@@ -8,7 +8,7 @@ void Battery::AddBattery(int _val)
 	CheckStat();
 }
 
-void Battery::RemoveSlots(ObjectHandle& _handle, ActionType _type)
+void UI_Battery::RemoveSlots(ObjectHandle& _handle, ActionType _type)
 {
 	while (true) {
 		auto it = std::find_if(slots.begin(), slots.end(),
@@ -22,17 +22,17 @@ void Battery::RemoveSlots(ObjectHandle& _handle, ActionType _type)
 	}
 }
 
-std::string Battery::GetCurrentStat()
+std::string UI_Battery::GetCurrentStat()
 {
 	switch (currStat)
 	{
-	case Battery::MIN:
+	case UI_Battery::MIN:
 		return "MIN";
 		break;
-	case Battery::LOW:
+	case UI_Battery::LOW:
 		return "LOW";
 		break;
-	case Battery::MAX:
+	case UI_Battery::MAX:
 		return "MAX";
 		break;
 	default:
@@ -42,20 +42,20 @@ std::string Battery::GetCurrentStat()
 	return "NULL";
 }
 
-void Battery::Update()
+void UI_Battery::Update()
 {
 	if (prevStat != currStat) {
 		prevStat = currStat;
 
 		switch (currStat)
 		{
-		case Battery::MIN:
+		case UI_Battery::MIN:
 			BroadCast(MIN);
 			break;
-		case Battery::LOW:
+		case UI_Battery::LOW:
 			BroadCast(LOW);
 			break;
-		case Battery::MAX:
+		case UI_Battery::MAX:
 			BroadCast(MAX);
 			break;
 		default:
@@ -65,7 +65,7 @@ void Battery::Update()
 
 }
 
-void Battery::CheckStat()
+void UI_Battery::CheckStat()
 {
 	if (battery <= minSize)
 		currStat = MIN;
@@ -75,7 +75,7 @@ void Battery::CheckStat()
 		currStat = MAX;
 }
 
-void Battery::BroadCast(ActionType _type)
+void UI_Battery::BroadCast(ActionType _type)
 {
 	for (auto it = slots.begin(); it != slots.end();) {
 		if (it->first == _type) {
