@@ -31,7 +31,7 @@ void EnemyBike::OnStart()
 
 		// ������ ����
 		anim->SetRelativeScale(scale);
-		anim->m_layer = 19999;
+		//anim->m_layer = 19999;
 
 		float height = anim->GetSpriteSizeY() * scale.y;
 		float yOffset = height * 0.4f;
