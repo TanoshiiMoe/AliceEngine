@@ -86,20 +86,22 @@ void Scene::OnEnter()
 	}
 
     m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
-    //GetCamera()->AddChildObject(m_sysinfoWidget);
+    GetCamera()->AddChildObject(m_sysinfoWidget);
     auto* sysText = m_sysinfoWidget->AddComponent<TextRenderComponent>();
     sysText->SetDrawType(Define::EDrawType::ScreenSpace);
     sysText->SetColor(FColor(200, 0, 0, 255));
     // ScreenSpace 좌표 (좌상단 0,0)
     sysText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.1f));
+	sysText->m_layer = 987654321;
 
     // FPS 위젯
     m_fpsWidget = NewObject<gameObject>(L"FPSWidget");
-    //GetCamera()->AddChildObject(m_fpsWidget);
+    GetCamera()->AddChildObject(m_fpsWidget);
     auto* fpsText = m_fpsWidget->AddComponent<TextRenderComponent>();
     fpsText->SetDrawType(Define::EDrawType::ScreenSpace);
     fpsText->SetColor(FColor(0, 255, 0, 255));
     fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.18f));
+	fpsText->m_layer = 987654321;
 }
 
 void Scene::OnExit()

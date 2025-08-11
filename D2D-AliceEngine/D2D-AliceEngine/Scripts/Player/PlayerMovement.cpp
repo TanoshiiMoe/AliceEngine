@@ -6,6 +6,7 @@
 #include "PlayerManager.h"
 #include <Core/Input.h>
 #include "Component/InputComponent.h"
+#include <GameManager/GamePlayManager.h>
 
 void PlayerMovement::Initialize()
 {
