@@ -2,6 +2,7 @@
 #include <Component/ScriptComponent.h>
 #include <Core/StatTraits.h>
 #include <Component/StatComponent.h>
+#include <Manager/TimerManager.h>
 
 struct EnemyStat {
     float HP = 10.f;
@@ -35,6 +36,7 @@ private:
     ProgressBarComponent* m_hpBarBack{ nullptr };
     ProgressBarComponent* m_hpBarFill{ nullptr };
     int m_enemyTypeId{ 0 };
+    FTimerHandle m_fadeHandle;
 };
 
 

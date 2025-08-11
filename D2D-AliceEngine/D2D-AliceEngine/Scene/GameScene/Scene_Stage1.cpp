@@ -84,11 +84,12 @@ void Scene_Stage1::OnEnter()
 	// 플레이어 생성
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
+	m_player->AddComponent<BackGroundRender>();
+
 	BulletManager::GetInstance().SetPlayer(m_player);
 	GamePlayManager::GetInstance().SetPlayer(m_player);
 	GamePlayManager::GetInstance().SetPassedTime(0);
 	GamePlayManager::GetInstance().SetKillEnemyAmount(0);
-	m_player->AddComponent<BackGroundRender>();
 
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);

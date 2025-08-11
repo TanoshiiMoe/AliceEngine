@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "BoxComponent.h"
 #include <Manager/D2DRenderManager.h>
 #include <Manager/SceneManager.h>
@@ -44,6 +44,7 @@ void BoxComponent::Release()
 
 void BoxComponent::Render()
 {
+	if (!D2DRenderManager::GetInstance().bRenderedBoxRect) return;
 	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
 	if (!GetOwner() || !context) return;
 	__super::Render();
@@ -53,7 +54,7 @@ void BoxComponent::Render()
 		if (auto transformComp = GetOwner()->transform())
 			scale = transformComp->GetScale();
 	}
-	// ½ºÄÉÀÏ ¹«½Ã ¸ğµå¸é scaleÀº (1,1) À¯Áö
+	// ìŠ¤ì¼€ì¼ ë¬´ì‹œ ëª¨ë“œë©´ scaleì€ (1,1) ìœ ì§€
 	float drawWidth = m_size.x / (scale.x != 0 ? scale.x : 1.0f);
 	float drawHeight = m_size.y / (scale.y != 0 ? scale.y : 1.0f);
 

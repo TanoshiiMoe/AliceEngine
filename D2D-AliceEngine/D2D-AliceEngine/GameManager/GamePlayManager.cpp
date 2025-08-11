@@ -121,7 +121,7 @@ void GamePlayManager::PlayBossMode()
         if (EnemySpawnTriggerBox* es = triggerBox->GetComponent<EnemySpawnTriggerBox>())
         {
             es->SetSpawnable(false);
-            es->SpawnBossAt(FVector2(1890, 0));
+            es->SpawnBossAt(FVector2(1200, 0));
 
             TimerManager::GetInstance().SetTimer(bossSpawnTimer, 
                 [this]()
@@ -130,8 +130,18 @@ void GamePlayManager::PlayBossMode()
 					FVector2 randomPoint = FRandom::GetRandomPointInCircle2D(center.x, center.y, 20);
 					EnemySpawnTriggerBox::SpawnEnemyAt(0, randomPoint + FVector2(600, 0));*/
 
-                    FVector2 randomPoint = FRandom::GetRandomPointInTorus2D(0, 0, 400, 700);
+                    // 보스 드론 소환
+                    FVector2 randomPoint = FRandom::GetRandomPointInTorus2D(0, 0, 300, 600);
                     EnemySpawnTriggerBox::SpawnBossDroneAt(randomPoint + FVector2(300, 0));
+                    
+                    // 일반 몬스터도 소환 (랜덤 타입)
+                    int enemyType = FRandom::GetRandomInRange(0, 3); // 0~3 타입의 적
+                    FVector2 enemySpawnPos = FRandom::GetRandomPointInTorus2D(0, 0, 400, 800);
+                    if (gameObject* player = GamePlayManager::GetInstance().GetPlayer())
+                    {
+                        FVector2 pos = player->GetPosition();
+                        EnemySpawnTriggerBox::SpawnEnemyAt(0, pos + enemySpawnPos + FVector2(1700, 0));
+                    }
             },
                 3.0f,
                 true,

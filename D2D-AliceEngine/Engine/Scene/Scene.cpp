@@ -68,6 +68,9 @@ void Scene::Update()
         if (m_sysinfoWidget) m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
         if (m_fpsWidget) m_fpsWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
     }
+	if (Input::IsKeyPressed(VK_F3)) {
+		D2DRenderManager::GetInstance().bRenderedBoxRect = !D2DRenderManager::GetInstance().bRenderedBoxRect;
+	}
     // FPS 갱신 (TimerManager 값을 그대로 사용)
     UpdateDebugHUD(0.0f);
 	VisibleMemoryInfo();
@@ -100,7 +103,7 @@ void Scene::OnEnter()
     auto* fpsText = m_fpsWidget->AddComponent<TextRenderComponent>();
     fpsText->SetDrawType(Define::EDrawType::ScreenSpace);
     fpsText->SetColor(FColor(0, 255, 0, 255));
-    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.18f));
+    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.23f));
 	fpsText->m_layer = 987654321;
 }
 
@@ -148,7 +151,7 @@ void Scene::VisibleMemoryInfo()
     if (m_sysinfoWidget)
     {
         auto* t = m_sysinfoWidget->GetComponent<TextRenderComponent>();
-        t->SetText(L"VRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
+        t->SetText(L"[F2] : 디버그 창 닫기 \n[F3] : 박스 컴포넌트 끄기/켜기 \nVRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
     }
 }
 

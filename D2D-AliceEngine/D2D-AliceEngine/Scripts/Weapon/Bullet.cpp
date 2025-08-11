@@ -188,7 +188,8 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 		{
 			if (EnemyStatScript* bs = collider->GetOwner()->GetComponent<EnemyStatScript>())
 			{
-				bs->m_enemyStat->DecreaseAbility("HP", 5);
+				// Bullet의 damage 변수 사용
+				bs->m_enemyStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 		}
@@ -198,7 +199,30 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 		{
 			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 			{
-				bs->m_bikeStat->DecreaseAbility("HP", 2);
+				// Bullet의 damage 변수 사용
+				bs->m_bikeStat->DecreaseAbility("HP", damage);
+			}
+			GetWorld()->RemoveObject(GetOwner());
+		}
+		break;
+	case EDroneType::BossSpawn:
+		if (collider->GetOwner()->GetTag() == L"Player")
+		{
+			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+			{
+				// Bullet의 damage 변수 사용
+				bs->m_bikeStat->DecreaseAbility("HP", damage);
+			}
+			GetWorld()->RemoveObject(GetOwner());
+		}
+		break;
+	case EDroneType::Boss:
+		if (collider->GetOwner()->GetTag() == L"Player")
+		{
+			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+			{
+				// Bullet의 damage 변수 사용
+				bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 		}

@@ -2,6 +2,7 @@
 #include <Scene/Scene.h>
 
 class gameObject;
+class TileMapComponent;
 class Scene_Stage2 : public Scene
 {
 public:
@@ -20,6 +21,7 @@ public:
     gameObject* m_player;
     gameObject* m_sound;
     gameObject* m_tile;	// = 3
+    TileMapComponent* m_tileMapComponent;
     gameObject* m_wall;
 
     gameObject* m_UI;
@@ -34,6 +36,7 @@ public:
 private:
     gameObject* m_textGO{ nullptr };
 
+    gameObject* m_widget;
     // 컷씬 종료 후 전환할 씬명
     std::wstring m_nextSceneName = L"Scene_Stage2";
 };
