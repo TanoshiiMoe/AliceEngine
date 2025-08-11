@@ -4,7 +4,7 @@
 #include <Scripts/Widget/TitleWidgetScript.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/AudioComponent.h>
-#include <Scripts/TitleAudioScript.h>
+#include <Scripts/Audio/TitleAudioScript.h>
 #include <Core/Input.h>
 #include <Component/InputComponent.h>
 #include <GameManager/GamePlayManager.h>

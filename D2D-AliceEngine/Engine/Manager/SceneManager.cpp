@@ -3,6 +3,8 @@
 #include <Scene/Scene.h>
 #include <Manager/TimerManager.h>
 
+std::wstring SceneManager::m_prevSceneName = L"";
+
 SceneManager::SceneManager() : m_currentScene{nullptr}
 {
 
@@ -62,6 +64,11 @@ void SceneManager::PerformSceneChange(const std::wstring& NewobjectName)
 {
     if (WeakObjectPtr<Scene> searchedScene = GetWeakPtrFromObjectName(NewobjectName))
     {
+        if (m_currentScene && !m_currentScene->GetName().empty())
+        {
+            m_prevSceneName = m_currentScene->GetName();
+        }
+
         if (WeakObjectPtr<Scene> weak = m_currentScene)	// 현재 씬이 있다면 그 씬을 Exit 시킵니다.
         {
             weak->OnExit();

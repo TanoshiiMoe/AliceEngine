@@ -18,6 +18,8 @@
 #include <GameManager/GamePlayManager.h>
 #include <Component/ProgressBarComponent.h>
 
+#include <Scripts/Bike/BikeMovementScript.h>
+
 void StageWidgetScript::Initialize()
 {
 	__super::Initialize();
@@ -30,6 +32,8 @@ void StageWidgetScript::Initialize()
 void StageWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+
+	GamePlayManager& gm = GamePlayManager::GetInstance();
 
 	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
 
@@ -48,21 +52,26 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	float batteryCount = killCount / 5.0f;
 
 	if (batteryCount >= 1.0f) batteryCount = 1.0f; // Battery : 0~1
-	static ProgressBarComponent* s_progress = nullptr;
-	static bool s_initialized = false;
+	
+	m_batteryProgress->SetProgress(batteryCount);
 
-	if (!s_initialized)
+	// 속도 연동
+
+	float playerSpeed = 0.0f;
+	if (WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player"))
 	{
-		if (auto go = GetOwner())
-		{
-			s_progress = go->GetComponent<ProgressBarComponent>();
-			s_initialized = (s_progress != nullptr);
-		}
+		if (BikeMovementScript* pm = player->GetComponent<BikeMovementScript>())
+			playerSpeed = pm->GetCurrentSpeed() * pm->GetSpeedModifierValue();
 	}
-	if (s_progress)
-	{
-		s_progress->SetProgress(batteryCount);
-	}
+
+	float finalSpeed = playerSpeed / 600.0f;
+
+	if (finalSpeed > 1.0f) finalSpeed = 0.999999f;	// 어느정도 허용치를 둠
+
+	m_speedProgress->SetProgress(finalSpeed);
+
+	m_speedText->SetText(playerSpeed);
+	m_speedText->m_layer = Define::NormalTextLayer;
 }
 
 void StageWidgetScript::Awake()
@@ -77,10 +86,7 @@ void StageWidgetScript::OnStart()
 	GetCamera()->AddChildObject(m_owner);
 
 	float soundUISize = 1;
-
-	auto soundObj = GetWorld()->FindObjectByName<gameObject>(L"UI");
-	if (!soundObj) return;
-	auto uiSound = soundObj->GetComponent<AudioComponent>();
+	float soundTabPosX = 450;
 
 	auto pauseButton = m_owner->AddComponent<ButtonComponent>();
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
@@ -102,17 +108,21 @@ void StageWidgetScript::OnStart()
 	auto restartText = m_owner->AddComponent<TextRenderComponent>();
 	auto selectText = m_owner->AddComponent<TextRenderComponent>();
 
+	auto optionTabText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionTabBGMText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionTabSFXText = m_owner->AddComponent<TextRenderComponent>();
+
 	auto UI_Timer = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_HP = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_Dashboard = m_owner->AddComponent<SpriteRenderer>();
 
-	auto UI_Battery = m_owner->AddComponent<ProgressBarComponent>();
-	auto UI_Speed = m_owner->AddComponent<ProgressBarComponent>();
+	m_batteryProgress = m_owner->AddComponent<ProgressBarComponent>();
+	m_speedProgress = m_owner->AddComponent<ProgressBarComponent>();
 	auto bgmControl = m_owner->AddComponent<ProgressBarComponent>();
 	auto sfxControl = m_owner->AddComponent<ProgressBarComponent>();
 
-	auto DashboardText = m_owner->AddComponent<TextRenderComponent>();
-	auto SpeedText = m_owner->AddComponent<TextRenderComponent>();
+	m_dashboardText = m_owner->AddComponent<TextRenderComponent>();
+	m_speedText = m_owner->AddComponent<TextRenderComponent>();
 
 	// ================== Sprite
 	auto popUpTab = m_owner->AddComponent<SpriteRenderer>();
@@ -141,41 +151,42 @@ void StageWidgetScript::OnStart()
 	UI_Dashboard->m_layer = Define::HUDLayer;
 
 	// Progress bar
-	UI_Battery->SetDrawType(Define::EDrawType::ScreenSpace);
-	UI_Battery->LoadData(L"UI\\UI_2_Battery.png");
-	UI_Battery->SetType(EProgressBarType::Linear);
-	UI_Battery->SetRelativeScale(FVector2(1, 1));
-	UI_Battery->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(UI_Battery->GetRelativeSize(), FVector2(0, 0))
+	m_batteryProgress->SetDrawType(Define::EDrawType::ScreenSpace);
+	m_batteryProgress->LoadData(L"UI\\UI_2_Battery.png");
+	m_batteryProgress->SetType(EProgressBarType::Linear);
+	m_batteryProgress->SetRelativeScale(FVector2(1, 1));
+	m_batteryProgress->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(m_batteryProgress->GetRelativeSize(), FVector2(0, 0))
 		+ FVector2(-596, SCREEN_HEIGHT / 2.0f - 169));
-	UI_Battery->SetProgress(0);
-	UI_Battery->m_layer = Define::HUDLayer + 10;
+	m_batteryProgress->SetProgress(0);
+	m_batteryProgress->m_layer = Define::HUDLayer + 10;
 
-	// Progress bar - 보류(원형 프로그레스 미구현)
-	UI_Speed->SetDrawType(Define::EDrawType::ScreenSpace);
-	UI_Speed->LoadData(L"UI\\UI_2_Speed.png");
-	UI_Speed->SetType(EProgressBarType::Radial);
-	UI_Speed->SetRelativeScale(FVector2(1, 1));
-	UI_Speed->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(UI_Battery->GetRelativeSize(), FVector2(0, 0))
+	// Progress bar - (원형 프로그레스)
+	m_speedProgress->SetDrawType(Define::EDrawType::ScreenSpace);
+	m_speedProgress->LoadData(L"UI\\UI_2_Speed.png");
+	m_speedProgress->SetType(EProgressBarType::Radial);
+	m_speedProgress->SetRelativeScale(FVector2(1, 1));
+	m_speedProgress->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(m_speedProgress->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(-SCREEN_WIDTH / 2.0f + 139, SCREEN_HEIGHT / 2.0f - 210));
-	UI_Speed->SetStartAngleDeg(90);
-	UI_Speed->m_layer = Define::HUDLayer + 10;
+	m_speedProgress->SetStartAngleDeg(0);
+	m_speedProgress->SetProgress(1);
+	m_speedProgress->m_layer = Define::HUDLayer + 10;
 
 	// 사운드 관련
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
-	auto bgm = bgmObj->GetComponent<AudioComponent>();
+	auto sound = bgmObj->GetComponent<AudioComponent>();
 
 	float bgmVolume = AudioManager::GetInstance().GetBGMVolume();
 	float sfxVolume = AudioManager::GetInstance().GetSFXVolume();
 
 	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
-	soundControl->LoadData(L"UI\\UI_SoundControl.png");
+	soundControl->LoadData(L"UI\\UI_SoundController.png");
 	soundControl->m_layer = Define::Disable;
 	soundControl->SetRelativeScale(soundUISize);
 	soundControl->SetDrawType(EDrawType::ScreenSpace);
-	soundControl->SetRelativePosition(FVector2(450.f, 0.f));
+	soundControl->SetRelativePosition(FVector2(soundTabPosX, 0.f));
 
 	// Progress bar
 	bgmControl->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -184,7 +195,7 @@ void StageWidgetScript::OnStart()
 	bgmControl->SetRelativeScale(FVector2(1, 1));
 	bgmControl->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(bgmControl->GetRelativeSize(), FVector2(0, 0))
-		+ FVector2(455, 5));
+		+ FVector2(soundTabPosX + 5, 3));
 	bgmControl->SetProgress(bgmVolume);
 	bgmControl->m_layer = Define::Disable;
 
@@ -194,7 +205,7 @@ void StageWidgetScript::OnStart()
 	sfxControl->SetRelativeScale(FVector2(1, 1));
 	sfxControl->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(sfxControl->GetRelativeSize(), FVector2(0, 0))
-		+ FVector2(455, 70));
+		+ FVector2(soundTabPosX + 5, 66));
 	sfxControl->SetProgress(sfxVolume);
 	sfxControl->m_layer = Define::Disable;
 
@@ -218,6 +229,43 @@ void StageWidgetScript::OnStart()
 	toOption->AddChildComponent(optionText);
 	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	optionText->m_layer = Define::Disable;
+
+	optionTabText->SetFontSize(55.0f);
+	optionTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabText->SetText(L"음량 조절");
+	optionTabText->SetColor(FColor::White);
+	FVector2 optionTabTextRectSize = optionTabText->GetRelativeSize();
+	optionTabText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabTextRectSize, FVector2(-0.5, -0.5))
+		+ FVector2(soundTabPosX, -85)
+	);
+	optionTabText->SetRelativeRotation(0);
+	optionTabText->m_layer = Define::Disable;
+
+	optionTabBGMText->SetFontSize(20.0f);
+	optionTabBGMText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabBGMText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabBGMText->SetText(L"배경음");
+	optionTabBGMText->SetColor(FColor(0, 234, 255, 255));
+	optionTabBGMText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabBGMText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(soundTabPosX, -30)
+	);
+	optionTabBGMText->SetRelativeRotation(0);
+	optionTabBGMText->m_layer = Define::Disable;
+
+	optionTabSFXText->SetFontSize(20.0f);
+	optionTabSFXText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabSFXText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabSFXText->SetText(L"효과음");
+	optionTabSFXText->SetColor(FColor(0, 234, 255, 255));
+	optionTabSFXText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabSFXText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(soundTabPosX, 35)
+	);
+	optionTabSFXText->SetRelativeRotation(0);
+	optionTabSFXText->m_layer = Define::Disable;
 
 	mainText->SetFontSize(40.f);
 	mainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -390,11 +438,11 @@ void StageWidgetScript::OnStart()
 	// ========================= Delegate
 	pauseButton->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, popUpTab,
-		toMain, toOption, toRestart, toSelect, uiSound, pauseText,
+		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText
 	] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 			GamePlayManager::GetInstance().PauseGame();
 
@@ -425,12 +473,13 @@ void StageWidgetScript::OnStart()
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, popUpTab,
-		toMain, toOption, toRestart, toSelect, uiSound, pauseText,
+		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText, soundControl,
-		bgmControl, sfxControl, bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton
+		bgmControl, sfxControl, bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton,
+		optionTabText, optionTabBGMText, optionTabSFXText
 	] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 		
 		GamePlayManager::GetInstance().ResumeGame();
 
@@ -458,6 +507,10 @@ void StageWidgetScript::OnStart()
 		toSelect->m_layer = Define::Disable;
 		selectText->m_layer = Define::Disable;
 
+		optionTabText->m_layer = Define::Disable;
+		optionTabBGMText->m_layer = Define::Disable;
+		optionTabSFXText->m_layer = Define::Disable;
+
 		soundControl->m_layer = Define::Disable;
 		bgmControl->m_layer = Define::Disable;
 		sfxControl->m_layer = Define::Disable;
@@ -472,10 +525,10 @@ void StageWidgetScript::OnStart()
 		sfxMinusButton->SetActive(false);
 		});
 
-	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, bgmControl] {
+	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [sound, bgmControl] {
 		
-		//uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 		
 		float vol = AudioManager::GetInstance().GetBGMVolume();
 		vol += 0.1f;
@@ -484,10 +537,10 @@ void StageWidgetScript::OnStart()
 		bgmControl->SetProgress(vol);
 		});
 
-	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, bgmControl] {
+	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [sound, bgmControl] {
 		
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 		
 		float vol = AudioManager::GetInstance().GetBGMVolume();
 		vol -= 0.1f;
@@ -496,10 +549,10 @@ void StageWidgetScript::OnStart()
 		bgmControl->SetProgress(vol);
 		});
 
-	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, sfxControl] {
+	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [sound, sfxControl] {
 
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 
 		float sfx = AudioManager::GetInstance().GetSFXVolume();
 		sfx += 0.1f;
@@ -508,10 +561,10 @@ void StageWidgetScript::OnStart()
 		sfxControl->SetProgress(sfx);
 		});
 
-	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, sfxControl] {
+	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [sound, sfxControl] {
 
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 
 		float sfx = AudioManager::GetInstance().GetSFXVolume();
 		sfx -= 0.1f;
@@ -528,13 +581,14 @@ void StageWidgetScript::OnStart()
 		SceneManager::ChangeScene(L"SelectScene");
 		});
 
-	toOption->SetStateAction(Define::EButtonState::Pressed, [uiSound,
+	toOption->SetStateAction(Define::EButtonState::Pressed, [sound,
 		soundControl, bgmControl, sfxControl,
 		bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton,
-		pauseButton, closeButton, toOption, toMain, toRestart, toSelect, smallClose
+		pauseButton, closeButton, toOption, toMain, toRestart, toSelect, smallClose,
+		optionTabText, optionTabBGMText, optionTabSFXText
 	] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 		pauseButton->SetActive(false);
 		closeButton->SetActive(false);
@@ -545,6 +599,10 @@ void StageWidgetScript::OnStart()
 
 		smallClose->SetActive(true);
 		smallClose->m_layer = PopupButtonLayer;
+
+		optionTabText->m_layer = Define::PopupTextLayer;
+		optionTabBGMText->m_layer = Define::PopupTextLayer;
+		optionTabSFXText->m_layer = Define::PopupTextLayer;
 
 		soundControl->m_layer = Define::PopupPopLayer;
 		bgmControl->m_layer = Define::PopupObjectLayer;
@@ -563,11 +621,11 @@ void StageWidgetScript::OnStart()
 	smallClose->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, toOption, toMain, toRestart, toSelect,
 		smallClose, soundControl, bgmControl, sfxControl, bgmPlusButton, bgmMinusButton,
-		sfxPlusButton, sfxMinusButton, uiSound
+		sfxPlusButton, sfxMinusButton, sound
 
 	] {
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 			
 		pauseButton->SetActive(true);
 		closeButton->SetActive(true);
@@ -594,11 +652,16 @@ void StageWidgetScript::OnStart()
 
 		});
 
-	toRestart->SetStateAction(Define::EButtonState::Pressed, [uiSound,
+	toRestart->SetStateAction(Define::EButtonState::Pressed, [weak = WeakFromThis<StageWidgetScript>(), sound,
 		pauseText, pauseButton, popUpTab, closeButton, toMain, mainText,
 		toRestart, restartText, toOption, optionText, toSelect, selectText
 	] {
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->PlayByName(L"UISound");
+
+		// TODO : 재시작 코드
+		if (weak.expired())return;
+		std::wstring sceneName = weak->GetWorld()->GetName();
+		SceneManager::GetInstance().ChangeScene(sceneName);
 
 		pauseText->m_layer = Define::Disable;
 		pauseButton->SetActive(true);

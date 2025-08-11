@@ -292,6 +292,7 @@
     <ClCompile Include="Component\Effect\PixelShaderRenderer.cpp" />
     <ClCompile Include="Component\Effect\VertexShaderRenderer.cpp" />
     <ClCompile Include="Component\RippleComponent.cpp" />
+    <ClInclude Include="Component\ParticleComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\Effect\ParticleComponent.cpp">
@@ -505,6 +506,7 @@
       <Filter>Helper</Filter>
     </ClCompile>
     <ClCompile Include="Component\ProgressBarComponent.cpp" />
+    <ClCompile Include="Component\ParticleComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GradationShader.hlsl">
@@ -515,6 +517,11 @@
     <FxCompile Include="Shader\ParticleDistortion.hlsl" />
     <FxCompile Include="Shader\ParticleEnvironment.hlsl" />
     <FxCompile Include="Shader\ParticlePhysics.hlsl" />
+    <FxCompile Include="Shader\ParticleColorChange.hlsl" />
+    <FxCompile Include="Shader\ParticleDistortion.hlsl" />
+    <FxCompile Include="Shader\ParticleBlending.hlsl" />
+    <FxCompile Include="Shader\ParticlePhysics.hlsl" />
+    <FxCompile Include="Shader\ParticleEnvironment.hlsl" />
     <FxCompile Include="Shader\ParticleSpecial.hlsl" />
   </ItemGroup>
 </Project>

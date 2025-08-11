@@ -17,6 +17,7 @@ public:
 	void OnStart() override;
     void OnDestroy() override;
     void Update(const float& deltaSeconds) override;
+	virtual void OnTriggerEnter2D(Collider* collider) override;
 
     // 총알 등으로 사망 시 지연 파괴
     void DelayDestroy();

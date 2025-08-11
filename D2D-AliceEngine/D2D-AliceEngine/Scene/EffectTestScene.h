@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Scene/Scene.h>
 
 class EffectTestScene : public Scene
@@ -19,13 +19,13 @@ private:
     void SpawnVignette(float durationSec, float maxAlpha);
     void SpawnBlackOut(int modeIndex, bool useCrossFade, float durationSec, float maxAlpha);
 
-    // a~h Å×½ºÆ®¿ë ½ºÆ÷³Ê
+    // a~h í…ŒìŠ¤íŠ¸ìš© ìŠ¤í¬ë„ˆ
     void SpawnParticleExplosion();      // a
     void SpawnParticleImpact();         // b
-    void SpawnParticleClickL();         // c (ÁÂÅ¬¸¯ ¹ö½ºÆ®)
-    void SpawnParticleClickR();         // d (¿ìÅ¬¸¯ ¹ö½ºÆ®)
-    void ToggleMouseTrail();            // e (Åä±Û)
-    void SpawnParticleAura();           // f (ÇÃ·¹ÀÌ¾î ¿À¶ó °¡Á¤, È­¸é Áß¾Ó ±ÙÃ³)
+    void SpawnParticleClickL();         // c (ì¢Œí´ë¦­ ë²„ìŠ¤íŠ¸)
+    void SpawnParticleClickR();         // d (ìš°í´ë¦­ ë²„ìŠ¤íŠ¸)
+    void ToggleMouseTrail();            // e (í† ê¸€)
+    void SpawnParticleAura();           // f (í”Œë ˆì´ì–´ ì˜¤ë¼ ê°€ì •, í™”ë©´ ì¤‘ì•™ ê·¼ì²˜)
     void SpawnParticleElectric();       // g
     void SpawnParticlePortal();         // h
 };

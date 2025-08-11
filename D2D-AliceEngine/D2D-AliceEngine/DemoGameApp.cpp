@@ -58,7 +58,7 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<Scene_Stage3>(Define::Scene_Stage3);	// stage select
 	SceneManager::AddScene<GameClearScene>(Define::Scene_GameClear);	// stage select
 	SceneManager::AddScene<GameOverScene>(Define::Scene_GameOver);	// stage select
-	SceneManager::ChangeScene(L"TitleScene");
+	SceneManager::ChangeScene(L"EffectTestScene");
 }
 
 void DemoGameApp::Run()
@@ -66,7 +66,7 @@ void DemoGameApp::Run()
 	__super::Run();
 	// �޽��� ����
 	MSG msg = {};
-	while (msg.message != WM_QUIT)
+	while (!m_quit/*msg.message != WM_QUIT*/)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{

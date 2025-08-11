@@ -6,6 +6,7 @@
 #include <Component/SpriteRenderer.h>
 #include <Helpers/CoordHelper.h>
 #include <GameManager/GamePlayManager.h>
+#include <Scripts/Widget/GameClearWidgetScript.h>
 
 void GameClearScene::Initialize()
 {
@@ -36,7 +37,16 @@ void GameClearScene::OnEnter()
 	m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
     {
         auto* text = m_passedTimeText->AddComponent<TextRenderComponent>();
-        text->SetText(std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
+        
+        float timeSec = GamePlayManager::GetInstance().GetPassedTime();
+
+        int minutes = static_cast<int>(timeSec) / 60;
+        int seconds = static_cast<int>(timeSec) % 60;
+        int milliseconds = static_cast<int>((timeSec - static_cast<int>(timeSec)) * 100.0f);
+
+        wchar_t buffer[16];
+        swprintf(buffer, 16, L"%02d:%02d:%02d", minutes, seconds, milliseconds);
+        text->SetText(std::wstring(buffer));
         text->SetTextAlignment(ETextFormat::TopLeft);
         text->SetRelativePosition(FVector2(350, 585));
         text->SetFontSize(28.0f);
@@ -71,7 +81,7 @@ void GameClearScene::OnEnter()
     });
 
     m_widget = NewObject<gameObject>(L"Widget");
-    //m_widget->AddComponent<GameClearWidgetScript>();
+    m_widget->AddComponent<GameClearWidgetScript>();
 }
 
 void GameClearScene::OnExit()

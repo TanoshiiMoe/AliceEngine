@@ -142,6 +142,222 @@ TVector2<T> operator*(const TVector2<T>& vec, const float& value)
 }
 
 template<typename T>
+class TVector3
+{
+public:
+	T x, y, z;
+
+	TVector3() : x(0), y(0), z(0) {}
+	TVector3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {}
+	TVector3(T _x) : x(_x), y(_x), z(_x) {}
+
+	TVector3(const TVector3<T>& left) { x = left.x; y = left.y; z = left.z; }
+	TVector3(TVector3<T>& left) { x = left.x; y = left.y; z = left.z; }
+	~TVector3() {}
+
+	TVector3 operator*(const float& value)
+	{
+		return TVector3(x * value, y * value, z * value);
+	}
+
+	TVector3 operator/(const float& value)
+	{
+		return TVector3(x / value, y / value, z / value);
+	}
+
+	TVector3 operator-() const
+	{
+		return TVector3(-x, -y, -z);
+	}
+
+	TVector3 operator+(const TVector3& rhs)
+	{
+		return TVector3(x + rhs.x, y + rhs.y, z + rhs.z);
+	}
+	TVector3 operator-(const TVector3& rhs)
+	{
+		return TVector3(x - rhs.x, y - rhs.y, z - rhs.z);
+	}
+
+	bool operator!=(const TVector3& rhs)
+	{
+		return x != rhs.x || y != rhs.y || z != rhs.z;
+	}
+	bool operator==(const TVector3& rhs)
+	{
+		return x == rhs.x && y == rhs.y && z == rhs.z;
+	}
+	void operator*=(const TVector3& rhs)
+	{
+		x *= rhs.x;
+		y *= rhs.y;
+		z *= rhs.z;
+	}
+	void operator*=(const float& value)
+	{
+		x *= value;
+		y *= value;
+		z *= value;
+	}
+	void operator+=(const TVector3& rhs)
+	{
+		x += rhs.x;
+		y += rhs.y;
+		z += rhs.z;
+	}
+	void operator-=(const TVector3& rhs)
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		z -= rhs.z;
+	}
+	void operator=(const TVector3& rhs)
+	{
+		x = rhs.x;
+		y = rhs.y;
+		z = rhs.z;
+	}
+	bool IsZero()
+	{
+		return x == 0 && y == 0 && z == 0;
+	}
+
+	float Dot(const TVector3& rhs)
+	{
+		return x * rhs.x + y * rhs.y + z * rhs.z;
+	}
+
+	TVector3 Cross(const TVector3& rhs)
+	{
+		return TVector3(
+			y * rhs.z - z * rhs.y,
+			z * rhs.x - x * rhs.z,
+			x * rhs.y - y * rhs.x
+		);
+	}
+
+	TVector3 Normalize()
+	{
+		float len = Length();
+		if (len < 1e-6f)
+			return TVector3(0, 0, 0);
+		return TVector3(x / len, y / len, z / len);
+	}
+
+	float Length()
+	{
+		return sqrt(LengthSQ());
+	}
+
+	float LengthSQ()
+	{
+		return x * x + y * y + z * z;
+	}
+};
+
+template<typename T>
+class TVector4
+{
+public:
+	T x, y, z, w;
+
+	TVector4() : x(0), y(0), z(0), w(0) {}
+	TVector4(T _x, T _y, T _z, T _w) : x(_x), y(_y), z(_z), w(_w) {}
+	TVector4(T _x) : x(_x), y(_x), z(_x), w(_x) {}
+
+	TVector4(const TVector4<T>& left) { x = left.x; y = left.y; z = left.z; w = left.w; }
+	TVector4(TVector4<T>& left) { x = left.x; y = left.y; z = left.z; w = left.w; }
+	~TVector4() {}
+
+	TVector4 operator*(const float& value)
+	{
+		return TVector4(x * value, y * value, z * value, w * value);
+	}
+
+	TVector4 operator/(const float& value)
+	{
+		return TVector4(x / value, y / value, z / value, w / value);
+	}
+
+	TVector4 operator-() const
+	{
+		return TVector4(-x, -y, -z, -w);
+	}
+
+	TVector4 operator+(const TVector4& rhs)
+	{
+		return TVector4(x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w);
+	}
+	TVector4 operator-(const TVector4& rhs)
+	{
+		return TVector4(x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w);
+	}
+
+	bool operator!=(const TVector4& rhs)
+	{
+		return x != rhs.x || y != rhs.y || z != rhs.z || w != rhs.w;
+	}
+	bool operator==(const TVector4& rhs)
+	{
+		return x == rhs.x && y == rhs.y && z == rhs.z && w == rhs.w;
+	}
+	void operator*=(const TVector4& rhs)
+	{
+		x *= rhs.x;
+		y *= rhs.y;
+		z *= rhs.z;
+		w *= rhs.w;
+	}
+	void operator*=(const float& value)
+	{
+		x *= value;
+		y *= value;
+		z *= value;
+		w *= value;
+	}
+	void operator+=(const TVector4& rhs)
+	{
+		x += rhs.x;
+		y += rhs.y;
+		z += rhs.z;
+		w += rhs.w;
+	}
+	void operator-=(const TVector4& rhs)
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		z -= rhs.z;
+		w -= rhs.w;
+	}
+	void operator=(const TVector4& rhs)
+	{
+		x = rhs.x;
+		y = rhs.y;
+		z = rhs.z;
+		w = rhs.w;
+	}
+	bool IsZero()
+	{
+		return x == 0 && y == 0 && z == 0 && w == 0;
+	}
+
+	float Dot(const TVector4& rhs)
+	{
+		return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
+	}
+
+	float Length()
+	{
+		return sqrt(LengthSQ());
+	}
+
+	float LengthSQ()
+	{
+		return x * x + y * y + z * z + w * w;
+	}
+};
+
+template<typename T>
 struct TBox2
 {
 public:
@@ -328,5 +544,7 @@ namespace Math
 }
 
 using FVector2 = TVector2<float>;
+using FVector3 = TVector3<float>;
+using FVector4 = TVector4<float>;
 using FBox = TBox2<float>;
 using FRandom = Math::TRandom<float>;

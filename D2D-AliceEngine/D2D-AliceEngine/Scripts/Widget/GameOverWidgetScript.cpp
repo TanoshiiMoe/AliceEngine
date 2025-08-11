@@ -106,8 +106,8 @@ void GameOverWidgetScript::OnStart()
 
 	// ==================== Delegate
 	toRestartButton->SetStateAction(Define::EButtonState::Pressed, [] {
-		// TODO : 씬 다시 로드하기
-		// 현재 진행했던 씬을 기억해서 불러오기
+		std::wstring prevScene = SceneManager::GetPrevSceneName();
+		SceneManager::ChangeScene(prevScene);
 		});
 
 	toMainButton->SetStateAction(Define::EButtonState::Pressed, [] {

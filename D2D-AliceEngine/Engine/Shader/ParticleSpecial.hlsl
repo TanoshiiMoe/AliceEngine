@@ -1,5 +1,5 @@
-// ÆÄÆ¼Å¬ Æ¯¼ö È¿°ú ½¦ÀÌ´õ
-// ¸¶¹ý, Æø¹ß, Àü±â, Æ÷ÅÐ È¿°ú
+// ï¿½ï¿½Æ¼Å¬ Æ¯ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½
+// ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
 
 struct PSInput
 {
@@ -13,7 +13,7 @@ struct PSInput
     float effectType : TEXCOORD5;
 };
 
-// ½¦ÀÌ´õ »ó¼ö ¹öÆÛ
+// ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 cbuffer SpecialEffectConstants : register(b0)
 {
     float4 effectData;      // x: magicIntensity, y: explosionPower, z: electricCharge, w: portalStrength
@@ -22,14 +22,14 @@ cbuffer SpecialEffectConstants : register(b0)
     float4 colorData;       // x: hueShift, y: saturation, z: brightness, w: contrast
 };
 
-// Æ¯¼ö È¿°ú ÇÔ¼öµé
+// Æ¯ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½
 float3 calculateMagicEffect(float2 pos, float time, float intensity)
 {
     float2 magicUV = pos * 0.02 + time * float2(0.3, 0.7);
     float magic = sin(magicUV.x * 20.0) * cos(magicUV.y * 20.0) * 0.5 + 0.5;
     magic *= intensity;
     
-    // ¸¶¹ý ¿À¶ó È¿°ú
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
     float aura = sin(time * 2.0) * 0.3 + 0.7;
     magic *= aura;
     
@@ -41,11 +41,11 @@ float3 calculateExplosionEffect(float2 pos, float time, float power)
     float distance = length(pos);
     float explosion = exp(-distance * 0.01) * power;
     
-    // Æø¹ß ÆÄµ¿
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Äµï¿½
     float wave = sin(distance * 0.1 - time * 10.0) * 0.5 + 0.5;
     explosion *= wave;
     
-    // Áß½É¿¡¼­ ¹Ù±ùÀ¸·Î ÆÛÁö´Â È¿°ú
+    // ï¿½ß½É¿ï¿½ï¿½ï¿½ ï¿½Ù±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
     float radial = 1.0 - smoothstep(0.0, 100.0, distance);
     explosion *= radial;
     
@@ -58,7 +58,7 @@ float3 calculateElectricEffect(float2 pos, float time, float charge)
     float electric = sin(electricUV.x * 50.0) * sin(electricUV.y * 50.0) * 0.5 + 0.5;
     electric *= charge;
     
-    // Àü±â ¾ÆÅ© È¿°ú
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å© È¿ï¿½ï¿½
     float arc = sin(pos.x * 0.1 + time * 20.0) * sin(pos.y * 0.1 + time * 15.0);
     electric += arc * 0.3;
     
@@ -71,18 +71,18 @@ float3 calculatePortalEffect(float2 pos, float time, float strength)
     float portal = sin(portalUV.x * 30.0) * cos(portalUV.y * 30.0) * 0.5 + 0.5;
     portal *= strength;
     
-    // Æ÷ÅÐ È¸Àü È¿°ú
+    // ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ È¿ï¿½ï¿½
     float rotation = sin(time * 0.5) * 0.5 + 0.5;
     portal *= rotation;
     
-    // Æ÷ÅÐ Áß½É È¿°ú
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½ È¿ï¿½ï¿½
     float center = 1.0 - smoothstep(0.0, 50.0, length(pos));
     portal *= center;
     
     return float3(portal * 0.3, portal * 0.7, portal);
 }
 
-// »ö»ó º¯È¯ ÇÔ¼öµé
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½Ô¼ï¿½ï¿½ï¿½
 float3 hsv2rgb(float3 c)
 {
     float4 K = float4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
@@ -101,60 +101,60 @@ float3 rgb2hsv(float3 c)
     return float3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 }
 
-// ¸ÞÀÎ ÇÈ¼¿ ¼ÎÀÌ´õ
+// ï¿½ï¿½ï¿½ï¿½ ï¿½È¼ï¿½ ï¿½ï¿½ï¿½Ì´ï¿½
 float4 D2DMain(PSInput input) : SV_TARGET
 {
     float time = timeData.x;
     float lifeRatio = input.lifeRatio;
     float effectType = input.effectType;
     
-    // ±âº» »ö»ó
+    // ï¿½âº» ï¿½ï¿½ï¿½ï¿½
     float4 color = input.color;
     
-    // È¿°ú Å¸ÀÔ¿¡ µû¸¥ Æ¯¼ö È¿°ú Àû¿ë
+    // È¿ï¿½ï¿½ Å¸ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ Æ¯ï¿½ï¿½ È¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     float3 specialEffect = float3(0, 0, 0);
     
-    if (effectType < 0.25) // ¸¶¹ý È¿°ú
+    if (effectType < 0.25) // ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
     {
         specialEffect = calculateMagicEffect(input.worldPos, time, effectData.x);
     }
-    else if (effectType < 0.5) // Æø¹ß È¿°ú
+    else if (effectType < 0.5) // ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
     {
         specialEffect = calculateExplosionEffect(input.worldPos, time, effectData.y);
     }
-    else if (effectType < 0.75) // Àü±â È¿°ú
+    else if (effectType < 0.75) // ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
     {
         specialEffect = calculateElectricEffect(input.worldPos, time, effectData.z);
     }
-    else // Æ÷ÅÐ È¿°ú
+    else // ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½
     {
         specialEffect = calculatePortalEffect(input.worldPos, time, effectData.w);
     }
     
-    // Æ¯¼ö È¿°ú¸¦ ±âº» »ö»ó¿¡ ÇÕ¼º
+    // Æ¯ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½Õ¼ï¿½
     color.rgb += specialEffect;
     
-    // »ö»ó º¯È¯ È¿°ú
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ È¿ï¿½ï¿½
     float3 hsv = rgb2hsv(color.rgb);
-    hsv.x += colorData.x * time * 0.1; // »öÁ¶ º¯È­
-    hsv.y *= colorData.y; // Ã¤µµ Á¶Á¤
-    hsv.z *= colorData.z; // ¸íµµ Á¶Á¤
+    hsv.x += colorData.x * time * 0.1; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­
+    hsv.y *= colorData.y; // Ã¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    hsv.z *= colorData.z; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     color.rgb = hsv2rgb(hsv);
     
-    // ´ëºñ Á¶Á¤
+    // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     color.rgb = (color.rgb - 0.5) * colorData.w + 0.5;
     
-    // ½Ã°£¿¡ µû¸¥ »ö»ó º¯È­
+    // ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­
     float timeShift = sin(time * 3.0) * 0.1;
     color.rgb += timeShift * float3(0.1, 0.05, 0.2);
     
-    // »ý¸í¿¡ µû¸¥ Åõ¸íµµ
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     color.a *= lifeRatio;
     
-    // È¿°ú °­µµ¿¡ µû¸¥ Åõ¸íµµ Á¶Á¤
+    // È¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     float effectIntensity = length(specialEffect);
     color.a *= (1.0 + effectIntensity * 0.5);
     
-    // ÃÖÁ¾ »ö»ó ¹ÝÈ¯
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
     return color;
 }

@@ -1,5 +1,4 @@
 ﻿#include "Bullet.h"
-#include "Bullet.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>

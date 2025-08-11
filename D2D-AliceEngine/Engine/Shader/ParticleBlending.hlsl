@@ -97,27 +97,29 @@ float4 D2DMain(PSInput input) : SV_TARGET
     
     if (blendMode == 0)
     {
-        blendedColor = blendAdd(blendedColor, lifeColor * 0.3);
+        case 0: // Add
+            blendedColor = blendAdd(blendedColor, lifeColor * 0.3);
     }
     else if (blendMode == 1)
     {
-        blendedColor = blendMultiply(blendedColor, lifeColor);
+            blendedColor = blendMultiply(blendedColor, lifeColor);
     }
     else if (blendMode == 2)
     {
-        blendedColor = blendScreen(blendedColor, lifeColor * 0.5);
+            blendedColor = blendScreen(blendedColor, lifeColor * 0.5);
     }
     else if (blendMode == 3)
     {
-        blendedColor = blendOverlay(blendedColor, lifeColor);
+            blendedColor = blendOverlay(blendedColor, lifeColor);
     }
     else if (blendMode == 4)
     {
-        blendedColor = blendSoftLight(blendedColor, lifeColor);
+            blendedColor = blendSoftLight(blendedColor, lifeColor);
     }
     else
     {
-        blendedColor = blendAdd(blendedColor, lifeColor * 0.2);
+            blendedColor = blendAdd(blendedColor, lifeColor * 0.2);
+            break;
     }
     
     // 글로우 효과

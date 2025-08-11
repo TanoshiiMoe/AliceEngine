@@ -62,6 +62,11 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	D2D1_FACTORY_OPTIONS options = {};
 	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, options, d2dFactory.GetAddressOf());
 
+	// 생성한 지역변수를 멤버변수에 대입
+	m_d2dFactory = d2dFactory;
+
+	//D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&m_d2dFactory));
+
 	ComPtr<IDXGIDevice> dxgiDevice;
 	m_d3dDevice.As(&dxgiDevice);
 
@@ -202,6 +207,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_SHARPNESS, 5.0f);   // 0.0 ~ 10.0
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // 엣지 강조 임계값
 
+	// 고급 쉐이더 효과들 설정
+	SetupAdvancedShaderEffects();
 }
 
 void D2DRenderManager::UnInitialize()
@@ -424,33 +431,4 @@ HRESULT D2DRenderManager::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1
 	// ⑥ DeviceContext에서 WIC 비트맵으로부터 D2D1Bitmap1 생성
 	hr = m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, outBitmap);
 	return hr;
-}
-
-// D3D 경로 삭제됨
-
-bool D2DRenderManager::LoadAndRegisterPixelShader(const std::wstring& hlslPath, const GUID& shaderGuid, const char* entry)
-{
-    ComPtr<ID2D1DeviceContext4> ctx4;
-    m_d2dDeviceContext.As(&ctx4);
-    if (!ctx4) return false;
-
-    UINT compileFlags = 0;
-#if defined(_DEBUG)
-    compileFlags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
-#endif
-    ComPtr<ID3DBlob> blob;
-    ComPtr<ID3DBlob> err;
-    HRESULT hr = D3DCompileFromFile(hlslPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, entry, "ps_4_0", compileFlags, 0, &blob, &err);
-    if (FAILED(hr))
-    {
-        if (err) OutputDebugStringA((const char*)err->GetBufferPointer());
-        return false;
-    }
-
-    // Direct2D 표준 효과로는 커스텀 픽셀 셰이더 등록 API가 없습니다.
-    // 대신, 이 샘플은 런타임 컴파일 성공 여부만 체크하여 실행 시점의 셰이더 유효성을 보장합니다.
-    // 실제 픽셀 셰이더 실행은 ID2D1Effect 기반 표준 효과 조합으로 대체하거나, 사용자 정의 효과를 작성해 등록해야 합니다.
-    if (FAILED(hr)) return false; // 컴파일 실패 체크
-
-    return true;
 }

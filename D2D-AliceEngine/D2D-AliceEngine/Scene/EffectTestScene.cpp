@@ -63,7 +63,7 @@ void EffectTestScene::OnEnter()
             L"[O] Shader Physics\n"
             L"[SPACE] Clear All\n"
         );
-        txt->SetFontSize(20.0f);
+        txt->SetFontSize(18.0f);
         txt->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.02f, 0.05f)));
     }
 }
@@ -75,6 +75,33 @@ void EffectTestScene::OnExit()
 
 void EffectTestScene::HandleInput()
 {
+    // 파티클 효과 테스트
+    if (Input::IsKeyPressed('A') || Input::IsKeyPressed('a'))
+    {
+        if (colorTransformEffect) colorTransformEffect->Play();
+    }
+    if (Input::IsKeyPressed('S') || Input::IsKeyPressed('s'))
+    {
+        if (distortionEffect) distortionEffect->Play();
+    }
+    if (Input::IsKeyPressed('D') || Input::IsKeyPressed('d'))
+    {
+        if (blendingEffect) blendingEffect->Play();
+    }
+    if (Input::IsKeyPressed('F') || Input::IsKeyPressed('f'))
+    {
+        if (physicsEffect) physicsEffect->Play();
+    }
+    if (Input::IsKeyPressed('G') || Input::IsKeyPressed('g'))
+    {
+        if (environmentEffect) environmentEffect->Play();
+    }
+    if (Input::IsKeyPressed('H') || Input::IsKeyPressed('h'))
+    {
+        if (specialEffect) specialEffect->Play();
+    }
+
+    // 기존 효과들
     if (Input::IsKeyPressed('1'))
     {
         SpawnVignette(2.0f, 1.0f);

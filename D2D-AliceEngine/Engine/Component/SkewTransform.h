@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #define ZPOSINIT -21359786.0f
 
 #include "Component/ScriptComponent.h"
@@ -16,12 +16,13 @@ public:
 	
 	const FVector2 GetOffset();
 	const FVector2 GetRealPos() { return realPos; }
+	const void SetRealPos(FVector2 _pos);
 
 	void Initialize() override;
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
 
-	// x,y ÁÂÇ¥¸¦ skewTransform ÁÂÇ¥·Î º¯È¯ÇØÁÖ´Â ÇÔ¼ö
+	// x,y ì¢Œí‘œë¥¼ skewTransform ì¢Œí‘œë¡œ ë³€í™˜í•´ì£¼ëŠ” í•¨ìˆ˜
 	void ToSkewPos();
 private:
 	TransformComponent* renderTransform = nullptr;
