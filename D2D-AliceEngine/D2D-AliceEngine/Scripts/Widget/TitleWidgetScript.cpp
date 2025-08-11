@@ -535,7 +535,7 @@ void TitleWidgetScript::OnStart()
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
 	closeText->SetRelativeScale(FVector2(1, 1));
 	closeText->SetRelativeRotation(0);
-	closeText->m_layer = Define::ButtonTextLayer;
+	closeText->m_layer = Define::Disable;
 	closeButton->SetActive(false);
 	closeText->RemoveFromParent();
 	closeButton->AddChildComponent(closeText);
@@ -1033,7 +1033,6 @@ void TitleWidgetScript::OnStart()
 		startButton->StopHoverPulse();
 		startButton->StartEffectAnimation(0.1f, 0.0f, FColor::Red); 
 	});
-	
 }
 
 void TitleWidgetScript::OnEnd()
