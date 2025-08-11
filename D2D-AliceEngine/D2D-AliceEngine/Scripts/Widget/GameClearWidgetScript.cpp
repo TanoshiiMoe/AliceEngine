@@ -26,6 +26,10 @@
 void GameClearWidgetScript::Initialize()
 {
 	__super::Initialize();
+	REGISTER_SCRIPT_METHOD(Awake);
+	REGISTER_SCRIPT_METHOD(OnStart);
+	REGISTER_SCRIPT_METHOD(OnEnd);
+	REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
 void GameClearWidgetScript::Update(const float& deltaSeconds)
@@ -47,7 +51,30 @@ void GameClearWidgetScript::OnStart()
 	auto toMainText = m_owner->AddComponent<TextRenderComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
 
+	toMainText->SetFontSize(55.0f);
+	toMainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	toMainText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	toMainText->SetText(L"처음 화면으로");
+	toMainText->SetColor(FColor::White);
+	toMainText->SetRelativePosition(CoordHelper::RatioCoordToScreen(toMainText->GetRelativeSize(), FVector2(-0.5, -0.5)));
+	toMainText->SetRelativeScale(FVector2(1, 1));
+	toMainText->SetRelativeRotation(0);
+	toMainText->m_layer = Define::ButtonTextLayer;
+	toMainText->RemoveFromParent();
+	toMainButton->AddChildComponent(toMainText);
 
+	toMainButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	toMainButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	toMainButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	toMainButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	toMainButton->SetRelativePosition(FVector2(0, 400));
+	toMainButton->m_layer = Define::ButtonLayer;
+
+	// ====================== Delegate
+	toMainButton->SetStateAction(Define::EButtonState::Pressed, [] {
+		
+		SceneManager::ChangeScene(L"TitleScene");
+		});
 }
 
 void GameClearWidgetScript::OnEnd()
