@@ -59,6 +59,9 @@ public:
 	// Debug용 box
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
 
+	// For Radial Progress Bar
+	ComPtr<ID2D1Factory1> m_d2dFactory;
+
 	// 후처리용
 	ComPtr<ID2D1Bitmap1> m_overlayBitmap; // 그라데이션 or 텍스처
 	ComPtr<ID2D1Effect> m_sceneEffect;
@@ -71,4 +74,50 @@ public:
 	}
 
 	bool bRenderedBoxRect = true;
+
+	ComPtr<ID2D1PathGeometry> CreatePieGeometry(
+		float centerX, float centerY, float radiusX, float radiusY,
+		float startAngleRad, float endAngleRad, bool clockwise)
+	{
+		ComPtr<ID2D1PathGeometry> geometry;
+		HRESULT hr = m_d2dFactory->CreatePathGeometry(&geometry);
+		if (FAILED(hr)) return nullptr;
+
+		ComPtr<ID2D1GeometrySink> sink;
+		geometry->Open(&sink);
+
+		sink->BeginFigure(D2D1::Point2F(centerX, centerY), D2D1_FIGURE_BEGIN_FILLED);
+
+		// 시작점 (원 호 시작점)
+		float startX = centerX + cosf(startAngleRad) * radiusX;
+		float startY = centerY + sinf(startAngleRad) * radiusY;
+		sink->AddLine(D2D1::Point2F(startX, startY));
+
+		// 호 방향과 크기 결정
+		// - 시작과 끝 각도를 계산 180 보다 크면 큰 호로 인식
+		float sweepAngle = endAngleRad - startAngleRad;
+		bool isLargeArc = fabs(sweepAngle) > Define::PI;
+
+		// 호 방향 설정(시계방향 or 반시계방향)
+		D2D1_SWEEP_DIRECTION sweepDirection = clockwise ? D2D1_SWEEP_DIRECTION_CLOCKWISE : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE;
+
+		// 끝점
+		float endX = centerX + cosf(endAngleRad) * radiusX;
+		float endY = centerY + sinf(endAngleRad) * radiusY;
+
+		// ArcSegment 추가
+		D2D1_ARC_SEGMENT arc = {};
+		arc.point = D2D1::Point2F(endX, endY);
+		arc.size = D2D1::SizeF(radiusX, radiusY);
+		arc.rotationAngle = 0.f;
+		arc.sweepDirection = sweepDirection;
+		arc.arcSize = isLargeArc ? D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL;
+
+		sink->AddArc(arc);
+
+		sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+		sink->Close();
+
+		return geometry;
+	}
 };
