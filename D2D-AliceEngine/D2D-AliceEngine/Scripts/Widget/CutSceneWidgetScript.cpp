@@ -154,7 +154,7 @@ void CutSceneWidgetScript::OnStart()
 		m_uiSound->StopByName(L"UISound");
 		m_uiSound->PlayByName1(L"UISound", 0.45f);
         GamePlayManager::GetInstance().StartGame();
-
+        
 		SkipCutScene();
 	});
 

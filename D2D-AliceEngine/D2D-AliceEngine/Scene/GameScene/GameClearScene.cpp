@@ -33,6 +33,26 @@ void GameClearScene::OnEnter()
     text->SetRelativePosition(FVector2(20, 10));
     text->SetFontSize(32.0f);
 
+	m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
+    {
+        auto* text = m_passedTimeText->AddComponent<TextRenderComponent>();
+        text->SetText(L"<지난 시간> " + std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
+        text->SetTextAlignment(ETextFormat::TopLeft);
+        text->SetRelativePosition(FVector2(20, 40));
+        text->SetFontSize(32.0f);
+        text->SetColor(FColor::Gold);
+    }
+
+    m_killEnemyText = NewObject<gameObject>(L"m_killEnemyText");
+	{
+		auto* text = m_killEnemyText->AddComponent<TextRenderComponent>();
+		text->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+		text->SetTextAlignment(ETextFormat::TopLeft);
+		text->SetRelativePosition(FVector2(20, 60));
+		text->SetFontSize(32.0f);
+		text->SetColor(FColor::Gold);
+	}
+
     // 중앙 클라우드 이미지
     if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))
     {

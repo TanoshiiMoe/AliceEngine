@@ -33,6 +33,7 @@ void Scene_Stage3::Release()
 void Scene_Stage3::Update()
 {
     __super::Update();
+    GamePlayManager::GetInstance().AddPassedTime(TimerManager::GetInstance().unscaledDeltaTime);
 }
 
 void Scene_Stage3::OnEnter()
@@ -82,6 +83,8 @@ void Scene_Stage3::OnEnter()
     m_player->AddComponent<PlayerBike>();
     BulletManager::GetInstance().SetPlayer(m_player);
     GamePlayManager::GetInstance().SetPlayer(m_player);
+    GamePlayManager::GetInstance().SetPassedTime(0);
+    GamePlayManager::GetInstance().SetKillEnemyAmount(0);
     m_player->AddComponent<BackGroundRender>();
 
     //m_bg = NewObject<gameObject>(L"BackGround");

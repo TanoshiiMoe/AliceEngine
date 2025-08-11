@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 #include <Component/ScriptComponent.h>
 
 class gameObject;
+class TextRenderComponent;
 class StageWidgetScript : public ScriptComponent
 {
 public:
@@ -14,5 +15,9 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+
+	TextRenderComponent* m_passedTimeText;
+	TextRenderComponent* m_killEnemyText;
+
 };
 
