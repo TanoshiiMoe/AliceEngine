@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-#include <wrl.h>  // ComPtr »ç¿ëÀ» À§ÇÑ Çì´õ
+#include <wrl.h>  // ComPtr ì‚¬ìš©ì„ ìœ„í•œ í—¤ë”
 
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
@@ -31,7 +31,7 @@ using Microsoft::WRL::ComPtr;
 #include <vector>
 #include <map>
 
-// Direct2D¿ë TextureLoader ±¸Çö
+// Direct2Dìš© TextureLoader êµ¬í˜„
 class Direct2DTextureLoader : public spine::TextureLoader {
 public:
     Direct2DTextureLoader(ID2D1RenderTarget* renderTarget);
@@ -49,13 +49,13 @@ public:
     SpineRenderer();
     ~SpineRenderer();
 
-    // ÃÊ±âÈ­
+    // ì´ˆê¸°í™”
     void RegistSystem(WeakObjectPtr<UObject> object);
     void Initialize();
     void LoadTextureLoader();
     void Shutdown();
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç Á¦¾î
+    // ì• ë‹ˆë©”ì´ì…˜ ì œì–´
     void SetAnimation(const std::string& animationName);
     void UpdateAnimation(float deltaTime);
     void SetAnimationTime(float time);
@@ -67,7 +67,7 @@ public:
     void Clear(const D2D1_COLOR_F& color = { 0.1f, 0.1f, 0.1f, 1.0f });
     D2D1_SIZE_F GetRenderTargetSize() const;
 
-    // ·»´õ¸µ
+    // ë Œë”ë§
     void Render();
 
     void LoadSpine(const std::wstring& atlasPath, const std::wstring& jsonPath);
@@ -80,10 +80,13 @@ public:
     void SetLayer(int _layer) { m_layer = _layer; }
     int* GetLayer () { return &m_layer; }
 
+	void SetPosition(const FVector2& _pos) { m_CharacterPosition = D2D1::Vector2F(_pos.x, _pos.y); }
+    FVector2 GetPosition() { return FVector2(m_CharacterPosition.x, m_CharacterPosition.y); }
+
 private:
     D2D1::Matrix3x2F m_UnityScreen;
 
-    // Spine-cpp °´Ã¼
+    // Spine-cpp ê°ì²´
     std::unique_ptr<Direct2DTextureLoader> m_textureLoader;
 
     std::unique_ptr<spine::Atlas> m_atlas;
@@ -92,14 +95,14 @@ private:
     std::unique_ptr<spine::AnimationStateData> m_stateData;
     std::unique_ptr<spine::AnimationState> m_state;
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ¸ñ·Ï ¹× »óÅÂ
+    // ì• ë‹ˆë©”ì´ì…˜ ëª©ë¡ ë° ìƒíƒœ
     std::vector<std::string> m_animationList;
     int m_currentAnimationIndex = 0;
     float m_animationTime = 0.0f;
     std::string m_currentAnimation = "idle";
     float m_currentAnimationTime = 0.0f;
 
-    // À©µµ¿ì ÇÚµé ¹× Å©±â
+    // ìœˆë„ìš° í•¸ë“¤ ë° í¬ê¸°
     HWND m_hwnd;
     int m_clientWidth = 0;
     int m_clientHeight = 0;
@@ -110,7 +113,7 @@ private:
     Define::EDrawType m_drawType = Define::EDrawType::ScreenSpace;
     int m_layer = 1000;
 
-    // ³»ºÎ ÇÔ¼öµé(Direct2D/3D ÃÊ±âÈ­ µî)
+    // ë‚´ë¶€ í•¨ìˆ˜ë“¤(Direct2D/3D ì´ˆê¸°í™” ë“±)
     void ReleaseResources();
     void ReleaseDirect2D();
 };
