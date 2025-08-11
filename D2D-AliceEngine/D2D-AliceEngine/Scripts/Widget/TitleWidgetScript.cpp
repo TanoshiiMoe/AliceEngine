@@ -175,15 +175,15 @@ void TitleWidgetScript::OnStart()
 	float buttonBasePos = 400;
 
 	// ======================== startButton
-	startButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	startButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	startButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	startButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	FVector2 startButtonSize = startButton->GetRelativeSize();
-	startButton->SetRelativePosition(CoordHelper::RatioCoordToScreen(startButtonSize, FVector2(1, 0))
-		+ FVector2(buttonBasePos, -150));
-	startButton->SetRelativeScale(FVector2(1, 1));
-	startButton->m_layer = Define::ButtonLayer;
+	//startButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	//startButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	//startButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	//startButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	//FVector2 startButtonSize = startButton->GetRelativeSize();
+	//startButton->SetRelativePosition(CoordHelper::RatioCoordToScreen(startButtonSize, FVector2(1, 0))
+	//	+ FVector2(buttonBasePos, -150));
+	//startButton->SetRelativeScale(FVector2(1, 1));
+	//startButton->m_layer = Define::ButtonLayer;
 
 	// ======================== continueButton
 	continueButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -396,18 +396,18 @@ void TitleWidgetScript::OnStart()
 	subTitle->m_layer = Define::NormalTextLayer;
 
 	// ======================== startText
-	startText->SetFontSize(55.0f);
-	startText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	startText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	startText->SetText(L"시작하기");
-	startText->SetColor(FColor::White);
-	FVector2 startTextRectSize = startText->GetRelativeSize();
-	startText->SetRelativePosition(CoordHelper::RatioCoordToScreen(startTextRectSize, FVector2(-0.5, -0.5)));
-	startText->SetRelativeScale(FVector2(1, 1));
-	startText->SetRelativeRotation(0);
-	startText->m_layer = Define::NormalTextLayer;
-	startText->RemoveFromParent();
-	startButton->AddChildComponent(startText);
+	//startText->SetFontSize(55.0f);
+	//startText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	//startText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	//startText->SetText(L"시작하기");
+	//startText->SetColor(FColor::White);
+	//FVector2 startTextRectSize = startText->GetRelativeSize();
+	//startText->SetRelativePosition(CoordHelper::RatioCoordToScreen(startTextRectSize, FVector2(-0.5, -0.5)));
+	//startText->SetRelativeScale(FVector2(1, 1));
+	//startText->SetRelativeRotation(0);
+	//startText->m_layer = Define::ButtonTextLayer;
+	//startText->RemoveFromParent();
+	//startButton->AddChildComponent(startText);
 
 	// ======================== continueText
 	continueText->SetFontSize(55.0f);
@@ -419,7 +419,7 @@ void TitleWidgetScript::OnStart()
 	continueText->SetRelativePosition(CoordHelper::RatioCoordToScreen(continueTextRectSize, FVector2(-0.5, -0.5)));
 	continueText->SetRelativeScale(FVector2(1, 1));
 	continueText->SetRelativeRotation(0);
-	continueText->m_layer = Define::NormalTextLayer;
+	continueText->m_layer = Define::ButtonTextLayer;
 	continueText->RemoveFromParent();
 	continueButton->AddChildComponent(continueText);
 

@@ -110,11 +110,12 @@ void StageWidgetScript::OnStart()
 
 	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
 	soundControl->LoadData(L"UI\\UI_SoundControl.png");
-	soundControl->m_layer = Define::Disable;
+	//soundControl->m_layer = Define::Disable;
+	soundControl->m_layer = 60000;
 	soundControl->SetRelativeScale(soundUISize);
 	soundControl->SetDrawType(EDrawType::ScreenSpace);
 	// 중앙 배치
-	soundControl->SetRelativePosition(FVector2(0.f, 0.f));
+	soundControl->SetRelativePosition(FVector2(450.f, 0.f));
 
 	auto bgmControl = m_owner->AddComponent<SpriteRenderer>();
 	bgmControl->LoadData(L"UI\\ControlBar.png");
@@ -462,7 +463,7 @@ void StageWidgetScript::OnStart()
 		toRestart, restartText, toOption, optionText, toSelect, selectText
 	] {
 		sound->PlayByName(L"UISound", 0.45);
-		// 재시작 하는 코드 필요? 재시작인지 재개인지 이거도 구분해야될듯
+		// TODO : 재시작 하는 코드 필요? 재시작인지 재개인지 이거도 구분해야될듯
 		GamePlayManager::GetInstance().ResumeGame();
 
 		pauseText->m_layer = Define::Disable;

@@ -6,6 +6,7 @@
 #include <Component/SpriteRenderer.h>
 #include <Helpers/CoordHelper.h>
 #include <GameManager/GamePlayManager.h>
+#include <Scripts/Widget/GameOverWidgetScript.h>
 
 void GameOverScene::Initialize()
 {
@@ -43,6 +44,9 @@ void GameOverScene::OnEnter()
         sr->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
         // 기본 비율 유지 (원본 사이즈)
     }
+
+    m_widget = NewObject<gameObject>(L"Widget");
+    m_widget->AddComponent<GameOverWidgetScript>();
 
     // VK_3 눌러 TitleScene 복귀
     auto* input = m_textGO->AddComponent<InputComponent>();

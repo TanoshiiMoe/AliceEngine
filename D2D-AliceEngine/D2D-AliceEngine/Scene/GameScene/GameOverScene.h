@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
 
 class GameOverScene : public Scene
@@ -16,4 +16,5 @@ public:
 
 private:
     gameObject* m_textGO{ nullptr };
+    gameObject* m_widget;
 };
