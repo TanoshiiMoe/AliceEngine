@@ -267,7 +267,11 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
                 {
                     TimerManager::GetInstance().SetTimer(
                         burstTimer,
-                        [this]() { FireOneBurstShot(); },
+                        [weak = WeakFromThis<Drone>()]() 
+						{ 
+							if(!weak.expired())
+								weak->FireOneBurstShot();
+						},
                         burstInterval,
                         true,              // 루프: 남은 발이 0이 되면 내부에서 타이머 정리
                         burstInterval      // 첫 지연도 동일 간격으로 설정
@@ -363,13 +367,13 @@ void Drone::OnStart()
 	);
 
 	body = owner->AddComponent<SpriteRenderer>();
-	body->m_layer = 10000;
+	body->m_layer = 20000;
 	body->LoadData(spritePath.body);
 	body->SetRelativeScale(initBodySize);
 	body->SetRelativePosition(initBodyPos);
 
 	arm = owner->AddComponent<SpriteRenderer>();
-	arm->m_layer = 10001;
+	arm->m_layer = 20001;
 	arm->LoadData(spritePath.arm);
 	arm->SetRelativeScale(FVector2(1.0f, 1.0f));
 	arm->RemoveFromParent();
