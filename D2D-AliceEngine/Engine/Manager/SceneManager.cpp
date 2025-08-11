@@ -68,6 +68,10 @@ void SceneManager::PerformSceneChange(const std::wstring& NewobjectName)
             weak->Release();
             SceneManager::GetInstance().GetCamera()->Release();
         }
+        
+        // 씬 전환 시 마우스 상태 초기화
+        searchedScene->OnSceneTransition();
+        
         TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
         m_currentScene = searchedScene.Get();
         m_currentScene->Initialize();

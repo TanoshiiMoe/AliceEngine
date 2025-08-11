@@ -42,6 +42,38 @@ namespace Input
 
 		GetCursorPos(&m_point);
 		ScreenToClient(m_hwnd, &m_point);
+	
+		// 마우스 상태 검증 및 자동 초기화
+		// 마우스가 클릭된 상태로 너무 오래 유지되는 경우 자동 초기화
+		static int mouseHoldFrameCount = 0;
+		if (IsMouseLeftDown())
+		{
+			mouseHoldFrameCount++;
+			// 300프레임(약 5초) 이상 마우스가 클릭된 상태로 유지되면 초기화
+			if (mouseHoldFrameCount > 300)
+			{
+				ResetMouseState();
+				mouseHoldFrameCount = 0;
+			}
+		}
+		else
+		{
+			mouseHoldFrameCount = 0;
+		}
+	
+		// 추가 안전장치: 마우스가 클릭된 상태로 너무 오래 유지되면 강제 초기화
+		static int totalFrameCount = 0;
+		totalFrameCount++;
+	
+		// 매 1000프레임마다 마우스 상태 검증
+		if (totalFrameCount % 1000 == 0)
+		{
+			// 마우스가 클릭된 상태로 1000프레임 이상 유지되면 강제 초기화
+			if (IsMouseLeftDown())
+			{
+				ResetMouseState();
+			}
+		}
 	}
 
 	bool IsKeyDown(int vKey)
@@ -122,5 +154,19 @@ namespace Input
 	bool IsMouseLeftDown()
 	{
 		return (currState[VK_LBUTTON] & 0x8000) != 0;
+	}
+	
+	void ResetMouseState()
+	{
+		// 마우스 클릭 상태 초기화
+		prevState[VK_LBUTTON] = 0;
+		currState[VK_LBUTTON] = 0;
+		
+		// 마우스 휠 상태도 초기화
+		m_mouseWheelDelta = 0;
+		
+		// 마우스 위치는 현재 위치로 유지 (클릭 상태만 초기화)
+		::GetCursorPos(&m_point);
+		::ScreenToClient(m_hwnd, &m_point);
 	}
 }

@@ -18,6 +18,7 @@ public:
 
 	virtual void OnEnter();
 	virtual void OnExit();
+	virtual void OnSceneTransition(); // 씬 전환 시 호출되는 함수 추가
 
 	void VisibleMemoryInfo();
     void UpdateDebugHUD(float deltaTime);

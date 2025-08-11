@@ -27,6 +27,21 @@ void ButtonComponent::Initialize()
 {
 	__super::Initialize();
 
+	// 마우스 상태 완전 초기화
+	m_prevMouseDown = false;
+	m_prevInArea = false;
+	m_state = Define::EButtonState::Idle;
+	
+	// Idle 상태의 이미지로 m_bitmap 설정
+	auto it = m_bitmaps.find(Define::EButtonState::Idle);
+	if (it != m_bitmaps.end() && it->second)
+	{
+		m_bitmap = it->second;
+	}
+	
+	// 모든 애니메이션 중지
+	StopAllAnimations();
+
 	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PostUpdateWork);
 }
 
@@ -50,6 +65,46 @@ void ButtonComponent::Update(const float& deltaSeconds)
 
 	const bool inArea = IsMouseInUIArea(mousePos, finalUIPos, uiSize);
 
+	// 핵심 수정: 씬 전환 후 마우스 상태 검증
+	// 마우스가 UI 영역에 들어왔을 때 이전에 클릭된 상태가 아니라면 초기화
+	if (inArea && !m_prevInArea)
+	{
+		// UI 영역에 처음 들어왔을 때 마우스가 클릭된 상태라면 초기화
+		if (mouseDown)
+		{
+			// 마우스가 클릭된 상태로 UI 영역에 들어왔다면 이는 씬 전환 후의 잘못된 상태
+			ResetMouseState();
+			return;
+		}
+	}
+
+	// 마우스 상태 검증 및 자동 초기화
+	// 마우스가 클릭된 상태로 너무 오래 유지되는 경우 자동 초기화
+	static int mouseHoldFrameCount = 0;
+	if (mouseDown)
+	{
+		mouseHoldFrameCount++;
+		// 300프레임(약 5초) 이상 마우스가 클릭된 상태로 유지되면 초기화
+		if (mouseHoldFrameCount > 300)
+		{
+			ResetMouseState();
+			mouseHoldFrameCount = 0;
+			return;
+		}
+	}
+	else
+	{
+		mouseHoldFrameCount = 0;
+	}
+
+	// 비정상적인 상태 감지: 마우스가 UI 영역 밖에 있는데 이전에 클릭된 상태라면 초기화
+	if (!inArea && m_prevMouseDown && !mouseDown)
+	{
+		// 마우스가 UI 영역 밖에서 클릭이 해제되었는데, 이전에 클릭된 상태였다면 초기화
+		ResetMouseState();
+		return;
+	}
+
 	if (inArea)
 	{
 		// (선택) 진입 이벤트가 필요하면 여기서 HoverEnter 발행:
@@ -57,8 +112,10 @@ void ButtonComponent::Update(const float& deltaSeconds)
 
 		SetCursor(LoadCursorW(nullptr, IDC_HAND));
 
-		if (mouseUp && m_prevMouseDown)
+		// 핵심 수정: Release 상태 조건을 더 엄격하게 검증
+		if (mouseUp && m_prevMouseDown && m_prevInArea)
 		{
+			// 마우스가 UI 영역 안에서 클릭되었다가 해제된 경우에만 Release
 			SetCurrentState(Define::EButtonState::Release);
 		}
 		else if (mouseDown)
@@ -185,6 +242,20 @@ void ButtonComponent::SetCurrentState(Define::EButtonState state)
 	{
 		// 이전 상태의 종료 함수 실행 (있는 경우)
 		ExecuteStateAction(static_cast<Define::EButtonState>(static_cast<int>(m_state) + 100)); // 종료 상태는 +100으로 가정
+		
+		// 상태 변경 전 검증
+		if (state == Define::EButtonState::Release && !m_prevMouseDown)
+		{
+			// Release 상태인데 이전에 마우스가 클릭되지 않았다면 무시
+			return;
+		}
+		
+		// 추가 검증: Hover 상태로 변경할 때 이전에 클릭된 상태라면 무시
+		if (state == Define::EButtonState::Hover && m_prevMouseDown)
+		{
+			// Hover 상태인데 이전에 마우스가 클릭된 상태라면 무시
+			return;
+		}
 		
 		m_state = state;
 		
@@ -355,4 +426,27 @@ void ButtonComponent::StopAllAnimations()
 	{
 		relativeTransform.SetScale(m_hoverBaseScale);
 	}
+}
+
+void ButtonComponent::ResetMouseState()
+{
+	// 마우스 상태 완전 초기화
+	m_prevMouseDown = false;
+	m_prevInArea = false;
+	
+	// 현재 상태를 Idle로 설정 (이미지도 Idle 상태로)
+	m_state = Define::EButtonState::Idle;
+	
+	// Idle 상태의 이미지로 m_bitmap 업데이트
+	auto it = m_bitmaps.find(Define::EButtonState::Idle);
+	if (it != m_bitmaps.end() && it->second)
+	{
+		m_bitmap = it->second;
+	}
+	
+	// 모든 애니메이션 중지
+	StopAllAnimations();
+	
+	// 커서를 기본 상태로 복원
+	SetCursor(LoadCursorW(nullptr, IDC_ARROW));
 }
