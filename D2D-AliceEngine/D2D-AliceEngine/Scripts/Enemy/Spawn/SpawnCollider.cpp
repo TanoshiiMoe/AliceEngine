@@ -8,6 +8,7 @@
 #include "EnemySpawner.h"
 #include <TileMap/TileMapLoader.h>
 #include "SpawnData.h"
+#include <Helpers/Logger.h>
 
 void SpawnCollider::Initialize()
 {
@@ -51,6 +52,8 @@ void SpawnCollider::OnTriggerEnter2D(Collider* collider)
 
 			FVector2 pos = collider->GetOwner()->GetPosition();
 			EnemySpawner::instance->SpawnEnemy(etype, pos);
+
+			LOG_INFO(L"스폰했습니다.");
 		}
 	}
 }

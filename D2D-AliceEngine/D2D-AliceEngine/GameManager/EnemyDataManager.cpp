@@ -58,4 +58,32 @@ bool EnemyDataManager::HasStats(int enemyTypeId) const
     return m_stats.find(enemyTypeId) != m_stats.end();
 }
 
+void EnemyDataManager::LoadSpawnData(const std::wstring& relativePath)
+{
+    if (m_spawnLoaded) return;
+    try
+    {
+        const std::wstring path = Define::BASE_RESOURCE_PATH + relativePath;
+        m_spawnTable = TileMapLoader::LoadTileMapColliderInfo(FileHelper::ToAbsolutePath(path));
+        m_spawnLoaded = true;
+    }
+    catch (...)
+    {
+        m_spawnLoaded = false;
+    }
+}
+
+bool EnemyDataManager::HasSpawnData(int index) const
+{
+    return m_spawnTable.find(index) != m_spawnTable.end();
+}
+
+bool EnemyDataManager::GetSpawnData(int index, CollData& outData) const
+{
+    auto it = m_spawnTable.find(index);
+    if (it == m_spawnTable.end()) return false;
+    outData = it->second;
+    return true;
+}
+
 

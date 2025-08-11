@@ -30,7 +30,7 @@
 #include <Scripts/Camera/CameraMover.h>
 #include <Prefab/Player/PlayerBike.h>
 #include "Scripts/TileMap/TileMapManager.h"
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 #include "Scripts/Enemy/Spawn/EnemySpawner.h"
 #include <Scripts/Widget/CutSceneWidgetScript.h>
 #include <Scripts/Widget/StageWidgetScript.h>

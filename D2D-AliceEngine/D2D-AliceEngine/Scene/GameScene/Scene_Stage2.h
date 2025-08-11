@@ -29,6 +29,8 @@ public:
 
     gameObject* m_truck;
 
+    gameObject* enemySpawnTriggerBox;
+
 private:
     gameObject* m_textGO{ nullptr };
 

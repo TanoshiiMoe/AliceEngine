@@ -3,6 +3,10 @@
 #include <Manager/SceneManager.h>  // 실제 씬 변경은 UI/외부가 하고, 여기선 이름만 관리
 #include <Helpers/Logger.h>
 #include <utility>
+#include <Scripts/Widget/BlackOutWidgetScript.h>
+#include <Scripts/Widget/VignetteWidgetScript.h>
+#include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
+#include <Scene/Scene.h>
 
 GamePlayManager::GamePlayManager()
 {
@@ -62,6 +66,97 @@ void GamePlayManager::StartGame()
     ApplyPauseTimescale(false);
     SetState(EGameRunState::InGame);
 }
+
+void GamePlayManager::GameOver()
+{
+    SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::VignetteOnly), true, 2.0f, 1.0f);
+    TimerManager::GetInstance().ClearTimer(gameOverTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTimer, [this]() 
+    {
+        SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::SpotDiffuse), true, 2.0f, 1.0f);
+    }, 
+    0, 
+    false,
+    1.0f);
+
+    TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
+    {
+        SceneManager::ChangeScene(Define::Scene_GameOver);
+    },
+    0,
+    false,
+    3.0f);
+}
+
+void GamePlayManager::GameClear()
+{
+    SpawnVignette(2.0f, 1.0f);
+    TimerManager::GetInstance().ClearTimer(gameOverTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTimer, [this]()
+    {
+        SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::PointDiffuse), true, 2.0f, 1.0f);
+    },
+        0,
+        false,
+        1.0f);
+
+    TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
+    {
+        SceneManager::ChangeScene(Define::Scene_GameClear);
+    },
+        0,
+        false,
+        3.0f);
+}
+
+
+void GamePlayManager::PlayBossMode()
+{
+    if (WeakObjectPtr<gameObject> triggerBox = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"EnemySpawnTriggerBox"))
+    {
+        if (triggerBox.expired()) return;
+        if (EnemySpawnTriggerBox* es = triggerBox->GetComponent<EnemySpawnTriggerBox>())
+        {
+            es->SetSpawnable(false);
+            es->SpawnBossAt(FVector2(400, 0));
+
+            //TimerManager::GetInstance().SetTimer(bossSpawnTimer, [this]()
+            //{
+            //    EnemySpawnTriggerBox::SpawnEnemyAt(0, m_player->GetPosition() + FVector2(500,0));
+            //},
+            //    3.0f,
+            //    true,
+            //    1.0f);
+        }
+    }
+}
+
+void GamePlayManager::SpawnVignette(float durationSec, float maxAlpha)
+{
+    if (auto go = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"VignetteOverlay"))
+    {
+        SceneManager::GetInstance().GetCamera()->AddChildObject(go);
+        auto* vig = go->AddComponent<VignetteWidgetScript>();
+        vig->SetDuration(durationSec);
+        vig->SetMaxEdgeAlpha(maxAlpha);
+    }
+}
+
+void GamePlayManager::SpawnBlackOut(int modeIndex, bool useCrossFade, float durationSec, float maxAlpha)
+{
+    if (auto go = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"BlackOutOverlay"))
+    {
+        SceneManager::GetInstance().GetCamera()->AddChildObject(go);
+        auto* bo = go->AddComponent<BlackOutWidgetScript>();
+        bo->SetDuration(durationSec);
+        bo->SetMaxEdgeAlpha(maxAlpha);
+        bo->SetMode(static_cast<EBlackOutLightingMode>(modeIndex));
+        bo->UseCrossFade(useCrossFade);
+    }
+}
+
 
 void GamePlayManager::PauseGame()
 {
@@ -123,4 +218,14 @@ void GamePlayManager::MarkLoadingComplete()
     // 로딩 완료 후 기본은 InGame로(필요 시 UI에서 Pause/Start를 별도로 호출 가능)
     if (m_State == EGameRunState::Loading)
         SetState(EGameRunState::InGame);
+}
+
+// 모든 내부 타이머 클리어 (씬 전환 종료 시 호출)
+void GamePlayManager::ReleaseTimers()
+{
+    auto& TM = TimerManager::GetInstance();
+    TM.ClearTimer(gameOverTimer);
+    TM.ClearTimer(gameOverTransitionTimer);
+    TM.ClearTimer(bossSpawnTimer);
+    TM.ClearTimer(m_bossFlickerTimer);
 }

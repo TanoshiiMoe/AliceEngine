@@ -25,6 +25,8 @@ namespace Define
 	static const std::wstring Scene_Stage1 = L"Scene_Stage1";
 	static const std::wstring Scene_Stage2 = L"Scene_Stage2";
 	static const std::wstring Scene_Stage3 = L"Scene_Stage3";
+	static const std::wstring Scene_GameOver = L"Scene_Over";
+	static const std::wstring Scene_GameClear = L"Scene_Clear";
 
 	// ========== Layer List ==========
 	static const int CutSceneLayer = 50001;

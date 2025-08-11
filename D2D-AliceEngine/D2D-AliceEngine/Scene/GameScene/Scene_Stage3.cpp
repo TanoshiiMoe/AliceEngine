@@ -16,7 +16,9 @@
 #include <Scripts/Audio.h>
 #include <Scripts/Enemy/Spawn/EnemySpawner.h>
 #include <Prefab/Truck.h>
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
+#include <GameManager/GamePlayManager.h>
+#include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 
 void Scene_Stage3::Initialize()
 {
@@ -79,6 +81,7 @@ void Scene_Stage3::OnEnter()
     m_player = NewObject<gameObject>(L"Player");
     m_player->AddComponent<PlayerBike>();
     BulletManager::GetInstance().SetPlayer(m_player);
+    GamePlayManager::GetInstance().SetPlayer(m_player);
     m_player->AddComponent<BackGroundRender>();
 
     //m_bg = NewObject<gameObject>(L"BackGround");
@@ -89,8 +92,9 @@ void Scene_Stage3::OnEnter()
     m_sound->AddComponent<Audio>();
 
     // 적 스포너 매니저 생성
-    gameObject* eSpwaner = NewObject<gameObject>(L"EnemySpawner");
-    eSpwaner->AddComponent<EnemySpawner>();
+    enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
+    auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
+    tb->SetBox(FVector2(1500.0f, 700.0f), 1);
 
     // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
     //m_button = NewObject<gameObject>(L"PauseButton");
@@ -106,12 +110,24 @@ void Scene_Stage3::OnEnter()
         if (Input::IsKeyPressed(VK_3)) {
             SceneManager::ChangeScene(L"TitleScene");
         }
+        if (Input::IsKeyPressed(VK_4)) {
+            GamePlayManager::GetInstance().GameClear();
+        }
+        if (Input::IsKeyPressed(VK_5)) {
+            GamePlayManager::GetInstance().GameOver();
+        }
+        if (Input::IsKeyPressed(VK_6)) {
+            GamePlayManager::GetInstance().PlayBossMode();
+        }
     });
 }
 
 void Scene_Stage3::OnExit()
 {
     __super::OnExit();
+    GamePlayManager::GetInstance().ReleaseTimers();
+    BulletManager::GetInstance().SetPlayer(nullptr);
+    GamePlayManager::GetInstance().SetPlayer(nullptr);
 }
 
 

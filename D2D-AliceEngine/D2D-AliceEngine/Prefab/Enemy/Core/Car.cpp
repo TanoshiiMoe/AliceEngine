@@ -11,12 +11,14 @@
 #include <memory>
 #include <Helpers/StringHelper.h>
 #include <Manager/UpdateTaskManager.h>
+#include <GameManager/GamePlayManager.h>
 
 void Car::Initialize()
 {
 	__super::Initialize();
 	REGISTER_SCRIPT_METHOD(OnStart);
-    REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_NewlySpawned);
+    // 보스 위치 보정을 위해 매 프레임 갱신 필요
+    REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
 
 	//?븷?땲硫붿씠?꽣 ?엳?쓣?떆
 	//owner->AddComponent<Animator>();
@@ -44,8 +46,10 @@ void Car::Initialize()
 
 			float marginX = 100.0f;
 			float marginY = 150.0f;
-			if (bulletPos.x < camPos.x - halfW - marginX || bulletPos.x > camPos.x + halfW + marginX ||
-				bulletPos.y < camPos.y - halfH - marginY || bulletPos.y > camPos.y + halfH + marginY)
+			bool outLeft      = bulletPos.x < camPos.x - halfW - marginX;
+			bool outVertical  = (bulletPos.y < camPos.y - halfH - marginY) || (bulletPos.y > camPos.y + halfH + marginY);
+
+			if (outLeft || outVertical)
 			{
 				weak->GetWorld()->RemoveObject(weak->GetOwner());
 			}
@@ -59,12 +63,13 @@ void Car::OnStart()
 {
 	// SkewTransform?쑝濡? 蹂??솚?븯湲?
 	SkewTransform* st = owner->GetComponent<SkewTransform>();
-	st->groundTile = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"TileMap");
+	st->groundTile = GetWorld()->FindObjectByName<gameObject>(L"TileMap");
 	st->ToSkewPos();
 }
 
 void Car::OnDestroy()
 {
+    TimerManager::GetInstance().ClearTimer(timer);
     if (m_skipGhostOnDestroy) return; // DelayDestroy로 이미 처리한 경우 스킵
     // 기존: 즉시 잔상 생성 페이드. 현재는 DelayDestroy로 대체되어 일반 OnDestroy에서는 생략
 }
@@ -78,6 +83,16 @@ void Car::Update(const float& deltaSeconds)
         float t = m_fadeElapsed / m_fadeDuration;
         if (t > 1.0f) t = 1.0f;
         m_fadeTargetSR->SetOpacity(1.0f - t);
+    }
+
+    if (owner && owner->GetName() == L"Boss")
+    {
+        if (auto player = GamePlayManager::GetInstance().GetPlayer())
+        {
+            const FVector2 ppos = player->GetPosition();
+            // 월드에서 Y=0으로 고정, X는 플레이어 +400
+            owner->transform()->SetPosition(FVector2(400, -ppos.y));
+        }
     }
 }
 

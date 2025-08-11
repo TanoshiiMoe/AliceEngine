@@ -34,6 +34,15 @@ public:
     // 플레이 시작: InGame 진입
     void StartGame();
 
+    void GameOver();
+    void GameClear();
+
+    void PlayBossMode();
+
+    void SpawnVignette(float durationSec, float maxAlpha);
+
+    void SpawnBlackOut(int modeIndex, bool useCrossFade, float durationSec, float maxAlpha);
+
     // 일시정지/재개 (글로벌 타임스케일 제어만 수행)
     void PauseGame();
     void ResumeGame();
@@ -53,6 +62,9 @@ public:
     void MarkLoadingBegin();
     void MarkLoadingComplete();
 
+    // 씬 전환 등 종료 시 내부 타이머 해제
+    void ReleaseTimers();
+
     // 상태 변경 콜백(선택): (prev, now)
     void SetOnStateChanged(std::function<void(EGameRunState, EGameRunState)> cb) { m_OnStateChanged = std::move(cb); }
 
@@ -68,10 +80,21 @@ private:
 
     std::wstring  m_CurrentScene; // 현재 활성 씬명(외부가 바꾼 뒤 MarkTransitionComplete에서 세팅)
     std::wstring  m_PendingScene; // 전환 예정 씬명(외부가 MarkTransitionBegin로 세팅)
-
+    FTimerHandle bossSpawnTimer;
     // 일시정지/재개용 이전 타임스케일 저장
     float m_PrevTimeScale = 1.0f;
 
     // 상태 변경 이벤트(옵션)
     std::function<void(EGameRunState, EGameRunState)> m_OnStateChanged = nullptr;
+
+    FTimerHandle gameOverTimer;
+    FTimerHandle gameOverTransitionTimer;
+    FTimerHandle m_bossFlickerTimer; // spot flicker timer
+
+public:
+    gameObject* GetPlayer() const { return m_player; }
+    void SetPlayer(gameObject* player) { m_player = player; }
+
+private:
+    gameObject* m_player = nullptr;
 };

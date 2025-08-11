@@ -3,7 +3,7 @@
 #include <Component/ProgressBarComponent.h>
 #include <Helpers/CoordHelper.h>
 #include <Component/SpriteRenderer.h>
-#include <Scripts/Enemy/EnemyDataManager.h>
+#include <GameManager/EnemyDataManager.h>
 #include <Component/BoxComponent.h>
 #include <Component/Collider.h>
 #include <Prefab/Enemy/Core/Car.h>
@@ -30,7 +30,6 @@ void EnemyStatScript::OnStart()
     m_enemyStat = owner->AddComponent<StatComponent<EnemyStat>>();
 
     // EnemyDataManager에서 타입별 데이터 로드 및 주입
-    EnemyDataManager::GetInstance().LoadData(L"Enemy/EnemyData.json");
     FEnemyStats stats{};
     if (EnemyDataManager::GetInstance().GetStats(m_enemyTypeId, stats))
     {

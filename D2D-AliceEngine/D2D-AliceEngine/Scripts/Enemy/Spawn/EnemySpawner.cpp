@@ -14,7 +14,7 @@
 #include <Scripts/Bike/BikeStatScript.h>
 #include <Scripts/Enemy/EnemyStatScript.h>
 #include <Scripts/Weapon/Drone.h>
-#include <Scripts/Enemy/EnemyDataManager.h>
+#include <GameManager/EnemyDataManager.h>
 
 EnemySpawner* EnemySpawner::instance = nullptr;
 
@@ -22,19 +22,13 @@ void EnemySpawner::Initialize()
 {
 	__super::Initialize();
 
-	// 플레이어한테 붙일 콜라이더 생성
-	gameObject* coll = GetWorld()->NewObject<gameObject>(L"SpawnCollider");
-	coll->AddComponent<SpawnCollider>();
-
 	REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void EnemySpawner::OnStart()
 {
-	if (instance == nullptr)
-		instance = this;
-	else
-		SceneManager::GetInstance().GetWorld()->RemoveObject(owner.lock());
+	// 씬마다 새로 인스턴스가 만들어질 수 있으므로 항상 최신으로 갱신
+	instance = this;
 }
 
 void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {0.0f ,0.0f}*/)

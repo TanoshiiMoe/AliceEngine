@@ -214,7 +214,7 @@
     <ClInclude Include="Scripts\Weapon\Bullet.h">
       <Filter>Scripts\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Weapon\BulletManager.h">
+    <ClInclude Include="GameManager\BulletManager.h">
       <Filter>Scripts\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Weapon\Drone.h">
@@ -235,6 +235,7 @@
     <ClInclude Include="Scripts\Bike\BikeStatScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Player\PlayerMovement.h">
     <ClInclude Include="Scripts\Legacy\Aru.h">
       <Filter>Scripts\Legacy</Filter>
     </ClInclude>
@@ -268,7 +269,7 @@
     <ClInclude Include="Scripts\Enemy\EnemyStatScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Enemy\EnemyDataManager.h">
+    <ClInclude Include="GameManager\EnemyDataManager.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="Scene\GameScene\Scene_Stage1.h">
@@ -278,6 +279,18 @@
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="Scene\GameScene\Scene_Stage3.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\PlayerDataManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\GameOverScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\GameClearScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
@@ -384,7 +397,7 @@
     <ClCompile Include="Scripts\Weapon\Bullet.cpp">
       <Filter>Scripts\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Weapon\BulletManager.cpp">
+    <ClCompile Include="GameManager\BulletManager.cpp">
       <Filter>Scripts\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Weapon\Drone.cpp">
@@ -423,6 +436,7 @@
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnCollider.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
     <ClCompile Include="Scripts\Bike\BikeStatScript.cpp" />
+    <ClCompile Include="Scripts\Player\PlayerMovement.cpp" />
     <ClCompile Include="Scripts\Legacy\Aru.cpp">
       <Filter>Scripts\Legacy</Filter>
     </ClCompile>
@@ -444,9 +458,13 @@
     <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
     <ClCompile Include="Scene\EffectTestScene.cpp" />
     <ClCompile Include="Scripts\Enemy\EnemyStatScript.cpp" />
-    <ClCompile Include="Scripts\Enemy\EnemyDataManager.cpp" />
+    <ClCompile Include="GameManager\EnemyDataManager.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage2.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage3.cpp" />
+    <ClCompile Include="GameManager\PlayerDataManager.cpp" />
+    <ClCompile Include="Scene\GameScene\GameOverScene.cpp" />
+    <ClCompile Include="Scene\GameScene\GameClearScene.cpp" />
+    <ClCompile Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.cpp" />
   </ItemGroup>
 </Project>
