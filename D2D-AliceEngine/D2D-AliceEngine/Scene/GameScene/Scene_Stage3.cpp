@@ -19,6 +19,8 @@
 #include <GameManager/BulletManager.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
+#include <Scripts/Bike/BikeMovementScript.h>
+#include <Scripts/Widget/StageWidgetScript.h>
 
 void Scene_Stage3::Initialize()
 {
@@ -100,8 +102,8 @@ void Scene_Stage3::OnEnter()
     tb->SetBox(FVector2(3300.0f, 700.0f), 1);
 
     // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
-    //m_button = NewObject<gameObject>(L"PauseButton");
-    //m_button->AddComponent<StageWidgetScript>();
+	m_button = NewObject<gameObject>(L"PauseButton");
+	m_button->AddComponent<StageWidgetScript>();
 
     // Truck(점프대)
     m_truck = NewObject<gameObject>(L"Truck");
@@ -122,6 +124,18 @@ void Scene_Stage3::OnEnter()
         if (Input::IsKeyPressed(VK_6)) {
             GamePlayManager::GetInstance().PlayBossMode();
         }
+		if (Input::IsKeyPressed(VK_P)) {
+			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
+			{
+				t->AddMaxSpeed(50);
+			}
+		}
+		if (Input::IsKeyPressed(VK_O)) {
+			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
+			{
+				t->AddMaxSpeed(-50);
+			}
+		}
     });
 }
 

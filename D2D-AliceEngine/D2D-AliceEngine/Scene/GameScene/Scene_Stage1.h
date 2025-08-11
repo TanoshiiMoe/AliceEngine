@@ -23,7 +23,6 @@ public:
 	gameObject* m_sound;
 	gameObject* m_tile;	// = 3
 	TileMapComponent* m_tileMapComponent;
-	Canvas* m_canvas;
 	gameObject* m_wall;
 
 	gameObject* m_UI;

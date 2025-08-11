@@ -19,6 +19,8 @@
 #include <GameManager/BulletManager.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
+#include <Scripts/Bike/BikeMovementScript.h>
+#include <Scripts/Widget/StageWidgetScript.h>
 
 void Scene_Stage2::Initialize()
 {
@@ -34,6 +36,13 @@ void Scene_Stage2::Update()
 {
     __super::Update();
     GamePlayManager::GetInstance().AddPassedTime(TimerManager::GetInstance().unscaledDeltaTime);
+	if (m_player)
+	{
+		if (m_player->GetPosition().x >= GamePlayManager::GetInstance().GetStopXAxis())
+		{
+			GamePlayManager::GetInstance().GameClear();
+		}
+	}
 }
 
 void Scene_Stage2::OnEnter()
@@ -42,6 +51,7 @@ void Scene_Stage2::OnEnter()
 
     m_textGO = NewObject<gameObject>(L"Stage2Label");
     auto* text = m_textGO->AddComponent<TextRenderComponent>();
+    GetCamera()->AddChildObject(m_textGO);
     text->SetText(L"<현재 씬> Scene_Stage2");
     text->SetTextAlignment(ETextFormat::TopLeft);
     text->SetRelativePosition(FVector2(20, 10));
@@ -49,7 +59,7 @@ void Scene_Stage2::OnEnter()
 
     // 타일맵 추가
     m_tile = NewObject<gameObject>(L"TileMap");
-    m_tile->AddComponent<TileMapComponent>();
+    m_tileMapComponent = m_tile->AddComponent<TileMapComponent>();
     if (auto* tileMgr = m_tile->AddComponent<TileMapManager>())
     {
         tileMgr->SetTilePaths(
@@ -81,11 +91,12 @@ void Scene_Stage2::OnEnter()
 
     m_player = NewObject<gameObject>(L"Player");
     m_player->AddComponent<PlayerBike>();
-    BulletManager::GetInstance().SetPlayer(m_player);
-    GamePlayManager::GetInstance().SetPlayer(m_player);
-    GamePlayManager::GetInstance().SetPassedTime(0);
-    GamePlayManager::GetInstance().SetKillEnemyAmount(0);
     m_player->AddComponent<BackGroundRender>();
+
+	BulletManager::GetInstance().SetPlayer(m_player);
+	GamePlayManager::GetInstance().SetPlayer(m_player);
+	GamePlayManager::GetInstance().SetPassedTime(0);
+	GamePlayManager::GetInstance().SetKillEnemyAmount(0);
 
     //m_bg = NewObject<gameObject>(L"BackGround");
     //m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
@@ -100,8 +111,8 @@ void Scene_Stage2::OnEnter()
     tb->SetBox(FVector2(3300.0f, 700.0f), 1);
 
     // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
-    //m_button = NewObject<gameObject>(L"PauseButton");
-    //m_button->AddComponent<StageWidgetScript>();
+    m_button = NewObject<gameObject>(L"PauseButton");
+    m_button->AddComponent<StageWidgetScript>();
 
     // Truck(점프대)
     m_truck = NewObject<gameObject>(L"Truck");
@@ -110,18 +121,30 @@ void Scene_Stage2::OnEnter()
     // 디버그용 씬 전환
     gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
     sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
-        if (Input::IsKeyPressed(VK_3)) {
-            SceneManager::ChangeScene(L"TitleScene");
-        }
-        if (Input::IsKeyPressed(VK_4)) {
-            GamePlayManager::GetInstance().GameClear();
-        }
-        if (Input::IsKeyPressed(VK_5)) {
-            GamePlayManager::GetInstance().GameOver();
-        }
-        if (Input::IsKeyPressed(VK_6)) {
-            GamePlayManager::GetInstance().PlayBossMode();
-        }
+		if (Input::IsKeyPressed(VK_3)) {
+			SceneManager::ChangeScene(L"TitleScene");
+		}
+		if (Input::IsKeyPressed(VK_4)) {
+			GamePlayManager::GetInstance().GameClear();
+		}
+		if (Input::IsKeyPressed(VK_5)) {
+			GamePlayManager::GetInstance().GameOver();
+		}
+		if (Input::IsKeyPressed(VK_6)) {
+			GamePlayManager::GetInstance().PlayBossMode();
+		}
+		if (Input::IsKeyPressed(VK_P)) {
+			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
+			{
+				t->AddMaxSpeed(50);
+			}
+		}
+		if (Input::IsKeyPressed(VK_O)) {
+			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
+			{
+				t->AddMaxSpeed(-50);
+			}
+		}
     });
 }
 

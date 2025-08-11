@@ -2,6 +2,7 @@
 #include <Scene/Scene.h>
 
 class gameObject;
+class TileMapComponent;
 class Scene_Stage3 : public Scene
 {
 public:
@@ -20,6 +21,7 @@ public:
     gameObject* m_player;
     gameObject* m_sound;
     gameObject* m_tile;	// = 3
+    TileMapComponent* m_tileMapComponent;
     gameObject* m_wall;
 
     gameObject* m_UI;
