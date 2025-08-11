@@ -235,7 +235,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scene\GameScene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
-    <ClInclude Include="Scripts\TitleAudioScript.h" />
+    <ClInclude Include="Scripts\Audio\TitleAudioScript.h" />
     <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
@@ -311,7 +311,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Spine2D\SpineRenderer.cpp" />
     <ClCompile Include="Scene\SpineScene.cpp" />
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
-    <ClCompile Include="Scripts\TitleAudioScript.cpp" />
+    <ClCompile Include="Scripts\Audio\TitleAudioScript.cpp" />
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
     <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />

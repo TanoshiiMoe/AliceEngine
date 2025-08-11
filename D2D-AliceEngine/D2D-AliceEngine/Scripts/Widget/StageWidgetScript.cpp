@@ -78,10 +78,6 @@ void StageWidgetScript::OnStart()
 
 	float soundUISize = 1;
 
-	auto soundObj = GetWorld()->FindObjectByName<gameObject>(L"UI");
-	if (!soundObj) return;
-	auto uiSound = soundObj->GetComponent<AudioComponent>();
-
 	auto pauseButton = m_owner->AddComponent<ButtonComponent>();
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
 	auto smallClose = m_owner->AddComponent<ButtonComponent>();
@@ -165,7 +161,7 @@ void StageWidgetScript::OnStart()
 	// 사운드 관련
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
-	auto bgm = bgmObj->GetComponent<AudioComponent>();
+	auto sound = bgmObj->GetComponent<AudioComponent>();
 
 	float bgmVolume = AudioManager::GetInstance().GetBGMVolume();
 	float sfxVolume = AudioManager::GetInstance().GetSFXVolume();
@@ -390,11 +386,11 @@ void StageWidgetScript::OnStart()
 	// ========================= Delegate
 	pauseButton->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, popUpTab,
-		toMain, toOption, toRestart, toSelect, uiSound, pauseText,
+		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText
 	] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 			GamePlayManager::GetInstance().PauseGame();
 
@@ -425,12 +421,12 @@ void StageWidgetScript::OnStart()
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, popUpTab,
-		toMain, toOption, toRestart, toSelect, uiSound, pauseText,
+		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText, soundControl,
 		bgmControl, sfxControl, bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton
 	] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 		
 		GamePlayManager::GetInstance().ResumeGame();
 
@@ -472,10 +468,10 @@ void StageWidgetScript::OnStart()
 		sfxMinusButton->SetActive(false);
 		});
 
-	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, bgmControl] {
+	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [sound, bgmControl] {
 		
-		//uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 		
 		float vol = AudioManager::GetInstance().GetBGMVolume();
 		vol += 0.1f;
@@ -484,10 +480,10 @@ void StageWidgetScript::OnStart()
 		bgmControl->SetProgress(vol);
 		});
 
-	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, bgmControl] {
+	bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [sound, bgmControl] {
 		
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 		
 		float vol = AudioManager::GetInstance().GetBGMVolume();
 		vol -= 0.1f;
@@ -496,10 +492,10 @@ void StageWidgetScript::OnStart()
 		bgmControl->SetProgress(vol);
 		});
 
-	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, sfxControl] {
+	sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [sound, sfxControl] {
 
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 
 		float sfx = AudioManager::GetInstance().GetSFXVolume();
 		sfx += 0.1f;
@@ -508,10 +504,10 @@ void StageWidgetScript::OnStart()
 		sfxControl->SetProgress(sfx);
 		});
 
-	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [uiSound, sfxControl] {
+	sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [sound, sfxControl] {
 
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 
 		float sfx = AudioManager::GetInstance().GetSFXVolume();
 		sfx -= 0.1f;
@@ -528,13 +524,13 @@ void StageWidgetScript::OnStart()
 		SceneManager::ChangeScene(L"SelectScene");
 		});
 
-	toOption->SetStateAction(Define::EButtonState::Pressed, [uiSound,
+	toOption->SetStateAction(Define::EButtonState::Pressed, [sound,
 		soundControl, bgmControl, sfxControl,
 		bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton,
 		pauseButton, closeButton, toOption, toMain, toRestart, toSelect, smallClose
 	] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 		pauseButton->SetActive(false);
 		closeButton->SetActive(false);
@@ -563,11 +559,11 @@ void StageWidgetScript::OnStart()
 	smallClose->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, toOption, toMain, toRestart, toSelect,
 		smallClose, soundControl, bgmControl, sfxControl, bgmPlusButton, bgmMinusButton,
-		sfxPlusButton, sfxMinusButton, uiSound
+		sfxPlusButton, sfxMinusButton, sound
 
 	] {
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName(L"UISound", 0.45);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 			
 		pauseButton->SetActive(true);
 		closeButton->SetActive(true);
@@ -594,11 +590,13 @@ void StageWidgetScript::OnStart()
 
 		});
 
-	toRestart->SetStateAction(Define::EButtonState::Pressed, [uiSound,
+	toRestart->SetStateAction(Define::EButtonState::Pressed, [sound,
 		pauseText, pauseButton, popUpTab, closeButton, toMain, mainText,
 		toRestart, restartText, toOption, optionText, toSelect, selectText
 	] {
-		uiSound->PlayByName(L"UISound", 0.45);
+		sound->PlayByName(L"UISound");
+
+		// TODO : 재시작 코드
 
 		pauseText->m_layer = Define::Disable;
 		pauseButton->SetActive(true);

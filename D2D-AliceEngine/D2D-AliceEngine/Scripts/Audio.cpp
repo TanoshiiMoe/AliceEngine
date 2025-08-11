@@ -1,4 +1,4 @@
-#include "Audio.h"
+ï»¿#include "Audio.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -24,7 +24,7 @@ void Audio::Initialize()
 void Audio::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ìž‘ì„±
 }
 
 void Audio::Awake()
@@ -51,13 +51,13 @@ void Audio::OnStart()
 		m_ambience->Play();
 	}
 
-	// À½·® Á¶Àý
+	// ìŒëŸ‰ ì¡°ì ˆ
 	//m_owner->GetComponent<AudioComponent>()->SetVolume(0.3f);
 }
 
 void Audio::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ìž‘ì„±
 	m_bgm->Stop();
 	m_ambience->Stop();
 	//m_owner->GetComponent<AudioComponent>()->Stop();

@@ -94,7 +94,7 @@ void TitleWidgetScript::OnStart()
 
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
-	auto bgm = bgmObj->GetComponent<AudioComponent>();
+	auto sound = bgmObj->GetComponent<AudioComponent>();
 	
 	float bgmVolume = AudioManager::GetInstance().GetBGMVolume();
 	float sfxVolume = AudioManager::GetInstance().GetSFXVolume();
@@ -127,8 +127,8 @@ void TitleWidgetScript::OnStart()
 	sfxControl->SetProgress(sfxVolume);
 	sfxControl->m_layer = Define::Disable;
 
-	auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
-	uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
+	//auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
+	//uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
 
 	auto tutorial = m_owner->AddComponent<VideoComponent>();
 	tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm",30,L"jpg",95,true);
@@ -146,7 +146,7 @@ void TitleWidgetScript::OnStart()
 	if (!staffText || !staffButton || !staffTabText) return;
 	if (!quitText || !quitButton) return;
 	if (!tutorial || !closeText || !closeButton) return;
-	if (!uiSound || !PopupTab) return;
+	if (!sound || !PopupTab) return;
 
 	float buttonBasePos = 400;
 
@@ -502,14 +502,16 @@ void TitleWidgetScript::OnStart()
 	// ======================== Delegete
 	startButton->SetStateAction(Define::EButtonState::Pressed, [
 		tutorial, startButton, quitButton, staffButton, optionButton, closeButton, closeText,
-		uiSound, continueButton, skipButton, skipText
+		sound, continueButton, skipButton, skipText
 	]()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 
-		uiSound->StopByName(L"UISound");
-		uiSound->PlayByName1(L"UISound", 0.45f);
+		sound->PlayByName(L"SFX");
+
+		//uiSound->StopByName(L"UISound");
+		//uiSound->PlayByName1(L"UISound", 0.45f);
 
 		// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 		startButton->SetActive(false);
@@ -540,13 +542,15 @@ void TitleWidgetScript::OnStart()
 
 	continueButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText, PopupTab,
-		uiSound, continueTabText
+		sound, continueTabText
 	]()		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName1(L"UISound", 0.45f);
+			sound->PlayByName(L"SFX");
+
+			//uiSound->StopByName(L"UISound");
+			//uiSound->PlayByName1(L"UISound", 0.45f);
 			
 			// 여기에 몇 초 뒤 씬 전환 넣으면 될 거 같음
 			SceneManager::ChangeScene(L"SelectScene");
@@ -569,15 +573,17 @@ void TitleWidgetScript::OnStart()
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		tutorial, startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
-		uiSound, continueTabText, optionTabText, staffTabText, staffNameText
+		sound, continueTabText, optionTabText, staffTabText, staffNameText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 			//SceneManager::ChangeScene(L"HiroScene");
 
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName1(L"UISound", 0.45f);
+			sound->PlayByName(L"SFX");
+
+			//uiSound->StopByName(L"UISound");
+			//uiSound->PlayByName1(L"UISound", 0.45f);
 
 			// 모두 활성화
 			startButton->SetActive(true);
@@ -632,7 +638,7 @@ void TitleWidgetScript::OnStart()
 
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab,
-		uiSound, optionTabText, bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
+		sound, optionTabText, bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
 		sfxControl, bgmControl, soundControl, smallClose
 	]()
 		{
@@ -641,9 +647,9 @@ void TitleWidgetScript::OnStart()
 			//SceneManager::ChangeScene(L"HiroScene");
 			
 			//if (uiSound->IsPlaying())
-			uiSound->StopByName(L"UISound");
+			sound->StopByName(L"UISound");
 
-			uiSound->PlayByName1(L"UISound", 0.45f);
+			sound->PlayByName(L"UISound");
 
 			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 			startButton->SetActive(false);
@@ -673,7 +679,7 @@ void TitleWidgetScript::OnStart()
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		uiSound, staffTabText, staffNameText
+		sound, staffTabText, staffNameText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -682,7 +688,7 @@ void TitleWidgetScript::OnStart()
 			//if (uiSound->IsPlaying())
 			//uiSound->StopByName(L"UISound");
 
-			uiSound->PlayByName(L"UISound", 0.45f);
+			sound->PlayByName(L"UISound");
 
 			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 			startButton->SetActive(false);
@@ -702,10 +708,10 @@ void TitleWidgetScript::OnStart()
 		});
 
 	// bgmVolume
-    bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [this, bgm, bgmControl, uiSound]
+    bgmMinusButton->SetStateAction(Define::EButtonState::Pressed, [sound, bgmControl]
 		{
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName1(L"UISound", 0.45f);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 			float vol = AudioManager::GetInstance().GetBGMVolume();
 			vol -= 0.1f;
@@ -714,10 +720,10 @@ void TitleWidgetScript::OnStart()
 			bgmControl->SetProgress(vol);
 		});
 
-    bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [this, bgm, bgmControl, uiSound]
+    bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [sound, bgmControl]
 		{
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName1(L"UISound", 0.45f);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 			float vol = AudioManager::GetInstance().GetBGMVolume();
 			vol += 0.1f;
@@ -727,10 +733,10 @@ void TitleWidgetScript::OnStart()
 		});
 
     sfxMinusButton->SetStateAction(Define::EButtonState::Pressed, [
-        this, uiSound, sfxControl
+        sound, sfxControl
     ] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName1(L"UISound", 0.45f);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 			float vol = AudioManager::GetInstance().GetSFXVolume();
 			vol -= 0.1f;
@@ -741,10 +747,10 @@ void TitleWidgetScript::OnStart()
 
 
     sfxPlusButton->SetStateAction(Define::EButtonState::Pressed, [
-        this, uiSound, sfxControl
+        sound, sfxControl
     ] {
-			uiSound->StopByName(L"UISound");
-			uiSound->PlayByName1(L"UISound", 0.45f);
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 		
 			float vol = AudioManager::GetInstance().GetSFXVolume();
 			vol += 0.1f;
