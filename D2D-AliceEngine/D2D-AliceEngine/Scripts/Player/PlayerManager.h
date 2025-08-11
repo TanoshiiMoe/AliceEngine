@@ -11,6 +11,7 @@ public:
 
 	void Initialize() override;
 	void OnStart() override;
+	void OnEnd() override;
 	void Update(const float& deltaSeconds) override;
 
 	// 플레이어 zPos 클램프 설정
@@ -25,8 +26,8 @@ private:
 	void Input();
 
 
-	float minZ = -230.0f;
-	float maxZ = 410.0f;
+	float minZ = -220.0f;
+	float maxZ = 380.0f;
 
 	float playerTimeScale = 1.0f;
 

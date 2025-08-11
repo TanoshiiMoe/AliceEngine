@@ -6,6 +6,8 @@
 
 namespace Define
 {
+	// 플레이어, 적은 도로너비에 따라 -220 ~ 380까지 사용합니다.
+
 	static const int SCREEN_WIDTH = 1920;	// 화면 너비
 	static const int SCREEN_HEIGHT = 1080;	// 화면 높이
 	static const int FRAME_RATE = 60;		// 프레임 레이트

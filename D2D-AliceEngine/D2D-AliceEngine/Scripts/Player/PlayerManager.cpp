@@ -21,6 +21,7 @@ void PlayerManager::Initialize()
 {
 	__super::Initialize();
 	REGISTER_SCRIPT_METHOD(OnStart);
+	REGISTER_SCRIPT_METHOD(OnEnd);
 
 	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
 }
@@ -65,6 +66,11 @@ void PlayerManager::OnStart()
 
 	// 인풋 컴포넌트
 	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), [this]() { Input(); });
+}
+
+void PlayerManager::OnEnd()
+{
+	instance = nullptr;
 }
 
 void PlayerManager::Update(const float& deltaSeconds)
