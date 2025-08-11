@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 
 #include <math.h>
 #include <random>
 #include <Define/Define.h>
 
 /*
-* ¼öÇĞ°ü·ÃÀÔ´Ï´Ù. 
-* nodiscard´Â ¹İÈ¯°ªÀ» °­Á¦·Î »ç¿ëÇÏµµ·Ï ÇÏ´Â Å°¿öµåÀÔ´Ï´Ù.
+* ìˆ˜í•™ê´€ë ¨ì…ë‹ˆë‹¤. 
+* nodiscardëŠ” ë°˜í™˜ê°’ì„ ê°•ì œë¡œ ì‚¬ìš©í•˜ë„ë¡ í•˜ëŠ” í‚¤ì›Œë“œì…ë‹ˆë‹¤.
 */
 
 template<typename T>
@@ -127,14 +127,14 @@ TVector2<T> operator*(const TVector2<T>& lhs, const TVector2<T>& rhs)
 	return TVector2<T>(lhs.x * rhs.x, lhs.y * rhs.y);
 }
 
-//  float * TVector2 ¿¬»ê (¼ø¼­ ¹Ù²ï °æ¿ì)
+//  float * TVector2 ì—°ì‚° (ìˆœì„œ ë°”ë€ ê²½ìš°)
 template<typename T>
 TVector2<T> operator*(const float& value, const TVector2<T>& vec)
 {
 	return TVector2<T>(vec.x * value, vec.y * value);
 }
 
-// TVector2 * float ¿¬»ê (Àü¿ª ÇÔ¼ö·Î)
+// TVector2 * float ì—°ì‚° (ì „ì—­ í•¨ìˆ˜ë¡œ)
 template<typename T>
 TVector2<T> operator*(const TVector2<T>& vec, const float& value)
 {
@@ -180,7 +180,7 @@ namespace Math
 	template<typename T>
 	struct TRandom
 	{
-		// µÎ ¼ö »çÀÌÀÇ ·£´ıÇÑ ¼ö¸¦ ¹İÈ¯. ¹İÈ¯°ªÀÌ ¾øÀ¸¸é ¿À·ù.
+		// ë‘ ìˆ˜ ì‚¬ì´ì˜ ëœë¤í•œ ìˆ˜ë¥¼ ë°˜í™˜. ë°˜í™˜ê°’ì´ ì—†ìœ¼ë©´ ì˜¤ë¥˜.
 		[[nodiscard]] static float GetRandomInRange(T Min, T Max)
 		{
 			static std::mt19937 gen(rd());
@@ -188,7 +188,7 @@ namespace Math
 			return dis(gen);
 		}
 
-		// µµ³Ó ¸ğ¾çÀÇ ±¸°£¿¡ ÀÓÀÇÀÇ Á¡À» ¹İÈ¯ÇÏ´Â ÇÔ¼ö.
+		// ë„ë„› ëª¨ì–‘ì˜ êµ¬ê°„ì— ì„ì˜ì˜ ì ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜.
 		[[nodiscard]] static TVector2<T> GetRandomPointInTorus2D(const T& centerX, const T& centerY, const T& innerRadius, const T& outerRadius)
 		{
 			static std::mt19937 gen(rd());
@@ -200,7 +200,7 @@ namespace Math
 			return TVector2<T>(centerX + newRadius * std::cos(theta), centerY + newRadius * std::sin(theta));
 		}
 
-		// ¿ø ¸ğ¾çÀÇ ±¸°£¿¡ ÀÓÀÇÀÇ Á¡À» ¹İÈ¯ÇÏ´Â ÇÔ¼ö.
+		// ì› ëª¨ì–‘ì˜ êµ¬ê°„ì— ì„ì˜ì˜ ì ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜.
 		[[nodiscard]] static TVector2<T> GetRandomPointInCircle2D(const T& centerX, const T& centerY, const T& radius)
 		{
 			static std::mt19937 gen(rd());
@@ -219,25 +219,39 @@ namespace Math
 		return (v < lo) ? lo : (hi < v) ? hi : v;
 	}
 
+	// Clamp í•¨ìˆ˜ (ëŒ€ì†Œë¬¸ì êµ¬ë¶„)
+	template <typename T>
+	constexpr const T& Clamp(const T& v, const T& lo, const T& hi) 
+	{
+		return (v < lo) ? lo : (hi < v) ? hi : v;
+	}
+
+	// Lerp í•¨ìˆ˜ (ì„ í˜• ë³´ê°„)
+	template <typename T>
+	constexpr T Lerp(const T& a, const T& b, float t)
+	{
+		return a + (b - a) * t;
+	}
+
 	// EaseInOut
 	inline float EaseInOut(float a, float b, float elapsedTime, float duration) {
-		// º¸°£ °è¼ö t °è»ê
+		// ë³´ê°„ ê³„ìˆ˜ t ê³„ì‚°
 		float t = elapsedTime / duration;
-		t = clamp(t, 0.0f, 1.0f); // ¹üÀ§ Á¦ÇÑ
+		t = clamp(t, 0.0f, 1.0f); // ë²”ìœ„ ì œí•œ
 
-		// EaseInOut Àû¿ë (SmoothStep)
+		// EaseInOut ì ìš© (SmoothStep)
 		float smoothT = t * t * (3.0f - 2.0f * t);
 
-		// ¼±Çü º¸°£
+		// ì„ í˜• ë³´ê°„
 		return a + (b - a) * smoothT;
 	}
 
 	// EaseOut
 	inline float EaseOut(float a, float b, float elapsedTime, float duration) {
 		float t = elapsedTime / duration;
-		t = clamp(t, 0.0f, 1.0f); // ¹üÀ§ Á¦ÇÑ
+		t = clamp(t, 0.0f, 1.0f); // ë²”ìœ„ ì œí•œ
 
-		// EaseOut: ´À·ÁÁö´Â °î¼± (¿¹: 1 - (1 - t)^2)
+		// EaseOut: ëŠë ¤ì§€ëŠ” ê³¡ì„  (ì˜ˆ: 1 - (1 - t)^2)
 		float easeT = 1.0f - (1.0f - t) * (1.0f - t);
 
 		return a + (b - a) * easeT;
@@ -261,6 +275,42 @@ namespace Math
 		return oneMinusT * oneMinusT * p0 +
 			2.0f * oneMinusT * t * p1 +
 			t * t * p2;
+	}
+
+	// 0..1 ë²”ìœ„ ë³´ì •ìš©
+	inline float clamp01(float v) { return (v < 0.f) ? 0.f : (v > 1.f ? 1.f : v); }
+
+	// Quintic Smoothstep (ë” ë¶€ë“œëŸ¬ìš´ S-curve)
+	inline float smoothstep5(float t) {
+		t = clamp01(t);
+		return t * t * t * (t * (t * 6.f - 15.f) + 10.f);
+	}
+
+	// ì£¼ê¸° tâˆˆ[0,1)ì—ì„œ ì‚¼ê°íŒŒ(0..1)
+	inline float triangle01(float u01) {
+		return 1.f - std::fabs(2.f * u01 - 1.f); // 0..1
+	}
+
+	// ëª¨ì–‘ ì œì–´ ê°€ëŠ¥í•œ í„ìŠ¤ ([-1,1]ë¡œ ë°˜í™˜)
+	// sharpness: ì •ì  ë‚ ì¹´ë¡œì›€(>1ì´ë©´ ë¾°ì¡±, <1ì´ë©´ ë‘¥ê¸€), ease: 0..1 (ì •ì /ë°”ë‹¥ì„ ì–¼ë§ˆë‚˜ ë¶€ë“œëŸ½ê²Œ í• ì§€)
+	inline float eased_triangle_pulse(float u01, float sharpness = 1.0f, float ease = 0.7f) {
+		// ê¸°ë³¸ ì‚¼ê°íŒŒ (0..1)
+		float tri = triangle01(u01);
+
+		// ì •ì  ë‚ ì¹´ë¡œì›€ ì¡°ì ˆ (powë¡œ í˜•íƒœ ì œì–´)
+		if (sharpness != 1.0f) {
+			tri = std::pow(tri, sharpness);
+		}
+
+		// ì–‘ìª½ ê°€ì¥ìë¦¬ ë¶€ë“œëŸ½ê²Œ (quintic smoothstepë¡œ ì‚´ì§ ë¼ìš´ë”©)
+		if (ease > 0.f) {
+			// ease ë¹„ìœ¨ë§Œí¼ trië¥¼ ë¶€ë“œëŸ½ê²Œ ì„ìŒ
+			float s = smoothstep5(tri);
+			tri = (1.f - ease) * tri + ease * s;
+		}
+
+		// -1..1ë¡œ ë³€í™˜
+		return tri * 2.f - 1.f;
 	}
 }
 

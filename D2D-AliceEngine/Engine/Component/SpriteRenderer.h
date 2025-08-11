@@ -5,6 +5,7 @@
 using namespace Microsoft::WRL;
 
 struct ID2D1Bitmap1;
+struct ID2D1Effect;
 class SpriteRenderer : public RenderComponent
 {
 public:
@@ -25,6 +26,10 @@ public:
 
 	void SetSlice(float x, float y, float w, float h);
 	void SetSkewing(bool _isSkewing, FVector2 _skewAngle = FVector2(0.0f, 0.0f));
+
+	// Effect helpers for transitions
+	void SetOpacity(float alpha); // 0..1
+	void ClearEffect() { m_effect.Reset(); }
 
 	SpriteInfo spriteInfo; // 스프라이트 정보
 

@@ -1,4 +1,4 @@
-#include "EnemyBike.h"
+ï»¿#include "EnemyBike.h"
 #include <Scripts/Bike/LaneController.h>
 #include "System/ScriptSystem.h"
 #include <Component/SpriteRenderer.h>
@@ -29,7 +29,7 @@ void EnemyBike::OnStart()
 		anim->Play();
 		anim->OnStart();
 
-		// ½ºÄÉÀÏ Á¶Á¤
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		anim->SetRelativeScale(scale);
 
 		float height = anim->GetSpriteSizeY() * scale.y;
@@ -43,4 +43,3 @@ void EnemyBike::OnStart()
 		owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Bike/bike.png");
 	}
 }
-

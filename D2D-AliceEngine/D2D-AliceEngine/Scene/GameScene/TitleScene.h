@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
+#include <Manager/TimerManager.h>
 
 class TextRenderComponent;
 class TitleScene : public Scene
@@ -28,5 +29,7 @@ public:
 	gameObject* m_button;
 
 	gameObject* iamge;
+
+	FTimerHandle timer;
 };
 

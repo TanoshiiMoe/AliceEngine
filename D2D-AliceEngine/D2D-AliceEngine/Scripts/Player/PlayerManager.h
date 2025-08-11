@@ -2,6 +2,7 @@
 #include "Component/ScriptComponent.h"
 #include "Animation/AnimatorInstance.h"
 #include "Animation/AnimationController.h"
+#include <Manager/TimerManager.h>
 
 class PlayerManager : public  ScriptComponent
 {
@@ -12,7 +13,11 @@ public:
 	void OnStart() override;
 	void Update(const float& deltaSeconds) override;
 
+	// 플레이어 zPos 클램프 설정
 	void SetZClamp(float _min, float _max);
+	// 플레이어를 잔상과 함께 서서히 사라지도록 파괴
+	void DelayDestroy();
+
 private:
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
@@ -24,5 +29,15 @@ private:
 	float maxZ = 410.0f;
 
 	float playerTimeScale = 1.0f;
+
+	// ===== DelayDestroy =====
+	bool m_isDelaying = false;
+	bool m_skipGhostOnDestroy = false;
+	bool m_isFading = false;
+	float m_fadeDuration = 1.0f;
+	float m_fadeElapsed = 0.0f;
+	class SpriteRenderer* m_fadeTargetSR = nullptr;
+	class gameObject* m_ghostGO = nullptr;
+	FTimerHandle m_fadeHandle;
 };
 

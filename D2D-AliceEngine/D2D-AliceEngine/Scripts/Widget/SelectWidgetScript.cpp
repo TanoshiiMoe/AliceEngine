@@ -1,4 +1,4 @@
-#include "SelectWidgetScript.h"
+ï»¿#include "SelectWidgetScript.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -32,7 +32,7 @@ void SelectWidgetScript::Initialize()
 void SelectWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ìž‘ì„±
 }
 
 void SelectWidgetScript::Awake()
@@ -63,20 +63,21 @@ void SelectWidgetScript::OnStart()
 	auto stage3 = m_owner->AddComponent<ButtonComponent>();
 
 	// ===================================================== //
-	//continueText->SetFontFromFile();
-	continueText->SetText(L"ÀÌ¾îÇÒ °÷ ¼±ÅÃ");
-	continueText->SetColor(FColor(0, 234, 255, 255));
 	continueText->SetFontSize(70.0f);
+	continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	continueText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	continueText->SetText(L"ìž„ë¬´ ì„ íƒ");
+	continueText->SetColor(FColor(0, 234, 255, 255));
 	continueText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(continueText->GetRelativeSize(),FVector2(-0.5,-0.5))
 		+FVector2(0,-350));
 	continueText->m_layer = 300;
 
 	// ======================== closeText
-	closeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	closeText->SetFont(L"»ç¿ù½ÊÀ°ÀÏ TTF ¾à¼Ó", L"ko-KR");
-	closeText->SetText(L"´Ý±â");
 	closeText->SetFontSize(55.0f);
+	closeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	closeText->SetFont(L"ì‚¬ì›”ì‹­ìœ¡ì¼ TTF ì•½ì†", L"ko-KR");
+	closeText->SetText(L"ë‹«ê¸°");
 	closeText->SetColor(FColor::White);
 	FVector2 closeTextRectSize = closeText->GetRelativeSize();
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
@@ -127,24 +128,101 @@ void SelectWidgetScript::OnStart()
 	stage3->SetRelativeScale(FVector2(1, 1));
 	stage3->m_layer = 300;
 
-	// ====================== Delegate
+	// ====================== Delegate & Hover Effects
+	
+	// stage1 Button íš¨ê³¼ (ì´ˆë¡ìƒ‰ ê¸€ë¡œìš° - ì‰¬ìš´ ìŠ¤í…Œì´ì§€)
+	stage1->SetStateAction(Define::EButtonState::Hover, [stage1]()
+	{
+		stage1->StartHoverPulse(0.8f, 0.04f);
+		stage1->StartEffectAnimation(0.3f, 1.2f, FColor::Green);
+	});
+
+	stage1->SetStateAction(Define::EButtonState::HoverLeave, [stage1]()
+	{
+		stage1->StopHoverPulse();
+		stage1->StartEffectAnimation(0.2f, 0.0f, FColor::Green);
+	});
+
+	stage1->SetStateAction(Define::EButtonState::Release, [stage1]()
+	{
+		stage1->StopHoverPulse();
+		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::Green);
+	});
+
 	stage1->SetStateAction(Define::EButtonState::Pressed, []{
 		
-		// TODO: ¿©±â¿¡ ½ºÅ×ÀÌÁö ¾ÀÀ¸·Î ÀÌµ¿ÇÏ´Â ÄÚµå Ãß°¡
-		
+		// TODO: ì—¬ê¸°ì— ìŠ¤í…Œì´ì§€ ì”¬ìœ¼ë¡œ ì´ë™í•˜ëŠ” ì½”ë“œ ì¶”ê°€
+		SceneManager::ChangeScene(Define::Scene_Stage1);
 		});
+
+	// stage2 Button íš¨ê³¼ (ë…¸ëž€ìƒ‰ ê¸€ë¡œìš° - ë³´í†µ ìŠ¤í…Œì´ì§€)
+	stage2->SetStateAction(Define::EButtonState::Hover, [stage2]()
+	{
+		stage2->StartHoverPulse(0.8f, 0.04f);
+		stage2->StartEffectAnimation(0.3f, 1.2f, FColor::Yellow);
+	});
+
+	stage2->SetStateAction(Define::EButtonState::HoverLeave, [stage2]()
+	{
+		stage2->StopHoverPulse();
+		stage2->StartEffectAnimation(0.2f, 0.0f, FColor::Yellow);
+	});
+
+	stage2->SetStateAction(Define::EButtonState::Release, [stage2]()
+	{
+		stage2->StopHoverPulse();
+		stage2->StartEffectAnimation(0.1f, 0.0f, FColor::Yellow);
+	});
 
 	stage2->SetStateAction(Define::EButtonState::Pressed, [] {
 
-		// TODO: ¿©±â¿¡ ½ºÅ×ÀÌÁö ¾ÀÀ¸·Î ÀÌµ¿ÇÏ´Â ÄÚµå Ãß°¡
-		
+		// TODO: ì—¬ê¸°ì— ìŠ¤í…Œì´ì§€ ì”¬ìœ¼ë¡œ ì´ë™í•˜ëŠ” ì½”ë“œ ì¶”ê°€
+		SceneManager::ChangeScene(Define::Scene_Stage2);
 		});
+
+	// stage3 Button íš¨ê³¼ (ë¹¨ê°„ìƒ‰ ê¸€ë¡œìš° - ì–´ë ¤ìš´ ìŠ¤í…Œì´ì§€/ë³´ìŠ¤)
+	stage3->SetStateAction(Define::EButtonState::Hover, [stage3]()
+	{
+		stage3->StartHoverPulse(0.8f, 0.04f);
+		stage3->StartEffectAnimation(0.3f, 1.2f, FColor::Red);
+	});
+
+	stage3->SetStateAction(Define::EButtonState::HoverLeave, [stage3]()
+	{
+		stage3->StopHoverPulse();
+		stage3->StartEffectAnimation(0.2f, 0.0f, FColor::Red);
+	});
+
+	stage3->SetStateAction(Define::EButtonState::Release, [stage3]()
+	{
+		stage3->StopHoverPulse();
+		stage3->StartEffectAnimation(0.1f, 0.0f, FColor::Red);
+	});
 
 	stage3->SetStateAction(Define::EButtonState::Pressed, [] {
 		
-		// TODO: ¿©±â¿¡ ½ºÅ×ÀÌÁö ¾ÀÀ¸·Î ÀÌµ¿ÇÏ´Â ÄÚµå Ãß°¡
-		
+		// TODO: ì—¬ê¸°ì— ìŠ¤í…Œì´ì§€ ì”¬ìœ¼ë¡œ ì´ë™í•˜ëŠ” ì½”ë“œ ì¶”ê°€
+		SceneManager::ChangeScene(Define::Scene_Stage3);
 		});
+
+	// closeButton íš¨ê³¼ (ì£¼í™©ìƒ‰ ê¸€ë¡œìš°)
+	closeButton->SetStateAction(Define::EButtonState::Hover, [closeButton]()
+	{
+		closeButton->StartHoverPulse(0.8f, 0.04f);
+		closeButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+	});
+
+	closeButton->SetStateAction(Define::EButtonState::HoverLeave, [closeButton]()
+	{
+		closeButton->StopHoverPulse();
+		closeButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+	});
+
+	closeButton->SetStateAction(Define::EButtonState::Release, [closeButton]()
+	{
+		closeButton->StopHoverPulse();
+		closeButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+	});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed,[] {
 		

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Object/gameObject.h>
 #include <Object/Camera.h>
 #include <Helpers/StringHelper.h>
@@ -20,6 +20,7 @@ public:
 	virtual void OnExit();
 
 	void VisibleMemoryInfo();
+    void UpdateDebugHUD(float deltaTime);
 
 	Camera* GetCamera()
 	{
@@ -49,6 +50,8 @@ public:
 	bool RemoveObjectByName(const std::wstring& objectName);
 
 	bool RemoveAllObjectsByName(const std::wstring& name);
+
+	void FlushPendingRemovals();
 
 	template<class T>
 	bool RemoveObjectByType()
@@ -172,7 +175,13 @@ public:
 
 private:
 	gameObject* m_sysinfoWidget;
+    gameObject* m_fpsWidget{ nullptr };
+    bool m_debugHudVisible{ true };
 	std::unordered_map<std::wstring, std::unique_ptr<gameObject>> m_objects;
 	std::unordered_map<std::wstring, std::unordered_set<std::wstring>> m_nameToUUIDs;
+
+	std::unordered_set<std::wstring> m_pendingDeleteUUIDs;
+
+	std::wstring FindUUIDByPointer(gameObject* ptr) const;
 };
 

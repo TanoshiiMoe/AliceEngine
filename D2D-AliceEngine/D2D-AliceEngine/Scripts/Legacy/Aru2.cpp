@@ -1,4 +1,4 @@
-#include "Aru2.h"
+ï»¿#include "Aru2.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -10,6 +10,7 @@
 #include <Component/StatComponent.h>
 #include <System/ScriptSystem.h>
 #include <Helpers/CoordHelper.h>
+#include <Component/Collider.h>
 
 void Aru2::Initialize()
 {
@@ -23,37 +24,43 @@ void Aru2::Initialize()
 void Aru2::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void Aru2::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void Aru2::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void Aru2::OnStart()
 {
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	m_aru2 = GetOwner();
-	m_aru2->transform()->SetPosition(300, 0);
-	m_aru2->transform()->SetRotation(0);
-	m_aru2->transform()->SetScale(0.5f, 0.5f);
-	m_aru2->transform()->SetPivot(0.5f);
+	//m_aru2->transform()->SetPosition(300, 0);
+	//m_aru2->transform()->SetRotation(0);
+	//m_aru2->transform()->SetScale(0.5f, 0.5f);
+	//m_aru2->transform()->SetPivot(0.5f);
 	m_aru2->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
 	m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Green);
 
+	m_aru2->SetTag(L"Enemy");
+	if (auto* t = m_aru2->AddComponent<Collider>())
+	{
+		t->SetBoxSize(FVector2(50, 50));
+	}
+
 	/*
-	* °ÔÀÓ¿ÀºêÁ§Æ®¿¡ TextRenderComponent¸¦ ºÙÀÌ´Â ¿¹½Ã
+	* ê²Œì„ì˜¤ë¸Œì íŠ¸ì— TextRenderComponentë¥¼ ë¶™ì´ëŠ” ì˜ˆì‹œ
 	*/
 
 	TextRenderComponent* m_Aru2TextCmp = m_aru2->AddComponent<TextRenderComponent>();
@@ -100,16 +107,16 @@ void Aru2::OnStart()
 
 
 	/*
-	* Ä¿½ºÅÒ ±¸Á¶Ã¼·Î µ¨¸®°ÔÀÌÆ®¸¦ ¹ÙÀÎµù ÇÏ´Â ¿¹Á¦
+	* ì»¤ìŠ¤í…€ êµ¬ì¡°ì²´ë¡œ ë¸ë¦¬ê²Œì´íŠ¸ë¥¼ ë°”ì¸ë”© í•˜ëŠ” ì˜ˆì œ
 	*/
 	m_aru2Stat = m_aru2->AddComponent<StatComponent<AruStat2>>();
 	m_aru2Stat->SetStat("HP", 100);
 	m_aru2Stat->SetStat("MAXHP", 100);
 	m_aru2Stat->SetStat("MP", 150);
-	m_aru2NameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", m_aru2Stat->GetStat("HP"));
-	m_aru2NameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", m_aru2Stat->GetStat("HP"));
-	m_aru2NameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", m_aru2Stat->GetStat("MAXHP"));
-	m_aru2NameTexts[4]->SetTextFormat(L"¸¶³ª : ", m_aru2Stat->GetStat("MP"));
+	m_aru2NameTexts[1]->SetTextFormat(L"ì§ì „ ì²´ë ¥ : ", m_aru2Stat->GetStat("HP"));
+	m_aru2NameTexts[2]->SetTextFormat(L"í˜„ì¬ ì²´ë ¥ : ", m_aru2Stat->GetStat("HP"));
+	m_aru2NameTexts[3]->SetTextFormat(L"ìµœëŒ€ ì²´ë ¥ : ", m_aru2Stat->GetStat("MAXHP"));
+	m_aru2NameTexts[4]->SetTextFormat(L"ë§ˆë‚˜ : ", m_aru2Stat->GetStat("MP"));
 
 	widgetSize = m_aru2NameTexts[1]->GetRelativeSize();
 	m_aru2NameTexts[1]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 0.0)));
@@ -122,36 +129,36 @@ void Aru2::OnStart()
 
 	m_aru2Stat->OnChangeStatMap["HP"].Add(m_aru2->GetHandle(), [this](float oldVal, float newVal)
 	{
-		if (newVal <= 0)	// Á×´Â ½ÃÁ¡
+		if (newVal <= 0)	// ì£½ëŠ” ì‹œì 
 		{
 			m_aru2->RemoveComponent<BoxComponent>(m_aru2->GetComponent<BoxComponent>());
 			m_aru2->GetComponent<SpriteRenderer>()->LoadData(L"dead.png");
 			m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
 		}
-		else if (oldVal <= 0)	// ºÎÈ°ÇÏ´Â ½ÃÁ¡
+		else if (oldVal <= 0)	// ë¶€í™œí•˜ëŠ” ì‹œì 
 		{
 			m_aru2->RemoveComponent<BoxComponent>(m_aru2->GetComponent<BoxComponent>());
 			m_aru2->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
 			m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
 		}
-		m_aru2NameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", oldVal);
-		m_aru2NameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", newVal);
+		m_aru2NameTexts[1]->SetTextFormat(L"ì§ì „ ì²´ë ¥ : ", oldVal);
+		m_aru2NameTexts[2]->SetTextFormat(L"í˜„ì¬ ì²´ë ¥ : ", newVal);
 	});;
 
 	m_aru2Stat->OnChangeStatMap["MAXHP"].Add(m_aru2->GetHandle(), [this](float oldVal, float newVal)
 	{
-		m_aru2NameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", newVal);
+		m_aru2NameTexts[3]->SetTextFormat(L"ìµœëŒ€ ì²´ë ¥ : ", newVal);
 	});;
 
 	m_aru2Stat->OnChangeStatMap["MP"].Add(m_aru2->GetHandle(), [this](float oldVal, float newVal)
 	{
-		m_aru2NameTexts[4]->SetTextFormat(L"¸¶³ª : ", newVal);
+		m_aru2NameTexts[4]->SetTextFormat(L"ë§ˆë‚˜ : ", newVal);
 	});;
 }
 
 void Aru2::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 void Aru2::OnDestroy()
@@ -161,5 +168,5 @@ void Aru2::OnDestroy()
 
 void Aru2::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }

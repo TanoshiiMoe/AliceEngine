@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 #include "pch.h"
 #include "D2DRenderManager.h"
 #include <Manager/SceneManager.h>
 #include <Define/Define.h>
 #include <Helpers/FileHelper.h>
-#include <d2d1_3.h>            // ID2D1DeviceContext2, ID2D1Factory2 µî
-#include <d2d1effectauthor.h>  // LoadPixelShader °ü·Ã
-#include <d2d1effecthelpers.h> // ¼ÎÀÌ´õ ÇïÆÛ
+#include <d2d1_3.h>            // ID2D1DeviceContext2, ID2D1Factory2 ë“±
+#include <d2d1effectauthor.h>  // LoadPixelShader ê´€ë ¨
+#include <d2d1effecthelpers.h> // ì…°ì´ë” í—¬í¼
 #include <Manager/PackageResourceManager.h>
 
 D2DRenderManager::D2DRenderManager()
@@ -27,7 +27,7 @@ ID2D1DeviceContext7* D2DRenderManager::GetD2DDevice()
 void D2DRenderManager::Initialize(HWND hwnd)
 {
 	m_hwnd = hwnd;
-	// D3D11 µğ¹ÙÀÌ½º »ı¼º
+	// D3D11 ë””ë°”ì´ìŠ¤ ìƒì„±
 	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 	D3D_FEATURE_LEVEL obtainedLevel;
 	HRESULT hr = D3D11CreateDevice(
@@ -55,7 +55,7 @@ void D2DRenderManager::Initialize(HWND hwnd)
 		return;
 	}
 
-	// D2D ÆÑÅä¸® ¹× µğ¹ÙÀÌ½º
+	// D2D íŒ©í† ë¦¬ ë° ë””ë°”ì´ìŠ¤
 	ComPtr<ID2D1Factory8> d2dFactory;
 	D2D1_FACTORY_OPTIONS options = {};
 	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, options, d2dFactory.GetAddressOf());
@@ -80,7 +80,7 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	ComPtr<IDXGIFactory7> dxgiFactory;
 	CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
 
-	// SwapChain »ı¼º
+	// SwapChain ìƒì„±
 	DXGI_SWAP_CHAIN_DESC1 scDesc = {};
 	scDesc.Width = GetApplicationSize().x;
 	scDesc.Height = GetApplicationSize().y;
@@ -99,7 +99,7 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	);
 	assert(SUCCEEDED(hr));
 
-	// ¹é¹öÆÛ¸¦ Å¸°ÙÀ¸·Î ¼³Á¤
+	// ë°±ë²„í¼ë¥¼ íƒ€ê²Ÿìœ¼ë¡œ ì„¤ì •
 	ComPtr<IDXGISurface> backBuffer;
 	m_dxgiSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
 	D2D1_BITMAP_PROPERTIES1 bmpProps = D2D1::BitmapProperties1(
@@ -109,81 +109,82 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, m_bitmapTarget.GetAddressOf());
 	//m_d2dDeviceContext->SetTarget(m_bitmapTarget.Get());
 
-	// DirectWrite ÆÑÅÍ¸®¸¦ ¸¸µì´Ï´Ù.
+	// DirectWrite íŒ©í„°ë¦¬ë¥¼ ë§Œë“­ë‹ˆë‹¤.
 	DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
 		__uuidof(m_dWriteFactory),
 		reinterpret_cast<IUnknown**>(m_dWriteFactory.GetAddressOf()));
 
-	// 4. D2D Å¸°Ù ºñÆ®¸Ê ¹× SetTarget
+	// 4. D2D íƒ€ê²Ÿ ë¹„íŠ¸ë§µ ë° SetTarget
 	//CreateSwapChainAndD2DTarget();
 	CreateAfterEffectScreenRenderTarget();
 
-	// 7. SpriteBatch »ı¼º
+	// 7. SpriteBatch ìƒì„±
 	hr = m_d2dDeviceContext->CreateSpriteBatch(m_spriteBatch.GetAddressOf());
 	assert(SUCCEEDED(hr));
 
 	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
 
-	hr = CreateBitmapFromFile(L"../Resource/BackGround/blood.png", m_overlayBitmap.GetAddressOf());
+	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"BackGround/blood.png");
+	hr = CreateBitmapFromFile(filePath.c_str(), m_overlayBitmap.GetAddressOf());
 	assert(SUCCEEDED(hr));
 
 
-	// ÀÌ°Íµé µ¿ÀûÀ¸·Î »ç¿ëÇÒ ¼ö ÀÖ°Ô ¸®ÆÑ ÇÊ¿ä
+	// ì´ê²ƒë“¤ ë™ì ìœ¼ë¡œ ì‚¬ìš©í•  ìˆ˜ ìˆê²Œ ë¦¬íŒ© í•„ìš”
 
-	// Ã¤µµ
+	// ì±„ë„
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Saturation, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());     
 	//m_sceneEffect->SetValue(D2D1_SATURATION_PROP_SATURATION, 2.0f);	
 
-	// Åõ¸íµµ -
+	// íˆ¬ëª…ë„ -
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Opacity, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
 	//m_sceneEffect->SetValue(D2D1_OPACITY_PROP_OPACITY, 0.9);
 
-	// Èå¸² (GaussianBlur)
+	// íë¦¼ (GaussianBlur)
 	//m_d2dDeviceContext->CreateEffect(CLSID_D2D1GaussianBlur, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
-	//m_sceneEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 6.0f);  // ºí·¯ °­µµ
+	//m_sceneEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 6.0f);  // ë¸”ëŸ¬ ê°•ë„
 
-	// ¹æÇâ Èå¸² (DirectionalBlur)
+	// ë°©í–¥ íë¦¼ (DirectionalBlur)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1DirectionalBlur, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
-	//m_sceneEffect->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, 45.0f); // °¢µµ (µµ)
+	//m_sceneEffect->SetValue(D2D1_DIRECTIONALBLUR_PROP_ANGLE, 45.0f); // ê°ë„ (ë„)
 	//m_sceneEffect->SetValue(D2D1_DIRECTIONALBLUR_PROP_STANDARD_DEVIATION, 5.0f);
 
-	// ±×¸²ÀÚ (Shadow) -
+	// ê·¸ë¦¼ì (Shadow) -
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Shadow, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
-	//m_sceneEffect->SetValue(D2D1_SHADOW_PROP_COLOR, D2D1::Vector4F(0.0f, 0.0f, 0.0f, 0.5f)); // °ËÀº ±×¸²ÀÚ
-	//m_sceneEffect->SetValue(D2D1_SHADOW_PROP_BLUR_STANDARD_DEVIATION, 1.0f); // Èå¸² °­µµ
+	//m_sceneEffect->SetValue(D2D1_SHADOW_PROP_COLOR, D2D1::Vector4F(0.0f, 0.0f, 0.0f, 0.5f)); // ê²€ì€ ê·¸ë¦¼ì
+	//m_sceneEffect->SetValue(D2D1_SHADOW_PROP_BLUR_STANDARD_DEVIATION, 1.0f); // íë¦¼ ê°•ë„
 
-	// »öÁ¶ È¸Àü (HueRotation)
+	// ìƒ‰ì¡° íšŒì „ (HueRotation)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1HueRotation, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
-	//m_sceneEffect->SetValue(D2D1_HUEROTATION_PROP_ANGLE, 120.0f);  // 0~360µµ
+	//m_sceneEffect->SetValue(D2D1_HUEROTATION_PROP_ANGLE, 120.0f);  // 0~360ë„
 
-	//¼¼ÇÇ¾ÆÅæ (Sepia)
+	//ì„¸í”¼ì•„í†¤ (Sepia)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Sepia, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
 	//m_sceneEffect->SetValue(D2D1_SEPIA_PROP_INTENSITY, 0.9f);  // 0.0 ~ 1.0
 
-	// ºñ³×Æ® È¿°ú (Vignette)
+	// ë¹„ë„¤íŠ¸ íš¨ê³¼ (Vignette)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Vignette, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
 	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_COLOR, D2D1::Vector4F(0, 0, 0, 1));
 	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_STRENGTH, 3.0f);
 	//m_sceneEffect->SetValue(D2D1_VIGNETTE_PROP_TRANSITION_SIZE, 2.0f);
 
-	// »şÇÁ´× (Sharpen)
+	// ìƒ¤í”„ë‹ (Sharpen)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Sharpen, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_SHARPNESS, 5.0f);   // 0.0 ~ 10.0
-	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // ¿§Áö °­Á¶ ÀÓ°è°ª
+	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // ì—£ì§€ ê°•ì¡° ì„ê³„ê°’
 
 
-	// µÎ È¿°ú¸¦ ÀÌ¾î¼­ ¸¸µå´Â ¹æ¹ı
-	// ºñ³×Æ® È¿°ú (Vignette)
+	// ë‘ íš¨ê³¼ë¥¼ ì´ì–´ì„œ ë§Œë“œëŠ” ë°©ë²•
+	// ë¹„ë„¤íŠ¸ íš¨ê³¼ (Vignette)
 	//ComPtr<ID2D1Effect> vignetteEffect;
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Vignette, vignetteEffect.GetAddressOf());
 	//vignetteEffect->SetInput(0, m_screenBitmap.Get());
@@ -191,11 +192,11 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	//vignetteEffect->SetValue(D2D1_VIGNETTE_PROP_STRENGTH, 0.8f);
 	//vignetteEffect->SetValue(D2D1_VIGNETTE_PROP_TRANSITION_SIZE, 0.3f);
 	//
-	//// »şÇÁ´× (Sharpen)
+	//// ìƒ¤í”„ë‹ (Sharpen)
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Sharpen, m_sceneEffect.GetAddressOf());
 	//m_sceneEffect->SetInputEffect(0, vignetteEffect.Get());
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_SHARPNESS, 5.0f);   // 0.0 ~ 10.0
-	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // ¿§Áö °­Á¶ ÀÓ°è°ª
+	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // ì—£ì§€ ê°•ì¡° ì„ê³„ê°’
 
 }
 
@@ -226,16 +227,16 @@ FVector2 D2DRenderManager::GetApplicationSize()
 
 void D2DRenderManager::CreateSwapChainAndD2DTarget()
 {
-	// 1. ÇöÀç Å¸°Ù ÇØÁ¦
+	// 1. í˜„ì¬ íƒ€ê²Ÿ í•´ì œ
 	if (m_d2dDeviceContext)
 	{
 		m_d2dDeviceContext->SetTarget(nullptr);
 	}
 	m_screenBitmap.Reset();
 
-	// 2. SwapChain Àç¼³Á¤
+	// 2. SwapChain ì¬ì„¤ì •
 	if (m_dxgiSwapChain) {
-		// ResizeBuffers: ³ĞÀÌ/³ôÀÌ°¡ 0ÀÌ¸é ÇöÀç ¼³Á¤ À¯Áö, ¿©±â¼± ½ÇÁ¦ Å©±â·Î ³Ñ±é´Ï´Ù.
+		// ResizeBuffers: ë„“ì´/ë†’ì´ê°€ 0ì´ë©´ í˜„ì¬ ì„¤ì • ìœ ì§€, ì—¬ê¸°ì„  ì‹¤ì œ í¬ê¸°ë¡œ ë„˜ê¹ë‹ˆë‹¤.
 		m_dxgiSwapChain->ResizeBuffers(
 			0,
 			GetApplicationSize().x,
@@ -245,7 +246,7 @@ void D2DRenderManager::CreateSwapChainAndD2DTarget()
 		);
 	}
 
-	// 3. ¹é¹öÆÛ IDXGISurface ¾ò±â
+	// 3. ë°±ë²„í¼ IDXGISurface ì–»ê¸°
 	ComPtr<IDXGISurface> backBuffer;
 	HRESULT hr = m_dxgiSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
 	if (FAILED(hr)) {
@@ -253,20 +254,20 @@ void D2DRenderManager::CreateSwapChainAndD2DTarget()
 		return;
 	}
 
-	// 4. D2D1BitmapProperties1 »ı¼º 
+	// 4. D2D1BitmapProperties1 ìƒì„± 
 	D2D1_BITMAP_PROPERTIES1 bmpProps = D2D1::BitmapProperties1(
 		D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW,
 		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
 	);
 
-	// 5. DeviceContext¿¡ ¹ÙÀÎµùÇÒ ID2D1Bitmap1 »ı¼º
+	// 5. DeviceContextì— ë°”ì¸ë”©í•  ID2D1Bitmap1 ìƒì„±
 	hr = m_d2dDeviceContext->CreateBitmapFromDxgiSurface(backBuffer.Get(), &bmpProps, &m_screenBitmap);
 	if (FAILED(hr)) {
 		OutputError(hr);
 		return;
 	}
 
-	// 6. ÄÁÅØ½ºÆ®¿¡ SetTarget
+	// 6. ì»¨í…ìŠ¤íŠ¸ì— SetTarget
 	m_d2dDeviceContext->SetTarget(m_screenBitmap.Get());
 }
 
@@ -292,13 +293,13 @@ void D2DRenderManager::DrawDebugText(
 	if (!m_d2dDeviceContext || !m_dWriteFactory)
 		return;
 
-	// 1. ºê·¯½Ã »ö»ó ¼³Á¤
+	// 1. ë¸ŒëŸ¬ì‹œ ìƒ‰ìƒ ì„¤ì •
 	m_pBrush->SetColor(color);
 
-	// 2. ÅØ½ºÆ® Æ÷¸Ë »ı¼º
+	// 2. í…ìŠ¤íŠ¸ í¬ë§· ìƒì„±
 	ComPtr<IDWriteTextFormat> textFormat;
 	HRESULT hr = m_dWriteFactory->CreateTextFormat(
-		L"¸¼Àº °íµñ",              // ÆùÆ®
+		L"ë§‘ì€ ê³ ë”•",              // í°íŠ¸
 		nullptr,
 		DWRITE_FONT_WEIGHT_NORMAL,
 		DWRITE_FONT_STYLE_NORMAL,
@@ -312,10 +313,10 @@ void D2DRenderManager::DrawDebugText(
 		return;
 	}
 
-	// 3. Ãâ·Â ¿µ¿ª ¼³Á¤
+	// 3. ì¶œë ¥ ì˜ì—­ ì„¤ì •
 	D2D1_RECT_F layoutRect = D2D1::RectF(posX, posY, posX + 1000.0f, posY + fontSize + 10.0f);
 
-	// 4. ±×¸®±â
+	// 4. ê·¸ë¦¬ê¸°
 	m_d2dDeviceContext->DrawTextW(
 		text.c_str(),
 		static_cast<UINT32>(text.length()),
@@ -365,7 +366,7 @@ void D2DRenderManager::LoadGradientTextrue()
 void D2DRenderManager::LoadEffectShader()
 {
 	//std::vector<BYTE> shaderBytes = FileHelper::LoadBinaryFile(L"MyShader.cso");
-	//GUID myShaderGUID = { /* »ı¼ºÇÑ GUID */ };
+	//GUID myShaderGUID = { /* ìƒì„±í•œ GUID */ };
 	//
 	//ComPtr<ID2D1DeviceContext4> context4;
 	//m_d2dDeviceContext.As(&context4);
@@ -386,20 +387,20 @@ HRESULT D2DRenderManager::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1
 	ComPtr<IWICBitmapFrameDecode> frame;
 	ComPtr<IWICFormatConverter>   converter;
 
-	// ¨ç µğÄÚ´õ »ı¼º
+	// â‘  ë””ì½”ë” ìƒì„±
 	HRESULT hr = m_wicFactory->CreateDecoderFromFilename(
 		path, nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
 	if (FAILED(hr)) return hr;
 
-	// ¨è Ã¹ ÇÁ·¹ÀÓ ¾ò±â
+	// â‘¡ ì²« í”„ë ˆì„ ì–»ê¸°
 	hr = decoder->GetFrame(0, &frame);
 	if (FAILED(hr)) return hr;
 
-	// ¨é Æ÷¸Ë º¯È¯±â »ı¼º
+	// â‘¢ í¬ë§· ë³€í™˜ê¸° ìƒì„±
 	hr = m_wicFactory->CreateFormatConverter(&converter);
 	if (FAILED(hr)) return hr;
 
-	// ¨ê GUID_WICPixelFormat32bppPBGRA·Î º¯È¯
+	// â‘£ GUID_WICPixelFormat32bppPBGRAë¡œ ë³€í™˜
 	hr = converter->Initialize(
 		frame.Get(),
 		GUID_WICPixelFormat32bppPBGRA,
@@ -410,13 +411,13 @@ HRESULT D2DRenderManager::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1
 	);
 	if (FAILED(hr)) return hr;
 
-	// ¨ë Direct2D ºñÆ®¸Ê ¼Ó¼º (premultiplied alpha, B8G8R8A8_UNORM)
+	// â‘¤ Direct2D ë¹„íŠ¸ë§µ ì†ì„± (premultiplied alpha, B8G8R8A8_UNORM)
 	D2D1_BITMAP_PROPERTIES1 bmpProps = D2D1::BitmapProperties1(
 		D2D1_BITMAP_OPTIONS_NONE,
 		D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
 	);
 
-	// ¨ì DeviceContext¿¡¼­ WIC ºñÆ®¸ÊÀ¸·ÎºÎÅÍ D2D1Bitmap1 »ı¼º
+	// â‘¥ DeviceContextì—ì„œ WIC ë¹„íŠ¸ë§µìœ¼ë¡œë¶€í„° D2D1Bitmap1 ìƒì„±
 	hr = m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, outBitmap);
 	return hr;
 }

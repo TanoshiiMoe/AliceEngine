@@ -11,6 +11,9 @@
 #include <Component/InputComponent.h>
 #include "Manager/UpdateTaskManager.h"
 #include "../Bike/BikeMovementScript.h"
+#include <Helpers/StringHelper.h>
+#include <Component/SpriteRenderer.h>
+#include <GameManager/GamePlayManager.h>
 
 PlayerManager* PlayerManager::instance = nullptr;
 
@@ -102,6 +105,15 @@ void PlayerManager::Update(const float& deltaSeconds)
 		FVector2 pos = SceneManager::GetCamera()->GetScale() - 1.1f * playerDeltaSeconds;
 		SceneManager::GetCamera()->SetScale(pos);
 	}
+
+	// 페이드 아웃 진행 중이면 투명도 감소
+	if (m_isFading && m_fadeTargetSR)
+	{
+		m_fadeElapsed += deltaSeconds;
+		float t = m_fadeElapsed / m_fadeDuration;
+		if (t > 1.0f) t = 1.0f;
+		m_fadeTargetSR->SetOpacity(1.0f - t);
+	}
 }
 
 void PlayerManager::SetZClamp(float _min, float _max)
@@ -134,4 +146,84 @@ void PlayerManager::Input()
 			playerTimeScale = 2.0f;
 		}
 	}
+}
+
+// Car::DelayDestroy 를 참고한 플레이어 지연 파괴
+void PlayerManager::DelayDestroy()
+{
+    if (m_isDelaying) return;
+    m_isDelaying = true;
+
+    // 애니메이터/스프라이트 렌더러 가져오기
+    AnimatorInstance* animator = owner->GetComponent<AnimatorInstance>();
+    SpriteRenderer* srSelf = owner->GetComponent<SpriteRenderer>();
+
+    // 고스트를 만들어 페이드 아웃 시킬 준비
+    WeakObjectPtr<gameObject> ghostObj;
+    SpriteRenderer* ghostSR = nullptr;
+
+    if (animator && animator->sheet)
+    {
+        auto* clip = animator->animationClips[animator->curAnimationClip].get();
+        if (clip && animator->m_curFrame < clip->frames.size())
+        {
+            FrameInfo* frameInfo = &(clip->frames[animator->m_curFrame]);
+            int spriteIndex = animator->sheet->spriteIndexMap[frameInfo->sprite];
+            SpriteInfo& sp = animator->sheet->sprites[spriteIndex];
+
+            if (WeakObjectPtr<gameObject> temp = SceneManager::GetInstance().m_currentScene->NewObject<gameObject>(L"Player_Ghost"))
+            {
+                ghostObj = temp;
+                ghostSR = temp->AddComponent<SpriteRenderer>();
+                std::wstring textureRelPath = StringHelper::string_to_wstring(animator->sheet->texture);
+                ghostSR->LoadData(textureRelPath);
+                ghostSR->m_layer = srSelf ? srSelf->m_layer : animator->m_layer;
+
+                temp->transform()->SetPosition(owner->transform()->GetPosition());
+                temp->transform()->SetRotation(owner->transform()->GetRotation());
+                temp->transform()->SetScale(animator->GetRelativeScale());
+                ghostSR->SetSlice(sp.x, sp.y - sp.height, sp.width, sp.height);
+                ghostSR->SetOpacity(1.0f);
+                m_ghostGO = temp.Get();
+            }
+        }
+    }
+
+    // 더 이상 원본 애니메이션이 렌더되지 않도록 정지
+    if (animator)
+    {
+        animator->Stop();
+        animator->SetVisible(false);
+    }
+    if (srSelf)
+    {
+        srSelf->SetOpacity(0.0f);
+    }
+
+    // 1초 페이드아웃 설정
+    m_skipGhostOnDestroy = true;
+    m_fadeElapsed = 0.0f;
+    m_fadeDuration = 1.0f;
+    m_isFading = true;
+    m_fadeTargetSR = ghostSR ? ghostSR : srSelf;
+
+    TimerManager::GetInstance().ClearTimer(m_fadeHandle);
+    TimerManager::GetInstance().SetTimer(
+        m_fadeHandle,
+        [weak = WeakFromThis<PlayerManager>(), ghostObj]() mutable {
+            if (!weak) return;
+
+			GamePlayManager::GetInstance().GameOver();
+            //if (ghostObj)
+            //{
+            //    SceneManager::GetInstance().GetWorld()->RemoveObject(ghostObj.Get());
+            //}
+            //if (weak)
+            //{
+            //    weak->GetWorld()->RemoveObject(weak->GetOwner());
+            //}
+        },
+        1.0f,
+        false,
+        1.0f);
 }

@@ -1,4 +1,4 @@
-#include "SpawnCollider.h"
+ï»¿#include "SpawnCollider.h"
 #include "Component/Collider.h"
 #include "Object/gameObject.h"
 #include "Component/TransformComponent.h"
@@ -8,6 +8,7 @@
 #include "EnemySpawner.h"
 #include <TileMap/TileMapLoader.h>
 #include "SpawnData.h"
+#include <Helpers/Logger.h>
 
 void SpawnCollider::Initialize()
 {
@@ -31,13 +32,14 @@ void SpawnCollider::OnStart()
 
 void SpawnCollider::Update(const float& deltaSeconds)
 {
-	owner->transform()->SetPosition(player->transform()->GetPosition());
+	if(!player.expired())
+		owner->transform()->SetPosition(player->transform()->GetPosition());
 }
 
 void SpawnCollider::OnTriggerEnter2D(Collider* collider)
 {
-	// µğ¹ö±ë
-	/*std::wstring message = collider->GetOwner()->GetName() + L" : ½ºÆ÷³Ê Äİ¶óÀÌ´õ Enter!!\n";
+	// ë””ë²„ê¹…
+	/*std::wstring message = collider->GetOwner()->GetName() + L" : ìŠ¤í¬ë„ˆ ì½œë¼ì´ë” Enter!!\n";
 	OutputDebugStringW(message.c_str());*/
 
 	if (collider->GetOwner()->GetTag() == L"EnemySpawn") {
@@ -50,6 +52,8 @@ void SpawnCollider::OnTriggerEnter2D(Collider* collider)
 
 			FVector2 pos = collider->GetOwner()->GetPosition();
 			EnemySpawner::instance->SpawnEnemy(etype, pos);
+
+			LOG_INFO(L"ìŠ¤í°í–ˆìŠµë‹ˆë‹¤.");
 		}
 	}
 }

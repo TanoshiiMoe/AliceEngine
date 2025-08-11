@@ -1,19 +1,25 @@
-#include "BikeStatScript.h"
+ï»¿#include "BikeStatScript.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
 #include <Component/TransformComponent.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/SpriteRenderer.h>
+#include <Component/ProgressBarComponent.h>
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Component/StatComponent.h>
 #include <System/ScriptSystem.h>
 #include <Manager/SceneManager.h>
 #include <Helpers/CoordHelper.h>
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 #include <Manager/TimerManager.h>
 #include <Component/Collider.h>
+#include <Manager/D2DRenderManager.h>
+#include <Prefab/Enemy/Core/Car.h>
+#include <Scripts/Weapon/Drone.h>
+#include <GameManager/PlayerDataManager.h>
+#include <Scripts/Player/PlayerManager.h>
 
 void BikeStatScript::Initialize()
 {
@@ -30,21 +36,21 @@ void BikeStatScript::Initialize()
 void BikeStatScript::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void BikeStatScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	// 
-	// ¸¶¿ì½º Å¬¸¯ °¨Áö
+	// ë§ˆìš°ìŠ¤ í´ë¦­ ê°ì§€
 
 	//if (Input::IsMouseLeftDown() && bCanFire)
 	//{
 	//	FVector2 ownerPos = owner->GetPosition();
-	//	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ¸¶¿ì½ºÀÇ ½ÇÁ¦ ¿ùµå ÁÂÇ¥
+	//	FVector2 worldMousePos = Input::GetMouseWorldPosition(); // ë§ˆìš°ìŠ¤ì˜ ì‹¤ì œ ì›”ë“œ ì¢Œí‘œ
 	//	BulletManager::GetInstance().FireBullet(ownerPos, worldMousePos, 300);
 	//	bCanFire = false;
 	//}
@@ -53,7 +59,7 @@ void BikeStatScript::Update(const float& deltaSeconds)
 void BikeStatScript::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -69,137 +75,105 @@ void BikeStatScript::OnStart()
 	//	[this]()
 	//	{
 	//		bCanFire = true;
-	//		OutputDebugStringW(L"¶÷´Ù Å¸ÀÌ¸Ó È£ÃâµÊ!\n");
+	//		OutputDebugStringW(L"ëŒë‹¤ íƒ€ì´ë¨¸ í˜¸ì¶œë¨!\n");
 	//	},
 	//	0.1f,
 	//	true,
 	//	0.0f
 	//);
 
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
-	//m_BikeStat = GetOwner();
+    // ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	owner->AddComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
 	BoxComponent* box = owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetRelativeSize(), FColor::Blue);
 	box->SetSize(owner->GetComponent<SpriteRenderer>()->GetRelativeSize());
 	box->SetIgnoreOwnerScale(false);
 
-	/*
-	* °ÔÀÓ¿ÀºêÁ§Æ®¿¡ TextRenderComponent¸¦ ºÙÀÌ´Â ¿¹½Ã
-	*/
+    // ìŠ¤íƒ¯ ì»´í¬ë„ŒíŠ¸ ìƒì„±
+    FPlayerStats stat = PlayerDataManager::GetInstance().GetStats();
+    m_bikeStat = owner->AddComponent<StatComponent<BikeStat>>();
+    m_bikeStat->SetStat("HP", stat.hp);
+    m_bikeStat->SetStat("MAXHP", stat.maxHP);
+    m_bikeStat->SetStat("BATTERY", stat.battery);
 
-	TextRenderComponent* m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(owner->GetName());
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeStatTextCmp->SetColor(FColor::Gold);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	FVector2 widgetSize = m_BikeStatTextCmp->GetRelativeSize();
-	m_BikeStatTextCmp->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 5.2f)));
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    // ì²´ë ¥ë°” ë°°ê²½
+    m_hpBarBack = owner->AddComponent<ProgressBarComponent>();
+    m_hpBarBack->LoadData(L"UI/HealthBar_White.png");
+    m_hpBarBack->SetType(EProgressBarType::Linear);
+    m_hpBarBack->SetProgress(1.0f);
+    m_hpBarBack->SetOpacity(0.6f);
+    m_hpBarBack->SetRelativeScale(FVector2(0.6f, 0.4f));
+    {
+        FVector2 size = m_hpBarBack->GetRelativeSize();
+        m_hpBarBack->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
+    }
+	m_hpBarBack->m_layer = 10004;
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"Á÷ÀüÃ¼·Â");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    // ì²´ë ¥ë°” ì „ê²½(ì±„ì›Œì§€ëŠ” ë¶€ë¶„)
+    m_hpBarFill = owner->AddComponent<ProgressBarComponent>();
+    m_hpBarFill->LoadData(L"UI/HealthBar_Red.png");
+    m_hpBarFill->SetType(EProgressBarType::Linear);
+    m_hpBarFill->SetProgress(1.0f);
+    m_hpBarFill->SetRelativeScale(FVector2(0.6f, 0.4f));
+    {
+        FVector2 size = m_hpBarFill->GetRelativeSize();
+        m_hpBarFill->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
+    }
+	m_hpBarFill->m_layer = m_hpBarBack->m_layer + 1;
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"test");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    // ë¸ë¦¬ê²Œì´íŠ¸: HP, MAXHP ë³€ê²½ ì‹œ ì§„í–‰ë„ ê°±ì‹ 
+    m_bikeStat->OnChangeStatMap["HP"].Add(m_bikeStat->GetHandle(), [this](float /*oldVal*/, float newVal)
+    {
+        if (m_hpBarFill && m_bikeStat)
+        {
+            float maxv = m_bikeStat->GetStat("MAXHP");
+            if (maxv <= 0.0f) maxv = 0.0001f;
+            m_hpBarFill->SetProgress(newVal / maxv);
+        }
+        if (newVal <= 0)
+        {
+            owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
+            owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
+            if (auto player = owner->GetComponent<PlayerManager>()) player->DelayDestroy();
+            if (auto drone = owner->GetComponent<Drone>()) drone->DelayDestroy();
+            return;
+        }
+    });
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"ÇöÀçÃ¼·Â");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
+    m_bikeStat->OnChangeStatMap["MAXHP"].Add(owner->GetHandle(), [this](float /*oldVal*/, float /*newVal*/)
+    {
+        if (m_hpBarFill && m_bikeStat)
+        {
+            float cur = m_bikeStat->GetStat("HP");
+            float maxv = m_bikeStat->GetStat("MAXHP");
+            if (maxv <= 0.0f) maxv = 0.0001f;
+            m_hpBarFill->SetProgress(cur / maxv);
+        }
+    });
 
-	m_BikeStatTextCmp = owner->AddComponent<TextRenderComponent>();
-	m_BikeStatTextCmp->SetText(L"test");
-	m_BikeStatTextCmp->SetDrawType(EDrawType::WorldSpace);
-	m_BikeStatTextCmp->SetTextAlignment(ETextFormat::MiddleCenter);
-	m_BikeStatTextCmp->SetRelativeScale(FVector2(3, 3));
-	m_BikeStatTextCmp->SetColor(FColor::Green);
-	m_BikeStatTextCmp->SetFontSize(8);
-	m_BikeNameTexts.push_back(m_BikeStatTextCmp);
-
-
-	/*
-	* Ä¿½ºÅÒ ±¸Á¶Ã¼·Î µ¨¸®°ÔÀÌÆ®¸¦ ¹ÙÀÎµù ÇÏ´Â ¿¹Á¦
-	*/
-	m_bikeStat = owner->AddComponent<StatComponent<BikeStat>>();
-	m_bikeStat->SetStat("HP", 30);
-	m_bikeStat->SetStat("MAXHP", 30);
-	m_bikeStat->SetStat("MP", 200);
-	m_BikeNameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", m_bikeStat->GetStat("HP"));
-	m_BikeNameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", m_bikeStat->GetStat("HP"));
-	m_BikeNameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", m_bikeStat->GetStat("MAXHP"));
-	m_BikeNameTexts[4]->SetTextFormat(L"¹èÅÍ¸® : ", m_bikeStat->GetStat("BATTERY"));
-
-	widgetSize = m_BikeNameTexts[1]->GetRelativeSize();
-	m_BikeNameTexts[1]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 1.0)));
-	widgetSize = m_BikeNameTexts[2]->GetRelativeSize();
-	m_BikeNameTexts[2]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 2.0f)));
-	widgetSize = m_BikeNameTexts[3]->GetRelativeSize();
-	m_BikeNameTexts[3]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 3.0f)));
-	widgetSize = m_BikeNameTexts[4]->GetRelativeSize();
-	m_BikeNameTexts[4]->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(-0.5f, 0.0f)));
-
-	m_bikeStat->OnChangeStatMap["HP"].Add(m_bikeStat->GetHandle(), [this](float oldVal, float newVal)
-		{
-			if (newVal <= 0)	// Á×´Â ½ÃÁ¡
-			{ 
-				owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
-				owner->GetComponent<SpriteRenderer>()->LoadData(L"aru.png");
-				owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
-				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Red);
-			}
-			//else if (oldVal <= 0)	// ºÎÈ°ÇÏ´Â ½ÃÁ¡
-			//{
-				//owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
-				//owner->GetComponent<SpriteRenderer>()->LoadData(L"BikeStatScript.png");
-				//owner->AddComponent<BoxComponent>(owner->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Blue);
-			//}
-			m_BikeNameTexts[1]->SetTextFormat(L"Á÷Àü Ã¼·Â : ", oldVal);
-			m_BikeNameTexts[2]->SetTextFormat(L"ÇöÀç Ã¼·Â : ", newVal);
-		});;
-
-	m_bikeStat->OnChangeStatMap["MAXHP"].Add(owner->GetHandle(), [this](float oldVal, float newVal)
-		{
-			m_BikeNameTexts[3]->SetTextFormat(L"ÃÖ´ë Ã¼·Â : ", newVal);
-		});;
-
-	m_bikeStat->OnChangeStatMap["MP"].Add(owner->GetHandle(), [this](float oldVal, float newVal)
-		{
-			m_BikeNameTexts[4]->SetTextFormat(L"BATTERY : ", newVal);
-		});;
+    // ì´ˆê¸° ì§„í–‰ë„ ë°˜ì˜
+    if (m_hpBarFill && m_bikeStat)
+    {
+        float cur = m_bikeStat->GetStat("HP");
+        float maxv = m_bikeStat->GetStat("MAXHP");
+        if (maxv <= 0.0f) maxv = 0.0001f;
+        m_hpBarFill->SetProgress(cur / maxv);
+    }
 
 	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), [this]() { Input(); });
 }
 
 void BikeStatScript::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	TimerManager::GetInstance().ClearTimer(timer);
 }
 
 void BikeStatScript::OnDestroy()
 {
-	m_BikeNameTexts.clear();
+    // ë¦¬ì†ŒìŠ¤ í•´ì œëŠ” ì—”ì§„ ì»´í¬ë„ŒíŠ¸ íŒŒì´í”„ë¼ì¸ì— ìœ„ì„
 }
 
 void BikeStatScript::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }

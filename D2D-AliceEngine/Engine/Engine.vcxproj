@@ -150,6 +150,7 @@
     <ClInclude Include="Effect\Prism.h" />
     <ClInclude Include="Experimental\Collision\Collision2D.h" />
     <ClInclude Include="Component\Rigidbody2D.h" />
+    <ClInclude Include="Helpers\Logger.h" />
     <ClInclude Include="Manager\AudioManager.h" />
     <ClInclude Include="Manager\ClassManager.h" />
     <ClInclude Include="Component\Collider.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Core\StatTraits.h" />
     <ClInclude Include="Manager\PackageResourceManager.h" />
     <ClInclude Include="Component\SkewTransform.h" />
+    <ClInclude Include="Component\ProgressBarComponent.h" />
     <ClInclude Include="System\PhysicsSystem.h" />
     <ClInclude Include="System\CollisionSystem.h" />
     <ClInclude Include="System\InputSystem.h" />
@@ -221,6 +223,7 @@
     <ClCompile Include="Effect\Prism.cpp" />
     <ClCompile Include="Experimental\Collision\Collision2D.cpp" />
     <ClCompile Include="Component\Rigidbody2D.cpp" />
+    <ClCompile Include="Helpers\Logger.cpp" />
     <ClCompile Include="Manager\AudioManager.cpp" />
     <ClCompile Include="Manager\ClassManager.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
@@ -249,6 +252,7 @@
     <ClCompile Include="Core\StatTraits.cpp" />
     <ClCompile Include="Manager\PackageResourceManager.cpp" />
     <ClCompile Include="Component\SkewTransform.cpp" />
+    <ClCompile Include="Component\ProgressBarComponent.cpp" />
     <ClCompile Include="System\PhysicsSystem.cpp" />
     <ClCompile Include="System\CollisionSystem.cpp" />
     <ClCompile Include="System\InputSystem.cpp" />

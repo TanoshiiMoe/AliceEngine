@@ -1,4 +1,4 @@
-#include "pch.h"
+Ôªø#include "pch.h"
 #include "TextRenderComponent.h"
 #include <Manager/D2DRenderManager.h>
 #include <Manager/SceneManager.h>
@@ -11,6 +11,7 @@
 #include <Component/TransformComponent.h>
 #include <Helpers/CoordHelper.h>
 #include <Helpers/FileHelper.h>
+#include <dwrite_3.h>
 
 TextRenderComponent::TextRenderComponent()
 {
@@ -64,8 +65,13 @@ void TextRenderComponent::Render()
 	
 	InitializeLayout();
 
-	D2D1_POINT_2F textPosition = D2D1::Point2F(0, 0); // destRect¿« ¡ﬂæ” (0,0)¿ª ±‚¡ÿ¡°¿∏∑Œ ªÁøÎ
-	context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
+    // Î∏åÎü¨Ïãú Ìà¨Î™ÖÎèÑ Ï†ÅÏö©
+    if (m_pBrush)
+        m_pBrush->SetOpacity(m_opacity);
+
+    D2D1_POINT_2F textPosition = D2D1::Point2F(0, 0); // destRectÏùò Ï§ëÏïô (0,0)ÏùÑ Í∏∞Ï§ÄÏ†êÏúºÎ°ú ÏÇ¨Ïö©
+    context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
+
 	//FVector2 relativeSize = GetRelativeSize();
 	//D2D1_POINT_2F textPosition = D2D1::Point2F(-relativeSize.x / 2, -relativeSize.y / 2);
 	//context->DrawTextLayout(textPosition, m_layout.Get(), m_pBrush.Get(), D2D1_DRAW_TEXT_OPTIONS_NONE);
@@ -99,7 +105,7 @@ void TextRenderComponent::InitializeFormat()
 	if (m_eTextSource == ETextSource::System)
 	{
 		m_dWriteFactory->CreateTextFormat(
-			m_font.c_str(), // FontName    ¡¶æÓ∆«-∏µÁ¡¶æÓ∆«-«◊∏Ò-±€≤√-≈¨∏Ø ¿∏∑Œ ±€≤√¿Ã∏ß »Æ¿Œ∞°¥…
+			m_font.c_str(), // FontName    Ï†úÏñ¥Ìåê-Î™®Îì†Ï†úÏñ¥Ìåê-Ìï≠Î™©-Í∏ÄÍº¥-ÌÅ¥Î¶≠ ÏúºÎ°ú Í∏ÄÍº¥Ïù¥Î¶Ñ ÌôïÏù∏Í∞ÄÎä•
 			NULL,
 			DWRITE_FONT_WEIGHT_NORMAL,
 			DWRITE_FONT_STYLE_NORMAL,
@@ -109,30 +115,85 @@ void TextRenderComponent::InitializeFormat()
 			&m_dWriteTextFormat
 		);
 	}
-	else
-	{
-		ComPtr<IDWriteFontFile> fontFile;
-		HRESULT hr = m_dWriteFactory->CreateFontFileReference(
-			m_filePath.c_str(),
-			nullptr,
-			&fontFile
-		);
-		if (FAILED(hr)) {
-			// ø°∑Ø √≥∏Æ
-			return;
-		}
+    else
+    {
+        // Ïª§Ïä§ÌÖÄ Ìè∞Ìä∏ ÌååÏùºÏùÑ Private Font CollectionÏúºÎ°ú Îì±Î°ù ÌõÑ ÏÇ¨Ïö©
+        ComPtr<IDWriteFactory> dwriteFactory = D2DRenderManager::GetInstance().m_dWriteFactory;
+        ComPtr<IDWriteFactory3> factory3;
+        HRESULT hrQI = dwriteFactory.As(&factory3);
+        if (SUCCEEDED(hrQI) && factory3)
+        {
+            // Í≤ΩÎ°ú Î≥ÄÍ≤Ω Ïãú Ïû¨Îì±Î°ù
+			if (!m_privateFontLoaded || m_fontFileAbsolutePath != m_filePath)
+			{
+				m_fontFileAbsolutePath = m_filePath;
+				m_privateFontLoaded = false;
 
-		m_dWriteFactory->CreateTextFormat(
-			m_font.c_str(), // ∆˘∆Æ ¿Ã∏ß¿ª Ω«¡¶ ∆˘∆Æ ∆ƒ¿œ ¿Ã∏ß∞˙ ∏¬√Á¡‡æﬂ «‘
-			nullptr,
-			DWRITE_FONT_WEIGHT_NORMAL,
-			DWRITE_FONT_STYLE_NORMAL,
-			DWRITE_FONT_STRETCH_NORMAL,
-			m_fontSize,
-			m_locale.c_str(),
-			&m_dWriteTextFormat
-		);
-	}
+				ComPtr<IDWriteFontSetBuilder> builder; // Í∏∞Î≥∏ Ïù∏ÌÑ∞ÌéòÏù¥Ïä§Î°ú Î∞õÍ∏∞
+				HRESULT hr = factory3->CreateFontSetBuilder(builder.GetAddressOf());
+				assert(SUCCEEDED(hr));
+
+				ComPtr<IDWriteFontSetBuilder1> fontSetBuilder;
+				hr = builder.As(&fontSetBuilder);
+				assert(SUCCEEDED(hr));
+
+				ComPtr<IDWriteFontFile> fontFile;
+				if (SUCCEEDED(dwriteFactory->CreateFontFileReference(m_filePath.c_str(), nullptr, &fontFile)) && fontFile)
+				{
+					fontSetBuilder->AddFontFile(fontFile.Get());
+					ComPtr<IDWriteFontSet> fontSet;
+					if (SUCCEEDED(fontSetBuilder->CreateFontSet(&fontSet)))
+					{
+						ComPtr<IDWriteFontCollection1> collection1;
+						if (SUCCEEDED(factory3->CreateFontCollectionFromFontSet(fontSet.Get(), &collection1)))
+						{
+							// ÏßÄÏ†ïÌïú Ìå®Î∞ÄÎ¶¨/Î°úÏºÄÏùºÎ°ú TextFormat ÏÉùÏÑ±
+							factory3->CreateTextFormat(
+								m_font.c_str(),
+								collection1.Get(),
+								DWRITE_FONT_WEIGHT_NORMAL,
+								DWRITE_FONT_STYLE_NORMAL,
+								DWRITE_FONT_STRETCH_NORMAL,
+								m_fontSize,
+								m_locale.c_str(),
+								&m_dWriteTextFormat
+							);
+							m_privateFontLoaded = (m_dWriteTextFormat != nullptr);
+						}
+					}
+				}
+			}
+
+            // Ïã§Ìå® Ïãú ÏãúÏä§ÌÖú Ïª¨Î†âÏÖòÏúºÎ°ú Ìè¥Î∞±
+            if (!m_dWriteTextFormat)
+            {
+                dwriteFactory->CreateTextFormat(
+                    m_font.c_str(),
+                    nullptr,
+                    DWRITE_FONT_WEIGHT_NORMAL,
+                    DWRITE_FONT_STYLE_NORMAL,
+                    DWRITE_FONT_STRETCH_NORMAL,
+                    m_fontSize,
+                    m_locale.c_str(),
+                    &m_dWriteTextFormat
+                );
+            }
+        }
+        else
+        {
+            // IDWriteFactory3Í∞Ä ÏóÜÎäî Íµ¨Î≤ÑÏ†Ñ ÌôòÍ≤Ω: ÏãúÏä§ÌÖú Ïª¨Î†âÏÖòÎßå ÏÇ¨Ïö© Í∞ÄÎä•
+            m_dWriteFactory->CreateTextFormat(
+                m_font.c_str(),
+                nullptr,
+                DWRITE_FONT_WEIGHT_NORMAL,
+                DWRITE_FONT_STYLE_NORMAL,
+                DWRITE_FONT_STRETCH_NORMAL,
+                m_fontSize,
+                m_locale.c_str(),
+                &m_dWriteTextFormat
+            );
+        }
+    }
 }
 
 void TextRenderComponent::InitializeColor()
@@ -261,11 +322,21 @@ void TextRenderComponent::SetFont(const std::wstring& _fontName, const std::wstr
 
 void TextRenderComponent::SetFontFromFile(const std::wstring& filePath)
 {
-	m_filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath);
-	m_eTextSource = ETextSource::File;
+    m_filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath);
+    m_eTextSource = ETextSource::File;
+    m_privateFontLoaded = false;
+    m_fontFileAbsolutePath.clear();
 }
 
 void TextRenderComponent::SetIgnoreCameraTransform(bool bIgnore)
 {
 	bIgnoreCameraTransform = bIgnore;
+}
+
+void TextRenderComponent::SetOpacity(float alpha)
+{
+    // 0..1 clamp
+    if (alpha < 0.f) alpha = 0.f;
+    if (alpha > 1.f) alpha = 1.f;
+    m_opacity = alpha;
 }

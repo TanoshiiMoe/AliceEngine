@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 #include "pch.h"
 #include <Core/Singleton.h>
 #include <d2d1effectauthor.h>
 
 /*
 * @briefs : 
-	·»´õ¿¡ ÇÊ¿äÇÑ º¯¼ö¿Í ÇÔ¼öµéÀÌ ¸ğ¿©ÀÖ´Â ½Ì±ÛÅæ ¸Å´ÏÀúÀÔ´Ï´Ù.
-	RenderSystem¿¡¼­ ·»´õ¸µÇÕ´Ï´Ù.
+	ë Œë”ì— í•„ìš”í•œ ë³€ìˆ˜ì™€ í•¨ìˆ˜ë“¤ì´ ëª¨ì—¬ìˆëŠ” ì‹±ê¸€í†¤ ë§¤ë‹ˆì €ì…ë‹ˆë‹¤.
+	RenderSystemì—ì„œ ë Œë”ë§í•©ë‹ˆë‹¤.
 */
 
 using namespace Define;
@@ -26,7 +26,7 @@ public:
 
 	HWND GetHWND() { return m_hwnd; }
 	FVector2 GetApplicationSize();
-	void CreateSwapChainAndD2DTarget();	// ºñÆ®¸ÊÀ» ¿©·¯ °³ ¹­¾îÁÖ´Â ÇÔ¼ö
+	void CreateSwapChainAndD2DTarget();	// ë¹„íŠ¸ë§µì„ ì—¬ëŸ¬ ê°œ ë¬¶ì–´ì£¼ëŠ” í•¨ìˆ˜
 	void OutputError(HRESULT hr);
 	void DrawDebugBox(const float& startPosX, const float& startPosY, const float& ensPosX, const float& ensPosY, const float& r, const float& g, const float& b, const float& a);
 	void DrawDebugText(const std::wstring& text, float posX, float posY, float fontSize, const D2D1::ColorF& color);
@@ -56,11 +56,11 @@ public:
 	ComPtr<ID2D1SpriteBatch> m_spriteBatch;
 	bool m_resizePending = false;
 
-	// Debug¿ë box
+	// Debugìš© box
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
 
-	// ÈÄÃ³¸®¿ë
-	ComPtr<ID2D1Bitmap1> m_overlayBitmap; // ±×¶óµ¥ÀÌ¼Ç or ÅØ½ºÃ³
+	// í›„ì²˜ë¦¬ìš©
+	ComPtr<ID2D1Bitmap1> m_overlayBitmap; // ê·¸ë¼ë°ì´ì…˜ or í…ìŠ¤ì²˜
 	ComPtr<ID2D1Effect> m_sceneEffect;
 
 	// Transform Type

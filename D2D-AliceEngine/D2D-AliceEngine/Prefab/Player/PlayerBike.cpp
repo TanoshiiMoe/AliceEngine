@@ -1,6 +1,6 @@
 ﻿#include "PlayerBike.h"
 #include "Object/gameObject.h"
-#include <Scripts/Player.h>
+#include <Scripts/Legacy/Player.h>
 #include <Scripts/BackGroundRender.h>
 #include <Component/SkewTransform.h>
 #include <Scripts/Bike/BikeMovementScript.h>

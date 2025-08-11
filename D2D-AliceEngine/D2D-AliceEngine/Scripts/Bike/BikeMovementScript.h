@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/ScriptComponent.h>
 
 class gameObject;
@@ -23,14 +23,14 @@ public:
 	virtual void OnTriggerStay2D(Collider* collider) override;
 	virtual void OnTriggerExit2D(Collider* collider) override;
 
-	// ¼Óµµ È¿°ú Àû¿ë ÇÔ¼ö
+	// ì†ë„ íš¨ê³¼ ì ìš© í•¨ìˆ˜
 	void ApplySlow(float slowFactor, float duration);
 	void ApplyBoost(float boostFactor, float duration);
 
-	// ÇöÀç ¼Óµµ Ãâ·Â
+	// í˜„ì¬ ì†ë„ ì¶œë ¥
 	float GetCurrSpeed() { return m_currentSpeed; }
 
-	// ÇöÀç ¼Óµµº¯È­ Ãâ·Â
+	// í˜„ì¬ ì†ë„ë³€í™” ì¶œë ¥
 	float GetSpeedModifier() { return m_speedModifier; }
 
 	void Input();
@@ -82,23 +82,32 @@ public:
 private:
 	gameObject* m_owner = nullptr;
 
-	// ±âº» ¼Óµµ ¼³Á¤
+	// ê¸°ë³¸ ì†ë„ ì„¤ì •
 	float m_initialSpeed = 50.0f;
 	float m_maxSpeed = 200.0f;
 	float m_acceleration = 20.0f;
 
-	// ÇöÀç ¼Óµµ
+	// í˜„ì¬ ì†ë„
 	float m_currentSpeed = 0.0f;
 
-	// Ãæµ¹ ¹İÀÀ
+	// ì¶©ëŒ ë°˜ì‘
 	bool m_hitReaction = false;
 	float m_hitReactionTime = 0.2f;
 	float m_hitTimer = 0.0f;
 
-	// ¼Óµµ º¯È­ È¿°ú
+	// ì†ë„ ë³€í™” íš¨ê³¼
 	float m_speedModifier = 1.0f;
 	float m_modifierDuration = 0.0f;
 
 	float m_prevMoveAmount = 0.0f;
+
+	// ================== Jump ê´€ë ¨ ==============
+	bool  m_isJumping   = false;   // ì í”„ ì¤‘ ì—¬ë¶€
+	float m_jumpWeightX = 200.0f;
+	float m_jumpVelocity         = 0.0f;    // í˜„ì¬ ì í”„ ì†ë„ Yì¶•
+	float m_jumpInitialVelocity  = 800.0f;  // ì´ˆê¸° ì í”„ ì†ë„ ì–‘ìˆ˜: ìœ„ ë°©í–¥
+	float m_jumpGravity          = -600.0f; // ì¤‘ë ¥ ê°€ì†ë„ ì–‘ìˆ˜: ì•„ë˜ ë°©í–¥
+	float m_groundY              = 0.0f;    // ì§€ë©´ Y ìœ„ì¹˜ ê¸°ì¤€
+	int m_jumpPrevLayer = 0;
 };
 

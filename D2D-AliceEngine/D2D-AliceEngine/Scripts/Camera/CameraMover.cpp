@@ -1,10 +1,10 @@
-#include "CameraMover.h"
+﻿#include "CameraMover.h"
 #include "Manager/UpdateTaskManager.h"
 #include <d2dengine_pch.cpp>
 #include "../Bike/BikeMovementScript.h"
 #include "Manager/SceneManager.h"
-#include <Scripts/CameraController.h>
 #include "Component/SkewTransform.h"
+#include <Core/ObjectHandler.h>
 
 void CameraMover::Initialize()
 {
@@ -21,7 +21,7 @@ void CameraMover::OnStart()
 {
 	//owner->AddComponent<CameraController>();
 	// 플레이어 찾아서 넣기
-	WeakObjectPtr<gameObject> player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
+	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
 
 	FVector2 initPos;
 
@@ -55,8 +55,10 @@ void CameraMover::Update(const float& dt)
 
 
 	if (!playerST) return;
+	if (!player) return;
 
-	FVector2 targetPos = playerST->GetRealPos();
+	//FVector2 targetPos = playerST->GetRealPos();
+	FVector2 targetPos = player->GetPosition();
 	FVector2 cameraPos = camera->GetPosition();  // camera는 이 스크립트의 owner임
 
 	FVector2 delta = targetPos - cameraPos;
@@ -67,5 +69,5 @@ void CameraMover::Update(const float& dt)
 
 	// 느리게 따라오기 (선형 보간 방식)
 	FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
-	camera->SetRelativePosition(targetPos);
+	camera->SetRelativePosition(newPos);
 }

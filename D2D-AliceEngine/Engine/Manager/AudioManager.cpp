@@ -148,19 +148,33 @@ void AudioManager::PlaySoundByName(
 	case SoundType::SFX: group = m_SFXGroup; break;
 	}
 
-	FMOD::Channel* channel = nullptr;
-	FMOD_RESULT fr = m_System->playSound(data->sound, group, paused, &channel);
+    // 기존 채널이 살아있으면 중복 채널 생성을 막기 위해 정지
+    if (data->channel)
+    {
+        bool isPlaying = false;
+        data->channel->isPlaying(&isPlaying);
+        if (isPlaying)
+        {
+            data->channel->stop();
+        }
+    }
+
+    FMOD::Channel* channel = nullptr;
+    FMOD_RESULT fr = m_System->playSound(data->sound, group, true, &channel); // 일단 pause 상태로 생성
 
 	if (fr != FMOD_OK) return;
 
 	if (channel)
 	{
 		channel->setVolume(volume);
-		channel->setPosition(static_cast<unsigned int>(startTime), FMOD_TIMEUNIT_MS);
+        channel->setPosition(static_cast<unsigned int>(startTime), FMOD_TIMEUNIT_MS);
+        channel->setPaused(paused);
+        // 내부에 채널 저장해 Pause/StopByName이 동작하도록 함
+        data->channel = channel;
 	}
 
 	if (outChannel)
-		*outChannel = channel;
+        *outChannel = channel;
 }
 
 void AudioManager::PauseSoundByName(const std::wstring& name, bool paused)
@@ -178,8 +192,11 @@ void AudioManager::ResumeSoundByName(const std::wstring& name)
 void AudioManager::StopSoundByName(const std::wstring& name)
 {
 	auto it = m_SoundMap.find(name);
-	if (it != m_SoundMap.end() && it->second->channel)
-		it->second->channel->stop();
+    if (it != m_SoundMap.end() && it->second->channel)
+    {
+        it->second->channel->stop();
+        it->second->channel = nullptr;
+    }
 }
 
 void AudioManager::PlaySoundByType(SoundType type, FMOD::Channel** outChannel, float volume, float startTime, bool paused)
@@ -210,12 +227,17 @@ void AudioManager::PlaySoundByType(SoundType type, FMOD::Channel** outChannel, f
 
 void AudioManager::PauseSoundByType(SoundType type, bool paused)
 {
-	for (auto& pair : m_SoundMap)
-	{
-		SoundData* data = pair.second;
-		if (data->type == type && data->channel)
-			data->channel->setPaused(paused);
-	}
+    for (auto& pair : m_SoundMap)
+    {
+        SoundData* data = pair.second;
+        if (!data) continue;
+        if (data->type != type) continue;
+        if (!data->channel) continue;
+        bool alive = false;
+        data->channel->isPlaying(&alive);
+        if (alive)
+            data->channel->setPaused(paused);
+    }
 }
 
 void AudioManager::ResumeSoundByType(SoundType type)
@@ -247,8 +269,14 @@ void AudioManager::ResumeAll()
 
 void AudioManager::StopAll()
 {
-	if (m_MasterGroup)
-		m_MasterGroup->stop();
+    if (m_MasterGroup)
+        m_MasterGroup->stop();
+    // 내부 레퍼런스 정리: 다음 재생 시 nullptr로 안전하게 갱신
+    for (auto& pair : m_SoundMap)
+    {
+        if (pair.second)
+            pair.second->channel = nullptr;
+    }
 }
 
 

@@ -57,6 +57,8 @@ public:
 	void SetFont(const std::wstring& _fontName, const std::wstring& _fontLocale);
 	void SetFontFromFile(const std::wstring& filePath);
 	void SetIgnoreCameraTransform(bool bIgnore);
+  // Text opacity 0..1
+  void SetOpacity(float alpha);
 
 public:
 	ETransformType m_eTransformType = ETransformType::D2D;
@@ -71,7 +73,12 @@ public:
 
 	ETextSource m_eTextSource = ETextSource::System;
 	std::wstring m_filePath;
+    // 커스텀 폰트를 프로세스에 Private로 등록했는지 추적
+    std::wstring m_fontFileAbsolutePath;
+    bool m_privateFontLoaded = false;
 private:
 	bool bIgnoreCameraTransform = false;
+  float m_opacity = 1.0f;
+
 };
 

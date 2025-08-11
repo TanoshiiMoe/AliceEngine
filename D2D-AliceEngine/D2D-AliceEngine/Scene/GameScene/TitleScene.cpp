@@ -1,4 +1,4 @@
-#include "TitleScene.h"
+﻿#include "TitleScene.h"
 #include <Manager/SceneManager.h>
 #include "Scripts/TitleUIScript.h"
 #include <Scripts/Widget/TitleWidgetScript.h>
@@ -7,10 +7,16 @@
 #include <Scripts/TitleAudioScript.h>
 #include <Core/Input.h>
 #include <Component/InputComponent.h>
+#include <GameManager/GamePlayManager.h>
+#include <Helpers/Logger.h>
+#include <Scripts/Widget/CutSceneWidgetScript.h>
 
 void TitleScene::Initialize()
 {
 	__super::Initialize();
+
+    GamePlayManager& GPM = GamePlayManager::GetInstance();
+	GPM.StartGame();
 }
 
 void TitleScene::Release()
@@ -34,11 +40,25 @@ void TitleScene::OnEnter()
 	m_UI = NewObject<gameObject>(L"UI");
 	//m_UI->AddComponent<TitleUIScript>();
 	m_UI->AddComponent<TitleWidgetScript>();
+
+	// 테스트용 컷씬 위젯. 이걸 켜서 확인할 것.
+	//m_UI->AddComponent<CutSceneWidgetScript>();
+
+
+	// 디버그용 씬 전환
+	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
+	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
+		if (Input::IsKeyPressed(VK_3)) {
+			SceneManager::ChangeScene(Define::Scene_Stage1);
+		}
+	});
 }
 
 void TitleScene::OnExit()
 {
 	__super::OnExit();
+
+	GamePlayManager::GetInstance().ReleaseTimers();
 }
 
 void TitleScene::PlayerInput()

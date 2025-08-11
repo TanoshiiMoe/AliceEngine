@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Scene.h"
 #include <System/InputSystem.h>
 #include <System/ScriptSystem.h>
@@ -10,6 +10,8 @@
 #include <Manager/D2DRenderManager.h>
 #include <Manager/UpdateTaskManager.h>
 #include <Manager/ClassManager.h>
+#include <Manager/TimerManager.h>
+#include <Core/Input.h>
 #include <Math/TColor.h>
 #include <Math/TMath.h>
 
@@ -48,17 +50,27 @@ void Scene::Release()
 		it->second.reset();
 	}
 	m_objects.clear();
+	m_nameToUUIDs.clear();
 	UpdateTaskManager::GetInstance().ClearWorld();
 	CollisionSystem::GetInstance().Release();
 	PhysicsSystem::GetInstance().Release();
 }
 
-// Ã¹ ÇÁ·¹ÀÓ¿¡¼­ ScriptSystemÀÇ Start¸¦ call
+// ì²« í”„ë ˆìž„ì—ì„œ ScriptSystemì˜ Startë¥¼ call
 void Scene::Update()
 {
 	UpdateTaskManager::GetInstance().StartFrame();
 	UpdateTaskManager::GetInstance().TickAll();
+    // F2 í† ê¸€
+    if (Input::IsKeyPressed(VK_F2)) {
+        m_debugHudVisible = !m_debugHudVisible;
+        if (m_sysinfoWidget) m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
+        if (m_fpsWidget) m_fpsWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
+    }
+    // FPS ê°±ì‹  (TimerManager ê°’ì„ ê·¸ëŒ€ë¡œ ì‚¬ìš©)
+    UpdateDebugHUD(0.0f);
 	VisibleMemoryInfo();
+	FlushPendingRemovals(); // í”„ë ˆìž„ ëì—ì„œ ì‚­ì œ ì²˜ë¦¬
 	UpdateTaskManager::GetInstance().EndFrame();
 }
 
@@ -69,12 +81,21 @@ void Scene::OnEnter()
 		it->second->OnStart();
 	}
 
-	m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
-	GetCamera()->AddChildObject(m_sysinfoWidget);
-	m_sysinfoWidget->AddComponent<TextRenderComponent>();
+    m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
+    //GetCamera()->AddChildObject(m_sysinfoWidget);
+    auto* sysText = m_sysinfoWidget->AddComponent<TextRenderComponent>();
+    sysText->SetDrawType(Define::EDrawType::ScreenSpace);
+    sysText->SetColor(FColor(200, 0, 0, 255));
+    // ScreenSpace ì¢Œí‘œ (ì¢Œìƒë‹¨ 0,0)
+    sysText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.1f));
 
-	FVector2 pos = D2DRenderManager::GetInstance().GetApplicationSize();
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(pos.x * 0.7f, pos.y * 0.1f));
+    // FPS ìœ„ì ¯
+    m_fpsWidget = NewObject<gameObject>(L"FPSWidget");
+    //GetCamera()->AddChildObject(m_fpsWidget);
+    auto* fpsText = m_fpsWidget->AddComponent<TextRenderComponent>();
+    fpsText->SetDrawType(Define::EDrawType::ScreenSpace);
+    fpsText->SetColor(FColor(0, 255, 0, 255));
+    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.18f));
 }
 
 void Scene::OnExit()
@@ -89,57 +110,90 @@ void Scene::OnExit()
 
 void Scene::VisibleMemoryInfo()
 {
-	FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetText(L"VRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
-	m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetColor(FColor(200, 0, 0, 255));
+    FMemoryInfo info = PackageResourceManager::GetInstance().GetMemoryInfo();
+    if (m_sysinfoWidget)
+    {
+        auto* t = m_sysinfoWidget->GetComponent<TextRenderComponent>();
+        t->SetText(L"VRAM : " + info.VRAMUssage + L"\n" + L"DRAM : " + info.DRAMUssage + L"\n" + L"PageFile : " + info.PageFile + L"\n");
+    }
+}
 
+void Scene::UpdateDebugHUD(float /*deltaTime*/)
+{
+    if (m_fpsWidget)
+    {
+        const float fps = TimerManager::GetInstance().GetCurrentFPS();
+        auto* t = m_fpsWidget->GetComponent<TextRenderComponent>();
+        t->SetText(L"FPS: " + std::to_wstring(static_cast<int>(std::round(fps))));
+    }
 }
 
 bool Scene::RemoveObject(gameObject* targetObj)
 {
-	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
-	{
-		if (it->second.get() == targetObj)
-		{
-			m_nameToUUIDs.erase(it->second->GetName());
-			it->second.reset();
-			m_objects.erase(it);
-			return true;
-		}
-	}
-	return false;
+	if (!targetObj) return false;
+	std::wstring uuid = FindUUIDByPointer(targetObj);
+	if (uuid.empty()) return false;
+
+	m_pendingDeleteUUIDs.insert(uuid);
+	return true;
 }
 
 bool Scene::RemoveObjectByName(const std::wstring& objectName)
 {
 	auto it = m_nameToUUIDs.find(objectName);
-	if (it != m_nameToUUIDs.end())
-	{
-		// ¿¹: Ã¹¹øÂ° UUID »èÁ¦ (´Ù¸¥ ¹æ½Äµµ °¡´É)
-		auto uuidIt = it->second.begin();
-		m_objects.erase(*uuidIt);
-		it->second.erase(uuidIt);
-		if (it->second.empty())
-			m_nameToUUIDs.erase(it);
-		return true;
-	}
-	return false;
+	if (it == m_nameToUUIDs.end() || it->second.empty())
+		return false;
+
+	m_pendingDeleteUUIDs.insert(*it->second.begin()); // í•˜ë‚˜ë§Œ ì‚­ì œ
+	return true;
 }
 
 bool Scene::RemoveAllObjectsByName(const std::wstring& name)
 {
 	auto it = m_nameToUUIDs.find(name);
-	if (it != m_nameToUUIDs.end())
-	{
-		for (const auto& uuid : it->second)
-		{
-			m_objects.erase(uuid);
-		}
-		m_nameToUUIDs.erase(it);
-		return true;
-	}
-	return false;
+	if (it == m_nameToUUIDs.end() || it->second.empty())
+		return false;
+
+	for (const auto& uuid : it->second)
+		m_pendingDeleteUUIDs.insert(uuid);
+	return true;
 }
+
+void Scene::FlushPendingRemovals()
+{
+	if (m_pendingDeleteUUIDs.empty()) return;
+
+	for (const auto& uuid : m_pendingDeleteUUIDs)
+	{
+		auto it = m_objects.find(uuid);
+		if (it == m_objects.end()) continue;
+
+		const std::wstring& name = it->second->GetName();
+		auto nameIt = m_nameToUUIDs.find(name);
+		if (nameIt != m_nameToUUIDs.end())
+		{
+			nameIt->second.erase(uuid);
+			if (nameIt->second.empty())
+				m_nameToUUIDs.erase(nameIt);
+		}
+
+		it->second.reset();
+		m_objects.erase(it);
+	}
+	m_pendingDeleteUUIDs.clear();
+}
+
+std::wstring Scene::FindUUIDByPointer(gameObject* ptr) const
+{
+	if (!ptr) return L"";
+	for (const auto& kv : m_objects)
+	{
+		if (kv.second.get() == ptr)
+			return kv.first;
+	}
+	return L"";
+}
+
 
 gameObject* Scene::Instantiate(gameObject* obj)
 {
@@ -160,7 +214,7 @@ gameObject* Scene::Instantiate(gameObject* obj)
 				{
 					ClassManager::GetInstance().ReplicateAllMembers(createdComp, objComp);
 				}
-				// AddComponentÀÇ ·ÎÁ÷À» ¿©±â¿¡ ³ÖÀ¸¸é µË´Ï´Ù.
+				// AddComponentì˜ ë¡œì§ì„ ì—¬ê¸°ì— ë„£ìœ¼ë©´ ë©ë‹ˆë‹¤.
 				createdComp->Initialize();
 				createdComp->SetOwner(target);
 				target->m_components.push_back(createdComp);

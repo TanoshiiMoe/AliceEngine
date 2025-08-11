@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "ButtonComponent.h"
 #include <Component/Component.h>
 #include <Manager/D2DRenderManager.h>
@@ -11,6 +11,7 @@
 #include <Core/Input.h>
 #include <Helpers/FileHelper.h>
 #include <Helpers/CoordHelper.h>
+#include <Manager/TimerManager.h>
 
 ButtonComponent::ButtonComponent()
 {
@@ -19,7 +20,7 @@ ButtonComponent::ButtonComponent()
 
 ButtonComponent::~ButtonComponent()
 {
-	PackageResourceManager::GetInstance().UnloadData(filePath); // ºñÆ®¸Ê ¾ğ·Îµå
+	PackageResourceManager::GetInstance().UnloadData(filePath); // ë¹„íŠ¸ë§µ ì–¸ë¡œë“œ
 }
 
 void ButtonComponent::Initialize()
@@ -32,46 +33,60 @@ void ButtonComponent::Initialize()
 void ButtonComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-
 	if (!bActive) return;
 
-	bool mouseDown = Input::IsMouseLeftDown();
-	bool mouseUp = Input::IsMouseLeftReleased();
-	FVector2 mousePos = Input::GetMouseWorldPositionInCanvas();
-	FVector2 relativePos = FVector2(
+	const bool mouseDown = Input::IsMouseLeftDown();
+	const bool mouseUp = Input::IsMouseLeftReleased();
+
+	const FVector2 mousePos = Input::GetMouseWorldPositionInCanvas();
+	const FVector2 relativePos(
 		relativeTransform.GetPosition().x,
 		relativeTransform.GetPosition().y
 	);
 
-	FVector2 uiSize = GetRelativeSize();
-	FVector2 finalUIPos = relativePos + FVector2(-uiSize.x * GetOwnerPivot()->x, -uiSize.y * GetOwnerPivot()->y);
+	const FVector2 uiSize = GetRelativeSize();
+	const FVector2 finalUIPos = relativePos + FVector2(-uiSize.x * GetOwnerPivot()->x,
+		-uiSize.y * GetOwnerPivot()->y);
 
-	// UI ¿µ¿ª ³» ¸¶¿ì½º Å¬¸¯ È®ÀÎ
-	if (IsMouseInUIArea(mousePos, finalUIPos, uiSize))
+	const bool inArea = IsMouseInUIArea(mousePos, finalUIPos, uiSize);
+
+	if (inArea)
 	{
-		// ¸¶¿ì½º°¡ UI ¿µ¿ª ¾È¿¡ ÀÖÀ» ¶§¸¸ ÇÔ¼ö È£Ãâ
+		// (ì„ íƒ) ì§„ì… ì´ë²¤íŠ¸ê°€ í•„ìš”í•˜ë©´ ì—¬ê¸°ì„œ HoverEnter ë°œí–‰:
+		// if (!m_prevInArea) SetCurrentState(Define::EButtonState::HoverEnter);
+
 		SetCursor(LoadCursorW(nullptr, IDC_HAND));
 
-		if (mouseUp && m_prevMouseDown) // ¸¶¿ì½º°¡ ¶¼¾îÁ³°í ÀÌÀü¿¡ ´­·ÁÀÖ¾ú´Ù¸é Release »óÅÂ
+		if (mouseUp && m_prevMouseDown)
 		{
-			SetCurrentState(EButtonState::Release);
+			SetCurrentState(Define::EButtonState::Release);
 		}
-		else if (mouseDown) // ¸¶¿ì½º°¡ ´­·ÁÀÖÀ¸¸é Pressed »óÅÂ
+		else if (mouseDown)
 		{
-			SetCurrentState(EButtonState::Pressed);
+			SetCurrentState(Define::EButtonState::Pressed);
 		}
 		else
 		{
-			SetCurrentState(EButtonState::Hover); // ¸¶¿ì½º°¡ ¿Ã¶ó°¡ÀÖÁö¸¸ ´­¸®Áö ¾Ê¾ÒÀ¸¸é Hover »óÅÂ
+			SetCurrentState(Define::EButtonState::Hover);
 		}
 	}
 	else
 	{
-		SetCurrentState(EButtonState::Idle);
+		// ì§ì „ í”„ë ˆì„ì—” ì•ˆì— ìˆì—ˆê³  ì´ë²ˆ í”„ë ˆì„ì— ë‚˜ê°”ë‹¤ë©´ HoverLeave 1íšŒ ë°œí–‰
+		if (m_prevInArea)
+		{
+			SetCurrentState(Define::EButtonState::HoverLeave);
+		}
+		else
+		{
+			SetCurrentState(Define::EButtonState::Idle);
+		}
+
 		SetCursor(LoadCursorW(nullptr, IDC_ARROW));
 	}
 
 	m_prevMouseDown = mouseDown;
+	m_prevInArea = inArea;
 }
 
 void ButtonComponent::Release()
@@ -85,9 +100,21 @@ void ButtonComponent::Render()
 	if (!m_bitmap) return;
 	__super::Render();
 
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!context) return;
+
 	FVector2 relativeSize = FVector2(GetBitmapSizeX(), GetBitmapSizeY());
 	D2D1_RECT_F destRect = D2D1::RectF(-relativeSize.x / 2, -relativeSize.y / 2, relativeSize.x / 2, relativeSize.y / 2);
-	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), destRect);
+	
+	// ë¨¼ì € ê¸€ë¡œìš° ì´í™íŠ¸ë¥¼ ë’¤ì— ê·¸ë¦¬ê¸° (ìˆëŠ” ê²½ìš°)
+	if (m_effect)
+	{
+		D2D1_POINT_2F glowPos = D2D1::Point2F(-relativeSize.x / 2, -relativeSize.y / 2);
+		context->DrawImage(m_effect.Get(), &glowPos);
+	}
+	
+	// ê·¸ ë‹¤ìŒ ê¸°ì¡´ ë²„íŠ¼ ì´ë¯¸ì§€ë¥¼ ìœ„ì— ê·¸ë¦¬ê¸°
+	context->DrawBitmap(m_bitmap.get(), destRect);
 }
 
 float ButtonComponent::GetBitmapSizeX()
@@ -114,11 +141,11 @@ FVector2 ButtonComponent::GetRelativeSize()
 
 void ButtonComponent::LoadData(Define::EButtonState state, const std::wstring& path)
 {
-	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // ÆÄÀÏ ÀÌ¸§¸¸ ÀúÀå
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // íŒŒì¼ ì´ë¦„ë§Œ ì €ì¥
 	m_bitmaps[state] = PackageResourceManager::GetInstance().CreateBitmapFromFile(
 		(Define::BASE_RESOURCE_PATH + path).c_str());
 	
-	// ÇöÀç »óÅÂÀÇ ÀÌ¹ÌÁö¶ó¸é m_bitmapµµ ¾÷µ¥ÀÌÆ®
+	// í˜„ì¬ ìƒíƒœì˜ ì´ë¯¸ì§€ë¼ë©´ m_bitmapë„ ì—…ë°ì´íŠ¸
 	if (state == m_state)
 	{
 		m_bitmap = m_bitmaps[state];
@@ -138,14 +165,14 @@ void ButtonComponent::ExecuteStateAction(Define::EButtonState state)
 	auto it = stateActionSlots.find(state);
 	if (it != stateActionSlots.end())
 	{
-		// ºÎ¸ğ °´Ã¼°¡ À¯È¿ÇÑÁö È®ÀÎ
+		// ë¶€ëª¨ ê°ì²´ê°€ ìœ íš¨í•œì§€ í™•ì¸
 		if (!it->second.weakPtr.expired())
 		{
-			it->second.func(); // ÇØ´ç »óÅÂÀÇ ÇÔ¼ö ½ÇÇà
+			it->second.func(); // í•´ë‹¹ ìƒíƒœì˜ í•¨ìˆ˜ ì‹¤í–‰
 		}
 		else
 		{
-			// ºÎ¸ğ °´Ã¼°¡ ÆÄ±«µÇ¾úÀ¸¸é ½½·Ô Á¦°Å
+			// ë¶€ëª¨ ê°ì²´ê°€ íŒŒê´´ë˜ì—ˆìœ¼ë©´ ìŠ¬ë¡¯ ì œê±°
 			stateActionSlots.erase(it);
 		}
 	}
@@ -153,22 +180,179 @@ void ButtonComponent::ExecuteStateAction(Define::EButtonState state)
 
 void ButtonComponent::SetCurrentState(Define::EButtonState state)
 {
-	// ÀÌÀü »óÅÂ¿Í ´Ù¸£¸é »óÅÂ º¯°æ
+	// ì´ì „ ìƒíƒœì™€ ë‹¤ë¥´ë©´ ìƒíƒœ ë³€ê²½
 	if (m_state != state)
 	{
-		// ÀÌÀü »óÅÂÀÇ Á¾·á ÇÔ¼ö ½ÇÇà (ÀÖ´Â °æ¿ì)
-		ExecuteStateAction(static_cast<Define::EButtonState>(static_cast<int>(m_state) + 100)); // Á¾·á »óÅÂ´Â +100À¸·Î °¡Á¤
+		// ì´ì „ ìƒíƒœì˜ ì¢…ë£Œ í•¨ìˆ˜ ì‹¤í–‰ (ìˆëŠ” ê²½ìš°)
+		ExecuteStateAction(static_cast<Define::EButtonState>(static_cast<int>(m_state) + 100)); // ì¢…ë£Œ ìƒíƒœëŠ” +100ìœ¼ë¡œ ê°€ì •
 		
 		m_state = state;
 		
-		// »õ »óÅÂÀÇ ½ÃÀÛ ÇÔ¼ö ½ÇÇà
+		// ìƒˆ ìƒíƒœì˜ ì‹œì‘ í•¨ìˆ˜ ì‹¤í–‰
 		ExecuteStateAction(state);
 		
-		// ÇöÀç »óÅÂ¿¡ ¸Â´Â ÀÌ¹ÌÁö·Î m_bitmap ¾÷µ¥ÀÌÆ®
+		// í˜„ì¬ ìƒíƒœì— ë§ëŠ” ì´ë¯¸ì§€ë¡œ m_bitmap ì—…ë°ì´íŠ¸
 		auto it = m_bitmaps.find(state);
 		if (it != m_bitmaps.end() && it->second)
 		{
 			m_bitmap = it->second;
 		}
+	}
+}
+
+void ButtonComponent::StartHoverPulse(float period, float amp)
+{
+	m_hoverPeriod = (period > 0.f) ? period : 0.8f;
+	m_hoverAmp = amp;
+	m_hoverT = 0.f;
+
+	// í˜„ì¬ ìŠ¤ì¼€ì¼ì„ ê¸°ì¤€ ìŠ¤ì¼€ì¼ë¡œ ì €ì¥
+	// (ì—”ì§„ APIì— ë§ì¶°ì„œ GetScale/SetScale ë˜ëŠ” relativeTransform ì‚¬ìš©)
+	m_hoverBaseScale = relativeTransform.GetScale();
+
+	auto weakThis = WeakFromThis<ButtonComponent>(); // ì—†ë‹¤ë©´ ownerë¥¼ í†µí•´ ì•ˆì „ê²€ì‚¬
+	TimerManager::GetInstance().SetTimerDt(m_hoverTimer, [weakThis](float dt) mutable
+	{
+		if (auto self = weakThis.lock())
+		{
+			self->m_hoverT += dt;
+
+			// 0..1 êµ¬ê°„ ì‹œê°„ ì¢Œí‘œ
+			const float u = std::fmod(self->m_hoverT, self->m_hoverPeriod) / self->m_hoverPeriod;
+
+			// [-1,1] ëª¨ì–‘ê°’
+			const float wave = Math::eased_triangle_pulse(u, self->m_hoverSharpness, self->m_hoverEase);
+
+			// 1 Â± amp ë¡œ ìŠ¤ì¼€ì¼ ë³€í™˜
+			const float s = 1.0f + self->m_hoverAmp * wave;
+
+			const FVector2 newScale(self->m_hoverBaseScale.x * s,
+				self->m_hoverBaseScale.y * s);
+
+			self->relativeTransform.SetScale(newScale);
+		}
+	});
+}
+
+void ButtonComponent::StopHoverPulse()
+{
+	TimerManager::GetInstance().ClearTimer(m_hoverTimer);
+	// ê¸°ì¤€ ìŠ¤ì¼€ì¼ë¡œ ë³µì›
+	relativeTransform.SetScale(m_hoverBaseScale);
+}
+
+void ButtonComponent::CreateGlowEffect(float intensity, FColor color)
+{
+	if (intensity <= 0.0f)
+	{
+		m_effect = nullptr;
+		return;
+	}
+
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	if (!context || !m_bitmap) return;
+
+	try
+	{
+		// ê·¸ë¦¼ì ì´í™íŠ¸ ìƒì„± (ê¸€ë¡œìš° íš¨ê³¼)
+		ComPtr<ID2D1Effect> shadowEffect;
+		HRESULT hr = context->CreateEffect(CLSID_D2D1Shadow, &shadowEffect);
+		
+		if (SUCCEEDED(hr) && shadowEffect)
+		{
+			// ê·¸ë¦¼ì ìƒ‰ìƒ ì„¤ì • (FColorë¥¼ 0~1 ë²”ìœ„ë¡œ ë³€í™˜)
+			D2D1_VECTOR_4F shadowColor = { 
+				color.r / 255.0f, 
+				color.g / 255.0f, 
+				color.b / 255.0f, 
+				intensity * 1.5f 
+			};
+			shadowEffect->SetValue(D2D1_SHADOW_PROP_COLOR, shadowColor);
+			
+			// ë¸”ëŸ¬ ë°˜ì§€ë¦„ ì„¤ì • (ë” í° ê¸€ë¡œìš° í¬ê¸°)
+			shadowEffect->SetValue(D2D1_SHADOW_PROP_BLUR_STANDARD_DEVIATION, 20.0f);
+
+			// ì…ë ¥ ì´ë¯¸ì§€ ì„¤ì •
+			shadowEffect->SetInput(0, m_bitmap.get());
+			
+			m_effect = shadowEffect;
+		}
+		else
+		{
+			// ì´í™íŠ¸ ìƒì„± ì‹¤íŒ¨ ì‹œ ì´í™íŠ¸ ì œê±°
+			m_effect = nullptr;
+		}
+	}
+	catch (...)
+	{
+		// ì˜ˆì™¸ ë°œìƒ ì‹œ ì´í™íŠ¸ ì œê±°
+		m_effect = nullptr;
+	}
+}
+
+void ButtonComponent::StartEffectAnimation(float duration, float targetIntensity, FColor glowColor)
+{
+	m_effectDuration = duration;
+	m_effectStartIntensity = m_currentEffectIntensity;
+	m_effectTargetIntensity = targetIntensity;
+	m_effectColor = glowColor;
+	m_effectT = 0.f;
+
+	// ê¸€ë¡œìš° ì´í™íŠ¸ ìƒì„±
+	CreateGlowEffect(m_currentEffectIntensity, m_effectColor);
+
+	auto weakThis = WeakFromThis<ButtonComponent>();
+	TimerManager::GetInstance().SetTimerDt(m_effectTimer, [weakThis](float dt) mutable
+	{
+		if (auto self = weakThis.lock())
+		{
+			self->m_effectT += dt;
+			
+			// 0..1 êµ¬ê°„ì˜ ì§„í–‰ë¥ 
+			float progress = Math::Clamp(self->m_effectT / self->m_effectDuration, 0.f, 1.f);
+			
+			// ë¶€ë“œëŸ¬ìš´ ë³´ê°„ (easeInOut)
+			float easedProgress = progress * progress * (3.0f - 2.0f * progress);
+			
+			// í˜„ì¬ ê°•ë„ ê³„ì‚°
+			self->m_currentEffectIntensity = Math::Lerp(
+				self->m_effectStartIntensity, 
+				self->m_effectTargetIntensity, 
+				easedProgress
+			);
+			
+			// ì´í™íŠ¸ ì—…ë°ì´íŠ¸ (ìƒ‰ìƒ í¬í•¨)
+			self->CreateGlowEffect(self->m_currentEffectIntensity, self->m_effectColor);
+			
+			// ì• ë‹ˆë©”ì´ì…˜ ì™„ë£Œ ì‹œ íƒ€ì´ë¨¸ ì •ë¦¬
+			if (progress >= 1.0f)
+			{
+				TimerManager::GetInstance().ClearTimer(self->m_effectTimer);
+			}
+		}
+	});
+}
+
+void ButtonComponent::StopEffectAnimation()
+{
+	TimerManager::GetInstance().ClearTimer(m_effectTimer);
+	m_effect = nullptr;
+	m_currentEffectIntensity = 0.f;
+}
+
+void ButtonComponent::StopAllAnimations()
+{
+	// ëª¨ë“  íƒ€ì´ë¨¸ ì¤‘ì§€
+	TimerManager::GetInstance().ClearTimer(m_hoverTimer);
+	TimerManager::GetInstance().ClearTimer(m_effectTimer);
+	
+	// ì´í™íŠ¸ ì œê±°
+	m_effect = nullptr;
+	m_currentEffectIntensity = 0.f;
+	
+	// ìŠ¤ì¼€ì¼ ì›ìƒë³µêµ¬
+	if (owner && owner->transform())
+	{
+		relativeTransform.SetScale(m_hoverBaseScale);
 	}
 }

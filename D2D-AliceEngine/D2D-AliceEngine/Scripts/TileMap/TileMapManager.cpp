@@ -1,4 +1,4 @@
-#include "TileMapManager.h"
+ï»¿#include "TileMapManager.h"
 #include "System/ScriptSystem.h"
 #include "TileMap/TileMapComponent.h"
 #include "Object/gameObject.h"
@@ -12,10 +12,12 @@ void TileMapManager::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(OnStart);
 
-	if (instance == nullptr)
-		instance = this;
-	else
-		SceneManager::GetInstance().GetWorld()->RemoveObject(this->owner.lock());
+	// ì‹±ê¸€í†¤ìœ¼ë¡œ ë”°ë¡œ ë¹¼ì„œ ì‚¬ìš©í•˜ê¸°ë¡œ í•¨.
+	//if (instance == nullptr)
+	//	instance = this;
+	//else
+	//	SceneManager::GetInstance().GetWorld()->RemoveObject(this->owner.lock());
+
 	/*gameObject* coll = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(L"SpawnCollider");
 	spawnerCollider = coll->AddComponent<Collider>();
 	spawnerCollider->SetBoxSize(FVector2(00.0f, 500.0f));*/
@@ -26,15 +28,24 @@ void TileMapManager::OnStart()
 	TileMapComponent* tc = owner->GetComponent<TileMapComponent>();
 
 	if (tc) {
-		tc->LoadTileMapData(L"TileMap/stage01_real/stage01_real.tmj");
-		tc->LoadTileSetData(L"TileMap/stage01_real/Tile_Road.tsj");
-		tc->LoadTileCollisionData(L"TileMap/TileMapColiderInfo.json");
+		// ê²½ë¡œê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ê¸°ë³¸ê°’ ì‚¬ìš© (Stage1 ê¸°ì¤€)
+		const std::wstring defaultMapPath       = L"TileMap/stage01_real/stage01_real.tmj";
+		const std::wstring defaultSetPath       = L"TileMap/stage01_real/Tile_Road.tsj";
+		const std::wstring defaultCollisionPath = L"TileMap/TileMapColiderInfo.json";
+
+		const std::wstring& mapPath       = m_tileMapPath.empty()       ? defaultMapPath       : m_tileMapPath;
+		const std::wstring& setPath       = m_tileSetPath.empty()       ? defaultSetPath       : m_tileSetPath;
+		const std::wstring& collisionPath = m_tileCollisionPath.empty() ? defaultCollisionPath : m_tileCollisionPath;
+
+		tc->LoadTileMapData(mapPath.c_str());
+		tc->LoadTileSetData(setPath.c_str());
+		tc->LoadTileCollisionData(collisionPath.c_str());
 		tc->SetSkew({ 45, 0 });
 		tc->CreateTileRenderers();
 		tc->CreateTileCollision();
-		tc->SetTileLayer(-5000);	// Å¸ÀÏ ·¹ÀÌ¾î¸¦ 3À¸·Î ¼³Á¤
+		tc->SetTileLayer(-5000);	// íƒ€ì¼ ë ˆì´ì–´ë¥¼ 3ìœ¼ë¡œ ì„¤ì •
 
-		// Å¸ÀÏ¸Ê À§Ä¡ Á¶Àı
+		// íƒ€ì¼ë§µ ìœ„ì¹˜ ì¡°ì ˆ
 		int t_height = tc->tileMap.tileHeight;
 		int map_height = tc->tileMap.height;
 		float yOffSet = t_height * ((float)map_height / 2.0f);
@@ -45,13 +56,13 @@ void TileMapManager::OnStart()
 		gameObject* realTile = tc->m_tile;
 		realTile->transform()->AddPosition(offSet.x, offSet.y);
 
-		// Å¸ÀÏ¸Ê Äİ¶óÀÌ´õ À§Ä¡ Á¶Àı
+		// íƒ€ì¼ë§µ ì½œë¼ì´ë” ìœ„ì¹˜ ì¡°ì ˆ
 		for (auto& obj : tc->go) {
 			obj->transform()->AddPosition(offSet.x, offSet.y);
 		}
 	}
 	else {
-		std::wstring message = owner->GetName() + L" : TileMapManager¿¡¼­ TileMapComponent¸¦ °¡Á®¿À´Âµ¥ ½ÇÆĞÇß½À´Ï´Ù!!!\n";
+		std::wstring message = owner->GetName() + L" : TileMapManagerì—ì„œ TileMapComponentë¥¼ ê°€ì ¸ì˜¤ëŠ”ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤!!!\n";
 		OutputDebugStringW(message.c_str());
 	}
 }

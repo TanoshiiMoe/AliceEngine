@@ -46,10 +46,20 @@ void AudioComponent::PlayByName(const std::wstring& name, float sec, float volum
 	AudioManager::GetInstance().PlaySoundByName(name, &m_Channel, volume, startSec, paused);
 }
 
+void AudioComponent::PlayByName1(const std::wstring& name, float volume)
+{
+    PlayByName(name, 0.0f, volume, false);
+}
+
 void AudioComponent::RestartByName(const std::wstring& name, float sec, float volume)
 {
 	StopByName(name);
 	PlayByName(name, sec, volume);
+}
+
+void AudioComponent::RestartByName1(const std::wstring& name, float volume)
+{
+    RestartByName(name, 0.0f, volume);
 }
 
 void AudioComponent::SetMasterVolume(float volume)

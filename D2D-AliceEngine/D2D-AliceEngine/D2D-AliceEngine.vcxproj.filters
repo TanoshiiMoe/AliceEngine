@@ -71,6 +71,9 @@
     <Filter Include="Scripts\Weapon">
       <UniqueIdentifier>{9634cc17-4f05-4b89-90df-3372689afb28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Legacy">
+      <UniqueIdentifier>{d891f3f6-01ba-4091-86f9-8bbf677cff57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -88,19 +91,10 @@
     <ClInclude Include="Scene\DemoScene2.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Aru.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Aru2.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\BackGroundImage.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\BackGroundVideo.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\CameraController.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="framework.h">
@@ -109,14 +103,8 @@
     <ClInclude Include="Scripts\Example\ScriptExample.h">
       <Filter>Scripts\ScriptExample</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Player.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\DemoScene3.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Enemy.h">
-      <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scene\DemoScene4.h">
       <Filter>Scene</Filter>
@@ -184,7 +172,7 @@
     <ClInclude Include="Scripts\Player\PlayerManager.h">
       <Filter>Scripts\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\TitleScene.h">
+    <ClInclude Include="Scene\GameScene\TitleScene.h">
       <Filter>Scene\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\KangScene\KangScene.h">
@@ -226,7 +214,7 @@
     <ClInclude Include="Scripts\Weapon\Bullet.h">
       <Filter>Scripts\Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Weapon\BulletManager.h">
+    <ClInclude Include="GameManager\BulletManager.h">
       <Filter>Scripts\Weapon</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Weapon\Drone.h">
@@ -248,6 +236,61 @@
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Player\PlayerMovement.h">
+    <ClInclude Include="Scripts\Legacy\Aru.h">
+      <Filter>Scripts\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Legacy\Aru2.h">
+      <Filter>Scripts\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Legacy\Enemy.h">
+      <Filter>Scripts\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Legacy\CameraController.h">
+      <Filter>Scripts\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Legacy\Player.h">
+      <Filter>Scripts\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\GamePlayManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Widget\CutSceneWidgetScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Widget\BlackOutWidgetScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\EffectTestScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\EnemyStatScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\EnemyDataManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\Scene_Stage1.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\Scene_Stage2.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\Scene_Stage3.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager\PlayerDataManager.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\GameOverScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene\GameClearScene.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
@@ -264,26 +307,14 @@
     <ClCompile Include="main.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Aru.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Aru2.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\BackGroundImage.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\BackGroundVideo.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\CameraController.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Example\ScriptExample.cpp">
       <Filter>Scripts\ScriptExample</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Enemy.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scene\DemoScene3.cpp">
       <Filter>Scene</Filter>
@@ -314,9 +345,6 @@
     </ClCompile>
     <ClCompile Include="Scripts\Bike\LaneController.cpp">
       <Filter>Scripts\Bike</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Player.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp">
       <Filter>Scripts\Widget</Filter>
@@ -354,7 +382,7 @@
     <ClCompile Include="Scripts\Player\PlayerManager.cpp">
       <Filter>Scripts\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\TitleScene.cpp">
+    <ClCompile Include="Scene\GameScene\TitleScene.cpp">
       <Filter>Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
@@ -369,7 +397,7 @@
     <ClCompile Include="Scripts\Weapon\Bullet.cpp">
       <Filter>Scripts\Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\Weapon\BulletManager.cpp">
+    <ClCompile Include="GameManager\BulletManager.cpp">
       <Filter>Scripts\Weapon</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Weapon\Drone.cpp">
@@ -409,5 +437,34 @@
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
     <ClCompile Include="Scripts\Bike\BikeStatScript.cpp" />
     <ClCompile Include="Scripts\Player\PlayerMovement.cpp" />
+    <ClCompile Include="Scripts\Legacy\Aru.cpp">
+      <Filter>Scripts\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Legacy\Aru2.cpp">
+      <Filter>Scripts\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Legacy\Enemy.cpp">
+      <Filter>Scripts\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Legacy\CameraController.cpp">
+      <Filter>Scripts\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Legacy\Player.cpp">
+      <Filter>Scripts\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager\GamePlayManager.cpp" />
+    <ClCompile Include="Scripts\Widget\CutSceneWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
+    <ClCompile Include="Scene\EffectTestScene.cpp" />
+    <ClCompile Include="Scripts\Enemy\EnemyStatScript.cpp" />
+    <ClCompile Include="GameManager\EnemyDataManager.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage2.cpp" />
+    <ClCompile Include="Scene\GameScene\Scene_Stage3.cpp" />
+    <ClCompile Include="GameManager\PlayerDataManager.cpp" />
+    <ClCompile Include="Scene\GameScene\GameOverScene.cpp" />
+    <ClCompile Include="Scene\GameScene\GameClearScene.cpp" />
+    <ClCompile Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.cpp" />
   </ItemGroup>
 </Project>

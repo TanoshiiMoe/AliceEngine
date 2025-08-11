@@ -1,7 +1,8 @@
-#include "EnemyManager.h"
+﻿#include "EnemyManager.h"
 #include "Manager/UpdateTaskManager.h"
 #include "System/ScriptSystem.h"
 #include "../Bike/LaneController.h"
+#include <Helpers/StringHelper.h>
 
 void EnemyManager::Initialize()
 {

@@ -55,7 +55,7 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 {
-	if (auto ptr = renderer.lock())
+	if (!renderer.expired())
 	{
 		m_renderers.push_back(renderer);
 
@@ -63,7 +63,7 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 		m_renderQueue.emplace_back(
 			renderer->GetHandle(),
 			renderer.Get(),
-			[renderer](){ renderer->Render(); },
+			[w = renderer](){ if(auto weak = w.lock()) weak->Render(); },
 			renderer->drawType,
 			&renderer->m_layer
 		);
@@ -320,9 +320,10 @@ ViewRect RenderSystem::GetCameraView()
 	FVector2 screen = D2DRenderManager::GetInstance().GetApplicationSize();
 	//const float halfWidth = (screen.x * 0.5f * fov) * scale.x;
 	//const float halfHeight = (screen.y * 0.5f * fov) * scale.y;
-	const float halfWidth = (screen.x * 0.5f * fov);
-	const float halfHeight = (screen.y * 0.5f * fov);
-	return ViewRect{ camX - halfWidth, camX + halfWidth, camY - halfHeight, camY + halfHeight };
+  const FVector2 cullScale = SceneManager::GetCamera()->GetCullingScale();
+  const float halfWidth = (screen.x * 0.5f * fov) * (cullScale.x > 0.0f ? cullScale.x : 1.0f);
+  const float halfHeight = (screen.y * 0.5f * fov) * (cullScale.y > 0.0f ? cullScale.y : 1.0f);
+  return ViewRect{ camX - halfWidth, camX + halfWidth, camY - halfHeight, camY + halfHeight };
 }
 
 // 컬링이 되는걸 확실하게 보려면 주석처리 된 부분을 사용

@@ -25,11 +25,11 @@
 #include <Manager/TimerManager.h>
 #include <Scripts/Bike/LaneController.h>
 
-#include <Scripts/Weapon/BulletManager.h>
+#include <GameManager/BulletManager.h>
 
 #include <Helpers/CoordHelper.h>
-#include "Bike/BikeMovementScript.h"
-#include "Weapon/Drone.h"
+#include <Scripts/Bike/BikeMovementScript.h>
+#include <Scripts/Weapon/Drone.h>
 
 void Player::Initialize()
 {

@@ -1,4 +1,4 @@
-#include "ExampleScene.h"
+ï»¿#include "ExampleScene.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -13,20 +13,20 @@
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 
-// ÀÌ ¹ØÀº °ÔÀÓ ÄÜÅÙÃ÷¿¡¼­ Á¤ÀÇÇÑ ½ºÅ©¸³Æ® ÄÄÆ÷³ÍÆ®µéÀÔ´Ï´Ù.
+// ì´ ë°‘ì€ ê²Œì„ ì½˜í…ì¸ ì—ì„œ ì •ì˜í•œ ìŠ¤í¬ë¦½íŠ¸ ì»´í¬ë„ŒíŠ¸ë“¤ì…ë‹ˆë‹¤.
 #include "../../Scripts/BackGroundImage.h"
-#include "../../Scripts/Aru.h"
-#include "../../Scripts/Aru2.h"
-#include "../../Scripts/Player.h"
-#include "../../Scripts/Enemy.h"
+#include "../../Scripts/Legacy/Aru.h"
+#include "../../Scripts/Legacy/Aru2.h"
+#include "../../Scripts/Legacy/Player.h"
+#include "../../Scripts/Legacy/Enemy.h"
 
 /*
-*	NewObject<T>(std::wstring&) : ÇØ´ç ÀÌ¸§ÀÇ °ÔÀÓ¿ÀºêÁ§Æ®¸¦ »ı¼ºÇÏ°í rawPointer¸¦ ¹İÈ¯ÇÕ´Ï´Ù.
-*	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : ÁÂÇ¥, È¸Àü, ½ºÄÉÀÏ, ÇÇº¿À» ÁöÁ¤ÇÕ´Ï´Ù.
+*	NewObject<T>(std::wstring&) : í•´ë‹¹ ì´ë¦„ì˜ ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  rawPointerë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
+*	Initilize(std::wstring&, FVector2&, float&, FVector2&, FVector2&) : ì¢Œí‘œ, íšŒì „, ìŠ¤ì¼€ì¼, í”¼ë´‡ì„ ì§€ì •í•©ë‹ˆë‹¤.
 *
-*   Update() ÇÔ¼ö¿¡ if¹®À¸·Î ÀÎÇ²À» ³ÖÀ» ¼ö µµ ÀÖ½À´Ï´Ù. È¤Àº Enter() ¿¡¼­ InputComponent¿¡ SetActionÀ¸·Î ÀÎÇ²À» µî·ÏÇÒ ¼ö ÀÖ½À´Ï´Ù.
+*   Update() í•¨ìˆ˜ì— ifë¬¸ìœ¼ë¡œ ì¸í’‹ì„ ë„£ì„ ìˆ˜ ë„ ìˆìŠµë‹ˆë‹¤. í˜¹ì€ Enter() ì—ì„œ InputComponentì— SetActionìœ¼ë¡œ ì¸í’‹ì„ ë“±ë¡í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 * 
-*	player->GetComponent<Rigidbody2D>()->m_eRigidBodyState Ã³·³ ÄÄÆ÷³ÍÆ®¿¡ ÀÖ´Â º¯¼ö »ç¿ëÇÒ¶§ nullptr Ã¼Å© ²À ÇÒ°Í.
+*	player->GetComponent<Rigidbody2D>()->m_eRigidBodyState ì²˜ëŸ¼ ì»´í¬ë„ŒíŠ¸ì— ìˆëŠ” ë³€ìˆ˜ ì‚¬ìš©í• ë•Œ nullptr ì²´í¬ ê¼­ í• ê²ƒ.
 *	if(player->GetComponent<Rigidbody2D>()) player->GetComponent<Rigidbody2D>()->m_eRigidBodyState;
 */
 
@@ -43,13 +43,13 @@ void ExampleScene::Release()
 void ExampleScene::Update()
 {
 	__super::Update();
-	// playerÀÇ position, rotation, scaleÀ» °¡Á®¿À´Â ¹æ¹ı
+	// playerì˜ position, rotation, scaleì„ ê°€ì ¸ì˜¤ëŠ” ë°©ë²•
 	FVector2 pos = m_player->transform()->GetPosition();
 	float rotation = m_player->transform()->GetRotation();
 	FVector2 scale = m_player->transform()->GetScale();
 
-	// for¹®À¸·Î µ¹¸é¼­ °ü¸®ÇÏ´Â ¹æ¹ı
-	// ¶¥¿¡ ÀÖ´Â¸é ColliderÀÇ »öÀ» ÃÊ·Ï»öÀ¸·Î, ¾Æ´Ï¸é »¡°£»öÀ¸·Î ¹Ù²Ù´Â ·ÎÁ÷
+	// forë¬¸ìœ¼ë¡œ ëŒë©´ì„œ ê´€ë¦¬í•˜ëŠ” ë°©ë²•
+	// ë•…ì— ìˆëŠ”ë©´ Colliderì˜ ìƒ‰ì„ ì´ˆë¡ìƒ‰ìœ¼ë¡œ, ì•„ë‹ˆë©´ ë¹¨ê°„ìƒ‰ìœ¼ë¡œ ë°”ê¾¸ëŠ” ë¡œì§
 	for (int i = 0; i < enemyMax; i++)
 	{
 		if (m_enemies[i]->GetComponent<Rigidbody2D>())
@@ -86,13 +86,13 @@ void ExampleScene::OnEnter()
 {
 	__super::OnEnter();
 
-	// À§Á¬À» »ı¼ºÇÏ°í ÄÄÆ÷³ÍÆ®¸¦ ºÎÂøÇÏ´Â ¿¹½ÃÀÔ´Ï´Ù.
+	// ìœ„ì ¯ì„ ìƒì„±í•˜ê³  ì»´í¬ë„ŒíŠ¸ë¥¼ ë¶€ì°©í•˜ëŠ” ì˜ˆì‹œì…ë‹ˆë‹¤.
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget->AddComponent<TextRenderComponent>()->SetText(
-		L" <ÇÃ·¹ÀÌ¾î> \n"
-		L" Á¤º¸¸¦ ³ÖÀ¸¸é µË´Ï´Ù.\n"
-		L" ÅØ½ºÆ® ÅØ½ºÆ® \n"
-		L" ÅØ½ºÆ® ÅØ½ºÆ® ÅØ½ºÆ® \n"
+		L" <í”Œë ˆì´ì–´> \n"
+		L" ì •ë³´ë¥¼ ë„£ìœ¼ë©´ ë©ë‹ˆë‹¤.\n"
+		L" í…ìŠ¤íŠ¸ í…ìŠ¤íŠ¸ \n"
+		L" í…ìŠ¤íŠ¸ í…ìŠ¤íŠ¸ í…ìŠ¤íŠ¸ \n"
 		L"\n"
 	);
 	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(18, 60));
@@ -100,31 +100,31 @@ void ExampleScene::OnEnter()
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
 
-	// ¹é±×¶ó¿îµå ¹è°æ ÀÔ´Ï´Ù.
+	// ë°±ê·¸ë¼ìš´ë“œ ë°°ê²½ ì…ë‹ˆë‹¤.
 	m_backgroundImage = NewObject<gameObject>(L"sky");
 	m_backgroundImage->AddComponent<BackGroundImage>();
 
-	// ÇÃ·¹ÀÌ¾î ¿¹½ÃÀÔ´Ï´Ù.
+	// í”Œë ˆì´ì–´ ì˜ˆì‹œì…ë‹ˆë‹¤.
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<Player>();
 	m_player->AddComponent<InputComponent>()->SetAction(m_player->GetHandle(), [this]() { PlayerInput(); });
 
 
-	// Àû ¿¹½ÃÀÔ´Ï´Ù. ÀûÀº vector¿¡ ´ã¾Æ Ã³¸®ÇÕ´Ï´Ù.
+	// ì  ì˜ˆì‹œì…ë‹ˆë‹¤. ì ì€ vectorì— ë‹´ì•„ ì²˜ë¦¬í•©ë‹ˆë‹¤.
 	for (int i = 0; i < enemyMax; i++)
 	{
 		m_enemies.push_back(NewObject<gameObject>(L"enemy"));
 		m_enemies[i]->AddComponent<Enemy>();
 		m_enemies[i]->AddComponent<InputComponent>()->SetAction(m_enemies[i]->GetHandle(), [this]() { EnemyInput(); });
 
-		// ÇÃ·¹ÀÌ¾îº¸´Ù Á¶±İ ¶³¾îÁø À§Ä¡¿¡¼­ »ı¼ºµÇ°ÔÇÏ´Â ·ÎÁ÷
+		// í”Œë ˆì´ì–´ë³´ë‹¤ ì¡°ê¸ˆ ë–¨ì–´ì§„ ìœ„ì¹˜ì—ì„œ ìƒì„±ë˜ê²Œí•˜ëŠ” ë¡œì§
 		/*m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInTorus2D(
 				m_player->transform()->GetPosition().x,
 				m_player->transform()->GetPosition().y,
 				200.0f,
 				412.0f));*/
-				// Æ¯Á¤ ÁöÁ¡¿¡¼­ ¿ø ¸ğ¾çÀÌ³»¿¡ ·£´ıÆÇ À§Ä¡¿¡¼­ »ı¼ºµÇ°ÔÇÏ´Â ·ÎÁ÷
+				// íŠ¹ì • ì§€ì ì—ì„œ ì› ëª¨ì–‘ì´ë‚´ì— ëœë¤íŒ ìœ„ì¹˜ì—ì„œ ìƒì„±ë˜ê²Œí•˜ëŠ” ë¡œì§
 		m_enemies[i]->transform()->SetPosition(
 			FRandom::GetRandomPointInCircle2D(
 				300,
@@ -143,7 +143,7 @@ void ExampleScene::OnEnter()
 		m_enemies[i]->GetComponent<Rigidbody2D>()->mass = 10;
 	}
 
-	// º® ¿¹½ÃÀÔ´Ï´Ù.
+	// ë²½ ì˜ˆì‹œì…ë‹ˆë‹¤.
 	m_wall = NewObject<gameObject>(L"wall");
 	m_wall->transform()->SetPivot(0.5f);
 	m_wall->transform()->SetPosition(0, -300);

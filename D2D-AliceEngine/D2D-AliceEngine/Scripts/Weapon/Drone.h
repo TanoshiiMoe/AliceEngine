@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Component/ScriptComponent.h>
 #include <Manager/TimerManager.h>
 
@@ -19,7 +19,8 @@ struct FDroneSpritePath
 enum class EDroneType
 {
 	Player,
-	Enemy
+	Enemy,
+	Boss
 };
 class gameObject;
 class SpriteRenderer;
@@ -34,7 +35,10 @@ public:
 	void Update(const float& deltaSeconds) override;
 	void Floating(const float& deltaSeconds, const FVector2& dirNormal);
 	void AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal);
+	void FireOneBurstShot();
 	void LateUpdate(const float& deltaSeconds);
+	// 사망 연출: 스프라이트를 페이드 아웃시키고 1초 뒤 삭제, 그동안 공격 금지
+	void DelayDestroy();
 
 	virtual void Awake() override;
 	virtual void OnStart() override;
@@ -65,18 +69,35 @@ public:
 	FTimerHandle timer;
 	bool bCanFire = true;
 	bool bWaitForSecond = true;
+	bool bDelayDestroying = false;
+  // 공개 페이드 파라미터 (인스턴스별 조절 가능)
+	float fadeDuration = 1.0f;  // 페이드 시간(초)
+	float fadeElapsed  = 0.0f;  // 진행 시간(초)
 
-	// ���Ʒ� ������ �ӵ�
+	// Recoil(반동) 파라미터
+	FVector2 recoilOffset = FVector2(0.0f, 0.0f);   // 현재 누적 반동 오프셋 (발사 방향의 반대)
+	FVector2 recoilDir    = FVector2(0.0f, 0.0f);   // 마지막 반동 방향(단위 벡터)
+	float    recoilMaxDistance = 24.0f;             // 최대 밀려나는 거리(px)
+	float    recoilImpulse     = 6.0f;              // 1회 발사 시 추가되는 반동 거리(px)
+	float    recoilReturnSpeed = 22.0f;             // 원위치 복귀 속도(px/s)
+
+	// 위아래 진폭과 속도
 	float elapsed = 0.0f;
-	float duration = 1.0f; // ����Ʒ� �� �� �̵��ϴµ� �ɸ��� �ð�
+	float duration = 1.0f; // 위→아래 한 번 이동하는데 걸리는 시간
 	float startY = 0.0f;
-	float endY = 7.0f;    // ���� 5��ŭ �̵�
+	float endY = 7.0f;    // 위로 5만큼 이동
 	bool goingUp = true;
 
 	FDroneSpritePath spritePath;
 	EDroneType droneType = EDroneType::Enemy;
 	float attackDelay = 0.5f;
 
-	// ���� �ٶ󺸴� �� ȸ�� �߰� ���� - �̹����� ȸ���Ǿ� ���� ��� �߰�.
+	// 상대방 바라보는 팔 회전 추가 각도 - 이미지가 회전되어 있을 경우 추가.
 	float armDegree = 0.0f;
+
+	// 플레이어 원형으로 쏠 변수
+	FTimerHandle burstTimer;
+	int   burstRemaining = 0;
+    float burstInterval = 0.2f;    // 연속 발사 간격(초)
+	float spreadRadius = 340.0f;  // 플레이어 주변 랜덤 조준 반경
 };
