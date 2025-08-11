@@ -18,10 +18,13 @@ void PlayerMovement::Initialize()
 void PlayerMovement::OnStart()
 {
 	if (!bMovement)
-		bMovement = owner->GetComponent<BikeMovementScript>();
+		bMovement = owner->AddComponent<BikeMovementScript>();
 
-	if (bMovement)
+	if (bMovement) {
 		initSpeed = bMovement->GetInitialSpeed();
+		bMovement->SetAcceleration(200.0f);
+	}
+
 	if (auto ic = owner->GetComponent<InputComponent>())
 		ic->SetAction(owner->GetHandle(), [this]() { Input(); });
 	else
@@ -31,18 +34,19 @@ void PlayerMovement::OnStart()
 void PlayerMovement::Update(const float& deltaSeconds)
 {
 	dt = deltaSeconds;
+	bMovement->SetMaxSpeed(bMovement->GetMaxSpeed() + moveDir.x * deltaSeconds);
 }
 
 void PlayerMovement::Input()
 {
-	moveDir = { 0.0f , 0.0f };
+	moveDir = { 0.0f, 0.0f };
 
 	if (Input::IsKeyDown(VK_A)) {
 		// initialSpeed 줄이기
-		moveDir.x -= 1.0f * dt;
+		moveDir.x -= 10.0f;
 	}
 	if (Input::IsKeyDown(VK_D)) {
 		// initialSpeed 늘리기
-		moveDir.x += 1.0f * dt;
+		moveDir.x += 10.0f;
 	}
 }

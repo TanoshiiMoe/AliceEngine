@@ -27,7 +27,6 @@ void PlayerBike::Initialize()
 	owner->AddComponent<AnimatorInstance>();
 	//owner->AddComponent<BackGroundRender>();
 	owner->AddComponent<SkewTransform>();
-	owner->AddComponent<BikeMovementScript>();
 	owner->AddComponent<Collider>();
 	owner->AddComponent<InputComponent>();
 	owner->AddComponent<Prism>(10, 0.1f);
