@@ -67,6 +67,8 @@ void TitleWidgetScript::OnStart()
 	auto optionText = m_owner->AddComponent<TextRenderComponent>();
 	auto optionButton = m_owner->AddComponent<ButtonComponent>();
 	auto optionTabText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionTabBGMText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionTabSFXText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto staffText = m_owner->AddComponent<TextRenderComponent>();
 	auto staffButton = m_owner->AddComponent<ButtonComponent>();
@@ -102,7 +104,7 @@ void TitleWidgetScript::OnStart()
 	float sfxVolume = AudioManager::GetInstance().GetSFXVolume();
 
     auto soundControl = m_owner->AddComponent<SpriteRenderer>();
-    soundControl->LoadData(L"UI\\UI_SoundControl.png");
+    soundControl->LoadData(L"UI\\UI_SoundController.png");
     soundControl->m_layer = Define::Disable;
     soundControl->SetRelativeScale(soundUISize);
     soundControl->SetDrawType(EDrawType::ScreenSpace);
@@ -115,7 +117,7 @@ void TitleWidgetScript::OnStart()
 	bgmControl->SetRelativeScale(FVector2(1, 1));
 	bgmControl->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(bgmControl->GetRelativeSize(), FVector2(0, 0))
-		+ FVector2(0, 5));
+		+ FVector2(5, 3));
 	bgmControl->SetProgress(bgmVolume);
 	bgmControl->m_layer = Define::Disable;
 
@@ -125,7 +127,7 @@ void TitleWidgetScript::OnStart()
 	sfxControl->SetRelativeScale(FVector2(1, 1));
 	sfxControl->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(sfxControl->GetRelativeSize(), FVector2(0, 0))
-		+ FVector2(0, 70));
+		+ FVector2(5, 66));
 	sfxControl->SetProgress(sfxVolume);
 	sfxControl->m_layer = Define::Disable;
 
@@ -378,7 +380,7 @@ void TitleWidgetScript::OnStart()
 	optionText->SetFontSize(55.0f);
 	optionText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	optionText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	optionText->SetText(L"음량 조정");
+	optionText->SetText(L"음량 조절");
 	optionText->SetColor(FColor::White);
 	FVector2 optionTextRectSize = optionText->GetRelativeSize();
 	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionTextRectSize, FVector2(-0.5, -0.5)));
@@ -388,18 +390,42 @@ void TitleWidgetScript::OnStart()
 	optionText->RemoveFromParent();
 	optionButton->AddChildComponent(optionText);
 
-	optionTabText->SetFontSize(70.0f);
+	optionTabText->SetFontSize(55.0f);
 	optionTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	optionTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	optionTabText->SetText(L"음량 조정");
-	optionTabText->SetColor(FColor(0, 234, 255, 255));
+	optionTabText->SetText(L"음량 조절");
+	optionTabText->SetColor(FColor::White);
 	FVector2 optionTabTextRectSize = optionTabText->GetRelativeSize();
 	optionTabText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(optionTabTextRectSize, FVector2(-0.5, -0.5))
-		+ FVector2(0, -350)
+		+ FVector2(0, -85)
 	);
 	optionTabText->SetRelativeRotation(0);
 	optionTabText->m_layer = Define::Disable;
+
+	optionTabBGMText->SetFontSize(20.0f);
+	optionTabBGMText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabBGMText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabBGMText->SetText(L"배경음");
+	optionTabBGMText->SetColor(FColor(0, 234, 255, 255));
+	optionTabBGMText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabBGMText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(0, -30)
+	);
+	optionTabBGMText->SetRelativeRotation(0);
+	optionTabBGMText->m_layer = Define::Disable;
+
+	optionTabSFXText->SetFontSize(20.0f);
+	optionTabSFXText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabSFXText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabSFXText->SetText(L"효과음");
+	optionTabSFXText->SetColor(FColor(0, 234, 255, 255));
+	optionTabSFXText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabSFXText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(0, 35)
+	);
+	optionTabSFXText->SetRelativeRotation(0);
+	optionTabSFXText->m_layer = Define::Disable;
 
 	// ======================== staffText
 	staffText->SetFontSize(55.0f);
@@ -612,7 +638,8 @@ void TitleWidgetScript::OnStart()
 	smallClose->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, smallClose,
 		bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
-		sfxControl, bgmControl, soundControl, sound
+		sfxControl, bgmControl, soundControl, sound, optionTabText,
+		optionTabBGMText, optionTabSFXText
 	] {
 		sound->StopByName(L"UISound");
 		sound->PlayByName(L"UISound");
@@ -634,6 +661,10 @@ void TitleWidgetScript::OnStart()
 		sfxMinusButton->SetActive(false);
 		sfxPlusButton->m_layer = Define::Disable;
 		sfxMinusButton->m_layer = Define::Disable;
+
+		optionTabText->m_layer = Define::Disable;
+		optionTabBGMText->m_layer = Define::Disable;
+		optionTabSFXText->m_layer = Define::Disable;
 
 		sfxControl->m_layer = Define::Disable;
 		bgmControl->m_layer = Define::Disable;
@@ -674,6 +705,8 @@ void TitleWidgetScript::OnStart()
 			sfxMinusButton->SetActive(true);
 			sfxPlusButton->m_layer = Define::PopupButtonLayer;
 			sfxMinusButton->m_layer = Define::PopupButtonLayer;
+
+			optionTabText->m_layer = Define::PopupTextLayer;
 
 			sfxControl->m_layer = Define::PopupObjectLayer;
 			bgmControl->m_layer = Define::PopupObjectLayer;

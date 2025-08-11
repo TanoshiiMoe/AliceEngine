@@ -63,6 +63,15 @@ void SelectWidgetScript::OnStart()
 	auto stage3 = m_owner->AddComponent<ButtonComponent>();
 
 	// ===================================================== //
+	background->LoadData(L"");
+	
+	
+	
+	
+	
+	
+	
+	
 	continueText->SetFontSize(70.0f);
 	continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	continueText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
