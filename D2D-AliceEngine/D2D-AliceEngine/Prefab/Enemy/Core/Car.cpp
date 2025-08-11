@@ -13,6 +13,8 @@
 #include <Manager/UpdateTaskManager.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Enemy/EnemyStatScript.h>
+#include <Component/Collider.h>
+#include <Scripts/Bike/BikeStatScript.h>
 
 void Car::Initialize()
 {
@@ -133,6 +135,20 @@ void Car::Update(const float& deltaSeconds)
 		// 최종 위치 = 기준점 + 오프셋
 		owner->SetPosition(basePos + FVector2(ox, oy));
     }
+}
+
+void Car::OnTriggerEnter2D(Collider* collider)
+{
+	if (!collider->GetOwner()) return;
+	if (collider->GetOwner()->GetTag() == L"Player")
+	{
+		if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+		{
+			// Bullet의 damage 변수 사용
+			bs->m_bikeStat->DecreaseAbility("HP", 8);
+		}
+		GetWorld()->RemoveObject(GetOwner());
+	}
 }
 
 void Car::DelayDestroy()

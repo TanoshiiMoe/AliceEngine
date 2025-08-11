@@ -14,6 +14,8 @@
 #include <Helpers/StringHelper.h>
 #include <Component/SpriteRenderer.h>
 #include <GameManager/GamePlayManager.h>
+#include <Object/gameObject.h>
+#include <Prefab/Enemy/Core/Car.h>
 
 PlayerManager* PlayerManager::instance = nullptr;
 

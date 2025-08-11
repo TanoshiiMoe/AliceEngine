@@ -198,6 +198,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_SHARPNESS, 5.0f);   // 0.0 ~ 10.0
 	//m_sceneEffect->SetValue(D2D1_SHARPEN_PROP_THRESHOLD, 0.0f);   // 엣지 강조 임계값
 
+	// 고급 쉐이더 효과들 설정
+	SetupAdvancedShaderEffects();
 }
 
 void D2DRenderManager::UnInitialize()
@@ -420,4 +422,120 @@ HRESULT D2DRenderManager::CreateBitmapFromFile(const wchar_t* path, ID2D1Bitmap1
 	// ⑥ DeviceContext에서 WIC 비트맵으로부터 D2D1Bitmap1 생성
 	hr = m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), &bmpProps, outBitmap);
 	return hr;
+}
+
+// 고급 쉐이더 효과들 구현
+void D2DRenderManager::SetupAdvancedShaderEffects()
+{
+	CreateColorMatrixEffect();
+	CreateGaussianBlurEffect();
+	CreateBlendEffect();
+	CreateTurbulenceEffect();
+	CreateMorphologyEffect();
+	CreateDisplacementEffect();
+	CreateArithmeticComposite();
+	CreateShaderChain();
+}
+
+void D2DRenderManager::CreateColorMatrixEffect()
+{
+	if (SUCCEEDED(m_d2dDeviceContext->CreateEffect(CLSID_D2D1ColorMatrix, &m_colorMatrixEffect)))
+	{
+		// 기본 색상 매트릭스 설정
+		D2D1_MATRIX_5X4_F colorMatrix = D2D1::Matrix5x4F(
+			1.0f, 0.0f, 0.0f, 0.0f,  // Red
+			0.0f, 1.0f, 0.0f, 0.0f,  // Green
+			0.0f, 0.0f, 1.0f, 0.0f,  // Blue
+			0.0f, 0.0f, 0.0f, 1.0f,  // Alpha
+			0.0f, 0.0f, 0.0f, 0.0f   // Offset
+		);
+		m_colorMatrixEffect->SetValue(D2D1_COLORMATRIX_PROP_COLOR_MATRIX, colorMatrix);
+	}
+}
+
+void D2DRenderManager::CreateGaussianBlurEffect()
+{
+	if (SUCCEEDED(m_d2dDeviceContext->CreateEffect(CLSID_D2D1GaussianBlur, &m_gaussianBlurEffect)))
+	{
+		m_gaussianBlurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION, 2.0f);
+		m_gaussianBlurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_OPTIMIZATION, D2D1_GAUSSIANBLUR_OPTIMIZATION_QUALITY);
+		m_gaussianBlurEffect->SetValue(D2D1_GAUSSIANBLUR_PROP_BORDER_MODE, D2D1_BORDER_MODE_HARD);
+	}
+}
+
+void D2DRenderManager::CreateBlendEffect()
+{
+	if (SUCCEEDED(m_d2dDeviceContext->CreateEffect(CLSID_D2D1Blend, &m_blendEffect)))
+	{
+		m_blendEffect->SetValue(D2D1_BLEND_PROP_MODE, D2D1_BLEND_MODE_MULTIPLY);
+	}
+}
+
+void D2DRenderManager::CreateTurbulenceEffect()
+{
+	if (SUCCEEDED(m_d2dDeviceContext->CreateEffect(CLSID_D2D1Turbulence, &m_turbulenceEffect)))
+	{
+		m_turbulenceEffect->SetValue(D2D1_TURBULENCE_PROP_FREQUENCY, D2D1::Vector2F(0.01f, 0.01f));
+		m_turbulenceEffect->SetValue(D2D1_TURBULENCE_PROP_OCTAVES, (UINT32)1);
+		m_turbulenceEffect->SetValue(D2D1_TURBULENCE_PROP_SEED, (UINT32)0);
+	}
+}
+
+void D2DRenderManager::CreateMorphologyEffect()
+{
+	if (SUCCEEDED(m_d2dDeviceContext->CreateEffect(CLSID_D2D1Morphology, &m_morphologyEffect)))
+	{
+		m_morphologyEffect->SetValue(D2D1_MORPHOLOGY_PROP_MODE, D2D1_MORPHOLOGY_MODE_ERODE);
+		m_morphologyEffect->SetValue(D2D1_MORPHOLOGY_PROP_WIDTH, 1);
+		m_morphologyEffect->SetValue(D2D1_MORPHOLOGY_PROP_HEIGHT, 1);
+	}
+}
+
+void D2DRenderManager::CreateDisplacementEffect()
+{
+	if (SUCCEEDED(m_d2dDeviceContext->CreateEffect(CLSID_D2D1DisplacementMap, &m_displacementEffect)))
+	{
+		m_displacementEffect->SetValue(D2D1_DISPLACEMENTMAP_PROP_SCALE, 10.0f);
+		m_displacementEffect->SetValue(D2D1_DISPLACEMENTMAP_PROP_X_CHANNEL_SELECT, D2D1_CHANNEL_SELECTOR_R);
+		m_displacementEffect->SetValue(D2D1_DISPLACEMENTMAP_PROP_Y_CHANNEL_SELECT, D2D1_CHANNEL_SELECTOR_G);
+	}
+}
+
+void D2DRenderManager::CreateArithmeticComposite()
+{
+	if (SUCCEEDED(m_d2dDeviceContext->CreateEffect(CLSID_D2D1ArithmeticComposite, &m_arithmeticComposite)))
+	{
+		m_arithmeticComposite->SetValue(D2D1_ARITHMETICCOMPOSITE_PROP_COEFFICIENTS, D2D1::Vector4F(1.0f, 0.0f, 0.0f, 0.0f));
+		m_arithmeticComposite->SetValue(D2D1_ARITHMETICCOMPOSITE_PROP_CLAMP_OUTPUT, TRUE);
+	}
+}
+
+void D2DRenderManager::CreateShaderChain()
+{
+	// 색상 매트릭스 -> 가우시안 블러 -> 블렌드 체인 생성
+	if (m_colorMatrixEffect && m_gaussianBlurEffect && m_blendEffect)
+	{
+		// 가우시안 블러에 색상 매트릭스 입력
+		m_gaussianBlurEffect->SetInput(0, static_cast<ID2D1Image*>(m_colorMatrixEffect.Get()));
+		
+		// 블렌드에 가우시안 블러 입력
+		m_blendEffect->SetInput(0, static_cast<ID2D1Image*>(m_gaussianBlurEffect.Get()));
+		
+		// 최종 쉐이더 체인 설정
+		m_shaderChain = m_blendEffect;
+		m_useAdvancedShaders = true;
+	}
+}
+
+void D2DRenderManager::ApplyShaderEffect(ID2D1Effect* effect, ID2D1Bitmap1* input, ID2D1Bitmap1* output)
+{
+	if (effect && input)
+	{
+		effect->SetInput(0, input);
+		// 출력 비트맵이 있다면 설정
+		if (output)
+		{
+			// 출력 비트맵 설정 로직
+		}
+	}
 }
