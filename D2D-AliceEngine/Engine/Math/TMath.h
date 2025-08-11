@@ -312,6 +312,19 @@ namespace Math
 		// -1..1로 변환
 		return tri * 2.f - 1.f;
 	}
+
+	// 2D 벡터 회전 (degree 단위)
+	template<typename T>
+	inline TVector2<T> Rotate(const TVector2<T>& v, float degree)
+	{
+		float rad = degree * Define::PI / 180.0f;
+		float cs = std::cos(rad);
+		float sn = std::sin(rad);
+		return TVector2<T>(
+			v.x * cs - v.y * sn,
+			v.x * sn + v.y * cs
+		);
+	}
 }
 
 using FVector2 = TVector2<float>;

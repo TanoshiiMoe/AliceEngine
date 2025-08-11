@@ -39,10 +39,10 @@ void DemoGameApp::Initialize()
 
 	GamePlayManager::Create();
 	EnemyDataManager::Create();
-	EnemyDataManager::GetInstance().LoadData(L"Enemy/EnemyData.json");
+	EnemyDataManager::GetInstance().LoadData(L"AbilityData/EnemyData.json");
  	EnemyDataManager::GetInstance().LoadSpawnData(L"TileMap/TileMapColiderInfo.json");
 	PlayerDataManager::Create();
-	PlayerDataManager::GetInstance().LoadData(L"Player/PlayerData.json");
+	PlayerDataManager::GetInstance().LoadData(L"AbilityData/PlayerData.json");
 
 	SceneManager::AddScene<DemoScene2>(L"aruScene");
 	SceneManager::AddScene<DemoScene3>(L"FSMScene");

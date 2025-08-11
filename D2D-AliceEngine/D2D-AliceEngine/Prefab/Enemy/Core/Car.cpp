@@ -12,6 +12,7 @@
 #include <Helpers/StringHelper.h>
 #include <Manager/UpdateTaskManager.h>
 #include <GameManager/GamePlayManager.h>
+#include <Scripts/Enemy/EnemyStatScript.h>
 
 void Car::Initialize()
 {
@@ -22,16 +23,18 @@ void Car::Initialize()
 
 	//?븷?땲硫붿씠?꽣 ?엳?쓣?떆
 	//owner->AddComponent<Animator>();
-	// 占쌍니몌옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙
+	// 占쌍니몌옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙
 	owner->AddComponent<AnimatorInstance>();
 	// 占쏙옙占쏙옙占쏙옙
-	owner->AddComponent<SpriteRenderer>();
-
-	owner->AddComponent<SkewTransform>();
-	owner->AddComponent<LaneController>();
-
-	// ?뒪?겕由쏀듃
-	owner->AddComponent<EnemyManager>();
+	
+    if (bSkewed)
+    {
+        owner->AddComponent<SpriteRenderer>();
+        owner->AddComponent<SkewTransform>();
+        owner->AddComponent<LaneController>();
+        // ?뒪?겕由쏀듃
+        owner->AddComponent<EnemyManager>();
+    }
 
 	TimerManager::GetInstance().ClearTimer(timer);
 	// 2珥덉뿉 ?븳踰덉뵫 移대찓?씪 而щ쭅 泥댄겕
@@ -62,9 +65,12 @@ void Car::Initialize()
 void Car::OnStart()
 {
 	// SkewTransform?쑝濡? 蹂??솚?븯湲?
-	SkewTransform* st = owner->GetComponent<SkewTransform>();
-	st->groundTile = GetWorld()->FindObjectByName<gameObject>(L"TileMap");
-	st->ToSkewPos();
+    if (bSkewed)
+    {
+        SkewTransform* st = owner->GetComponent<SkewTransform>();
+        st->groundTile = GetWorld()->FindObjectByName<gameObject>(L"TileMap");
+        st->ToSkewPos();
+    }
 }
 
 void Car::OnDestroy()
@@ -92,7 +98,40 @@ void Car::Update(const float& deltaSeconds)
 		{
 			playerPos += player->GetPosition();
 		}
-        owner->SetPosition(FVector2(playerPos.x + 900, 0));
+		
+		// 보스의 체력에 비례하여 플레이어로부터의 거리 조정
+		float baseDistance = 900.0f; // 기본 거리
+		float currentDistance = baseDistance;
+		
+		// EnemyStatScript에서 현재 체력과 최대 체력 가져오기
+		if (EnemyStatScript* enemyStat = owner->GetComponent<EnemyStatScript>())
+		{
+            if (!enemyStat->m_enemyStat) return;
+			float currentHP = enemyStat->m_enemyStat->GetStat("HP");
+			float maxHP = enemyStat->m_enemyStat->GetStat("MAXHP");
+			
+			if (maxHP > 0.0f)
+			{
+				// 체력이 줄어들수록 플레이어에게 가까워짐 (거리가 줄어듦)
+				float healthRatio = currentHP / maxHP;
+				// 체력이 100%일 때는 baseDistance, 0%일 때는 baseDistance * 0.3 (최소 거리)
+				currentDistance = baseDistance * (0.3f + 0.7f * healthRatio);
+			}
+		}
+		
+        //owner->SetPosition(FVector2(playerPos.x + currentDistance, 0));
+
+		const FVector2 basePos(playerPos.x + currentDistance, 0.0f);
+
+		// 부드러운 흔들림 오프셋 계산
+		m_bobTime += deltaSeconds;
+		const float twoPI = 2.0f * Define::PI;
+
+		float ox = std::sinf(twoPI * m_bobFreqX * m_bobTime) * m_bobAmpX;
+		float oy = std::sinf(twoPI * m_bobFreqY * m_bobTime + m_bobPhase) * m_bobAmpY;
+
+		// 최종 위치 = 기준점 + 오프셋
+		owner->SetPosition(basePos + FVector2(ox, oy));
     }
 }
 
@@ -164,24 +203,4 @@ void Car::DelayDestroy()
     m_fadeDuration = 1.0f;
     m_isFading = true;
     m_fadeTargetSR = ghostSR ? ghostSR : srSelf;
-    TimerManager::GetInstance().ClearTimer(m_fadeHandle);
-    TimerManager::GetInstance().SetTimer(
-        m_fadeHandle,
-        [weak = WeakFromThis<Car>(), ghostObj]() mutable {
-            if (!weak) return;
-            // 고스트 오브젝트 정리
-            if (ghostObj)
-            {
-                SceneManager::GetInstance().GetWorld()->RemoveObject(ghostObj.Get());
-            }
-            // 자신 파괴
-            if (weak)
-            {
-                weak->GetWorld()->RemoveObject(weak->GetOwner());
-            }
-        },
-        1.0f,
-        false,
-        1.0f
-    );
 }

@@ -44,18 +44,18 @@ void EnemySpawnTriggerBox::Update(const float& /*deltaSeconds*/)
     }
 }
 
-// 일단 12번으로 보스가 나온다고 가정
+// 일단 4번으로 보스가 나온다고 가정
 void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
 {
     // 이름 정하기
     std::wstring name = L"Boss";
     gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
 
-    enemy->AddComponent<Car>();
+    enemy->AddComponent<Car>(false);
     enemy->AddComponent<SpriteRenderer>()->LoadData(L"Enemy/Durang/boss_idle_notfix.png");
     enemy->GetComponent<SpriteRenderer>()->m_layer = 19999;
     enemy->AddComponent<Collider>()->SetBoxSize(FVector2(180, 180));
-    enemy->SetScale(FVector2(1.4f, 1.4f));
+    enemy->SetScale(FVector2(1.2f, 1.2f));
    
 
     FDroneSpritePath dronePath(
@@ -70,16 +70,30 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
 
     if (auto* drone = enemy->AddComponent<Drone>(dronePath))
     {
-        drone->initBodyPos = FVector2(-50.0f, 40.0f);
+        drone->initBodyPos = FVector2(-50.0f, 130.0f);
         drone->initBodySize = FVector2(0.85f, 0.85f);
-        drone->SetDroneType(EDroneType::Enemy);
+        drone->SetDroneType(EDroneType::Boss);
+        
+        // EnemyDataManager에서 데미지 값 가져와서 설정
+        FEnemyStats stats{};
+        if (EnemyDataManager::GetInstance().GetStats(4, stats))
+        {
+            drone->SetDamage(stats.damage);
+        }
     }
 
     if (auto* drone = enemy->AddComponent<Drone>(dronePath))
     {
-        drone->initBodyPos = FVector2(-50.0f, -40.0f);
+        drone->initBodyPos = FVector2(-50.0f, -80.0f);
         drone->initBodySize = FVector2(0.85f, 0.85f);
-        drone->SetDroneType(EDroneType::Enemy);
+        drone->SetDroneType(EDroneType::Boss);
+        
+        // EnemyDataManager에서 데미지 값 가져와서 설정
+        FEnemyStats stats{};
+        if (EnemyDataManager::GetInstance().GetStats(4, stats))
+        {
+            drone->SetDamage(stats.damage);
+        }
     }
 
     //enemy->SetPosition(worldPos);
@@ -98,11 +112,6 @@ void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
 	std::wstring name = L"BossDrone";
 	gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
 
-	if (auto player = GamePlayManager::GetInstance().GetPlayer())
-	{
-		player->AddChildObject(enemy);
-	}
-
 	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(140, 140));
 
 	FDroneSpritePath dronePath(
@@ -119,7 +128,25 @@ void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
 	{
 		drone->initBodyPos = FVector2(0.0f, 0.0f);
 		drone->initBodySize = FVector2(0.85f, 0.85f);
-		drone->SetDroneType(EDroneType::Boss);
+		drone->SetDroneType(EDroneType::BossSpawn);
+        
+        // 보스 드론 독립 이동 초기 설정
+        
+        drone->m_baseOffset = FVector2(
+            FRandom::GetRandomInRange(1300, 1600),        // 플레이어 기준 상대 거리
+            FRandom::GetRandomInRange(-300, 300)
+        );     
+        drone->m_movementSpeed = 100.0f;                   // 이동 속도
+        drone->m_movementRadius = 100.0f;                  // 이동 반경
+        drone->m_movementAngleSpeed = 120.0f;              // 각도 변화 속도
+        drone->m_patternChangeInterval = 2.5f;             // 패턴 변경 간격
+        
+        // EnemyDataManager에서 데미지 값 가져와서 설정 (Boss 타입)
+        FEnemyStats stats{};
+        if (EnemyDataManager::GetInstance().GetStats(999, stats))
+        {
+            drone->SetDamage(stats.damage);
+        }
 	}
 
 	enemy->SetPosition(worldPos);
@@ -160,6 +187,13 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
             drone->initBodySize = FVector2(0.7f, 0.7f);
             drone->SetDroneType(EDroneType::Enemy);
             drone->SetAttackDelay(2.0f);
+            
+            // EnemyDataManager에서 데미지 값 가져와서 설정
+            FEnemyStats stats{};
+            if (EnemyDataManager::GetInstance().GetStats(_enemyTypeId, stats))
+            {
+                drone->SetDamage(stats.damage);
+            }
         }
         break;
     case EnemySpawner::Truck:
@@ -182,6 +216,13 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
         {
             drone->initBodyPos = FVector2(50.0f, 40.0f);
             drone->SetDroneType(EDroneType::Enemy);
+            
+            // EnemyDataManager에서 데미지 값 가져와서 설정
+            FEnemyStats stats{};
+            if (EnemyDataManager::GetInstance().GetStats(_enemyTypeId, stats))
+            {
+                drone->SetDamage(stats.damage);
+            }
         }
         break;
     default:
