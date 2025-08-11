@@ -69,4 +69,6 @@ public:
 	{
 		m_eTransformType = _type;
 	}
+
+	bool bRenderedBoxRect = true;
 };

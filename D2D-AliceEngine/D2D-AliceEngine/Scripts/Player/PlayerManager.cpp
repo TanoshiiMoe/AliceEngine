@@ -57,7 +57,7 @@ void PlayerManager::OnStart()
 	animInstance->OnStart();
 
 	// 콜라이더 설정
-	owner->GetComponent<Collider>()->SetBoxSize(FVector2(35, 10));
+	owner->GetComponent<Collider>()->SetBoxSize(FVector2(110, 50));
 	if (auto collider = owner->GetComponent<Collider>())
 	{
 		collider->SetLayer(0);
