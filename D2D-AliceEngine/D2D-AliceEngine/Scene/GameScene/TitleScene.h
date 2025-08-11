@@ -31,5 +31,7 @@ public:
 	gameObject* iamge;
 
 	FTimerHandle timer;
+	gameObject* spineObject;
+	gameObject* spineObject2;
 };
 
