@@ -47,7 +47,7 @@ void GameClearWidgetScript::OnStart()
 	auto toMainText = m_owner->AddComponent<TextRenderComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
 
-	// TODO : 
+
 }
 
 void GameClearWidgetScript::OnEnd()

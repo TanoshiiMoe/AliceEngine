@@ -77,6 +77,7 @@ void StageWidgetScript::OnStart()
 	GetCamera()->AddChildObject(m_owner);
 
 	float soundUISize = 1;
+	float soundTabPosX = 450;
 
 	auto pauseButton = m_owner->AddComponent<ButtonComponent>();
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
@@ -97,6 +98,10 @@ void StageWidgetScript::OnStart()
 	auto mainText = m_owner->AddComponent<TextRenderComponent>();
 	auto restartText = m_owner->AddComponent<TextRenderComponent>();
 	auto selectText = m_owner->AddComponent<TextRenderComponent>();
+
+	auto optionTabText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionTabBGMText = m_owner->AddComponent<TextRenderComponent>();
+	auto optionTabSFXText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto UI_Timer = m_owner->AddComponent<SpriteRenderer>();
 	auto UI_HP = m_owner->AddComponent<SpriteRenderer>();
@@ -167,11 +172,11 @@ void StageWidgetScript::OnStart()
 	float sfxVolume = AudioManager::GetInstance().GetSFXVolume();
 
 	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
-	soundControl->LoadData(L"UI\\UI_SoundControl.png");
+	soundControl->LoadData(L"UI\\UI_SoundController.png");
 	soundControl->m_layer = Define::Disable;
 	soundControl->SetRelativeScale(soundUISize);
 	soundControl->SetDrawType(EDrawType::ScreenSpace);
-	soundControl->SetRelativePosition(FVector2(450.f, 0.f));
+	soundControl->SetRelativePosition(FVector2(soundTabPosX, 0.f));
 
 	// Progress bar
 	bgmControl->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -180,7 +185,7 @@ void StageWidgetScript::OnStart()
 	bgmControl->SetRelativeScale(FVector2(1, 1));
 	bgmControl->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(bgmControl->GetRelativeSize(), FVector2(0, 0))
-		+ FVector2(455, 5));
+		+ FVector2(soundTabPosX + 5, 3));
 	bgmControl->SetProgress(bgmVolume);
 	bgmControl->m_layer = Define::Disable;
 
@@ -190,7 +195,7 @@ void StageWidgetScript::OnStart()
 	sfxControl->SetRelativeScale(FVector2(1, 1));
 	sfxControl->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(sfxControl->GetRelativeSize(), FVector2(0, 0))
-		+ FVector2(455, 70));
+		+ FVector2(soundTabPosX + 5, 66));
 	sfxControl->SetProgress(sfxVolume);
 	sfxControl->m_layer = Define::Disable;
 
@@ -214,6 +219,43 @@ void StageWidgetScript::OnStart()
 	toOption->AddChildComponent(optionText);
 	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	optionText->m_layer = Define::Disable;
+
+	optionTabText->SetFontSize(55.0f);
+	optionTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabText->SetText(L"음량 조절");
+	optionTabText->SetColor(FColor::White);
+	FVector2 optionTabTextRectSize = optionTabText->GetRelativeSize();
+	optionTabText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabTextRectSize, FVector2(-0.5, -0.5))
+		+ FVector2(soundTabPosX, -85)
+	);
+	optionTabText->SetRelativeRotation(0);
+	optionTabText->m_layer = Define::Disable;
+
+	optionTabBGMText->SetFontSize(20.0f);
+	optionTabBGMText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabBGMText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabBGMText->SetText(L"배경음");
+	optionTabBGMText->SetColor(FColor(0, 234, 255, 255));
+	optionTabBGMText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabBGMText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(soundTabPosX, -30)
+	);
+	optionTabBGMText->SetRelativeRotation(0);
+	optionTabBGMText->m_layer = Define::Disable;
+
+	optionTabSFXText->SetFontSize(20.0f);
+	optionTabSFXText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	optionTabSFXText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	optionTabSFXText->SetText(L"효과음");
+	optionTabSFXText->SetColor(FColor(0, 234, 255, 255));
+	optionTabSFXText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(optionTabSFXText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(soundTabPosX, 35)
+	);
+	optionTabSFXText->SetRelativeRotation(0);
+	optionTabSFXText->m_layer = Define::Disable;
 
 	mainText->SetFontSize(40.f);
 	mainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -423,7 +465,8 @@ void StageWidgetScript::OnStart()
 		pauseButton, closeButton, popUpTab,
 		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText, soundControl,
-		bgmControl, sfxControl, bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton
+		bgmControl, sfxControl, bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton,
+		optionTabText, optionTabBGMText, optionTabSFXText
 	] {
 			sound->StopByName(L"UISound");
 			sound->PlayByName(L"UISound");
@@ -453,6 +496,10 @@ void StageWidgetScript::OnStart()
 		toSelect->SetActive(false);
 		toSelect->m_layer = Define::Disable;
 		selectText->m_layer = Define::Disable;
+
+		optionTabText->m_layer = Define::Disable;
+		optionTabBGMText->m_layer = Define::Disable;
+		optionTabSFXText->m_layer = Define::Disable;
 
 		soundControl->m_layer = Define::Disable;
 		bgmControl->m_layer = Define::Disable;
@@ -527,7 +574,8 @@ void StageWidgetScript::OnStart()
 	toOption->SetStateAction(Define::EButtonState::Pressed, [sound,
 		soundControl, bgmControl, sfxControl,
 		bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton,
-		pauseButton, closeButton, toOption, toMain, toRestart, toSelect, smallClose
+		pauseButton, closeButton, toOption, toMain, toRestart, toSelect, smallClose,
+		optionTabText, optionTabBGMText, optionTabSFXText
 	] {
 			sound->StopByName(L"UISound");
 			sound->PlayByName(L"UISound");
@@ -541,6 +589,10 @@ void StageWidgetScript::OnStart()
 
 		smallClose->SetActive(true);
 		smallClose->m_layer = PopupButtonLayer;
+
+		optionTabText->m_layer = Define::PopupTextLayer;
+		optionTabBGMText->m_layer = Define::PopupTextLayer;
+		optionTabSFXText->m_layer = Define::PopupTextLayer;
 
 		soundControl->m_layer = Define::PopupPopLayer;
 		bgmControl->m_layer = Define::PopupObjectLayer;
