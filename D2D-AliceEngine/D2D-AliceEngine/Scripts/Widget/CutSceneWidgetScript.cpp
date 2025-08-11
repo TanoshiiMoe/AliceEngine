@@ -108,7 +108,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	m_skipButton->SetRelativePosition(FVector2(0, 400));
 	m_skipButton->SetRelativeScale(FVector2(0.8f, 0.8f));
-    m_skipButton->m_layer = Define::ButtonLayer;
+    m_skipButton->m_layer = Define::ButtonLayer + Define::CutSceneLayer;
 
 	// 텍스트 설정
     // Next 텍스트 주석 처리
@@ -122,7 +122,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipText->SetColor(FColor::White);
 	FVector2 skipTextSize = m_skipText->GetRelativeSize();
 	m_skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextSize, FVector2(-0.5, -0.5)));
-    m_skipText->m_layer = Define::ButtonTextLayer;
+    m_skipText->m_layer = Define::ButtonTextLayer + Define::CutSceneLayer;
 	m_skipText->RemoveFromParent();
 	m_skipButton->AddChildComponent(m_skipText);
 
@@ -136,7 +136,7 @@ void CutSceneWidgetScript::OnStart()
     FVector2 guideSize = m_guideText->GetRelativeSize();
     // 스킵 버튼 오른쪽(오프셋 220,0)
     m_guideText->SetRelativePosition(FVector2(340, -20));
-    m_guideText->m_layer = Define::ButtonTextLayer;
+    m_guideText->m_layer = Define::ButtonTextLayer + Define::CutSceneLayer;
     m_guideText->RemoveFromParent();
     m_skipButton->AddChildComponent(m_guideText);
     // 시작 시 감춤
