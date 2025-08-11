@@ -11,7 +11,7 @@ BulletManager::~BulletManager()
 {
 }
 
-void BulletManager::FireBullet(const FVector2& start, const FVector2& target, const FVector2& initVelocity, const EDroneType& dronType)
+void BulletManager::FireBullet(const FVector2& start, const FVector2& target, const FVector2& initVelocity, const EDroneType& dronType, float damage)
 {
 	Scene* curScene = SceneManager::GetInstance().GetWorld();
 	auto bulletObj = curScene->NewObject<gameObject>(L"bullet");
@@ -26,6 +26,8 @@ void BulletManager::FireBullet(const FVector2& start, const FVector2& target, co
 		bullet->SetSpritePath(L"Player/bullet_blue_final.png");
 		break;
 	case EDroneType::Enemy :
+	case EDroneType::BossSpawn:
+	case EDroneType::Boss:
 		bullet->SetSpritePath(L"Enemy/bullet_red_final.png");
 		break;
 	default:
@@ -33,6 +35,7 @@ void BulletManager::FireBullet(const FVector2& start, const FVector2& target, co
 	}
 
 	bullet->SetDroneType(dronType);
+	bullet->SetDamage(damage); // 데미지 설정
 	bullet->inheritedVelocity = initVelocity;
 	bullet->bulletType = EBulletType::Linear; // 기본적으로 BezierCurve로 설정
 

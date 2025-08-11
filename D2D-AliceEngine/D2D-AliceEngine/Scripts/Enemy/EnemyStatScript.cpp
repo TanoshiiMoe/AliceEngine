@@ -11,6 +11,7 @@
 #include <System/ScriptSystem.h>
 #include <Object/gameObject.h>
 #include <GameManager/GamePlayManager.h>
+#include <Manager/SceneManager.h>
 
 void EnemyStatScript::Initialize()
 {
@@ -89,6 +90,19 @@ void EnemyStatScript::OnStart()
                 car->DelayDestroy();
             if (auto drone = owner->GetComponent<Drone>())
                 drone->DelayDestroy();
+
+			TimerManager::GetInstance().ClearTimer(m_fadeHandle);
+			TimerManager::GetInstance().SetTimer(
+				m_fadeHandle,
+				[weak = WeakFromThis<EnemyStatScript>()]() mutable {
+					if (weak.expired()) return;
+					// 자신 파괴
+					weak->GetWorld()->RemoveObject(weak->GetOwner());
+				},
+				1.0f,
+				false,
+				1.0f
+			);
             return;
         }
     });

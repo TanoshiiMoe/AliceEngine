@@ -39,6 +39,10 @@ public:
 	void SetDroneType(EDroneType type) { droneType = type; }
 	const std::wstring& GetSpritePath() const { return spritePath; }
 	void SetSpritePath(const std::wstring& path) { spritePath = path; }
+	
+	// 데미지 관련 함수 추가
+	float GetDamage() const { return damage; }
+	void SetDamage(float val) { damage = val; }
 
 public:
 	FVector2 P0, P1, P2;
@@ -59,8 +63,9 @@ public:
 	float waveFrequency = 2.0f;  // 흔들림 속도
 
 	EBulletType bulletType = EBulletType::BezierCurve;
-	EDroneType droneType = EDroneType::Player; // 드론 타입
+	EDroneType droneType = EDroneType::Player; // 총알 타입
 	std::wstring spritePath = L"wallet.png";
+	float damage = 5.0f; // 데미지 값 추가
 
 	FTimerHandle handle;
 	bool bCameraCulling = false;
