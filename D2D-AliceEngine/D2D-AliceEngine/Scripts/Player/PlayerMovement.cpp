@@ -7,6 +7,7 @@
 #include <Core/Input.h>
 #include "Component/InputComponent.h"
 #include <GameManager/GamePlayManager.h>
+#include <Component/SkewTransform.h>
 
 void PlayerMovement::Initialize()
 {
@@ -22,8 +23,8 @@ void PlayerMovement::OnStart()
 		bMovement = owner->AddComponent<BikeMovementScript>();
 
 	if (bMovement) {
-		initSpeed = bMovement->GetInitialSpeed();
-		bMovement->SetAcceleration(200.0f);
+		initSpeed = (minSpeed + maxSpeed) * 0.5;
+		bMovement->SetAcceleration(100.0f);
 	}
 
 	if (auto ic = owner->GetComponent<InputComponent>())
@@ -34,20 +35,76 @@ void PlayerMovement::OnStart()
 
 void PlayerMovement::Update(const float& deltaSeconds)
 {
-	dt = deltaSeconds;
-	bMovement->SetMaxSpeed(bMovement->GetMaxSpeed() + moveDir.x * deltaSeconds);
+	playerDeltaSeconds = PlayerManager::instance->GetTimeScale() * deltaSeconds;
+
+	if ((moveDir.x > 0.0f && bMovement->GetMaxSpeed() < maxSpeed) || (moveDir.x < 0.0f && bMovement->GetMaxSpeed() > minSpeed))
+		bMovement->AddMaxSpeed(moveDir.x * playerDeltaSeconds);
+	else
+		bMovement->AddMaxSpeed((initSpeed - bMovement->GetMaxSpeed()) * decVal * playerDeltaSeconds);
+		
+
+	if (!Math::Approximately(moveDir.y, 0.0f)) {
+		owner->GetComponent<SkewTransform>()->zPos += moveDir.y * playerDeltaSeconds;
+	}
+}
+
+void PlayerMovement::SetZClamp(float _min, float _max)
+{
+	_min = minZ;
+	_max = maxZ;
+}
+
+void PlayerMovement::SetBoost(bool _val)
+{
+	if (isBoosting == _val)
+		return;
+
+	if (_val) {
+		maxSpeed += bonusSpeed;
+		minSpeed += bonusSpeed * 0.5f;
+		isBoosting = true;
+	}
+	else {
+		maxSpeed -= bonusSpeed;
+		minSpeed -= bonusSpeed * 0.5f;
+		isBoosting = false;
+	}
+		
 }
 
 void PlayerMovement::Input()
 {
 	moveDir = { 0.0f, 0.0f };
 
+	if (Input::IsKeyDown(VK_S))
+	{
+		auto st = owner->GetComponent<SkewTransform>();
+		if (st && st->zPos > minZ)
+			moveDir.y -= 200.0f;
+			//st->zPos -= 200.0f * playerDeltaSeconds;
+	}
+	if (Input::IsKeyDown(VK_W))
+	{
+		auto st = owner->GetComponent<SkewTransform>();
+		if (st && st->zPos < maxZ)
+			moveDir.y += 200.0f;
+			//st->zPos += 200.0f * playerDeltaSeconds;
+	}
 	if (Input::IsKeyDown(VK_A)) {
 		// initialSpeed 줄이기
-		moveDir.x -= 10.0f;
+		moveDir.x -= 200.0f;
 	}
 	if (Input::IsKeyDown(VK_D)) {
 		// initialSpeed 늘리기
-		moveDir.x += 10.0f;
+		moveDir.x += isBoosting ? 400.0f : 100.0f;
+	}
+
+	if (Input::IsKeyPressed(VK_B))
+	{
+		SetBoost(true);
+	}
+	if (Input::IsKeyPressed(VK_V))
+	{
+		SetBoost(false);
 	}
 }

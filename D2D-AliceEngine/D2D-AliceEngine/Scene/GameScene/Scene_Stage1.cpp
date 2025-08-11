@@ -77,9 +77,11 @@ void Scene_Stage1::OnEnter()
 	if (CutSceneWidgetScript* cut = m_UI->AddComponent<CutSceneWidgetScript>())
 		cut->m_nextSceneName = m_nextSceneName;
 
+	// 카메라컨트롤러 생성
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraMover>();
 
+	// 플레이어 생성
 	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
 	BulletManager::GetInstance().SetPlayer(m_player);
@@ -116,9 +118,9 @@ void Scene_Stage1::OnEnter()
 	m_button = NewObject<gameObject>(L"PauseButton");
 	m_button->AddComponent<StageWidgetScript>();
 
-	// Truck(점프대)
-	m_truck = NewObject<gameObject>(L"Truck");
-	m_truck->AddComponent<Truck>();
+	//// Truck(점프대)
+	//m_truck = NewObject<gameObject>(L"Truck");
+	//m_truck->AddComponent<Truck>();
 
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");

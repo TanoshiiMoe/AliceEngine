@@ -80,19 +80,6 @@ void PlayerManager::Update(const float& deltaSeconds)
 
 	float playerDeltaSeconds = deltaSeconds * playerTimeScale;
 
-	if (Input::IsKeyDown(VK_S))
-	{
-		auto st = owner->GetComponent<SkewTransform>();
-		if(st && st->zPos > minZ)
-			st->zPos -= 100.0f * playerDeltaSeconds;
-	}
-	if (Input::IsKeyDown(VK_W))
-	{
-		auto st = owner->GetComponent<SkewTransform>();
-		if (st && st->zPos < maxZ)
-			st->zPos += 100.0f * playerDeltaSeconds;
-	}
-
 	if (Input::IsKeyDown(VK_OEM_4))
 	{
 		//float fov = SceneManager::GetCamera()->fieldOfView;
@@ -120,12 +107,6 @@ void PlayerManager::Update(const float& deltaSeconds)
 		if (t > 1.0f) t = 1.0f;
 		m_fadeTargetSR->SetOpacity(1.0f - t);
 	}
-}
-
-void PlayerManager::SetZClamp(float _min, float _max)
-{
-	_min = minZ;
-	_max = maxZ;
 }
  
 void PlayerManager::Input()

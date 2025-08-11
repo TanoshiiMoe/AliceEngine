@@ -14,20 +14,17 @@ public:
 	void OnEnd() override;
 	void Update(const float& deltaSeconds) override;
 
-	// 플레이어 zPos 클램프 설정
-	void SetZClamp(float _min, float _max);
 	// 플레이어를 잔상과 함께 서서히 사라지도록 파괴
 	void DelayDestroy();
+
+	// 플레이어 타임스케일 획득
+	float GetTimeScale() { return playerTimeScale; }
 
 private:
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
 
 	void Input();
-
-
-	float minZ = -220.0f;
-	float maxZ = 380.0f;
 
 	float playerTimeScale = 1.0f;
 

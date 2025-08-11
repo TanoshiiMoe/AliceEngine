@@ -76,11 +76,11 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 		m_groundY = owner->GetComponent<SkewTransform>()->GetRealPos().y;
 		m_jumpVelocity = m_jumpInitialVelocity;
 
-		if (auto anim = owner->GetComponent<AnimatorInstance>())
+		/*if (auto anim = owner->GetComponent<AnimatorInstance>())
 		{
 			m_jumpPrevLayer = anim->m_layer;
 			anim->m_layer = 70000;
-		}
+		}*/
 
 		// 회전 적용 (60도)
 		if (auto tr = m_owner->transform())
@@ -108,16 +108,18 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 				m_jumpVelocity = 0.0f;
 				owner->transform()->SetRotation(0.0f);
 
-				if (auto anim = owner->GetComponent<AnimatorInstance>())
+				/*if (auto anim = owner->GetComponent<AnimatorInstance>())
 				{
 					anim->m_layer = m_jumpPrevLayer;
-				}
+				}*/
 			}
 
 			tr->SetRealPos(pos);
-			if (auto transform = m_owner->transform()) {
-				transform->AddPosition((finalSpeed + m_jumpWeightX) * deltaSeconds, 0);
 
+
+			if (auto transform = m_owner->transform()) {
+				//transform->AddPosition((finalSpeed + m_jumpWeightX) * deltaSeconds, 0);
+			
 				/*FVector2 pos = tr->GetRealPos();
 				pos.x += (finalSpeed + m_jumpWeightX) * deltaSeconds;
 				tr->SetRealPos(pos);*/

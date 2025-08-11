@@ -15,8 +15,8 @@ const FVector2 SkewTransform::GetOffset()
 
 const void SkewTransform::SetRealPos(FVector2 _pos)
 {
-	FVector2 offset = _pos - realPos;
-	renderTransform->AddPosition(offset);
+	FVector2 realOffset = _pos - realPos;
+	renderTransform->AddPosition(realOffset);
 }
 
 void SkewTransform::Initialize()
