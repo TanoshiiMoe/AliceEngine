@@ -38,7 +38,7 @@ void Bullet::Initialize()
 	}
 
 	TimerManager::GetInstance().ClearTimer(handle); // 이전 타이머 제거
-	TimerManager::GetInstance().SetTimer(handle, [this]() { bCameraCulling = true; }, 0, false, 1.0f);
+	TimerManager::GetInstance().SetTimer(handle, [weak = WeakFromThis<Bullet>()]() { if(!weak.expired()) weak->bCameraCulling = true; }, 0, false, 1.0f);
 }
 
 void Bullet::FixedUpdate(const float& deltaSeconds)
@@ -158,7 +158,7 @@ void Bullet::OnStart()
 
 	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
 	sp->LoadData(spritePath);
-	sp->m_layer = 20000;
+	sp->m_layer = 20002;
 
 	const float angleRad = std::atan2f(moveDir.y, moveDir.x);
 	const float angleDeg = angleRad * 180.0f / Define::PI;

@@ -121,18 +121,21 @@ void GamePlayManager::PlayBossMode()
         if (EnemySpawnTriggerBox* es = triggerBox->GetComponent<EnemySpawnTriggerBox>())
         {
             es->SetSpawnable(false);
-            es->SpawnBossAt(FVector2(400, 0));
+            es->SpawnBossAt(FVector2(1890, 0));
 
             TimerManager::GetInstance().SetTimer(bossSpawnTimer, 
                 [this]()
             {
-                FVector2 center = m_player->GetPosition();
-                FVector2 randomPoint = FRandom::GetRandomPointInCircle2D(center.x, center.y, 20);
-				EnemySpawnTriggerBox::SpawnEnemyAt(0, randomPoint + FVector2(600, 0));
+					/*FVector2 center = m_player->GetPosition();
+					FVector2 randomPoint = FRandom::GetRandomPointInCircle2D(center.x, center.y, 20);
+					EnemySpawnTriggerBox::SpawnEnemyAt(0, randomPoint + FVector2(600, 0));*/
+
+                    FVector2 randomPoint = FRandom::GetRandomPointInTorus2D(0, 0, 400, 700);
+                    EnemySpawnTriggerBox::SpawnBossDroneAt(randomPoint + FVector2(300, 0));
             },
-                0.5f,
+                3.0f,
                 true,
-                0.0f);
+                1.0f);
         }
     }
 }

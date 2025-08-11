@@ -19,7 +19,8 @@ public:
     bool GetSpawnable() const { return m_bSpawnable; }
     void SetSpawnable(bool bSpawnable) { m_bSpawnable = bSpawnable; }
 
-    static void SpawnBossAt(const FVector2& worldPos);
+	static void SpawnBossAt(const FVector2& worldPos);
+	static void SpawnBossDroneAt(const FVector2& worldPos);
     static void SpawnEnemyAt(int _enemyTypeId, const FVector2& worldPos);
 private:
     Collider* m_collider{ nullptr };
