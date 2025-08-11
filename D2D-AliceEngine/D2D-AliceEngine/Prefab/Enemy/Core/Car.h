@@ -6,6 +6,7 @@ class Car : public ScriptComponent
 {
 public:
 	Car() {}
+    Car(bool _bSkewed) { bSkewed = _bSkewed; }
 	virtual ~Car() {}
 
 	void Initialize() override;
@@ -30,5 +31,7 @@ protected:
     float m_fadeElapsed = 0.0f;
     class SpriteRenderer* m_fadeTargetSR = nullptr; // 고스트 또는 폴백 대상
     class gameObject* m_ghostGO = nullptr;          // 생성된 고스트 오브젝트
+
+    bool bSkewed = true;
 };
 

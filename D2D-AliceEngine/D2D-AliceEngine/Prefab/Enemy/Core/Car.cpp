@@ -25,13 +25,15 @@ void Car::Initialize()
 	// 占쌍니몌옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙
 	owner->AddComponent<AnimatorInstance>();
 	// 占쏙옙占쏙옙占쏙옙
-	owner->AddComponent<SpriteRenderer>();
-
-	owner->AddComponent<SkewTransform>();
-	owner->AddComponent<LaneController>();
-
-	// ?뒪?겕由쏀듃
-	owner->AddComponent<EnemyManager>();
+	
+    if (bSkewed)
+    {
+        owner->AddComponent<SpriteRenderer>();
+        owner->AddComponent<SkewTransform>();
+        owner->AddComponent<LaneController>();
+        // ?뒪?겕由쏀듃
+        owner->AddComponent<EnemyManager>();
+    }
 
 	TimerManager::GetInstance().ClearTimer(timer);
 	// 2珥덉뿉 ?븳踰덉뵫 移대찓?씪 而щ쭅 泥댄겕
@@ -62,9 +64,12 @@ void Car::Initialize()
 void Car::OnStart()
 {
 	// SkewTransform?쑝濡? 蹂??솚?븯湲?
-	SkewTransform* st = owner->GetComponent<SkewTransform>();
-	st->groundTile = GetWorld()->FindObjectByName<gameObject>(L"TileMap");
-	st->ToSkewPos();
+    if (bSkewed)
+    {
+        SkewTransform* st = owner->GetComponent<SkewTransform>();
+        st->groundTile = GetWorld()->FindObjectByName<gameObject>(L"TileMap");
+        st->ToSkewPos();
+    }
 }
 
 void Car::OnDestroy()

@@ -51,11 +51,11 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
     std::wstring name = L"Boss";
     gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
 
-    enemy->AddComponent<Car>();
+    enemy->AddComponent<Car>(false);
     enemy->AddComponent<SpriteRenderer>()->LoadData(L"Enemy/Durang/boss_idle_notfix.png");
     enemy->GetComponent<SpriteRenderer>()->m_layer = 19999;
     enemy->AddComponent<Collider>()->SetBoxSize(FVector2(180, 180));
-    enemy->SetScale(FVector2(1.4f, 1.4f));
+    enemy->SetScale(FVector2(1.2f, 1.2f));
    
 
     FDroneSpritePath dronePath(
