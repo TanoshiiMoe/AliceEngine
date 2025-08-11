@@ -8,7 +8,6 @@
 #include <Core/Input.h>
 #include <Manager/UpdateTaskManager.h>
 
-using Microsoft::WRL::ComPtr;
 // WorldSpace 입력 좌표를 내부 시뮬레이션 좌표로 변환 (Y 반전 옵션)
 FVector2 ParticleComponent::ToSimPos(const FVector2& in) const
 {
