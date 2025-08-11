@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
 
 class GameOverScene : public Scene
@@ -15,5 +15,7 @@ public:
     void OnExit() override;
 
 private:
-    gameObject* m_textGO{ nullptr };
+	gameObject* m_textGO{ nullptr };
+	gameObject* m_passedTimeText{ nullptr };
+    gameObject* m_killEnemyText{ nullptr };
 };
