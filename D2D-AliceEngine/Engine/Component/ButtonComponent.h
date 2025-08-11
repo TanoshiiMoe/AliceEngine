@@ -47,6 +47,9 @@ public:
 	}
 	bool GetActive() const { return bActive; }
 
+	// 마우스 상태 초기화 함수 추가
+	void ResetMouseState();
+
 	// 이펙트 관련 메서드
 	void SetEffect(ComPtr<ID2D1Effect> effect) { m_effect = effect; }
 	ComPtr<ID2D1Effect> GetEffect() const { return m_effect; }
