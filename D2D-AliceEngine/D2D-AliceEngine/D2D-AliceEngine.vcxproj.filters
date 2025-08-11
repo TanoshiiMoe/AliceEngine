@@ -298,6 +298,9 @@
     <ClInclude Include="GameClearWidgetScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -514,6 +517,7 @@
     <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
     <ClCompile Include="Scripts\Widget\GameOverWidgetScript.cpp" />
     <ClCompile Include="GameClearWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />

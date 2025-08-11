@@ -84,7 +84,7 @@ void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {
 		enemy->AddComponent<NormalTruck>();
 		break;
 	case EnemySpawner::JTruck:
-		enemy->SetTag(L"JumpTrigger");
+		enemy->SetTag(L"Obstacle");
 		enemy->AddComponent<JumpTruck>();
 		break;
 	case EnemySpawner::Car:

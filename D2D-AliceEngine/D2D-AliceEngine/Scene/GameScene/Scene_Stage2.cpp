@@ -21,6 +21,7 @@
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Widget/StageWidgetScript.h>
+#include <Scripts/Enemy/Spawn/EnemyDespawner.h>
 
 void Scene_Stage2::Initialize()
 {
@@ -110,13 +111,13 @@ void Scene_Stage2::OnEnter()
     auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
     tb->SetBox(FVector2(3300.0f, 700.0f), 1);
 
+	// 디스포너 생성
+	gameObject* deSpawner = NewObject<gameObject>(L"DeSpwaner");
+	deSpawner->AddComponent<EnemyDespawner>();
+
     // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
     m_button = NewObject<gameObject>(L"PauseButton");
     m_button->AddComponent<StageWidgetScript>();
-
-    // Truck(점프대)
-    m_truck = NewObject<gameObject>(L"Truck");
-    m_truck->AddComponent<Truck>();
 
     // 디버그용 씬 전환
     gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
