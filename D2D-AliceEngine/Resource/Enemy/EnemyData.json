@@ -36,9 +36,18 @@
     "damage": 7.0
   },
   {
-    "typeId": 12.0,
-    "maxHP": 800.0,
-    "hp": 800.0,
+    "typeId": 4.0,
+    "maxHP": 600.0,
+    "hp": 600.0,
+    "battery": 20.0,
+    "moveSpeed": 35.0,
+    "attackDelay": 1.5,
+    "damage": 12.0
+  },
+  {
+    "typeId": 999.0,
+    "maxHP": 20.0,
+    "hp": 20.0,
     "battery": 20.0,
     "moveSpeed": 35.0,
     "attackDelay": 1.5,
