@@ -10,6 +10,7 @@
 #include <Scripts/Weapon/Drone.h>
 #include <System/ScriptSystem.h>
 #include <Object/gameObject.h>
+#include <GameManager/GamePlayManager.h>
 
 void EnemyStatScript::Initialize()
 {
@@ -81,6 +82,8 @@ void EnemyStatScript::OnStart()
                 owner->RemoveComponent<BoxComponent>(box);
             if (auto col = owner->GetComponent<Collider>())
                 owner->RemoveComponent<Collider>(col);
+
+            GamePlayManager::GetInstance().AddKillEnemyAmount(1);
 
             if (auto car = owner->GetComponent<Car>())
                 car->DelayDestroy();

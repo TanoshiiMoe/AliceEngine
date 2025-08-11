@@ -29,6 +29,8 @@ void StageWidgetScript::Initialize()
 void StageWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
+	m_passedTimeText->SetText(L"<지난 시간> " + std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
+	m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
 }
 
 void StageWidgetScript::Awake()
@@ -218,6 +220,28 @@ void StageWidgetScript::OnStart()
 	closeButton->SetActive(false);
 	closeButton->m_layer = Define::Disable;
 
+	// ======================== toOption
+	toOption->LoadData(Define::EButtonState::Idle, L"UI\\UI_ToOption.png");
+	toOption->LoadData(Define::EButtonState::Hover, L"UI\\UI_ToOption.png");
+	toOption->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ToOption.png");
+	toOption->LoadData(Define::EButtonState::Release, L"UI\\UI_ToOption.png");
+	toOption->SetDrawType(EDrawType::ScreenSpace);
+	toOption->SetRelativePosition(FVector2(0, 0));
+	toOption->SetRelativeScale(FVector2(1, 1));
+	toOption->SetActive(false);
+	toOption->m_layer = -1000;
+
+	// ======================== toMain
+	toMain->LoadData(Define::EButtonState::Idle, L"UI\\UI_ToMain.png");
+	toMain->LoadData(Define::EButtonState::Hover, L"UI\\UI_ToMain.png");
+	toMain->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ToMain.png");
+	toMain->LoadData(Define::EButtonState::Release, L"UI\\UI_ToMain.png");
+	toMain->SetDrawType(EDrawType::ScreenSpace);
+	toMain->SetRelativePosition(FVector2(0, 100));
+	toMain->SetRelativeScale(FVector2(1, 1));
+	toMain->SetActive(false);
+	toMain->m_layer = -1000;
+
 	// ======================== toRestart
 	toRestart->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	toRestart->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
@@ -329,9 +353,9 @@ void StageWidgetScript::OnStart()
 		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText
 	] {
-		sound->PlayByName(L"UISound", 0.45);
+			sound->PlayByName(L"UISound", 0.45);
 
-		GamePlayManager::GetInstance().PauseGame();
+			GamePlayManager::GetInstance().PauseGame();
 
 		pauseButton->SetActive(false);
 		popUpTab->m_layer = Define::PopupLayer;
@@ -490,6 +514,27 @@ void StageWidgetScript::OnStart()
 		toSelect->m_layer = Define::Disable;
 		selectText->m_layer = Define::Disable;
 		});
+
+	toMain->SetStateAction(Define::EButtonState::Pressed, [] {
+
+		SceneManager::ChangeScene(L"TitleScene");
+		});
+
+
+	m_passedTimeText = m_owner->AddComponent<TextRenderComponent>();
+	m_passedTimeText->SetText(L"<지난 시간> " + std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
+	m_passedTimeText->SetTextAlignment(ETextFormat::TopLeft);
+	m_passedTimeText->SetRelativePosition(FVector2(20, 40));
+	m_passedTimeText->SetFontSize(32.0f);
+	m_passedTimeText->SetColor(FColor::Gold);
+
+	m_killEnemyText = owner->AddComponent<TextRenderComponent>();
+	m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+	m_killEnemyText->SetTextAlignment(ETextFormat::TopLeft);
+	m_killEnemyText->SetRelativePosition(FVector2(20, 80));
+	m_killEnemyText->SetFontSize(32.0f);
+	m_killEnemyText->SetColor(FColor::Gold);
+
 }
 
 void StageWidgetScript::OnEnd()
