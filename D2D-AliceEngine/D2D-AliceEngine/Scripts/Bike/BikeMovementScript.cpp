@@ -73,7 +73,7 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 	if (Input::IsKeyPressed(VK_SPACE) && !m_isJumping && !m_hitReaction)
 	{
 		m_isJumping = true;
-		m_groundY = owner->GetPosition().y;
+		m_groundY = owner->GetComponent<SkewTransform>()->GetRealPos().y;
 		m_jumpVelocity = m_jumpInitialVelocity;
 
 		if (auto anim = owner->GetComponent<AnimatorInstance>())
@@ -95,9 +95,9 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 
 		float dy = m_jumpVelocity * deltaSeconds;
 
-		if (auto tr = m_owner->transform())
+		if (auto tr = m_owner->GetComponent<SkewTransform>())
 		{
-			FVector2 pos = tr->GetPosition();
+			FVector2 pos = tr->GetRealPos();
 			pos.y += dy;
 
 			// 착지 체크
@@ -106,7 +106,7 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 				pos.y = m_groundY;
 				m_isJumping = false;
 				m_jumpVelocity = 0.0f;
-				tr->SetRotation(0.0f);
+				owner->transform()->SetRotation(0.0f);
 
 				if (auto anim = owner->GetComponent<AnimatorInstance>())
 				{
@@ -114,9 +114,14 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 				}
 			}
 
-			tr->SetPosition(pos);
-			if (auto transform = m_owner->transform())
+			tr->SetRealPos(pos);
+			if (auto transform = m_owner->transform()) {
 				transform->AddPosition((finalSpeed + m_jumpWeightX) * deltaSeconds, 0);
+
+				/*FVector2 pos = tr->GetRealPos();
+				pos.x += (finalSpeed + m_jumpWeightX) * deltaSeconds;
+				tr->SetRealPos(pos);*/
+			}
 		}
 	}
 }

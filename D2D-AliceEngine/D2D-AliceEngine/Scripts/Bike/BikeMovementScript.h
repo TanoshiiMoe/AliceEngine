@@ -103,9 +103,9 @@ private:
 
 	// ================== Jump 관련 ==============
 	bool  m_isJumping   = false;   // 점프 중 여부
-	float m_jumpWeightX = 200.0f;
+	float m_jumpWeightX = 1.0f;
 	float m_jumpVelocity         = 0.0f;    // 현재 점프 속도 Y축
-	float m_jumpInitialVelocity  = 800.0f;  // 초기 점프 속도 양수: 위 방향
+	float m_jumpInitialVelocity  = 600.0f;  // 초기 점프 속도 양수: 위 방향
 	float m_jumpGravity          = -600.0f; // 중력 가속도 양수: 아래 방향
 	float m_groundY              = 0.0f;    // 지면 Y 위치 기준
 	int m_jumpPrevLayer = 0;

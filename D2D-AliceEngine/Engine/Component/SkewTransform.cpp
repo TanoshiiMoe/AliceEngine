@@ -13,12 +13,18 @@ const FVector2 SkewTransform::GetOffset()
 	return offset;
 }
 
+const void SkewTransform::SetRealPos(FVector2 _pos)
+{
+	FVector2 offset = _pos - realPos;
+	renderTransform->AddPosition(offset);
+}
+
 void SkewTransform::Initialize()
 {
 	REGISTER_SCRIPT_METHOD(Awake);
 	REGISTER_SCRIPT_METHOD(OnStart);
 
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_EndPhysics);
 }
 
 void SkewTransform::OnStart()
@@ -31,7 +37,7 @@ void SkewTransform::OnStart()
 	}
 		
 
-	renderTransform = owner->GetComponent<TransformComponent>();
+	renderTransform = owner->transform();
 }
 
 void SkewTransform::Update(const float& deltaSeconds)
