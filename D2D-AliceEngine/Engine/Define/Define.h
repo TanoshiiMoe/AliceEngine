@@ -26,6 +26,27 @@ namespace Define
 	static const std::wstring Scene_Stage2 = L"Scene_Stage2";
 	static const std::wstring Scene_Stage3 = L"Scene_Stage3";
 
+	// ========== Layer List ==========
+	static const int CutSceneLayer = 50001;
+	// UI : 50000 ~
+	static const int NormalTextLayer = 50010;
+	static const int ButtonLayer = 50020;
+	static const int ButtonTextLayer = 50021;
+	static const int PopupLayer = 50030;
+	static const int PopupButtonLayer = 50031;
+	static const int PopupTextLayer = 50032;
+
+	// Player
+	static const int HUDLayer = 50000;
+
+	// BackGround
+	static const int TileLayer = -300;
+
+	// Enemy
+
+	// Delete : -50000
+	static const int Disable = -50000;
+
 	enum class EDrawType
 	{
 		ScreenSpace,

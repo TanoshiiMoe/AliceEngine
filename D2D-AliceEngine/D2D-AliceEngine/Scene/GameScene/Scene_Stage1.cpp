@@ -93,8 +93,8 @@ void Scene_Stage1::OnEnter()
 	eSpwaner->AddComponent<EnemySpawner>();
 
 	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
-	//m_button = NewObject<gameObject>(L"PauseButton");
-	//m_button->AddComponent<StageWidgetScript>();
+	m_button = NewObject<gameObject>(L"PauseButton");
+	m_button->AddComponent<StageWidgetScript>();
 
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");
