@@ -93,7 +93,7 @@ void CutSceneWidgetScript::OnStart()
     const float targetH = 1080.f;
     // 아직 비트맵이 로드되지 않았으므로, 첫 ShowImage에서 실제 스케일을 적용합니다.
     // 임시로 layer만 설정 (상대 레이어 적용)
-    m_background->m_layer = 0 + m_relativeLayer;
+    m_background->m_layer = 0 + Define::CutSceneLayer;
 
 	// Next 버튼 설정
     // Next 버튼 주석 처리
@@ -108,7 +108,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	m_skipButton->SetRelativePosition(FVector2(0, 400));
 	m_skipButton->SetRelativeScale(FVector2(0.8f, 0.8f));
-    m_skipButton->m_layer = 100 + m_relativeLayer;
+    m_skipButton->m_layer = Define::ButtonLayer;
 
 	// 텍스트 설정
     // Next 텍스트 주석 처리
@@ -122,7 +122,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipText->SetColor(FColor::White);
 	FVector2 skipTextSize = m_skipText->GetRelativeSize();
 	m_skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextSize, FVector2(-0.5, -0.5)));
-    m_skipText->m_layer = 101 + m_relativeLayer;
+    m_skipText->m_layer = Define::ButtonTextLayer;
 	m_skipText->RemoveFromParent();
 	m_skipButton->AddChildComponent(m_skipText);
 
@@ -136,7 +136,7 @@ void CutSceneWidgetScript::OnStart()
     FVector2 guideSize = m_guideText->GetRelativeSize();
     // 스킵 버튼 오른쪽(오프셋 220,0)
     m_guideText->SetRelativePosition(FVector2(340, -20));
-    m_guideText->m_layer = 101 + m_relativeLayer;
+    m_guideText->m_layer = Define::ButtonTextLayer;
     m_guideText->RemoveFromParent();
     m_skipButton->AddChildComponent(m_guideText);
     // 시작 시 감춤
@@ -290,7 +290,7 @@ void CutSceneWidgetScript::ShowImage(int index)
                 spr->SetRelativeScale(FVector2(desc.size.x / w, desc.size.y / h));
             }
             spr->SetRelativePosition(desc.position);
-            spr->m_layer = desc.layer + m_relativeLayer;
+            spr->m_layer = desc.layer + Define::CutSceneLayer;
             m_activeOverlays.push_back(spr);
         }
     }
@@ -500,7 +500,7 @@ void CutSceneWidgetScript::StartTransitionTo(int targetIndex, float durationSec)
     // 초기 상태
     ApplyOpacityToAll(1.f);
     EnsureFadeOverlay();
-    if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = 9999 + m_relativeLayer; }
+    if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = 9999 + Define::CutSceneLayer; }
 }
 
 void CutSceneWidgetScript::StepTransition(float dt)
@@ -530,7 +530,7 @@ void CutSceneWidgetScript::StepTransition(float dt)
         if (t >= 1.f)
         {
             ClearOpacityOnAll();
-            if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = -1000; }
+            if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = Define::Disable; }
             m_isTransitioning = false;
             m_transitionElapsed = 0.f;
             m_transitionSwitchover = false;
@@ -573,7 +573,7 @@ void CutSceneWidgetScript::EnsureFadeOverlay()
     }
     m_fadeOverlay->SetRelativePosition(FVector2(0, 0));
     // 페이드 오버레이는 컷씬 요소들보다 위 (상대 레이어 적용)
-    m_fadeOverlay->m_layer = 9999 + m_relativeLayer;
+    m_fadeOverlay->m_layer = 9999 + Define::CutSceneLayer;
 }
 
 void CutSceneWidgetScript::EnsureBackdropOverlay()
@@ -591,5 +591,5 @@ void CutSceneWidgetScript::EnsureBackdropOverlay()
     }
     m_backdropOverlay->SetRelativePosition(FVector2(0, 0));
     // 컷씬 전체보다 뒤에 위치 (상대 레이어 적용)
-    m_backdropOverlay->m_layer = -10000 + m_relativeLayer;
+    m_backdropOverlay->m_layer = -10000 + Define::CutSceneLayer;
 }
