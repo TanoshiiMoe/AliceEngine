@@ -74,6 +74,9 @@
     <Filter Include="Scripts\Legacy">
       <UniqueIdentifier>{d891f3f6-01ba-4091-86f9-8bbf677cff57}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\Audio">
+      <UniqueIdentifier>{003ec608-7d56-4f4d-8510-6b9daec8e0c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -166,7 +169,7 @@
     <ClInclude Include="Resource.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\TitleAudioScript.h">
+    <ClInclude Include="Scripts\Audio\TitleAudioScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Player\PlayerManager.h">
@@ -393,7 +396,7 @@
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Scripts\TitleAudioScript.cpp">
+    <ClCompile Include="Scripts\Audio\TitleAudioScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Prefab\Enemy\EnemyBike.cpp">

@@ -57,6 +57,28 @@ void ProgressBarComponent::Render()
     }
     else // Radial
     {
+        // 진행도 0 = 0, 1이면 360;
+        float progressAngle = 360.0f * m_progress;
+        if (!m_clockwise) progressAngle = -progressAngle;
+
+        float startAngleRad = m_startAngleDeg * (Define::PI / 180.0f);
+        float endAngleRad = startAngleRad + progressAngle * (Define::PI / 180.0f);
+
+        ComPtr<ID2D1Geometry> pieGeometry;
+
+        //D2DRenderManager::GetD2DDevice()->CreateFilledGeometryRealization(&pieGeometry);
+
+
+
+
+
+
+
+
+
+
+
+
         // 간단한 원형 마스크: 진행 각도만큼 부채꼴로 클리핑 (고정 파이프라인 내에서 간이 구현)
         // 주의: 고급 마스킹은 별도 효과/레이어 필요. 여기서는 간단히 DrawImage 효과 기반의 Clip은 생략하고,
         // 진행율을 8분할 근사로 표현 (필요 시 확장)
