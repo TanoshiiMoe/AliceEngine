@@ -31,6 +31,8 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 
+	GamePlayManager& gm = GamePlayManager::GetInstance();
+
 	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
 
 	int minutes = static_cast<int>(timeSec) / 60;
@@ -48,20 +50,13 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	float batteryCount = killCount / 5.0f;
 
 	if (batteryCount >= 1.0f) batteryCount = 1.0f; // Battery : 0~1
-	static ProgressBarComponent* s_progress = nullptr;
-	static bool s_initialized = false;
-
-	if (!s_initialized)
+	
+	if (auto go = GetOwner())
 	{
-		if (auto go = GetOwner())
+		if (auto progress = go->GetComponent<ProgressBarComponent>())
 		{
-			s_progress = go->GetComponent<ProgressBarComponent>();
-			s_initialized = (s_progress != nullptr);
+			progress->SetProgress(batteryCount);
 		}
-	}
-	if (s_progress)
-	{
-		s_progress->SetProgress(batteryCount);
 	}
 }
 
