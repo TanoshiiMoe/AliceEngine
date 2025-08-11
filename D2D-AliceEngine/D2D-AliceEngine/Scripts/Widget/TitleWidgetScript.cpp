@@ -23,6 +23,8 @@
 #include <Helpers/Logger.h>
 #include <Component/ProgressBarComponent.h>
 
+#include <Application.h>
+
 void TitleWidgetScript::Initialize()
 {
 	__super::Initialize();
@@ -507,8 +509,8 @@ void TitleWidgetScript::OnStart()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
 		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-
-		sound->PlayByName(L"SFX");
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 
 		//uiSound->StopByName(L"UISound");
 		//uiSound->PlayByName1(L"UISound", 0.45f);
@@ -546,8 +548,8 @@ void TitleWidgetScript::OnStart()
 	]()		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-
-			sound->PlayByName(L"SFX");
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 			//uiSound->StopByName(L"UISound");
 			//uiSound->PlayByName1(L"UISound", 0.45f);
@@ -579,8 +581,8 @@ void TitleWidgetScript::OnStart()
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
 			//SceneManager::ChangeScene(L"HiroScene");
-
-			sound->PlayByName(L"SFX");
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
 
 			//uiSound->StopByName(L"UISound");
 			//uiSound->PlayByName1(L"UISound", 0.45f);
@@ -610,8 +612,10 @@ void TitleWidgetScript::OnStart()
 	smallClose->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, smallClose,
 		bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
-		sfxControl, bgmControl, soundControl
+		sfxControl, bgmControl, soundControl, sound
 	] {
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 		startButton->SetActive(true);
 		continueButton->SetActive(true);
 		quitButton->SetActive(true);
@@ -648,7 +652,6 @@ void TitleWidgetScript::OnStart()
 			
 			//if (uiSound->IsPlaying())
 			sound->StopByName(L"UISound");
-
 			sound->PlayByName(L"UISound");
 
 			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
@@ -688,6 +691,7 @@ void TitleWidgetScript::OnStart()
 			//if (uiSound->IsPlaying())
 			//uiSound->StopByName(L"UISound");
 
+			sound->StopByName(L"UISound");
 			sound->PlayByName(L"UISound");
 
 			// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
@@ -764,13 +768,10 @@ void TitleWidgetScript::OnStart()
 	{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			
-			//uiSound->Play(0.45);
+
 			// Quit
-			PostQuitMessage(0);
-			// 임시 씬 전환
-			//SceneManager::ChangeScene(L"HiroScene");
-			//SceneManager::ChangeScene(Define::Scene_Stage1);
+			//PostQuitMessage(0);
+			Application::GetInstance().GameQuit();
 		});
 
 	quitButton->SetStateAction(Define::EButtonState::Hover, [quitButton]()

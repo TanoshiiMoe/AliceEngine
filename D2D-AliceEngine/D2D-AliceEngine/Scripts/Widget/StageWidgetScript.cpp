@@ -590,13 +590,16 @@ void StageWidgetScript::OnStart()
 
 		});
 
-	toRestart->SetStateAction(Define::EButtonState::Pressed, [sound,
+	toRestart->SetStateAction(Define::EButtonState::Pressed, [weak = WeakFromThis<StageWidgetScript>(), sound,
 		pauseText, pauseButton, popUpTab, closeButton, toMain, mainText,
 		toRestart, restartText, toOption, optionText, toSelect, selectText
 	] {
 		sound->PlayByName(L"UISound");
 
 		// TODO : 재시작 코드
+		if (weak.expired())return;
+		std::wstring sceneName = weak->GetWorld()->GetName();
+		SceneManager::GetInstance().ChangeScene(sceneName);
 
 		pauseText->m_layer = Define::Disable;
 		pauseButton->SetActive(true);

@@ -66,7 +66,7 @@ void DemoGameApp::Run()
 	__super::Run();
 	// �޽��� ����
 	MSG msg = {};
-	while (msg.message != WM_QUIT)
+	while (!m_quit/*msg.message != WM_QUIT*/)
 	{
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
