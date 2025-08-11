@@ -4,6 +4,10 @@
 #include "Object/gameObject.h"
 #include "Component/SkewTransform.h"
 #include <Animation/AnimatorInstance.h>
+#include <Prefab/Truck.h>
+#include "Scene/Scene.h"
+#include "Component/Collider.h"
+#include "Scripts/Enemy/Jump/JumpTrigger.h"
 
 void JumpTruck::Initialize()
 {
@@ -55,7 +59,16 @@ void JumpTruck::OnStart()
 	sr->SetRelativeScale(scale);
 
 	float height = sr->GetBitmapSizeY() * scale.y;
+	float width = sr->GetBitmapSizeX() * scale.x;
 	float yOffset = height * 0.25f;
+
+	// 콜라이더 설정 넣기
+	gameObject* lc = GetWorld()->NewObject<gameObject>(L"JumpCollider");
+	lc->AddComponent<Collider>()->SetBoxSize(FVector2(5.0f, height * 0.3f));
+	lc->AddComponent<JumpTrigger>()->target = owner.lock();
+	lc->transform()->AddPosition(owner->transform()->GetPosition());
+	lc->transform()->AddPosition(-(width * 0.4f), -(height * 0.25f));
+	
 
 	// zPos 오프셋 넣기
 	SkewTransform* st = owner->GetComponent<SkewTransform>();

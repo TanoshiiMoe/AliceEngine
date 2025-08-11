@@ -301,6 +301,9 @@
     <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Jump\JumpTrigger.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -518,6 +521,7 @@
     <ClCompile Include="Scripts\Widget\GameOverWidgetScript.cpp" />
     <ClCompile Include="GameClearWidgetScript.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />
+    <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />

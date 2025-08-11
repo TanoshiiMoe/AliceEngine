@@ -1,4 +1,4 @@
-#include "Truck.h"
+﻿#include "Truck.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -54,7 +54,7 @@ void Truck::OnStart()
 	m_owner->transform()->SetRotation(0);
 	m_owner->transform()->SetScale(0.3f);
 	m_owner->transform()->SetPivot(0.5f);
-	m_owner->AddComponent<SpriteRenderer>()->LoadData(L"truck.png");
+	//m_owner->AddComponent<SpriteRenderer>()->LoadData(L"truck.png");
 
 	float sizeX = m_owner->GetComponent<SpriteRenderer>()->GetBitmapSizeX() * m_owner->transform()->GetScale().x;
 	float sizeY = m_owner->GetComponent<SpriteRenderer>()->GetBitmapSizeY() * m_owner->transform()->GetScale().y;
