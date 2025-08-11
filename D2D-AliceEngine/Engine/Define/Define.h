@@ -29,9 +29,9 @@ namespace Define
 	static const std::wstring Scene_GameClear = L"Scene_Clear";
 
 	// ========== Layer List ==========
-	// Scene : 50000 ~ 59999
-	static const int CutSceneLayer = 50001;
-	
+
+// Scene : 350000 ~ 359999
+	static const int CutSceneLayer = 350001;
 	// UI : 50000 ~
 	static const int NormalTextLayer = 50010;
 	static const int ButtonLayer = 50020;
