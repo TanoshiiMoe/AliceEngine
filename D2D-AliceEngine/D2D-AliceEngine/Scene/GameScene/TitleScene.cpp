@@ -50,6 +50,13 @@ void TitleScene::OnEnter()
 	spine->LoadData(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
 	spine->spineRenderer->SetAnimation("Idle");
 	spine->spineRenderer->SetPosition(FVector2(-200, 0));
+
+	spineObject2 = NewObject<gameObject>(L"spineObject");
+	SpineScript* spine2 = spineObject2->AddComponent<SpineScript>();
+	spine2->LoadData(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
+	spine2->spineRenderer->SetAnimation("Idle");
+	spine2->spineRenderer->SetPosition(FVector2(100, 0));
+
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {

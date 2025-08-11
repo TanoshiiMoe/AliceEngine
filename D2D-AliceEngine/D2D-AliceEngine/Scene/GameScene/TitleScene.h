@@ -32,5 +32,6 @@ public:
 
 	FTimerHandle timer;
 	gameObject* spineObject;
+	gameObject* spineObject2;
 };
 
