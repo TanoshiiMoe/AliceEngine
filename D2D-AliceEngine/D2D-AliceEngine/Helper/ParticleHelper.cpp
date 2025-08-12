@@ -44,6 +44,31 @@ void ParticleHelper::SpawnParticleImpact(const FVector2& pos, const std::wstring
 	}
 }
 
+void ParticleHelper::SpawnParticleImpactByColor(const FVector2& pos, const std::wstring& texturePath /* = L"" */, FColor colorA, FColor colorB)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (!sceneWeak.expired())
+	{
+		WeakObjectPtr<gameObject> go = sceneWeak->FindObjectByName<gameObject>(L"ParticleWorldImpact");
+		if (!go)
+		{
+			go = sceneWeak->NewObject<gameObject>(L"ParticleWorldImpact");
+		}
+		go->SetPosition(pos);
+		auto* pc = go->AddComponent<ParticleComponent>();
+		pc->SetDrawType(Define::EDrawType::WorldSpace);
+		if (!texturePath.empty()) pc->LoadData(texturePath);
+		pc->SetAdditiveBlend(true);
+		//pc->EmitImpact(FVector2(0, 0));
+		pc->EmitImpactByColor(
+			FVector2(0, 0),
+			28,
+			D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
+			D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
+		);
+	}
+}
+
 void ParticleHelper::SpawnParticleClickL(const FVector2& pos, const std::wstring& texturePath /* = L"" */)
 {
 	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();

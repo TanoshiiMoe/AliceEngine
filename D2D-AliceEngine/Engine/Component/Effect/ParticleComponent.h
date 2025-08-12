@@ -31,6 +31,7 @@ public:
     // 이펙트 프리셋 API -----------------------------------------------------
     void EmitExplosion(const FVector2& worldOrScreenPos, int count = 60);
     void EmitImpact(const FVector2& worldOrScreenPos, int count = 28);
+    void EmitImpactByColor(const FVector2& pos, int count, D2D1::ColorF colorA, D2D1::ColorF colorB);
     void EmitClickBurst(const FVector2& pos, bool rightClick = false);
     void ToggleMouseTrail(bool enabled);
     void EmitAura(const FVector2& center, float radius = 80.0f, int count = 40);

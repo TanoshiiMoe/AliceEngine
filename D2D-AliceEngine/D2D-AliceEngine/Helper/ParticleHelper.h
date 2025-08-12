@@ -7,6 +7,7 @@ class ParticleHelper
 public:
 	static void SpawnParticleExplosion(const FVector2& pos, const std::wstring& texturePath = L"");
 	static void SpawnParticleImpact(const FVector2& pos, const std::wstring& texturePath = L"");
+	static void SpawnParticleImpactByColor(const FVector2& pos, const std::wstring& texturePath, FColor colorA, FColor colorB);
 	static void SpawnParticleClickL(const FVector2& pos, const std::wstring& texturePath = L"");
 	static void SpawnParticleClickR(const FVector2& pos, const std::wstring& texturePath = L"");
 	static void ToggleMouseTrail();

@@ -214,6 +214,22 @@ void ParticleComponent::EmitImpact(const FVector2& pos, int count)
     spawnShockwaveRing(ToSimPos(pos), 28.0f, 10.0f, 0.4f, D2D1::ColorF(1.0f, 0.9f, 0.6f, 0.9f));
 }
 
+void ParticleComponent::EmitImpactByColor(const FVector2& pos, int count, D2D1::ColorF colorA, D2D1::ColorF colorB)
+{
+	// 중앙에서 방사형으로 강하게 퍼지는 튜닝
+	emitBurstCommon(ToSimPos(pos), count,
+		260.0f, 520.0f,   // 더 강한 반경 속도
+		10.0f, 22.0f,
+		0.28f, 0.55f,
+		colorA,
+        colorB,
+		3.5f,
+		0.0f);
+
+	// 강한 방사 링 추가
+	spawnShockwaveRing(ToSimPos(pos), 28.0f, 10.0f, 0.4f, D2D1::ColorF(1.0f, 0.9f, 0.6f, 0.9f));
+}
+
 void ParticleComponent::EmitClickBurst(const FVector2& pos, bool rightClick)
 {
     emitBurstCommon(ToSimPos(pos), rightClick ? 30 : 18,
