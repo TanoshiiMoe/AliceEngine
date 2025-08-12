@@ -144,6 +144,12 @@ void TitleWidgetScript::OnStart()
 	PopupTab->m_layer = Define::Disable;
 	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f));
 
+	auto qrCodeSprite = m_owner->AddComponent<SpriteRenderer>();
+	qrCodeSprite->LoadData(L"UI\\Github.jpg");
+
+	auto githubGuideTeamSprite = m_owner->AddComponent<SpriteRenderer>();
+	githubGuideTeamSprite->LoadData(L"UI\\Github_Team_Guide.png");
+
 	if (!startText || !startButton) return;
 	if (!continueText || !continueButton || !continueTabText) return;
 	if (!optionText || !optionButton || !optionTabText) return;
@@ -475,6 +481,23 @@ void TitleWidgetScript::OnStart()
 	);
 	staffNameText->m_layer = Define::Disable;
 
+	qrCodeSprite->SetDrawType(Define::EDrawType::ScreenSpace);
+	FVector2 qrCodeSpriteSize = qrCodeSprite->GetRelativeSize();
+	qrCodeSprite->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(qrCodeSpriteSize, FVector2(-0.5, -0.5))
+		+ FVector2(-250, -80)
+	);
+	qrCodeSprite->m_layer = Define::Disable;
+
+	githubGuideTeamSprite->SetDrawType(Define::EDrawType::ScreenSpace);
+	githubGuideTeamSprite->SetRelativeScale(FVector2(0.67,0.70));
+	FVector2 githubGuideTeamSpriteSize = githubGuideTeamSprite->GetRelativeSize();
+	githubGuideTeamSprite->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(githubGuideTeamSpriteSize, FVector2(-0.5, -0.5))
+		+ FVector2(-250, 275)
+	);
+	githubGuideTeamSprite->m_layer = Define::Disable;
+
 	// ======================== quitText
 	quitText->SetFontSize(55.0f);
 	quitText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -601,7 +624,7 @@ void TitleWidgetScript::OnStart()
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
-		sound, continueTabText, optionTabText, staffTabText, staffNameText
+		sound, continueTabText, optionTabText, staffTabText, staffNameText, qrCodeSprite, githubGuideTeamSprite
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -628,7 +651,8 @@ void TitleWidgetScript::OnStart()
 			//optionTabText->m_layer = -1000;
 			staffTabText->m_layer = Define::Disable;
 			staffNameText->m_layer = Define::Disable;
-
+			qrCodeSprite->m_layer = Define::Disable;
+			githubGuideTeamSprite->m_layer = Define::Disable;
 			//tutorial->m_layer = Define::Disable;
 			//tutorial->Stop();
 
@@ -715,7 +739,7 @@ void TitleWidgetScript::OnStart()
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		sound, staffTabText, staffNameText
+		sound, staffTabText, staffNameText, qrCodeSprite, githubGuideTeamSprite
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -740,6 +764,8 @@ void TitleWidgetScript::OnStart()
 
 			staffTabText->m_layer = Define::PopupTextLayer;
 			staffNameText->m_layer = Define::PopupTextLayer;
+			qrCodeSprite->m_layer = Define::PopupTextLayer;
+			githubGuideTeamSprite->m_layer = Define::PopupTextLayer;
 
 			PopupTab->m_layer = Define::PopupLayer;
 		});
