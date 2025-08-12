@@ -85,6 +85,16 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 
 	m_speedText->SetText(realSpeed);
 	m_speedText->m_layer = Define::NormalTextLayer;
+
+	static bool wasPlaying = true; // 초기값은 컷씬 중이라고 가정
+
+	bool isPlaying = GamePlayManager::GetInstance().IsCutScenePlaying();
+
+	if (wasPlaying != isPlaying)
+	{
+		m_pauseButton->SetActive(!isPlaying);
+		wasPlaying = isPlaying;
+	}
 }
 
 void StageWidgetScript::Awake()
@@ -104,6 +114,7 @@ void StageWidgetScript::OnStart()
 	float soundTabPosX = 450;
 
 	auto pauseButton = m_owner->AddComponent<ButtonComponent>();
+	m_pauseButton = pauseButton;
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
 	auto smallClose = m_owner->AddComponent<ButtonComponent>();
 
@@ -484,15 +495,6 @@ void StageWidgetScript::OnStart()
 		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText
 	] {
-			if (auto uiObj = GetWorld()->FindObjectByName<gameObject>(L"UI"))
-			{
-				if (auto cutScene = uiObj->GetComponent<CutSceneWidgetScript>())
-				{
-					if (cutScene->IsCutScenePlaying())
-						return; // ESC 처리 안 함
-				}
-			}
-
 		sound->StopByName(L"UISound");
 		sound->PlayByName(L"UISound");
 
@@ -950,15 +952,7 @@ void StageWidgetScript::OnStart()
 		soundControl, bgmControl, sfxControl,bgmPlusButton,bgmMinusButton,sfxPlusButton,sfxMinusButton,
 		smallClose
 	] {
-			if (auto uiObj = GetWorld()->FindObjectByName<gameObject>(L"UI"))
-			{
-				if (auto cutScene = uiObj->GetComponent<CutSceneWidgetScript>())
-				{
-					if (cutScene->IsCutScenePlaying())
-						return; // ESC 처리 안 함
-				}
-			}
-
+		if (GamePlayManager::GetInstance().IsCutScenePlaying()) return;
 
 		if (!m_isPaused && Input::IsKeyPressed(VK_ESCAPE))
 		{

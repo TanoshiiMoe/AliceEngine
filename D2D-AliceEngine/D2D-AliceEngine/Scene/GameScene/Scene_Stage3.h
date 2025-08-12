@@ -25,7 +25,7 @@ public:
     gameObject* m_wall;
 
     gameObject* m_UI;
-    gameObject* m_button;
+    gameObject* m_widget;
 
     gameObject* m_bg;	// 임시 배경
 

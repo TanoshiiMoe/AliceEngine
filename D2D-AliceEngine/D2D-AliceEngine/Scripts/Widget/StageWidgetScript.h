@@ -5,6 +5,8 @@ class gameObject;
 class TextRenderComponent;
 class ProgressBarComponent;
 class BikeMovementScript;
+class ButtonComponent;
+
 class StageWidgetScript : public ScriptComponent
 {
 public:
@@ -29,6 +31,8 @@ public:
 
 	ProgressBarComponent* m_batteryProgress;
 	ProgressBarComponent* m_speedProgress;
+
+	ButtonComponent* m_pauseButton;
 
 	//BikeMovementScript* m_bike;
 
