@@ -15,6 +15,7 @@
 #include <Scripts/Enemy/EnemyStatScript.h>
 #include <Component/Collider.h>
 #include <Scripts/Bike/BikeStatScript.h>
+#include <Helper/ParticleHelper.h>
 
 void Car::Initialize()
 {
@@ -147,7 +148,14 @@ void Car::OnTriggerEnter2D(Collider* collider)
 			// Bullet의 damage 변수 사용
 			bs->m_bikeStat->DecreaseAbility("HP", 8);
 		}
-		GetWorld()->RemoveObject(GetOwner());
+
+		if (gameObject* player = GamePlayManager::GetInstance().GetPlayer())
+		{
+			FVector2 pos = player->GetPosition() + FVector2(40, 0);
+			//FVector2 pos = player->GetPosition();
+			ParticleHelper::SpawnParticleExplosion(pos, Define::Effect_Texture_Collision);
+		}
+		//GetWorld()->RemoveObject(GetOwner());
 	}
 }
 

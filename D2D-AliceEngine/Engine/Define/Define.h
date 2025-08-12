@@ -28,7 +28,11 @@ namespace Define
 	static const std::wstring Scene_GameOver = L"Scene_Over";
 	static const std::wstring Scene_GameClear = L"Scene_Clear";
 
+	static const std::wstring Effect_Texture_Bullet_Bomb	= L"Effect/BulletBomb.png";
+	static const std::wstring Effect_Texture_Collision		= L"Effect/Collision.png";
+
 	// ========== Layer List ==========
+	static const int ParticleLayer = 987654322;
 
 // Scene : 350000 ~ 359999
 	static const int CutSceneLayer = 350001;

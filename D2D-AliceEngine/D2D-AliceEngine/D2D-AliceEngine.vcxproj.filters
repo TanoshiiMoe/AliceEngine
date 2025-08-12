@@ -301,6 +301,9 @@
     <ClInclude Include="Scripts\Widget\GameClearWidgetScript.h">
       <Filter>Scripts\Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Helper\ParticleHelper.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -518,6 +521,7 @@
     <ClCompile Include="Scripts\Widget\GameClearWidgetScript.cpp">
       <Filter>Scripts\Widget</Filter>
     </ClCompile>
+    <ClCompile Include="Helper\ParticleHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />

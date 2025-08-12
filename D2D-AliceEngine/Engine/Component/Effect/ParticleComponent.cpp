@@ -7,6 +7,8 @@
 #include <Manager/SceneManager.h>
 #include <Core/Input.h>
 #include <Manager/UpdateTaskManager.h>
+#include <Helpers/CoordHelper.h>
+#include <Helpers/FileHelper.h>
 
 // WorldSpace 입력 좌표를 내부 시뮬레이션 좌표로 변환 (Y 반전 옵션)
 FVector2 ParticleComponent::ToSimPos(const FVector2& in) const
@@ -31,8 +33,8 @@ void ParticleComponent::Initialize()
 {
     __super::Initialize();
     ensureParticleTexture();
-    m_layer = 100; // 기본 레이어 (UI보다 뒤, 월드보다 위 조정 필요시 변경)
-    REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_LastDemotable);
+    m_layer = 987654322; // 기본 레이어 (UI보다 뒤, 월드보다 위 조정 필요시 변경)
+    REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
 }
 
 void ParticleComponent::Release()
@@ -71,12 +73,12 @@ void ParticleComponent::Update(const float& deltaSeconds)
         {
             m_trailAccumulator -= interval;
             FVector2 mp = (drawType == Define::EDrawType::WorldSpace)
-                ? ToSimPos(Input::GetMouseWorldPosition())
+                ? ToSimPos(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()))
                 : Input::GetMousePosition();
 
             emitBurstCommon(mp, 4,
                 10.0f, 30.0f, // speed
-                8.0f, 14.0f,  // size
+                10.0f, 16.0f,  // size
                 0.25f, 0.45f, // life
                 D2D1::ColorF(1.0f, 1.0f, 0.8f, 0.9f),
                 D2D1::ColorF(0.9f, 0.6f, 0.2f, 0.0f),
@@ -117,7 +119,8 @@ void ParticleComponent::Update(const float& deltaSeconds)
 void ParticleComponent::Render()
 {
     ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-    if (!context) return;
+    ComPtr<ID2D1SpriteBatch> spriteBatch = D2DRenderManager::GetInstance().m_spriteBatch;
+    if (!context || !spriteBatch) return;
 
     // 부모 클래스에서 좌표계 변환 설정
     __super::Render();
@@ -129,7 +132,7 @@ void ParticleComponent::Render()
     context->SetPrimitiveBlend(m_useAdditive ? D2D1_PRIMITIVE_BLEND_ADD : D2D1_PRIMITIVE_BLEND_SOURCE_OVER);
 
     // SpriteBatch가 있으면 최적, 없으면 개별 DrawBitmap 사용
-    ComPtr<ID2D1SpriteBatch> spriteBatch = D2DRenderManager::GetInstance().m_spriteBatch;
+    
     const bool useBatch = spriteBatch.Get() != nullptr;
 
     if (useBatch)
@@ -214,7 +217,7 @@ void ParticleComponent::EmitImpact(const FVector2& pos, int count)
 
 void ParticleComponent::EmitClickBurst(const FVector2& pos, bool rightClick)
 {
-    emitBurstCommon(pos, rightClick ? 30 : 18,
+    emitBurstCommon(ToSimPos(pos), rightClick ? 30 : 18,
         120.0f, rightClick ? 380.0f : 240.0f,
         6.0f, 14.0f,
         0.25f, 0.5f,
@@ -403,8 +406,10 @@ void ParticleComponent::createSoftCircleBitmap()
 
 void ParticleComponent::LoadData(const std::wstring& relativeOrAbsolutePath)
 {
+    std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + relativeOrAbsolutePath); // 파일 이름만 저장
     // 파일에서 텍스처 로드하여 파티클 비트맵 교체
-    std::shared_ptr<ID2D1Bitmap1> loaded = PackageResourceManager::GetInstance().CreateBitmapFromFile(relativeOrAbsolutePath.c_str());
+	std::shared_ptr<ID2D1Bitmap1> loaded = PackageResourceManager::GetInstance().CreateBitmapFromFile(
+			filePath.c_str());
     if (loaded)
     {
         m_particleBitmap = loaded;
