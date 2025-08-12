@@ -14,15 +14,15 @@ void JumpTrigger::Initialize()
 
 void JumpTrigger::OnStart()
 {
-	if (target)
+	/*if (target)
 		offset = owner->transform()->GetPosition() - target->transform()->GetPosition();
 	else
-		OutputDebugStringW(L"점프트리거에 타겟이 없음!!!!\n");
+		OutputDebugStringW(L"점프트리거에 타겟이 없음!!!!\n");*/
 }
 
 void JumpTrigger::Update(const float& deltaSeconds)
 {
-	if (target) {
+	if (target.IsValid()) {
 		FVector2 targetPos = target->transform()->GetPosition();
 		targetPos += offset;
 
@@ -32,7 +32,7 @@ void JumpTrigger::Update(const float& deltaSeconds)
 
 void JumpTrigger::OnTriggerEnter2D(Collider* collider)
 {
-	if (collider->GetOwner()->GetTag() == L"Player") {
+	if (collider->GetOwner()->GetName() == L"Player") {
 		GamePlayManager::GetInstance().GetPlayer()->GetComponent<PlayerManager>()->Jump();
 	}
 }

@@ -521,7 +521,6 @@
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
     <ClCompile Include="Scripts\Widget\GameOverWidgetScript.cpp" />
-    <ClCompile Include="GameClearWidgetScript.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />
     <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />
     <ClCompile Include="Scripts\Widget\GameClearWidgetScript.cpp">

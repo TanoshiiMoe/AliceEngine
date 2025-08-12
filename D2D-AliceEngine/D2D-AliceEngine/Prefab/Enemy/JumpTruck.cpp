@@ -65,9 +65,12 @@ void JumpTruck::OnStart()
 	// 콜라이더 설정 넣기
 	gameObject* lc = GetWorld()->NewObject<gameObject>(L"JumpCollider");
 	lc->AddComponent<Collider>()->SetBoxSize(FVector2(5.0f, height * 0.3f));
-	lc->AddComponent<JumpTrigger>()->target = owner.lock();
-	lc->transform()->AddPosition(owner->transform()->GetPosition());
-	lc->transform()->AddPosition(-(width * 0.4f), -(height * 0.25f));
+	/*lc->transform()->SetPosition(owner->transform()->GetPosition());
+	lc->transform()->AddPosition(-(width * 0.4f), -(height * 0.25f));*/
+	JumpTrigger* jt = lc->AddComponent<JumpTrigger>();
+	jt->target = owner;
+	jt->SetOffSet(FVector2(-(width * 0.3f), -(height * 0.25f)));
+	
 	
 
 	// zPos 오프셋 넣기
