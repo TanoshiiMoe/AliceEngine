@@ -134,10 +134,10 @@ void TitleWidgetScript::OnStart()
 	//auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
 	//uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
 
-	auto tutorial = m_owner->AddComponent<VideoComponent>();
-	tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm",30,L"jpg",95,true);
-	tutorial->m_layer = Define::Disable;
-	tutorial->SetRelativePosition(FVector2(-960, -550));
+	//auto tutorial = m_owner->AddComponent<VideoComponent>();
+	//tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm",30,L"jpg",95,true);
+	//tutorial->m_layer = Define::Disable;
+	//tutorial->SetRelativePosition(FVector2(-960, -550));
 
 	auto PopupTab = m_owner->AddComponent<SpriteRenderer>();
 	PopupTab->LoadData(L"UI\\PopupTab.png");
@@ -149,7 +149,7 @@ void TitleWidgetScript::OnStart()
 	if (!optionText || !optionButton || !optionTabText) return;
 	if (!staffText || !staffButton || !staffTabText) return;
 	if (!quitText || !quitButton) return;
-	if (!tutorial || !closeText || !closeButton) return;
+	if (!closeText || !closeButton) return;
 	if (!sound || !PopupTab) return;
 
 	float buttonBasePos = 400;
@@ -529,7 +529,7 @@ void TitleWidgetScript::OnStart()
 
 	// ======================== Delegete
 	startButton->SetStateAction(Define::EButtonState::Pressed, [
-		tutorial, startButton, quitButton, staffButton, optionButton, closeButton, closeText,
+		startButton, quitButton, staffButton, optionButton, closeButton, closeText,
 		sound, continueButton, skipButton, skipText
 	]()
 	{
@@ -556,8 +556,8 @@ void TitleWidgetScript::OnStart()
 		skipButton->SetActive(true);
 		skipText->m_layer = Define::PopupTextLayer;
 
-		tutorial->m_layer = Define::PopupLayer;
-		tutorial->Play();
+		//tutorial->m_layer = Define::PopupLayer;
+		//tutorial->Play();
 	});
 
 	skipButton->SetStateAction(Define::EButtonState::Pressed, []()
@@ -600,7 +600,7 @@ void TitleWidgetScript::OnStart()
 		});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
-		tutorial, startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
+		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
 		sound, continueTabText, optionTabText, staffTabText, staffNameText
 	]()
 		{
@@ -629,8 +629,8 @@ void TitleWidgetScript::OnStart()
 			staffTabText->m_layer = Define::Disable;
 			staffNameText->m_layer = Define::Disable;
 
-			tutorial->m_layer = Define::Disable;
-			tutorial->Stop();
+			//tutorial->m_layer = Define::Disable;
+			//tutorial->Stop();
 
 			PopupTab->m_layer = Define::Disable;
 		});
