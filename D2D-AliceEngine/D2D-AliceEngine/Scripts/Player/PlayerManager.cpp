@@ -126,13 +126,21 @@ void PlayerManager::Input()
 	}
 
 
-	// 산데비스탄 테스트
+	// 산데비스탄 실행키
 	if (Input::IsKeyPressed(VK_G)) {
 		if (auto prism = owner->GetComponent<Prism>())
 		{
-			prism->SetActive(!prism->IsActive());
-			TimerManager::GetInstance().SetGlobalTimeScale(0.5);
-			playerTimeScale = 2.0f;
+			bool bVal = !prism->IsActive();
+			prism->SetActive(bVal);
+
+			if (bVal) {
+				TimerManager::GetInstance().SetGlobalTimeScale(0.5f);
+				playerTimeScale = 2.0f;
+			}
+			else {
+				TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
+				playerTimeScale = 1.0f;
+			}
 		}
 	}
 }
