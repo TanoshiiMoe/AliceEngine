@@ -70,10 +70,14 @@ void BoxComponent::Render()
 		drawWidth * GetOwnerPivot()->x,
 		drawHeight * GetOwnerPivot()->y
 	};
-	D2DRenderManager::GetD2DDevice()->DrawRectangle(
-		D2D1::RectF(-pivot.x, -pivot.y, pivot.x, pivot.y),
-		m_pBrush.Get(), thickness
-	);
+
+	if (D2DRenderManager::GetInstance().bRenderedBoxRect)
+	{
+		D2DRenderManager::GetD2DDevice()->DrawRectangle(
+			D2D1::RectF(-pivot.x, -pivot.y, pivot.x, pivot.y),
+			m_pBrush.Get(), thickness
+		);
+	}
 }
 
 float BoxComponent::GetBitmapSizeX()

@@ -473,10 +473,21 @@ void Drone::FireOneBurstShot()
 	const auto rnd = FRandom::GetRandomPointInCircle2D(targetPos.x, targetPos.y, spreadRadius);
 	const FVector2 aimedTarget{ rnd.x, rnd.y };
 
-	// 속도 반영(플레이어 바이크 이동속도)
-	float currentSpeed = 0.0f;
+	float currentSpeed = 1.0f;
 	if (auto bike = player->GetComponent<BikeMovementScript>())
 		currentSpeed = bike->GetCurrSpeed();
+
+	switch (droneType)
+	{
+	case EDroneType::Enemy:
+	case EDroneType::BossSpawn:
+		// 속도 반영(플레이어 바이크 이동속도)
+		currentSpeed *= 0.4f;
+		break;
+	case EDroneType::Boss:
+		currentSpeed *= 0.5f;
+		break;
+	}
 
 	const FVector2 speed{ currentSpeed, 0.0f };
 
@@ -626,7 +637,7 @@ void Drone::OnStart()
 	arm->RemoveFromParent();
 	body->AddChildComponent(arm);
 	
-	// 보스 드론인 경우 초기 위치 설정
+	// 보스가 소환한 드론인 경우 초기 위치 설정
 	if (droneType == EDroneType::BossSpawn)
 	{
 		if (auto player = GamePlayManager::GetInstance().GetPlayer())

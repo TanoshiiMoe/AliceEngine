@@ -298,6 +298,9 @@
     <ClInclude Include="Scripts\Widget\GameClearWidgetScript.h">
       <Filter>Scripts\Widget</Filter>
     </ClInclude>
+    <ClInclude Include="Helper\ParticleHelper.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
     <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
@@ -529,6 +532,7 @@
     <ClCompile Include="Scripts\Widget\GameClearWidgetScript.cpp">
       <Filter>Scripts\Widget</Filter>
     </ClCompile>
+    <ClCompile Include="Helper\ParticleHelper.cpp" />
     <ClCompile Include="Scripts\Audio\GameClearAudioScript.cpp">
       <Filter>Scripts\Audio</Filter>
     </ClCompile>

@@ -20,6 +20,7 @@
 #include <Prefab/Enemy/Core/Car.h>
 #include <Scripts/Enemy/EnemyStatScript.h>
 #include "../Player/PlayerManager.h"
+#include <Helper/ParticleHelper.h>
 
 void Bullet::Initialize()
 {
@@ -191,6 +192,18 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				// Bullet의 damage 변수 사용
 				bs->m_enemyStat->DecreaseAbility("HP", damage);
 			}
+			if (gameObject* target = collider->GetOwner())
+			{
+				FVector2 pos = target->GetPosition();
+				//FVector2 pos = player->GetPosition();
+				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
+				ParticleHelper::SpawnParticleExplosionByColor(
+					pos,
+					Define::Effect_Texture_Bullet_Bomb,
+					FColor(0.0f, 0.05f, 0.95f, 1.0f),
+					FColor(0.0f, 0.5f, 0.9f, 1.0f)
+				);
+			}
 			GetWorld()->RemoveObject(GetOwner());
 		}
 		break;
@@ -203,6 +216,19 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
+
+			if (gameObject* target = collider->GetOwner())
+			{
+				FVector2 pos = target->GetPosition();
+				//FVector2 pos = player->GetPosition();
+				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
+				ParticleHelper::SpawnParticleExplosionByColor(
+					pos,
+					Define::Effect_Texture_Bullet_Bomb,
+					FColor(1.0f, 0.95f, 0.85f, 1.0f),
+					FColor(1.0f, 0.5f, 0.2f, 0.0f)
+				);
+			}
 		}
 		break;
 	case EDroneType::BossSpawn:
@@ -215,6 +241,19 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
+
+			if (gameObject* target = collider->GetOwner())
+			{
+				FVector2 pos = target->GetPosition();
+				//FVector2 pos = player->GetPosition();
+				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
+				ParticleHelper::SpawnParticleExplosionByColor(
+					pos,
+					Define::Effect_Texture_Bullet_Bomb,
+					FColor(1.0f, 0.95f, 0.85f, 1.0f),
+					FColor(1.0f, 0.5f, 0.2f, 0.0f)
+				);
+			}
 		}
 		break;
 	case EDroneType::Boss:
@@ -227,6 +266,19 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
+
+			if (gameObject* target = collider->GetOwner())
+			{
+				FVector2 pos = target->GetPosition();
+				//FVector2 pos = player->GetPosition();
+				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
+				ParticleHelper::SpawnParticleExplosionByColor(
+					pos,
+					Define::Effect_Texture_Bullet_Bomb,
+					FColor(1.0f, 0.95f, 0.85f, 1.0f),
+					FColor(1.0f, 0.5f, 0.2f, 0.0f)
+				);
+			}
 		}
 		break;
 	default:
