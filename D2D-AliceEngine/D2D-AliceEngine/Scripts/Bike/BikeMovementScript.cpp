@@ -69,23 +69,6 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 	if (auto transform = m_owner->transform())
 		transform->AddPosition(finalSpeed * deltaSeconds, 0);
 
-	// 점프 입력 처리 (스페이스바)
-	if (Input::IsKeyPressed(VK_SPACE) && !m_isJumping && !m_hitReaction)
-	{
-		m_isJumping = true;
-		m_groundY = owner->GetComponent<SkewTransform>()->GetRealPos().y;
-		m_jumpVelocity = m_jumpInitialVelocity;
-
-		/*if (auto anim = owner->GetComponent<AnimatorInstance>())
-		{
-			m_jumpPrevLayer = anim->m_layer;
-			anim->m_layer = 70000;
-		}*/
-
-		// 회전 적용 (60도)
-		if (auto tr = m_owner->transform())
-			tr->SetRotation(60.0f);
-	}
 
 	// 점프 중 물리 처리
 	if (m_isJumping)
@@ -202,6 +185,27 @@ void BikeMovementScript::Input()
 	// 여기에 Input에 대한 로직 작성
 }
 
+
+void BikeMovementScript::Jump()
+{
+	// 점프 입력 처리
+	if (!m_isJumping && !m_hitReaction)
+	{
+		m_isJumping = true;
+		m_groundY = owner->GetComponent<SkewTransform>()->GetRealPos().y;
+		m_jumpVelocity = m_jumpInitialVelocity;
+
+		/*if (auto anim = owner->GetComponent<AnimatorInstance>())
+		{
+			m_jumpPrevLayer = anim->m_layer;
+			anim->m_layer = 70000;
+		}*/
+
+		// 회전 적용 (60도)
+		if (auto tr = m_owner->transform())
+			tr->SetRotation(60.0f);
+	}
+}
 
 void BikeMovementScript::ApplySlow(float slowFactor, float duration)
 {

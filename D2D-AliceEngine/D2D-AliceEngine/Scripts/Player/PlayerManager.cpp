@@ -216,3 +216,8 @@ void PlayerManager::DelayDestroy()
         false,
         1.0f);
 }
+
+void PlayerManager::Jump()
+{
+	owner->GetComponent<BikeMovementScript>()->Jump();
+}

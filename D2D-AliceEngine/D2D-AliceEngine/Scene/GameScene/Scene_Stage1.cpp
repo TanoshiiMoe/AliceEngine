@@ -37,6 +37,7 @@
 #include <Scripts/Enemy/Spawn/SpawnCollider.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
+#include "Scripts/Enemy/Spawn/EnemyDespawner.h"
 #include <Component/Effect/ParticleComponent.h>
 
 void Scene_Stage1::Initialize()
@@ -116,6 +117,10 @@ void Scene_Stage1::OnEnter()
 	auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
 	tb->SetBox(FVector2(3300.0f, 800.0f), 1);
 	//owner->transform()->SetPivot(0.5f, 0.5f);
+
+	// 디스포너 생성
+	gameObject* deSpawner = NewObject<gameObject>(L"DeSpwaner");
+	deSpawner->AddComponent<EnemyDespawner>();
 
 	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
 	m_button = NewObject<gameObject>(L"PauseButton");

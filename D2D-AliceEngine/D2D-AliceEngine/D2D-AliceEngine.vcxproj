@@ -167,6 +167,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Enemy\Jump\JumpTrigger.h" />
+    <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h" />
     <ClInclude Include="Scripts\Widget\GameClearWidgetScript.h" />
     <ClInclude Include="Scripts\Widget\GameOverWidgetScript.h" />
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />
@@ -244,6 +246,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />
     <ClCompile Include="Scripts\Widget\GameClearWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\GameOverWidgetScript.cpp" />
     <ClCompile Include="Scripts\Player\PlayerMovement.cpp" />
