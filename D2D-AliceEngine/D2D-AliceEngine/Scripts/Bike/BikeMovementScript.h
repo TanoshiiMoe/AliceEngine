@@ -123,5 +123,7 @@ private:
 	float m_jumpGravity          = -600.0f; // 중력 가속도 양수: 아래 방향
 	float m_groundY              = 0.0f;    // 지면 Y 위치 기준
 	int m_jumpPrevLayer = 0;
+
+	int prevCollLayer = 0;
 };
 

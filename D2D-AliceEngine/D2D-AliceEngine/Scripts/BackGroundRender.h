@@ -32,7 +32,8 @@ public:
 	// 이 값을 조절하여 전체 배경 레이어를 상대적으로 이동시킬 수 있습니다.
 	int m_backgroundRelativeLayer = -3000;
 	int m_bottomRelativeLayer = 45910;
-	int m_topRelativeLayer = 5910;
+	int m_topRelativeLayer = -500;
+	//int m_topRelativeLayer = 5910;
 
 	// background
 	gameObject* m_sky;	// 밤하늘 배경(남산타워)

@@ -24,10 +24,10 @@ public:
 	void Jump();
 
 	// 가속시키기
-	void Boost(float _time);
+	void Boost(float _time = 5.0f);
 
 	// 싼데비슷한
-	void Sande(float _time);
+	void Sande(float _time = 5.0f);
 
 private:
 	AnimatorInstance* animInstance = nullptr;

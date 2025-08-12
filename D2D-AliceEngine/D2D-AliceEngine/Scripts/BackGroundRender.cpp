@@ -112,9 +112,17 @@ void BackGroundRender::OnStart()
 
     // y=0을 중심으로 위(+Y) 3장, 아래(-Y) 3장 구성해보자
     // speed 파라미터는 계수 플레이어 속도에 비례해서 이동하게
-    AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png",         -10 + m_backgroundRelativeLayer, 400.0f, 0.2f);
+    
+    // 원경은 카메라에 박기로 함
+    WeakObjectPtr<gameObject> bg = GetWorld()->NewObject<gameObject>(L"TopFar");
+    SpriteRenderer* bgsr = bg->AddComponent<SpriteRenderer>();
+    bgsr->LoadData(L"BackGround\\BG_Sky.png");
+    bgsr->m_layer = -5000 + m_backgroundRelativeLayer;
+    GetWorld()->GetCamera()->AddChildObject(bg.lock());
+    //AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png",         -10 + m_backgroundRelativeLayer, 400.0f, 0.2f);
+    
     AddLooping(L"TopMid",    L"BackGround\\BG_Building.png",    -7  + m_topRelativeLayer, 500.0f, 0.4f);
-    AddLooping(L"TopNear",   L"BackGround\\BG_BackBarrier.png", 5  + m_topRelativeLayer, 330.0f, 1.5f);
+    AddLooping(L"TopNear",   L"BackGround\\BG_BackBarrier.png", -5  + m_topRelativeLayer, 330.0f, 1.5f);
     // =========================== Player가 여기에 있고, 위 아래 배경이라는 뜻 ===================================
     AddLooping(L"BotNear",   L"BackGround\\BG_GuardRail.png",  5  + m_bottomRelativeLayer, -180.0f, 1.5f);
     AddLooping(L"BotMid",    L"BackGround\\BG_Bridge.png",     3  + m_bottomRelativeLayer, -640.0f, 0.9f);
