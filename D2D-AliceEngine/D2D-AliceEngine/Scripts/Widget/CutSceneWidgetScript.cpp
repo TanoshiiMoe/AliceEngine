@@ -17,6 +17,8 @@
 #include <Manager/SceneManager.h>
 #include <Helpers/Logger.h>
 #include <GameManager/GamePlayManager.h>
+#include <Component/ProgressBarComponent.h>
+#include <Component/InputComponent.h>
 
 void CutSceneWidgetScript::Initialize()
 {
@@ -32,18 +34,28 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
 	__super::Update(deltaSeconds);
 
 	// 키보드 입력으로도 조작 가능
-    if (!m_isTransitioning && m_canAdvance && (Input::IsKeyDown(VK_RETURN)))
-	{
-		NextImage();
-	}
+ //   if (!m_isTransitioning && m_canAdvance && (Input::IsKeyDown(VK_SPACE)))
+	//{
+	//	NextImage();
+	//}
     //else if (!m_isTransitioning && Input::IsKeyDown(VK_LEFT))
     //{
     //    PrevImage();
     //}
-    else if (!m_isTransitioning && Input::IsKeyDown(VK_ESCAPE))
-	{
-		SkipCutScene();
-	}
+ //   else if (!m_isTransitioning && Input::IsKeyDown(VK_ESCAPE))
+	//{
+	//	SkipCutScene();
+	//}
+
+    m_progress->SetProgress(m_pressValue / 500.0f);
+
+    FVector2 mousePos = Input::GetMousePosition();
+
+    m_progress->SetRelativePosition(FVector2(mousePos.x - SCREEN_WIDTH / 2.0f, mousePos.y - 450));
+    m_progressSprite->SetRelativePosition(FVector2(mousePos.x - SCREEN_WIDTH / 2.0f, mousePos.y - 450));
+    m_guideText->SetRelativePosition(
+        CoordHelper::RatioCoordToScreen(m_guideText->GetRelativeSize(), FVector2(-0.5, -0.5)) +
+        FVector2(mousePos.x - SCREEN_WIDTH / 2.0f, mousePos.y - 400));
 
     // 진행 중인 전환 스텝 처리
     if (m_isTransitioning)
@@ -64,6 +76,24 @@ void CutSceneWidgetScript::OnStart()
 
 	GetCamera()->AddChildObject(m_owner);
 
+    auto input = m_owner->AddComponent<InputComponent>();
+
+    m_progressSprite = m_owner->AddComponent<SpriteRenderer>();
+    m_progress = m_owner->AddComponent<ProgressBarComponent>();
+
+    // ========= Progress
+    m_progress->LoadData(L"UI\\ProgressBar.png");
+    m_progress->SetDrawType(EDrawType::ScreenSpace);
+    m_progress->SetRelativePosition(FVector2(0, 0));
+    m_progress->m_layer = Define::PopupObjectLayer + Define::CutSceneLayer;
+    m_progress->SetProgress(m_pressValue);
+
+    m_progressSprite->LoadData(L"UI\\PressValue.png");
+    m_progressSprite->m_layer = Define::PopupObjectLayer + Define::CutSceneLayer;
+
+    m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
+    m_progressSprite->SetRelativePosition(FVector2(0, 0));
+
 	// 컷씬 이미지 로드
 	LoadCutSceneImages();
 	m_currentImageIndex = 0;
@@ -71,6 +101,8 @@ void CutSceneWidgetScript::OnStart()
 	// 컴포넌트들 생성
     // 월드 가림용 백드롭을 가장 먼저 생성하여 항상 뒤를 완전 차단
     EnsureBackdropOverlay();
+
+    auto spacebar = m_owner->AddComponent<InputComponent>();
 
     m_background = m_owner->AddComponent<SpriteRenderer>();
     //m_nextButton = m_owner->AddComponent<ButtonComponent>();
@@ -106,8 +138,8 @@ void CutSceneWidgetScript::OnStart()
 	m_skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
 	m_skipButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
 	m_skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	m_skipButton->SetRelativePosition(FVector2(0, 400));
-	m_skipButton->SetRelativeScale(FVector2(0.8f, 0.8f));
+	m_skipButton->SetRelativePosition(FVector2(0, 350));
+	m_skipButton->SetRelativeScale(FVector2(1.f, 1.f));
     m_skipButton->m_layer = Define::ButtonLayer + Define::CutSceneLayer;
 
 	// 텍스트 설정
@@ -118,7 +150,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipText->SetFontSize(45.0f);
 	m_skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	m_skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	m_skipText->SetText(L"건너뛰기");
+	m_skipText->SetText(L"다음으로");
 	m_skipText->SetColor(FColor::White);
 	FVector2 skipTextSize = m_skipText->GetRelativeSize();
 	m_skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextSize, FVector2(-0.5, -0.5)));
@@ -128,34 +160,38 @@ void CutSceneWidgetScript::OnStart()
 
     // 안내 문구 생성 (초기 비가시, 스킵 버튼 오른쪽에 배치)
     m_guideText = m_owner->AddComponent<TextRenderComponent>();
-    m_guideText->SetFontSize(40.0f);
+    m_guideText->SetFontSize(25.0f);
     m_guideText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
     m_guideText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-    m_guideText->SetText(L"엔터를 눌러 다음으로 넘어가세요");
+    m_guideText->SetText(L"[SPACE]를 길게 눌러서 컷씬 건너뛰기");
     m_guideText->SetColor(FColor::White);
-    FVector2 guideSize = m_guideText->GetRelativeSize();
-    // 스킵 버튼 오른쪽(오프셋 220,0)
-    m_guideText->SetRelativePosition(FVector2(340, -20));
-    m_guideText->m_layer = Define::ButtonTextLayer + Define::CutSceneLayer;
-    m_guideText->RemoveFromParent();
-    m_skipButton->AddChildComponent(m_guideText);
+    m_guideText->m_layer = Define::PopupTextLayer + Define::CutSceneLayer;
+    //m_guideText->RemoveFromParent();
+    //m_skipButton->AddChildComponent(m_guideText);
     // 시작 시 감춤
-    m_guideAlpha = 0.0f;
-    m_guideText->SetOpacity(0.0f);
-    m_guideFadeElapsed = 0.0f;
+    //m_guideAlpha = 0.0f;
+    //m_guideText->SetOpacity(0.0f);
+    //m_guideFadeElapsed = 0.0f;
 
 	// 버튼 이벤트 설정
     // Next 버튼 핸들러 주석 처리
 
     // Prev 버튼 핸들러 주석 처리
 
+    input->SetAction(input->GetHandle(), [this] {
+        SkipInput();
+
+        });
+
 	m_skipButton->SetStateAction(Define::EButtonState::Pressed, [this]()
 	{
 		m_uiSound->StopByName(L"UISound");
 		m_uiSound->PlayByName1(L"UISound", 0.45f);
-        GamePlayManager::GetInstance().StartGame();
+
+        NextImage();
+        //GamePlayManager::GetInstance().StartGame();
         
-		SkipCutScene();
+		//SkipCutScene();
 	});
 
 	// 호버 효과 추가
@@ -236,6 +272,23 @@ void CutSceneWidgetScript::OnDestroy()
     m_guideText = nullptr;
 }
 
+void CutSceneWidgetScript::SkipInput()
+{
+    if (Input::IsKeyDown(VK_SPACE))
+    {
+        m_pressValue += 3.5f;
+
+        if (m_pressValue >= 500.0f)
+        {
+            SkipCutScene();
+            GamePlayManager::GetInstance().StartGame();
+        }
+    }
+
+    m_pressValue -= 1.5f;
+    if (m_pressValue <= 0.0f) m_pressValue = 0.0f;
+}
+
 void CutSceneWidgetScript::LoadCutSceneImages()
 {
 	// 컷씬 이미지 경로들을 추가 (Resource/CutScene/Stage1/ 폴더의 이미지들)
@@ -296,21 +349,21 @@ void CutSceneWidgetScript::ShowImage(int index)
     }
 
     // 버튼 활성화/텍스트 업데이트 (Next/Prev는 현재 주석 처리)
-    {
-        const bool hasPrev = index > 0;
-        const bool isLast = index >= static_cast<int>(m_cutSceneImages.size()) - 1;
+    //{
+    //    const bool hasPrev = index > 0;
+    //    const bool isLast = index >= static_cast<int>(m_cutSceneImages.size()) - 1;
 
-        // 진행 가능 여부 초기화 및 가이드 리셋
-        m_canAdvance = false;
-        StopGuideTimers();
-        if (m_guideText)
-        {
-            m_guideAlpha = 0.0f;
-            m_guideText->SetOpacity(0.0f);
-        }
-        // 2초 뒤 가이드 출력
-        ShowGuideAfterDelay();
-    }
+    //    // 진행 가능 여부 초기화 및 가이드 리셋
+    //    m_canAdvance = false;
+    //    StopGuideTimers();
+    //    if (m_guideText)
+    //    {
+    //        m_guideAlpha = 0.0f;
+    //        m_guideText->SetOpacity(0.0f);
+    //    }
+    //    // 2초 뒤 가이드 출력
+    //    ShowGuideAfterDelay();
+    //}
 
 	OutputDebugStringW((L"Showing cutscene image: " + std::to_wstring(index + 1) + L"/" + std::to_wstring(m_cutSceneImages.size()) + L"\n").c_str());
 }

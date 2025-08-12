@@ -9,6 +9,7 @@ class SpriteRenderer;
 class ButtonComponent;
 class TextRenderComponent;
 class AudioComponent;
+class ProgressBarComponent;
 
 class CutSceneWidgetScript : public ScriptComponent
 {
@@ -43,6 +44,12 @@ private:
 	TextRenderComponent* m_skipText;
     TextRenderComponent* m_guideText{ nullptr };
 	AudioComponent* m_uiSound;
+
+    SpriteRenderer* m_progressSprite;
+    ProgressBarComponent* m_progress;
+    float m_pressValue;
+
+    void SkipInput();
 
 	// 컷씬 관련
 	std::vector<std::wstring> m_cutSceneImages;
