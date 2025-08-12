@@ -7,6 +7,7 @@
 #include <d2d1_3.h>            // ID2D1DeviceContext2, ID2D1Factory2 등
 #include <d2d1effectauthor.h>  // LoadPixelShader 관련
 #include <d2d1effecthelpers.h> // 셰이더 헬퍼
+#include <d3dcompiler.h>
 #include <Manager/PackageResourceManager.h>
 
 D2DRenderManager::D2DRenderManager()
@@ -59,6 +60,11 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	ComPtr<ID2D1Factory8> d2dFactory;
 	D2D1_FACTORY_OPTIONS options = {};
 	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, options, d2dFactory.GetAddressOf());
+
+	// 생성한 지역변수를 멤버변수에 대입
+	m_d2dFactory = d2dFactory;
+
+	//D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, IID_PPV_ARGS(&m_d2dFactory));
 
 	ComPtr<IDXGIDevice> dxgiDevice;
 	m_d3dDevice.As(&dxgiDevice);
@@ -128,6 +134,8 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"BackGround/blood.png");
 	hr = CreateBitmapFromFile(filePath.c_str(), m_overlayBitmap.GetAddressOf());
 	assert(SUCCEEDED(hr));
+
+    // D3D 경로 제거됨
 
 
 	// 이것들 동적으로 사용할 수 있게 리팩 필요

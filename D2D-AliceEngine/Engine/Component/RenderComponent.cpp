@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "RenderComponent.h"
 #include <Manager/D2DRenderManager.h>
 #include <System/RenderSystem.h>
@@ -61,7 +61,7 @@ void RenderComponent::Render()
 	{
 		//view = view * unity * world * cameraInv;
 		//view = view * unity * D2D1::Matrix3x2F::Translation(Define::SCREEN_WIDTH * 0.5f, Define::SCREEN_HEIGHT * 0.5f);
-		// Unity ÁÂÇ¥°è * OwnerÀÇ ¿ùµå À§Ä¡ * Ä«¸Ş¶ó º¯È¯ *  È­¸é Áß½É º¸Á¤
+		// Unity ì¢Œí‘œê³„ * Ownerì˜ ì›”ë“œ ìœ„ì¹˜ * ì¹´ë©”ë¼ ë³€í™˜ *  í™”ë©´ ì¤‘ì‹¬ ë³´ì •
 		view = flipY * world * cameraInv * flipY * screen;
 	}
 	else if (drawType == Define::EDrawType::ScreenSpace)
@@ -131,13 +131,13 @@ FVector2 RenderComponent::GetRelativeScale()
 
 FVector2 RenderComponent::GetRelativeSize()
 {
-	// »ó´ë TransformÀÇ Scale
+	// ìƒëŒ€ Transformì˜ Scale
 	FVector2 relativeScale = FVector2(
 		relativeTransform.GetScale().x,
 		relativeTransform.GetScale().y
 	);
 
-	// ÃÖÁ¾ Å©±â = ±âº» Å©±â * ºÎ¸ğ Scale * »ó´ë Scale
+	// ìµœì¢… í¬ê¸° = ê¸°ë³¸ í¬ê¸° * ë¶€ëª¨ Scale * ìƒëŒ€ Scale
 	return FVector2(
 		relativeScale.x,
 		relativeScale.y

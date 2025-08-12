@@ -63,21 +63,27 @@ void SelectWidgetScript::OnStart()
 	auto stage3 = m_owner->AddComponent<ButtonComponent>();
 
 	// ===================================================== //
-	continueText->SetFontSize(70.0f);
-	continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	continueText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	continueText->SetText(L"임무 선택");
-	continueText->SetColor(FColor(0, 234, 255, 255));
-	continueText->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(continueText->GetRelativeSize(),FVector2(-0.5,-0.5))
-		+FVector2(0,-350));
-	continueText->m_layer = Define::NormalTextLayer;
+	background->LoadData(L"BackGround\\Background_Select.png");
+	background->SetDrawType(Define::EDrawType::ScreenSpace);
+	FVector2 backgroundSize = background->GetRelativeSize();
+	background->SetRelativePosition(CoordHelper::RatioCoordToScreen(backgroundSize, FVector2(0, 0)));
+	background->SetRelativeScale(FVector2(1, 1));
+	
+	//continueText->SetFontSize(70.0f);
+	//continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	//continueText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	//continueText->SetText(L"임무 선택");
+	//continueText->SetColor(FColor(0, 234, 255, 255));
+	//continueText->SetRelativePosition(
+	//	CoordHelper::RatioCoordToScreen(continueText->GetRelativeSize(),FVector2(-0.5,-0.5))
+	//	+FVector2(0,-350));
+	//continueText->m_layer = Define::NormalTextLayer;
 
 	// ======================== closeText
 	closeText->SetFontSize(55.0f);
 	closeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	closeText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	closeText->SetText(L"닫기");
+	closeText->SetText(L"돌아가기");
 	closeText->SetColor(FColor::White);
 	FVector2 closeTextRectSize = closeText->GetRelativeSize();
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
@@ -92,38 +98,38 @@ void SelectWidgetScript::OnStart()
 	closeButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
 	closeButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
 	closeButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	closeButton->SetRelativePosition(FVector2(0, 350));
+	closeButton->SetRelativePosition(FVector2(0, 400));
 
 	// ===================== stage1
-	stage1->LoadData(Define::EButtonState::Idle, L"UI\\MapSelectExam.png");
-	stage1->LoadData(Define::EButtonState::Hover, L"UI\\MapSelectExam.png");
-	stage1->LoadData(Define::EButtonState::Pressed, L"UI\\MapSelectExam.png");
-	stage1->LoadData(Define::EButtonState::Release, L"UI\\MapSelectExam.png");
+	stage1->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
+	stage1->LoadData(Define::EButtonState::Hover, L"UI\\StageButton_Idle.png");
+	stage1->LoadData(Define::EButtonState::Pressed, L"UI\\StageButton_Pressed.png");
+	stage1->LoadData(Define::EButtonState::Release, L"UI\\StageButton_Idle.png");
 	FVector2 stage1Size = stage1->GetRelativeSize();
 	stage1->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(stage1Size, FVector2(0 ,0))
-		+ FVector2(-500, 0)
+		+ FVector2(-570, 0)
 	);
 	stage1->SetRelativeScale(FVector2(1, 1));
 	stage1->m_layer = Define::NormalTextLayer;
 
 	// ===================== stage2
-	stage2->LoadData(Define::EButtonState::Idle, L"UI\\MapSelectReal.png");
-	stage2->LoadData(Define::EButtonState::Hover, L"UI\\MapSelectReal.png");
-	stage2->LoadData(Define::EButtonState::Pressed, L"UI\\MapSelectReal.png");
-	stage2->LoadData(Define::EButtonState::Release, L"UI\\MapSelectReal.png");
+	stage2->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
+	stage2->LoadData(Define::EButtonState::Hover, L"UI\\StageButton_Idle.png");
+	stage2->LoadData(Define::EButtonState::Pressed, L"UI\\StageButton_Pressed.png");
+	stage2->LoadData(Define::EButtonState::Release, L"UI\\StageButton_Idle.png");
 	stage2->SetRelativePosition(FVector2(0,0));
 	stage2->m_layer = Define::NormalTextLayer;
 
 	// ===================== stage3
-	stage3->LoadData(Define::EButtonState::Idle, L"UI\\MapSelectBoss.png");
-	stage3->LoadData(Define::EButtonState::Hover, L"UI\\MapSelectBoss.png");
-	stage3->LoadData(Define::EButtonState::Pressed, L"UI\\MapSelectBoss.png");
-	stage3->LoadData(Define::EButtonState::Release, L"UI\\MapSelectBoss.png");
+	stage3->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
+	stage3->LoadData(Define::EButtonState::Hover, L"UI\\StageButton_Idle.png");
+	stage3->LoadData(Define::EButtonState::Pressed, L"UI\\StageButton_Pressed.png");
+	stage3->LoadData(Define::EButtonState::Release, L"UI\\StageButton_Idle.png");
 	FVector2 stage3Size = stage3->GetRelativeSize();
 	stage3->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(stage3Size, FVector2(0, 0))
-		+ FVector2(500, 0)
+		+ FVector2(570, 0)
 	);
 	stage3->SetRelativeScale(FVector2(1, 1));
 	stage3->m_layer = Define::NormalTextLayer;

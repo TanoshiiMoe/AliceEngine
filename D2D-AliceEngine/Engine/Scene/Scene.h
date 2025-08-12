@@ -4,6 +4,7 @@
 #include <Helpers/StringHelper.h>
 #include <unordered_set>
 
+class ParticleComponent;
 class Scene : public UObject
 {
 public:
@@ -174,9 +175,12 @@ public:
 
 	gameObject* Instantiate(gameObject* obj);
 
+protected:
+	ParticleComponent* m_mouseParticle;
 private:
 	gameObject* m_sysinfoWidget;
-    gameObject* m_fpsWidget{ nullptr };
+	gameObject* m_fpsWidget{ nullptr };
+	gameObject* m_mouseTrail{ nullptr };
     bool m_debugHudVisible{ true };
 	std::unordered_map<std::wstring, std::unique_ptr<gameObject>> m_objects;
 	std::unordered_map<std::wstring, std::unordered_set<std::wstring>> m_nameToUUIDs;

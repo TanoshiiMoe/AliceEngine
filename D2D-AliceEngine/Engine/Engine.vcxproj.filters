@@ -277,6 +277,11 @@
       <Filter>Helper</Filter>
     </ClInclude>
     <ClInclude Include="Component\ProgressBarComponent.h" />
+    <ClInclude Include="Component\ParticleComponent.h" />
+    <ClInclude Include="Component\Effect\ParticleComponent.h" />
+    <ClInclude Include="Component\Effect\VertexShaderRenderer.h" />
+    <ClInclude Include="Component\Effect\PixelShaderRenderer.h" />
+    <ClInclude Include="Component\Effect\ShaderParticleComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -487,6 +492,11 @@
       <Filter>Helper</Filter>
     </ClCompile>
     <ClCompile Include="Component\ProgressBarComponent.cpp" />
+    <ClCompile Include="Component\ParticleComponent.cpp" />
+    <ClCompile Include="Component\Effect\ParticleComponent.cpp" />
+    <ClCompile Include="Component\Effect\PixelShaderRenderer.cpp" />
+    <ClCompile Include="Component\Effect\ShaderParticleComponent.cpp" />
+    <ClCompile Include="Component\Effect\VertexShaderRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GradationShader.hlsl">

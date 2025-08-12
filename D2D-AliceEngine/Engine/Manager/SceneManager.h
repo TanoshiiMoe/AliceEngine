@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object/gameObject.h"
 #include <Core/Singleton.h>
 #include <Helpers/StringHelper.h>
@@ -15,7 +15,7 @@ public:
 	virtual void UnInitialize();
 	virtual void Update();
 
-	Scene* m_currentScene;	// ÇöÀç ¾À
+	Scene* m_currentScene;	// í˜„ìž¬ ì”¬
 
 	Scene* GetWorld();
 	static Camera* GetCamera();
@@ -40,7 +40,10 @@ public:
 	static void ChangeScene(const std::wstring& NewobjectName);
 	static void RestartScene();
 
+	static std::wstring GetPrevSceneName()  { return m_prevSceneName; }
+
 private:
 	std::unordered_map<std::wstring, std::unique_ptr<Scene>> m_scenes;
 	std::wstring m_nextSceneName;
+	static std::wstring m_prevSceneName;
 };

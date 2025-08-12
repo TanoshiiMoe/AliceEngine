@@ -298,8 +298,8 @@
     <ClInclude Include="Scripts\Enemy\SpawnerUsingSingleton\EnemySpawnTriggerBox.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="GameClearWidgetScript.h">
-      <Filter>PreCompiledHeader</Filter>
+    <ClInclude Include="Scripts\Widget\GameClearWidgetScript.h">
+      <Filter>Scripts\Widget</Filter>
     </ClInclude>
     <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h">
       <Filter>PreCompiledHeader</Filter>
@@ -516,7 +516,6 @@
     <ClCompile Include="Spine2D\SpineRenderer.cpp" />
     <ClCompile Include="Scene\SpineScene.cpp" />
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
-    <ClCompile Include="Scripts\TitleAudioScript.cpp" />
     <ClCompile Include="Scripts\TileMap\TileMapManager.cpp" />
     <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
@@ -525,6 +524,9 @@
     <ClCompile Include="GameClearWidgetScript.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />
     <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />
+    <ClCompile Include="Scripts\Widget\GameClearWidgetScript.cpp">
+      <Filter>Scripts\Widget</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />
@@ -597,7 +599,6 @@
     <ClInclude Include="Scene\GameScene\TitleScene.h" />
     <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
-    <ClInclude Include="Scripts\TitleAudioScript.h" />
     <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
     <ClInclude Include="Scripts\Widget\GameOverWidgetScript.h" />

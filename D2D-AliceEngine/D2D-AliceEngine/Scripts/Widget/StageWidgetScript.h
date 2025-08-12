@@ -3,6 +3,8 @@
 
 class gameObject;
 class TextRenderComponent;
+class ProgressBarComponent;
+class BikeMovementScript;
 class StageWidgetScript : public ScriptComponent
 {
 public:
@@ -19,5 +21,12 @@ public:
 	TextRenderComponent* m_passedTimeText;
 	TextRenderComponent* m_killEnemyText;
 
+	TextRenderComponent* m_dashboardText;
+	TextRenderComponent* m_speedText;
+
+	ProgressBarComponent* m_batteryProgress;
+	ProgressBarComponent* m_speedProgress;
+
+	//BikeMovementScript* m_bike;
 };
 

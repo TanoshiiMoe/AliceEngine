@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -78,7 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
@@ -97,6 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -114,7 +115,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Engine\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
@@ -133,6 +134,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)Extension\core\inc;$(SolutionDir)Engine\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -146,6 +148,10 @@
     <ClInclude Include="Component\ButtonComponent.h" />
     <ClInclude Include="Component\BackGroundComponent.h" />
     <ClInclude Include="Component\AudioComponent.h" />
+    <ClInclude Include="Component\Effect\ParticleComponent.h" />
+    <ClInclude Include="Component\Effect\PixelShaderRenderer.h" />
+    <ClInclude Include="Component\Effect\ShaderParticleComponent.h" />
+    <ClInclude Include="Component\Effect\VertexShaderRenderer.h" />
     <ClInclude Include="Helpers\CoordHelper.h" />
     <ClInclude Include="Effect\Prism.h" />
     <ClInclude Include="Experimental\Collision\Collision2D.h" />
@@ -181,6 +187,7 @@
     <ClInclude Include="Manager\PackageResourceManager.h" />
     <ClInclude Include="Component\SkewTransform.h" />
     <ClInclude Include="Component\ProgressBarComponent.h" />
+    <ClInclude Include="Component\ParticleComponent.h" />
     <ClInclude Include="System\PhysicsSystem.h" />
     <ClInclude Include="System\CollisionSystem.h" />
     <ClInclude Include="System\InputSystem.h" />
@@ -219,6 +226,10 @@
     <ClCompile Include="Component\ButtonComponent.cpp" />
     <ClCompile Include="Component\BackGroundComponent.cpp" />
     <ClCompile Include="Component\AudioComponent.cpp" />
+    <ClCompile Include="Component\Effect\ParticleComponent.cpp" />
+    <ClCompile Include="Component\Effect\PixelShaderRenderer.cpp" />
+    <ClCompile Include="Component\Effect\ShaderParticleComponent.cpp" />
+    <ClCompile Include="Component\Effect\VertexShaderRenderer.cpp" />
     <ClCompile Include="Helpers\CoordHelper.cpp" />
     <ClCompile Include="Effect\Prism.cpp" />
     <ClCompile Include="Experimental\Collision\Collision2D.cpp" />
@@ -253,6 +264,7 @@
     <ClCompile Include="Manager\PackageResourceManager.cpp" />
     <ClCompile Include="Component\SkewTransform.cpp" />
     <ClCompile Include="Component\ProgressBarComponent.cpp" />
+    <ClCompile Include="Component\ParticleComponent.cpp" />
     <ClCompile Include="System\PhysicsSystem.cpp" />
     <ClCompile Include="System\CollisionSystem.cpp" />
     <ClCompile Include="System\InputSystem.cpp" />
