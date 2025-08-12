@@ -30,6 +30,8 @@ public:
     void SpawnParticleElectric();       // g
     void SpawnParticlePortal();         // h
 
+    gameObject* gotest;
+
     // 6개의 파티클 효과 핸들
     ParticleComponent* colorTransformEffect;    // A키 - 색상 변환
     ParticleComponent* distortionEffect;        // S키 - 왜곡 효과

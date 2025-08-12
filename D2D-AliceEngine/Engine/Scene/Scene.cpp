@@ -16,6 +16,7 @@
 #include <Math/TMath.h>
 #include <Component/ButtonComponent.h>
 #include <Component/Effect/ParticleComponent.h>
+#include <Helpers/CoordHelper.h>
 
 Scene::Scene()
 {
@@ -75,6 +76,24 @@ void Scene::Update()
 	if (Input::IsKeyPressed(VK_F4)) {
 		m_mouseParticle->ToggleMouseTrail();
 	}
+
+	if (TimerManager::GetInstance().GetGlobalTimeScale() > 0 && Input::IsMouseLeftPressed())
+	{
+		/*WeakObjectPtr<gameObject> go  = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
+		GetCamera()->AddChildObject(go.Get());
+		auto* pc = go->AddComponent<ParticleComponent>();
+		pc->LoadData(L"Effect/MouseClick.png");
+		pc->SetDrawType(Define::EDrawType::WorldSpace);
+		pc->SetAdditiveBlend(true);
+		pc->EmitClickBurst(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()), true);*/
+		WeakObjectPtr<gameObject> go = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
+		GetCamera()->AddChildObject(go.Get());
+		auto* pc = go->AddComponent<ParticleComponent>();
+		pc->LoadData(L"Effect/MouseClick.png");
+		pc->SetDrawType(Define::EDrawType::ScreenSpace);
+		pc->SetAdditiveBlend(true);
+		pc->EmitClickBurst(Input::GetMousePosition(), true);
+	}
     // FPS 갱신 (TimerManager 값을 그대로 사용)
     UpdateDebugHUD(0.0f);
 	VisibleMemoryInfo();
@@ -110,12 +129,12 @@ void Scene::OnEnter()
     fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.27f));
 	fpsText->m_layer = 987654321;
 
-
-	m_mouseTrail = NewObject<gameObject>(L"ParticleScreen");
+	m_mouseTrail = NewObject<gameObject>(L"Scene_Default_ParticleScreenTrail");
+	GetCamera()->AddChildObject(m_mouseTrail);
 	m_mouseParticle = m_mouseTrail->AddComponent<ParticleComponent>();
-	m_mouseParticle->SetDrawType(Define::EDrawType::ScreenSpace);
+	m_mouseParticle->LoadData(L"Effect/MouseTrail.png");
+	m_mouseParticle->SetDrawType(Define::EDrawType::WorldSpace);
 	m_mouseParticle->ToggleMouseTrail(true);
-
 }
 
 void Scene::OnExit()

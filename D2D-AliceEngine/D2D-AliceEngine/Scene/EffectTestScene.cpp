@@ -12,6 +12,8 @@
 #include <Component/Effect/ShaderParticleComponent.h>
 #include <Scripts/Video/YuukaVideo.h>
 #include <Component/SpriteRenderer.h>
+#include <Scripts/Legacy/CameraController.h>
+#include <Helper/ParticleHelper.h>
 
 void EffectTestScene::Initialize()
 {
@@ -33,8 +35,11 @@ void EffectTestScene::OnEnter()
 {
     __super::OnEnter();
 
-    gameObject* m_yuuka = NewObject<gameObject>(L"yuuka");
-    m_yuuka->AddComponent<SpriteRenderer>()->LoadData(L"tree.jpg");
+	//gameObject* m_camera = NewObject<gameObject>(L"Camera");
+	//m_camera->AddComponent<CameraController>();
+
+	gameObject* m_yuuka = NewObject<gameObject>(L"yuuka");
+	m_yuuka->AddComponent<SpriteRenderer>()->LoadData(L"tree.jpg");
 
     // 간단한 안내 텍스트 UI
     if (auto ui = NewObject<gameObject>(L"EffectUI"))
@@ -192,47 +197,55 @@ void EffectTestScene::SpawnBlackOut(int modeIndex, bool useCrossFade, float dura
 void EffectTestScene::SpawnParticleExplosion()
 {
     // 월드 공간 파티클 객체 (없으면 만들고 재사용)
-    WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
-    if (!go) go = NewObject<gameObject>(L"ParticleWorld");
-    auto* pc = go->GetComponent<ParticleComponent>();
-    if (!pc) pc = go->AddComponent<ParticleComponent>();
-    pc->SetDrawType(Define::EDrawType::WorldSpace);
-    pc->SetAdditiveBlend(true);
-    //pc->EmitExplosion(Input::GetMouseWorldPosition());
-    pc->EmitExplosion(Input::GetMouseWorldPosition());
+    //gotest = NewObject<gameObject>(L"ParticleWorld");
+    //GetCamera()->AddChildObject(gotest);
+	////auto* pc = gotest->GetComponent<ParticleComponent>();
+    //auto* pc = gotest->AddComponent<ParticleComponent>();
+	//pc->SetDrawType(Define::EDrawType::WorldSpace);
+	//pc->SetAdditiveBlend(true);
+    //pc->EmitExplosion(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()));
+    ParticleHelper::SpawnParticleExplosion(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
 }
 
 void EffectTestScene::SpawnParticleImpact()
 {
-    WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
-    if (!go) go = NewObject<gameObject>(L"ParticleWorld");
-    auto* pc = go->GetComponent<ParticleComponent>();
-    if (!pc) pc = go->AddComponent<ParticleComponent>();
-    pc->SetDrawType(Define::EDrawType::WorldSpace);
-    pc->SetAdditiveBlend(true);
-    pc->EmitImpact(Input::GetMouseWorldPosition());
+	//WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorldImpact");
+	//if (!go)
+	//{
+	//    go = NewObject<gameObject>(L"ParticleWorldImpact");
+	//    go->SetPosition(FVector2(1800, 1600));
+	//}
+	//auto* pc = go->AddComponent<ParticleComponent>();   
+	//pc->SetDrawType(Define::EDrawType::WorldSpace);
+	//pc->SetAdditiveBlend(true);
+	//pc->EmitImpact(FVector2(1800,1600));
+	//ParticleHelper::SpawnParticleImpact(FVector2(800, 600), Define::Effect_Texture_Collision);
+	ParticleHelper::SpawnParticleImpact(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
 }
 
 void EffectTestScene::SpawnParticleClickL()
 {
-    WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleScreen");
-    if (!go) go = NewObject<gameObject>(L"ParticleScreen");
-    auto* pc = go->GetComponent<ParticleComponent>();
-    if (!pc) pc = go->AddComponent<ParticleComponent>();
-    pc->SetDrawType(Define::EDrawType::ScreenSpace);
-    pc->SetAdditiveBlend(true);
-    pc->EmitClickBurst(Input::GetMousePosition(), false);
+	//WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleScreen");
+	//if (!go) go = NewObject<gameObject>(L"ParticleScreen");
+	//auto* pc = go->GetComponent<ParticleComponent>();
+	//if (!pc) pc = go->AddComponent<ParticleComponent>();
+	//pc->m_layer = 987654322;
+	//pc->SetDrawType(Define::EDrawType::ScreenSpace);
+	//pc->SetAdditiveBlend(true);
+	//pc->EmitClickBurst(Input::GetMousePosition(), false);
+    ParticleHelper::SpawnParticleClickL(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
 }
 
 void EffectTestScene::SpawnParticleClickR()
 {
-    WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleScreen");
-    if (!go) go = NewObject<gameObject>(L"ParticleScreen");
-    auto* pc = go->GetComponent<ParticleComponent>();
-    if (!pc) pc = go->AddComponent<ParticleComponent>();
-    pc->SetDrawType(Define::EDrawType::ScreenSpace);
-    pc->SetAdditiveBlend(true);
-    pc->EmitClickBurst(Input::GetMousePosition(), true);
+	//WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleScreen");
+	//if (!go) go = NewObject<gameObject>(L"ParticleScreen");
+	//auto* pc = go->GetComponent<ParticleComponent>();
+	//if (!pc) pc = go->AddComponent<ParticleComponent>();
+	//pc->SetDrawType(Define::EDrawType::ScreenSpace);
+	//pc->SetAdditiveBlend(true);
+	//pc->EmitClickBurst(Input::GetMousePosition(), true);
+    ParticleHelper::SpawnParticleClickR(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
 }
 
 void EffectTestScene::ToggleMouseTrail()
@@ -248,37 +261,40 @@ void EffectTestScene::ToggleMouseTrail()
 
 void EffectTestScene::SpawnParticleAura()
 {
-    WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
-    if (!go) go = NewObject<gameObject>(L"ParticleWorld");
-    auto* pc = go->GetComponent<ParticleComponent>();
-    if (!pc) pc = go->AddComponent<ParticleComponent>();
-    pc->SetDrawType(Define::EDrawType::WorldSpace);
-    pc->SetAdditiveBlend(true);
-    // 화면 중앙 근처에 오라 생성
-    FVector2 center = SceneManager::GetCamera()->GetPosition();
-    pc->EmitAura(center, 100.0f);
+	//WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
+	//if (!go) go = NewObject<gameObject>(L"ParticleWorld");
+	//auto* pc = go->GetComponent<ParticleComponent>();
+	//if (!pc) pc = go->AddComponent<ParticleComponent>();
+	//pc->SetDrawType(Define::EDrawType::WorldSpace);
+	//pc->SetAdditiveBlend(true);
+	//// 화면 중앙 근처에 오라 생성
+	//FVector2 center = SceneManager::GetCamera()->GetPosition();
+	//pc->EmitAura(center, 100.0f);
+    ParticleHelper::SpawnParticleAura(Input::GetMouseWorldPosition(), 100, 180, Define::Effect_Texture_Collision);
 }
 
 void EffectTestScene::SpawnParticleElectric()
 {
-    WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
-    if (!go) go = NewObject<gameObject>(L"ParticleWorld");
-    auto* pc = go->GetComponent<ParticleComponent>();
-    if (!pc) pc = go->AddComponent<ParticleComponent>();
-    pc->SetDrawType(Define::EDrawType::WorldSpace);
-    pc->SetAdditiveBlend(true);
-    pc->EmitElectric(Input::GetMouseWorldPosition());
+	//WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
+	//if (!go) go = NewObject<gameObject>(L"ParticleWorld");
+	//auto* pc = go->GetComponent<ParticleComponent>();
+	//if (!pc) pc = go->AddComponent<ParticleComponent>();
+	//pc->SetDrawType(Define::EDrawType::WorldSpace);
+	//pc->SetAdditiveBlend(true);
+	//pc->EmitElectric(Input::GetMouseWorldPosition());
+    ParticleHelper::SpawnParticleElectric(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
 }
 
 void EffectTestScene::SpawnParticlePortal()
 {
-    WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
-    if (!go) go = NewObject<gameObject>(L"ParticleWorld");
-    auto* pc = go->GetComponent<ParticleComponent>();
-    if (!pc) pc = go->AddComponent<ParticleComponent>();
-    pc->SetDrawType(Define::EDrawType::WorldSpace);
-    pc->SetAdditiveBlend(true);
-    pc->EmitPortalSwirl(Input::GetMouseWorldPosition());
+	//WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleWorld");
+	//if (!go) go = NewObject<gameObject>(L"ParticleWorld");
+	//auto* pc = go->GetComponent<ParticleComponent>();
+	//if (!pc) pc = go->AddComponent<ParticleComponent>();
+	//pc->SetDrawType(Define::EDrawType::WorldSpace);
+	//pc->SetAdditiveBlend(true);
+	//pc->EmitPortalSwirl(Input::GetMouseWorldPosition());
+    ParticleHelper::SpawnParticlePortal(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
 }
 
 

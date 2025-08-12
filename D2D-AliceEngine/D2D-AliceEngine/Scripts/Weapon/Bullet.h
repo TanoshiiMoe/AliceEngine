@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/ScriptComponent.h>
 #include <Manager/TimerManager.h>
 #include "Drone.h"
@@ -40,32 +40,32 @@ public:
 	const std::wstring& GetSpritePath() const { return spritePath; }
 	void SetSpritePath(const std::wstring& path) { spritePath = path; }
 	
-	// µ¥¹ÌÁö °ü·Ã ÇÔ¼ö Ãß°¡
+	// ë°ë¯¸ì§€ ê´€ë ¨ í•¨ìˆ˜ ì¶”ê°€
 	float GetDamage() const { return damage; }
 	void SetDamage(float val) { damage = val; }
 
 public:
 	FVector2 P0, P1, P2;
 	float time = 0.0f;
-	float duration = 1.0f; // ÃÑ¾Ë ºñÇà ½Ã°£ (ÃÊ)
+	float duration = 1.0f; // ì´ì•Œ ë¹„í–‰ ì‹œê°„ (ì´ˆ)
 	bool isActive = true;
 
-	FVector2 inheritedVelocity; // ÇÃ·¹ÀÌ¾î ¼Óµµ ÀúÀå¿ë
-	FVector2 accumulatedOffset; // ¼Óµµ ´©Àû À§Ä¡
+	FVector2 inheritedVelocity; // í”Œë ˆì´ì–´ ì†ë„ ì €ì¥ìš©
+	FVector2 accumulatedOffset; // ì†ë„ ëˆ„ì  ìœ„ì¹˜
 	bool bBezierFinished = false;
 
-	FVector2 moveDir; // ÃÑ¾ËÀÇ Á÷Áø ¹æÇâ (Normalized)
+	FVector2 moveDir; // ì´ì•Œì˜ ì§ì§„ ë°©í–¥ (Normalized)
 	FVector2 startPos;
 	FVector2 currentPos;
-	float moveSpeed = 8.1f; // ÃÑ¾Ë ¼Óµµ
+	float moveSpeed = 8.1f; // ì´ì•Œ ì†ë„
 
-	float waveAmplitude = 0.2f; // Èçµé¸² Å©±â
-	float waveFrequency = 2.0f;  // Èçµé¸² ¼Óµµ
+	float waveAmplitude = 0.2f; // í”ë“¤ë¦¼ í¬ê¸°
+	float waveFrequency = 2.0f;  // í”ë“¤ë¦¼ ì†ë„
 
 	EBulletType bulletType = EBulletType::BezierCurve;
-	EDroneType droneType = EDroneType::Player; // ÃÑ¾Ë Å¸ÀÔ
+	EDroneType droneType = EDroneType::Player; // ì´ì•Œ íƒ€ì…
 	std::wstring spritePath = L"wallet.png";
-	float damage = 5.0f; // µ¥¹ÌÁö °ª Ãß°¡
+	float damage = 5.0f; // ë°ë¯¸ì§€ ê°’ ì¶”ê°€
 
 	FTimerHandle handle;
 	bool bCameraCulling = false;
