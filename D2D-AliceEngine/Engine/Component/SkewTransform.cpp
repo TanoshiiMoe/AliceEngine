@@ -15,7 +15,7 @@ const FVector2 SkewTransform::GetOffset()
 
 const void SkewTransform::SetRealPos(FVector2 _pos)
 {
-	FVector2 realOffset = _pos - realPos;
+	realOffset = _pos - realPos;
 	renderTransform->AddPosition(realOffset);
 }
 
@@ -47,7 +47,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 		return;
 
 	// 오프셋 안한 트랜스폼 저장하기
-	realPos = renderTransform->GetPosition() - offset;
+	realPos = renderTransform->GetPosition() - offset + realOffset;
 
 	if (!Math::Approximately(prevzPos, zPos)) {
 
@@ -66,6 +66,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 
 		// 트랜스폼 적용하기
 		renderTransform->AddPosition(offset.x, offset.y);
+		renderTransform->AddPosition(realOffset);
 
 		// 렌더 레이어 설정하기
 		SetRenderLayer();
@@ -75,6 +76,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 		OutputDebugStringW(message.c_str());*/
 	}
 
+	realOffset = { 0.0f , 0.0f };
 }
 
 void SkewTransform::ToSkewPos()

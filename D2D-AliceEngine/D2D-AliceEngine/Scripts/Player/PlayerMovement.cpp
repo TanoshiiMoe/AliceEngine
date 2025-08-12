@@ -91,14 +91,12 @@ void PlayerMovement::Input()
 		auto st = owner->GetComponent<SkewTransform>();
 		if (st && st->zPos > minZ)
 			moveDir.y -= 200.0f;
-			//st->zPos -= 200.0f * playerDeltaSeconds;
 	}
 	if (Input::IsKeyDown(VK_W))
 	{
 		auto st = owner->GetComponent<SkewTransform>();
 		if (st && st->zPos < maxZ)
 			moveDir.y += 200.0f;
-			//st->zPos += 200.0f * playerDeltaSeconds;
 	}
 	if (Input::IsKeyDown(VK_A)) {
 		// initialSpeed 줄이기
