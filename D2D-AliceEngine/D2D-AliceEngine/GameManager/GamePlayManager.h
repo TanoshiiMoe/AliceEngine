@@ -39,6 +39,8 @@ public:
 
     void PlayBossMode();
 
+    void BackNormalMode();
+
     void SpawnVignette(float durationSec, float maxAlpha);
 
     void SpawnBlackOut(int modeIndex, bool useCrossFade, float durationSec, float maxAlpha);

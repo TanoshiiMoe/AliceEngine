@@ -24,6 +24,8 @@ private:
     ProgressBarComponent*   m_barFill  = nullptr;   // 채워지는 컬러 바
     SpriteRenderer*         m_marker   = nullptr;   // 현재 위치 표시용 글로우/마커
     SpriteRenderer*         m_enemyMarker   = nullptr;   // 현재 위치 표시용 글로우/마커
+    gameObject* enemyIndecatorObj;
+    bool bossSpawned{false};
 
     // 배치/레이어
     int   m_baseLayer = 50000; // HUD 기준 상대 레이어 (StageWidgetScript를 참고해 여유있게 높임)
