@@ -484,6 +484,15 @@ void StageWidgetScript::OnStart()
 		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText
 	] {
+			if (auto uiObj = GetWorld()->FindObjectByName<gameObject>(L"UI"))
+			{
+				if (auto cutScene = uiObj->GetComponent<CutSceneWidgetScript>())
+				{
+					if (cutScene->IsCutScenePlaying())
+						return; // ESC 처리 안 함
+				}
+			}
+
 		sound->StopByName(L"UISound");
 		sound->PlayByName(L"UISound");
 
