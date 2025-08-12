@@ -7,6 +7,7 @@
 #include <Helpers/CoordHelper.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Widget/GameClearWidgetScript.h>
+#include <Scripts/Audio/GameClearAudioScript.h>
 
 void GameClearScene::Initialize()
 {
@@ -62,6 +63,9 @@ void GameClearScene::OnEnter()
 		text->SetFontSize(28.0f);
 		text->SetColor(FColor::Gold);
 	}
+
+    m_sound = NewObject<gameObject>(L"Sound");
+    m_sound->AddComponent<GameClearAudioScript>();
 
     // 중앙 클라우드 이미지
     if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))

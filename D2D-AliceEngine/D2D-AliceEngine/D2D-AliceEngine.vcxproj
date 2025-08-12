@@ -167,6 +167,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Scripts\Audio\GameClearAudioScript.h" />
     <ClInclude Include="Scripts\Enemy\Jump\JumpTrigger.h" />
     <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h" />
     <ClInclude Include="Scripts\Widget\GameClearWidgetScript.h" />
@@ -234,6 +235,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
     <ClInclude Include="Scripts\Widget\StageWidgetScript.h" />
     <ClInclude Include="Scene\GameScene\Scene_Stage1.h" />
+    <ClInclude Include="Scripts\Audio\StageAudioScript.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\Video\YuukaVideo.h" />
     <ClInclude Include="Scripts\UI_Script.h" />
@@ -246,6 +248,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Audio\GameClearAudioScript.cpp" />
     <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />
     <ClCompile Include="Scripts\Widget\GameClearWidgetScript.cpp" />
@@ -324,6 +327,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\Widget\StageWidgetScript.cpp" />
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
+    <ClCompile Include="Scripts\Audio\StageAudioScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">

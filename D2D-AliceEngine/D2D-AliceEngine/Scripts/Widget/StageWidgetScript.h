@@ -16,6 +16,7 @@ public:
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
 
+	bool m_isPaused = false;
 	void SetProgress();
 
 	gameObject* m_owner;

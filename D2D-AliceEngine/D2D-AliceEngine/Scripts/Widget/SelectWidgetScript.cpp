@@ -139,20 +139,20 @@ void SelectWidgetScript::OnStart()
 	// stage1 Button 효과 (초록색 글로우 - 쉬운 스테이지)
 	stage1->SetStateAction(Define::EButtonState::Hover, [stage1]()
 	{
-		stage1->StartHoverPulse(0.8f, 0.04f);
-		stage1->StartEffectAnimation(0.3f, 1.2f, FColor::Green);
+		stage1->StartHoverPulse(3.f, 0.01f);
+		stage1->StartEffectAnimation(0.3f, 1.2f, FColor::White);
 	});
 
 	stage1->SetStateAction(Define::EButtonState::HoverLeave, [stage1]()
 	{
 		stage1->StopHoverPulse();
-		stage1->StartEffectAnimation(0.2f, 0.0f, FColor::Green);
+		stage1->StartEffectAnimation(0.2f, 0.0f, FColor::White);
 	});
 
 	stage1->SetStateAction(Define::EButtonState::Release, [stage1]()
 	{
 		stage1->StopHoverPulse();
-		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::Green);
+		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
 	stage1->SetStateAction(Define::EButtonState::Pressed, []{
@@ -164,20 +164,20 @@ void SelectWidgetScript::OnStart()
 	// stage2 Button 효과 (노란색 글로우 - 보통 스테이지)
 	stage2->SetStateAction(Define::EButtonState::Hover, [stage2]()
 	{
-		stage2->StartHoverPulse(0.8f, 0.04f);
-		stage2->StartEffectAnimation(0.3f, 1.2f, FColor::Yellow);
+		stage2->StartHoverPulse(3.f, 0.01f);
+		stage2->StartEffectAnimation(0.3f, 1.2f, FColor::White);
 	});
 
 	stage2->SetStateAction(Define::EButtonState::HoverLeave, [stage2]()
 	{
 		stage2->StopHoverPulse();
-		stage2->StartEffectAnimation(0.2f, 0.0f, FColor::Yellow);
+		stage2->StartEffectAnimation(0.2f, 0.0f, FColor::White);
 	});
 
 	stage2->SetStateAction(Define::EButtonState::Release, [stage2]()
 	{
 		stage2->StopHoverPulse();
-		stage2->StartEffectAnimation(0.1f, 0.0f, FColor::Yellow);
+		stage2->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
 	stage2->SetStateAction(Define::EButtonState::Pressed, [] {
@@ -189,20 +189,20 @@ void SelectWidgetScript::OnStart()
 	// stage3 Button 효과 (빨간색 글로우 - 어려운 스테이지/보스)
 	stage3->SetStateAction(Define::EButtonState::Hover, [stage3]()
 	{
-		stage3->StartHoverPulse(0.8f, 0.04f);
-		stage3->StartEffectAnimation(0.3f, 1.2f, FColor::Red);
+		stage3->StartHoverPulse(3.f, 0.01f);
+		stage3->StartEffectAnimation(0.3f, 1.2f, FColor::White);
 	});
 
 	stage3->SetStateAction(Define::EButtonState::HoverLeave, [stage3]()
 	{
 		stage3->StopHoverPulse();
-		stage3->StartEffectAnimation(0.2f, 0.0f, FColor::Red);
+		stage3->StartEffectAnimation(0.2f, 0.0f, FColor::White);
 	});
 
 	stage3->SetStateAction(Define::EButtonState::Release, [stage3]()
 	{
 		stage3->StopHoverPulse();
-		stage3->StartEffectAnimation(0.1f, 0.0f, FColor::Red);
+		stage3->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
 	stage3->SetStateAction(Define::EButtonState::Pressed, [] {
@@ -231,7 +231,7 @@ void SelectWidgetScript::OnStart()
 	});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed,[] {
-		
+
 		SceneManager::ChangeScene(L"TitleScene");
 		});
 }

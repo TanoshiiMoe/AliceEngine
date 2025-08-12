@@ -13,7 +13,6 @@
 #include <Scripts/Camera/CameraMover.h>
 #include <Prefab/Player/PlayerBike.h>
 #include <Scripts/BackGroundRender.h>
-#include <Scripts/Audio.h>
 #include <Scripts/Enemy/Spawn/EnemySpawner.h>
 #include <Prefab/Truck.h>
 #include <GameManager/BulletManager.h>
@@ -23,6 +22,7 @@
 #include <Scripts/Widget/StageWidgetScript.h>
 #include <Scripts/Enemy/Spawn/EnemyDespawner.h>
 #include <Component/Effect/ParticleComponent.h>
+#include <Scripts/Audio/StageAudioScript.h>
 
 void Scene_Stage2::Initialize()
 {
@@ -108,7 +108,7 @@ void Scene_Stage2::OnEnter()
 
     // 오디오 추가, 오디오 관련 스크립트 넣기
     m_sound = NewObject<gameObject>(L"Sound");
-    m_sound->AddComponent<Audio>();
+    m_sound->AddComponent<StageAudioScript>();
 
     // 적 스포너 매니저 생성
     enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
