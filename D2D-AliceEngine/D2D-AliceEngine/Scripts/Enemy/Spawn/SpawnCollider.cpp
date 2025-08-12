@@ -9,6 +9,7 @@
 #include <TileMap/TileMapLoader.h>
 #include "SpawnData.h"
 #include <Helpers/Logger.h>
+#include "GameManager/GamePlayManager.h"
 
 void SpawnCollider::Initialize()
 {
@@ -27,7 +28,7 @@ void SpawnCollider::OnStart()
 	co->SetBoxSize(FVector2(1500.0f, 1500.0f));
 	co->SetLayer(1);
 
-	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
+	player = GamePlayManager::GetInstance().GetPlayer(); //SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
 }
 
 void SpawnCollider::Update(const float& deltaSeconds)
@@ -53,7 +54,7 @@ void SpawnCollider::OnTriggerEnter2D(Collider* collider)
 			FVector2 pos = collider->GetOwner()->GetPosition();
 			EnemySpawner::instance->SpawnEnemy(etype, pos);
 
-			LOG_INFO(L"스폰했습니다.");
+			//LOG_INFO(L"스폰했습니다.");
 		}
 	}
 }
