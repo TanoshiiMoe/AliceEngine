@@ -15,8 +15,10 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+	AudioComponent* m_TutorialAudio;
 	AudioComponent* m_Stage1Audio;
 	AudioComponent* m_Stage2Audio;
 	AudioComponent* m_Stage3Audio;
+	AudioComponent* m_Ambience;
 };
 
