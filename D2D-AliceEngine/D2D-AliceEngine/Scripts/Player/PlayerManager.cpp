@@ -315,3 +315,8 @@ void PlayerManager::Sande(float _time)
 		}
 	}
 }
+
+void PlayerManager::CrashSlow()
+{
+	owner->GetComponent<PlayerMovement>()->CrashSlow();
+}
