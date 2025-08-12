@@ -20,6 +20,7 @@
 #include <Component/ProgressBarComponent.h>
 
 #include <Scripts/Bike/BikeMovementScript.h>
+#include <Scripts/Widget/CutSceneWidgetScript.h>
 
 void StageWidgetScript::Initialize()
 {
@@ -33,8 +34,8 @@ void StageWidgetScript::Initialize()
 void StageWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-
-	GamePlayManager& gm = GamePlayManager::GetInstance();
+	
+	//GamePlayManager& gm = GamePlayManager::GetInstance();
 
 	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
 
@@ -69,7 +70,6 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	}
 
 	// 속도 연동
-
 	float playerSpeed = 0.0f;
 	if (WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player"))
 	{
@@ -78,12 +78,12 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	}
 
 	float finalSpeed = playerSpeed / 600.0f;
-
+	float realSpeed = playerSpeed / 3.0f;
 	if (finalSpeed > 1.0f) finalSpeed = 0.999999f;	// 어느정도 허용치를 둠
 
 	m_speedProgress->SetProgress(finalSpeed);
 
-	m_speedText->SetText(playerSpeed);
+	m_speedText->SetText(realSpeed);
 	m_speedText->m_layer = Define::NormalTextLayer;
 }
 
@@ -184,7 +184,8 @@ void StageWidgetScript::OnStart()
 	m_speedProgress->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_speedProgress->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(-SCREEN_WIDTH / 2.0f + 139, SCREEN_HEIGHT / 2.0f - 210));
-	m_speedProgress->SetStartAngleDeg(0);
+	m_speedProgress->SetStartAngleDeg(10);
+	m_speedProgress->SetClockwise(true);
 	m_speedProgress->SetProgress(1);
 	m_speedProgress->m_layer = Define::HUDLayer + 10;
 
@@ -311,6 +312,15 @@ void StageWidgetScript::OnStart()
 	toSelect->AddChildComponent(selectText);
 	selectText->SetRelativePosition(CoordHelper::RatioCoordToScreen(selectText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	selectText->m_layer = Define::Disable;
+
+	m_speedText->SetFontSize(30.f);
+	m_speedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	m_speedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	m_speedText->SetColor(FColor(0, 234, 255, 255));
+	m_speedText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(m_speedText->GetRelativeSize(), FVector2(-0.5, -0.5))
+	+ FVector2(-850,330)
+	);
 
 	// ========================== pauseButton
 	pauseButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
@@ -931,6 +941,16 @@ void StageWidgetScript::OnStart()
 		soundControl, bgmControl, sfxControl,bgmPlusButton,bgmMinusButton,sfxPlusButton,sfxMinusButton,
 		smallClose
 	] {
+			if (auto uiObj = GetWorld()->FindObjectByName<gameObject>(L"UI"))
+			{
+				if (auto cutScene = uiObj->GetComponent<CutSceneWidgetScript>())
+				{
+					if (cutScene->IsCutScenePlaying())
+						return; // ESC 처리 안 함
+				}
+			}
+
+
 		if (!m_isPaused && Input::IsKeyPressed(VK_ESCAPE))
 		{
 			m_isPaused = !m_isPaused;
