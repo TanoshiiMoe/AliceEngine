@@ -26,6 +26,9 @@ public:
 
 	// 표시속도 가져오기
 	float GetRealSpeed();
+
+	// 충돌시 InitSpeed로 전환
+	void CrashSlow();
 private:
 	BikeMovementScript* bMovement;
 	float initSpeed;					// 기본 스피드

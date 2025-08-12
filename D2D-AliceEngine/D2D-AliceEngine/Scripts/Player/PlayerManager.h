@@ -37,6 +37,9 @@ public:
 
 	// 부스트 상태출력
 	bool GetBoost() { return bBoost; }
+	
+	// 충돌 감속효과
+	void CrashSlow();
 
 private:
 	AnimatorInstance* animInstance = nullptr;

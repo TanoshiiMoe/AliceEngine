@@ -77,6 +77,11 @@ float PlayerMovement::GetRealSpeed()
 	return bMovement->GetMaxSpeed() * 0.3f;
 }
 
+void PlayerMovement::CrashSlow()
+{
+	bMovement->SetCurrentSpeed(bMovement->GetCurrentSpeed() * 0.5f);
+}
+
 void PlayerMovement::Input()
 {
 	moveDir = { 0.0f, 0.0f };

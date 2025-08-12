@@ -150,7 +150,7 @@ void Car::OnTriggerEnter2D(Collider* collider)
 			// Bullet의 damage 변수 사용
             if (!PlayerManager::instance->GetInvincible()) {
                 bs->m_bikeStat->DecreaseAbility("HP", 8);
-                collider->GetOwner()->GetComponent<BikeMovementScript>();
+				PlayerManager::instance->CrashSlow();
             }
 			    
 		}
