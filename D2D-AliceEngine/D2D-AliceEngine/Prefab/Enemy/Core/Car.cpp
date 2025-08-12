@@ -153,7 +153,13 @@ void Car::OnTriggerEnter2D(Collider* collider)
 		{
 			FVector2 pos = player->GetPosition() + FVector2(40, 0);
 			//FVector2 pos = player->GetPosition();
-			ParticleHelper::SpawnParticleExplosion(pos, Define::Effect_Texture_Collision);
+			//ParticleHelper::SpawnParticleExplosion(pos, Define::Effect_Texture_Collision);
+			ParticleHelper::SpawnParticleImpactByColor(
+				pos,
+				Define::Effect_Texture_Bullet_Bomb,
+				FColor(1.0f, 0.95f, 0.85f, 1.0f),
+				FColor(1.0f, 0.5f, 0.2f, 0.0f)
+			);
 			//ParticleHelper::SpawnParticleExplosionByValue(
 			//    pos, 70,
 			//    200.0f, 520.0f,

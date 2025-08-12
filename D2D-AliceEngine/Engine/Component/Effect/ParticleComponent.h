@@ -30,6 +30,7 @@ public:
 
     // 이펙트 프리셋 API -----------------------------------------------------
     void EmitExplosion(const FVector2& worldOrScreenPos, int count = 60);
+    void EmitExplosionByColor(const FVector2& pos, int count, const D2D1::ColorF& colorA, const D2D1::ColorF& colorB);
     void EmitImpact(const FVector2& worldOrScreenPos, int count = 28);
     void EmitImpactByColor(const FVector2& pos, int count, D2D1::ColorF colorA, D2D1::ColorF colorB);
     void EmitClickBurst(const FVector2& pos, bool rightClick = false);
@@ -186,6 +187,7 @@ private:
 
     // 랜덤
     std::mt19937 m_rng;
+    
 };
 
 

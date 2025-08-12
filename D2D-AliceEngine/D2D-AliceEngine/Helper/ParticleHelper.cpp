@@ -44,6 +44,31 @@ void ParticleHelper::SpawnParticleImpact(const FVector2& pos, const std::wstring
 	}
 }
 
+void ParticleHelper::SpawnParticleExplosionByColor(const FVector2& pos, const std::wstring& texturePath /* = L"" */, FColor colorA, FColor colorB)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = sceneWeak->FindObjectByName<gameObject>(L"ParticleWorldExplosion");
+	if (!go)
+	{
+		go = sceneWeak->NewObject<gameObject>(L"ParticleWorldExplosion");
+	}
+	go->SetPosition(pos);
+
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::WorldSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(true);
+
+	pc->EmitExplosionByColor(
+		FVector2(0, 0),
+		28, // count 값 필요 시 조정
+		D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
+		D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
+	);
+}
+
 void ParticleHelper::SpawnParticleImpactByColor(const FVector2& pos, const std::wstring& texturePath /* = L"" */, FColor colorA, FColor colorB)
 {
 	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();

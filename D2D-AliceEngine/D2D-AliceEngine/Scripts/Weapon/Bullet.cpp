@@ -196,7 +196,7 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
-				ParticleHelper::SpawnParticleImpactByColor(
+				ParticleHelper::SpawnParticleExplosionByColor(
 					pos,
 					Define::Effect_Texture_Bullet_Bomb,
 					FColor(0.0f, 0.05f, 0.95f, 1.0f),
@@ -221,7 +221,7 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
-				ParticleHelper::SpawnParticleImpactByColor(
+				ParticleHelper::SpawnParticleExplosionByColor(
 					pos,
 					Define::Effect_Texture_Bullet_Bomb,
 					FColor(1.0f, 0.95f, 0.85f, 1.0f),
@@ -245,7 +245,7 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
-				ParticleHelper::SpawnParticleImpactByColor(
+				ParticleHelper::SpawnParticleExplosionByColor(
 					pos,
 					Define::Effect_Texture_Bullet_Bomb,
 					FColor(1.0f, 0.95f, 0.85f, 1.0f),
@@ -269,7 +269,7 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
-				ParticleHelper::SpawnParticleImpactByColor(
+				ParticleHelper::SpawnParticleExplosionByColor(
 					pos,
 					Define::Effect_Texture_Bullet_Bomb,
 					FColor(1.0f, 0.95f, 0.85f, 1.0f),

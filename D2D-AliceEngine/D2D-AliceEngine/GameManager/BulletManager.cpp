@@ -18,7 +18,7 @@ void BulletManager::FireBullet(const FVector2& start, const FVector2& target, co
 	auto bullet = bulletObj->AddComponent<Bullet>();
 
 	bulletObj->SetPosition(start);
-	bulletObj->SetScale(FVector2(1.2, 1.2));
+	bulletObj->SetScale(FVector2(1.7, 1.7));
 
 	switch (dronType)
 	{

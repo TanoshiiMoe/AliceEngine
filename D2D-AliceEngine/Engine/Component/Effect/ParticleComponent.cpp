@@ -198,6 +198,34 @@ void ParticleComponent::EmitExplosion(const FVector2& pos, int count)
     spawnShockwaveRing(ToSimPos(pos), 20.0f, 8.0f, 0.5f, D2D1::ColorF(1.0f, 0.8f, 0.4f, 0.8f));
 }
 
+void ParticleComponent::EmitExplosionByColor(
+	const FVector2& pos,
+	int count,
+	const D2D1::ColorF& colorA,
+	const D2D1::ColorF& colorB)
+{
+	// 본체 + 꼬리 색을 외부에서 주입
+	emitBurstCommon(
+		ToSimPos(pos), count,
+		200.0f, 520.0f,   // speedMin, speedMax
+		10.0f, 28.0f,     // sizeMin, sizeMax
+		0.45f, 0.85f,     // lifeMin, lifeMax
+		colorA,           // 본체 색
+		colorB,           // 꼬리 색
+		4.0f,             // drag
+		200.0f            // gravity
+	);
+
+	// 쇼크웨이브 링 (색은 기존 고정값 유지)
+	spawnShockwaveRing(
+		ToSimPos(pos),
+		20.0f,   // radius
+		8.0f,    // thickness
+		0.5f,    // life
+		D2D1::ColorF(1.0f, 0.8f, 0.4f, 0.8f)
+	);
+}
+
 void ParticleComponent::EmitImpact(const FVector2& pos, int count)
 {
     // 중앙에서 방사형으로 강하게 퍼지는 튜닝
