@@ -67,6 +67,7 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
 void CutSceneWidgetScript::Awake()
 {
     m_isAlive = true;
+    GamePlayManager::GetInstance().SetCutScenePlaying(m_isAlive);
 }
 
 void CutSceneWidgetScript::OnStart()
@@ -262,6 +263,8 @@ void CutSceneWidgetScript::OnEnd()
 {
     m_isAlive = false;
     StopGuideTimers();
+
+    GamePlayManager::GetInstance().SetCutScenePlaying(m_isAlive);
 }
 
 void CutSceneWidgetScript::OnDestroy()
@@ -269,6 +272,8 @@ void CutSceneWidgetScript::OnDestroy()
     m_isAlive = false;
     StopGuideTimers();
     m_guideText = nullptr;
+
+    GamePlayManager::GetInstance().SetCutScenePlaying(m_isAlive);
 }
 
 void CutSceneWidgetScript::SkipInput()
