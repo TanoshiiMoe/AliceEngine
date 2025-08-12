@@ -78,13 +78,18 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	}
 
 	float finalSpeed = playerSpeed / 600.0f;
-	float realSpeed = playerSpeed / 3.0f;
+
 	if (finalSpeed > 1.0f) finalSpeed = 0.999999f;	// 어느정도 허용치를 둠
 
 	m_speedProgress->SetProgress(finalSpeed);
 
-	m_speedText->SetText(realSpeed);
-	m_speedText->m_layer = Define::NormalTextLayer;
+	int realSpeed = static_cast<int>(std::round(playerSpeed / 3.0f));
+	if (realSpeed > 200) realSpeed = 200;
+
+	wchar_t speedBuffer[8];
+	swprintf(speedBuffer, 8, L"%03d", realSpeed);
+
+	m_speedText->SetText(std::wstring(speedBuffer)+ L"km/h");
 
 	static bool wasPlaying = true; // 초기값은 컷씬 중이라고 가정
 
@@ -94,6 +99,23 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	{
 		m_pauseButton->SetActive(!isPlaying);
 		wasPlaying = isPlaying;
+	}
+
+	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
+	if (!bgmObj) return;
+	auto sound = bgmObj->GetComponent<AudioComponent>();
+
+	if (!GamePlayManager::GetInstance().IsCutScenePlaying())
+	{
+		if (!m_ambiencePlayed)
+		{
+			sound->PlayByName(L"Ambience");
+			m_ambiencePlayed = true; // 다음부터는 안 들어오게
+		}
+	}
+	else
+	{
+		m_ambiencePlayed = false; // 컷씬이 다시 시작하면 초기화
 	}
 }
 
@@ -328,6 +350,9 @@ void StageWidgetScript::OnStart()
 	m_speedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	m_speedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	m_speedText->SetColor(FColor(0, 234, 255, 255));
+	m_speedText->SetDrawType(EDrawType::ScreenSpace);
+	//m_speedText->m_layer = Define::NormalTextLayer;
+	m_speedText->m_layer = 1000000;
 	m_speedText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_speedText->GetRelativeSize(), FVector2(-0.5, -0.5))
 	+ FVector2(-850,330)
@@ -499,6 +524,7 @@ void StageWidgetScript::OnStart()
 		sound->PlayByName(L"UISound");
 
 		sound->PauseByType(SoundType::BGM);
+		sound->PauseByType(SoundType::SFX);
 
 		GamePlayManager::GetInstance().PauseGame();
 
@@ -558,6 +584,7 @@ void StageWidgetScript::OnStart()
 		sound->PlayByName(L"UISound");
 
 		sound->ResumeByType(SoundType::BGM);
+		sound->ResumeByType(SoundType::SFX);
 		
 		GamePlayManager::GetInstance().ResumeGame();
 

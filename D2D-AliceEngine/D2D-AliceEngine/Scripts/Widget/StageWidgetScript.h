@@ -40,5 +40,7 @@ private:
 	int maxBattery = 5;
 	int prevBattery = 0;
 	int prevKillAmount = 0;
+
+	bool m_ambiencePlayed = false;
 };
 
