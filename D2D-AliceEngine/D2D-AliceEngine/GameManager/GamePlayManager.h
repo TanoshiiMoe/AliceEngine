@@ -97,7 +97,7 @@ public:
 
 	float GetPassedTime() const { return m_passedTime; }
 	void SetPassedTime(float time) { m_passedTime = time; }
-    void AddPassedTime(float delta) { if (IsPaused()) return;  m_passedTime += delta; }
+    void AddPassedTime(float delta) { if (IsPaused()) return;  m_passedTime += delta * TimerManager::GetInstance().GetGlobalTimeScale(); }
 	int GetKillEnemyAmount() const { return m_killEnemyAmount; }
 	void SetKillEnemyAmount(int amount) { m_killEnemyAmount = amount; }
 	void AddKillEnemyAmount(int delta) { m_killEnemyAmount += delta; }

@@ -12,7 +12,6 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../../Scripts/BackGroundImage.h"
-#include "../../Scripts/Audio.h"
 #include "../../Scripts/UI_Script.h"
 #include "../../Scripts/BackGroundVideo.h"
 #include "../../Prefab/Truck.h"
@@ -39,6 +38,7 @@
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 #include "Scripts/Enemy/Spawn/EnemyDespawner.h"
 #include <Component/Effect/ParticleComponent.h>
+#include <Scripts/Audio/StageAudioScript.h>
 
 void Scene_Stage1::Initialize()
 {
@@ -99,7 +99,7 @@ void Scene_Stage1::OnEnter()
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<Audio>();
+	m_sound->AddComponent<StageAudioScript>();
 
 	// 타일맵 추가
 	m_tile = NewObject<gameObject>(L"TileMap");
