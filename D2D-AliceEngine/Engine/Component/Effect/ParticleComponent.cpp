@@ -77,7 +77,7 @@ void ParticleComponent::Update(const float& deltaSeconds)
 
             emitBurstCommon(mp, 4,
                 10.0f, 30.0f, // speed
-                10.0f, 16.0f,  // size
+                14.0f, 18.0f,  // size
                 0.25f, 0.45f, // life
                 D2D1::ColorF(1.0f, 1.0f, 0.8f, 0.9f),
                 D2D1::ColorF(0.9f, 0.6f, 0.2f, 0.0f),
@@ -208,7 +208,7 @@ void ParticleComponent::EmitExplosionByColor(
 	emitBurstCommon(
 		ToSimPos(pos), count,
 		200.0f, 520.0f,   // speedMin, speedMax
-		16.0f, 38.0f,     // sizeMin, sizeMax
+		24.0f, 48.0f,     // sizeMin, sizeMax
 		0.45f, 0.85f,     // lifeMin, lifeMax
 		colorA,           // 본체 색
 		colorB,           // 꼬리 색
@@ -219,8 +219,8 @@ void ParticleComponent::EmitExplosionByColor(
 	// 쇼크웨이브 링 (색은 기존 고정값 유지)
 	spawnShockwaveRing(
 		ToSimPos(pos),
-		26.0f,   // radius
-		10.0f,    // thickness
+		28.0f,   // radius
+		14.0f,    // thickness
 		0.5f,    // life
 		D2D1::ColorF(1.0f, 0.8f, 0.4f, 0.8f)
 	);
@@ -327,6 +327,17 @@ void ParticleComponent::EmitPortalSwirl(const FVector2& pos, int count)
         D2D1::ColorF(0.7f, 0.2f, 1.0f, 1.0f),
         D2D1::ColorF(0.2f, 0.1f, 0.5f, 0.0f),
         0.8f, 0.0f);
+}
+
+void ParticleComponent::EmitLocationIndicator(const FVector2& pos, int count, D2D1::ColorF colorA, D2D1::ColorF colorB)
+{
+    emitBurstCommon(ToSimPos(pos), 4,
+        10.0f, 30.0f, // speed
+        24.0f, 48.0f,  // size
+        0.25f, 0.45f, // life
+        colorA,
+        colorB,
+        2.0f, 0.0f);
 }
 
 // 커스텀 프리셋 오버로드 구현 ----------------------------------------------
