@@ -118,7 +118,7 @@ void Scene_Stage1::OnEnter()
 	// 적 스포너 매니저 생성
 	enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
 	auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
-	tb->SetBox(FVector2(3300.0f, 800.0f), 1);
+	tb->SetBox(FVector2(3300.0f, 1920.0f), 1);
 	//owner->transform()->SetPivot(0.5f, 0.5f);
 
 	// 디스포너 생성
