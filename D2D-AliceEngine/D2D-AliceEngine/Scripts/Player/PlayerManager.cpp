@@ -126,8 +126,8 @@ void PlayerManager::Update(const float& deltaSeconds)
 
 		boostElipsed += (deltaSeconds * 0.5f) * TimerManager::GetInstance().GetGlobalTimeScale();
 		
-		std::wstring message = L"BoostTime : " + std::to_wstring(boostElipsed) + L"\n";
-		OutputDebugStringW(message.c_str());
+		/*std::wstring message = L"BoostTime : " + std::to_wstring(boostElipsed) + L"\n";
+		OutputDebugStringW(message.c_str());*/
 	}
 
 }

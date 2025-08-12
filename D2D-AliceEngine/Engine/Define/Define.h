@@ -44,10 +44,10 @@ namespace Define
 
 	// Player
 	static const int HUDLayer = 50000;
-	// 플레이어, 적은 도로너비에 따라 -220 ~ 380까지 사용합니다.
+	// 플레이어, 적은 도로너비에 따라 -380 ~ 220까지 사용합니다.
 
 	// BackGround
-	static const int TileLayer = -300;
+	static const int TileLayer = -500;
 
 	// Enemy
 
