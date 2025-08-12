@@ -21,6 +21,8 @@ void LocationIndicatorWidgetScript::Initialize()
 void LocationIndicatorWidgetScript::OnStart()
 {
     // 카메라에 붙여 HUD처럼 고정
+    if(GetWorld())
+        enemyIndecatorObj = GetWorld()->NewObject<gameObject>(L"enemyIndecatorObj");
     owner->SetScale(FVector2(1, 0.8f));
     owner->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
     GetCamera()->AddChildObject(owner.Get());
@@ -176,21 +178,35 @@ void LocationIndicatorWidgetScript::updateProgressAndMarker(const float& deltaSe
                 particle2->EmitLocationIndicator(FVector2(xOnBar, m_barY), 40);
             }
         }
+    }
 
+    if (owner && enemyIndecatorObj)
+    {
+        int t1 = owner->GetPosition().x;
+        int t2 = GamePlayManager::GetInstance().GetStopXAxis() / 2;
         if (owner->GetPosition().x < GamePlayManager::GetInstance().GetStopXAxis() / 2)
         {
-            if (ParticleComponent* particle = owner->GetComponent<ParticleComponent>())
+            if (ParticleComponent* particle = enemyIndecatorObj->GetComponent<ParticleComponent>())
             {
                 particle->EmitLocationIndicator(FVector2(0, m_barY), 40, D2D1::ColorF(10.9f, 0.6f, 0.2f, 0.0f), D2D1::ColorF(21.0f, 0.0f, 0.0f, 0.9f));
             }
             else
             {
-                auto* particle2 = owner->AddComponent<ParticleComponent>();
+                auto* particle2 = enemyIndecatorObj->AddComponent<ParticleComponent>();
                 particle2->LoadData(L"Effect/LocationIndicator.png");
                 particle2->SetDrawType(Define::EDrawType::ScreenSpace);
             }
         }
+        else
+        {
+            if (!bossSpawned)
+            {
+                GamePlayManager::GetInstance().PlayBossMode();
+                bossSpawned = true;
+            }
+        }
     }
+    
 }
 
 

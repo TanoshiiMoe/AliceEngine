@@ -85,6 +85,10 @@ void EnemyStatScript::OnStart()
                 owner->RemoveComponent<Collider>(col);
 
             GamePlayManager::GetInstance().AddKillEnemyAmount(1);
+            if (owner->GetName() == L"Boss")
+            {
+                GamePlayManager::GetInstance().BackNormalMode();
+            }
 
             if (auto car = owner->GetComponent<Car>())
                 car->DelayDestroy();
