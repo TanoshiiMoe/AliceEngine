@@ -24,7 +24,7 @@ public:
 	void Jump();
 
 	// 가속시키기
-	void Boost(float _time = 5.0f);
+	void Boost(float _time = 5.0f, bool _battDec = true);
 
 	// 싼데비슷한
 	void Sande(float _time = 5.0f);

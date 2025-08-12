@@ -113,7 +113,7 @@ void Scene_Stage2::OnEnter()
     // 적 스포너 매니저 생성
     enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
     auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
-    tb->SetBox(FVector2(3300.0f, 700.0f), 1);
+    tb->SetBox(FVector2(3300.0f, 1920.0f), 1);
 
 	// 디스포너 생성
 	gameObject* deSpawner = NewObject<gameObject>(L"DeSpwaner");
