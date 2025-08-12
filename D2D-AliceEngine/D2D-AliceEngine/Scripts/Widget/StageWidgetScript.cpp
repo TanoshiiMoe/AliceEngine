@@ -6,6 +6,7 @@
 #include <Math/Transform.h>
 #include <Helpers/CoordHelper.h>
 
+#include <Core/Input.h>
 #include <UI/UIImage.h>
 #include <UI/UIText.h>
 #include <Scene/Scene.h>
@@ -436,15 +437,35 @@ void StageWidgetScript::OnStart()
 	sfxMinusButton->m_layer = Define::Disable;
 
 	// ========================= Delegate
-	pauseButton->SetStateAction(Define::EButtonState::Pressed, [
+	pauseButton->SetStateAction(Define::EButtonState::Hover, [pauseButton]()
+		{
+			pauseButton->StartHoverPulse(0.8f, 0.04f);
+			pauseButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
+		});
+
+	pauseButton->SetStateAction(Define::EButtonState::HoverLeave, [pauseButton]()
+		{
+			pauseButton->StopHoverPulse();
+			pauseButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	pauseButton->SetStateAction(Define::EButtonState::Release, [pauseButton]()
+		{
+			pauseButton->StopHoverPulse();
+			pauseButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	pauseButton->SetStateAction(Define::EButtonState::Pressed, [this,
 		pauseButton, closeButton, popUpTab,
 		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText
 	] {
-			sound->StopByName(L"UISound");
-			sound->PlayByName(L"UISound");
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 
-			GamePlayManager::GetInstance().PauseGame();
+		GamePlayManager::GetInstance().PauseGame();
+
+		m_isPaused = !m_isPaused;
 
 		pauseButton->SetActive(false);
 		popUpTab->m_layer = Define::PopupLayer;
@@ -471,17 +492,37 @@ void StageWidgetScript::OnStart()
 		selectText->m_layer = Define::PopupTextLayer;
 		});
 
-	closeButton->SetStateAction(Define::EButtonState::Pressed, [
+	//closeButton->SetStateAction(Define::EButtonState::Hover, [closeButton]()
+	//	{
+	//		closeButton->StartHoverPulse(0.8f, 0.04f);
+	//		closeButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+	//	});
+
+	//closeButton->SetStateAction(Define::EButtonState::HoverLeave, [closeButton]()
+	//	{
+	//		closeButton->StopHoverPulse();
+	//		closeButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+	//	});
+
+	//closeButton->SetStateAction(Define::EButtonState::Release, [closeButton]()
+	//	{
+	//		closeButton->StopHoverPulse();
+	//		closeButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+	//	});
+
+	closeButton->SetStateAction(Define::EButtonState::Pressed, [this,
 		pauseButton, closeButton, popUpTab,
 		toMain, toOption, toRestart, toSelect, sound, pauseText,
 		optionText, mainText, restartText, selectText, soundControl,
 		bgmControl, sfxControl, bgmPlusButton, bgmMinusButton, sfxPlusButton, sfxMinusButton,
 		optionTabText, optionTabBGMText, optionTabSFXText
 	] {
-			sound->StopByName(L"UISound");
-			sound->PlayByName(L"UISound");
+		sound->StopByName(L"UISound");
+		sound->PlayByName(L"UISound");
 		
 		GamePlayManager::GetInstance().ResumeGame();
+
+		m_isPaused = !m_isPaused;
 
 		pauseText->m_layer = Define::Disable;
 		pauseButton->SetActive(true);
@@ -524,6 +565,83 @@ void StageWidgetScript::OnStart()
 		sfxMinusButton->m_layer = Define::Disable;
 		sfxMinusButton->SetActive(false);
 		});
+
+	// bgmPlusButton Hover 효과 (시안색 글로우)
+	bgmPlusButton->SetStateAction(Define::EButtonState::Hover, [bgmPlusButton]()
+		{
+			bgmPlusButton->StartHoverPulse(0.8f, 0.04f);
+			bgmPlusButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
+		});
+
+	bgmPlusButton->SetStateAction(Define::EButtonState::HoverLeave, [bgmPlusButton]()
+		{
+			bgmPlusButton->StopHoverPulse();
+			bgmPlusButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	bgmPlusButton->SetStateAction(Define::EButtonState::Release, [bgmPlusButton]()
+		{
+			bgmPlusButton->StopHoverPulse();
+			bgmPlusButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	// bgmMinusButton Hover 효과 (시안색 글로우)
+	bgmMinusButton->SetStateAction(Define::EButtonState::Hover, [bgmMinusButton]()
+		{
+			bgmMinusButton->StartHoverPulse(0.8f, 0.04f);
+			bgmMinusButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
+		});
+
+	bgmMinusButton->SetStateAction(Define::EButtonState::HoverLeave, [bgmMinusButton]()
+		{
+			bgmMinusButton->StopHoverPulse();
+			bgmMinusButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	bgmMinusButton->SetStateAction(Define::EButtonState::Release, [bgmMinusButton]()
+		{
+			bgmMinusButton->StopHoverPulse();
+			bgmMinusButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	// sfxPlusButton Hover 효과 (시안색 글로우)
+	sfxPlusButton->SetStateAction(Define::EButtonState::Hover, [sfxPlusButton]()
+		{
+			sfxPlusButton->StartHoverPulse(0.8f, 0.04f);
+			sfxPlusButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
+		});
+
+	sfxPlusButton->SetStateAction(Define::EButtonState::HoverLeave, [sfxPlusButton]()
+		{
+			sfxPlusButton->StopHoverPulse();
+			sfxPlusButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	sfxPlusButton->SetStateAction(Define::EButtonState::Release, [sfxPlusButton]()
+		{
+			sfxPlusButton->StopHoverPulse();
+			sfxPlusButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	// sfxMinusButton Hover 효과 (시안색 글로우)
+	sfxMinusButton->SetStateAction(Define::EButtonState::Hover, [sfxMinusButton]()
+		{
+			sfxMinusButton->StartHoverPulse(0.8f, 0.04f);
+			sfxMinusButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
+		});
+
+	sfxMinusButton->SetStateAction(Define::EButtonState::HoverLeave, [sfxMinusButton]()
+		{
+			sfxMinusButton->StopHoverPulse();
+			sfxMinusButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
+	sfxMinusButton->SetStateAction(Define::EButtonState::Release, [sfxMinusButton]()
+		{
+			sfxMinusButton->StopHoverPulse();
+			sfxMinusButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
+		});
+
 
 	bgmPlusButton->SetStateAction(Define::EButtonState::Pressed, [sound, bgmControl] {
 		
@@ -573,12 +691,46 @@ void StageWidgetScript::OnStart()
 		sfxControl->SetProgress(sfx);
 		});
 
-	toMain->SetStateAction(Define::EButtonState::Pressed, [] {
-		SceneManager::ChangeScene(L"TitleScene");
+	// 효과 (주황색 글로우)
+	toSelect->SetStateAction(Define::EButtonState::Hover, [toSelect]()
+		{
+			toSelect->StartHoverPulse(0.8f, 0.04f);
+			toSelect->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+		});
+
+	toSelect->SetStateAction(Define::EButtonState::HoverLeave, [toSelect]()
+		{
+			toSelect->StopHoverPulse();
+			toSelect->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+		});
+
+	toSelect->SetStateAction(Define::EButtonState::Release, [toSelect]()
+		{
+			toSelect->StopHoverPulse();
+			toSelect->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
 		});
 
 	toSelect->SetStateAction(Define::EButtonState::Pressed, [] {
 		SceneManager::ChangeScene(L"SelectScene");
+		});
+
+	// 효과 (주황색 글로우)
+	toOption->SetStateAction(Define::EButtonState::Hover, [toOption]()
+		{
+			toOption->StartHoverPulse(0.8f, 0.04f);
+			toOption->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+		});
+
+	toOption->SetStateAction(Define::EButtonState::HoverLeave, [toOption]()
+		{
+			toOption->StopHoverPulse();
+			toOption->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+		});
+
+	toOption->SetStateAction(Define::EButtonState::Release, [toOption]()
+		{
+			toOption->StopHoverPulse();
+			toOption->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
 		});
 
 	toOption->SetStateAction(Define::EButtonState::Pressed, [sound,
@@ -621,7 +773,7 @@ void StageWidgetScript::OnStart()
 	smallClose->SetStateAction(Define::EButtonState::Pressed, [
 		pauseButton, closeButton, toOption, toMain, toRestart, toSelect,
 		smallClose, soundControl, bgmControl, sfxControl, bgmPlusButton, bgmMinusButton,
-		sfxPlusButton, sfxMinusButton, sound
+		sfxPlusButton, sfxMinusButton, sound, optionTabText, optionTabBGMText, optionTabSFXText
 
 	] {
 			sound->StopByName(L"UISound");
@@ -637,6 +789,10 @@ void StageWidgetScript::OnStart()
 		smallClose->SetActive(false);
 		smallClose->m_layer = Define::Disable;
 
+		optionTabText->m_layer = Define::Disable;
+		optionTabBGMText->m_layer = Define::Disable;
+		optionTabSFXText->m_layer = Define::Disable;
+
 		soundControl->m_layer = Define::Disable;
 		bgmControl->m_layer = Define::Disable;
 		sfxControl->m_layer = Define::Disable;
@@ -650,6 +806,25 @@ void StageWidgetScript::OnStart()
 		sfxMinusButton->m_layer = Define::Disable;
 		sfxMinusButton->SetActive(false);
 
+		});
+
+	// 효과 (주황색 글로우)
+	toRestart->SetStateAction(Define::EButtonState::Hover, [toRestart]()
+		{
+			toRestart->StartHoverPulse(0.8f, 0.04f);
+			toRestart->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+		});
+
+	toRestart->SetStateAction(Define::EButtonState::HoverLeave, [toRestart]()
+		{
+			toRestart->StopHoverPulse();
+			toRestart->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+		});
+
+	toRestart->SetStateAction(Define::EButtonState::Release, [toRestart]()
+		{
+			toRestart->StopHoverPulse();
+			toRestart->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
 		});
 
 	toRestart->SetStateAction(Define::EButtonState::Pressed, [weak = WeakFromThis<StageWidgetScript>(), sound,
@@ -688,6 +863,25 @@ void StageWidgetScript::OnStart()
 		selectText->m_layer = Define::Disable;
 		});
 
+	// 효과 (주황색 글로우)
+	toMain->SetStateAction(Define::EButtonState::Hover, [toMain]()
+		{
+			toMain->StartHoverPulse(0.8f, 0.04f);
+			toMain->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+		});
+
+	toMain->SetStateAction(Define::EButtonState::HoverLeave, [toMain]()
+		{
+			toMain->StopHoverPulse();
+			toMain->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+		});
+
+	toMain->SetStateAction(Define::EButtonState::Release, [toMain]()
+		{
+			toMain->StopHoverPulse();
+			toMain->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+		});
+
 	toMain->SetStateAction(Define::EButtonState::Pressed, [] {
 
 		SceneManager::ChangeScene(L"TitleScene");
@@ -710,6 +904,102 @@ void StageWidgetScript::OnStart()
 	//m_killEnemyText->SetFontSize(32.0f);
 	//m_killEnemyText->SetColor(FColor::Gold);
 	//m_killEnemyText->m_layer = Define::NormalTextLayer;
+
+	auto input = m_owner->AddComponent<InputComponent>();
+	input->SetAction(input->GetHandle(), [this,
+		sound, pauseButton, popUpTab, pauseText, closeButton, toMain, mainText,
+		toRestart, restartText, toOption, optionText, toSelect, selectText,
+		optionTabText, optionTabBGMText, optionTabSFXText,
+		soundControl, bgmControl, sfxControl,bgmPlusButton,bgmMinusButton,sfxPlusButton,sfxMinusButton,
+		smallClose
+	] {
+		if (!m_isPaused && Input::IsKeyPressed(VK_ESCAPE))
+		{
+			m_isPaused = !m_isPaused;
+
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
+
+			GamePlayManager::GetInstance().PauseGame();
+
+			pauseButton->SetActive(false);
+			popUpTab->m_layer = Define::PopupLayer;
+			popUpTab->SetOpacity(1);
+
+			pauseText->m_layer = Define::PopupTextLayer;
+			closeButton->SetActive(true);
+			closeButton->m_layer = Define::PopupButtonLayer;
+
+			toMain->SetActive(true);
+			toMain->m_layer = Define::PopupButtonLayer;
+			mainText->m_layer = Define::PopupTextLayer;
+
+			toRestart->SetActive(true);
+			toRestart->m_layer = Define::PopupButtonLayer;
+			restartText->m_layer = Define::PopupTextLayer;
+
+			toOption->SetActive(true);
+			toOption->m_layer = Define::PopupButtonLayer;
+			optionText->m_layer = Define::PopupTextLayer;
+
+			toSelect->SetActive(true);
+			toSelect->m_layer = Define::PopupButtonLayer;
+			selectText->m_layer = Define::PopupTextLayer;
+		}
+		else if (m_isPaused && Input::IsKeyPressed(VK_ESCAPE))
+		{
+			m_isPaused = !m_isPaused;
+
+			sound->StopByName(L"UISound");
+			sound->PlayByName(L"UISound");
+
+			GamePlayManager::GetInstance().ResumeGame();
+
+			pauseText->m_layer = Define::Disable;
+			pauseButton->SetActive(true);
+			popUpTab->m_layer = Define::Disable;
+			popUpTab->SetOpacity(0);
+
+			closeButton->SetActive(false);
+			closeButton->m_layer = Define::Disable;
+
+			toMain->SetActive(false);
+			toMain->m_layer = Define::Disable;
+			mainText->m_layer = Define::Disable;
+
+			toRestart->SetActive(false);
+			toRestart->m_layer = Define::Disable;
+			restartText->m_layer = Define::Disable;
+
+			toOption->SetActive(false);
+			toOption->m_layer = Define::Disable;
+			optionText->m_layer = Define::Disable;
+
+			toSelect->SetActive(false);
+			toSelect->m_layer = Define::Disable;
+			selectText->m_layer = Define::Disable;
+
+			optionTabText->m_layer = Define::Disable;
+			optionTabBGMText->m_layer = Define::Disable;
+			optionTabSFXText->m_layer = Define::Disable;
+
+			soundControl->m_layer = Define::Disable;
+			bgmControl->m_layer = Define::Disable;
+			sfxControl->m_layer = Define::Disable;
+
+			bgmPlusButton->m_layer = Define::Disable;
+			bgmPlusButton->SetActive(false);
+			bgmMinusButton->m_layer = Define::Disable;
+			bgmMinusButton->SetActive(false);
+			sfxPlusButton->m_layer = Define::Disable;
+			sfxPlusButton->SetActive(false);
+			sfxMinusButton->m_layer = Define::Disable;
+			sfxMinusButton->SetActive(false);
+
+			smallClose->SetActive(false);
+			smallClose->m_layer = Define::Disable;
+		}
+		});
 }
 
 void StageWidgetScript::OnEnd()

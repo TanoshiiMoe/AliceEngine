@@ -16,6 +16,8 @@ public:
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
 
+	bool m_isPaused = false;
+
 	gameObject* m_owner;
 
 	TextRenderComponent* m_passedTimeText;
