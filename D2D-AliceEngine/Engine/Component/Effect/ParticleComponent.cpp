@@ -208,7 +208,7 @@ void ParticleComponent::EmitExplosionByColor(
 	emitBurstCommon(
 		ToSimPos(pos), count,
 		200.0f, 520.0f,   // speedMin, speedMax
-		10.0f, 28.0f,     // sizeMin, sizeMax
+		16.0f, 38.0f,     // sizeMin, sizeMax
 		0.45f, 0.85f,     // lifeMin, lifeMax
 		colorA,           // 본체 색
 		colorB,           // 꼬리 색
@@ -219,8 +219,8 @@ void ParticleComponent::EmitExplosionByColor(
 	// 쇼크웨이브 링 (색은 기존 고정값 유지)
 	spawnShockwaveRing(
 		ToSimPos(pos),
-		20.0f,   // radius
-		8.0f,    // thickness
+		26.0f,   // radius
+		10.0f,    // thickness
 		0.5f,    // life
 		D2D1::ColorF(1.0f, 0.8f, 0.4f, 0.8f)
 	);

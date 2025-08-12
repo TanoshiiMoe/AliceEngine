@@ -200,7 +200,7 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 					pos,
 					Define::Effect_Texture_Bullet_Bomb,
 					FColor(0.0f, 0.05f, 0.95f, 1.0f),
-					FColor(1.0f, 0.5f, 0.2f, 0.0f)
+					FColor(0.0f, 0.5f, 0.9f, 1.0f)
 				);
 			}
 			GetWorld()->RemoveObject(GetOwner());
