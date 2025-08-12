@@ -8,6 +8,10 @@
 #include <Component/SpriteRenderer.h>
 #include <Component/BoxComponent.h>
 #include <Component/VideoComponent.h>
+#include <Component/ProgressBarComponent.h>
+#include <Component/AudioComponent.h>
+#include <Component/ButtonComponent.h>
+#include <Component/InputComponent.h>
 
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
@@ -15,10 +19,8 @@
 #include <UI/UIImage.h>
 #include <UI/UIText.h>
 #include <Scene/Scene.h>
-#include <Component/ButtonComponent.h>
 #include <Helpers/CoordHelper.h>
 #include <Manager/SceneManager.h>
-#include <Component/AudioComponent.h>
 
 void SelectWidgetScript::Initialize()
 {
@@ -33,6 +35,16 @@ void SelectWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
+
+	m_progress->SetProgress(m_pressValue / 500.0f);
+
+	FVector2 mousePos = Input::GetMousePosition();
+
+	m_progress->SetRelativePosition(FVector2(mousePos.x - SCREEN_WIDTH / 2.0f, mousePos.y - 450));
+	m_progressSprite->SetRelativePosition(FVector2(mousePos.x - SCREEN_WIDTH / 2.0f, mousePos.y - 450));
+	m_guideText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(m_guideText->GetRelativeSize(), FVector2(-0.5, -0.5)) +
+		FVector2(mousePos.x - SCREEN_WIDTH / 2.0f, mousePos.y - 400));
 }
 
 void SelectWidgetScript::Awake()
@@ -46,8 +58,17 @@ void SelectWidgetScript::OnStart()
 
 	GetCamera()->AddChildObject(m_owner);
 
+	SetPressValue(0);
+	m_isInStage1 = false;
+
 	auto background = m_owner->AddComponent<SpriteRenderer>();
 	auto tutorial = m_owner->AddComponent<VideoComponent>();
+
+	auto input = m_owner->AddComponent<InputComponent>();
+	m_progressSprite = m_owner->AddComponent<SpriteRenderer>();
+	m_progress = m_owner->AddComponent<ProgressBarComponent>();
+
+	m_guideText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto continueText = m_owner->AddComponent<TextRenderComponent>();
 	auto closeText = m_owner->AddComponent<TextRenderComponent>();
@@ -69,7 +90,7 @@ void SelectWidgetScript::OnStart()
 
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
-	auto sound = bgmObj->GetComponent<AudioComponent>();
+	m_sound = bgmObj->GetComponent<AudioComponent>();
 
 	// ===================================================== //
 	background->LoadData(L"BackGround\\Background_Select.png");
@@ -114,28 +135,36 @@ void SelectWidgetScript::OnStart()
 	closeButton->SetRelativePosition(FVector2(0, 400));
 
 	// ======================== skipText
-	skipText->SetFontSize(55.0f);
-	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	skipText->SetText(L"건너뛰기");
-	skipText->SetColor(FColor::White);
-	FVector2 skipTextRectSize = skipText->GetRelativeSize();
-	skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextRectSize, FVector2(-0.5, -0.5)));
-	skipText->SetRelativeScale(FVector2(1, 1));
-	skipText->SetRelativeRotation(0);
-	skipText->m_layer = Define::Disable;
-	skipButton->SetActive(false);
-	skipText->RemoveFromParent();
-	skipButton->AddChildComponent(skipText);
+	//skipText->SetFontSize(55.0f);
+	//skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	//skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	//skipText->SetText(L"건너뛰기");
+	//skipText->SetColor(FColor::White);
+	//FVector2 skipTextRectSize = skipText->GetRelativeSize();
+	//skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextRectSize, FVector2(-0.5, -0.5)));
+	//skipText->SetRelativeScale(FVector2(1, 1));
+	//skipText->SetRelativeRotation(0);
+	//skipText->m_layer = Define::Disable;
+	//skipButton->SetActive(false);
+	//skipText->RemoveFromParent();
+	//skipButton->AddChildComponent(skipText);
 
 	// ======================== skipButton
-	skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	skipButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	skipButton->SetRelativePosition(FVector2(0, 350));
-	skipButton->SetRelativeScale(FVector2(1, 1));
-	skipButton->m_layer = Define::Disable;
+	//skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	//skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	//skipButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	//skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	//skipButton->SetRelativePosition(FVector2(0, 350));
+	//skipButton->SetRelativeScale(FVector2(1, 1));
+	//skipButton->m_layer = Define::Disable;
+
+	// ======================= GuideText
+	m_guideText->SetFontSize(25.0f);
+	m_guideText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	m_guideText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	m_guideText->SetText(L"[SPACE]를 길게 눌러서 튜토리얼 건너뛰기");
+	m_guideText->SetColor(FColor::White);
+	m_guideText->m_layer = Define::Disable;
 
 	// ===================== stage1
 	stage1->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
@@ -171,6 +200,19 @@ void SelectWidgetScript::OnStart()
 	stage3->SetRelativeScale(FVector2(1, 1));
 	stage3->m_layer = Define::NormalTextLayer;
 
+	// ========= Progress
+	m_progress->LoadData(L"UI\\ProgressBar.png");
+	m_progress->SetDrawType(EDrawType::ScreenSpace);
+	m_progress->SetRelativePosition(FVector2(0, 0));
+	m_progress->m_layer = Define::Disable;
+	m_progress->SetProgress(m_pressValue);
+
+	m_progressSprite->LoadData(L"UI\\PressValue.png");
+	m_progressSprite->m_layer = Define::Disable;
+
+	m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
+	m_progressSprite->SetRelativePosition(FVector2(0, 0));
+
 	// ====================== Delegate & Hover Effects
 	
 	// stage1 Button 효과 (초록색 글로우 - 쉬운 스테이지)
@@ -192,47 +234,59 @@ void SelectWidgetScript::OnStart()
 		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
-	stage1->SetStateAction(Define::EButtonState::Pressed, [closeButton, sound, tutorial, skipButton, skipText]{
+	stage1->SetStateAction(Define::EButtonState::Pressed, [this, closeButton, tutorial, skipButton, skipText,
+		stage1, stage2, stage3
+	]{
 		
-		skipButton->m_layer = Define::PopupButtonLayer;
-		skipButton->SetActive(true);
-		skipText->m_layer = Define::PopupTextLayer;
+		//skipButton->m_layer = Define::PopupButtonLayer;
+		//skipButton->SetActive(true);
+		//skipText->m_layer = Define::PopupTextLayer;
 
 		tutorial->m_layer = Define::PopupLayer;
 		tutorial->Play();
 
-		sound->PlayByName(L"Tutorial");
+		m_sound->PlayByName(L"Tutorial");
 		closeButton->SetActive(false);
+
+		stage1->SetActive(false);
+		stage2->SetActive(false);
+		stage3->SetActive(false);
+
+		m_progressSprite->m_layer = Define::PopupPopLayer;
+		m_progress->m_layer = Define::PopupObjectLayer;
+		m_guideText->m_layer = Define::PopupTextLayer;
+
+		m_isInStage1 = true;
 
 		//SceneManager::ChangeScene(Define::Scene_Stage1);
 		});
 
-	skipButton->SetStateAction(Define::EButtonState::Hover, [skipButton]()
-		{
-			skipButton->StartHoverPulse(0.8f, 0.04f);
-			skipButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
-		});
+	//skipButton->SetStateAction(Define::EButtonState::Hover, [skipButton]()
+	//	{
+	//		skipButton->StartHoverPulse(0.8f, 0.04f);
+	//		skipButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+	//	});
 
-	skipButton->SetStateAction(Define::EButtonState::HoverLeave, [skipButton]()
-		{
-			skipButton->StopHoverPulse();
-			skipButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
-		});
+	//skipButton->SetStateAction(Define::EButtonState::HoverLeave, [skipButton]()
+	//	{
+	//		skipButton->StopHoverPulse();
+	//		skipButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+	//	});
 
-	skipButton->SetStateAction(Define::EButtonState::Release, [skipButton]()
-		{
-			skipButton->StopHoverPulse();
-			skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
-		});
+	//skipButton->SetStateAction(Define::EButtonState::Release, [skipButton]()
+	//	{
+	//		skipButton->StopHoverPulse();
+	//		skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+	//	});
 
-	skipButton->SetStateAction(Define::EButtonState::Pressed, [sound]()
-		{
-			OutputDebugStringW(L"SetAction click!\n");
-			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			sound->StopByName(L"Tutorial");
-			
-			SceneManager::ChangeScene(Define::Scene_Stage1);
-		});
+	//skipButton->SetStateAction(Define::EButtonState::Pressed, []()
+	//	{
+	//		OutputDebugStringW(L"SetAction click!\n");
+	//		OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+	//		m_sound->StopByName(L"Tutorial");
+	//		
+	//		SceneManager::ChangeScene(Define::Scene_Stage1);
+	//	});
 
 	// stage2 Button 효과 (노란색 글로우 - 보통 스테이지)
 	stage2->SetStateAction(Define::EButtonState::Hover, [stage2]()
@@ -307,6 +361,10 @@ void SelectWidgetScript::OnStart()
 
 		SceneManager::ChangeScene(L"TitleScene");
 		});
+
+	input->SetAction(input->GetHandle(), [this] {
+		SkipInput();
+		});
 }
 
 void SelectWidgetScript::OnEnd()
@@ -315,4 +373,21 @@ void SelectWidgetScript::OnEnd()
 
 void SelectWidgetScript::OnDestroy()
 {
+}
+
+void SelectWidgetScript::SkipInput()
+{
+	if (m_isInStage1 && Input::IsKeyDown(VK_SPACE))
+	{
+		m_pressValue += 3.5f;
+
+		if (m_pressValue >= 500.0f)
+		{
+			m_sound->StopByName(L"Tutorial");
+			SceneManager::ChangeScene(Define::Scene_Stage1);
+		}
+	}
+
+	m_pressValue -= 1.5f;
+	if (m_pressValue <= 0.0f) m_pressValue = 0.0f;
 }
