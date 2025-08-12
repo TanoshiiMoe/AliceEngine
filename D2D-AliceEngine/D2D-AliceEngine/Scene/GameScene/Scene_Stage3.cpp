@@ -23,6 +23,7 @@
 #include <Scripts/Enemy/Spawn/EnemyDespawner.h>
 #include <Component/Effect/ParticleComponent.h>
 #include <Scripts/Audio/StageAudioScript.h>
+#include <Scripts/Widget/LocationIndicatorWidgetScript.h>
 
 void Scene_Stage3::Initialize()
 {
@@ -114,6 +115,11 @@ void Scene_Stage3::OnEnter()
     // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
 	m_button = NewObject<gameObject>(L"PauseButton");
 	m_button->AddComponent<StageWidgetScript>();
+
+    // 로케이션 인디케이터 위젯
+    auto hud = GetWorld()->NewObject<gameObject>(L"LocationHUD");
+    hud->AddComponent<LocationIndicatorWidgetScript>();
+    hud->GetComponent<LocationIndicatorWidgetScript>()->SetStartX(m_player->GetPosition().x);
 
     // 디버그용 씬 전환
     gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");

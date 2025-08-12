@@ -316,6 +316,9 @@
     <ClInclude Include="Scripts\Audio\StageAudioScript.h">
       <Filter>Scripts\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Widget\LocationIndicatorWidgetScript.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -542,6 +545,7 @@
     <ClCompile Include="Scripts\Audio\StageAudioScript.cpp">
       <Filter>Scripts\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Scripts\Widget\LocationIndicatorWidgetScript.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />
