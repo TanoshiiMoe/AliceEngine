@@ -89,6 +89,10 @@ void Scene_Stage3::OnEnter()
     GamePlayManager::GetInstance().SetPlayer(m_player);
     GamePlayManager::GetInstance().SetPassedTime(0);
     GamePlayManager::GetInstance().SetKillEnemyAmount(0);
+
+	// 게임 일시정지 시키기
+	GamePlayManager::GetInstance().PauseGame();
+
     m_player->AddComponent<BackGroundRender>();
 
     //m_bg = NewObject<gameObject>(L"BackGround");
