@@ -25,7 +25,7 @@ public:
     gameObject* m_wall;
 
     gameObject* m_UI;
-    gameObject* m_button;
+    gameObject* m_widget;
 
     gameObject* m_bg;	// 임시 배경
 
@@ -36,7 +36,6 @@ public:
 private:
     gameObject* m_textGO{ nullptr };
 
-    gameObject* m_widget;
     // 컷씬 종료 후 전환할 씬명
     std::wstring m_nextSceneName = L"Scene_Stage2";
 };

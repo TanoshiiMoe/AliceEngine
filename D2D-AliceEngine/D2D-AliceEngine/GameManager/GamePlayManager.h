@@ -106,7 +106,11 @@ public:
 	void SetStopXAxis(int value) { m_stopXAxis = value; }
 	void AddStopXAxis(int delta) { m_stopXAxis += delta; }
 
+    void SetCutScenePlaying(bool bEvent) { isCutScenePlaying = bEvent; }
+    bool IsCutScenePlaying() { return isCutScenePlaying; }
+
     int batteryCount = 0;
+
 private:
     gameObject* m_player = nullptr;
 
@@ -115,4 +119,6 @@ private:
     int m_killEnemyAmount{ 0 };
 
     int m_stopXAxis{10200};
+
+    bool isCutScenePlaying = false;
 };

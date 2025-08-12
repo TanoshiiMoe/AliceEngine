@@ -698,7 +698,7 @@ void TitleWidgetScript::OnStart()
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab,
 		sound, optionTabText, bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
-		sfxControl, bgmControl, soundControl, smallClose
+		sfxControl, bgmControl, soundControl, smallClose, optionTabBGMText, optionTabSFXText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -731,6 +731,8 @@ void TitleWidgetScript::OnStart()
 			sfxMinusButton->m_layer = Define::PopupButtonLayer;
 
 			optionTabText->m_layer = Define::PopupTextLayer;
+			optionTabBGMText->m_layer = Define::PopupTextLayer;
+			optionTabSFXText->m_layer = Define::PopupTextLayer;
 
 			sfxControl->m_layer = Define::PopupObjectLayer;
 			bgmControl->m_layer = Define::PopupObjectLayer;

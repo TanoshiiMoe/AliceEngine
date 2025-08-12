@@ -27,6 +27,9 @@
 void Scene_Stage3::Initialize()
 {
     __super::Initialize();
+
+    m_sound = NewObject<gameObject>(L"Sound");
+    m_sound->AddComponent<StageAudioScript>();
 }
 
 void Scene_Stage3::Release()
@@ -98,10 +101,6 @@ void Scene_Stage3::OnEnter()
     //m_bg = NewObject<gameObject>(L"BackGround");
     //m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
 
-    // 오디오 추가, 오디오 관련 스크립트 넣기
-    m_sound = NewObject<gameObject>(L"Sound");
-    m_sound->AddComponent<StageAudioScript>();
-
     // 적 스포너 매니저 생성
     enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
     auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
@@ -111,9 +110,8 @@ void Scene_Stage3::OnEnter()
 	gameObject* deSpawner = NewObject<gameObject>(L"DeSpwaner");
 	deSpawner->AddComponent<EnemyDespawner>();
 
-    // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
-	m_button = NewObject<gameObject>(L"PauseButton");
-	m_button->AddComponent<StageWidgetScript>();
+	m_widget = NewObject<gameObject>(L"Widget");
+	m_widget->AddComponent<StageWidgetScript>();
 
     // 디버그용 씬 전환
     gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
