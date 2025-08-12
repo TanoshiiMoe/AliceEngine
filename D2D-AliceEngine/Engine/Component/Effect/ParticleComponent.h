@@ -39,6 +39,8 @@ public:
     void EmitElectric(const FVector2& pos, int count = 45);
     void EmitPortalSwirl(const FVector2& pos, int count = 70);
 
+    void EmitLocationIndicator(const FVector2& pos, int count = 70, D2D1::ColorF colorA = D2D1::ColorF(0.0f, 0.0f, 255.0f, 0.9f), D2D1::ColorF colorB = D2D1::ColorF(0.9f, 30.6f, 30.2f, 0.0f));
+
     // 프리셋 커스텀 오버로드 -----------------------------------------------
     void EmitExplosion(
         const FVector2& pos,

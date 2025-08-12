@@ -23,6 +23,7 @@
 #include <Scripts/Enemy/Spawn/EnemyDespawner.h>
 #include <Component/Effect/ParticleComponent.h>
 #include <Scripts/Audio/StageAudioScript.h>
+#include <Scripts/Widget/LocationIndicatorWidgetScript.h>
 
 void Scene_Stage2::Initialize()
 {
@@ -120,6 +121,11 @@ void Scene_Stage2::OnEnter()
 
     m_widget = NewObject<gameObject>(L"Widget");
     m_widget->AddComponent<StageWidgetScript>();
+
+    // 로케이션 인디케이터 위젯
+    auto hud = GetWorld()->NewObject<gameObject>(L"LocationHUD");
+    hud->AddComponent<LocationIndicatorWidgetScript>();
+    hud->GetComponent<LocationIndicatorWidgetScript>()->SetStartX(m_player->GetPosition().x);
 
     // 디버그용 씬 전환
     gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
