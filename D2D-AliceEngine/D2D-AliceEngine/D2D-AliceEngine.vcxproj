@@ -119,6 +119,9 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Extension\core\lib\x64</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -165,8 +168,12 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Extension\core\lib\x64</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Helper\ParticleHelper.h" />
     <ClInclude Include="Scripts\Audio\GameClearAudioScript.h" />
     <ClInclude Include="Scripts\Enemy\Jump\JumpTrigger.h" />
     <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h" />
@@ -248,6 +255,7 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Helper\ParticleHelper.cpp" />
     <ClCompile Include="Scripts\Audio\GameClearAudioScript.cpp" />
     <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />

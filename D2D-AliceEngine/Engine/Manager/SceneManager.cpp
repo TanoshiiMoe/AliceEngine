@@ -51,6 +51,18 @@ Scene* SceneManager::GetWorld()
     }
 }
 
+WeakObjectPtr<Scene> SceneManager::GetWorldByWeak()
+{
+	if (WeakObjectPtr<Scene> scene = m_currentScene)
+	{
+		return scene;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
 Camera* SceneManager::GetCamera()
 {
     if (WeakObjectPtr<Scene> scene = GetInstance().m_currentScene)

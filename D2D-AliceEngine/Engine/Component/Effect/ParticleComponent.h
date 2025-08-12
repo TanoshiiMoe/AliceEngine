@@ -30,12 +30,80 @@ public:
 
     // 이펙트 프리셋 API -----------------------------------------------------
     void EmitExplosion(const FVector2& worldOrScreenPos, int count = 60);
+    void EmitExplosionByColor(const FVector2& pos, int count, const D2D1::ColorF& colorA, const D2D1::ColorF& colorB);
     void EmitImpact(const FVector2& worldOrScreenPos, int count = 28);
+    void EmitImpactByColor(const FVector2& pos, int count, D2D1::ColorF colorA, D2D1::ColorF colorB);
     void EmitClickBurst(const FVector2& pos, bool rightClick = false);
     void ToggleMouseTrail(bool enabled);
     void EmitAura(const FVector2& center, float radius = 80.0f, int count = 40);
     void EmitElectric(const FVector2& pos, int count = 45);
     void EmitPortalSwirl(const FVector2& pos, int count = 70);
+
+    // 프리셋 커스텀 오버로드 -----------------------------------------------
+    void EmitExplosion(
+        const FVector2& pos,
+        int count,
+        float speedMin, float speedMax,
+        float sizeMin, float sizeMax,
+        float lifeMin, float lifeMax,
+        const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+        float drag, float gravity,
+        bool shockwaveEnabled,
+        float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+        const D2D1_COLOR_F& shockwaveColor);
+
+    void EmitImpact(
+        const FVector2& pos,
+        int count,
+        float speedMin, float speedMax,
+        float sizeMin, float sizeMax,
+        float lifeMin, float lifeMax,
+        const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+        float drag, float gravity,
+        bool shockwaveEnabled,
+        float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+        const D2D1_COLOR_F& shockwaveColor);
+
+    void EmitClickBurst(
+        const FVector2& pos,
+        int count,
+        float speedMin, float speedMax,
+        float sizeMin, float sizeMax,
+        float lifeMin, float lifeMax,
+        const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+        float drag, float gravity,
+        bool enableSelfDestruct, float selfDestructAfterSeconds);
+
+    void EmitAura(
+        const FVector2& center,
+        float radius,
+        int count,
+        float radiusJitter,
+        float angularSpeedMin, float angularSpeedMax,
+        float sizeMin, float sizeMax,
+        float lifeMin, float lifeMax,
+        float drag, float gravity,
+        const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB);
+
+    void EmitElectric(
+        const FVector2& pos,
+        int count,
+        float speedMin, float speedMax,
+        float sizeMin, float sizeMax,
+        float lifeMin, float lifeMax,
+        const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+        float drag, float gravity,
+        float spreadRadians);
+
+    void EmitPortalSwirl(
+        const FVector2& pos,
+        int count,
+        float speedMin, float speedMax,
+        float sizeMin, float sizeMax,
+        float lifeMin, float lifeMax,
+        const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+        float drag, float gravity,
+        float spreadRadians);
 
     // 렌더링 모드
     void SetAdditiveBlend(bool enabled) { m_useAdditive = enabled; }
@@ -119,6 +187,7 @@ private:
 
     // 랜덤
     std::mt19937 m_rng;
+    
 };
 
 

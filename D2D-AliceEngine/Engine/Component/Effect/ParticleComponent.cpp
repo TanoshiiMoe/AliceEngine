@@ -1,12 +1,13 @@
 ﻿#include "pch.h"
 #include "ParticleComponent.h"
-
 #include <Manager/D2DRenderManager.h>
 #include <Manager/PackageResourceManager.h>
 #include <System/RenderSystem.h>
 #include <Manager/SceneManager.h>
 #include <Core/Input.h>
 #include <Manager/UpdateTaskManager.h>
+#include <Helpers/CoordHelper.h>
+#include <Helpers/FileHelper.h>
 
 // WorldSpace 입력 좌표를 내부 시뮬레이션 좌표로 변환 (Y 반전 옵션)
 FVector2 ParticleComponent::ToSimPos(const FVector2& in) const
@@ -31,8 +32,8 @@ void ParticleComponent::Initialize()
 {
     __super::Initialize();
     ensureParticleTexture();
-    m_layer = 100; // 기본 레이어 (UI보다 뒤, 월드보다 위 조정 필요시 변경)
-    REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_LastDemotable);
+    m_layer = 987654322; // 기본 레이어 (UI보다 뒤, 월드보다 위 조정 필요시 변경)
+    REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
 }
 
 void ParticleComponent::Release()
@@ -71,12 +72,12 @@ void ParticleComponent::Update(const float& deltaSeconds)
         {
             m_trailAccumulator -= interval;
             FVector2 mp = (drawType == Define::EDrawType::WorldSpace)
-                ? ToSimPos(Input::GetMouseWorldPosition())
+                ? ToSimPos(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()))
                 : Input::GetMousePosition();
 
             emitBurstCommon(mp, 4,
                 10.0f, 30.0f, // speed
-                8.0f, 14.0f,  // size
+                10.0f, 16.0f,  // size
                 0.25f, 0.45f, // life
                 D2D1::ColorF(1.0f, 1.0f, 0.8f, 0.9f),
                 D2D1::ColorF(0.9f, 0.6f, 0.2f, 0.0f),
@@ -117,7 +118,8 @@ void ParticleComponent::Update(const float& deltaSeconds)
 void ParticleComponent::Render()
 {
     ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
-    if (!context) return;
+    ComPtr<ID2D1SpriteBatch> spriteBatch = D2DRenderManager::GetInstance().m_spriteBatch;
+    if (!context || !spriteBatch) return;
 
     // 부모 클래스에서 좌표계 변환 설정
     __super::Render();
@@ -129,7 +131,7 @@ void ParticleComponent::Render()
     context->SetPrimitiveBlend(m_useAdditive ? D2D1_PRIMITIVE_BLEND_ADD : D2D1_PRIMITIVE_BLEND_SOURCE_OVER);
 
     // SpriteBatch가 있으면 최적, 없으면 개별 DrawBitmap 사용
-    ComPtr<ID2D1SpriteBatch> spriteBatch = D2DRenderManager::GetInstance().m_spriteBatch;
+    
     const bool useBatch = spriteBatch.Get() != nullptr;
 
     if (useBatch)
@@ -196,6 +198,34 @@ void ParticleComponent::EmitExplosion(const FVector2& pos, int count)
     spawnShockwaveRing(ToSimPos(pos), 20.0f, 8.0f, 0.5f, D2D1::ColorF(1.0f, 0.8f, 0.4f, 0.8f));
 }
 
+void ParticleComponent::EmitExplosionByColor(
+	const FVector2& pos,
+	int count,
+	const D2D1::ColorF& colorA,
+	const D2D1::ColorF& colorB)
+{
+	// 본체 + 꼬리 색을 외부에서 주입
+	emitBurstCommon(
+		ToSimPos(pos), count,
+		200.0f, 520.0f,   // speedMin, speedMax
+		10.0f, 28.0f,     // sizeMin, sizeMax
+		0.45f, 0.85f,     // lifeMin, lifeMax
+		colorA,           // 본체 색
+		colorB,           // 꼬리 색
+		4.0f,             // drag
+		200.0f            // gravity
+	);
+
+	// 쇼크웨이브 링 (색은 기존 고정값 유지)
+	spawnShockwaveRing(
+		ToSimPos(pos),
+		20.0f,   // radius
+		8.0f,    // thickness
+		0.5f,    // life
+		D2D1::ColorF(1.0f, 0.8f, 0.4f, 0.8f)
+	);
+}
+
 void ParticleComponent::EmitImpact(const FVector2& pos, int count)
 {
     // 중앙에서 방사형으로 강하게 퍼지는 튜닝
@@ -212,9 +242,25 @@ void ParticleComponent::EmitImpact(const FVector2& pos, int count)
     spawnShockwaveRing(ToSimPos(pos), 28.0f, 10.0f, 0.4f, D2D1::ColorF(1.0f, 0.9f, 0.6f, 0.9f));
 }
 
+void ParticleComponent::EmitImpactByColor(const FVector2& pos, int count, D2D1::ColorF colorA, D2D1::ColorF colorB)
+{
+	// 중앙에서 방사형으로 강하게 퍼지는 튜닝
+	emitBurstCommon(ToSimPos(pos), count,
+		260.0f, 520.0f,   // 더 강한 반경 속도
+		10.0f, 22.0f,
+		0.28f, 0.55f,
+		colorA,
+        colorB,
+		3.5f,
+		0.0f);
+
+	// 강한 방사 링 추가
+	spawnShockwaveRing(ToSimPos(pos), 28.0f, 10.0f, 0.4f, D2D1::ColorF(1.0f, 0.9f, 0.6f, 0.9f));
+}
+
 void ParticleComponent::EmitClickBurst(const FVector2& pos, bool rightClick)
 {
-    emitBurstCommon(pos, rightClick ? 30 : 18,
+    emitBurstCommon(ToSimPos(pos), rightClick ? 30 : 18,
         120.0f, rightClick ? 380.0f : 240.0f,
         6.0f, 14.0f,
         0.25f, 0.5f,
@@ -281,6 +327,158 @@ void ParticleComponent::EmitPortalSwirl(const FVector2& pos, int count)
         D2D1::ColorF(0.7f, 0.2f, 1.0f, 1.0f),
         D2D1::ColorF(0.2f, 0.1f, 0.5f, 0.0f),
         0.8f, 0.0f);
+}
+
+// 커스텀 프리셋 오버로드 구현 ----------------------------------------------
+void ParticleComponent::EmitExplosion(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    bool shockwaveEnabled,
+    float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+    const D2D1_COLOR_F& shockwaveColor)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity);
+
+    if (shockwaveEnabled)
+    {
+        spawnShockwaveRing(ToSimPos(pos), shockwaveRadius, shockwaveThickness, shockwaveLife, shockwaveColor);
+    }
+}
+
+void ParticleComponent::EmitImpact(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    bool shockwaveEnabled,
+    float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+    const D2D1_COLOR_F& shockwaveColor)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity);
+
+    if (shockwaveEnabled)
+    {
+        spawnShockwaveRing(ToSimPos(pos), shockwaveRadius, shockwaveThickness, shockwaveLife, shockwaveColor);
+    }
+}
+
+void ParticleComponent::EmitClickBurst(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    bool enableSelfDestruct, float selfDestructAfterSeconds)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity);
+
+    if (enableSelfDestruct)
+    {
+        m_selfDestructActive = true;
+        m_selfDestructTimer = 0.0f;
+        m_selfDestructAfterSeconds = selfDestructAfterSeconds;
+    }
+}
+
+void ParticleComponent::EmitAura(
+    const FVector2& center,
+    float radius,
+    int count,
+    float radiusJitter,
+    float angularSpeedMin, float angularSpeedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    float drag, float gravity,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB)
+{
+    for (int i = 0; i < count; ++i)
+    {
+        const float ang = (float)i / (float)count * 6.2831853f;
+        Particle p;
+        p.isOrbital = true;
+        p.orbitalCenter = ToSimPos(center);
+        p.orbitalRadius = radius + randRange(-radiusJitter, radiusJitter);
+        p.orbitalAngularSpeed = randRange(angularSpeedMin, angularSpeedMax); // deg/sec
+        p.orbitalAngleDeg = ang * 180.0f / 3.14159265f;
+
+        p.position = FVector2(
+            p.orbitalCenter.x + cosf(ang) * p.orbitalRadius,
+            p.orbitalCenter.y + sinf(ang) * p.orbitalRadius);
+        p.velocity = FVector2(0.0f, 0.0f);
+        p.size = randRange(sizeMin, sizeMax);
+        p.rotation = randRange(0.0f, 360.0f);
+        p.angularVelocity = randRange(-90.0f, 90.0f);
+        p.life = 0.0f;
+        p.maxLife = randRange(lifeMin, lifeMax);
+        p.drag = drag;
+        p.gravity = gravity;
+        p.colorStart = colorA;
+        p.colorEnd = colorB;
+        m_particles.push_back(p);
+    }
+}
+
+void ParticleComponent::EmitElectric(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    float spreadRadians)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity,
+        spreadRadians);
+}
+
+void ParticleComponent::EmitPortalSwirl(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    float spreadRadians)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity,
+        spreadRadians);
 }
 
 // 내부 구현 -----------------------------------------------------------------
@@ -403,8 +601,10 @@ void ParticleComponent::createSoftCircleBitmap()
 
 void ParticleComponent::LoadData(const std::wstring& relativeOrAbsolutePath)
 {
+    std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + relativeOrAbsolutePath); // 파일 이름만 저장
     // 파일에서 텍스처 로드하여 파티클 비트맵 교체
-    std::shared_ptr<ID2D1Bitmap1> loaded = PackageResourceManager::GetInstance().CreateBitmapFromFile(relativeOrAbsolutePath.c_str());
+	std::shared_ptr<ID2D1Bitmap1> loaded = PackageResourceManager::GetInstance().CreateBitmapFromFile(
+			filePath.c_str());
     if (loaded)
     {
         m_particleBitmap = loaded;

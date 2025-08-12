@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <math.h>
 #include <algorithm>
@@ -9,19 +9,20 @@ class TColor
 public:
 	T r, g, b, a;
 
-	// ±âº» »ı¼ºÀÚ (¹İÅõ¸í °ËÁ¤»ö)
+	// ê¸°ë³¸ ìƒì„±ì (ë°˜íˆ¬ëª… ê²€ì •ìƒ‰)
 	TColor() : r(0), g(0), b(0), a(255) {}
 
-	// RGB »ı¼ºÀÚ (¾ËÆÄ ±âº»°ª: 255)
+	// RGB ìƒì„±ì (ì•ŒíŒŒ ê¸°ë³¸ê°’: 255)
 	TColor(T _r, T _g, T _b, T _a = 0) : r(_r), g(_g), b(_b), a(_a) {}
 
-	// ´ÜÀÏ °ª »ı¼ºÀÚ (±×·¹ÀÌ½ºÄÉÀÏ)
+	// ë‹¨ì¼ ê°’ ìƒì„±ì (ê·¸ë ˆì´ìŠ¤ì¼€ì¼)
 	TColor(T _all) : r(_all), g(_all), b(_all), a(_all) {}
 
-	// º¹»ç »ı¼ºÀÚ
+	// ë³µì‚¬ ìƒì„±ì
 	TColor(const TColor<T>& other) = default;
 
-	// ¿¬»êÀÚ ¿À¹ö·Îµù
+
+	// ì—°ì‚°ì ì˜¤ë²„ë¡œë”©
 	TColor operator*(const float& scalar) const {
 		return TColor(r * scalar, g * scalar, b * scalar, a * scalar);
 	}
@@ -38,7 +39,7 @@ public:
 		return TColor(r - rhs.r, g - rhs.g, b - rhs.b, a - rhs.a);
 	}
 
-	// ºñ±³ ¿¬»êÀÚ
+	// ë¹„êµ ì—°ì‚°ì
 	bool operator==(const TColor& rhs) const {
 		return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
 	}
@@ -47,7 +48,7 @@ public:
 		return !(*this == rhs);
 	}
 
-	// º¹ÇÕ ÇÒ´ç ¿¬»êÀÚ
+	// ë³µí•© í• ë‹¹ ì—°ì‚°ì
 	void operator+=(const TColor& rhs) {
 		r += rhs.r;
 		g += rhs.g;
@@ -74,7 +75,7 @@ public:
 		return (v < lo) ? lo : (hi < v) ? hi : v;
 	}
 
-	// Å¬·¥ÇÎ ÇÔ¼ö (0~255 ¹üÀ§ Á¦ÇÑ)
+	// í´ë¨í•‘ í•¨ìˆ˜ (0~255 ë²”ìœ„ ì œí•œ)
 	TColor Clamp() const {
 		return TColor(
 			clamp(r, T(0), T(255)),
@@ -84,12 +85,12 @@ public:
 		);
 	}
 
-	// ¼±Çü º¸°£
+	// ì„ í˜• ë³´ê°„
 	static TColor Lerp(const TColor& A, const TColor& B, float Alpha) {
 		return A * (1.0f - Alpha) + B * Alpha;
 	}
 
-	// ¹Ì¸® Á¤ÀÇµÈ »ö»óµé (static const)
+	// ë¯¸ë¦¬ ì •ì˜ëœ ìƒ‰ìƒë“¤ (static const)
 	static const TColor<T> Red;
 	static const TColor<T> Green;
 	static const TColor<T> Blue;
@@ -114,7 +115,7 @@ public:
 	static const TColor<T> Gold;
 	static const TColor<T> Transparent;
 };
-// static ¸â¹ö Á¤ÀÇ
+// static ë©¤ë²„ ì •ì˜
 template<typename T> const TColor<T> TColor<T>::Red = TColor<T>(255, 0, 0, 255);
 template<typename T> const TColor<T> TColor<T>::Green = TColor<T>(0, 255, 0, 255);
 template<typename T> const TColor<T> TColor<T>::Blue = TColor<T>(0, 0, 255, 255);

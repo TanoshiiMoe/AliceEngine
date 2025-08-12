@@ -18,6 +18,7 @@ public:
 	Scene* m_currentScene;	// 현재 씬
 
 	Scene* GetWorld();
+	WeakObjectPtr<Scene> GetWorldByWeak();
 	static Camera* GetCamera();
 
 	template<class T>

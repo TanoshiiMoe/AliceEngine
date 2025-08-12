@@ -38,6 +38,7 @@ void PlayerBike::Initialize()
 	if (Drone* drone = owner->AddComponent<Drone>(dronePath))
 	{
 		drone->SetDroneType(EDroneType::Player);
+		drone->initBodyPos = FVector2(-70, 120);
 		drone->SetAttackDelay(0.2f);
 	}
 	owner->AddComponent<BikeStatScript>();
