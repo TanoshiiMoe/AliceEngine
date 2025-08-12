@@ -19,5 +19,6 @@ private:
 	gameObject* m_passedTimeText{ nullptr };
 	gameObject* m_killEnemyText{ nullptr };
 
+    gameObject* m_sound;
     gameObject* m_widget;
 };

@@ -20,6 +20,15 @@ public:
 	// 플레이어 타임스케일 획득
 	float GetTimeScale() { return playerTimeScale; }
 
+	// 점프시키기
+	void Jump();
+
+	// 가속시키기
+	void Boost(float _time);
+
+	// 싼데비슷한
+	void Sande(float _time);
+
 private:
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
@@ -37,5 +46,14 @@ private:
 	class SpriteRenderer* m_fadeTargetSR = nullptr;
 	class gameObject* m_ghostGO = nullptr;
 	FTimerHandle m_fadeHandle;
+
+	// 타이머
+	bool bBoost = false;
+	float boostTimer = 0.0f;
+	float boostElipsed = 0.0f;
+
+	bool bSande = false;
+	float sandeTimer = 0.0f;
+	float sandeElipsed = 0.0f;
 };
 

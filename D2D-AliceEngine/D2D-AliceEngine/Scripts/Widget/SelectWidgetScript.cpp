@@ -47,6 +47,7 @@ void SelectWidgetScript::OnStart()
 	GetCamera()->AddChildObject(m_owner);
 
 	auto background = m_owner->AddComponent<SpriteRenderer>();
+	auto tutorial = m_owner->AddComponent<VideoComponent>();
 
 	auto continueText = m_owner->AddComponent<TextRenderComponent>();
 	auto closeText = m_owner->AddComponent<TextRenderComponent>();
@@ -57,10 +58,18 @@ void SelectWidgetScript::OnStart()
 	// Close
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
 
+	// Skip
+	auto skipText = m_owner->AddComponent<TextRenderComponent>();
+	auto skipButton = m_owner->AddComponent<ButtonComponent>();
+
 	// Select Stage Button
 	auto stage1 = m_owner->AddComponent<ButtonComponent>();
 	auto stage2 = m_owner->AddComponent<ButtonComponent>();
 	auto stage3 = m_owner->AddComponent<ButtonComponent>();
+
+	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
+	if (!bgmObj) return;
+	auto sound = bgmObj->GetComponent<AudioComponent>();
 
 	// ===================================================== //
 	background->LoadData(L"BackGround\\Background_Select.png");
@@ -69,6 +78,10 @@ void SelectWidgetScript::OnStart()
 	background->SetRelativePosition(CoordHelper::RatioCoordToScreen(backgroundSize, FVector2(0, 0)));
 	background->SetRelativeScale(FVector2(1, 1));
 	
+	tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm", 30, L"jpg", 95, true);
+	tutorial->m_layer = Define::Disable;
+	tutorial->SetRelativePosition(FVector2(-960, -550));
+
 	//continueText->SetFontSize(70.0f);
 	//continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	//continueText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
@@ -99,6 +112,30 @@ void SelectWidgetScript::OnStart()
 	closeButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
 	closeButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	closeButton->SetRelativePosition(FVector2(0, 400));
+
+	// ======================== skipText
+	skipText->SetFontSize(55.0f);
+	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	skipText->SetText(L"건너뛰기");
+	skipText->SetColor(FColor::White);
+	FVector2 skipTextRectSize = skipText->GetRelativeSize();
+	skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextRectSize, FVector2(-0.5, -0.5)));
+	skipText->SetRelativeScale(FVector2(1, 1));
+	skipText->SetRelativeRotation(0);
+	skipText->m_layer = Define::Disable;
+	skipButton->SetActive(false);
+	skipText->RemoveFromParent();
+	skipButton->AddChildComponent(skipText);
+
+	// ======================== skipButton
+	skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	skipButton->SetRelativePosition(FVector2(0, 350));
+	skipButton->SetRelativeScale(FVector2(1, 1));
+	skipButton->m_layer = Define::Disable;
 
 	// ===================== stage1
 	stage1->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
@@ -139,45 +176,62 @@ void SelectWidgetScript::OnStart()
 	// stage1 Button 효과 (초록색 글로우 - 쉬운 스테이지)
 	stage1->SetStateAction(Define::EButtonState::Hover, [stage1]()
 	{
-		stage1->StartHoverPulse(0.8f, 0.04f);
-		stage1->StartEffectAnimation(0.3f, 1.2f, FColor::Green);
+		stage1->StartHoverPulse(3.f, 0.01f);
+		stage1->StartEffectAnimation(0.3f, 1.2f, FColor::White);
 	});
 
 	stage1->SetStateAction(Define::EButtonState::HoverLeave, [stage1]()
 	{
 		stage1->StopHoverPulse();
-		stage1->StartEffectAnimation(0.2f, 0.0f, FColor::Green);
+		stage1->StartEffectAnimation(0.2f, 0.0f, FColor::White);
 	});
 
 	stage1->SetStateAction(Define::EButtonState::Release, [stage1]()
 	{
 		stage1->StopHoverPulse();
-		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::Green);
+		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
-	stage1->SetStateAction(Define::EButtonState::Pressed, []{
+	stage1->SetStateAction(Define::EButtonState::Pressed, [sound, tutorial, skipButton, skipText]{
 		
-		// TODO: 여기에 스테이지 씬으로 이동하는 코드 추가
-		SceneManager::ChangeScene(Define::Scene_Stage1);
+		skipButton->m_layer = Define::PopupButtonLayer;
+		skipButton->SetActive(true);
+		skipText->m_layer = Define::PopupTextLayer;
+
+		tutorial->m_layer = Define::PopupLayer;
+		tutorial->Play();
+
+		sound->PlayByName(L"Tutorial");
+
+		//SceneManager::ChangeScene(Define::Scene_Stage1);
+		});
+
+	skipButton->SetStateAction(Define::EButtonState::Pressed, [sound]()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+			sound->StopByName(L"Tutorial");
+			
+			SceneManager::ChangeScene(Define::Scene_Stage1);
 		});
 
 	// stage2 Button 효과 (노란색 글로우 - 보통 스테이지)
 	stage2->SetStateAction(Define::EButtonState::Hover, [stage2]()
 	{
-		stage2->StartHoverPulse(0.8f, 0.04f);
-		stage2->StartEffectAnimation(0.3f, 1.2f, FColor::Yellow);
+		stage2->StartHoverPulse(3.f, 0.01f);
+		stage2->StartEffectAnimation(0.3f, 1.2f, FColor::White);
 	});
 
 	stage2->SetStateAction(Define::EButtonState::HoverLeave, [stage2]()
 	{
 		stage2->StopHoverPulse();
-		stage2->StartEffectAnimation(0.2f, 0.0f, FColor::Yellow);
+		stage2->StartEffectAnimation(0.2f, 0.0f, FColor::White);
 	});
 
 	stage2->SetStateAction(Define::EButtonState::Release, [stage2]()
 	{
 		stage2->StopHoverPulse();
-		stage2->StartEffectAnimation(0.1f, 0.0f, FColor::Yellow);
+		stage2->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
 	stage2->SetStateAction(Define::EButtonState::Pressed, [] {
@@ -189,20 +243,20 @@ void SelectWidgetScript::OnStart()
 	// stage3 Button 효과 (빨간색 글로우 - 어려운 스테이지/보스)
 	stage3->SetStateAction(Define::EButtonState::Hover, [stage3]()
 	{
-		stage3->StartHoverPulse(0.8f, 0.04f);
-		stage3->StartEffectAnimation(0.3f, 1.2f, FColor::Red);
+		stage3->StartHoverPulse(3.f, 0.01f);
+		stage3->StartEffectAnimation(0.3f, 1.2f, FColor::White);
 	});
 
 	stage3->SetStateAction(Define::EButtonState::HoverLeave, [stage3]()
 	{
 		stage3->StopHoverPulse();
-		stage3->StartEffectAnimation(0.2f, 0.0f, FColor::Red);
+		stage3->StartEffectAnimation(0.2f, 0.0f, FColor::White);
 	});
 
 	stage3->SetStateAction(Define::EButtonState::Release, [stage3]()
 	{
 		stage3->StopHoverPulse();
-		stage3->StartEffectAnimation(0.1f, 0.0f, FColor::Red);
+		stage3->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
 	stage3->SetStateAction(Define::EButtonState::Pressed, [] {
@@ -231,7 +285,7 @@ void SelectWidgetScript::OnStart()
 	});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed,[] {
-		
+
 		SceneManager::ChangeScene(L"TitleScene");
 		});
 }

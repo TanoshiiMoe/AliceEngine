@@ -105,9 +105,45 @@ void GameOverWidgetScript::OnStart()
 		+ FVector2(400, 100));
 
 	// ==================== Delegate
+	toRestartButton->SetStateAction(Define::EButtonState::Hover, [toRestartButton]()
+		{
+			toRestartButton->StartHoverPulse(0.8f, 0.04f);
+			toRestartButton->StartEffectAnimation(0.3f, 1.2f, FColor::White);
+		});
+
+	toRestartButton->SetStateAction(Define::EButtonState::HoverLeave, [toRestartButton]()
+		{
+			toRestartButton->StopHoverPulse();
+			toRestartButton->StartEffectAnimation(0.2f, 0.0f, FColor::White);
+		});
+
+	toRestartButton->SetStateAction(Define::EButtonState::Release, [toRestartButton]()
+		{
+			toRestartButton->StopHoverPulse();
+			toRestartButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
+		});
+
 	toRestartButton->SetStateAction(Define::EButtonState::Pressed, [] {
 		std::wstring prevScene = SceneManager::GetPrevSceneName();
 		SceneManager::ChangeScene(prevScene);
+		});
+
+	toMainButton->SetStateAction(Define::EButtonState::Hover, [toMainButton]()
+		{
+			toMainButton->StartHoverPulse(0.8f, 0.04f);
+			toMainButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+		});
+
+	toMainButton->SetStateAction(Define::EButtonState::HoverLeave, [toMainButton]()
+		{
+			toMainButton->StopHoverPulse();
+			toMainButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+		});
+
+	toMainButton->SetStateAction(Define::EButtonState::Release, [toMainButton]()
+		{
+			toMainButton->StopHoverPulse();
+			toMainButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
 		});
 
 	toMainButton->SetStateAction(Define::EButtonState::Pressed, [] {

@@ -12,7 +12,6 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../../Scripts/BackGroundImage.h"
-#include "../../Scripts/Audio.h"
 #include "../../Scripts/UI_Script.h"
 #include "../../Scripts/BackGroundVideo.h"
 #include "../../Prefab/Truck.h"
@@ -37,7 +36,9 @@
 #include <Scripts/Enemy/Spawn/SpawnCollider.h>
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
+#include "Scripts/Enemy/Spawn/EnemyDespawner.h"
 #include <Component/Effect/ParticleComponent.h>
+#include <Scripts/Audio/StageAudioScript.h>
 
 void Scene_Stage1::Initialize()
 {
@@ -93,12 +94,15 @@ void Scene_Stage1::OnEnter()
 	GamePlayManager::GetInstance().SetPassedTime(0);
 	GamePlayManager::GetInstance().SetKillEnemyAmount(0);
 
+	// 게임 일시정지 시키기
+	GamePlayManager::GetInstance().PauseGame();
+
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
 
 	// 오디오 추가, 오디오 관련 스크립트 넣기
 	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<Audio>();
+	m_sound->AddComponent<StageAudioScript>();
 
 	// 타일맵 추가
 	m_tile = NewObject<gameObject>(L"TileMap");
@@ -116,6 +120,10 @@ void Scene_Stage1::OnEnter()
 	auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
 	tb->SetBox(FVector2(3300.0f, 800.0f), 1);
 	//owner->transform()->SetPivot(0.5f, 0.5f);
+
+	// 디스포너 생성
+	gameObject* deSpawner = NewObject<gameObject>(L"DeSpwaner");
+	deSpawner->AddComponent<EnemyDespawner>();
 
 	// 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
 	m_button = NewObject<gameObject>(L"PauseButton");
@@ -140,7 +148,7 @@ void Scene_Stage1::OnEnter()
 		if (Input::IsKeyPressed(VK_6)) {
 			GamePlayManager::GetInstance().PlayBossMode();
 		}
-		if (Input::IsKeyPressed(VK_P)) {
+		/*if (Input::IsKeyPressed(VK_P)) {
 			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
 			{
 				t->AddMaxSpeed(50);
@@ -151,7 +159,7 @@ void Scene_Stage1::OnEnter()
 			{
 				t->AddMaxSpeed(-50);
 			}
-		}
+		}*/
 	});
 }
 

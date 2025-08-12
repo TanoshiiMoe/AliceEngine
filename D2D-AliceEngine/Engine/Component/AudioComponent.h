@@ -48,7 +48,7 @@ public:
 	void ResumeByName(const std::wstring& name);
 	void StopByName(const std::wstring& name);
 
-	void PauseByType(SoundType type, bool paused);
+	void PauseByType(SoundType type, bool paused = true);
 	void ResumeByType(SoundType type);
 	void StopByType(SoundType type);
 

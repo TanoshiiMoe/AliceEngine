@@ -169,9 +169,6 @@
     <ClInclude Include="Resource.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\Audio\TitleAudioScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Player\PlayerManager.h">
       <Filter>Scripts\Player</Filter>
     </ClInclude>
@@ -304,6 +301,21 @@
     <ClInclude Include="Helper\ParticleHelper.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Spawn\EnemyDespawner.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Enemy\Jump\JumpTrigger.h">
+      <Filter>PreCompiledHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Audio\GameClearAudioScript.h">
+      <Filter>Scripts\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Audio\TitleAudioScript.h">
+      <Filter>Scripts\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Audio\StageAudioScript.h">
+      <Filter>Scripts\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DemoGameApp.cpp">
@@ -398,9 +410,6 @@
     </ClCompile>
     <ClCompile Include="Scene\KangScene\KangScene.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Audio\TitleAudioScript.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Prefab\Enemy\EnemyBike.cpp">
       <Filter>Prefab\Enemy</Filter>
@@ -518,10 +527,21 @@
     <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
     <ClCompile Include="Scene\GameScene\Scene_Stage1.cpp" />
     <ClCompile Include="Scripts\Widget\GameOverWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Enemy\Spawn\EnemyDespawner.cpp" />
+    <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />
     <ClCompile Include="Scripts\Widget\GameClearWidgetScript.cpp">
       <Filter>Scripts\Widget</Filter>
     </ClCompile>
     <ClCompile Include="Helper\ParticleHelper.cpp" />
+    <ClCompile Include="Scripts\Audio\GameClearAudioScript.cpp">
+      <Filter>Scripts\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Audio\TitleAudioScript.cpp">
+      <Filter>Scripts\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Audio\StageAudioScript.cpp">
+      <Filter>Scripts\Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />

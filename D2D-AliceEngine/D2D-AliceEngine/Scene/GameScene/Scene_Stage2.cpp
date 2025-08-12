@@ -13,7 +13,6 @@
 #include <Scripts/Camera/CameraMover.h>
 #include <Prefab/Player/PlayerBike.h>
 #include <Scripts/BackGroundRender.h>
-#include <Scripts/Audio.h>
 #include <Scripts/Enemy/Spawn/EnemySpawner.h>
 #include <Prefab/Truck.h>
 #include <GameManager/BulletManager.h>
@@ -21,7 +20,9 @@
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Widget/StageWidgetScript.h>
+#include <Scripts/Enemy/Spawn/EnemyDespawner.h>
 #include <Component/Effect/ParticleComponent.h>
+#include <Scripts/Audio/StageAudioScript.h>
 
 void Scene_Stage2::Initialize()
 {
@@ -99,25 +100,28 @@ void Scene_Stage2::OnEnter()
 	GamePlayManager::GetInstance().SetPassedTime(0);
 	GamePlayManager::GetInstance().SetKillEnemyAmount(0);
 
+	// 게임 일시정지 시키기
+	GamePlayManager::GetInstance().PauseGame();
+
     //m_bg = NewObject<gameObject>(L"BackGround");
     //m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
 
     // 오디오 추가, 오디오 관련 스크립트 넣기
     m_sound = NewObject<gameObject>(L"Sound");
-    m_sound->AddComponent<Audio>();
+    m_sound->AddComponent<StageAudioScript>();
 
     // 적 스포너 매니저 생성
     enemySpawnTriggerBox = NewObject<gameObject>(L"EnemySpawnTriggerBox");
     auto tb = enemySpawnTriggerBox->AddComponent<EnemySpawnTriggerBox>();
     tb->SetBox(FVector2(3300.0f, 700.0f), 1);
 
+	// 디스포너 생성
+	gameObject* deSpawner = NewObject<gameObject>(L"DeSpwaner");
+	deSpawner->AddComponent<EnemyDespawner>();
+
     // 이거 띄우면 적이 생성이 안되는데 확인 부탁드립니다
     m_button = NewObject<gameObject>(L"PauseButton");
     m_button->AddComponent<StageWidgetScript>();
-
-    // Truck(점프대)
-    m_truck = NewObject<gameObject>(L"Truck");
-    m_truck->AddComponent<Truck>();
 
     // 디버그용 씬 전환
     gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
@@ -134,7 +138,7 @@ void Scene_Stage2::OnEnter()
 		if (Input::IsKeyPressed(VK_6)) {
 			GamePlayManager::GetInstance().PlayBossMode();
 		}
-		if (Input::IsKeyPressed(VK_P)) {
+		/*if (Input::IsKeyPressed(VK_P)) {
 			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
 			{
 				t->AddMaxSpeed(50);
@@ -145,7 +149,7 @@ void Scene_Stage2::OnEnter()
 			{
 				t->AddMaxSpeed(-50);
 			}
-		}
+		}*/
     });
 }
 

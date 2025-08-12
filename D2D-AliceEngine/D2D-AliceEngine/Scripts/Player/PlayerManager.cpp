@@ -115,25 +115,9 @@ void PlayerManager::Input()
 {
 	// 여기에 Input에 대한 로직 작성
 
-	if (Input::IsKeyDown(VK_8))
-	{
-		owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
-	}
-	if (Input::IsKeyDown(VK_9))
-	{
-		if (owner->GetComponent<Collider>() == nullptr)
-			owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 60));
-	}
-
-
-	// 산데비스탄 테스트
-	if (Input::IsKeyPressed(VK_G)) {
-		if (auto prism = owner->GetComponent<Prism>())
-		{
-			prism->SetActive(!prism->IsActive());
-			TimerManager::GetInstance().SetGlobalTimeScale(0.5);
-			playerTimeScale = 2.0f;
-		}
+	// 산데비스탄 실행키
+	if (Input::IsKeyPressed(VK_Q)) {
+		Sande(5.0f);
 	}
 }
 
@@ -215,4 +199,51 @@ void PlayerManager::DelayDestroy()
         1.0f,
         false,
         1.0f);
+}
+
+void PlayerManager::Jump()
+{
+	owner->GetComponent<BikeMovementScript>()->Jump();
+}
+
+void PlayerManager::Boost(float _time)
+{
+
+}
+
+void PlayerManager::Sande(float _time)
+{
+	// pause 상태 아닐시 실행
+	if (!GamePlayManager::GetInstance().IsPaused()) {
+		if (auto prism = owner->GetComponent<Prism>())
+		{
+			// 조건 저장
+			bool bVal = !prism->IsActive();
+			prism->SetActive(bVal);
+			bSande = bVal;
+
+			// 배터리 조건확인
+
+			// 타이머 설정
+			if (bVal)
+				sandeTimer = _time;
+			else
+				sandeTimer = 0.0f;
+			
+			sandeElipsed = 0.0f;
+
+			// 타임스케일 조절
+			if (bVal) {
+				TimerManager::GetInstance().SetGlobalTimeScale(0.5f);
+				playerTimeScale = 2.0f;
+			}
+			else {
+				TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
+				playerTimeScale = 1.0f;
+			}
+		}
+		else {
+			OutputDebugStringW(L"플레이어에게 Prism 컴포넌트가 없음!!\n");
+		}
+	}
 }
