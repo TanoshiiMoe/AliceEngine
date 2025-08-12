@@ -28,6 +28,15 @@ public:
 
 	// 싼데비슷한
 	void Sande(float _time = 5.0f);
+	
+	// 무적상태 받아오기
+	bool GetInvincible() { return isInvincible; }
+
+	// 산데비스탄 상태출력
+	bool GetSande() { return bSande; }
+
+	// 부스트 상태출력
+	bool GetBoost() { return bBoost; }
 
 private:
 	AnimatorInstance* animInstance = nullptr;
@@ -55,5 +64,8 @@ private:
 	bool bSande = false;
 	float sandeTimer = 0.0f;
 	float sandeElipsed = 0.0f;
+
+	// 무적상태인가
+	bool isInvincible = false;
 };
 

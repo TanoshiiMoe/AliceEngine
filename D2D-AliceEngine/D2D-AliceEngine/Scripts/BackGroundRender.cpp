@@ -48,7 +48,7 @@ void BackGroundRender::Update(const float& deltaSeconds)
         if (player->transform())
             playerX = player->transform()->GetPosition().x;
         if (BikeMovementScript* pm = player->GetComponent<BikeMovementScript>())
-            playerSpeed = pm->GetMaxSpeed();// *pm->GetSpeedModifierValue();
+            playerSpeed = pm->GetCurrentSpeed() * pm->GetSpeedModifierValue();
     }
 
     // tiles 기반으로 +x 방향 진행, 플레이어 기준 뒤로 흐르는 효과
@@ -96,6 +96,9 @@ void BackGroundRender::Update(const float& deltaSeconds)
             std::rotate(layer.tiles.begin(), layer.tiles.begin() + 1, layer.tiles.begin() + 3);
         }
     }
+
+    // 하늘 옮기기
+    //m_sky->transform()->SetPosition(0.0f, -(GetWorld()->GetCamera()->GetPosition().y));
 }
 
 void BackGroundRender::LateUpdate(const float& deltaSeconds)
@@ -114,15 +117,18 @@ void BackGroundRender::OnStart()
     // speed 파라미터는 계수 플레이어 속도에 비례해서 이동하게
     
     // 원경은 카메라에 박기로 함
-	WeakObjectPtr<gameObject> bg = GetWorld()->NewObject<gameObject>(L"TopFar");
-	SpriteRenderer* bgsr = bg->AddComponent<SpriteRenderer>();
+	m_sky = GetWorld()->NewObject<gameObject>(L"TopFar");
+	SpriteRenderer* bgsr = m_sky->AddComponent<SpriteRenderer>();
 	bgsr->LoadData(L"BackGround\\BG_Sky.png");
 	bgsr->m_layer = -5000 + m_backgroundRelativeLayer;
-	GetWorld()->GetCamera()->AddChildObject(bg.lock());
-    bg->transform()->AddPosition(0.0f, 250.0f);
-    //AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png", -5000 + m_backgroundRelativeLayer, 400.0f, 0.01f);
+	GetWorld()->GetCamera()->AddChildObject(m_sky);
+    m_sky->transform()->SetPosition(0.0f, 180.0f);
+    //AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png", -5000 + m_backgroundRelativeLayer, 400.0f, 1.0f);
     
-    AddLooping(L"TopMid",    L"BackGround\\BG_Building.png",    -7  + m_topRelativeLayer, 500.0f, 0.4f);
+    AddLooping(L"TopMid1",    L"BackGround\\BG_Building_1.png",    -7  + m_topRelativeLayer, 500.0f, 0.5f);
+    AddLooping(L"TopMid2", L"BackGround\\BG_Building_2.png", -8 + m_topRelativeLayer, 500.0f, 0.35f);
+    AddLooping(L"TopMid3", L"BackGround\\BG_Building_3.png", -9 + m_topRelativeLayer, 500.0f, 0.2f);
+
     AddLooping(L"TopNear",   L"BackGround\\BG_BackBarrier.png", -5  + m_topRelativeLayer, 330.0f, 1.0f);
     // =========================== Player가 여기에 있고, 위 아래 배경이라는 뜻 ===================================
     AddLooping(L"BotNear",   L"BackGround\\BG_GuardRail.png",  5  + m_bottomRelativeLayer, -180.0f, 1.0f);

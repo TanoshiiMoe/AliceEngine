@@ -19,6 +19,7 @@
 #include <Scripts/Bike/BikeStatScript.h>
 #include <Prefab/Enemy/Core/Car.h>
 #include <Scripts/Enemy/EnemyStatScript.h>
+#include "../Player/PlayerManager.h"
 #include <Helper/ParticleHelper.h>
 
 void Bullet::Initialize()
@@ -236,7 +237,8 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 			{
 				// Bullet의 damage 변수 사용
-				bs->m_bikeStat->DecreaseAbility("HP", damage);
+				if(!PlayerManager::instance->GetInvincible())
+					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 
@@ -260,7 +262,8 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 			{
 				// Bullet의 damage 변수 사용
-				bs->m_bikeStat->DecreaseAbility("HP", damage);
+				if (!PlayerManager::instance->GetInvincible())
+					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 

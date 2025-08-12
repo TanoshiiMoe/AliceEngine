@@ -143,7 +143,8 @@ void PlayerManager::Input()
 
 	// 부스터 실행키
 	if (Input::IsKeyPressed(VK_LSHIFT)) {
-		Boost(5.0f);
+		if(!bBoost)
+			Boost(5.0f);
 	}
 }
 
@@ -245,6 +246,7 @@ void PlayerManager::Boost(float _time, bool _battDec)
 				if(_battDec)
 					batteryCount -= 3;
 				bBoost = true;
+				isInvincible = true;
 				boostTimer = _time;
 				boostElipsed = 0.0f;
 
@@ -252,6 +254,7 @@ void PlayerManager::Boost(float _time, bool _battDec)
 			}
 			else {
 				bBoost = false;
+				isInvincible = false;
 				boostTimer = 0.0f;
 				boostElipsed = 0.0f;
 

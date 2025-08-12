@@ -23,7 +23,7 @@ void PlayerMovement::OnStart()
 		bMovement = owner->AddComponent<BikeMovementScript>();
 
 	if (bMovement) {
-		initSpeed = (minSpeed + maxSpeed) * 0.5;
+		initSpeed = minSpeed +  minSpeed * 0.25;
 		bMovement->SetAcceleration(100.0f);
 	}
 

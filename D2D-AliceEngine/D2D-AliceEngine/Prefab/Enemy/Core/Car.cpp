@@ -15,6 +15,8 @@
 #include <Scripts/Enemy/EnemyStatScript.h>
 #include <Component/Collider.h>
 #include <Scripts/Bike/BikeStatScript.h>
+#include "Scripts/Player/PlayerManager.h"
+#include "Scripts/Bike/BikeMovementScript.h"
 #include <Helper/ParticleHelper.h>
 
 void Car::Initialize()
@@ -146,7 +148,11 @@ void Car::OnTriggerEnter2D(Collider* collider)
 		if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 		{
 			// Bullet의 damage 변수 사용
-			bs->m_bikeStat->DecreaseAbility("HP", 8);
+            if (!PlayerManager::instance->GetInvincible()) {
+                bs->m_bikeStat->DecreaseAbility("HP", 8);
+                collider->GetOwner()->GetComponent<BikeMovementScript>();
+            }
+			    
 		}
 
 		if (gameObject* player = GamePlayManager::GetInstance().GetPlayer())
