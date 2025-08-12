@@ -16,6 +16,8 @@ public:
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
 
+	void SetProgress();
+
 	gameObject* m_owner;
 
 	TextRenderComponent* m_passedTimeText;
@@ -28,5 +30,10 @@ public:
 	ProgressBarComponent* m_speedProgress;
 
 	//BikeMovementScript* m_bike;
+
+private:
+	int maxBattery = 5;
+	int prevBattery = 0;
+	int prevKillAmount = 0;
 };
 
