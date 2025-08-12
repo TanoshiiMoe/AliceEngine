@@ -628,7 +628,7 @@ void Drone::OnStart()
 	body->m_layer = 20000;
 	body->LoadData(spritePath.body);
 	body->SetRelativeScale(initBodySize);
-	body->SetRelativePosition(initBodyPos);
+   	body->SetRelativePosition(initBodyPos);
 
 	arm = owner->AddComponent<SpriteRenderer>();
 	arm->m_layer = 20001;
