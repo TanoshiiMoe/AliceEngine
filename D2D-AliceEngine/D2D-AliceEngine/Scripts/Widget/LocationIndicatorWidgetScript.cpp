@@ -164,18 +164,31 @@ void LocationIndicatorWidgetScript::updateProgressAndMarker(const float& deltaSe
         {
             m_trailAccumulator -= interval;
             //m_indicatorObject->SetPosition(FVector2(currentX, m_barY));
-            auto* particle = owner->AddComponent<ParticleComponent>();
-            particle->LoadData(L"Effect/LocationIndicator.png");
-            particle->SetDrawType(Define::EDrawType::ScreenSpace);
-            particle->EmitLocationIndicator(FVector2(xOnBar, m_barY), 40);
+            if (ParticleComponent* particle = owner->GetComponent<ParticleComponent>())
+            {
+                particle->EmitLocationIndicator(FVector2(xOnBar, m_barY), 40);
+            }
+            else
+            {
+                auto* particle2 = owner->AddComponent<ParticleComponent>();
+                particle2->LoadData(L"Effect/LocationIndicator.png");
+                particle2->SetDrawType(Define::EDrawType::ScreenSpace);
+                particle2->EmitLocationIndicator(FVector2(xOnBar, m_barY), 40);
+            }
         }
 
         if (owner->GetPosition().x < GamePlayManager::GetInstance().GetStopXAxis() / 2)
         {
-            auto* particle = owner->AddComponent<ParticleComponent>();
-            particle->LoadData(L"Effect/LocationIndicator.png");
-            particle->SetDrawType(Define::EDrawType::ScreenSpace);
-            particle->EmitLocationIndicator(FVector2(0, m_barY), 40, D2D1::ColorF(10.9f, 0.6f, 0.2f, 0.0f), D2D1::ColorF(21.0f, 0.0f, 0.0f, 0.9f));
+            if (ParticleComponent* particle = owner->GetComponent<ParticleComponent>())
+            {
+                particle->EmitLocationIndicator(FVector2(0, m_barY), 40, D2D1::ColorF(10.9f, 0.6f, 0.2f, 0.0f), D2D1::ColorF(21.0f, 0.0f, 0.0f, 0.9f));
+            }
+            else
+            {
+                auto* particle2 = owner->AddComponent<ParticleComponent>();
+                particle2->LoadData(L"Effect/LocationIndicator.png");
+                particle2->SetDrawType(Define::EDrawType::ScreenSpace);
+            }
         }
     }
 }
