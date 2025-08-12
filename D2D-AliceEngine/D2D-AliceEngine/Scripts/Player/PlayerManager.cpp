@@ -128,18 +128,21 @@ void PlayerManager::Input()
 
 	// 산데비스탄 실행키
 	if (Input::IsKeyPressed(VK_G)) {
-		if (auto prism = owner->GetComponent<Prism>())
-		{
-			bool bVal = !prism->IsActive();
-			prism->SetActive(bVal);
+		// pause 상태 아닐시 실행
+		if (!GamePlayManager::GetInstance().IsPaused()) {
+			if (auto prism = owner->GetComponent<Prism>())
+			{
+				bool bVal = !prism->IsActive();
+				prism->SetActive(bVal);
 
-			if (bVal) {
-				TimerManager::GetInstance().SetGlobalTimeScale(0.5f);
-				playerTimeScale = 2.0f;
-			}
-			else {
-				TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
-				playerTimeScale = 1.0f;
+				if (bVal) {
+					TimerManager::GetInstance().SetGlobalTimeScale(0.5f);
+					playerTimeScale = 2.0f;
+				}
+				else {
+					TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
+					playerTimeScale = 1.0f;
+				}
 			}
 		}
 	}
