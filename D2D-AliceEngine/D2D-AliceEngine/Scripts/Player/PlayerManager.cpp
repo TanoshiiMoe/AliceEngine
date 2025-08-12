@@ -16,6 +16,7 @@
 #include <GameManager/GamePlayManager.h>
 #include <Object/gameObject.h>
 #include <Prefab/Enemy/Core/Car.h>
+#include "PlayerMovement.h"
 
 PlayerManager* PlayerManager::instance = nullptr;
 
@@ -109,6 +110,26 @@ void PlayerManager::Update(const float& deltaSeconds)
 		if (t > 1.0f) t = 1.0f;
 		m_fadeTargetSR->SetOpacity(1.0f - t);
 	}
+
+	// 산데비스탄 종료타이머
+	if (bSande) {
+		if (sandeElipsed > sandeTimer)
+			Sande();
+
+		sandeElipsed += deltaSeconds * TimerManager::GetInstance().GetGlobalTimeScale();
+	}
+
+	// 부스터(가속) 종료타이머
+	if (bBoost) {
+		if (boostElipsed > boostTimer)
+			Boost();
+
+		boostElipsed += (deltaSeconds * 0.5f) * TimerManager::GetInstance().GetGlobalTimeScale();
+		
+		/*std::wstring message = L"BoostTime : " + std::to_wstring(boostElipsed) + L"\n";
+		OutputDebugStringW(message.c_str());*/
+	}
+
 }
  
 void PlayerManager::Input()
@@ -118,6 +139,11 @@ void PlayerManager::Input()
 	// 산데비스탄 실행키
 	if (Input::IsKeyPressed(VK_Q)) {
 		Sande(5.0f);
+	}
+
+	// 부스터 실행키
+	if (Input::IsKeyPressed(VK_LSHIFT)) {
+		Boost(5.0f);
 	}
 }
 
@@ -208,7 +234,30 @@ void PlayerManager::Jump()
 
 void PlayerManager::Boost(float _time)
 {
+	// pause 상태 아닐시 실행
+	if (!GamePlayManager::GetInstance().IsPaused()) {
+		if (auto pm = owner->GetComponent<PlayerMovement>()) {
 
+			// 배터리 가져오기
+			int& batteryCount = GamePlayManager::GetInstance().batteryCount;
+
+			if (!bBoost && batteryCount >= 3) {
+				batteryCount -= 3;
+				bBoost = true;
+				boostTimer = _time;
+				boostElipsed = 0.0f;
+
+				pm->SetBoost(true);
+			}
+			else {
+				bBoost = false;
+				boostTimer = 0.0f;
+				boostElipsed = 0.0f;
+
+				pm->SetBoost(false);
+			}
+		}
+	}
 }
 
 void PlayerManager::Sande(float _time)
@@ -219,25 +268,40 @@ void PlayerManager::Sande(float _time)
 		{
 			// 조건 저장
 			bool bVal = !prism->IsActive();
-			prism->SetActive(bVal);
-			bSande = bVal;
-
-			// 배터리 조건확인
-
-			// 타이머 설정
-			if (bVal)
-				sandeTimer = _time;
-			else
-				sandeTimer = 0.0f;
 			
-			sandeElipsed = 0.0f;
+			// 배터리 조건계산
+			int& batteryCount = GamePlayManager::GetInstance().batteryCount;
 
-			// 타임스케일 조절
 			if (bVal) {
-				TimerManager::GetInstance().SetGlobalTimeScale(0.5f);
-				playerTimeScale = 2.0f;
+				if (batteryCount >= 3) {
+					batteryCount -= 3;
+
+					// 조건 설정
+					prism->SetActive(true);
+					bSande = true;
+
+					// 타이머 설정
+					sandeTimer = _time;
+					sandeElipsed = 0.0f;
+
+					// 타임스케일 조절
+					TimerManager::GetInstance().SetGlobalTimeScale(0.5f);
+					playerTimeScale = 2.0f;
+				}
+				else {
+					// 배터리 부족시 실행할 코드들
+				}
 			}
 			else {
+				// 조건 설정
+				prism->SetActive(false);
+				bSande = false;
+
+				// 타이머 설정
+				sandeTimer = 0.0f;
+				sandeElipsed = 0.0f;
+
+				// 타임스케일 조절
 				TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
 				playerTimeScale = 1.0f;
 			}

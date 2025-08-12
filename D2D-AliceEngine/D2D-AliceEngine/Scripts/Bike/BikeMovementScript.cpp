@@ -13,6 +13,7 @@
 #include <Manager/UpdateTaskManager.h>
 #include <Component/SkewTransform.h>
 #include <Animation/AnimatorInstance.h>
+#include "Component/Collider.h"
 
 void BikeMovementScript::Initialize()
 {
@@ -86,6 +87,9 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 			// 착지 체크
 			if (pos.y <= m_groundY)
 			{
+				// 콜라이더 돌려놓기
+				owner->GetComponent<Collider>()->SetLayer(prevCollLayer);
+
 				pos.y = m_groundY;
 				m_isJumping = false;
 				m_jumpVelocity = 0.0f;
@@ -191,6 +195,10 @@ void BikeMovementScript::Jump()
 	// 점프 입력 처리
 	if (!m_isJumping && !m_hitReaction)
 	{
+		// 콜라이더 쌉무시
+		prevCollLayer = owner->GetComponent<Collider>()->GetLayer();
+		owner->GetComponent<Collider>()->SetLayer(10);
+
 		m_isJumping = true;
 		m_groundY = owner->GetComponent<SkewTransform>()->GetRealPos().y;
 		m_jumpVelocity = m_jumpInitialVelocity;
