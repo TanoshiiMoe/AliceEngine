@@ -77,7 +77,7 @@ void Scene::Update()
 		m_mouseParticle->ToggleMouseTrail();
 	}
 
-	if (Input::IsMouseLeftPressed())
+	if (TimerManager::GetInstance().GetGlobalTimeScale() > 0 && Input::IsMouseLeftPressed())
 	{
 		/*WeakObjectPtr<gameObject> go  = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
 		GetCamera()->AddChildObject(go.Get());

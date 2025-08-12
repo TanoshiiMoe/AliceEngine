@@ -9,8 +9,8 @@ namespace Define
 	static const int SCREEN_WIDTH = 1920;	// 화면 너비
 	static const int SCREEN_HEIGHT = 1080;	// 화면 높이
 	static const int FRAME_RATE = 60;		// 프레임 레이트
-	static const std::wstring WINDOW_CLASS_NAME = L"Sun, Earth, Moon";	// 윈도우 클래스 이름
-	static const std::wstring WINDOW_TITLE = L"Sun, Earth, Moon Title";		// 윈도우 타이틀
+	static const std::wstring WINDOW_CLASS_NAME = L"Game";	// 윈도우 클래스 이름
+	static const std::wstring WINDOW_TITLE = L"Alice Engine";		// 윈도우 타이틀
 	static const std::wstring MODULE_PATH;		// 모듈 경로
 	static const std::wstring WORKING_PATH;	// 작업 디렉토리 경로
 	static const bool ENABLE_DEBUG_MODE = true; // 디버그 모드 활성화 여부
