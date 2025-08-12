@@ -154,6 +154,21 @@ void Car::OnTriggerEnter2D(Collider* collider)
 			FVector2 pos = player->GetPosition() + FVector2(40, 0);
 			//FVector2 pos = player->GetPosition();
 			ParticleHelper::SpawnParticleExplosion(pos, Define::Effect_Texture_Collision);
+			//ParticleHelper::SpawnParticleExplosionByValue(
+			//    pos, 70,
+			//    200.0f, 520.0f,
+			//    16.0f, 38.0f,
+			//    0.6f, 0.9f,
+			//	  FColor(1.0f, 0.55f, 0.15f, 1.0f), // 주황
+			//    FColor(0.9f, 0.2f, 0.0f, 0.0f),   // 붉은 꼬리
+			//    4.0f,
+			//    200.0f,
+			//    true,
+			//    20,8.0f,0.5f,
+			//    FColor(1.0f, 0.8f, 0.4f, 0.8f),
+			//    true,
+			//    Define::Effect_Texture_Collision
+			//);
 		}
 		//GetWorld()->RemoveObject(GetOwner());
 	}

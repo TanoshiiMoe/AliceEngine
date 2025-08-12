@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "ParticleComponent.h"
-
 #include <Manager/D2DRenderManager.h>
 #include <Manager/PackageResourceManager.h>
 #include <System/RenderSystem.h>
@@ -284,6 +283,158 @@ void ParticleComponent::EmitPortalSwirl(const FVector2& pos, int count)
         D2D1::ColorF(0.7f, 0.2f, 1.0f, 1.0f),
         D2D1::ColorF(0.2f, 0.1f, 0.5f, 0.0f),
         0.8f, 0.0f);
+}
+
+// 커스텀 프리셋 오버로드 구현 ----------------------------------------------
+void ParticleComponent::EmitExplosion(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    bool shockwaveEnabled,
+    float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+    const D2D1_COLOR_F& shockwaveColor)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity);
+
+    if (shockwaveEnabled)
+    {
+        spawnShockwaveRing(ToSimPos(pos), shockwaveRadius, shockwaveThickness, shockwaveLife, shockwaveColor);
+    }
+}
+
+void ParticleComponent::EmitImpact(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    bool shockwaveEnabled,
+    float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+    const D2D1_COLOR_F& shockwaveColor)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity);
+
+    if (shockwaveEnabled)
+    {
+        spawnShockwaveRing(ToSimPos(pos), shockwaveRadius, shockwaveThickness, shockwaveLife, shockwaveColor);
+    }
+}
+
+void ParticleComponent::EmitClickBurst(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    bool enableSelfDestruct, float selfDestructAfterSeconds)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity);
+
+    if (enableSelfDestruct)
+    {
+        m_selfDestructActive = true;
+        m_selfDestructTimer = 0.0f;
+        m_selfDestructAfterSeconds = selfDestructAfterSeconds;
+    }
+}
+
+void ParticleComponent::EmitAura(
+    const FVector2& center,
+    float radius,
+    int count,
+    float radiusJitter,
+    float angularSpeedMin, float angularSpeedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    float drag, float gravity,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB)
+{
+    for (int i = 0; i < count; ++i)
+    {
+        const float ang = (float)i / (float)count * 6.2831853f;
+        Particle p;
+        p.isOrbital = true;
+        p.orbitalCenter = ToSimPos(center);
+        p.orbitalRadius = radius + randRange(-radiusJitter, radiusJitter);
+        p.orbitalAngularSpeed = randRange(angularSpeedMin, angularSpeedMax); // deg/sec
+        p.orbitalAngleDeg = ang * 180.0f / 3.14159265f;
+
+        p.position = FVector2(
+            p.orbitalCenter.x + cosf(ang) * p.orbitalRadius,
+            p.orbitalCenter.y + sinf(ang) * p.orbitalRadius);
+        p.velocity = FVector2(0.0f, 0.0f);
+        p.size = randRange(sizeMin, sizeMax);
+        p.rotation = randRange(0.0f, 360.0f);
+        p.angularVelocity = randRange(-90.0f, 90.0f);
+        p.life = 0.0f;
+        p.maxLife = randRange(lifeMin, lifeMax);
+        p.drag = drag;
+        p.gravity = gravity;
+        p.colorStart = colorA;
+        p.colorEnd = colorB;
+        m_particles.push_back(p);
+    }
+}
+
+void ParticleComponent::EmitElectric(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    float spreadRadians)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity,
+        spreadRadians);
+}
+
+void ParticleComponent::EmitPortalSwirl(
+    const FVector2& pos,
+    int count,
+    float speedMin, float speedMax,
+    float sizeMin, float sizeMax,
+    float lifeMin, float lifeMax,
+    const D2D1_COLOR_F& colorA, const D2D1_COLOR_F& colorB,
+    float drag, float gravity,
+    float spreadRadians)
+{
+    emitBurstCommon(ToSimPos(pos), count,
+        speedMin, speedMax,
+        sizeMin, sizeMax,
+        lifeMin, lifeMax,
+        colorA, colorB,
+        drag, gravity,
+        spreadRadians);
 }
 
 // 내부 구현 -----------------------------------------------------------------

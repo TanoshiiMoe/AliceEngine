@@ -156,3 +156,332 @@ void ParticleHelper::SpawnParticlePortal(const FVector2& pos, const std::wstring
 		pc->EmitPortalSwirl(FVector2(0, 0));
 	}
 }
+
+// ===================== ByValue =====================
+static WeakObjectPtr<gameObject> EnsureOrCreateNamedGO(const WeakObjectPtr<Scene>& sceneWeak, const wchar_t* name)
+{
+	WeakObjectPtr<gameObject> go = sceneWeak->FindObjectByName<gameObject>(name);
+	if (!go)
+	{
+		go = sceneWeak->NewObject<gameObject>(name);
+	}
+	return go;
+}
+
+#include <d2d1.h>
+
+void ParticleHelper::SpawnParticleExplosionByValue(
+	const FVector2& pos,
+	int count,
+	float speedMin, float speedMax,
+	float sizeMin, float sizeMax,
+	float lifeMin, float lifeMax,
+	const FColor& colorA, const FColor& colorB,
+	float drag, float gravity,
+	bool shockwaveEnabled,
+	float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+	const FColor& shockwaveColor,
+	bool additive,
+	const std::wstring& texturePath)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleWorldExplosionBV");
+	go->SetPosition(pos);
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::WorldSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(additive);
+
+	auto toCF = [](const FColor& c) -> D2D1::ColorF {
+		return D2D1::ColorF(
+			static_cast<float>(c.r),
+			static_cast<float>(c.g),
+			static_cast<float>(c.b),
+			static_cast<float>(c.a));
+		};
+	const D2D1::ColorF cA = toCF(colorA);
+	const D2D1::ColorF cB = toCF(colorB);
+	const D2D1::ColorF cShock = toCF(shockwaveColor);
+
+	pc->EmitExplosion(
+		pos, count,
+		speedMin, speedMax,
+		sizeMin, sizeMax,
+		lifeMin, lifeMax,
+		cA, cB,
+		drag, gravity,
+		shockwaveEnabled,
+		shockwaveRadius, shockwaveThickness, shockwaveLife,
+		cShock);
+}
+
+void ParticleHelper::SpawnParticleImpactByValue(
+	const FVector2& pos,
+	int count,
+	float speedMin, float speedMax,
+	float sizeMin, float sizeMax,
+	float lifeMin, float lifeMax,
+	const FColor& colorA, const FColor& colorB,
+	float drag, float gravity,
+	bool shockwaveEnabled,
+	float shockwaveRadius, float shockwaveThickness, float shockwaveLife,
+	const FColor& shockwaveColor,
+	bool additive,
+	const std::wstring& texturePath)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleWorldImpactBV");
+	go->SetPosition(pos);
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::WorldSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(additive);
+
+	auto toCF = [](const FColor& c) -> D2D1::ColorF {
+		return D2D1::ColorF(
+			static_cast<float>(c.r),
+			static_cast<float>(c.g),
+			static_cast<float>(c.b),
+			static_cast<float>(c.a));
+		};
+	const D2D1::ColorF cA = toCF(colorA);
+	const D2D1::ColorF cB = toCF(colorB);
+	const D2D1::ColorF cShock = toCF(shockwaveColor);
+
+	pc->EmitImpact(
+		pos, count,
+		speedMin, speedMax,
+		sizeMin, sizeMax,
+		lifeMin, lifeMax,
+		cA, cB,
+		drag, gravity,
+		shockwaveEnabled,
+		shockwaveRadius, shockwaveThickness, shockwaveLife,
+		cShock);
+}
+
+void ParticleHelper::SpawnParticleClickLByValue(
+	const FVector2& pos,
+	int count,
+	float speedMin, float speedMax,
+	float sizeMin, float sizeMax,
+	float lifeMin, float lifeMax,
+	const FColor& colorA, const FColor& colorB,
+	float drag, float gravity,
+	bool enableSelfDestruct, float selfDestructAfterSeconds,
+	bool additive,
+	const std::wstring& texturePath)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleScreenClickLBV");
+	go->SetPosition(pos);
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::ScreenSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(additive);
+
+	auto toCF = [](const FColor& c) -> D2D1::ColorF {
+		return D2D1::ColorF(
+			static_cast<float>(c.r),
+			static_cast<float>(c.g),
+			static_cast<float>(c.b),
+			static_cast<float>(c.a));
+		};
+	const D2D1::ColorF cA = toCF(colorA);
+	const D2D1::ColorF cB = toCF(colorB);
+
+	pc->EmitClickBurst(
+		pos, count,
+		speedMin, speedMax,
+		sizeMin, sizeMax,
+		lifeMin, lifeMax,
+		cA, cB,
+		drag, gravity,
+		enableSelfDestruct, selfDestructAfterSeconds);
+}
+
+void ParticleHelper::SpawnParticleClickRByValue(
+	const FVector2& pos,
+	int count,
+	float speedMin, float speedMax,
+	float sizeMin, float sizeMax,
+	float lifeMin, float lifeMax,
+	const FColor& colorA, const FColor& colorB,
+	float drag, float gravity,
+	bool enableSelfDestruct, float selfDestructAfterSeconds,
+	bool additive,
+	const std::wstring& texturePath)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleScreenClickRBV");
+	go->SetPosition(pos);
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::ScreenSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(additive);
+
+	auto toCF = [](const FColor& c) -> D2D1::ColorF {
+		return D2D1::ColorF(
+			static_cast<float>(c.r),
+			static_cast<float>(c.g),
+			static_cast<float>(c.b),
+			static_cast<float>(c.a));
+		};
+	const D2D1::ColorF cA = toCF(colorA);
+	const D2D1::ColorF cB = toCF(colorB);
+
+	pc->EmitClickBurst(
+		pos, count,
+		speedMin, speedMax,
+		sizeMin, sizeMax,
+		lifeMin, lifeMax,
+		cA, cB,
+		drag, gravity,
+		enableSelfDestruct, selfDestructAfterSeconds);
+}
+
+void ParticleHelper::ToggleMouseTrailByValue(bool enable)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleScreenTrailBV");
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::ScreenSpace);
+	pc->ToggleMouseTrail(enable);
+}
+
+void ParticleHelper::SpawnParticleAuraByValue(
+	const FVector2& pos,
+	float radius, int count,
+	float radiusJitter,
+	float angularSpeedMin, float angularSpeedMax,
+	float sizeMin, float sizeMax,
+	float lifeMin, float lifeMax,
+	float drag, float gravity,
+	const FColor& colorA, const FColor& colorB,
+	bool additive,
+	const std::wstring& texturePath)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleWorldAuraBV");
+	go->SetPosition(pos);
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::WorldSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(additive);
+
+	auto toCF = [](const FColor& c) -> D2D1::ColorF {
+		return D2D1::ColorF(
+			static_cast<float>(c.r),
+			static_cast<float>(c.g),
+			static_cast<float>(c.b),
+			static_cast<float>(c.a));
+		};
+	const D2D1::ColorF cA = toCF(colorA);
+	const D2D1::ColorF cB = toCF(colorB);
+
+	pc->EmitAura(
+		pos,
+		radius, count,
+		radiusJitter,
+		angularSpeedMin, angularSpeedMax,
+		sizeMin, sizeMax,
+		lifeMin, lifeMax,
+		drag, gravity,
+		cA, cB);
+}
+
+void ParticleHelper::SpawnParticleElectricByValue(
+	const FVector2& pos,
+	int count,
+	float speedMin, float speedMax,
+	float sizeMin, float sizeMax,
+	float lifeMin, float lifeMax,
+	const FColor& colorA, const FColor& colorB,
+	float drag, float gravity,
+	float spreadRadians,
+	bool additive,
+	const std::wstring& texturePath)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleWorldElectricBV");
+	go->SetPosition(pos);
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::WorldSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(additive);
+
+	auto toCF = [](const FColor& c) -> D2D1::ColorF {
+		return D2D1::ColorF(
+			static_cast<float>(c.r),
+			static_cast<float>(c.g),
+			static_cast<float>(c.b),
+			static_cast<float>(c.a));
+		};
+	const D2D1::ColorF cA = toCF(colorA);
+	const D2D1::ColorF cB = toCF(colorB);
+
+	pc->EmitElectric(
+		pos, count,
+		speedMin, speedMax,
+		sizeMin, sizeMax,
+		lifeMin, lifeMax,
+		cA, cB,
+		drag, gravity,
+		spreadRadians);
+}
+
+void ParticleHelper::SpawnParticlePortalByValue(
+	const FVector2& pos,
+	int count,
+	float speedMin, float speedMax,
+	float sizeMin, float sizeMax,
+	float lifeMin, float lifeMax,
+	const FColor& colorA, const FColor& colorB,
+	float drag, float gravity,
+	float spreadRadians,
+	bool additive,
+	const std::wstring& texturePath)
+{
+	WeakObjectPtr<Scene> sceneWeak = SceneManager::GetInstance().GetWorldByWeak();
+	if (sceneWeak.expired()) return;
+
+	WeakObjectPtr<gameObject> go = EnsureOrCreateNamedGO(sceneWeak, L"ParticleWorldPortalBV");
+	go->SetPosition(pos);
+	auto* pc = go->AddComponent<ParticleComponent>();
+	pc->SetDrawType(Define::EDrawType::WorldSpace);
+	if (!texturePath.empty()) pc->LoadData(texturePath);
+	pc->SetAdditiveBlend(additive);
+
+	auto toCF = [](const FColor& c) -> D2D1::ColorF {
+		return D2D1::ColorF(
+			static_cast<float>(c.r),
+			static_cast<float>(c.g),
+			static_cast<float>(c.b),
+			static_cast<float>(c.a));
+		};
+	const D2D1::ColorF cA = toCF(colorA);
+	const D2D1::ColorF cB = toCF(colorB);
+
+	pc->EmitPortalSwirl(
+		pos, count,
+		speedMin, speedMax,
+		sizeMin, sizeMax,
+		lifeMin, lifeMax,
+		cA, cB,
+		drag, gravity,
+		spreadRadians);
+}
