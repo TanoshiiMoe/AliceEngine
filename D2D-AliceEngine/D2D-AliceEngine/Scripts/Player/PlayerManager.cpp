@@ -246,6 +246,7 @@ void PlayerManager::Boost(float _time, bool _battDec)
 				if(_battDec)
 					batteryCount -= 3;
 				bBoost = true;
+				isInvincible = true;
 				boostTimer = _time;
 				boostElipsed = 0.0f;
 
@@ -253,6 +254,7 @@ void PlayerManager::Boost(float _time, bool _battDec)
 			}
 			else {
 				bBoost = false;
+				isInvincible = false;
 				boostTimer = 0.0f;
 				boostElipsed = 0.0f;
 
