@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
 
 class SelectScene : public Scene
@@ -18,5 +18,7 @@ public:
 
 	gameObject* m_camera;
 	gameObject* m_UI;
+
+	gameObject* m_sound;
 };
 

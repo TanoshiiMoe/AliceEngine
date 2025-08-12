@@ -89,6 +89,8 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 
 void StageWidgetScript::Awake()
 {
+	// 씬 처음 들어오면 배터리 카운트는 0
+	GamePlayManager::GetInstance().batteryCount = 0;
 }
 
 void StageWidgetScript::OnStart()
@@ -475,6 +477,8 @@ void StageWidgetScript::OnStart()
 		sound->StopByName(L"UISound");
 		sound->PlayByName(L"UISound");
 
+		sound->PauseByType(SoundType::BGM);
+
 		GamePlayManager::GetInstance().PauseGame();
 
 		m_isPaused = !m_isPaused;
@@ -531,6 +535,8 @@ void StageWidgetScript::OnStart()
 	] {
 		sound->StopByName(L"UISound");
 		sound->PlayByName(L"UISound");
+
+		sound->ResumeByType(SoundType::BGM);
 		
 		GamePlayManager::GetInstance().ResumeGame();
 
@@ -934,6 +940,8 @@ void StageWidgetScript::OnStart()
 
 			GamePlayManager::GetInstance().PauseGame();
 
+			sound->PauseByType(SoundType::BGM);
+
 			pauseButton->SetActive(false);
 			popUpTab->m_layer = Define::PopupLayer;
 			popUpTab->SetOpacity(1);
@@ -966,6 +974,8 @@ void StageWidgetScript::OnStart()
 			sound->PlayByName(L"UISound");
 
 			GamePlayManager::GetInstance().ResumeGame();
+
+			sound->ResumeByType(SoundType::BGM);
 
 			pauseText->m_layer = Define::Disable;
 			pauseButton->SetActive(true);

@@ -45,6 +45,9 @@ void StageAudioScript::OnStart()
 {
 	m_owner = GetOwner();
 
+	m_TutorialAudio = m_owner->AddComponent<AudioComponent>(L"Tutorial");
+	m_TutorialAudio->LoadData(L"Bg_music_tutorial.wav", AudioMode::StreamLoop, SoundType::BGM);
+
 	m_Stage1Audio = m_owner->AddComponent<AudioComponent>(L"Stage1");
 	m_Stage1Audio->LoadData(L"Bg_music_Stage_1.wav", AudioMode::StreamLoop, SoundType::BGM);
 
@@ -53,6 +56,9 @@ void StageAudioScript::OnStart()
 
 	m_Stage3Audio = m_owner->AddComponent<AudioComponent>(L"Stage3");
 	m_Stage3Audio->LoadData(L"Bg_music_Stage_Finale.wav", AudioMode::StreamLoop, SoundType::BGM);
+
+	m_Ambience = m_owner->AddComponent<AudioComponent>(L"Ambience");
+	m_Ambience->LoadData(L"BG_Ambience_Loop.wav", AudioMode::StreamLoop, SoundType::SFX);
 
 	std::wstring SceneName = SceneManager::GetInstance().m_currentScene->GetName();
 
@@ -72,9 +78,11 @@ void StageAudioScript::OnStart()
 
 void StageAudioScript::OnEnd()
 {
-	m_Stage1Audio->Stop();
-	m_Stage2Audio->Stop();
-	m_Stage3Audio->Stop();
+	if(m_TutorialAudio->IsPlaying()) m_TutorialAudio->Stop();
+	if (m_Stage1Audio->IsPlaying()) m_Stage1Audio->Stop();
+	if (m_Stage2Audio->IsPlaying()) m_Stage2Audio->Stop();
+	if (m_Stage3Audio->IsPlaying()) m_Stage3Audio->Stop();
+	if (m_Ambience->IsPlaying()) m_Ambience->Stop();
 }
 
 void StageAudioScript::OnDestroy()

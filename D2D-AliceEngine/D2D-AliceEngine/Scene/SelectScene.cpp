@@ -1,4 +1,4 @@
-#include "SelectScene.h"
+ï»¿#include "SelectScene.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -12,10 +12,14 @@
 #include <Math/TColor.h>
 #include <Helpers/CoordHelper.h>
 #include <Scripts/Widget/SelectWidgetScript.h>
+#include <Scripts/Audio/StageAudioScript.h>
 
 void SelectScene::Initialize()
 {
 	__super::Initialize();
+
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<StageAudioScript>();
 }
 
 void SelectScene::Release()
@@ -32,7 +36,7 @@ void SelectScene::OnEnter()
 {
 	__super::OnEnter();
 	
-	// ¾À ÁøÀÔ ½Ã ¸¶¿ì½º »óÅÂ ÃÊ±âÈ­
+	// ì”¬ ì§„ì… ì‹œ ë§ˆìš°ìŠ¤ ìƒíƒœ ì´ˆê¸°í™”
 	Input::ResetMouseState();
 
 	m_UI = NewObject<gameObject>(L"UI");
@@ -45,7 +49,7 @@ void SelectScene::OnExit()
 {
 	__super::OnExit();
 	
-	// ¾À Á¾·á ½Ã ¸¶¿ì½º »óÅÂ ÃÊ±âÈ­
+	// ì”¬ ì¢…ë£Œ ì‹œ ë§ˆìš°ìŠ¤ ìƒíƒœ ì´ˆê¸°í™”
 	Input::ResetMouseState();
 }
 
