@@ -232,7 +232,7 @@ void PlayerManager::Jump()
 	owner->GetComponent<BikeMovementScript>()->Jump();
 }
 
-void PlayerManager::Boost(float _time)
+void PlayerManager::Boost(float _time, bool _battDec)
 {
 	// pause 상태 아닐시 실행
 	if (!GamePlayManager::GetInstance().IsPaused()) {
@@ -241,8 +241,9 @@ void PlayerManager::Boost(float _time)
 			// 배터리 가져오기
 			int& batteryCount = GamePlayManager::GetInstance().batteryCount;
 
-			if (!bBoost && batteryCount >= 3) {
-				batteryCount -= 3;
+			if (!bBoost && batteryCount >= 3 || !_battDec) {
+				if(_battDec)
+					batteryCount -= 3;
 				bBoost = true;
 				boostTimer = _time;
 				boostElipsed = 0.0f;

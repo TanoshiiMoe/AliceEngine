@@ -14,6 +14,7 @@
 #include <Component/SkewTransform.h>
 #include <Animation/AnimatorInstance.h>
 #include "Component/Collider.h"
+#include "../Player/PlayerManager.h"
 
 void BikeMovementScript::Initialize()
 {
@@ -89,6 +90,9 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 			{
 				// 콜라이더 돌려놓기
 				owner->GetComponent<Collider>()->SetLayer(prevCollLayer);
+
+				// 부스터 설정
+				PlayerManager::instance->Boost(3.0f, false);
 
 				pos.y = m_groundY;
 				m_isJumping = false;
