@@ -85,6 +85,9 @@ public:
 	void SetPrevMoveAmount(float amount) { m_prevMoveAmount = amount; }
 	void AddPrevMoveAmount(float delta) { m_prevMoveAmount += delta; }
 
+	// Jump
+	void Jump();
+
 private:
 	gameObject* m_owner = nullptr;
 
@@ -92,7 +95,7 @@ private:
 	// 표시속도는 m_maxSpeed * 0.3f 로 쓰는게 타당하다 봅니다
 	float m_initialSpeed = 200.0f;
 	float m_maxSpeed = 300.0f;
-	float m_acceleration = 20.0f;
+	float m_acceleration = 40.0f;
 
 	// 움직임 클램프
 	float minZ = -220.0f;

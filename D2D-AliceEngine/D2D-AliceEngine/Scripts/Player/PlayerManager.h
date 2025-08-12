@@ -20,6 +20,9 @@ public:
 	// 플레이어 타임스케일 획득
 	float GetTimeScale() { return playerTimeScale; }
 
+	// 점프시키기
+	void Jump();
+
 private:
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
