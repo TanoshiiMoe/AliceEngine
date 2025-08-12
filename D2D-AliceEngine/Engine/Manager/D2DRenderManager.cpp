@@ -131,7 +131,7 @@ void D2DRenderManager::Initialize(HWND hwnd)
 
 	m_d2dDeviceContext.Get()->CreateSolidColorBrush(D2D1::ColorF(0, 0, 0, 255), m_pBrush.GetAddressOf());
 
-	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"BackGround/blood.png");
+	std::wstring filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + L"CutScene/Transparent.png");
 	hr = CreateBitmapFromFile(filePath.c_str(), m_overlayBitmap.GetAddressOf());
 	assert(SUCCEEDED(hr));
 
@@ -141,9 +141,10 @@ void D2DRenderManager::Initialize(HWND hwnd)
 	// 이것들 동적으로 사용할 수 있게 리팩 필요
 
 	// 채도
+	// [0] 흑백 ~ [2.0] 채도 높음
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Saturation, m_sceneEffect.GetAddressOf());
-	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());     
-	//m_sceneEffect->SetValue(D2D1_SATURATION_PROP_SATURATION, 2.0f);	
+	//m_sceneEffect->SetInput(0, m_screenBitmap.Get());
+	//m_sceneEffect->SetValue(D2D1_SATURATION_PROP_SATURATION, 0.1f);
 
 	// 투명도 -
 	//hr = m_d2dDeviceContext->CreateEffect(CLSID_D2D1Opacity, m_sceneEffect.GetAddressOf());
