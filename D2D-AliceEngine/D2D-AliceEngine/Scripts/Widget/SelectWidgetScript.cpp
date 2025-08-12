@@ -201,17 +201,16 @@ void SelectWidgetScript::OnStart()
 	stage3->m_layer = Define::NormalTextLayer;
 
 	// ========= Progress
+	m_progressSprite->LoadData(L"UI\\PressValue.png");
+	m_progressSprite->m_layer = Define::Disable;
+	m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
+	m_progressSprite->SetRelativePosition(FVector2(0, 0));
+	
 	m_progress->LoadData(L"UI\\ProgressBar.png");
 	m_progress->SetDrawType(EDrawType::ScreenSpace);
 	m_progress->SetRelativePosition(FVector2(0, 0));
 	m_progress->m_layer = Define::Disable;
 	m_progress->SetProgress(m_pressValue);
-
-	m_progressSprite->LoadData(L"UI\\PressValue.png");
-	m_progressSprite->m_layer = Define::Disable;
-
-	m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
-	m_progressSprite->SetRelativePosition(FVector2(0, 0));
 
 	// ====================== Delegate & Hover Effects
 	

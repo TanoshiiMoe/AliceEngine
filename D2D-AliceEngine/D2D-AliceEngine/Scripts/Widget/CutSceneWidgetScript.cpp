@@ -82,17 +82,16 @@ void CutSceneWidgetScript::OnStart()
     m_progress = m_owner->AddComponent<ProgressBarComponent>();
 
     // ========= Progress
+    m_progressSprite->LoadData(L"UI\\PressValue.png");
+    m_progressSprite->m_layer = Define::PopupObjectLayer + Define::CutSceneLayer;
+    m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
+    m_progressSprite->SetRelativePosition(FVector2(0, 0));
+    
     m_progress->LoadData(L"UI\\ProgressBar.png");
     m_progress->SetDrawType(EDrawType::ScreenSpace);
     m_progress->SetRelativePosition(FVector2(0, 0));
-    m_progress->m_layer = Define::PopupObjectLayer + Define::CutSceneLayer;
+    m_progress->m_layer = Define::PopupObjectLayer +1 + Define::CutSceneLayer;
     m_progress->SetProgress(m_pressValue);
-
-    m_progressSprite->LoadData(L"UI\\PressValue.png");
-    m_progressSprite->m_layer = Define::PopupObjectLayer + Define::CutSceneLayer;
-
-    m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
-    m_progressSprite->SetRelativePosition(FVector2(0, 0));
 
 	// 컷씬 이미지 로드
 	LoadCutSceneImages();

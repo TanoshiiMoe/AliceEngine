@@ -32,7 +32,7 @@ public:
         int layer{100};
     };
     void AddSpriteToPage(int pageIndex, const CutSpriteDesc& desc);
-
+    bool IsCutScenePlaying() const { return m_isAlive; }
 private:
 	gameObject* m_owner;
 	SpriteRenderer* m_background;
