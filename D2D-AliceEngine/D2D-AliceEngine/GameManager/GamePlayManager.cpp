@@ -71,8 +71,19 @@ void GamePlayManager::StartGame()
 void GamePlayManager::GameOver()
 {
     SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::VignetteOnly), true, 2.0f, 1.0f);
+
+    TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
+    {
+        SceneManager::ChangeScene(Define::Scene_GameOver);
+    },
+        0,
+        false,
+        3.0f);
+
     TimerManager::GetInstance().ClearTimer(gameOverTimer);
-    TimerManager::GetInstance().SetTimer(gameOverTimer, [this]() 
+    TimerManager::GetInstance().SetTimer(gameOverTimer, 
+        [this]() 
     {
         SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::SpotDiffuse), true, 2.0f, 1.0f);
     }, 
@@ -80,29 +91,13 @@ void GamePlayManager::GameOver()
     false,
     1.0f);
 
-    TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
-    TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
-    {
-        SceneManager::ChangeScene(Define::Scene_GameOver);
-    },
-    0,
-    false,
-    3.0f);
+   
 }
 
 void GamePlayManager::GameClear()
 {
     SpawnVignette(2.0f, 1.0f);
-    TimerManager::GetInstance().ClearTimer(gameOverTimer);
-    TimerManager::GetInstance().SetTimer(gameOverTimer, [this]()
-    {
-        SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::PointDiffuse), true, 2.0f, 1.0f);
-    },
-        0,
-        false,
-        1.0f);
-
-    TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
+    //TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
     TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
     {
         SceneManager::ChangeScene(Define::Scene_GameClear);
@@ -110,6 +105,17 @@ void GamePlayManager::GameClear()
         0,
         false,
         3.0f);
+
+    TimerManager::GetInstance().ClearTimer(gameOverTimer);
+    TimerManager::GetInstance().SetTimer(gameOverTimer, [this]()
+    {
+        SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::PointDiffuse), true, 2.0f, 1.0f);
+    },
+    0,
+    false,
+    1.0f);
+
+    
 }
 
 
@@ -146,6 +152,19 @@ void GamePlayManager::PlayBossMode()
                 3.0f,
                 true,
                 1.0f);
+        }
+    }
+}
+
+void GamePlayManager::BackNormalMode()
+{
+    if (WeakObjectPtr<gameObject> triggerBox = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"EnemySpawnTriggerBox"))
+    {
+        if (triggerBox.expired()) return;
+        if (EnemySpawnTriggerBox* es = triggerBox->GetComponent<EnemySpawnTriggerBox>())
+        {
+            es->SetSpawnable(true);
+            TimerManager::GetInstance().ClearTimer(bossSpawnTimer);
         }
     }
 }
