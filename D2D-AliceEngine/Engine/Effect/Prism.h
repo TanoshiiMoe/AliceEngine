@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component/ScriptComponent.h"
 #include "Component/Animator.h"
@@ -8,8 +8,8 @@ class Prism : public ScriptComponent
 {
 private:
 	bool bReady = false;
-	bool isActive = true;
-	bool isEnabled = true;
+	bool isActive = false;
+	bool isEnabled = false;
 	bool isDirty = false;
 
 	int prismCount = 0;
@@ -19,7 +19,7 @@ private:
 	//std::deque<ID2D1Bitmap1> bitmaps;
 	std::deque<WeakObjectPtr<gameObject>> objects;
 
-	// ¾Ö´Ï¸ŞÀÌÅÍ °ü·Ã
+	// ì• ë‹ˆë©”ì´í„° ê´€ë ¨
 	Animator* animator = nullptr;
 	std::weak_ptr<ID2D1Bitmap1> bitmap;
 	SpriteInfo* spriteInfo = nullptr;
@@ -40,8 +40,8 @@ public:
 
 	void SetActive(bool _val);
 	bool IsActive();
-	void SetPrismTransform(gameObject* go); // ½ºÇÁ¶óÀÌÆ® ·»´õ·¯¸¦ ³ÖÀ» °ÔÀÓ¿ÀºêÁ§Æ® ÁÂÇ¥ ¼³Á¤
-	void SetSpriteRenderer(gameObject* go); // ½ºÇÁ¶óÀÌÆ® ·»´õ·¯ ¼³Á¤
+	void SetPrismTransform(gameObject* go); // ìŠ¤í”„ë¼ì´íŠ¸ ë Œë”ëŸ¬ë¥¼ ë„£ì„ ê²Œì„ì˜¤ë¸Œì íŠ¸ ì¢Œí‘œ ì„¤ì •
+	void SetSpriteRenderer(gameObject* go); // ìŠ¤í”„ë¼ì´íŠ¸ ë Œë”ëŸ¬ ì„¤ì •
 
 	FTimerHandle timer;
 };
