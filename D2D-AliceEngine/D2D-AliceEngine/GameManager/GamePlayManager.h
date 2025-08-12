@@ -106,6 +106,7 @@ public:
 	void SetStopXAxis(int value) { m_stopXAxis = value; }
 	void AddStopXAxis(int delta) { m_stopXAxis += delta; }
 
+    int batteryCount = 0;
 private:
     gameObject* m_player = nullptr;
 

@@ -49,12 +49,24 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 
 	//m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
 
+	// 배터리 계산
 	int killCount = GamePlayManager::GetInstance().GetKillEnemyAmount();
-	float batteryCount = killCount / 5.0f;
+	int& batteryCount = GamePlayManager::GetInstance().batteryCount;
 
-	if (batteryCount >= 1.0f) batteryCount = 1.0f; // Battery : 0~1
-	
-	m_batteryProgress->SetProgress(batteryCount);
+	if (prevKillAmount != killCount) {
+		int delta = killCount - prevKillAmount;
+
+		batteryCount = batteryCount + delta > maxBattery ?
+			maxBattery : batteryCount + delta;
+
+		prevKillAmount = killCount;
+	}
+
+	// 배터리 프로그래스 설정
+	if (prevBattery != batteryCount) {
+		SetProgress();
+		prevBattery = batteryCount;
+	}
 
 	// 속도 연동
 
@@ -1008,4 +1020,11 @@ void StageWidgetScript::OnEnd()
 
 void StageWidgetScript::OnDestroy()
 {
+}
+
+void StageWidgetScript::SetProgress()
+{
+	float bProgress = (float)GamePlayManager::GetInstance().batteryCount / (float)maxBattery;
+	bProgress = bProgress > 1.0f ? 1.0f : bProgress;	// Battery : 0~1
+	m_batteryProgress->SetProgress(bProgress);
 }

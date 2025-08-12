@@ -94,6 +94,9 @@ void Scene_Stage1::OnEnter()
 	GamePlayManager::GetInstance().SetPassedTime(0);
 	GamePlayManager::GetInstance().SetKillEnemyAmount(0);
 
+	// 게임 일시정지 시키기
+	GamePlayManager::GetInstance().PauseGame();
+
 	//m_bg = NewObject<gameObject>(L"BackGround");
 	//m_bg->AddComponent<BackGroundVideo>()->SetPlayer(m_player);
 
@@ -145,7 +148,7 @@ void Scene_Stage1::OnEnter()
 		if (Input::IsKeyPressed(VK_6)) {
 			GamePlayManager::GetInstance().PlayBossMode();
 		}
-		if (Input::IsKeyPressed(VK_P)) {
+		/*if (Input::IsKeyPressed(VK_P)) {
 			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
 			{
 				t->AddMaxSpeed(50);
@@ -156,7 +159,7 @@ void Scene_Stage1::OnEnter()
 			{
 				t->AddMaxSpeed(-50);
 			}
-		}
+		}*/
 	});
 }
 
