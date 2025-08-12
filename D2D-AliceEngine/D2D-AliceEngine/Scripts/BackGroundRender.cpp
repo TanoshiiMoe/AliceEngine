@@ -48,7 +48,7 @@ void BackGroundRender::Update(const float& deltaSeconds)
         if (player->transform())
             playerX = player->transform()->GetPosition().x;
         if (BikeMovementScript* pm = player->GetComponent<BikeMovementScript>())
-            playerSpeed = pm->GetCurrentSpeed() * pm->GetSpeedModifierValue();
+            playerSpeed = pm->GetMaxSpeed();// *pm->GetSpeedModifierValue();
     }
 
     // tiles 기반으로 +x 방향 진행, 플레이어 기준 뒤로 흐르는 효과
@@ -114,17 +114,18 @@ void BackGroundRender::OnStart()
     // speed 파라미터는 계수 플레이어 속도에 비례해서 이동하게
     
     // 원경은 카메라에 박기로 함
-    WeakObjectPtr<gameObject> bg = GetWorld()->NewObject<gameObject>(L"TopFar");
-    SpriteRenderer* bgsr = bg->AddComponent<SpriteRenderer>();
-    bgsr->LoadData(L"BackGround\\BG_Sky.png");
-    bgsr->m_layer = -5000 + m_backgroundRelativeLayer;
-    GetWorld()->GetCamera()->AddChildObject(bg.lock());
-    //AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png",         -10 + m_backgroundRelativeLayer, 400.0f, 0.2f);
+	WeakObjectPtr<gameObject> bg = GetWorld()->NewObject<gameObject>(L"TopFar");
+	SpriteRenderer* bgsr = bg->AddComponent<SpriteRenderer>();
+	bgsr->LoadData(L"BackGround\\BG_Sky.png");
+	bgsr->m_layer = -5000 + m_backgroundRelativeLayer;
+	GetWorld()->GetCamera()->AddChildObject(bg.lock());
+    bg->transform()->AddPosition(0.0f, 250.0f);
+    //AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png", -5000 + m_backgroundRelativeLayer, 400.0f, 0.01f);
     
     AddLooping(L"TopMid",    L"BackGround\\BG_Building.png",    -7  + m_topRelativeLayer, 500.0f, 0.4f);
-    AddLooping(L"TopNear",   L"BackGround\\BG_BackBarrier.png", -5  + m_topRelativeLayer, 330.0f, 1.5f);
+    AddLooping(L"TopNear",   L"BackGround\\BG_BackBarrier.png", -5  + m_topRelativeLayer, 330.0f, 1.0f);
     // =========================== Player가 여기에 있고, 위 아래 배경이라는 뜻 ===================================
-    AddLooping(L"BotNear",   L"BackGround\\BG_GuardRail.png",  5  + m_bottomRelativeLayer, -180.0f, 1.5f);
+    AddLooping(L"BotNear",   L"BackGround\\BG_GuardRail.png",  5  + m_bottomRelativeLayer, -180.0f, 1.0f);
     AddLooping(L"BotMid",    L"BackGround\\BG_Bridge.png",     3  + m_bottomRelativeLayer, -640.0f, 0.9f);
     AddLooping(L"BotFar",    L"BackGround\\BG_Market.png",     -2   + m_backgroundRelativeLayer, -440.0f, 0.8f);
 }

@@ -192,7 +192,7 @@ void SelectWidgetScript::OnStart()
 		stage1->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
 
-	stage1->SetStateAction(Define::EButtonState::Pressed, [sound, tutorial, skipButton, skipText]{
+	stage1->SetStateAction(Define::EButtonState::Pressed, [closeButton, sound, tutorial, skipButton, skipText]{
 		
 		skipButton->m_layer = Define::PopupButtonLayer;
 		skipButton->SetActive(true);
@@ -202,8 +202,27 @@ void SelectWidgetScript::OnStart()
 		tutorial->Play();
 
 		sound->PlayByName(L"Tutorial");
+		closeButton->SetActive(false);
 
 		//SceneManager::ChangeScene(Define::Scene_Stage1);
+		});
+
+	skipButton->SetStateAction(Define::EButtonState::Hover, [skipButton]()
+		{
+			skipButton->StartHoverPulse(0.8f, 0.04f);
+			skipButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+		});
+
+	skipButton->SetStateAction(Define::EButtonState::HoverLeave, [skipButton]()
+		{
+			skipButton->StopHoverPulse();
+			skipButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+		});
+
+	skipButton->SetStateAction(Define::EButtonState::Release, [skipButton]()
+		{
+			skipButton->StopHoverPulse();
+			skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
 		});
 
 	skipButton->SetStateAction(Define::EButtonState::Pressed, [sound]()
