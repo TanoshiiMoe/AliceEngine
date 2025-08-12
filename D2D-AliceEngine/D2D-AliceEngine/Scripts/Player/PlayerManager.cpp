@@ -143,7 +143,8 @@ void PlayerManager::Input()
 
 	// 부스터 실행키
 	if (Input::IsKeyPressed(VK_LSHIFT)) {
-		Boost(5.0f);
+		if(!bBoost)
+			Boost(5.0f);
 	}
 }
 
