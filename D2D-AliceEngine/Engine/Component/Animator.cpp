@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Animator.h"
 #include <Math/Transform.h>
 #include <Animation/TextureLoader.h>
@@ -47,9 +47,9 @@ void Animator::Update(const float& deltaSeconds)
 		m_curFrame = 0;
 		return;
 	}
-	if (!bPlay) return;	// ÇÃ·¹ÀÌ °¡´ÉÇÒ ¶§¸¸ ÇÃ·¹ÀÌ
-	//if (IsEnd()) return; // ÇÁ·¹ÀÓÀÇ ³¡¿¡¼­ ¹Ýº¹ÇÒÁö ¸»Áö ÆÇ´Ü
-	//if (IsEnd() && !bLoopping) return; // ÇÁ·¹ÀÓÀÇ ³¡¿¡¼­ ¹Ýº¹ÇÒÁö ¸»Áö ÆÇ´Ü
+	if (!bPlay) return;	// í”Œë ˆì´ ê°€ëŠ¥í•  ë•Œë§Œ í”Œë ˆì´
+	//if (IsEnd()) return; // í”„ë ˆìž„ì˜ ëì—ì„œ ë°˜ë³µí• ì§€ ë§ì§€ íŒë‹¨
+	//if (IsEnd() && !bLoopping) return; // í”„ë ˆìž„ì˜ ëì—ì„œ ë°˜ë³µí• ì§€ ë§ì§€ íŒë‹¨
 
 	m_accumTime += deltaSeconds;
 	if (m_accumTime >= animationClips[curAnimationClip]->frames[m_curFrame].duration)
@@ -72,7 +72,7 @@ void Animator::Render()
 	if (curAnimationClip != nextAnimationClip) return;
 	auto& sprite = sheet.get()->sprites[animationClips[curAnimationClip]->frames[m_curFrame].spriteSheetIndex];
 
-	// ÃÖÁ¾ º¯È¯ ºñÆ®¸Ê ¿øÁ¡¿¡ ¸ÂÃç ±×¸®±â (Src ÀüÃ¼ »ç¿ë)
+	// ìµœì¢… ë³€í™˜ ë¹„íŠ¸ë§µ ì›ì ì— ë§žì¶° ê·¸ë¦¬ê¸° (Src ì „ì²´ ì‚¬ìš©)
 	float ScaleX = GetBitmapSizeX() / sheet.get()->textureWidth;
 	float ScaleY = GetBitmapSizeY() / sheet.get()->textureHeight;
 	float x = sprite.x * ScaleX;
@@ -85,7 +85,8 @@ void Animator::Render()
 	__super::Render();
 
 	D2DRenderManager::GetD2DDevice()->DrawBitmap(m_bitmap.get(), &destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, &SrcRect);
-	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
+	if (D2DRenderManager::GetInstance().bRenderedBoxRect)
+		D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 }
 
 float Animator::GetBitmapSizeX()

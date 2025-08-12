@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "RenderSystem.h"
 #include "Component/TextRenderComponent.h"
 #include <Component/RenderComponent.h>
@@ -27,7 +27,7 @@ RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::functi
 	: type(Define::ERenderType::D2D), objectHandle(handle), D2DObject(object), RenderFunc(func), drawType(_drawType), layer(renderLayer)
 {
 	if (!ObjectHandler::GetInstance().IsValid(handle)) {
-		// À¯È¿ÇÏÁö ¾ÊÀ¸¸é ÀÌÈÄ ·»´õ¸µ ½Ã IsValid()¿¡¼­ °É·¯Áö¹Ç·Î ÀÌ ÀÚ¸®¿¡¼­ °­Á¦ Å»ÃâÇÏÁö ¾Ê¾Æµµ µË´Ï´Ù.
+		// ìœ íš¨í•˜ì§€ ì•Šìœ¼ë©´ ì´í›„ ë Œë”ë§ ì‹œ IsValid()ì—ì„œ ê±¸ëŸ¬ì§€ë¯€ë¡œ ì´ ìë¦¬ì—ì„œ ê°•ì œ íƒˆì¶œí•˜ì§€ ì•Šì•„ë„ ë©ë‹ˆë‹¤.
 	}
 }
 
@@ -59,7 +59,7 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 	{
 		m_renderers.push_back(renderer);
 
-		// ÅëÇÕ ·»´õ¸µ Å¥¿¡µµ Ãß°¡
+		// í†µí•© ë Œë”ë§ íì—ë„ ì¶”ê°€
 		m_renderQueue.emplace_back(
 			renderer->GetHandle(),
 			renderer.Get(),
@@ -72,9 +72,9 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 
 void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType, int* _layer)
 {
-	// ±âÁ¸ ¹æ½Ä À¯Áö (ÇÏÀ§ È£È¯¼º)
+	// ê¸°ì¡´ ë°©ì‹ ìœ ì§€ (í•˜ìœ„ í˜¸í™˜ì„±)
 	m_spineRenders.push_back({ objectHandle, f });
-	// ÅëÇÕ ·»´õ¸µ Å¥¿¡ Ãß°¡
+	// í†µí•© ë Œë”ë§ íì— ì¶”ê°€
 	m_renderQueue.emplace_back(
 		Define::ERenderType::Spine2D,
 		objectHandle,
@@ -88,14 +88,14 @@ void RenderSystem::UnRegist(WeakObjectPtr<RenderComponent>&& renderer)
 {
 	if (auto ptr = renderer.lock())
 	{
-		// ±âÁ¸ ·»´õ·¯ ¸ñ·Ï¿¡¼­ Á¦°Å
+		// ê¸°ì¡´ ë Œë”ëŸ¬ ëª©ë¡ì—ì„œ ì œê±°
 		m_renderers.erase(std::remove_if(m_renderers.begin(), m_renderers.end(),
 			[&](const WeakObjectPtr<RenderComponent>& r)
 			{
 				return r.handle == renderer.handle;
 			}), m_renderers.end());
 
-		// ÅëÇÕ ·»´õ¸µ Å¥¿¡¼­µµ Á¦°Å
+		// í†µí•© ë Œë”ë§ íì—ì„œë„ ì œê±°
 		ObjectHandle targetHandle = ptr->GetHandle();
 		m_renderQueue.erase(std::remove_if(m_renderQueue.begin(), m_renderQueue.end(),
 			[&](const RenderItem& item)
@@ -152,21 +152,22 @@ void RenderSystem::Render()
 	deviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 
-	// ÅëÇÕ ·»´õ¸µ »ç¿ë
+	// í†µí•© ë Œë”ë§ ì‚¬ìš©
 	RenderUnified();
-	DebugCamera();
+	if(D2DRenderManager::GetInstance().bRenderedBoxRect)
+		DebugCamera();
 
 	if(D2DRenderManager::GetInstance().m_sceneEffect.Get())
 	{
 		deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-		D2D1_SIZE_F size = D2DRenderManager::GetInstance().m_screenBitmap->GetSize();	//	±×¸± Å©±â
+		D2D1_SIZE_F size = D2DRenderManager::GetInstance().m_screenBitmap->GetSize();	//	ê·¸ë¦´ í¬ê¸°
 		D2D1_RECT_F DestRect{ 0,0,size.width,size.height };
 		deviceContext->DrawBitmap(
 			D2DRenderManager::GetInstance().m_overlayBitmap.Get(),
-			DestRect,           // g_d2dBitmapScene Å©±â¿¡ ¸Â°Ô ´Ã¸²
+			DestRect,           // g_d2dBitmapScene í¬ê¸°ì— ë§ê²Œ ëŠ˜ë¦¼
 			1.0f,              // Opacity (0.0 ~ 1.0)
 			D2D1_INTERPOLATION_MODE_LINEAR,
-			nullptr            // ÀÌ¹ÌÁö ¿øº» ¿µ¿ª ÀüÃ¼ »ç¿ë
+			nullptr            // ì´ë¯¸ì§€ ì›ë³¸ ì˜ì—­ ì „ì²´ ì‚¬ìš©
 		);
 	}
 	
@@ -199,26 +200,26 @@ void RenderSystem::Render()
 
 void RenderSystem::RenderUnified()
 {
-	// ¸¸·áµÈ ¾ÆÀÌÅÛ Á¦°Å
+	// ë§Œë£Œëœ ì•„ì´í…œ ì œê±°
 	m_renderQueue.erase(std::remove_if(m_renderQueue.begin(), m_renderQueue.end(),
 		[](const RenderItem& item) { return !item.IsValid(); }), m_renderQueue.end());
 
-	// ·¹ÀÌ¾î ¼ø¼­·Î Á¤·Ä
+	// ë ˆì´ì–´ ìˆœì„œë¡œ ì •ë ¬
 	std::sort(m_renderQueue.begin(), m_renderQueue.end(), RenderItemSortCompare);
 
 	ViewRect view = GetCameraView();
 
-	// ÅëÇÕ ·»´õ¸µ ·çÇÁ
+	// í†µí•© ë Œë”ë§ ë£¨í”„
 	for (const auto& item : m_renderQueue)
 	{
 		if (!item.IsValid()) continue;
 
 		if (item.type == Define::ERenderType::D2D)
 		{
-			// D2D ·»´õ¸µ
+			// D2D ë Œë”ë§
 			if (ObjectHandler::GetInstance().IsValid(item.objectHandle))
 			{
-				// Ä«¸Ş¶ó ÄÃ¸µ Ã¼Å© (WorldSpaceÀÎ °æ¿ì¿¡¸¸)
+				// ì¹´ë©”ë¼ ì»¬ë§ ì²´í¬ (WorldSpaceì¸ ê²½ìš°ì—ë§Œ)
 				switch (item.drawType)
 				{
 				case Define::EDrawType::WorldSpace:
@@ -228,7 +229,7 @@ void RenderSystem::RenderUnified()
 					}
 					break;
 				case Define::EDrawType::ScreenSpace:
-					// ScreenSpace´Â ÄÃ¸µ Ã¼Å©¸¦ ÇÏÁö ¾ÊÀ½
+					// ScreenSpaceëŠ” ì»¬ë§ ì²´í¬ë¥¼ í•˜ì§€ ì•ŠìŒ
 					item.RenderFunc();
 					break;
 				default:
@@ -239,7 +240,7 @@ void RenderSystem::RenderUnified()
 		}
 		else if (item.type == Define::ERenderType::Spine2D)
 		{
-			// Spine2D ·»´õ¸µ
+			// Spine2D ë Œë”ë§
 			if (ObjectHandler::GetInstance().IsValid(item.objectHandle))
 			{
 				item.RenderFunc();
@@ -326,7 +327,7 @@ ViewRect RenderSystem::GetCameraView()
   return ViewRect{ camX - halfWidth, camX + halfWidth, camY - halfHeight, camY + halfHeight };
 }
 
-// ÄÃ¸µÀÌ µÇ´Â°É È®½ÇÇÏ°Ô º¸·Á¸é ÁÖ¼®Ã³¸® µÈ ºÎºĞÀ» »ç¿ë
+// ì»¬ë§ì´ ë˜ëŠ”ê±¸ í™•ì‹¤í•˜ê²Œ ë³´ë ¤ë©´ ì£¼ì„ì²˜ë¦¬ ëœ ë¶€ë¶„ì„ ì‚¬ìš©
 bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view)
 {
 	auto* transform = renderer->GetOwnerTransform();
@@ -344,7 +345,7 @@ bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& rend
 	const float bottom = pos.y - halfH;
 	const float top = pos.y + halfH;
 
-	// margin ºñÀ² (¿¹: 0.1f = 10% ¿©À¯)
+	// margin ë¹„ìœ¨ (ì˜ˆ: 0.1f = 10% ì—¬ìœ )
 	const float marginRatio = 0.05f;
 	const float marginX = (view.maxX - view.minX) * marginRatio;
 	const float marginY = (view.maxY - view.minY) * 1.2f;
@@ -353,7 +354,7 @@ bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& rend
 	const float minY = view.minY - marginY;
 	const float maxY = view.maxY + marginY;
 
-	// Ä«¸Ş¶ó ºä ¾È¿¡¸¸ º¸ÀÌ°Ô (¿©À¯ Æ÷ÇÔ)
+	// ì¹´ë©”ë¼ ë·° ì•ˆì—ë§Œ ë³´ì´ê²Œ (ì—¬ìœ  í¬í•¨)
 	return (right < minX || left > maxX ||
 		top < minY || bottom > maxY);
 }

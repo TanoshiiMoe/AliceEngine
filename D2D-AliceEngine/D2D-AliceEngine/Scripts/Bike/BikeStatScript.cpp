@@ -20,6 +20,7 @@
 #include <Scripts/Weapon/Drone.h>
 #include <GameManager/PlayerDataManager.h>
 #include <Scripts/Player/PlayerManager.h>
+#include <GameManager/GamePlayManager.h>
 
 void BikeStatScript::Initialize()
 {
@@ -133,8 +134,9 @@ void BikeStatScript::OnStart()
         {
             owner->RemoveComponent<BoxComponent>(owner->GetComponent<BoxComponent>());
             owner->RemoveComponent<Collider>(owner->GetComponent<Collider>());
-            if (auto player = owner->GetComponent<PlayerManager>()) player->DelayDestroy();
-            if (auto drone = owner->GetComponent<Drone>()) drone->DelayDestroy();
+            GamePlayManager::GetInstance().GameOver();
+            //if (auto player = owner->GetComponent<PlayerManager>()) player->DelayDestroy();
+            //if (auto drone = owner->GetComponent<Drone>()) drone->DelayDestroy();
             return;
         }
     });

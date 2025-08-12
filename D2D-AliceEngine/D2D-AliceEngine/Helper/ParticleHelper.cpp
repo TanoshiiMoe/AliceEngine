@@ -63,7 +63,7 @@ void ParticleHelper::SpawnParticleExplosionByColor(const FVector2& pos, const st
 
 	pc->EmitExplosionByColor(
 		FVector2(0, 0),
-		28, // count 값 필요 시 조정
+		38, // count 값 필요 시 조정
 		D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
 		D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
 	);
@@ -87,7 +87,7 @@ void ParticleHelper::SpawnParticleImpactByColor(const FVector2& pos, const std::
 		//pc->EmitImpact(FVector2(0, 0));
 		pc->EmitImpactByColor(
 			FVector2(0, 0),
-			28,
+			38,
 			D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
 			D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
 		);
