@@ -77,7 +77,7 @@ void Scene::Update()
 		m_mouseParticle->ToggleMouseTrail();
 	}
 
-	if (TimerManager::GetInstance().GetGlobalTimeScale() > 0 && Input::IsMouseLeftPressed())
+	if (m_bClickable && TimerManager::GetInstance().GetGlobalTimeScale() > 0 && Input::IsMouseLeftPressed())
 	{
 		/*WeakObjectPtr<gameObject> go  = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
 		GetCamera()->AddChildObject(go.Get());
@@ -115,7 +115,8 @@ void Scene::OnEnter()
     GetCamera()->AddChildObject(m_sysinfoWidget);
     auto* sysText = m_sysinfoWidget->AddComponent<TextRenderComponent>();
     sysText->SetDrawType(Define::EDrawType::ScreenSpace);
-    sysText->SetColor(FColor(200, 0, 0, 255));
+	sysText->SetColor(FColor(200, 0, 0, 255));
+	sysText->SetOpacity(0);
     // ScreenSpace 좌표 (좌상단 0,0)
     sysText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.1f));
 	sysText->m_layer = 987654321;
@@ -126,7 +127,8 @@ void Scene::OnEnter()
     auto* fpsText = m_fpsWidget->AddComponent<TextRenderComponent>();
     fpsText->SetDrawType(Define::EDrawType::ScreenSpace);
     fpsText->SetColor(FColor(0, 255, 0, 255));
-    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.27f));
+	fpsText->SetOpacity(1);
+    fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.05f));
 	fpsText->m_layer = 987654321;
 
 	m_mouseTrail = NewObject<gameObject>(L"Scene_Default_ParticleScreenTrail");

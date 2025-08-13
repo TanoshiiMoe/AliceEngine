@@ -174,7 +174,6 @@ public:
 	}
 
 	gameObject* Instantiate(gameObject* obj);
-
 protected:
 	ParticleComponent* m_mouseParticle;
 private:
@@ -188,5 +187,12 @@ private:
 	std::unordered_set<std::wstring> m_pendingDeleteUUIDs;
 
 	std::wstring FindUUIDByPointer(gameObject* ptr) const;
+
+
+public:
+	bool GetClickable() const { return m_bClickable; }
+	void SetClickable(const bool value) { m_bClickable = value; }
+private:
+	bool m_bClickable = false;
 };
 
