@@ -256,7 +256,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 			// 동그랗게 3발 
 			FVector2 targetPos = player->transform() ? player->transform()->GetPosition() : FVector2{ 0,0 };
 			FVector2 dir = targetPos - bodyPos ;
-			FVector2 _dirNormal = -dir.Normalize();
+			FVector2 _dirNormal = dir.Normalize();
 			// arm 회전
 			const float angleRad = std::atan2f(_dirNormal.y, _dirNormal.x);
 			const float angleDeg = angleRad * 180.0f / Define::PI;

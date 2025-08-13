@@ -73,21 +73,25 @@ void LocationIndicatorWidgetScript::OnStart()
     m_marker->SetRelativePosition(FVector2(0.0f, m_barY));
     m_marker->m_layer = Define::HUDLayer + 7;
 
-    m_enemyMarker = owner->AddComponent<SpriteRenderer>();
-    m_enemyMarker->SetDrawType(Define::EDrawType::ScreenSpace);
-    m_enemyMarker->LoadData(L"UI\\Location_Indicator_Color_Enemy.png");
-    // 마커는 좁은 폭으로 보이도록 스케일 축소 (세로만 조금 키움)
+    if (bBossState)
     {
-        const float w = m_enemyMarker->GetBitmapSizeX();
-        const float h = m_enemyMarker->GetBitmapSizeY();
-        if (w > 0.f && h > 0.f)
-        {
-            // 가로 스케일을 매우 작게 하여 얇은 선 형태
-            m_enemyMarker->SetRelativeScale(FVector2(0.02f, 1.1f));
-        }
+		m_enemyMarker = owner->AddComponent<SpriteRenderer>();
+		m_enemyMarker->SetDrawType(Define::EDrawType::ScreenSpace);
+		m_enemyMarker->LoadData(L"UI\\Location_Indicator_Color_Enemy.png");
+		// 마커는 좁은 폭으로 보이도록 스케일 축소 (세로만 조금 키움)
+		{
+			const float w = m_enemyMarker->GetBitmapSizeX();
+			const float h = m_enemyMarker->GetBitmapSizeY();
+			if (w > 0.f && h > 0.f)
+			{
+				// 가로 스케일을 매우 작게 하여 얇은 선 형태
+				m_enemyMarker->SetRelativeScale(FVector2(0.02f, 1.1f));
+			}
+		}
+		m_enemyMarker->SetRelativePosition(FVector2(0.0f, m_barY));
+		m_enemyMarker->m_layer = Define::HUDLayer + 7;
     }
-    m_enemyMarker->SetRelativePosition(FVector2(0.0f, m_barY));
-    m_enemyMarker->m_layer = Define::HUDLayer + 7;
+    
 
     // 시작 X 자동 설정
     if (!m_hasStartX)
@@ -112,7 +116,8 @@ void LocationIndicatorWidgetScript::Update(const float& deltaSeconds)
     if (m_marker)
     {
         m_marker->SetOpacity(pulse);
-        m_enemyMarker->SetOpacity(pulse);
+        if (bBossState)
+            m_enemyMarker->SetOpacity(pulse);
     }
 }
 
@@ -151,10 +156,12 @@ void LocationIndicatorWidgetScript::updateProgressAndMarker(const float& deltaSe
     const float barW = m_barEmpty->GetBitmapSizeX();
     const float halfW = barW * 0.5f; // 현재는 스케일 1.0 가정
     const float xOnBar = -halfW + (2.0f * halfW) * progress;
+    const float xBossBar = -halfW + (2.0f * halfW) * bossSpawnRelativeRatio;
     if (m_marker)
     {
         m_marker->SetRelativePosition(FVector2(xOnBar, m_barY));
-        m_enemyMarker->SetRelativePosition(FVector2(0, m_barY));
+        if (bBossState)
+            m_enemyMarker->SetRelativePosition(FVector2(xBossBar, m_barY));
     }
 
     if (owner)
@@ -180,11 +187,9 @@ void LocationIndicatorWidgetScript::updateProgressAndMarker(const float& deltaSe
         }
     }
 
-    if (owner && enemyIndecatorObj)
+    if (bBossState && owner && enemyIndecatorObj)
     {
-        int t1 = owner->GetPosition().x;
-        int t2 = GamePlayManager::GetInstance().GetStopXAxis() / 2;
-        if (owner->GetPosition().x < GamePlayManager::GetInstance().GetStopXAxis() / 2)
+        if (owner->GetPosition().x < GamePlayManager::GetInstance().GetStopXAxis() * bossSpawnRelativeRatio)
         {
             if (ParticleComponent* particle = enemyIndecatorObj->GetComponent<ParticleComponent>())
             {

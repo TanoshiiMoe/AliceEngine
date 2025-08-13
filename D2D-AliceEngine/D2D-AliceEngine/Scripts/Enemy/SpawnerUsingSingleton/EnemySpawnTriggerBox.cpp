@@ -79,6 +79,7 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
         if (EnemyDataManager::GetInstance().GetStats(4, stats))
         {
             drone->SetDamage(stats.damage);
+            drone->SetDamage(stats.attackDelay);
         }
     }
 
@@ -93,11 +94,11 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
         if (EnemyDataManager::GetInstance().GetStats(4, stats))
         {
             drone->SetDamage(stats.damage);
+            drone->SetDamage(stats.attackDelay);
         }
     }
 
     //enemy->SetPosition(worldPos);
-
 	FVector2 playerPos = 0;
 	if (auto player = GamePlayManager::GetInstance().GetPlayer())
 	{
@@ -168,6 +169,8 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
     EnemySpawner::EnemyType etype = static_cast<EnemySpawner::EnemyType>(_enemyTypeId);
 
     enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
+	FEnemyStats stats{};
+    bool t = EnemyDataManager::GetInstance().GetStats(_enemyTypeId, stats);
 
     FDroneSpritePath dronePath(
         L"Enemy/Drone/enermy_Drone_body.png",
@@ -186,14 +189,8 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
             drone->initBodyPos = FVector2(-120.0f, 85.0f);
             drone->initBodySize = FVector2(0.7f, 0.7f);
             drone->SetDroneType(EDroneType::Enemy);
-            drone->SetAttackDelay(2.0f);
-            
-            // EnemyDataManager에서 데미지 값 가져와서 설정
-            FEnemyStats stats{};
-            if (EnemyDataManager::GetInstance().GetStats(_enemyTypeId, stats))
-            {
-                drone->SetDamage(stats.damage);
-            }
+			drone->SetDamage(stats.damage);
+			drone->SetAttackDelay(stats.attackDelay);
         }
         break;
     case EnemySpawner::Truck:
@@ -216,13 +213,8 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
         {
             drone->initBodyPos = FVector2(50.0f, 40.0f);
             drone->SetDroneType(EDroneType::Enemy);
-            
-            // EnemyDataManager에서 데미지 값 가져와서 설정
-            FEnemyStats stats{};
-            if (EnemyDataManager::GetInstance().GetStats(_enemyTypeId, stats))
-            {
-                drone->SetDamage(stats.damage);
-            }
+			drone->SetDamage(stats.damage);
+			drone->SetAttackDelay(stats.attackDelay);
         }
         break;
     default:
