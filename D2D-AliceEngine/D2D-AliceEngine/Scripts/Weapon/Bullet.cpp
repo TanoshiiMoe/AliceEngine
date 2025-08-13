@@ -23,6 +23,16 @@
 #include <Helper/ParticleHelper.h>
 #include "BulletColl.h"
 
+static FVector2 CatmullRomPoint(const FVector2& p0, const FVector2& p1, const FVector2& p2, const FVector2& p3, float t)
+{
+	float t2 = t * t;
+	float t3 = t2 * t;
+	return FVector2(
+		0.5f * ((2.0f * p1.x) + (-p0.x + p2.x) * t + (2.0f * p0.x - 5.0f * p1.x + 4.0f * p2.x - p3.x) * t2 + (-p0.x + 3.0f * p1.x - 3.0f * p2.x + p3.x) * t3),
+		0.5f * ((2.0f * p1.y) + (-p0.y + p2.y) * t + (2.0f * p0.y - 5.0f * p1.y + 4.0f * p2.y - p3.y) * t2 + (-p0.y + 3.0f * p1.y - 3.0f * p2.y + p3.y) * t3)
+	);
+}
+
 void Bullet::Initialize()
 {
 	__super::Initialize();
@@ -116,6 +126,37 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 
 		FVector2 finalPos = currentPos + offset;
 		GetOwner()->transform()->SetPosition(finalPos);
+		break;
+	}
+	case EBulletType::CatmullRom:
+	{
+		if (bSplineFinished || catmullPoints.size() < 4)
+		{
+			// 경로 끝났거나 포인트 부족: 소멸
+			GetWorld()->RemoveObject(GetOwner());
+			break;
+		}
+		// 총 구간 수 = points-3
+		int numSegments = static_cast<int>(catmullPoints.size()) - 3;
+		float segmentTime = splineDuration / static_cast<float>(numSegments);
+		splineT += deltaSeconds / segmentTime;
+		if (splineT >= 1.0f)
+		{
+			splineT = 0.0f;
+			++splineSegment;
+			if (splineSegment >= numSegments)
+			{
+				bSplineFinished = true;
+				GetWorld()->RemoveObject(GetOwner());
+				break;
+			}
+		}
+		const FVector2& A = catmullPoints[splineSegment + 0];
+		const FVector2& B = catmullPoints[splineSegment + 1];
+		const FVector2& C = catmullPoints[splineSegment + 2];
+		const FVector2& D = catmullPoints[splineSegment + 3];
+		FVector2 pos = CatmullRomPoint(A, B, C, D, splineT);
+		GetOwner()->transform()->SetPosition(pos);
 		break;
 	}
 	default:

@@ -90,6 +90,11 @@ void SelectWidgetScript::OnStart()
 	auto stage2 = m_owner->AddComponent<ButtonComponent>();
 	auto stage3 = m_owner->AddComponent<ButtonComponent>();
 
+	auto stage1Sprite = m_owner->AddComponent<SpriteRenderer>();
+	auto stage2Sprite = m_owner->AddComponent<SpriteRenderer>();
+	auto stage3Sprite = m_owner->AddComponent<SpriteRenderer>();
+
+
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
 	m_sound = bgmObj->GetComponent<AudioComponent>();
@@ -180,6 +185,42 @@ void SelectWidgetScript::OnStart()
 	);
 	stage1->SetRelativeScale(FVector2(1, 1));
 	stage1->m_layer = Define::NormalTextLayer;
+
+	stage1Sprite->SetRelativeScale(FVector2(0.35f));
+	stage1Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
+	stage1Sprite->LoadData(L"CutScene/Stage1/stage_1_scene01.png");
+	stage1Sprite->RemoveFromParent();
+	stage1->AddChildComponent(stage1Sprite);
+	FVector2 stage1SpriteSize = stage1Sprite->GetRelativeSize();
+	stage1Sprite->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(stage1SpriteSize, FVector2(0, 0))
+		+ FVector2(0, 0)
+	);
+	stage1Sprite->m_layer = Define::NormalTextLayer+1;
+
+	stage2Sprite->SetRelativeScale(FVector2(0.35f));
+	stage2Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
+	stage2Sprite->LoadData(L"CutScene/Stage2/stage_2_scene02.png");
+	stage2Sprite->RemoveFromParent();
+	stage2->AddChildComponent(stage2Sprite);
+	FVector2 stage2SpriteSize = stage2Sprite->GetRelativeSize();
+	stage2Sprite->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(stage2SpriteSize, FVector2(0, 0))
+		+ FVector2(0, 0)
+	);
+	stage2Sprite->m_layer = Define::NormalTextLayer + 1;
+
+	stage3Sprite->SetRelativeScale(FVector2(0.35f));
+	stage3Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
+	stage3Sprite->LoadData(L"CutScene/Stage3/stage_3_scene04.png");
+	stage3Sprite->RemoveFromParent();
+	stage3->AddChildComponent(stage3Sprite);
+	FVector2 stage3SpriteSize = stage3Sprite->GetRelativeSize();
+	stage3Sprite->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(stage3SpriteSize, FVector2(0, 0))
+		+ FVector2(0, 0)
+	);
+	stage3Sprite->m_layer = Define::NormalTextLayer + 1;
 
 	// ===================== stage2
 	stage2->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
