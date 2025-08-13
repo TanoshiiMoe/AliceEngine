@@ -83,8 +83,16 @@ public:
 	void SetPosition(const FVector2& _pos) { m_CharacterPosition = D2D1::Vector2F(_pos.x, _pos.y); }
     FVector2 GetPosition() { return FVector2(m_CharacterPosition.x, m_CharacterPosition.y); }
 
+    // 크기 설정/조회
+    void SetScale(const FVector2& _scale) { m_CharacterScale = D2D1::Vector2F(_scale.x, _scale.y); }
+    FVector2 GetScale() const { return FVector2(m_CharacterScale.x, m_CharacterScale.y); }
+
 	bool GetRendered() const { return m_bRendered; }
 	void SetRendered(const bool value) { m_bRendered = value; }
+ 
+    // Spine 레이어(툴의 슬롯 순서) 사용 여부 토글
+    void SetUseSpineLayerOrder(bool enable) { m_useSetupSlotOrder = enable; }
+    bool GetUseSpineLayerOrder() const { return m_useSetupSlotOrder; }
 
 private:
     D2D1::Matrix3x2F m_UnityScreen;
@@ -112,6 +120,7 @@ private:
     bool m_initialized = false;
     D2D1_VECTOR_2F m_CharacterPosition = D2D1::Vector2F(0.0f, 0.0f);
     D2D1_VECTOR_2F m_CameraPosition = D2D1::Vector2F(0.0f, 300.0f);
+    D2D1_VECTOR_2F m_CharacterScale = D2D1::Vector2F(1.0f, 1.0f);
 
     Define::EDrawType m_drawType = Define::EDrawType::ScreenSpace;
     int m_layer = 1000;
@@ -121,4 +130,25 @@ private:
     void ReleaseDirect2D();
 
     bool m_bRendered = true;
+
+    // 디버그 렌더링 리소스
+    ComPtr<ID2D1SolidColorBrush> m_brush;
+    ComPtr<IDWriteFactory>       m_dwriteFactory;
+    ComPtr<IDWriteTextFormat>    m_textFormat;
+
+    // 툴의 슬롯 순서(레이어) 사용
+    bool m_useSetupSlotOrder = true;
+
+private:
+    // Helper: 아틀라스 리전(회전/트리밍 포함) 배치 계산
+    void ComputeRegionPlacement(
+        spine::RegionAttachment* regionAtt,
+        spine::AtlasRegion* atlasRegion,
+        float srcW, float srcH, bool rotated,
+        float& outDestW, float& outDestH,
+        float& outAttachX, float& outAttachY,
+        float& outAttachRot);
+
+    // Helper: 소스 사각형 계산
+    D2D1_RECT_F MakeSrcRect(spine::AtlasRegion* atlasRegion, bool rotated, float srcW, float srcH);
 };

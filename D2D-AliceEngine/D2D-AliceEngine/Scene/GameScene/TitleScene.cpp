@@ -11,6 +11,7 @@
 #include <Helpers/Logger.h>
 #include <Scripts/Widget/CutSceneWidgetScript.h>
 #include <Scripts/Spine2D/SpineScript.h>
+#include <Scripts/Legacy/CameraController.h>
 
 void TitleScene::Initialize()
 {
@@ -39,6 +40,7 @@ void TitleScene::OnEnter()
 	__super::OnEnter();
 	SetClickable(true);
 	m_cameraController = NewObject<gameObject>(L"Camera");
+	m_cameraController->AddComponent<CameraController>();
 
 	m_widget = NewObject<gameObject>(L"Widget");
 	//m_UI->AddComponent<TitleUIScript>();
@@ -46,6 +48,29 @@ void TitleScene::OnEnter()
 
 	// 테스트용 컷씬 위젯. 이걸 켜서 확인할 것.
 	//m_UI->AddComponent<CutSceneWidgetScript>();
+
+	spineObject = NewObject<gameObject>(L"spineObject");
+	SpineScript* spine = spineObject->AddComponent<SpineScript>();
+	spine->LoadData(L"Spine2D/MAIN_SPINE.atlas", L"Spine2D/MAIN_SPINE.json");
+	if (spine->spineRenderer)
+	{
+		spine->spineRenderer->SetAnimation("animation");
+		spine->spineRenderer->SetPosition(FVector2(0, 300));
+		spine->spineRenderer->SetRendered(true);
+		spine->spineRenderer->SetScale(0.34f);
+		//spine->spineRenderer->SetLayer(94548823);
+		spine->spineRenderer->SetDrawType(Define::EDrawType::WorldSpace);
+	}
+
+	//spineObject2 = scene->NewObject<gameObject>(L"spineObject");
+	//SpineScript* spine2 = spineObject2->AddComponent<SpineScript>();
+	//spine2->LoadData(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
+	//if (spine2->spineRenderer)
+	//{
+	//	spine2->spineRenderer->SetAnimation("Idle");
+	//	spine2->spineRenderer->SetPosition(FVector2(100, 0));
+	//	spine2->spineRenderer->SetRendered(false);
+	//}
 
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");

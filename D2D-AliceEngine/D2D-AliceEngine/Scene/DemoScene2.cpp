@@ -80,6 +80,28 @@ void DemoScene2::OnEnter()
 	m_camera = NewObject<gameObject>(L"Camera");
 	m_camera->AddComponent<CameraController>();
 
+	spineObject = NewObject<gameObject>(L"spineObject");
+	spine = spineObject->AddComponent<SpineScript>();
+	spine->LoadData(L"Spine2D\\MAIN_SPINE.atlas", L"Spine2D\\MAIN_SPINE.json");
+	if (spine->spineRenderer)
+	{
+		spine->spineRenderer->SetAnimation("animation");
+		spine->spineRenderer->SetPosition(FVector2(0, 0));
+		spine->spineRenderer->SetRendered(true);
+		spine->spineRenderer->SetLayer(94548823);
+	}
+
+	//spine->LoadData(L"Spine2D_g\\Monster_1.atlas", L"Spine2D_g\\Monster_1.json");
+	//if (spine->spineRenderer)
+	//{
+	//	//spine->spineRenderer->SetAnimation("animation");
+	//	spine->spineRenderer->SetPosition(FVector2(0, 0));
+	//	spine->spineRenderer->SetRendered(true);
+	//	spine->spineRenderer->SetLayer(94548823);
+	//	spine->spineRenderer->SetUseSpineLayerOrder(false);
+	//	//spine->spineRenderer->SetDrawType(Define::EDrawType::WorldSpace);
+	//}
+
 	m_widget = NewObject<gameObject>(L"widget");
 	m_widget2 = NewObject<gameObject>(L"widget2");
 	m_widget3 = NewObject<gameObject>(L"widget3");
@@ -324,6 +346,60 @@ void DemoScene2::aruInput()
 			GetWorld()->RemoveObjectByName(L"spineObject");
 		}
 	}
+
+	float moveSpeed = 35.0f; // 한번 누를 때마다 이동하는 픽셀 수
+
+	if (Input::IsKeyDown(VK_W)) // 위
+	{
+		FVector2 pos = spine->spineRenderer->GetPosition();
+		pos.y += moveSpeed; // y 증가 → 위로 이동
+		spine->spineRenderer->SetPosition(pos);
+	}
+
+	if (Input::IsKeyDown(VK_S)) // 아래
+	{
+		FVector2 pos = spine->spineRenderer->GetPosition();
+		pos.y -= moveSpeed; // y 감소 → 아래로 이동
+		spine->spineRenderer->SetPosition(pos);
+	}
+
+	if (Input::IsKeyDown(VK_A)) // 왼쪽
+	{
+		FVector2 pos = spine->spineRenderer->GetPosition();
+		pos.x -= moveSpeed; // x 감소 → 왼쪽 이동
+		spine->spineRenderer->SetPosition(pos);
+	}
+
+	if (Input::IsKeyDown(VK_D)) // 오른쪽
+	{
+		FVector2 pos = spine->spineRenderer->GetPosition();
+		pos.x += moveSpeed; // x 증가 → 오른쪽 이동
+		spine->spineRenderer->SetPosition(pos);
+	}
+
+	if (Input::IsKeyPressed(VK_F))
+	{
+		spine->spineRenderer->SetNextAnimation();
+	}
+	
+	// 스파인 스케일 조절: [ (축소), ] (확대)
+	if (Input::IsKeyDown(VK_OEM_4)) // '['
+	{
+		FVector2 sc = spine->spineRenderer->GetScale();
+		sc.x *= 0.9f; sc.y *= 0.9f;
+		sc.x = Math::Clamp(sc.x, 0.1f, 5.0f);
+		sc.y = Math::Clamp(sc.y, 0.1f, 5.0f);
+		spine->spineRenderer->SetScale(sc);
+	}
+	if (Input::IsKeyDown(VK_OEM_6)) // ']'
+	{
+		FVector2 sc = spine->spineRenderer->GetScale();
+		sc.x *= 1.1f; sc.y *= 1.1f;
+		sc.x = Math::Clamp(sc.x, 0.1f, 5.0f);
+		sc.y = Math::Clamp(sc.y, 0.1f, 5.0f);
+		spine->spineRenderer->SetScale(sc);
+	}
+	
 }
 
 void DemoScene2::CameraInput()
