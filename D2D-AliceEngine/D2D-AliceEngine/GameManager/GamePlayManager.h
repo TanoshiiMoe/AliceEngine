@@ -130,5 +130,5 @@ private:
 
     bool isCutScenePlaying = false;
     int m_cutSceneIndex = 0;
-    int m_endSubDistance = 1300;
+    int m_endSubDistance = 2200;
 };

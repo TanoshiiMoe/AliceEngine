@@ -1,7 +1,7 @@
 [
   {
-    "maxHP": 250.0,
-    "hp": 250.0,
+    "maxHP": 2500.0,
+    "hp": 2500.0,
     "battery": 10.0,
     "moveSpeed": 50.0,
     "attackDelay": 0.1,
