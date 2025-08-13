@@ -34,12 +34,6 @@ void GameClearScene::OnEnter()
 
     m_textGO = NewObject<gameObject>(L"GameClearLabel");
     auto* text = m_textGO->AddComponent<TextRenderComponent>();
-    text->SetText(L"<현재 씬> GameClearScene");
-    text->SetTextAlignment(ETextFormat::TopLeft);
-    text->SetRelativePosition(FVector2(20, 10));
-    text->SetFontSize(32.0f);
-
-    m_background = NewObject<gameObject>(L"BackGround");
 
 	m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
     {
@@ -77,9 +71,10 @@ void GameClearScene::OnEnter()
         sr->SetDrawType(Define::EDrawType::ScreenSpace);
         sr->LoadData(L"UI/UI_Score.png");
         sr->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
-    // VK_3 눌러 TitleScene 복귀
     }
 
+    // VK_3 눌러 TitleScene 복귀
+    // TODO : 디버깅 끝나면 지우기
     auto* input = m_textGO->AddComponent<InputComponent>();
     input->SetAction(m_textGO->GetHandle(), []() {
         if (Input::IsKeyDown(VK_3)) {

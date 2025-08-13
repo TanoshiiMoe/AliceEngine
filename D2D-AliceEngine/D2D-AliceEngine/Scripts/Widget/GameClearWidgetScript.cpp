@@ -50,7 +50,7 @@ void GameClearWidgetScript::OnStart()
 
 	std::wstring prevScene = SceneManager::GetInstance().GetPrevSceneName();
 
-	auto background = m_owner->AddComponent<SpriteRenderer>();
+	auto cutScene = m_owner->AddComponent<SpriteRenderer>();
 
 	auto skipText = m_owner->AddComponent<TextRenderComponent>();
 	auto skipButton = m_owner->AddComponent<ButtonComponent>();
@@ -116,10 +116,10 @@ void GameClearWidgetScript::OnStart()
 			skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 		});
 
-	skipButton->SetStateAction(EButtonState::Pressed, [skipButton, skipText, background,
+	skipButton->SetStateAction(EButtonState::Pressed, [skipButton, skipText, cutScene,
 		toMainButton
 	] {
-		background->m_layer = Define::Disable;
+		cutScene->m_layer = Define::Disable;
 		skipButton->m_layer = Define::Disable;
 		skipText->m_layer = Define::Disable;
 		skipButton->SetActive(false);
@@ -128,22 +128,27 @@ void GameClearWidgetScript::OnStart()
 
 	if (prevScene == Define::Scene_Stage3)
 	{
-		background->LoadData(L"CutScene\\Clear\\ending.png");
-		background->SetDrawType(EDrawType::ScreenSpace);
+		cutScene->LoadData(L"CutScene\\Clear\\ending.png");
+		cutScene->SetDrawType(EDrawType::ScreenSpace);
 		const float targetW = 1920.f;
 		const float targetH = 1080.f;
-		const float bmpW = background->GetBitmapSizeX();
-		const float bmpH = background->GetBitmapSizeY();
+		const float bmpW = cutScene->GetBitmapSizeX();
+		const float bmpH = cutScene->GetBitmapSizeY();
 		if (bmpW > 0.f && bmpH > 0.f)
 		{
 			const FVector2 scale(targetW / bmpW, targetH / bmpH);
-			background->SetRelativeScale(scale);
-			background->m_layer = Define::CutSceneLayer;
+			cutScene->SetRelativeScale(scale);
+			cutScene->m_layer = Define::CutSceneLayer;
 		}
 
 		skipButton->SetActive(true);
 		skipButton->m_layer = Define::CutSceneLayer + Define::ButtonLayer;
 		skipText->m_layer = Define::CutSceneLayer + Define::ButtonTextLayer;
+	}
+	else
+	{
+		skipButton->SetActive(false);
+		toMainButton->SetActive(true);
 	}
 
 	// ====================== Delegate
