@@ -12,10 +12,13 @@
 #include <Scripts/Widget/CutSceneWidgetScript.h>
 #include <Scripts/Spine2D/SpineScript.h>
 #include <Scripts/Legacy/CameraController.h>
+#include <Scripts/Widget/GameClearWidgetScript.h>
 
 void TitleScene::Initialize()
 {
 	__super::Initialize();
+
+	GameClearWidgetScript::s_prevScene = L"";
 
     GamePlayManager& GPM = GamePlayManager::GetInstance();
 	GPM.StartGame();
