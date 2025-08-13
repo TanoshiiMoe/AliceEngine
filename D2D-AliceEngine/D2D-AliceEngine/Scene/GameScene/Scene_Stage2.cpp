@@ -56,12 +56,12 @@ void Scene_Stage2::OnEnter()
     __super::OnEnter();
     m_mouseParticle->ToggleMouseTrail();
     m_textGO = NewObject<gameObject>(L"Stage2Label");
-    auto* text = m_textGO->AddComponent<TextRenderComponent>();
+    //auto* text = m_textGO->AddComponent<TextRenderComponent>();
     GetCamera()->AddChildObject(m_textGO);
-    text->SetText(L"<현재 씬> Scene_Stage2");
-    text->SetTextAlignment(ETextFormat::TopLeft);
-    text->SetRelativePosition(FVector2(20, 10));
-    text->SetFontSize(24.0f);
+	//text->SetText(L"<현재 씬> Scene_Stage2");
+	//text->SetTextAlignment(ETextFormat::TopLeft);
+	//text->SetRelativePosition(FVector2(20, 10));
+	//text->SetFontSize(24.0f);
 
     // 타일맵 추가
     m_tile = NewObject<gameObject>(L"TileMap");
