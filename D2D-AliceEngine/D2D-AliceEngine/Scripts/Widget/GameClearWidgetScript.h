@@ -14,5 +14,7 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+
+	static std::wstring s_prevScene;
 };
 

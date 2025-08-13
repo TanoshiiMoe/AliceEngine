@@ -22,6 +22,11 @@
 #include <Component/AudioComponent.h>
 #include <GameManager/GamePlayManager.h>
 #include <Helpers/Logger.h>
+#include <Manager/TimerManager.h>
+#include <Scene/GameScene/GameClearScene.h>
+#include <memory>
+
+std::wstring GameClearWidgetScript::s_prevScene = L"";
 
 void GameClearWidgetScript::Initialize()
 {
@@ -50,7 +55,13 @@ void GameClearWidgetScript::OnStart()
 
 	std::wstring prevScene = SceneManager::GetInstance().GetPrevSceneName();
 
+	if (s_prevScene == L"")
+	{
+		s_prevScene = prevScene;
+	}
+
 	auto background = m_owner->AddComponent<SpriteRenderer>();
+	auto cutScene = m_owner->AddComponent<SpriteRenderer>();
 
 	auto skipText = m_owner->AddComponent<TextRenderComponent>();
 	auto skipButton = m_owner->AddComponent<ButtonComponent>();
@@ -58,7 +69,42 @@ void GameClearWidgetScript::OnStart()
 	auto toMainText = m_owner->AddComponent<TextRenderComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
 
+	auto grade = m_owner->AddComponent<SpriteRenderer>();
+
 	// ========================= //
+	auto timeObj = GetWorld()->FindObjectByName<gameObject>(L"PassedTime");
+	if (!timeObj) return;
+	auto passedTime = timeObj->GetComponent<TextRenderComponent>();
+	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
+
+	int minutes = static_cast<int>(timeSec) / 60;
+	int seconds = static_cast<int>(timeSec) % 60;
+	int milliseconds = static_cast<int>((timeSec - static_cast<int>(timeSec)) * 100.0f);
+
+	wchar_t buffer[16];
+	swprintf(buffer, 16, L"%02d:%02d:%02d", minutes, seconds, milliseconds);
+	passedTime->SetFontSize(28.0f);
+	passedTime->SetText(std::wstring(buffer));
+	passedTime->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	passedTime->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	passedTime->SetTextAlignment(ETextFormat::TopLeft);
+	passedTime->SetRelativePosition(FVector2(350, 585));
+	passedTime->SetColor(FColor(0, 234, 255, 255));
+	passedTime->m_layer = Define::Disable;
+
+	auto killObj = GetWorld()->FindObjectByName<gameObject>(L"KillCount");
+	if (!killObj) return;
+	auto killCount = killObj->GetComponent<TextRenderComponent>();
+
+	killCount->SetText(std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+	killCount->SetFontSize(28.0f);
+	killCount->SetTextAlignment(ETextFormat::TopLeft);
+	killCount->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	killCount->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	killCount->SetRelativePosition(FVector2(350, 553));
+	killCount->SetColor(FColor(0, 234, 255, 255));
+	killCount->m_layer = Define::Disable;
+
 	skipText->SetFontSize(55.0f);
 	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
@@ -66,9 +112,9 @@ void GameClearWidgetScript::OnStart()
 	skipText->SetColor(FColor::White);
 	skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	skipText->SetRelativeScale(FVector2(1, 1));
-	skipText->m_layer = Define::Disable;
 	skipText->RemoveFromParent();
 	skipButton->AddChildComponent(skipText);
+	skipText->m_layer = Define::CutSceneLayer + Define::ButtonTextLayer;
 	
 	skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
@@ -76,7 +122,8 @@ void GameClearWidgetScript::OnStart()
 	skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	skipButton->SetRelativePosition(FVector2(0, 400));
 	skipButton->SetRelativeScale(FVector2(1.f, 1.f));
-	skipButton->m_layer = Define::Disable;
+	skipButton->SetActive(true);
+	skipButton->m_layer = Define::CutSceneLayer + Define::ButtonLayer;
 
 	toMainText->SetFontSize(55.0f);
 	toMainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -86,7 +133,7 @@ void GameClearWidgetScript::OnStart()
 	toMainText->SetRelativePosition(CoordHelper::RatioCoordToScreen(toMainText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	toMainText->SetRelativeScale(FVector2(1, 1));
 	toMainText->SetRelativeRotation(0);
-	toMainText->m_layer = Define::ButtonTextLayer;
+	toMainText->m_layer = Define::Disable;
 	toMainText->RemoveFromParent();
 	toMainButton->AddChildComponent(toMainText);
 
@@ -95,8 +142,27 @@ void GameClearWidgetScript::OnStart()
 	toMainButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
 	toMainButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	toMainButton->SetRelativePosition(FVector2(0, 400));
-	toMainButton->m_layer = Define::ButtonLayer;
+	toMainButton->m_layer = Define::Disable;
 	toMainButton->SetActive(false);
+
+	// =================== //
+	background->LoadData(L"UI/UI_Score.png");
+	background->SetDrawType(Define::EDrawType::ScreenSpace);
+	background->m_layer = Define::NormalUILayer;
+
+	cutScene->LoadData(L"CutScene\\Clear\\ending.png");
+	cutScene->SetDrawType(EDrawType::ScreenSpace);
+	const float targetW = 1920.f;
+	const float targetH = 1080.f;
+	const float bmpW = cutScene->GetBitmapSizeX();
+	const float bmpH = cutScene->GetBitmapSizeY();
+
+	if (bmpW > 0.f && bmpH > 0.f)
+	{
+		const FVector2 scale(targetW / bmpW, targetH / bmpH);
+		cutScene->SetRelativeScale(scale);
+		cutScene->m_layer = CutSceneLayer;
+	}
 
 	skipButton->SetStateAction(Define::EButtonState::Hover, [skipButton]()
 		{
@@ -116,34 +182,33 @@ void GameClearWidgetScript::OnStart()
 			skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 		});
 
-	skipButton->SetStateAction(EButtonState::Pressed, [skipButton, skipText, background,
-		toMainButton
+	skipButton->SetStateAction(EButtonState::Pressed, [skipButton, skipText, cutScene,
+		toMainButton, toMainText, passedTime, killCount
 	] {
-		background->m_layer = Define::Disable;
+		cutScene->m_layer = Define::Disable;
+		skipButton->m_layer = Define::Disable;
+		skipText->m_layer = Define::Disable;
+
+		passedTime->m_layer = Define::NormalTextLayer;
+		killCount->m_layer = Define::NormalTextLayer;
+
+		skipButton->SetActive(false);
+
+		toMainButton->SetActive(true);
+		toMainButton->m_layer = Define::ButtonLayer;
+		toMainText->m_layer = Define::ButtonTextLayer;
+		});
+
+	if (s_prevScene != Define::Scene_Stage3)
+	{
+		cutScene->m_layer = Define::Disable;
 		skipButton->m_layer = Define::Disable;
 		skipText->m_layer = Define::Disable;
 		skipButton->SetActive(false);
+
 		toMainButton->SetActive(true);
-		});
-
-	if (prevScene == Define::Scene_Stage3)
-	{
-		background->LoadData(L"CutScene\\Clear\\ending.png");
-		background->SetDrawType(EDrawType::ScreenSpace);
-		const float targetW = 1920.f;
-		const float targetH = 1080.f;
-		const float bmpW = background->GetBitmapSizeX();
-		const float bmpH = background->GetBitmapSizeY();
-		if (bmpW > 0.f && bmpH > 0.f)
-		{
-			const FVector2 scale(targetW / bmpW, targetH / bmpH);
-			background->SetRelativeScale(scale);
-			background->m_layer = Define::CutSceneLayer;
-		}
-
-		skipButton->SetActive(true);
-		skipButton->m_layer = Define::CutSceneLayer + Define::ButtonLayer;
-		skipText->m_layer = Define::CutSceneLayer + Define::ButtonTextLayer;
+		toMainButton->m_layer = Define::ButtonLayer;
+		toMainText->m_layer = Define::ButtonTextLayer;
 	}
 
 	// ====================== Delegate

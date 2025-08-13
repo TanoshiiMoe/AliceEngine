@@ -144,7 +144,8 @@ void GamePlayManager::PlayBossMode()
                     
                     // 일반 몬스터도 소환 (랜덤 타입)
                     int enemyType = FRandom::GetRandomInRange(0, 3); // 0~3 타입의 적
-                    FVector2 enemySpawnPos = FRandom::GetRandomPointInCircle2D(0, 0, 250);
+					FVector2 enemySpawnPos = FRandom::GetRandomPointInCircle2D(0, -150, 250);
+					//FVector2 enemySpawnPos = FVector2(0,-150);
                     if (gameObject* player = GamePlayManager::GetInstance().GetPlayer())
                     {
                         FVector2 pos = player->GetPosition();
@@ -194,7 +195,6 @@ void GamePlayManager::SpawnBlackOut(int modeIndex, bool useCrossFade, float dura
         bo->UseCrossFade(useCrossFade);
     }
 }
-
 
 void GamePlayManager::PauseGame()
 {
