@@ -109,6 +109,14 @@ void StageAudioScript::OnEnd()
 	if (m_Stage3Audio->IsPlaying()) m_Stage3Audio->Stop();
 	if (m_Ambience->IsPlaying()) m_Ambience->Stop();
 
+	for (auto& pair : m_Sfx) {
+		auto& audio = pair.second;
+		if (audio != nullptr) {
+			if (audio->IsPlaying())
+				audio->Stop();
+		}
+	}
+
 	instance = nullptr;
 }
 
