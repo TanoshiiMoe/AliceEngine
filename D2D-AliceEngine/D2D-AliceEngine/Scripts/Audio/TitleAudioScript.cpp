@@ -4,6 +4,7 @@
 #include <Object/gameObject.h>
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
+#include <Scene/Scene.h>
 
 #include <Component/AudioComponent.h>
 

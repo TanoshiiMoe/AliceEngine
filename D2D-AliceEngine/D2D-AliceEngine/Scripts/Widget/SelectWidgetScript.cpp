@@ -106,7 +106,7 @@ void SelectWidgetScript::OnStart()
 	background->SetRelativePosition(CoordHelper::RatioCoordToScreen(backgroundSize, FVector2(0, 0)));
 	background->SetRelativeScale(FVector2(1, 1));
 	
-	tutorial->LoadData(L"BackGround\\Mari_Sportswear.webm", 30, L"jpg", 95, true);
+	tutorial->LoadData(L"BackGround\\movie_tutorial.mp4", 14, L"jpg", 95, true);
 	tutorial->m_layer = Define::Disable;
 	tutorial->SetRelativePosition(FVector2(-960, -550));
 

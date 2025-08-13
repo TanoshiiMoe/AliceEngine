@@ -1,6 +1,6 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "SpineRenderer.h"
-#include <Extension/json.hpp>// nlohmann::json »ç¿ë
+#include <Extension/json.hpp>// nlohmann::json ì‚¬ìš©
 #include <wincodec.h>
 #include <fstream>
 #include <iostream>
@@ -36,7 +36,7 @@
 #include <System/RenderSystem.h>
 #include <Manager/PackageResourceManager.h>
 
-// Direct2DTextureLoader ±¸Çö
+// Direct2DTextureLoader êµ¬í˜„
 Direct2DTextureLoader::Direct2DTextureLoader(ID2D1RenderTarget* renderTarget)
 	: m_renderTarget(renderTarget) {
 }
@@ -84,7 +84,7 @@ void Direct2DTextureLoader::load(spine::AtlasPage& page, const spine::String& pa
 }
 void Direct2DTextureLoader::unload(void* texture)
 {
-	// ComPr »èÁ¦
+	// ComPr ì‚­ì œ
 	m_bitmapMap.clear();
 }
 
@@ -164,7 +164,7 @@ D2D1_SIZE_F SpineRenderer::GetRenderTargetSize() const {
 		return D2DRenderManager::GetInstance().m_d2dDeviceContext->GetSize();
 	}
 	FVector2 screenSize = D2DRenderManager::GetInstance().GetApplicationSize();
-	return D2D1::SizeF(static_cast<float>(screenSize.x), static_cast<float>(screenSize.y)); // ±âº» Å©±â
+	return D2D1::SizeF(static_cast<float>(screenSize.x), static_cast<float>(screenSize.y)); // ê¸°ë³¸ í¬ê¸°
 }
 
 void SpineRenderer::Clear(const D2D1_COLOR_F& color) {
@@ -175,28 +175,29 @@ void SpineRenderer::Clear(const D2D1_COLOR_F& color) {
 
 
 
-// --- ½½·Ôº° ÀÌ¹ÌÁö ·»´õ¸µ ---
+// --- ìŠ¬ë¡¯ë³„ ì´ë¯¸ì§€ ë Œë”ë§ ---
 void SpineRenderer::Render()
 {
+	if (!m_bRendered) return;
 	if (!m_skeleton || !m_atlas || !D2DRenderManager::GetInstance().m_d2dDeviceContext)
 		return;
 
 	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 
-	// Ä³¸¯ÅÍÀÇ ¿ùµå À§Ä¡
+	// ìºë¦­í„°ì˜ ì›”ë“œ ìœ„ì¹˜
 	D2D1::Matrix3x2F worldTransform = D2D1::Matrix3x2F::Translation(m_CharacterPosition.x, m_CharacterPosition.y);
-	// À¯´ÏÆ¼ ÁÂÇ¥°è º¯È¯À» À§ÇØ »çÀü YÃà ¹İÀü
+	// ìœ ë‹ˆí‹° ì¢Œí‘œê³„ ë³€í™˜ì„ ìœ„í•´ ì‚¬ì „ Yì¶• ë°˜ì „
 	D2D1::Matrix3x2F renderTransform = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	// Ä«¸Ş¶ó ±âÁØ ÁÂÇ¥°è º¯È¯À» À§ÇØ ¿ªÇà·Ä °è»ê
+	// ì¹´ë©”ë¼ ê¸°ì¤€ ì¢Œí‘œê³„ ë³€í™˜ì„ ìœ„í•´ ì—­í–‰ë ¬ ê³„ì‚°
 	D2D1::Matrix3x2F cameraInv = D2D1::Matrix3x2F::Translation(m_CameraPosition.x, m_CameraPosition.y);
 	cameraInv.Invert();
 
-	// ÁÂÇ¥°è Ãà ±×¸®±â
+	// ì¢Œí‘œê³„ ì¶• ê·¸ë¦¬ê¸°
 	//D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(cameraInv * m_UnityScreen);
 	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(-m_clientWidth), D2D1::Point2F(+m_clientWidth), m_brush.Get(), 1.0f);
 	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(0.0f, -m_clientHeight), D2D1::Point2F(0.0f, m_clientHeight), m_brush.Get(), 1.0f);
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ÀÌ¸§ Ç¥½Ã
+	// ì• ë‹ˆë©”ì´ì…˜ ì´ë¦„ í‘œì‹œ
 	//D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 	//std::wstring wMessage = L"Select Animation 1~9.   ,0: BasePose";
 	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawTextW(wMessage.c_str(), (UINT32)wMessage.length(),
@@ -205,7 +206,7 @@ void SpineRenderer::Render()
 	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawTextW(wAnimName.c_str(), (UINT32)wAnimName.length(),
 	//	m_textFormat.Get(), D2D1::RectF(0, 20, 100, 30), m_brush.Get());
 
-	// ½½·Ôº°·Î ·»´õ¸µ
+	// ìŠ¬ë¡¯ë³„ë¡œ ë Œë”ë§
 	const auto& drawOrder = m_skeleton->getDrawOrder();
 	for (size_t i = 0; i < drawOrder.size(); ++i)
 	{
@@ -215,7 +216,7 @@ void SpineRenderer::Render()
 			continue;
 
 		if (!attachment->getRTTI().isExactly(spine::RegionAttachment::rtti))
-			continue; // RegionAttachment¸¸ Ã³¸®
+			continue; // RegionAttachmentë§Œ ì²˜ë¦¬
 
 		spine::RegionAttachment* regionAtt = static_cast<spine::RegionAttachment*>(attachment);
 		spine::TextureRegion* region = regionAtt->getRegion();
@@ -230,10 +231,10 @@ void SpineRenderer::Render()
 		if (!bitmap)
 			continue;
 
-		// region.rotate È®ÀÎ
+		// region.rotate í™•ì¸
 		assert(atlasRegion->degrees == 0 || atlasRegion->degrees == 90);
 
-		// ÅØ½ºÃ³ ÀÌ¹ÌÁö ¹èÄ¡ ÃÖÀûÈ­·Î ÀÌ¹ÌÁö°¡ È¸ÀüµÈ °æ¿ì´Â ¿¹¿ÜÃ³¸®°¡ ÇÊ¿äÇÏ´Ù.
+		// í…ìŠ¤ì²˜ ì´ë¯¸ì§€ ë°°ì¹˜ ìµœì í™”ë¡œ ì´ë¯¸ì§€ê°€ íšŒì „ëœ ê²½ìš°ëŠ” ì˜ˆì™¸ì²˜ë¦¬ê°€ í•„ìš”í•˜ë‹¤.
 		bool rotated = (atlasRegion->degrees == 90);
 		float srcW = rotated ? atlasRegion->height : atlasRegion->width;
 		float srcH = rotated ? atlasRegion->width : atlasRegion->height;
@@ -243,7 +244,7 @@ void SpineRenderer::Render()
 		srcRect.right = srcRect.left + srcW;
 		srcRect.bottom = srcRect.top + srcH;
 
-		// 2. destRect + offset Àû¿ë
+		// 2. destRect + offset ì ìš©
 		float destW = rotated ? atlasRegion->originalHeight : atlasRegion->originalWidth;
 		float destH = rotated ? atlasRegion->originalWidth : atlasRegion->originalHeight;
 		float offsetX = rotated ? atlasRegion->offsetY : atlasRegion->offsetX;
@@ -263,7 +264,7 @@ void SpineRenderer::Render()
 		destRect.right = destRect.left + destW;
 		destRect.bottom = destRect.top + destH;
 
-		// 4. º»(Bone)ÀÇ ¿ùµå º¯È¯
+		// 4. ë³¸(Bone)ì˜ ì›”ë“œ ë³€í™˜
 		spine::Bone& bone = slot->getBone();
 		D2D1::Matrix3x2F boneWorldMatrix =
 			D2D1::Matrix3x2F::Scale(bone.getScaleX(), bone.getScaleY()) *
@@ -275,18 +276,18 @@ void SpineRenderer::Render()
 
 		D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 255, 0, 255);
 
-		// È®ÀÎ¿ë ¿µ¿ª ±×¸®±â
+		// í™•ì¸ìš© ì˜ì—­ ê·¸ë¦¬ê¸°
 		//if (rotated)
 		//	m_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Blue, 0.1f));
 		//else
 		//	m_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Green, 0.1f));
 		//D2DRenderManager::GetInstance().m_d2dDeviceContext->FillRectangle(destRect, m_brush.Get());
 		
-		// ÀÌ¹ÌÁö ±×¸®±â
+		// ì´ë¯¸ì§€ ê·¸ë¦¬ê¸°
 		D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawBitmap(bitmap, destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, srcRect);
 	}
 
-	// º»ÀÇ ¿øÁ¡¿¡ + ¶óÀÎ°ú ÀÌ¸§ Ç¥½Ã
+	// ë³¸ì˜ ì›ì ì— + ë¼ì¸ê³¼ ì´ë¦„ í‘œì‹œ
 	if (m_skeleton)
 	{
 		auto& bones = m_skeleton->getBones();
@@ -309,10 +310,10 @@ void SpineRenderer::Render()
 	}
 }
 
-// --- Å°º¸µå ÀÔ·Â Ã³¸® ---
+// --- í‚¤ë³´ë“œ ì…ë ¥ ì²˜ë¦¬ ---
 void SpineRenderer::HandleKeyInput(int keyCode) {
 	std::cout << "Key pressed: " << keyCode << std::endl;
-	// 1~9: ÇØ´ç ÀÎµ¦½º ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
+	// 1~9: í•´ë‹¹ ì¸ë±ìŠ¤ ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
 	if (keyCode >= '1' && keyCode <= '9') {
 		int idx = keyCode - '1';
 		if (idx >= 0 && idx < (int)m_animationList.size()) {
@@ -321,15 +322,15 @@ void SpineRenderer::HandleKeyInput(int keyCode) {
 		return;
 	}
 	switch (keyCode) {
-	case '0': // 0¹ø Å°: ¾Ö´Ï¸ŞÀÌ¼Ç ¾øÀÌ ±âº» Æ÷Áî
+	case '0': // 0ë²ˆ í‚¤: ì• ë‹ˆë©”ì´ì…˜ ì—†ì´ ê¸°ë³¸ í¬ì¦ˆ
 		if (m_state) m_state->clearTracks();
 		if (m_skeleton) m_skeleton->setToSetupPose();
 		SetAnimationTime(0.0f);
 		break;
-	case VK_LEFT: // ¿ŞÂÊ È­»ìÇ¥: ÀÌÀü ¾Ö´Ï¸ŞÀÌ¼Ç
+	case VK_LEFT: // ì™¼ìª½ í™”ì‚´í‘œ: ì´ì „ ì• ë‹ˆë©”ì´ì…˜
 		SetPreviousAnimation();
 		break;
-	case VK_RIGHT: // ¿À¸¥ÂÊ È­»ìÇ¥: ´ÙÀ½ ¾Ö´Ï¸ŞÀÌ¼Ç
+	case VK_RIGHT: // ì˜¤ë¥¸ìª½ í™”ì‚´í‘œ: ë‹¤ìŒ ì• ë‹ˆë©”ì´ì…˜
 		SetNextAnimation();
 		break;
 	default:
@@ -361,8 +362,8 @@ void SpineRenderer::SetPreviousAnimation() {
 
 void SpineRenderer::LoadSpine(const std::wstring& atlasPath, const std::wstring& jsonPath)
 {
-	std::wstring atlasFilePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + atlasPath); // ÆÄÀÏ ÀÌ¸§¸¸ ÀúÀå
-	std::wstring jsonFilePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + jsonPath); // ÆÄÀÏ ÀÌ¸§¸¸ ÀúÀå
+	std::wstring atlasFilePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + atlasPath); // íŒŒì¼ ì´ë¦„ë§Œ ì €ì¥
+	std::wstring jsonFilePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + jsonPath); // íŒŒì¼ ì´ë¦„ë§Œ ì €ì¥
 	std::string atlasFileStrPath = StringHelper::wstring_to_string(atlasFilePath);
 	std::string jsonFileStrPath = StringHelper::wstring_to_string(jsonFilePath);
 
@@ -370,7 +371,7 @@ void SpineRenderer::LoadSpine(const std::wstring& atlasPath, const std::wstring&
 	m_atlas = std::make_unique<spine::Atlas>(atlasFileStrPath.c_str(), m_textureLoader.get());
 	spine::SkeletonJson json(m_atlas.get());
 
-	m_skeletonData.reset(json.readSkeletonDataFile(jsonFileStrPath.c_str())); // ³»ºÎ new
+	m_skeletonData.reset(json.readSkeletonDataFile(jsonFileStrPath.c_str())); // ë‚´ë¶€ new
 	if (!m_skeletonData)
 	{
 		OutputDebugStringW(L"spineRenderer LoadSpine()  m_skeletonDataError!\n");
@@ -380,7 +381,7 @@ void SpineRenderer::LoadSpine(const std::wstring& atlasPath, const std::wstring&
 	m_skeleton.reset(new spine::Skeleton(m_skeletonData.get()));
 	m_stateData.reset(new spine::AnimationStateData(m_skeletonData.get()));
 	m_state.reset(new  spine::AnimationState(m_stateData.get()));
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¸ñ·Ï Ã¤¿ì±â
+	// ì• ë‹ˆë©”ì´ì…˜ ëª©ë¡ ì±„ìš°ê¸°
 	m_animationList.clear();
 	for (int i = 0; i < m_skeletonData->getAnimations().size(); ++i) {
 		m_animationList.push_back(m_skeletonData->getAnimations()[i]->getName().buffer());
@@ -391,7 +392,7 @@ void SpineRenderer::LoadSpine(const std::wstring& atlasPath, const std::wstring&
 
 void SpineRenderer::ReleaseSpine()
 {
-	// spine-cpp °´Ã¼µé ÇØÁ¦
+	// spine-cpp ê°ì²´ë“¤ í•´ì œ
 	m_state.reset();
 	m_stateData.reset();
 	m_skeleton.reset();
@@ -399,7 +400,7 @@ void SpineRenderer::ReleaseSpine()
 	m_atlas.reset();
 
 	if (m_textureLoader)
-		m_textureLoader->unload(nullptr); // ºñÆ®¸Ê ÇØÁ¦)
+		m_textureLoader->unload(nullptr); // ë¹„íŠ¸ë§µ í•´ì œ)
 }
 
 void SpineRenderer::ReleaseDirect2D()

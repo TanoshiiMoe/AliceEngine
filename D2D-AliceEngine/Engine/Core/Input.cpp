@@ -91,6 +91,12 @@ namespace Input
 		return ((prevState[vKey] & 0x8000) && !(currState[vKey] & 0x8000));
 	}
 
+	void ResetKeyState(int vKey)
+	{
+		prevState[vKey] = 0;
+		currState[vKey] = 0;
+	}
+
 	FVector2 GetMousePosition()
 	{
 		return FVector2(float(m_point.x), float(m_point.y));
