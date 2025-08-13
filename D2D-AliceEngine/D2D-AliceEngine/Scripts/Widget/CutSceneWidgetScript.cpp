@@ -255,9 +255,26 @@ void CutSceneWidgetScript::OnStart()
 	});
 
 	// 이미지 이어서 표시
-    int index = GamePlayManager::GetInstance().GetCutSceneIndex();
+    int startIndex = 0;
 
-	ShowImage(index);
+    std::wstring currScene = SceneManager::GetInstance().m_currentScene->GetName();
+
+    if (currScene == Define::Scene_Stage1)
+    {
+        startIndex = 0;
+    }
+
+    if (currScene == Define::Scene_Stage2)
+    {
+        startIndex = 2;
+    }
+
+    if (currScene == Define::Scene_Stage3)
+    {
+        startIndex = 3;
+    }
+
+	ShowImage(startIndex);
 
     // 각 컷마다 2초 지연 후 가이드 표시
     ShowGuideAfterDelay();
@@ -319,8 +336,8 @@ void CutSceneWidgetScript::ShowImage(int index)
     // 씬별 최대 허용 인덱스 지정
     std::unordered_map<std::wstring, int> maxIndexPerScene = {
         { Define::Scene_Stage1, 1 }, // 인덱스 1까지 허용
-        { Define::Scene_Stage2, 3 }, // 인덱스 3까지 허용
-        { Define::Scene_Stage3, 6 }, // 인덱스 6까지 허용
+        { Define::Scene_Stage2, 2 }, // 인덱스 2까지 허용
+        { Define::Scene_Stage3, 4 }, // 인덱스 4까지 허용
     };
 
     std::wstring currScene = SceneManager::GetInstance().m_currentScene->GetName();
