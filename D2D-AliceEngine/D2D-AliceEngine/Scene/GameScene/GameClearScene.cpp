@@ -64,6 +64,4 @@ void GameClearScene::OnExit()
 {
     __super::OnExit();
     GamePlayManager::GetInstance().ReleaseTimers();
-
-    GameClearWidgetScript::s_prevScene = L"";
 }
