@@ -38,9 +38,9 @@ void TitleScene::OnEnter()
 	m_sound = NewObject<gameObject>(L"Sound");
 	m_sound->AddComponent<TitleAudioScript>();
 
-	m_UI = NewObject<gameObject>(L"UI");
+	m_widget = NewObject<gameObject>(L"Widget");
 	//m_UI->AddComponent<TitleUIScript>();
-	m_UI->AddComponent<TitleWidgetScript>();
+	m_widget->AddComponent<TitleWidgetScript>();
 
 	// 테스트용 컷씬 위젯. 이걸 켜서 확인할 것.
 	//m_UI->AddComponent<CutSceneWidgetScript>();

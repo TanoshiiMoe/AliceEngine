@@ -323,7 +323,6 @@ void CutSceneWidgetScript::LoadCutSceneImages()
 	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_2_scene03.png");
 	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene04.png");
 	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene05.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\ending.png");
 }
 
 void CutSceneWidgetScript::ShowImage(int index)
@@ -358,12 +357,6 @@ void CutSceneWidgetScript::ShowImage(int index)
                     SkipCutScene();
                     GamePlayManager::GetInstance().StartGame();
                 });
-        }
-
-        if (index > maxAllowedIndex)
-        {
-            GamePlayManager::GetInstance().SetCutSceneIndex(index);
-            return;
         }
 
         // 만약 index가 maxAllowedIndex를 넘어가면 로드하지 않고 리턴

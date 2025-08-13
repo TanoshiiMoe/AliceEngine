@@ -48,8 +48,13 @@ void GameClearWidgetScript::OnStart()
 
 	GetCamera()->AddChildObject(m_owner);
 
+	auto background = m_owner->AddComponent<SpriteRenderer>();
+
 	auto toMainText = m_owner->AddComponent<TextRenderComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
+
+	// ========================= //
+	background->LoadData(L"");
 
 	toMainText->SetFontSize(55.0f);
 	toMainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
