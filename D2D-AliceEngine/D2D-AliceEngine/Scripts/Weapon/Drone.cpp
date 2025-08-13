@@ -15,6 +15,8 @@
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Component/SkewTransform.h>
 #include <GameManager/GamePlayManager.h>
+#include <Scripts/Player/PlayerManager.h>
+#include <Core/Input.cpp>
 
 Drone::Drone(FDroneSpritePath path)
 {
@@ -162,7 +164,43 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 					recoilOffset = candidate;
 				}
 			}
+			bCanFire = false;
+		}
 
+		if (Input::IsMouseRightDown() && PlayerManager::instance->GetSande() && bCanFire)
+		{
+			if (auto player = BulletManager::GetInstance().GetPlayer())
+			{
+				float currentSpeed = 0.0f;
+				if (auto bike = player->GetComponent<BikeMovementScript>())
+					currentSpeed = bike->GetCurrSpeed();
+				const FVector2 speed{ currentSpeed, 0.0f };
+
+				// 0도(원본)
+				BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed, droneType);
+
+				// 회전 함수
+				auto RotateVector = [](const FVector2& v, float degree) -> FVector2 {
+					float rad = degree * Define::PI / 180.0f;
+					float cs = std::cos(rad);
+					float sn = std::sin(rad);
+					return { -v.y * sn + v.x * cs, -v.y * cs + v.x * sn };
+					};
+
+				// +30도
+				{
+					FVector2 dir30 = RotateVector(dirNormal, 10.0f);
+					FVector2 newTarget = bodyPos + dir30 * 1000.0f; // 먼 위치로 타겟
+					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+				}
+
+				// -30도
+				{
+					FVector2 dirNeg30 = RotateVector(dirNormal, -10.0f);
+					FVector2 newTarget = bodyPos + dirNeg30 * 1000.0f;
+					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+				}
+			}
 			bCanFire = false;
 		}
 		break;
