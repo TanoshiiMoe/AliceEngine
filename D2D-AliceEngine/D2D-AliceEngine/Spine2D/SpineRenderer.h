@@ -83,6 +83,9 @@ public:
 	void SetPosition(const FVector2& _pos) { m_CharacterPosition = D2D1::Vector2F(_pos.x, _pos.y); }
     FVector2 GetPosition() { return FVector2(m_CharacterPosition.x, m_CharacterPosition.y); }
 
+	bool GetRendered() const { return m_bRendered; }
+	void SetRendered(const bool value) { m_bRendered = value; }
+
 private:
     D2D1::Matrix3x2F m_UnityScreen;
 
@@ -116,4 +119,6 @@ private:
     // 내부 함수들(Direct2D/3D 초기화 등)
     void ReleaseResources();
     void ReleaseDirect2D();
+
+    bool m_bRendered = true;
 };

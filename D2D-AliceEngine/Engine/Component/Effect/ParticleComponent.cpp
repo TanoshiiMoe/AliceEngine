@@ -208,7 +208,7 @@ void ParticleComponent::EmitExplosionByColor(
 	emitBurstCommon(
 		ToSimPos(pos), count,
 		200.0f, 520.0f,   // speedMin, speedMax
-		24.0f, 48.0f,     // sizeMin, sizeMax
+		34.0f, 56.0f,     // sizeMin, sizeMax
 		0.45f, 0.85f,     // lifeMin, lifeMax
 		colorA,           // 본체 색
 		colorB,           // 꼬리 색
@@ -217,9 +217,9 @@ void ParticleComponent::EmitExplosionByColor(
 	);
 
 	// 쇼크웨이브 링 (색은 기존 고정값 유지)
-	spawnShockwaveRing(
+	spawnShockwaveRing( 
 		ToSimPos(pos),
-		28.0f,   // radius
+		30.0f,   // radius
 		14.0f,    // thickness
 		0.5f,    // life
 		D2D1::ColorF(1.0f, 0.8f, 0.4f, 0.8f)
@@ -246,8 +246,8 @@ void ParticleComponent::EmitImpactByColor(const FVector2& pos, int count, D2D1::
 {
 	// 중앙에서 방사형으로 강하게 퍼지는 튜닝
 	emitBurstCommon(ToSimPos(pos), count,
-		260.0f, 520.0f,   // 더 강한 반경 속도
-		10.0f, 22.0f,
+		260.0f, 620.0f,   // 더 강한 반경 속도
+		14.0f, 22.0f,
 		0.28f, 0.55f,
 		colorA,
         colorB,
@@ -262,7 +262,7 @@ void ParticleComponent::EmitClickBurst(const FVector2& pos, bool rightClick)
 {
     emitBurstCommon(ToSimPos(pos), rightClick ? 30 : 18,
         120.0f, rightClick ? 380.0f : 240.0f,
-        6.0f, 14.0f,
+        10.0f, 18.0f,
         0.25f, 0.5f,
         rightClick ? D2D1::ColorF(0.3f, 1.0f, 1.0f, 1.0f) : D2D1::ColorF(1.0f, 0.9f, 0.6f, 1.0f),
         rightClick ? D2D1::ColorF(0.0f, 0.6f, 1.0f, 0.0f) : D2D1::ColorF(1.0f, 0.4f, 0.1f, 0.0f),

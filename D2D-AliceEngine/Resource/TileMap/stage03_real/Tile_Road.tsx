@@ -3,5 +3,5 @@
  <editorsettings>
   <export target="Tile_Road_real_Final.tsj" format="json"/>
  </editorsettings>
- <image source="Tile_Road.png" width="600" height="360"/>
+ <image source="../stage02_real/Tile_Road.png" width="600" height="360"/>
 </tileset>
