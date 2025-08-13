@@ -5,6 +5,8 @@
 #include "Animation/AnimatorInstance.h"
 #include "Component/SpriteRenderer.h"
 #include "Component/SkewTransform.h"
+#include "Component/Collider.h"
+#include <Component/BoxComponent.h>
 
 void NormalTruck::Initialize()
 {
@@ -43,4 +45,11 @@ void NormalTruck::OnStart()
 	else {
 		owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Porter/porter.png");
 	}
+
+	// 콜라이더 설정
+	// 콜라이더 설정
+	Collider* coll = owner->GetComponent<Collider>();
+	coll->SetLayer(5);
+	coll->boxComponent->SetSize(FVector2(300, 70));
+	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
 }

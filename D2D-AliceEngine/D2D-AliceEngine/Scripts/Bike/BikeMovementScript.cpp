@@ -105,16 +105,16 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 				}*/
 			}
 
-			tr->SetRealPos(pos);
+			
 
 
 			if (auto transform = m_owner->transform()) {
 				//transform->AddPosition((finalSpeed + m_jumpWeightX) * deltaSeconds, 0);
-			
-				/*FVector2 pos = tr->GetRealPos();
-				pos.x += (finalSpeed + m_jumpWeightX) * deltaSeconds;
-				tr->SetRealPos(pos);*/
+
+				pos.x += (m_jumpWeightX * 3.0f) * deltaSeconds;
 			}
+
+			tr->SetRealPos(pos);
 		}
 	}
 }
@@ -213,9 +213,9 @@ void BikeMovementScript::Jump()
 			anim->m_layer = 70000;
 		}*/
 
-		// 회전 적용 (60도)
+		// 회전 적용 (45도)
 		if (auto tr = m_owner->transform())
-			tr->SetRotation(60.0f);
+			tr->SetRotation(45.0f);
 	}
 }
 

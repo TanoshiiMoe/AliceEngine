@@ -12,7 +12,9 @@ public:
 
 	void OnTriggerEnter2D(Collider* collider) override;
 
-	void SetOffSet(FVector2 _offset) { offset = _offset; }
+	void SetOffSet(FVector2 _offset);
+	void SetBoxSize(FVector2 _size);
+
 private:
 	FVector2 offset;
 };

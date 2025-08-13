@@ -66,7 +66,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 
 		// 트랜스폼 적용하기
 		renderTransform->AddPosition(offset.x, offset.y);
-		renderTransform->AddPosition(realOffset);
+		//renderTransform->AddPosition(realOffset);
 
 		// 렌더 레이어 설정하기
 		SetRenderLayer();

@@ -129,7 +129,7 @@ void GamePlayManager::PlayBossMode()
         if (EnemySpawnTriggerBox* es = triggerBox->GetComponent<EnemySpawnTriggerBox>())
         {
             es->SetSpawnable(false);
-            es->SpawnBossAt(FVector2(1200, 0));
+            es->SpawnBossAt(FVector2(4800, 0));
 
             TimerManager::GetInstance().SetTimer(bossSpawnTimer, 
                 [this]()

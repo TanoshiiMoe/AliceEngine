@@ -21,6 +21,7 @@
 #include <Scripts/Enemy/EnemyStatScript.h>
 #include "../Player/PlayerManager.h"
 #include <Helper/ParticleHelper.h>
+#include "BulletColl.h"
 
 void Bullet::Initialize()
 {
@@ -192,6 +193,11 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				// Bullet의 damage 변수 사용
 				bs->m_enemyStat->DecreaseAbility("HP", damage);
 			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				// Bullet의 damage 변수 사용
+				es->target->GetComponent<EnemyStatScript>()->m_enemyStat->DecreaseAbility("HP", damage);
+			}
 			if (gameObject* target = collider->GetOwner())
 			{
 				FVector2 pos = target->GetPosition();
@@ -222,6 +228,14 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				if (!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				if (auto bs = es->target->GetComponent<BikeStatScript>()) {
+					// Bullet의 damage 변수 사용
+					if (!PlayerManager::instance->GetInvincible())
+						bs->m_bikeStat->DecreaseAbility("HP", damage);
+				}
+			}
 			GetWorld()->RemoveObject(GetOwner());
 
 			if (gameObject* target = collider->GetOwner())
@@ -247,6 +261,11 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				if(!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				// Bullet의 damage 변수 사용
+				es->target->GetComponent<EnemyStatScript>()->m_enemyStat->DecreaseAbility("HP", damage);
+			}
 			GetWorld()->RemoveObject(GetOwner());
 
 			if (gameObject* target = collider->GetOwner())
@@ -271,6 +290,11 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				// Bullet의 damage 변수 사용
 				if (!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
+			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				// Bullet의 damage 변수 사용
+				es->target->GetComponent<EnemyStatScript>()->m_enemyStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 
