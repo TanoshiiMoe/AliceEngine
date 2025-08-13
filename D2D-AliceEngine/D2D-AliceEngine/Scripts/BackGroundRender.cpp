@@ -125,6 +125,13 @@ void BackGroundRender::OnStart()
     m_sky->transform()->SetPosition(0.0f, 180.0f);
     //AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png", -5000 + m_backgroundRelativeLayer, 400.0f, 1.0f);
     
+	// 원경2 (배경가리개)
+	gameObject* bg2 = GetWorld()->NewObject<gameObject>(L"TopFar2");
+	SpriteRenderer* bgsr2 = bg2->AddComponent<SpriteRenderer>();
+	bgsr2->LoadData(L"BackGround\\BG_Sky.png");
+	bgsr2->m_layer = -5001 + m_backgroundRelativeLayer;
+	GetWorld()->GetCamera()->AddChildObject(bg2);
+
     AddLooping(L"TopMid1",    L"BackGround\\BG_Building_1.png",    -7  + m_topRelativeLayer, 500.0f, 0.5f);
     AddLooping(L"TopMid2", L"BackGround\\BG_Building_2.png", -8 + m_topRelativeLayer, 500.0f, 0.35f);
     AddLooping(L"TopMid3", L"BackGround\\BG_Building_3.png", -9 + m_topRelativeLayer, 500.0f, 0.2f);
@@ -133,7 +140,7 @@ void BackGroundRender::OnStart()
     // =========================== Player가 여기에 있고, 위 아래 배경이라는 뜻 ===================================
     AddLooping(L"BotNear",   L"BackGround\\BG_GuardRail.png",  5  + m_bottomRelativeLayer, -180.0f, 1.0f);
     AddLooping(L"BotMid",    L"BackGround\\BG_Bridge.png",     3  + m_bottomRelativeLayer, -640.0f, 0.9f);
-    AddLooping(L"BotFar",    L"BackGround\\BG_Market.png",     -2   + m_backgroundRelativeLayer, -440.0f, 0.8f);
+    AddLooping(L"BotFar",    L"BackGround\\BG_Market.png",     4   + m_bottomRelativeLayer, -550.0f, 0.9f);
 }
 
 void BackGroundRender::OnEnd()
