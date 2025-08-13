@@ -3,6 +3,7 @@
 
 class gameObject;
 class SpriteRenderer;
+class SpineScript;
 class TitleWidgetScript : public ScriptComponent
 {
 public:
@@ -16,6 +17,13 @@ public:
 
 	gameObject* m_owner;
 
+	gameObject* spineObject;
+	gameObject* spineObject2;
+	SpineScript* spine;
+	SpineScript* spine2;
+
 private:
 	//void WidgetClose();
+
+	bool m_spineRender = false;
 };

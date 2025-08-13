@@ -24,6 +24,7 @@
 #include <Component/ProgressBarComponent.h>
 
 #include <Application.h>
+#include <Scripts/Spine2D/SpineScript.h>
 
 void TitleWidgetScript::Initialize()
 {
@@ -45,6 +46,29 @@ void TitleWidgetScript::Awake()
 
 void TitleWidgetScript::OnStart()
 {
+	if (Scene* scene = GetWorld())
+	{
+		spineObject = scene->NewObject<gameObject>(L"spineObject");
+		spine = spineObject->AddComponent<SpineScript>();
+		spine->LoadData(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
+		if (spine->spineRenderer)
+		{
+			spine->spineRenderer->SetAnimation("Idle");
+			spine->spineRenderer->SetPosition(FVector2(-200, 0));
+			spine->spineRenderer->SetRendered(false);
+		}
+
+		spineObject2 = scene->NewObject<gameObject>(L"spineObject");
+		spine2 = spineObject2->AddComponent<SpineScript>();
+		spine2->LoadData(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
+		if (spine2->spineRenderer)
+		{
+			spine2->spineRenderer->SetAnimation("Idle");
+			spine2->spineRenderer->SetPosition(FVector2(100, 0));
+			spine2->spineRenderer->SetRendered(false);
+		}
+	}
+
 	m_owner = GetOwner();
 	m_owner->transform()->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f,0.5f)));
 
@@ -84,6 +108,9 @@ void TitleWidgetScript::OnStart()
 
 	auto quitText = m_owner->AddComponent<TextRenderComponent>();
 	auto quitButton = m_owner->AddComponent<ButtonComponent>();
+
+	auto spineShowText = m_owner->AddComponent<TextRenderComponent>();
+	auto spineShowButton = m_owner->AddComponent<ButtonComponent>();
 
 	auto closeText = m_owner->AddComponent<TextRenderComponent>();
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
@@ -159,6 +186,7 @@ void TitleWidgetScript::OnStart()
 	if (!optionText || !optionButton || !optionTabText) return;
 	if (!staffText || !staffButton || !staffTabText) return;
 	if (!quitText || !quitButton) return;
+	if (!spineShowText || !spineShowButton) return;
 	if (!closeText || !closeButton) return;
 	if (!sound || !PopupTab) return;
 
@@ -224,6 +252,20 @@ void TitleWidgetScript::OnStart()
 	quitButton->SetRelativeScale(FVector2(1, 1));
 	quitButton->SetRelativeRotation(0);
 	quitButton->m_layer = Define::ButtonLayer;
+
+	// ======================== spineShowButton
+	spineShowButton->SetTag(L"Button");
+	spineShowButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	spineShowButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	spineShowButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	spineShowButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	FVector2 spineShowButtonSize = spineShowButton->GetRelativeSize();
+	spineShowButton->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(spineShowButtonSize, FVector2(1, 0))
+		+ FVector2(-1000, 450));
+	spineShowButton->SetRelativeScale(FVector2(1, 1));
+	spineShowButton->SetRelativeRotation(0);
+	spineShowButton->m_layer = Define::ButtonLayer;
 
 	// ======================== closeButton
 	closeButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -516,6 +558,20 @@ void TitleWidgetScript::OnStart()
 	quitText->RemoveFromParent();
 	quitButton->AddChildComponent(quitText);
 
+	// ======================== spineShowText
+	spineShowText->SetFontSize(43.0f);
+	spineShowText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	spineShowText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	spineShowText->SetText(L"Spine2D 보러가기");
+	spineShowText->SetColor(FColor::White);
+	FVector2 spineShowTextRectSize = spineShowText->GetRelativeSize();
+	spineShowText->SetRelativePosition(CoordHelper::RatioCoordToScreen(spineShowTextRectSize, FVector2(-0.5, -0.5)));
+	spineShowText->SetRelativeScale(FVector2(1, 1));
+	spineShowText->SetRelativeRotation(0);
+	spineShowText->m_layer = Define::ButtonTextLayer;
+	spineShowText->RemoveFromParent();
+	spineShowButton->AddChildComponent(spineShowText);
+
 	// ======================== closeText
 	closeText->SetFontSize(55.0f);
 	closeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -643,7 +699,7 @@ void TitleWidgetScript::OnStart()
 		});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
-		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
+		startButton, continueButton, quitButton, spineShowButton, staffButton, optionButton, closeButton, closeText , PopupTab,
 		sound, continueTabText, optionTabText, staffTabText, staffNameText, qrCodeSprite, githubGuideTeamSprite,
 		artBookButton, artBookText
 	]()
@@ -661,6 +717,7 @@ void TitleWidgetScript::OnStart()
 			startButton->SetActive(true);
 			continueButton->SetActive(true);
 			quitButton->SetActive(true);
+			spineShowButton->SetActive(true);
 			staffButton->SetActive(true);
 			optionButton->SetActive(true);
 
@@ -684,7 +741,7 @@ void TitleWidgetScript::OnStart()
 		});
 
 	smallClose->SetStateAction(Define::EButtonState::Pressed, [
-		startButton, continueButton, quitButton, staffButton, optionButton, smallClose,
+		startButton, continueButton, quitButton, spineShowButton, staffButton, optionButton, smallClose,
 		bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
 		sfxControl, bgmControl, soundControl, sound, optionTabText,
 		optionTabBGMText, optionTabSFXText
@@ -694,6 +751,7 @@ void TitleWidgetScript::OnStart()
 		startButton->SetActive(true);
 		continueButton->SetActive(true);
 		quitButton->SetActive(true);
+		spineShowButton->SetActive(true);
 		staffButton->SetActive(true);
 		optionButton->SetActive(true);
 
@@ -720,7 +778,7 @@ void TitleWidgetScript::OnStart()
 		});
 
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
-		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab,
+		startButton, continueButton, quitButton, spineShowButton, staffButton, optionButton, PopupTab,
 		sound, optionTabText, bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
 		sfxControl, bgmControl, soundControl, smallClose, optionTabBGMText, optionTabSFXText
 	]()
@@ -737,6 +795,7 @@ void TitleWidgetScript::OnStart()
 			startButton->SetActive(false);
 			continueButton->SetActive(false);
 			quitButton->SetActive(false);
+			spineShowButton->SetActive(false);
 			staffButton->SetActive(false);
 			optionButton->SetActive(false);
 			
@@ -764,7 +823,7 @@ void TitleWidgetScript::OnStart()
 		});
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
-		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
+		startButton, continueButton, quitButton, spineShowButton, staffButton, optionButton, PopupTab, closeButton, closeText,
 		sound, staffTabText, staffNameText, qrCodeSprite, githubGuideTeamSprite, artBookButton, artBookText
 	]()
 		{
@@ -781,6 +840,7 @@ void TitleWidgetScript::OnStart()
 			startButton->SetActive(false);
 			continueButton->SetActive(false);
 			quitButton->SetActive(false);
+			spineShowButton->SetActive(false);
 			staffButton->SetActive(false);
 			optionButton->SetActive(false);
 
@@ -878,6 +938,47 @@ void TitleWidgetScript::OnStart()
 		quitButton->StopHoverPulse();
 		quitButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 	});
+
+	spineShowButton->SetStateAction(Define::EButtonState::Pressed, [this]()
+		{
+			OutputDebugStringW(L"SetAction click!\n");
+			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
+
+			// Quit
+			//PostQuitMessage(0);
+			//Application::GetInstance().GameQuit();
+			if (m_spineRender)
+			{
+				spine->spineRenderer->SetRendered(false);
+				spine2->spineRenderer->SetRendered(false);
+				m_spineRender = false;
+			}
+			else
+			{
+				spine->spineRenderer->SetRendered(true);
+				spine2->spineRenderer->SetRendered(true);
+				m_spineRender = true;
+			}
+			
+		});
+
+	spineShowButton->SetStateAction(Define::EButtonState::Hover, [spineShowButton]()
+		{
+			spineShowButton->StartHoverPulse(0.8f, 0.04f);
+			spineShowButton->StartEffectAnimation(0.3f, 1.2f, FColor::White);
+		});
+
+	spineShowButton->SetStateAction(Define::EButtonState::HoverLeave, [spineShowButton]()
+		{
+			spineShowButton->StopHoverPulse();
+			spineShowButton->StartEffectAnimation(0.2f, 0.0f, FColor::White);
+		});
+
+	spineShowButton->SetStateAction(Define::EButtonState::Release, [spineShowButton]()
+		{
+			spineShowButton->StopHoverPulse();
+			spineShowButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
+		});
 
 	// optionButton Hover 효과 (노란색 글로우)
 	optionButton->SetStateAction(Define::EButtonState::Hover, [optionButton]()

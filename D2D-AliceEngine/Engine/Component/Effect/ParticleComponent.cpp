@@ -262,7 +262,7 @@ void ParticleComponent::EmitClickBurst(const FVector2& pos, bool rightClick)
 {
     emitBurstCommon(ToSimPos(pos), rightClick ? 30 : 18,
         120.0f, rightClick ? 380.0f : 240.0f,
-        6.0f, 14.0f,
+        10.0f, 18.0f,
         0.25f, 0.5f,
         rightClick ? D2D1::ColorF(0.3f, 1.0f, 1.0f, 1.0f) : D2D1::ColorF(1.0f, 0.9f, 0.6f, 1.0f),
         rightClick ? D2D1::ColorF(0.0f, 0.6f, 1.0f, 0.0f) : D2D1::ColorF(1.0f, 0.4f, 0.1f, 0.0f),
