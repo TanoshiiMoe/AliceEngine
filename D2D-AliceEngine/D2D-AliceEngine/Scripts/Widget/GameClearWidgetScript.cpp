@@ -48,13 +48,35 @@ void GameClearWidgetScript::OnStart()
 
 	GetCamera()->AddChildObject(m_owner);
 
+	std::wstring prevScene = SceneManager::GetInstance().GetPrevSceneName();
+
 	auto background = m_owner->AddComponent<SpriteRenderer>();
+
+	auto skipText = m_owner->AddComponent<TextRenderComponent>();
+	auto skipButton = m_owner->AddComponent<ButtonComponent>();
 
 	auto toMainText = m_owner->AddComponent<TextRenderComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
 
 	// ========================= //
-	background->LoadData(L"");
+	skipText->SetFontSize(55.0f);
+	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	skipText->SetText(L"건너뛰기");
+	skipText->SetColor(FColor::White);
+	skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipText->GetRelativeSize(), FVector2(-0.5, -0.5)));
+	skipText->SetRelativeScale(FVector2(1, 1));
+	skipText->m_layer = Define::Disable;
+	skipText->RemoveFromParent();
+	skipButton->AddChildComponent(skipText);
+	
+	skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	skipButton->SetRelativePosition(FVector2(0, 400));
+	skipButton->SetRelativeScale(FVector2(1.f, 1.f));
+	skipButton->m_layer = Define::Disable;
 
 	toMainText->SetFontSize(55.0f);
 	toMainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -74,6 +96,55 @@ void GameClearWidgetScript::OnStart()
 	toMainButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	toMainButton->SetRelativePosition(FVector2(0, 400));
 	toMainButton->m_layer = Define::ButtonLayer;
+	toMainButton->SetActive(false);
+
+	skipButton->SetStateAction(Define::EButtonState::Hover, [skipButton]()
+		{
+			skipButton->StartHoverPulse(0.8f, 0.04f);
+			skipButton->StartEffectAnimation(0.3f, 1.2f, FColor::White);
+		});
+
+	skipButton->SetStateAction(Define::EButtonState::HoverLeave, [skipButton]()
+		{
+			skipButton->StopHoverPulse();
+			skipButton->StartEffectAnimation(0.2f, 0.0f, FColor::White);
+		});
+
+	skipButton->SetStateAction(Define::EButtonState::Release, [skipButton]()
+		{
+			skipButton->StopHoverPulse();
+			skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
+		});
+
+	skipButton->SetStateAction(EButtonState::Pressed, [skipButton, skipText, background,
+		toMainButton
+	] {
+		background->m_layer = Define::Disable;
+		skipButton->m_layer = Define::Disable;
+		skipText->m_layer = Define::Disable;
+		skipButton->SetActive(false);
+		toMainButton->SetActive(true);
+		});
+
+	if (prevScene == Define::Scene_Stage3)
+	{
+		background->LoadData(L"CutScene\\Clear\\ending.png");
+		background->SetDrawType(EDrawType::ScreenSpace);
+		const float targetW = 1920.f;
+		const float targetH = 1080.f;
+		const float bmpW = background->GetBitmapSizeX();
+		const float bmpH = background->GetBitmapSizeY();
+		if (bmpW > 0.f && bmpH > 0.f)
+		{
+			const FVector2 scale(targetW / bmpW, targetH / bmpH);
+			background->SetRelativeScale(scale);
+			background->m_layer = Define::CutSceneLayer;
+		}
+
+		skipButton->SetActive(true);
+		skipButton->m_layer = Define::CutSceneLayer + Define::ButtonLayer;
+		skipText->m_layer = Define::CutSceneLayer + Define::ButtonTextLayer;
+	}
 
 	// ====================== Delegate
 	toMainButton->SetStateAction(Define::EButtonState::Hover, [toMainButton]()

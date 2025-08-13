@@ -15,7 +15,7 @@ class CutSceneWidgetScript : public ScriptComponent
 {
 public:
     // 컷씬 종료 시 전환할 씬 이름
-    std::wstring m_nextSceneName = L"D";
+    std::wstring m_nextSceneName = L"KangeTest";
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;
 

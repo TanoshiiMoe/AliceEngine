@@ -63,7 +63,7 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
         StepTransition(TimerManager::GetInstance().unscaledDeltaTime);
     }
 
-    m_seconds += deltaSeconds;
+    m_seconds = TimerManager::GetInstance().unscaledDeltaTime;
 }
 
 void CutSceneWidgetScript::Awake()
@@ -78,6 +78,8 @@ void CutSceneWidgetScript::OnStart()
 	m_owner->transform()->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
 
 	GetCamera()->AddChildObject(m_owner);
+
+    m_seconds = 0.0f;   // 델타타임 초기화
 
     auto input = m_owner->AddComponent<InputComponent>();
 
@@ -160,7 +162,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipText->RemoveFromParent();
 	m_skipButton->AddChildComponent(m_skipText);
 
-    // 안내 문구 생성 (초기 비가시, 스킵 버튼 오른쪽에 배치)
+    // 안내 문구 생성
     m_guideText = m_owner->AddComponent<TextRenderComponent>();
     m_guideText->SetFontSize(25.0f);
     m_guideText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -316,13 +318,13 @@ void CutSceneWidgetScript::SkipInput(float deltaSeconds)
 
 void CutSceneWidgetScript::LoadCutSceneImages()
 {
-	// 컷씬 이미지 경로들을 추가 (Resource/CutScene/Stage1/ 폴더의 이미지들)
+	// 컷씬 이미지 경로들을 추가
 	m_cutSceneImages.clear();
 	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_1_scene01.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_2_scene02.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_2_scene03.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene04.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene05.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage2\\stage_2_scene02.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage2\\stage_2_scene03.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage3\\stage_3_scene04.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage3\\stage_3_scene05.png");
 }
 
 void CutSceneWidgetScript::ShowImage(int index)
