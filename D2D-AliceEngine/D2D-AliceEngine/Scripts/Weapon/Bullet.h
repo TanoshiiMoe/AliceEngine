@@ -3,6 +3,7 @@
 #include <Manager/TimerManager.h>
 #include "Drone.h"
 #include <vector>
+#include "Component/AudioComponent.h"
 
 enum class EBulletType
 {
@@ -78,5 +79,8 @@ public:
 
 	FTimerHandle handle;
 	bool bCameraCulling = false;
+
+	// 사운드 컴포넌트
+	AudioComponent* audioComp = nullptr;
 };
 

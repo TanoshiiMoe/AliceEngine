@@ -206,6 +206,10 @@ void Bullet::OnStart()
 	const float angleRad = std::atan2f(moveDir.y, moveDir.x);
 	const float angleDeg = angleRad * 180.0f / Define::PI;
 	sp->SetRelativeRotation(angleDeg);
+
+	audioComp = owner->AddComponent<AudioComponent>(L"BulletShoot");
+	audioComp->LoadData(L"Enemy/character_Enemy_sfx_shot.wav", AudioMode::Memory, SoundType::SFX);
+	audioComp->PlayByName(L"BulletShoot", 0.0f, 0.5f);
 }
 
 void Bullet::OnEnd()

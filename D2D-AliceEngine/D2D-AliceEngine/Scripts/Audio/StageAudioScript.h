@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <unordered_map>
 #include <Component/ScriptComponent.h>
 
 class gameObject;
@@ -6,6 +7,8 @@ class AudioComponent;
 class StageAudioScript : public ScriptComponent
 {
 public:
+	static StageAudioScript* instance;
+
 	void Initialize() override;
 	void Update(const float& deltaSeconds) override;
 
@@ -20,5 +23,8 @@ public:
 	AudioComponent* m_Stage2Audio;
 	AudioComponent* m_Stage3Audio;
 	AudioComponent* m_Ambience;
+
+	std::vector<std::wstring> sfxList;
+	std::unordered_map<std::wstring, AudioComponent*> m_Sfx;
 };
 
