@@ -1009,6 +1009,7 @@ void StageWidgetScript::OnStart()
 			GamePlayManager::GetInstance().PauseGame();
 
 			sound->PauseByType(SoundType::BGM);
+			sound->PauseByType(SoundType::SFX);
 
 			pauseButton->SetActive(false);
 			popUpTab->m_layer = Define::PopupLayer;
@@ -1044,6 +1045,7 @@ void StageWidgetScript::OnStart()
 			GamePlayManager::GetInstance().ResumeGame();
 
 			sound->ResumeByType(SoundType::BGM);
+			sound->ResumeByType(SoundType::SFX);
 
 			pauseText->m_layer = Define::Disable;
 			pauseButton->SetActive(true);
