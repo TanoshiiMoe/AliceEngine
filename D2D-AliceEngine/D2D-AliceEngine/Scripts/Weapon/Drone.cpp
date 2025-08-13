@@ -134,6 +134,7 @@ void Drone::Floating(const float& deltaSeconds, const FVector2& dirNormal)
 
 void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos, const FVector2& dirNormal)
 {
+	if (GamePlayManager::GetInstance().IsPaused()) return;
 	switch (droneType)
 	{
 	case EDroneType::Player:
@@ -535,6 +536,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 // 한 발 쏘고, 남았으면 다음 발 타이머 예약
 void Drone::FireOneBurstShot()
 {
+	if (GamePlayManager::GetInstance().IsPaused()) return;
 	auto player = BulletManager::GetInstance().GetPlayer();
 	if (!player) { burstRemaining = 0; return; }
 
