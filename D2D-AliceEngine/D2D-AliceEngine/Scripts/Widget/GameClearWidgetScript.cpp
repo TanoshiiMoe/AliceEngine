@@ -240,10 +240,13 @@ void GameClearWidgetScript::OnStart()
 		});
 
 	//if()
+	
+	TimerManager::GetInstance().ClearTimer(m_killHandle);
+	TimerManager::GetInstance().ClearTimer(m_timeHandle);
+	TimerManager::GetInstance().ClearTimer(m_gradeHandle);
 
-	TimerManager::GetInstance().ClearTimer(m_fadeHandle);
 	TimerManager::GetInstance().SetTimer(
-		m_fadeHandle,
+		m_killHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
 			weak.Get()->m_killCount->m_layer = Define::PopupObjectLayer;
 		},
@@ -253,7 +256,7 @@ void GameClearWidgetScript::OnStart()
 	);
 
 	TimerManager::GetInstance().SetTimer(
-		m_fadeHandle,
+		m_timeHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
 			weak.Get()->m_passedTime->m_layer = Define::PopupObjectLayer;
 		},
@@ -263,13 +266,13 @@ void GameClearWidgetScript::OnStart()
 	);
 
 	TimerManager::GetInstance().SetTimer(
-		m_fadeHandle,
+		m_gradeHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
 			weak.Get()->m_grade->m_layer = Define::PopupObjectLayer;
 		},
 		0.1f,
 		false,
-		3.0f
+		4.5f
 	);
 }
 
@@ -279,5 +282,7 @@ void GameClearWidgetScript::OnEnd()
 
 void GameClearWidgetScript::OnDestroy()
 {
-	TimerManager::GetInstance().ClearTimer(m_fadeHandle);
+	TimerManager::GetInstance().ClearTimer(m_killHandle);
+	TimerManager::GetInstance().ClearTimer(m_timeHandle);
+	TimerManager::GetInstance().ClearTimer(m_gradeHandle);
 }
