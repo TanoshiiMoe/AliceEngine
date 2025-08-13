@@ -60,6 +60,13 @@ void TitleWidgetScript::OnStart()
 	//startButton->RemoveFromParent();
 	//GetCamera()->AddChildObject(startButton);
 
+	// 아트 리소스 확인하기
+	//auto artBookText = m_owner->AddComponent<TextRenderComponent>();
+	//auto artBookButton = m_owner->AddComponent<ButtonComponent>();
+
+	auto artBookText = m_owner->AddComponent<TextRenderComponent>();
+	auto artBookButton = m_owner->AddComponent<ButtonComponent>();
+
 	auto continueText = m_owner->AddComponent<TextRenderComponent>();
 	auto continueButton = m_owner->AddComponent<ButtonComponent>();
 	auto continueTabText = m_owner->AddComponent<TextRenderComponent>();
@@ -92,9 +99,6 @@ void TitleWidgetScript::OnStart()
 	auto bgmMinusButton = m_owner->AddComponent<ButtonComponent>();
 	auto sfxPlusButton = m_owner->AddComponent<ButtonComponent>();
 	auto sfxMinusButton = m_owner->AddComponent<ButtonComponent>();
-
-	auto skipText = m_owner->AddComponent<TextRenderComponent>();
-	auto skipButton = m_owner->AddComponent<ButtonComponent>();
 
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
 	if (!bgmObj) return;
@@ -143,6 +147,12 @@ void TitleWidgetScript::OnStart()
 	PopupTab->LoadData(L"UI\\PopupTab.png");
 	PopupTab->m_layer = Define::Disable;
 	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f));
+
+	auto qrCodeSprite = m_owner->AddComponent<SpriteRenderer>();
+	qrCodeSprite->LoadData(L"UI\\Github.jpg");
+
+	auto githubGuideTeamSprite = m_owner->AddComponent<SpriteRenderer>();
+	githubGuideTeamSprite->LoadData(L"UI\\Github_Team_Guide.png");
 
 	if (!startText || !startButton) return;
 	if (!continueText || !continueButton || !continueTabText) return;
@@ -241,14 +251,14 @@ void TitleWidgetScript::OnStart()
         smallClose->SetRelativePosition(FVector2(hw - margin, -hh + margin));
     }
 
-	// ======================== skipButton
-	skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	skipButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	skipButton->SetRelativePosition(FVector2(0, 350));
-	skipButton->SetRelativeScale(FVector2(1, 1));
-	skipButton->m_layer = Define::Disable;
+	// ======================== artBookButton
+	artBookButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+	artBookButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+	artBookButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+	artBookButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	artBookButton->SetRelativePosition(FVector2(-400, 0));
+	artBookButton->SetRelativeScale(FVector2(1, 1));
+	artBookButton->m_layer = Define::Disable;
 
 	// ======================== soundButton
 	bgmPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
@@ -475,6 +485,23 @@ void TitleWidgetScript::OnStart()
 	);
 	staffNameText->m_layer = Define::Disable;
 
+	qrCodeSprite->SetDrawType(Define::EDrawType::ScreenSpace);
+	FVector2 qrCodeSpriteSize = qrCodeSprite->GetRelativeSize();
+	qrCodeSprite->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(qrCodeSpriteSize, FVector2(-0.5, -0.5))
+		+ FVector2(-250, -80)
+	);
+	qrCodeSprite->m_layer = Define::Disable;
+
+	githubGuideTeamSprite->SetDrawType(Define::EDrawType::ScreenSpace);
+	githubGuideTeamSprite->SetRelativeScale(FVector2(0.67,0.70));
+	FVector2 githubGuideTeamSpriteSize = githubGuideTeamSprite->GetRelativeSize();
+	githubGuideTeamSprite->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(githubGuideTeamSpriteSize, FVector2(-0.5, -0.5))
+		+ FVector2(-250, 275)
+	);
+	githubGuideTeamSprite->m_layer = Define::Disable;
+
 	// ======================== quitText
 	quitText->SetFontSize(55.0f);
 	quitText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -505,19 +532,19 @@ void TitleWidgetScript::OnStart()
 	closeButton->AddChildComponent(closeText);
 
 	// ======================== skipText
-	skipText->SetFontSize(55.0f);
-	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	skipText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	skipText->SetText(L"건너뛰기");
-	skipText->SetColor(FColor::White);
-	FVector2 skipTextRectSize = skipText->GetRelativeSize();
-	skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextRectSize, FVector2(-0.5, -0.5)));
-	skipText->SetRelativeScale(FVector2(1, 1));
-	skipText->SetRelativeRotation(0);
-	skipText->m_layer = Define::Disable;
-	skipButton->SetActive(false);
-	skipText->RemoveFromParent();
-	skipButton->AddChildComponent(skipText);
+	artBookText->SetFontSize(55.0f);
+	artBookText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	artBookText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	artBookText->SetText(L"디지털 아트북");
+	artBookText->SetColor(FColor::White);
+	FVector2 skipTextRectSize = artBookText->GetRelativeSize();
+	artBookText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextRectSize, FVector2(-0.5, -0.5)));
+	artBookText->SetRelativeScale(FVector2(1, 1));
+	artBookText->SetRelativeRotation(0);
+	artBookText->m_layer = Define::Disable;
+	artBookButton->SetActive(true);
+	artBookText->RemoveFromParent();
+	artBookButton->AddChildComponent(artBookText);
 
 	// ======================== background
 	background->LoadData(L"tree.jpg");
@@ -528,9 +555,9 @@ void TitleWidgetScript::OnStart()
 	background->SetRelativeRotation(0);
 
 	// ======================== Delegete
-	startButton->SetStateAction(Define::EButtonState::Pressed, [
+	/*startButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, quitButton, staffButton, optionButton, closeButton, closeText,
-		sound, continueButton, skipButton, skipText
+		sound, continueButton, artBookButton, artBookText
 	]()
 	{
 		OutputDebugStringW(L"SetAction click!\n");
@@ -538,35 +565,51 @@ void TitleWidgetScript::OnStart()
 		sound->StopByName(L"UISound");
 		sound->PlayByName(L"UISound");
 
-		//uiSound->StopByName(L"UISound");
-		//uiSound->PlayByName1(L"UISound", 0.45f);
+		uiSound->StopByName(L"UISound");
+		uiSound->PlayByName1(L"UISound", 0.45f);
 
-		// 다른 버튼 비활성화 (애니메이션 자동 중지됨)
+		 다른 버튼 비활성화 (애니메이션 자동 중지됨)
 		startButton->SetActive(false);
 		quitButton->SetActive(false);
 		staffButton->SetActive(false);
 		optionButton->SetActive(false);
 		continueButton->SetActive(false);
 
-		//closeButton->m_layer = 503;
-		//closeButton->SetActive(true);
-		//closeText->m_layer = 504;
+		closeButton->m_layer = 503;
+		closeButton->SetActive(true);
+		closeText->m_layer = 504;
 
-		skipButton->m_layer = Define::PopupButtonLayer;
-		skipButton->SetActive(true);
-		skipText->m_layer = Define::PopupTextLayer;
+		artBookButton->m_layer = Define::PopupButtonLayer;
+		artBookButton->SetActive(true);
+		artBookText->m_layer = Define::PopupTextLayer;
 
-		//tutorial->m_layer = Define::PopupLayer;
-		//tutorial->Play();
-	});
+		tutorial->m_layer = Define::PopupLayer;
+		tutorial->Play();
+	});*/
+	artBookButton->SetStateAction(Define::EButtonState::Hover, [artBookButton]()
+		{
+			artBookButton->StartHoverPulse(0.8f, 0.04f);
+			artBookButton->StartEffectAnimation(0.3f, 1.2f, FColor(64, 224, 208, 255));
+		});
 
-	skipButton->SetStateAction(Define::EButtonState::Pressed, []()
+	artBookButton->SetStateAction(Define::EButtonState::HoverLeave, [artBookButton]()
+		{
+			artBookButton->StopHoverPulse();
+			artBookButton->StartEffectAnimation(0.2f, 0.0f, FColor(64, 224, 208, 255));
+		});
+
+	artBookButton->SetStateAction(Define::EButtonState::Release, [artBookButton]()
+		{
+			artBookButton->StopHoverPulse();
+			artBookButton->StartEffectAnimation(0.1f, 0.0f, FColor(64, 224, 208, 255));
+		});
+
+	artBookButton->SetStateAction(Define::EButtonState::Pressed, []()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
 			OutputDebugStringW((L"x,y " + std::to_wstring(Input::GetMousePosition().x) + L", " + std::to_wstring(Input::GetMousePosition().y) + L"\n").c_str());
-			SceneManager::ChangeScene(Define::Scene_Stage1);
+			//SceneManager::ChangeScene(Define::Scene_Stage1);
 		});
-
 
 	continueButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText, PopupTab,
@@ -601,7 +644,8 @@ void TitleWidgetScript::OnStart()
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, closeButton, closeText , PopupTab,
-		sound, continueTabText, optionTabText, staffTabText, staffNameText
+		sound, continueTabText, optionTabText, staffTabText, staffNameText, qrCodeSprite, githubGuideTeamSprite,
+		artBookButton, artBookText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -628,6 +672,10 @@ void TitleWidgetScript::OnStart()
 			//optionTabText->m_layer = -1000;
 			staffTabText->m_layer = Define::Disable;
 			staffNameText->m_layer = Define::Disable;
+			qrCodeSprite->m_layer = Define::Disable;
+			githubGuideTeamSprite->m_layer = Define::Disable;
+			artBookButton->m_layer = Define::Disable;
+			artBookText->m_layer = Define::Disable;
 
 			//tutorial->m_layer = Define::Disable;
 			//tutorial->Stop();
@@ -674,7 +722,7 @@ void TitleWidgetScript::OnStart()
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab,
 		sound, optionTabText, bgmMinusButton, bgmPlusButton, sfxPlusButton, sfxMinusButton,
-		sfxControl, bgmControl, soundControl, smallClose
+		sfxControl, bgmControl, soundControl, smallClose, optionTabBGMText, optionTabSFXText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -707,6 +755,8 @@ void TitleWidgetScript::OnStart()
 			sfxMinusButton->m_layer = Define::PopupButtonLayer;
 
 			optionTabText->m_layer = Define::PopupTextLayer;
+			optionTabBGMText->m_layer = Define::PopupTextLayer;
+			optionTabSFXText->m_layer = Define::PopupTextLayer;
 
 			sfxControl->m_layer = Define::PopupObjectLayer;
 			bgmControl->m_layer = Define::PopupObjectLayer;
@@ -715,7 +765,7 @@ void TitleWidgetScript::OnStart()
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
 		startButton, continueButton, quitButton, staffButton, optionButton, PopupTab, closeButton, closeText,
-		sound, staffTabText, staffNameText
+		sound, staffTabText, staffNameText, qrCodeSprite, githubGuideTeamSprite, artBookButton, artBookText
 	]()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -740,6 +790,10 @@ void TitleWidgetScript::OnStart()
 
 			staffTabText->m_layer = Define::PopupTextLayer;
 			staffNameText->m_layer = Define::PopupTextLayer;
+			qrCodeSprite->m_layer = Define::PopupTextLayer;
+			githubGuideTeamSprite->m_layer = Define::PopupTextLayer;
+			artBookButton->m_layer = Define::PopupButtonLayer;
+			artBookText->m_layer = Define::PopupTextLayer;
 
 			PopupTab->m_layer = Define::PopupLayer;
 		});

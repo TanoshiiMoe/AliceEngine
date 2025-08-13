@@ -5,6 +5,8 @@ class gameObject;
 class TextRenderComponent;
 class ProgressBarComponent;
 class BikeMovementScript;
+class ButtonComponent;
+
 class StageWidgetScript : public ScriptComponent
 {
 public:
@@ -30,11 +32,15 @@ public:
 	ProgressBarComponent* m_batteryProgress;
 	ProgressBarComponent* m_speedProgress;
 
+	ButtonComponent* m_pauseButton;
+
 	//BikeMovementScript* m_bike;
 
 private:
 	int maxBattery = 5;
 	int prevBattery = 0;
 	int prevKillAmount = 0;
+
+	bool m_ambiencePlayed = false;
 };
 

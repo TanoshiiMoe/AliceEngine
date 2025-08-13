@@ -17,11 +17,18 @@ void ParticleHelper::SpawnParticleExplosion(const FVector2& pos, const std::wstr
 			go = sceneWeak->NewObject<gameObject>(L"ParticleWorldExplosion");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		pc->EmitExplosion(FVector2(0, 0));
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitExplosion(FVector2(0, 0));
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::WorldSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitExplosion(FVector2(0, 0));
+        }
 	}
 }
 
@@ -36,11 +43,18 @@ void ParticleHelper::SpawnParticleImpact(const FVector2& pos, const std::wstring
 			go = sceneWeak->NewObject<gameObject>(L"ParticleWorldImpact");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		pc->EmitImpact(FVector2(0,0));
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitImpact(FVector2(0, 0));
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::WorldSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitImpact(FVector2(0, 0));
+        }
 	}
 }
 
@@ -56,17 +70,29 @@ void ParticleHelper::SpawnParticleExplosionByColor(const FVector2& pos, const st
 	}
 	go->SetPosition(pos);
 
-	auto* pc = go->AddComponent<ParticleComponent>();
-	pc->SetDrawType(Define::EDrawType::WorldSpace);
-	if (!texturePath.empty()) pc->LoadData(texturePath);
-	pc->SetAdditiveBlend(true);
-
-	pc->EmitExplosionByColor(
-		FVector2(0, 0),
-		38, // count 값 필요 시 조정
-		D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
-		D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
-	);
+    if (auto * pc = go->GetComponent<ParticleComponent>())
+	{
+		pc->EmitExplosionByColor(
+			FVector2(0, 0),
+			38, // count 값 필요 시 조정
+			D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
+			D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
+		);
+	}
+	else
+	{
+		auto* pc2 = go->AddComponent<ParticleComponent>();
+		pc2->SetDrawType(Define::EDrawType::WorldSpace);
+        if (!texturePath.empty()) pc2->LoadData(texturePath);
+		pc2->SetAdditiveBlend(true);
+		pc2->EmitExplosionByColor(
+			FVector2(0, 0),
+			38, // count 값 필요 시 조정
+			D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
+			D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
+		);
+	}
+	
 }
 
 void ParticleHelper::SpawnParticleImpactByColor(const FVector2& pos, const std::wstring& texturePath /* = L"" */, FColor colorA, FColor colorB)
@@ -80,17 +106,28 @@ void ParticleHelper::SpawnParticleImpactByColor(const FVector2& pos, const std::
 			go = sceneWeak->NewObject<gameObject>(L"ParticleWorldImpact");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		//pc->EmitImpact(FVector2(0, 0));
-		pc->EmitImpactByColor(
-			FVector2(0, 0),
-			38,
-			D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
-			D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
-		);
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitImpactByColor(
+                FVector2(0, 0),
+                38,
+                D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
+                D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
+            );
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::WorldSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitImpactByColor(
+                FVector2(0, 0),
+                38,
+                D2D1::ColorF(FLOAT(colorA.r), FLOAT(colorA.g), FLOAT(colorA.b), FLOAT(colorA.a)),
+                D2D1::ColorF(FLOAT(colorB.r), FLOAT(colorB.g), FLOAT(colorB.b), FLOAT(colorB.a))
+            );
+        }
 	}
 }
 
@@ -105,11 +142,18 @@ void ParticleHelper::SpawnParticleClickL(const FVector2& pos, const std::wstring
 			go = sceneWeak->NewObject<gameObject>(L"ParticleScreenClickL");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::ScreenSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		pc->EmitClickBurst(FVector2(0, 0), false);
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitClickBurst(FVector2(0, 0), false);
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::ScreenSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitClickBurst(FVector2(0, 0), false);
+        }
 	}
 }
 
@@ -124,11 +168,18 @@ void ParticleHelper::SpawnParticleClickR(const FVector2& pos, const std::wstring
 			go = sceneWeak->NewObject<gameObject>(L"ParticleScreenClickR");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::ScreenSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		pc->EmitClickBurst(FVector2(0, 0), true);
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitClickBurst(FVector2(0, 0), true);
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::ScreenSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitClickBurst(FVector2(0, 0), true);
+        }
 	}
 }
 
@@ -142,8 +193,12 @@ void ParticleHelper::ToggleMouseTrail()
 		{
 			go = sceneWeak->NewObject<gameObject>(L"ParticleScreenTrail");
 		}
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::ScreenSpace);
+        auto* pc = go->GetComponent<ParticleComponent>();
+        if (!pc)
+        {
+            pc = go->AddComponent<ParticleComponent>();
+            pc->SetDrawType(Define::EDrawType::ScreenSpace);
+        }
 		static bool on = false;
 		on = !on;
 		pc->ToggleMouseTrail(on);
@@ -161,11 +216,18 @@ void ParticleHelper::SpawnParticleAura(const FVector2& pos, float radius, int co
 			go = sceneWeak->NewObject<gameObject>(L"ParticleWorldAura");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		pc->EmitAura(pos, radius > 0 ? radius : 100.0f, count);
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitAura(pos, radius > 0 ? radius : 100.0f, count);
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::WorldSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitAura(pos, radius > 0 ? radius : 100.0f, count);
+        }
 	}
 }
 
@@ -180,11 +242,18 @@ void ParticleHelper::SpawnParticleElectric(const FVector2& pos, const std::wstri
 			go = sceneWeak->NewObject<gameObject>(L"ParticleWorldElectric");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		pc->EmitElectric(FVector2(0, 0));
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitElectric(FVector2(0, 0));
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::WorldSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitElectric(FVector2(0, 0));
+        }
 	}
 }
 
@@ -199,11 +268,18 @@ void ParticleHelper::SpawnParticlePortal(const FVector2& pos, const std::wstring
 			go = sceneWeak->NewObject<gameObject>(L"ParticleWorldPortal");
 		}
 		go->SetPosition(pos);
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		if (!texturePath.empty()) pc->LoadData(texturePath);
-		pc->SetAdditiveBlend(true);
-		pc->EmitPortalSwirl(FVector2(0, 0));
+        if (auto* pc = go->GetComponent<ParticleComponent>())
+        {
+            pc->EmitPortalSwirl(FVector2(0, 0));
+        }
+        else
+        {
+            auto* pc2 = go->AddComponent<ParticleComponent>();
+            pc2->SetDrawType(Define::EDrawType::WorldSpace);
+            if (!texturePath.empty()) pc2->LoadData(texturePath);
+            pc2->SetAdditiveBlend(true);
+            pc2->EmitPortalSwirl(FVector2(0, 0));
+        }
 	}
 }
 

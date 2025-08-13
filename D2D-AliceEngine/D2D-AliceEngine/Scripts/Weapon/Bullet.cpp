@@ -197,11 +197,17 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
+                ParticleHelper::SpawnParticleExplosionByColor(
+                    pos,
+                    Define::Effect_Texture_Bullet_Bomb,
+                    FColor(0.0f, 0.04f, 0.85f, 1.0f),
+                    FColor(0.0f, 0.40f, 0.78f, 1.0f)
+                );
 				ParticleHelper::SpawnParticleExplosionByColor(
 					pos,
 					Define::Effect_Texture_Bullet_Bomb,
-					FColor(0.0f, 0.05f, 0.95f, 1.0f),
-					FColor(0.0f, 0.5f, 0.9f, 1.0f)
+					FColor(0.0f, 0.04f, 0.85f, 1.0f),
+					FColor(0.0f, 0.40f, 0.78f, 1.0f)
 				);
 			}
 			GetWorld()->RemoveObject(GetOwner());
@@ -223,12 +229,12 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
-				ParticleHelper::SpawnParticleExplosionByColor(
-					pos,
-					Define::Effect_Texture_Bullet_Bomb,
-					FColor(1.0f, 0.95f, 0.85f, 1.0f),
-					FColor(1.0f, 0.5f, 0.2f, 0.0f)
-				);
+                ParticleHelper::SpawnParticleExplosionByColor(
+                    pos,
+                    Define::Effect_Texture_Bullet_Bomb,
+                    FColor(0.95f, 0.78f, 0.60f, 1.0f),
+                    FColor(1.0f, 0.45f, 0.15f, 0.0f)
+                );
 			}
 		}
 		break;
@@ -248,12 +254,12 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
-				ParticleHelper::SpawnParticleExplosionByColor(
-					pos,
-					Define::Effect_Texture_Bullet_Bomb,
-					FColor(1.0f, 0.95f, 0.85f, 1.0f),
-					FColor(1.0f, 0.5f, 0.2f, 0.0f)
-				);
+                ParticleHelper::SpawnParticleExplosionByColor(
+                    pos,
+                    Define::Effect_Texture_Bullet_Bomb,
+                    FColor(0.95f, 0.78f, 0.60f, 1.0f),
+                    FColor(1.0f, 0.45f, 0.15f, 0.0f)
+                );
 			}
 		}
 		break;
@@ -273,12 +279,12 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				FVector2 pos = target->GetPosition();
 				//FVector2 pos = player->GetPosition();
 				//ParticleHelper::SpawnParticleImpact(pos, Define::Effect_Texture_Bullet_Bomb);
-				ParticleHelper::SpawnParticleExplosionByColor(
-					pos,
-					Define::Effect_Texture_Bullet_Bomb,
-					FColor(1.0f, 0.95f, 0.85f, 1.0f),
-					FColor(1.0f, 0.5f, 0.2f, 0.0f)
-				);
+                ParticleHelper::SpawnParticleExplosionByColor(
+                    pos,
+                    Define::Effect_Texture_Bullet_Bomb,
+                    FColor(0.95f, 0.78f, 0.60f, 1.0f),
+                    FColor(1.0f, 0.45f, 0.15f, 0.0f)
+                );
 			}
 		}
 		break;

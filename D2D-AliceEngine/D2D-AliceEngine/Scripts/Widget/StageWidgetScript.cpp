@@ -20,6 +20,7 @@
 #include <Component/ProgressBarComponent.h>
 
 #include <Scripts/Bike/BikeMovementScript.h>
+#include <Scripts/Widget/CutSceneWidgetScript.h>
 
 void StageWidgetScript::Initialize()
 {
@@ -33,8 +34,8 @@ void StageWidgetScript::Initialize()
 void StageWidgetScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-
-	GamePlayManager& gm = GamePlayManager::GetInstance();
+	
+	//GamePlayManager& gm = GamePlayManager::GetInstance();
 
 	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
 
@@ -69,7 +70,6 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	}
 
 	// 속도 연동
-
 	float playerSpeed = 0.0f;
 	if (WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player"))
 	{
@@ -83,8 +83,40 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 
 	m_speedProgress->SetProgress(finalSpeed);
 
-	m_speedText->SetText(playerSpeed);
-	m_speedText->m_layer = Define::NormalTextLayer;
+	int realSpeed = static_cast<int>(std::round(playerSpeed / 3.0f));
+	if (realSpeed > 200) realSpeed = 200;
+
+	wchar_t speedBuffer[8];
+	swprintf(speedBuffer, 8, L"%03d", realSpeed);
+
+	m_speedText->SetText(std::wstring(speedBuffer)+ L"km/h");
+
+	static bool wasPlaying = true; // 초기값은 컷씬 중이라고 가정
+
+	bool isPlaying = GamePlayManager::GetInstance().IsCutScenePlaying();
+
+	if (wasPlaying != isPlaying)
+	{
+		m_pauseButton->SetActive(!isPlaying);
+		wasPlaying = isPlaying;
+	}
+
+	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
+	if (!bgmObj) return;
+	auto sound = bgmObj->GetComponent<AudioComponent>();
+
+	if (!GamePlayManager::GetInstance().IsCutScenePlaying())
+	{
+		if (!m_ambiencePlayed)
+		{
+			sound->PlayByName(L"Ambience");
+			m_ambiencePlayed = true; // 다음부터는 안 들어오게
+		}
+	}
+	else
+	{
+		m_ambiencePlayed = false; // 컷씬이 다시 시작하면 초기화
+	}
 }
 
 void StageWidgetScript::Awake()
@@ -104,6 +136,7 @@ void StageWidgetScript::OnStart()
 	float soundTabPosX = 450;
 
 	auto pauseButton = m_owner->AddComponent<ButtonComponent>();
+	m_pauseButton = pauseButton;
 	auto closeButton = m_owner->AddComponent<ButtonComponent>();
 	auto smallClose = m_owner->AddComponent<ButtonComponent>();
 
@@ -184,7 +217,8 @@ void StageWidgetScript::OnStart()
 	m_speedProgress->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_speedProgress->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(-SCREEN_WIDTH / 2.0f + 139, SCREEN_HEIGHT / 2.0f - 210));
-	m_speedProgress->SetStartAngleDeg(0);
+	m_speedProgress->SetStartAngleDeg(10);
+	m_speedProgress->SetClockwise(true);
 	m_speedProgress->SetProgress(1);
 	m_speedProgress->m_layer = Define::HUDLayer + 10;
 
@@ -311,6 +345,18 @@ void StageWidgetScript::OnStart()
 	toSelect->AddChildComponent(selectText);
 	selectText->SetRelativePosition(CoordHelper::RatioCoordToScreen(selectText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	selectText->m_layer = Define::Disable;
+
+	m_speedText->SetFontSize(30.f);
+	m_speedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	m_speedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	m_speedText->SetColor(FColor(0, 234, 255, 255));
+	m_speedText->SetDrawType(EDrawType::ScreenSpace);
+	//m_speedText->m_layer = Define::NormalTextLayer;
+	m_speedText->m_layer = 1000000;
+	m_speedText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(m_speedText->GetRelativeSize(), FVector2(-0.5, -0.5))
+	+ FVector2(-850,330)
+	);
 
 	// ========================== pauseButton
 	pauseButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_Pause.png");
@@ -478,6 +524,7 @@ void StageWidgetScript::OnStart()
 		sound->PlayByName(L"UISound");
 
 		sound->PauseByType(SoundType::BGM);
+		sound->PauseByType(SoundType::SFX);
 
 		GamePlayManager::GetInstance().PauseGame();
 
@@ -537,6 +584,7 @@ void StageWidgetScript::OnStart()
 		sound->PlayByName(L"UISound");
 
 		sound->ResumeByType(SoundType::BGM);
+		sound->ResumeByType(SoundType::SFX);
 		
 		GamePlayManager::GetInstance().ResumeGame();
 
@@ -931,6 +979,8 @@ void StageWidgetScript::OnStart()
 		soundControl, bgmControl, sfxControl,bgmPlusButton,bgmMinusButton,sfxPlusButton,sfxMinusButton,
 		smallClose
 	] {
+		if (GamePlayManager::GetInstance().IsCutScenePlaying()) return;
+
 		if (!m_isPaused && Input::IsKeyPressed(VK_ESCAPE))
 		{
 			m_isPaused = !m_isPaused;

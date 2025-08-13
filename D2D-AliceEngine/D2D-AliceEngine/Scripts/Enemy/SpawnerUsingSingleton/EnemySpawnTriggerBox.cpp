@@ -183,7 +183,7 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
             statScript->SetEnemyTypeId(_enemyTypeId);
         if (auto* drone = enemy->AddComponent<Drone>(dronePath))
         {
-            drone->initBodyPos = FVector2(-60.0f, 80.0f);
+            drone->initBodyPos = FVector2(-120.0f, 85.0f);
             drone->initBodySize = FVector2(0.7f, 0.7f);
             drone->SetDroneType(EDroneType::Enemy);
             drone->SetAttackDelay(2.0f);
