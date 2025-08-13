@@ -22,8 +22,14 @@ public:
 	FTimerHandle m_timeHandle;
 	FTimerHandle m_gradeHandle;
 
-	TextRenderComponent* m_passedTime;
 	TextRenderComponent* m_killCount;
+	TextRenderComponent* m_passedTime;
+	TextRenderComponent* m_playerHP;
+
+	// 계산식용
+	float m_fTime = 0.0f;
+	int m_iKill = 0;
+	int m_iHealth = 0.0f;
 
 	static std::wstring s_prevScene;
 };
