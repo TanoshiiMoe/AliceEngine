@@ -107,12 +107,12 @@ void PlayerMovement::Input()
 		moveDir.x += isBoosting ? 400.0f : 100.0f;
 	}
 
-	/*if (Input::IsKeyPressed(VK_B))
+	if (Input::IsKeyPressed(VK_B))
 	{
-		SetBoost(true);
+		PlayerManager::instance->Boost(999.0f, false);
 	}
 	if (Input::IsKeyPressed(VK_V))
 	{
-		SetBoost(false);
-	}*/
+		PlayerManager::instance->Boost(1.0f, false);
+	}
 }

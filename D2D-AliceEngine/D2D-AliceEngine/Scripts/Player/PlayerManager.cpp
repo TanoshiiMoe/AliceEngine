@@ -59,7 +59,7 @@ void PlayerManager::OnStart()
 	animInstance->Play();
 	animInstance->OnStart();
 
-	// 콜라이더 설정
+	// 총알 콜라이더 설정
 	owner->GetComponent<Collider>()->SetBoxSize(FVector2(110, 50));
 	if (auto collider = owner->GetComponent<Collider>())
 	{
@@ -319,4 +319,11 @@ void PlayerManager::Sande(float _time)
 void PlayerManager::CrashSlow()
 {
 	owner->GetComponent<PlayerMovement>()->CrashSlow();
+}
+
+void PlayerManager::SetCrashColl(Collider* coll)
+{
+	if (coll) {
+		crashColl = coll;
+	}
 }

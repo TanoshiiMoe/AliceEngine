@@ -32,7 +32,7 @@ void JumpTrigger::Update(const float& deltaSeconds)
 
 void JumpTrigger::OnTriggerEnter2D(Collider* collider)
 {
-	if (collider->GetOwner()->GetName() == L"Player") {
+	if (collider->GetOwner()->GetTag() == L"Player") {
 		GamePlayManager::GetInstance().GetPlayer()->GetComponent<PlayerManager>()->Jump();
 	}
 }

@@ -41,6 +41,10 @@ public:
 	// 충돌 감속효과
 	void CrashSlow();
 
+	// 충돌 콜라이더 가져오기
+	Collider* GetCrashColl() { return crashColl; }
+	void SetCrashColl(Collider* coll);
+
 private:
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
@@ -70,5 +74,8 @@ private:
 
 	// 무적상태인가
 	bool isInvincible = false;
+
+	// 차량충돌 콜라이더 (레이어 5 사용)
+	Collider* crashColl;
 };
 

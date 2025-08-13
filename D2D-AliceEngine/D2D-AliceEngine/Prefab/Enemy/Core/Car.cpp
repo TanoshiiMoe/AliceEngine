@@ -39,6 +39,9 @@ void Car::Initialize()
         owner->AddComponent<LaneController>();
         // ?뒪?겕由쏀듃
         owner->AddComponent<EnemyManager>();
+
+		// 기본 콜라이더 (총알 콜라이더는 레이어 0, 차량충돌은 5)
+		owner->AddComponent<Collider>()->SetBoxSize(FVector2(0.0f, 0.0f));
     }
 
 	TimerManager::GetInstance().ClearTimer(timer);
@@ -145,14 +148,16 @@ void Car::OnTriggerEnter2D(Collider* collider)
 	if (!collider->GetOwner()) return;
 	if (collider->GetOwner()->GetTag() == L"Player")
 	{
+		if (owner->GetComponent<Collider>()->GetLayer() != 5)
+			return;
+
 		if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 		{
-			// Bullet의 damage 변수 사용
+			// 크래시 상태
             if (!PlayerManager::instance->GetInvincible()) {
                 bs->m_bikeStat->DecreaseAbility("HP", 8);
 				PlayerManager::instance->CrashSlow();
             }
-			    
 		}
 
 		if (gameObject* player = GamePlayManager::GetInstance().GetPlayer())

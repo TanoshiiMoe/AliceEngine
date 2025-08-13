@@ -6,6 +6,8 @@
 #include "Animation/AnimatorInstance.h"
 #include <Helpers/CoordHelper.h>
 #include "Component/SkewTransform.h"
+#include "Component/Collider.h"
+#include <Component/BoxComponent.h>
 
 void EnemyBike::Initialize()
 {
@@ -43,4 +45,9 @@ void EnemyBike::OnStart()
 	else {
 		owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Bike/bike.png");
 	}
+
+	// 콜라이더 설정
+	Collider* coll = owner->GetComponent<Collider>();
+	coll->boxComponent->SetSize(FVector2(150, 70));
+	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -30.0f));
 }

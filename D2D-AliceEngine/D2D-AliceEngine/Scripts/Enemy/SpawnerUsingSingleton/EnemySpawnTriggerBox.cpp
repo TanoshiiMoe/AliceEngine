@@ -167,7 +167,7 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
     gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
     EnemySpawner::EnemyType etype = static_cast<EnemySpawner::EnemyType>(_enemyTypeId);
 
-    enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
+    //enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
 
     FDroneSpritePath dronePath(
         L"Enemy/Drone/enermy_Drone_body.png",
