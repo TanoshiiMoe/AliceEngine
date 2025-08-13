@@ -45,6 +45,8 @@ void SelectWidgetScript::Update(const float& deltaSeconds)
 	m_guideText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_guideText->GetRelativeSize(), FVector2(-0.5, -0.5)) +
 		FVector2(mousePos.x - SCREEN_WIDTH / 2.0f, mousePos.y - 400));
+
+	m_seconds = deltaSeconds;
 }
 
 void SelectWidgetScript::Awake()
@@ -362,7 +364,7 @@ void SelectWidgetScript::OnStart()
 		});
 
 	input->SetAction(input->GetHandle(), [this] {
-		SkipInput();
+		SkipInput(m_seconds);
 		});
 }
 
@@ -374,11 +376,11 @@ void SelectWidgetScript::OnDestroy()
 {
 }
 
-void SelectWidgetScript::SkipInput()
+void SelectWidgetScript::SkipInput(float deltaSeconds)
 {
 	if (m_isInStage1 && Input::IsKeyDown(VK_SPACE))
 	{
-		m_pressValue += 3.5f;
+		m_pressValue += 4.5f * deltaSeconds * 300;
 
 		if (m_pressValue >= 500.0f)
 		{
@@ -387,6 +389,6 @@ void SelectWidgetScript::SkipInput()
 		}
 	}
 
-	m_pressValue -= 1.5f;
+	m_pressValue -= 1.5f * deltaSeconds * 300;
 	if (m_pressValue <= 0.0f) m_pressValue = 0.0f;
 }
