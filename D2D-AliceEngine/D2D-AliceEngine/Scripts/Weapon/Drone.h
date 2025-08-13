@@ -62,6 +62,9 @@ public:
 	float GetDamage() const { return damage; }
 	void SetDamage(float val) { damage = val; }
 
+	float GetBulletSpeed() const { return m_bulletSpeed; }
+	void SetBulletSpeed(const float value) { m_bulletSpeed = value; }
+
 	gameObject* m_player = nullptr;
 	gameObject* m_owner = nullptr;
 
@@ -144,4 +147,6 @@ public:
 	float probBurst3 = 0.34f;
 	float probSweep = 0.23f;
 
+private:
+	float m_bulletSpeed{1};
 };

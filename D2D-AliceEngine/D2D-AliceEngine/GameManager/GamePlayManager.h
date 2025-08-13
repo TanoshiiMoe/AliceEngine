@@ -126,6 +126,6 @@ private:
     int m_stopXAxis{10200};
 
     bool isCutScenePlaying = false;
-
-    int m_endSubDistance = 1300;
+    int m_cutSceneIndex = 0;
+    int m_endSubDistance = 2200;
 };

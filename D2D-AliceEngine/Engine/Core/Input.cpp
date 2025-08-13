@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Input.h"
 #include <Helpers/CoordHelper.h>
 #include <Manager/SceneManager.h>
@@ -15,14 +15,14 @@ namespace Input
 	{
 		m_hwnd = hwnd;
 
-		// Å°º¸µå »óÅÂ ÃÊ±âÈ­
+		// í‚¤ë³´ë“œ ìƒíƒœ ì´ˆê¸°í™”
 		for (int i = 0; i < 256; i++)
 		{
 			currState[i] = GetAsyncKeyState(i);
 			prevState[i] = currState[i];
 		}
 
-		// ¸¶¿ì½º ÁÂÇ¥ ÃÊ±âÈ­
+		// ë§ˆìš°ìŠ¤ ì¢Œí‘œ ì´ˆê¸°í™”
 		::GetCursorPos(&m_point);
 		::ScreenToClient(m_hwnd, &m_point);
 	}
@@ -43,13 +43,13 @@ namespace Input
 		GetCursorPos(&m_point);
 		ScreenToClient(m_hwnd, &m_point);
 	
-		// ¸¶¿ì½º »óÅÂ °ËÁõ ¹× ÀÚµ¿ ÃÊ±âÈ­
-		// ¸¶¿ì½º°¡ Å¬¸¯µÈ »óÅÂ·Î ³Ê¹« ¿À·¡ À¯ÁöµÇ´Â °æ¿ì ÀÚµ¿ ÃÊ±âÈ­
+		// ë§ˆìš°ìŠ¤ ìƒíƒœ ê²€ì¦ ë° ìë™ ì´ˆê¸°í™”
+		// ë§ˆìš°ìŠ¤ê°€ í´ë¦­ëœ ìƒíƒœë¡œ ë„ˆë¬´ ì˜¤ë˜ ìœ ì§€ë˜ëŠ” ê²½ìš° ìë™ ì´ˆê¸°í™”
 		static int mouseHoldFrameCount = 0;
 		if (IsMouseLeftDown())
 		{
 			mouseHoldFrameCount++;
-			// 300ÇÁ·¹ÀÓ(¾à 5ÃÊ) ÀÌ»ó ¸¶¿ì½º°¡ Å¬¸¯µÈ »óÅÂ·Î À¯ÁöµÇ¸é ÃÊ±âÈ­
+			// 300í”„ë ˆì„(ì•½ 5ì´ˆ) ì´ìƒ ë§ˆìš°ìŠ¤ê°€ í´ë¦­ëœ ìƒíƒœë¡œ ìœ ì§€ë˜ë©´ ì´ˆê¸°í™”
 			if (mouseHoldFrameCount > 300)
 			{
 				ResetMouseState();
@@ -61,14 +61,14 @@ namespace Input
 			mouseHoldFrameCount = 0;
 		}
 	
-		// Ãß°¡ ¾ÈÀüÀåÄ¡: ¸¶¿ì½º°¡ Å¬¸¯µÈ »óÅÂ·Î ³Ê¹« ¿À·¡ À¯ÁöµÇ¸é °­Á¦ ÃÊ±âÈ­
+		// ì¶”ê°€ ì•ˆì „ì¥ì¹˜: ë§ˆìš°ìŠ¤ê°€ í´ë¦­ëœ ìƒíƒœë¡œ ë„ˆë¬´ ì˜¤ë˜ ìœ ì§€ë˜ë©´ ê°•ì œ ì´ˆê¸°í™”
 		static int totalFrameCount = 0;
 		totalFrameCount++;
 	
-		// ¸Å 1000ÇÁ·¹ÀÓ¸¶´Ù ¸¶¿ì½º »óÅÂ °ËÁõ
+		// ë§¤ 1000í”„ë ˆì„ë§ˆë‹¤ ë§ˆìš°ìŠ¤ ìƒíƒœ ê²€ì¦
 		if (totalFrameCount % 1000 == 0)
 		{
-			// ¸¶¿ì½º°¡ Å¬¸¯µÈ »óÅÂ·Î 1000ÇÁ·¹ÀÓ ÀÌ»ó À¯ÁöµÇ¸é °­Á¦ ÃÊ±âÈ­
+			// ë§ˆìš°ìŠ¤ê°€ í´ë¦­ëœ ìƒíƒœë¡œ 1000í”„ë ˆì„ ì´ìƒ ìœ ì§€ë˜ë©´ ê°•ì œ ì´ˆê¸°í™”
 			if (IsMouseLeftDown())
 			{
 				ResetMouseState();
@@ -112,7 +112,7 @@ namespace Input
 		return worldMousePos;
 	}
 
-	// ¾Æ¹« Å°¸¦ ´­·¶À» ¶§
+	// ì•„ë¬´ í‚¤ë¥¼ ëˆŒë €ì„ ë•Œ
 	bool AnyKeyPressed()
 	{
 		for (int i = 0; i < 256; ++i)
@@ -155,17 +155,21 @@ namespace Input
 	{
 		return (currState[VK_LBUTTON] & 0x8000) != 0;
 	}
-	
+	bool IsMouseRightDown()
+	{
+		return (currState[VK_RBUTTON] & 0x8000) != 0;
+	}
+
 	void ResetMouseState()
 	{
-		// ¸¶¿ì½º Å¬¸¯ »óÅÂ ÃÊ±âÈ­
+		// ë§ˆìš°ìŠ¤ í´ë¦­ ìƒíƒœ ì´ˆê¸°í™”
 		prevState[VK_LBUTTON] = 0;
 		currState[VK_LBUTTON] = 0;
 		
-		// ¸¶¿ì½º ÈÙ »óÅÂµµ ÃÊ±âÈ­
+		// ë§ˆìš°ìŠ¤ íœ  ìƒíƒœë„ ì´ˆê¸°í™”
 		m_mouseWheelDelta = 0;
 		
-		// ¸¶¿ì½º À§Ä¡´Â ÇöÀç À§Ä¡·Î À¯Áö (Å¬¸¯ »óÅÂ¸¸ ÃÊ±âÈ­)
+		// ë§ˆìš°ìŠ¤ ìœ„ì¹˜ëŠ” í˜„ì¬ ìœ„ì¹˜ë¡œ ìœ ì§€ (í´ë¦­ ìƒíƒœë§Œ ì´ˆê¸°í™”)
 		::GetCursorPos(&m_point);
 		::ScreenToClient(m_hwnd, &m_point);
 	}

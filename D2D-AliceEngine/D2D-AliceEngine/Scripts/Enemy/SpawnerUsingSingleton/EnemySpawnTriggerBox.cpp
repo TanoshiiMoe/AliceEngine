@@ -79,7 +79,8 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
         if (EnemyDataManager::GetInstance().GetStats(4, stats))
         {
             drone->SetDamage(stats.damage);
-            drone->SetDamage(stats.attackDelay);
+            drone->SetAttackDelay(stats.attackDelay);
+            drone->SetBulletSpeed(stats.bulletSpeed);
         }
     }
 
@@ -94,7 +95,8 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
         if (EnemyDataManager::GetInstance().GetStats(4, stats))
         {
             drone->SetDamage(stats.damage);
-            drone->SetDamage(stats.attackDelay);
+			drone->SetAttackDelay(stats.attackDelay);
+			drone->SetBulletSpeed(stats.bulletSpeed);
         }
     }
 
@@ -150,6 +152,7 @@ void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
         {
             drone->SetDamage(stats.damage);
             drone->SetAttackDelay(stats.attackDelay);
+            drone->SetBulletSpeed(stats.bulletSpeed);
         }
 	}
 
@@ -184,6 +187,7 @@ void EnemySpawnTriggerBox::SpawnEnemyInBossModeAt(int _enemyTypeId, const FVecto
 		drone->SetDroneType(EDroneType::Enemy);
 		drone->SetDamage(stats.damage);
 		drone->SetAttackDelay(stats.attackDelay);
+        drone->SetBulletSpeed(stats.bulletSpeed);
 	}
 
 	enemy->transform()->SetPosition(worldPos);
