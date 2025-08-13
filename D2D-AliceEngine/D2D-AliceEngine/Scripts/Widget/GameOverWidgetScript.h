@@ -3,6 +3,8 @@
 #include <Manager/TimerManager.h>
 
 class gameObject;
+class SpriteRenderer;
+class ButtonComponent;
 class GameOverWidgetScript : public ScriptComponent
 {
 public:
@@ -15,7 +17,15 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+	SpriteRenderer* m_errorPopup;
+	ButtonComponent* m_toRestartButton;
+	ButtonComponent* m_toMainButton;
 
 	FTimerHandle m_fadeHandle;
+	float m_scale = 0.0f;
+	float m_sec = 0.0f;
+
+	bool m_isPop = false;
+
 };
 
