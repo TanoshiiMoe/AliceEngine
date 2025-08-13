@@ -103,7 +103,7 @@ void StageAudioScript::OnStart()
 
 	for (auto& wstr : sfxList) {
 		m_Sfx[wstr] = m_owner->AddComponent<AudioComponent>(wstr);
-		m_Sfx[wstr]->LoadData(wstr, AudioMode::Memory, SoundType::SFX);
+		m_Sfx[wstr]->LoadData(wstr, AudioMode::Stream, SoundType::SFX);
 	}
 }
 
