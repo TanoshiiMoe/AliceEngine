@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/RenderComponent.h>
 #include <Animation/TextureLoader.h>
 
@@ -6,6 +6,17 @@ using namespace Microsoft::WRL;
 
 struct ID2D1Bitmap1;
 struct ID2D1Effect;
+
+//enum class Filter
+//{
+//	None,
+//	Grayscale,
+//	Sepia,
+//	Invert,
+//	Brighten,
+//	Darken
+//};
+
 class SpriteRenderer : public RenderComponent
 {
 public:
@@ -29,13 +40,16 @@ public:
 
 	// Effect helpers for transitions
 	void SetOpacity(float alpha); // 0..1
+	void SetFilter(float rMul, float gMul, float bMul);
+	void SetFilter(FColor color);
+	//void SetFilter(Filter filter);
 	void ClearEffect() { m_effect.Reset(); }
 
-	SpriteInfo spriteInfo; // ½ºÇÁ¶óÀÌÆ® Á¤º¸
+	SpriteInfo spriteInfo; // ìŠ¤í”„ë¼ì´íŠ¸ ì •ë³´
 
-	std::wstring filePath; // ÆÄÀÏÀÇ °æ·Î
+	std::wstring filePath; // íŒŒì¼ì˜ ê²½ë¡œ
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
-	ComPtr<ID2D1Effect> m_effect;	// ÀÌÆåÆ® ÀÌ¹ÌÁö
+	ComPtr<ID2D1Effect> m_effect;	// ì´í™íŠ¸ ì´ë¯¸ì§€
 
 	struct FSlicedArea {
 		float srcX{ 0 }, srcY{ 0 };
