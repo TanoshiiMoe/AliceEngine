@@ -18,7 +18,9 @@ public:
 
 	gameObject* m_owner;
 	SpriteRenderer* m_grade;
-	FTimerHandle m_fadeHandle;
+	FTimerHandle m_killHandle;
+	FTimerHandle m_timeHandle;
+	FTimerHandle m_gradeHandle;
 
 	TextRenderComponent* m_passedTime;
 	TextRenderComponent* m_killCount;
