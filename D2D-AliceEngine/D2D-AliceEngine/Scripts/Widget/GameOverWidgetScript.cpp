@@ -10,8 +10,8 @@
 
 #include <UI/UIImage.h>
 #include <UI/UIText.h>
-#include <Scene/Scene.h>
-#include <Component/ButtonComponent.h>
+#include <Scene/Scene.h
+ #include <Component/ButtonComponent.h>
 
 #include <Manager/SceneManager.h>
 #include <Component/AudioComponent.h>
@@ -128,18 +128,21 @@ void GameOverWidgetScript::OnStart()
 	// ==================== Delegate
 	m_toRestartButton->SetStateAction(Define::EButtonState::Hover, [weak = WeakFromThis<GameOverWidgetScript>()]()
 		{
+			if (weak.expired())return;
 			weak.Get()->m_toRestartButton->StartHoverPulse(0.8f, 0.04f);
 			weak.Get()->m_toRestartButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
 		});
 
 	m_toRestartButton->SetStateAction(Define::EButtonState::HoverLeave, [weak = WeakFromThis<GameOverWidgetScript>()]()
 		{
+			if (weak.expired())return;
 			weak.Get()->m_toRestartButton->StopHoverPulse();
 			weak.Get()->m_toRestartButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
 		});
 
 	m_toRestartButton->SetStateAction(Define::EButtonState::Release, [weak = WeakFromThis<GameOverWidgetScript>()]()
 		{
+			if (weak.expired())return;
 			weak.Get()->m_toRestartButton->StopHoverPulse();
 			weak.Get()->m_toRestartButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
 		});
@@ -151,18 +154,21 @@ void GameOverWidgetScript::OnStart()
 
 	m_toMainButton->SetStateAction(Define::EButtonState::Hover, [weak = WeakFromThis<GameOverWidgetScript>()]()
 		{
+			if (weak.expired())return;
 			weak.Get()->m_toMainButton->StartHoverPulse(0.8f, 0.04f);
 			weak.Get()->m_toMainButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
 		});
 
 	m_toMainButton->SetStateAction(Define::EButtonState::HoverLeave, [weak = WeakFromThis<GameOverWidgetScript>()]()
 		{
+			if (weak.expired())return;
 			weak.Get()->m_toMainButton->StopHoverPulse();
 			weak.Get()->m_toMainButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
 		});
 
 	m_toMainButton->SetStateAction(Define::EButtonState::Release, [weak = WeakFromThis<GameOverWidgetScript>()]()
 		{
+			if (weak.expired())return;
 			weak.Get()->m_toMainButton->StopHoverPulse();
 			weak.Get()->m_toMainButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
 		});
