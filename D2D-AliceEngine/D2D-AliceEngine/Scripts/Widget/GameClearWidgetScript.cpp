@@ -248,6 +248,7 @@ void GameClearWidgetScript::OnStart()
 	TimerManager::GetInstance().SetTimer(
 		m_killHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
+			if (weak.expired())return;
 			weak.Get()->m_killCount->m_layer = Define::PopupObjectLayer;
 		},
 		0.1f,
@@ -258,6 +259,7 @@ void GameClearWidgetScript::OnStart()
 	TimerManager::GetInstance().SetTimer(
 		m_timeHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
+			if (weak.expired())return;
 			weak.Get()->m_passedTime->m_layer = Define::PopupObjectLayer;
 		},
 		0.1f,
@@ -268,6 +270,7 @@ void GameClearWidgetScript::OnStart()
 	TimerManager::GetInstance().SetTimer(
 		m_gradeHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
+			if (weak.expired())return;
 			weak.Get()->m_grade->m_layer = Define::PopupObjectLayer;
 		},
 		0.1f,
