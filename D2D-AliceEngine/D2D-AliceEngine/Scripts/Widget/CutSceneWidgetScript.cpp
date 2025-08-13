@@ -69,6 +69,7 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
 void CutSceneWidgetScript::Awake()
 {
     m_isAlive = true;
+    m_isSpaceReleased = false;
     GamePlayManager::GetInstance().SetCutScenePlaying(m_isAlive);
 }
 
@@ -301,8 +302,15 @@ void CutSceneWidgetScript::OnDestroy()
 
 void CutSceneWidgetScript::SkipInput(float deltaSeconds)
 {
+    if (Input::IsKeyReleased(VK_SPACE))
+    {
+        m_isSpaceReleased = true;
+    }
+
     if (Input::IsKeyDown(VK_SPACE))
     {
+        if (!m_isSpaceReleased) return;
+
         m_pressValue += 4.5f * deltaSeconds * 300;
 
         if (m_pressValue >= 500.0f)

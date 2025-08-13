@@ -51,6 +51,7 @@ private:
 
     void SkipInput(float deltaSeconds);
     float m_seconds = 0.0f;
+    bool m_isSpaceReleased = false;
 
 	// 컷씬 관련
 	std::vector<std::wstring> m_cutSceneImages;
