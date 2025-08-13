@@ -12,6 +12,7 @@
 #include <Object/gameObject.h>
 #include <GameManager/GamePlayManager.h>
 #include <Manager/SceneManager.h>
+#include <Scripts/Weapon/BulletColl.h>
 
 void EnemyStatScript::Initialize()
 {
@@ -90,8 +91,12 @@ void EnemyStatScript::OnStart()
                 GamePlayManager::GetInstance().BackNormalMode();
             }
 
-            if (auto car = owner->GetComponent<Car>())
+            if (auto car = owner->GetComponent<Car>()) {
                 car->DelayDestroy();
+                // BulletColl 삭제 -성근수정-
+                car->DestroybColl();
+            }
+                
             if (auto drone = owner->GetComponent<Drone>())
                 drone->DelayDestroy();
 

@@ -8,6 +8,7 @@
 #include "Scene/Scene.h"
 #include "Component/Collider.h"
 #include "Scripts/Enemy/Jump/JumpTrigger.h"
+#include <Component/BoxComponent.h>
 
 void JumpTruck::Initialize()
 {
@@ -62,18 +63,20 @@ void JumpTruck::OnStart()
 	float width = sr->GetBitmapSizeX() * scale.x;
 	float yOffset = height * 0.25f;
 
-	// 콜라이더 설정 넣기
+	// 점프 콜라이더 설정 넣기
 	gameObject* lc = GetWorld()->NewObject<gameObject>(L"JumpCollider");
-	lc->AddComponent<Collider>()->SetBoxSize(FVector2(5.0f, height * 0.3f));
-	/*lc->transform()->SetPosition(owner->transform()->GetPosition());
-	lc->transform()->AddPosition(-(width * 0.4f), -(height * 0.25f));*/
 	JumpTrigger* jt = lc->AddComponent<JumpTrigger>();
-	jt->target = owner;
+	jt->SetBoxSize(FVector2(5.0f, height * 0.3f));
 	jt->SetOffSet(FVector2(-(width * 0.3f), -(height * 0.25f)));
-	
-	
+	jt->target = owner;
 
 	// zPos 오프셋 넣기
 	SkewTransform* st = owner->GetComponent<SkewTransform>();
 	st->zPos += yOffset / std::sin(Math::Deg2Rad(45.0f));
+
+	// 콜라이더 설정
+	Collider* coll = owner->GetComponent<Collider>();
+	coll->SetLayer(5);
+	coll->boxComponent->SetSize(FVector2(100, 70));
+	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
 }

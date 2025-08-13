@@ -21,6 +21,17 @@
 #include <Scripts/Enemy/EnemyStatScript.h>
 #include "../Player/PlayerManager.h"
 #include <Helper/ParticleHelper.h>
+#include "BulletColl.h"
+
+static FVector2 CatmullRomPoint(const FVector2& p0, const FVector2& p1, const FVector2& p2, const FVector2& p3, float t)
+{
+	float t2 = t * t;
+	float t3 = t2 * t;
+	return FVector2(
+		0.5f * ((2.0f * p1.x) + (-p0.x + p2.x) * t + (2.0f * p0.x - 5.0f * p1.x + 4.0f * p2.x - p3.x) * t2 + (-p0.x + 3.0f * p1.x - 3.0f * p2.x + p3.x) * t3),
+		0.5f * ((2.0f * p1.y) + (-p0.y + p2.y) * t + (2.0f * p0.y - 5.0f * p1.y + 4.0f * p2.y - p3.y) * t2 + (-p0.y + 3.0f * p1.y - 3.0f * p2.y + p3.y) * t3)
+	);
+}
 
 void Bullet::Initialize()
 {
@@ -117,6 +128,37 @@ void Bullet::UpdatePositionByType(const float& deltaSeconds)
 		GetOwner()->transform()->SetPosition(finalPos);
 		break;
 	}
+	case EBulletType::CatmullRom:
+	{
+		if (bSplineFinished || catmullPoints.size() < 4)
+		{
+			// 경로 끝났거나 포인트 부족: 소멸
+			GetWorld()->RemoveObject(GetOwner());
+			break;
+		}
+		// 총 구간 수 = points-3
+		int numSegments = static_cast<int>(catmullPoints.size()) - 3;
+		float segmentTime = splineDuration / static_cast<float>(numSegments);
+		splineT += deltaSeconds / segmentTime;
+		if (splineT >= 1.0f)
+		{
+			splineT = 0.0f;
+			++splineSegment;
+			if (splineSegment >= numSegments)
+			{
+				bSplineFinished = true;
+				GetWorld()->RemoveObject(GetOwner());
+				break;
+			}
+		}
+		const FVector2& A = catmullPoints[splineSegment + 0];
+		const FVector2& B = catmullPoints[splineSegment + 1];
+		const FVector2& C = catmullPoints[splineSegment + 2];
+		const FVector2& D = catmullPoints[splineSegment + 3];
+		FVector2 pos = CatmullRomPoint(A, B, C, D, splineT);
+		GetOwner()->transform()->SetPosition(pos);
+		break;
+	}
 	default:
 		break;
 	}
@@ -178,8 +220,8 @@ void Bullet::OnDestroy()
 
 void Bullet::OnTriggerEnter2D(Collider* collider)
 {
-	std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
+	//std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
+	//OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
 
 	if (!collider->GetOwner()) return;
 	switch (droneType)
@@ -191,6 +233,11 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			{
 				// Bullet의 damage 변수 사용
 				bs->m_enemyStat->DecreaseAbility("HP", damage);
+			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				// Bullet의 damage 변수 사용
+				es->target->GetComponent<EnemyStatScript>()->m_enemyStat->DecreaseAbility("HP", damage);
 			}
 			if (gameObject* target = collider->GetOwner())
 			{
@@ -222,6 +269,14 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				if (!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				if (auto bs = es->target->GetComponent<BikeStatScript>()) {
+					// Bullet의 damage 변수 사용
+					if (!PlayerManager::instance->GetInvincible())
+						bs->m_bikeStat->DecreaseAbility("HP", damage);
+				}
+			}
 			GetWorld()->RemoveObject(GetOwner());
 
 			if (gameObject* target = collider->GetOwner())
@@ -247,6 +302,13 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				if(!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				// Bullet의 damage 변수 사용
+				if(!es->target.expired())
+					if(auto* ess = es->target->GetComponent<EnemyStatScript>())
+						ess->m_enemyStat->DecreaseAbility("HP", damage);
+			}
 			GetWorld()->RemoveObject(GetOwner());
 
 			if (gameObject* target = collider->GetOwner())
@@ -271,6 +333,13 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 				// Bullet의 damage 변수 사용
 				if (!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
+			}
+			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
+			{
+				// Bullet의 damage 변수 사용
+				if (!es->target.expired())
+					if(auto* ess = es->target->GetComponent<EnemyStatScript>())
+						ess->m_enemyStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 

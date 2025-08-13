@@ -24,6 +24,9 @@ public:
 
     // 총알 등으로 사망 시 지연 파괴
     void DelayDestroy();
+
+	// 총알 콜라이더 삭제
+	void DestroybColl();
 protected:
 	AnimatorController animController;
 
@@ -41,6 +44,7 @@ protected:
 
     bool bSkewed = true;
 
+	std::vector<gameObject*> colObjs;
 
 private:
 	// 부드러운 흔들림(바운스) 파라미터

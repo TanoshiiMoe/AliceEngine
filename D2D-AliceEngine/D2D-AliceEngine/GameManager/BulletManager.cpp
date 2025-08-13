@@ -67,3 +67,40 @@ void BulletManager::FireBullet(const FVector2& start, const FVector2& target, co
 
 	bullets.push_back(bullet);
 }
+
+void BulletManager::FireBulletCatmull(const std::vector<FVector2>& controlPoints, float totalDuration, const EDroneType& droneType, float damage)
+{
+	if (controlPoints.size() < 4) return;
+	Scene* curScene = SceneManager::GetInstance().GetWorld();
+	auto bulletObj = curScene->NewObject<gameObject>(L"bullet_catmull");
+	auto bullet = bulletObj->AddComponent<Bullet>();
+
+	bulletObj->SetPosition(controlPoints.front());
+	bulletObj->SetScale(FVector2(1.7, 1.7));
+
+	switch (droneType)
+	{
+	case EDroneType::Player:
+		bullet->SetSpritePath(L"Player/bullet_blue_final.png");
+		break;
+	case EDroneType::Enemy:
+	case EDroneType::BossSpawn:
+	case EDroneType::Boss:
+		bullet->SetSpritePath(L"Enemy/bullet_red_final.png");
+		break;
+	default:
+		break;
+	}
+
+	bullet->SetDroneType(droneType);
+	bullet->SetDamage(damage);
+	bullet->bulletType = EBulletType::CatmullRom;
+	bullet->catmullPoints = controlPoints;
+	bullet->splineDuration = totalDuration;
+
+	// 초기 진행 방향 설정(첫 두 점 기준)
+	FVector2 dir = controlPoints[1] - controlPoints[0];
+	bullet->moveDir = dir.Normalize();
+
+	bullets.push_back(bullet);
+}

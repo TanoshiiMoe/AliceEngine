@@ -52,8 +52,6 @@ void EnemySpawner::SpawnEnemy(int _enemyTypeId /*= 0*/, FVector2 _position /*= {
 	gameObject* enemy = GetWorld()->NewObject<gameObject>(name);
 	EnemyType etype = static_cast<EnemyType>(_enemyTypeId);
 
-	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
-
 	FDroneSpritePath dronePath(
 		L"Enemy/Drone/enermy_Drone_body.png",
 		L"Enemy/Drone/enermy_Drone_arm.png"

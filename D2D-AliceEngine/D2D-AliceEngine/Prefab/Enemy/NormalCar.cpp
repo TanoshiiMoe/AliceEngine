@@ -4,6 +4,8 @@
 #include "Object/gameObject.h"
 #include "Animation/AnimatorInstance.h"
 #include "Component/SkewTransform.h"
+#include "Component/Collider.h"
+#include <Component/BoxComponent.h>
 
 void NormalCar::Initialize()
 {
@@ -41,4 +43,10 @@ void NormalCar::OnStart()
 	else {
 		owner->GetComponent<SpriteRenderer>()->LoadData(L"Enemy/Tico/tico.png");
 	}
+
+	// 콜라이더 설정
+	Collider* coll = owner->GetComponent<Collider>();
+	coll->SetLayer(5);
+	coll->boxComponent->SetSize(FVector2(300, 70));
+	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
 }

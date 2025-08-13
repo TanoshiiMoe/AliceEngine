@@ -18,6 +18,7 @@
 #include "Scripts/Player/PlayerManager.h"
 #include "Scripts/Bike/BikeMovementScript.h"
 #include <Helper/ParticleHelper.h>
+#include "Scripts/Weapon/BulletColl.h"
 
 void Car::Initialize()
 {
@@ -39,6 +40,11 @@ void Car::Initialize()
         owner->AddComponent<LaneController>();
         // ?뒪?겕由쏀듃
         owner->AddComponent<EnemyManager>();
+
+		// 기본 콜라이더 (총알 콜라이더는 레이어 0, 차량충돌은 5)
+		Collider* col = owner->AddComponent<Collider>();
+		col->SetBoxSize(FVector2(0.0f, 0.0f));
+		col->SetLayer(5);
     }
 
 	TimerManager::GetInstance().ClearTimer(timer);
@@ -145,14 +151,15 @@ void Car::OnTriggerEnter2D(Collider* collider)
 	if (!collider->GetOwner()) return;
 	if (collider->GetOwner()->GetTag() == L"Player")
 	{
-		if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+		// 무적일시 무시
+		if (PlayerManager::instance->GetInvincible())
+			return;
+
+		if (BikeStatScript* bs = PlayerManager::instance->GetOwner()->GetComponent<BikeStatScript>())
 		{
-			// Bullet의 damage 변수 사용
-            if (!PlayerManager::instance->GetInvincible()) {
-                bs->m_bikeStat->DecreaseAbility("HP", 8);
-				PlayerManager::instance->CrashSlow();
-            }
-			    
+			// 크래시 상태
+			bs->m_bikeStat->DecreaseAbility("HP", 8);
+			PlayerManager::instance->CrashSlow();
 		}
 
 		if (gameObject* player = GamePlayManager::GetInstance().GetPlayer())
@@ -254,4 +261,11 @@ void Car::DelayDestroy()
     m_fadeDuration = 1.0f;
     m_isFading = true;
     m_fadeTargetSR = ghostSR ? ghostSR : srSelf;
+}
+
+void Car::DestroybColl()
+{
+	for (auto& obj : colObjs) {
+		GetWorld()->RemoveObject(obj);
+	}
 }

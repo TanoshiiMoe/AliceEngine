@@ -2,12 +2,14 @@
 #include <Component/ScriptComponent.h>
 #include <Manager/TimerManager.h>
 #include "Drone.h"
+#include <vector>
 
 enum class EBulletType
 {
 	Linear,
 	BezierCurve,
-	SinCurve
+	SinCurve,
+	CatmullRom
 };
 
 class gameObject;
@@ -61,6 +63,13 @@ public:
 
 	float waveAmplitude = 0.2f; // 흔들림 크기
 	float waveFrequency = 2.0f;  // 흔들림 속도
+
+	// Catmull-Rom spline data
+	std::vector<FVector2> catmullPoints; // 최소 4개: P0,P1,P2,P3 ...
+	float splineT = 0.0f;                // 현재 세그먼트 진행도 [0,1]
+	float splineDuration = 1.0f;         // 전체 곡선 소요 시간(초)
+	int   splineSegment = 0;             // 현재 세그먼트 인덱스 (0..numSeg-1)
+	bool  bSplineFinished = false;
 
 	EBulletType bulletType = EBulletType::BezierCurve;
 	EDroneType droneType = EDroneType::Player; // 총알 타입

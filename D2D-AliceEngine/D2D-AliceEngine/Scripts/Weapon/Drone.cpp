@@ -56,7 +56,7 @@ void Drone::FixedUpdate(const float& deltaSeconds)
 void Drone::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-    if (!GamePlayManager::GetInstance().IsPlaying()) return;
+    if (GamePlayManager::GetInstance().IsPaused()) return;
     if (bDelayDestroying) {
         // 페이드 아웃 진행 (Update 기반, 타이머는 삭제만 담당)
         if (body) {
@@ -171,35 +171,69 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 		{
 			if (auto player = BulletManager::GetInstance().GetPlayer())
 			{
-				float currentSpeed = 0.0f;
-				if (auto bike = player->GetComponent<BikeMovementScript>())
-					currentSpeed = bike->GetCurrSpeed();
-				currentSpeed += m_bulletSpeed;
-				const FVector2 speed{ currentSpeed, 0.0f };
+				// TODO : 지금은 20도 -20도 해서 총 3발을 발사하는것이지만, 캣멀롬 스플라인을 써서 마우스 위치로 탄환이 날아가는 것을 만들고 싶음. 
+				// 이때 캣멀롬 스플라인의 중간 포인트들은 플레이어와 마우스 포지션을 잇는 직선의 위로 위치, 아래로 위치를 적절히 섞어서 랜덤하게 작은 미사일들이 많이 날아가는 느낌을 원함. 
+				
+				//float currentSpeed = 0.0f;
+                //if (auto bike = player->GetComponent<BikeMovementScript>())
+                //  currentSpeed = bike->GetCurrSpeed();
+                //currentSpeed += m_bulletSpeed;
+                //const FVector2 speed{ currentSpeed, 0.0f };
+                //
+                //// 0도(원본)
+                //BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed, droneType);
+                //
+                //// 회전 함수
+                //auto RotateVector = [](const FVector2& v, float degree) -> FVector2 {
+                //  float rad = degree * Define::PI / 180.0f;
+                //  float cs = std::cos(rad);
+                //  float sn = std::sin(rad);
+                //  return { -v.y * sn + v.x * cs, -v.y * cs + v.x * sn };
+                //  };
+                //
+                //// +30도
+                //{
+                //  FVector2 dir30 = RotateVector(dirNormal, 10.0f);
+                //  FVector2 newTarget = bodyPos + dir30 * 1000.0f; // 먼 위치로 타겟
+                //  BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+                //}
+                //
+                //// -30도
+                //{
+                //  FVector2 dirNeg30 = RotateVector(dirNormal, -10.0f);
+                //  FVector2 newTarget = bodyPos + dirNeg30 * 1000.0f;
+                //  BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+                //}
 
-				// 0도(원본)
-				BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed, droneType);
-
-				// 회전 함수
-				auto RotateVector = [](const FVector2& v, float degree) -> FVector2 {
-					float rad = degree * Define::PI / 180.0f;
-					float cs = std::cos(rad);
-					float sn = std::sin(rad);
-					return { -v.y * sn + v.x * cs, -v.y * cs + v.x * sn };
-					};
-
-				// +30도
+				// Catmull-Rom 스플라인 탄환 추가 발사 (기존 코드는 유지)
 				{
-					FVector2 dir30 = RotateVector(dirNormal, 10.0f);
-					FVector2 newTarget = bodyPos + dir30 * 1000.0f; // 먼 위치로 타겟
-					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
-				}
-
-				// -30도
-				{
-					FVector2 dirNeg30 = RotateVector(dirNormal, -10.0f);
-					FVector2 newTarget = bodyPos + dirNeg30 * 1000.0f;
-					BulletManager::GetInstance().FireBullet(bodyPos, newTarget, speed, droneType);
+					const FVector2 start = bodyPos;
+					const FVector2 target = worldMousePos;
+					// 중간 포인트들을 무작위로 위/아래로 배치하여 물결치는 경로 생성
+					const int numMissiles = 3; // 작은 미사일 여러 발
+					for (int i = 0; i < numMissiles; ++i)
+					{
+						std::vector<FVector2> cps;
+						cps.reserve(6);
+						// 입력 최소 4포인트 필요: 시작 전/후 패딩 포함
+						FVector2 dir = (target - start).Normalize();
+						FVector2 amount = dir * 430;
+						FVector2 relativeTarget = target + amount;
+						FVector2 perp(-dir.y, dir.x);
+						float dist = (relativeTarget - start).Length();
+						float arc = FRandom::GetRandomInRange(0.08f, 0.18f) * dist; // 굴곡 크기
+						float arc2 = FRandom::GetRandomInRange(0.06f, 0.14f) * dist;
+						float splay = FRandom::GetRandomInRange(-1.0f, 1.0f);
+						// 앞뒤 패딩 포인트(스플라인 안정)
+						cps.push_back(start - dir * 60.0f);
+						cps.push_back(start);
+						cps.push_back(start + dir * (dist * 0.35f) + perp * arc * splay);
+						cps.push_back(start + dir * (dist * 0.68f) - perp * arc2 * splay);
+						cps.push_back(relativeTarget);
+						cps.push_back(relativeTarget + dir * 60.0f);
+						float totalDuration = FRandom::GetRandomInRange(0.55f, 0.85f);
+						BulletManager::GetInstance().FireBulletCatmull(cps, totalDuration, droneType, damage);
+					}
 				}
 			}
 			bCanFire = false;
