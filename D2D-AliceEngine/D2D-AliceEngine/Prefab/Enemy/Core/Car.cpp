@@ -151,13 +151,15 @@ void Car::OnTriggerEnter2D(Collider* collider)
 	if (!collider->GetOwner()) return;
 	if (collider->GetOwner()->GetTag() == L"Player")
 	{
+		// 무적일시 무시
+		if (PlayerManager::instance->GetInvincible())
+			return;
+
 		if (BikeStatScript* bs = PlayerManager::instance->GetOwner()->GetComponent<BikeStatScript>())
 		{
 			// 크래시 상태
-            if (!PlayerManager::instance->GetInvincible()) {
-                bs->m_bikeStat->DecreaseAbility("HP", 8);
-				PlayerManager::instance->CrashSlow();
-            }
+			bs->m_bikeStat->DecreaseAbility("HP", 8);
+			PlayerManager::instance->CrashSlow();
 		}
 
 		if (gameObject* player = GamePlayManager::GetInstance().GetPlayer())

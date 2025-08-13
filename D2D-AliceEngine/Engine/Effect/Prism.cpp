@@ -292,6 +292,7 @@ void Prism::SetPrismTransform(gameObject* go)
 	go->transform()->SetPosition(owner->transform()->GetPosition());
 	go->transform()->SetRotation(owner->transform()->GetRotation());
 	go->transform()->SetScale(owner->transform()->GetScale());
+	go->GetComponent<SpriteRenderer>()->SetRelativeScale(animator->GetRelativeScale());
 }
 
 // 스프라이트 렌더러 설정
