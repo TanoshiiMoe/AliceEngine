@@ -45,6 +45,8 @@ void GameClearScene::OnEnter()
 		auto* text = m_killEnemyText->AddComponent<TextRenderComponent>();
 	}
 
+    m_playerHP = NewObject<gameObject>(L"PlayerHP");
+
     // VK_3 눌러 TitleScene 복귀
     // TODO : 디버깅 끝나면 지우기
     auto* input = m_textGO->AddComponent<InputComponent>();

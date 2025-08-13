@@ -19,11 +19,14 @@
 #include <Component/ButtonComponent.h>
 #include <Helpers/CoordHelper.h>
 #include <Manager/SceneManager.h>
+#include <GameManager/PlayerDataManager.h>
 #include <Component/AudioComponent.h>
 #include <GameManager/GamePlayManager.h>
 #include <Helpers/Logger.h>
 #include <Scene/GameScene/GameClearScene.h>
 #include <memory>
+#include <Component/StatComponent.h>
+#include <Scripts/Bike/BikeStatScript.h>
 
 std::wstring GameClearWidgetScript::s_prevScene = L"";
 
@@ -75,6 +78,7 @@ void GameClearWidgetScript::OnStart()
 	if (!timeObj) return;
 	m_passedTime = timeObj->GetComponent<TextRenderComponent>();
 	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
+	m_fTime = timeSec;
 
 	int minutes = static_cast<int>(timeSec) / 60;
 	int seconds = static_cast<int>(timeSec) % 60;
@@ -95,7 +99,9 @@ void GameClearWidgetScript::OnStart()
 	if (!killObj) return;
 	m_killCount = killObj->GetComponent<TextRenderComponent>();
 
-	m_killCount->SetText(std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+	m_iKill = GamePlayManager::GetInstance().GetKillEnemyAmount();
+
+	m_killCount->SetText(std::to_wstring(m_iKill));
 	m_killCount->SetFontSize(28.0f);
 	m_killCount->SetTextAlignment(ETextFormat::TopLeft);
 	m_killCount->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -164,7 +170,7 @@ void GameClearWidgetScript::OnStart()
 	}
 
 	m_grade->LoadData(L"UI\\UI_Grade.png");
-	m_grade->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f ,-900));
+	m_grade->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f - 60 ,-850));
 
 	skipButton->SetStateAction(Define::EButtonState::Hover, [skipButton]()
 		{
@@ -189,6 +195,8 @@ void GameClearWidgetScript::OnStart()
 		skipButton, skipText, cutScene,
 		toMainButton, toMainText
 	] {
+		if (weak.expired())return;
+			
 		cutScene->m_layer = Define::Disable;
 		skipButton->m_layer = Define::Disable;
 		skipText->m_layer = Define::Disable;
