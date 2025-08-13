@@ -4,7 +4,7 @@
     "maxHP": 30.0,
     "hp": 30.0,
     "battery": 10.0,
-    "bulletSpeed": 5.0,
+    "bulletSpeed": -115.0,
     "attackDelay": 2.0,
     "damage": 5.0
   },

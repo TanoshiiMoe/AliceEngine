@@ -185,6 +185,7 @@ void EnemySpawnTriggerBox::SpawnEnemyInBossModeAt(int _enemyTypeId, const FVecto
 		drone->SetDroneType(EDroneType::Enemy);
 		drone->SetDamage(stats.damage);
 		drone->SetAttackDelay(stats.attackDelay);
+        drone->SetBulletSpeed(stats.bulletSpeed);
 	}
 
 	enemy->transform()->SetPosition(worldPos);
