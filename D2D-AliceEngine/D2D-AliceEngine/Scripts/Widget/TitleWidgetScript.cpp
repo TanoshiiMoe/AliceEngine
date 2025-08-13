@@ -547,7 +547,7 @@ void TitleWidgetScript::OnStart()
 	artBookButton->AddChildComponent(artBookText);
 
 	// ======================== background
-	background->LoadData(L"tree.jpg");
+	background->LoadData(L"UI/MAIN_02.png");
 	background->SetDrawType(Define::EDrawType::ScreenSpace);
 	FVector2 backgroundSize = background->GetRelativeSize();
 	background->SetRelativePosition(CoordHelper::RatioCoordToScreen(backgroundSize, FVector2(0, 0)));
