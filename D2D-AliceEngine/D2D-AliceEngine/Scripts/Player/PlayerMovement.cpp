@@ -35,18 +35,16 @@ void PlayerMovement::OnStart()
 
 void PlayerMovement::Update(const float& deltaSeconds)
 {
-	if (isMoving) {
-		playerDeltaSeconds = PlayerManager::instance->GetTimeScale() * deltaSeconds;
+	playerDeltaSeconds = PlayerManager::instance->GetTimeScale() * deltaSeconds;
 
-		if ((moveDir.x > 0.0f && bMovement->GetMaxSpeed() < maxSpeed) || (moveDir.x < 0.0f && bMovement->GetMaxSpeed() > minSpeed))
-			bMovement->AddMaxSpeed(moveDir.x * playerDeltaSeconds);
-		else
-			bMovement->AddMaxSpeed((initSpeed - bMovement->GetMaxSpeed()) * decVal * playerDeltaSeconds);
+	if ((moveDir.x > 0.0f && bMovement->GetMaxSpeed() < maxSpeed) || (moveDir.x < 0.0f && bMovement->GetMaxSpeed() > minSpeed))
+		bMovement->AddMaxSpeed(moveDir.x * playerDeltaSeconds);
+	else
+		bMovement->AddMaxSpeed((initSpeed - bMovement->GetMaxSpeed()) * decVal * playerDeltaSeconds);
+		
 
-
-		if (!Math::Approximately(moveDir.y, 0.0f)) {
-			owner->GetComponent<SkewTransform>()->zPos += moveDir.y * playerDeltaSeconds;
-		}
+	if (!Math::Approximately(moveDir.y, 0.0f)) {
+		owner->GetComponent<SkewTransform>()->zPos += moveDir.y * playerDeltaSeconds;
 	}
 }
 
@@ -84,17 +82,6 @@ void PlayerMovement::CrashSlow()
 	bMovement->SetCurrentSpeed(bMovement->GetCurrentSpeed() * 0.5f);
 }
 
-void PlayerMovement::Stop()
-{
-	isMoving = false;
-	bMovement->SetCurrentSpeed(0.0f);
-}
-
-void PlayerMovement::Start()
-{
-	isMoving = true;
-}
-
 void PlayerMovement::Input()
 {
 	moveDir = { 0.0f, 0.0f };
@@ -120,12 +107,12 @@ void PlayerMovement::Input()
 		moveDir.x += isBoosting ? 400.0f : 100.0f;
 	}
 
-	if (Input::IsKeyPressed(VK_B))
+	/*if (Input::IsKeyPressed(VK_B))
 	{
-		PlayerManager::instance->Boost(999.0f, false);
+		SetBoost(true);
 	}
 	if (Input::IsKeyPressed(VK_V))
 	{
-		PlayerManager::instance->Boost(1.0f, false);
-	}
+		SetBoost(false);
+	}*/
 }
