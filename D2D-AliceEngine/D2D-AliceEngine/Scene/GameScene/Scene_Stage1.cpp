@@ -152,12 +152,13 @@ void Scene_Stage1::OnEnter()
 		if (Input::IsKeyPressed(VK_6)) {
 			GamePlayManager::GetInstance().PlayBossMode();
 		}
-		/*if (Input::IsKeyPressed(VK_P)) {
+		if (Input::IsKeyDown(VK_P)) {
 			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
 			{
 				t->AddMaxSpeed(50);
 			}
 		}
+		/*
 		if (Input::IsKeyPressed(VK_O)) {
 			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
 			{

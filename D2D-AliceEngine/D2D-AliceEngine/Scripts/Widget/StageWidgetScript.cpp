@@ -69,27 +69,32 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 		prevBattery = batteryCount;
 	}
 
+	// =======================================
+
 	// 속도 연동
 	float playerSpeed = 0.0f;
 	if (WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player"))
 	{
 		if (BikeMovementScript* pm = player->GetComponent<BikeMovementScript>())
-			playerSpeed = pm->GetCurrentSpeed() * pm->GetSpeedModifierValue();
+			playerSpeed = pm->GetMaxSpeed() * pm->GetSpeedModifierValue();
 	}
 
-	float finalSpeed = playerSpeed / 600.0f;
+	float progress = playerSpeed / 600.0f;
 
-	if (finalSpeed > 1.0f) finalSpeed = 0.999999f;	// 어느정도 허용치를 둠
+	if (progress > 1.0f) progress = 0.999999f;	// 어느정도 허용치를 둠
 
-	m_speedProgress->SetProgress(finalSpeed);
+	m_speedProgress->SetProgress(progress);
 
-	int realSpeed = static_cast<int>(std::round(playerSpeed / 3.0f));
-	if (realSpeed > 200) realSpeed = 200;
+	int maxSpeed = static_cast<int>(std::round(playerSpeed / 3.0f));
+	if (maxSpeed > 200) maxSpeed = 200;
 
 	wchar_t speedBuffer[8];
-	swprintf(speedBuffer, 8, L"%03d", realSpeed);
+	swprintf(speedBuffer, 8, L"%03d", maxSpeed);
 
-	m_speedText->SetText(std::wstring(speedBuffer)+ L"km/h");
+	m_speedText->SetText(std::wstring(speedBuffer));
+
+
+	// =====================================
 
 	static bool wasPlaying = true; // 초기값은 컷씬 중이라고 가정
 
@@ -155,6 +160,7 @@ void StageWidgetScript::OnStart()
 	auto mainText = m_owner->AddComponent<TextRenderComponent>();
 	auto restartText = m_owner->AddComponent<TextRenderComponent>();
 	auto selectText = m_owner->AddComponent<TextRenderComponent>();
+	auto velocityText = m_owner->AddComponent<TextRenderComponent>();
 
 	auto optionTabText = m_owner->AddComponent<TextRenderComponent>();
 	auto optionTabBGMText = m_owner->AddComponent<TextRenderComponent>();
@@ -217,7 +223,8 @@ void StageWidgetScript::OnStart()
 	m_speedProgress->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_speedProgress->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(-SCREEN_WIDTH / 2.0f + 139, SCREEN_HEIGHT / 2.0f - 210));
-	m_speedProgress->SetStartAngleDeg(10);
+	// 초기값 - 최저속도일때 4칸
+	m_speedProgress->SetStartAngleDeg(74);
 	m_speedProgress->SetClockwise(true);
 	m_speedProgress->SetProgress(1);
 	m_speedProgress->m_layer = Define::HUDLayer + 10;
@@ -351,11 +358,22 @@ void StageWidgetScript::OnStart()
 	m_speedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	m_speedText->SetColor(FColor(0, 234, 255, 255));
 	m_speedText->SetDrawType(EDrawType::ScreenSpace);
-	//m_speedText->m_layer = Define::NormalTextLayer;
-	m_speedText->m_layer = 1000000;
+	m_speedText->m_layer = Define::NormalTextLayer;
 	m_speedText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_speedText->GetRelativeSize(), FVector2(-0.5, -0.5))
 	+ FVector2(-850,330)
+	);
+
+	velocityText->SetFontSize(20.f);
+	velocityText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	velocityText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	velocityText->SetText(L"km/h");
+	velocityText->SetColor(FColor(0, 234, 255, 255));
+	velocityText->SetDrawType(EDrawType::ScreenSpace);
+	velocityText->m_layer = Define::NormalTextLayer;
+	velocityText->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(velocityText->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(-800, 360)
 	);
 
 	// ========================== pauseButton

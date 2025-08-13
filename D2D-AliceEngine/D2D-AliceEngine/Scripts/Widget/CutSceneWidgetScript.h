@@ -49,7 +49,8 @@ private:
     ProgressBarComponent* m_progress;
     float m_pressValue;
 
-    void SkipInput();
+    void SkipInput(float deltaSeconds);
+    float m_seconds = 0.0f;
 
 	// 컷씬 관련
 	std::vector<std::wstring> m_cutSceneImages;

@@ -62,6 +62,8 @@ void CutSceneWidgetScript::Update(const float& deltaSeconds)
     {
         StepTransition(TimerManager::GetInstance().unscaledDeltaTime);
     }
+
+    m_seconds += deltaSeconds;
 }
 
 void CutSceneWidgetScript::Awake()
@@ -179,7 +181,7 @@ void CutSceneWidgetScript::OnStart()
     // Prev 버튼 핸들러 주석 처리
 
     input->SetAction(input->GetHandle(), [this] {
-        SkipInput();
+        SkipInput(m_seconds);
 
         });
 
@@ -252,8 +254,27 @@ void CutSceneWidgetScript::OnStart()
 		m_skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::Red);
 	});
 
-	// 첫 번째 이미지 표시
-	ShowImage(0);
+	// 이미지 이어서 표시
+    int startIndex = 0;
+
+    std::wstring currScene = SceneManager::GetInstance().m_currentScene->GetName();
+
+    if (currScene == Define::Scene_Stage1)
+    {
+        startIndex = 0;
+    }
+
+    if (currScene == Define::Scene_Stage2)
+    {
+        startIndex = 2;
+    }
+
+    if (currScene == Define::Scene_Stage3)
+    {
+        startIndex = 3;
+    }
+
+	ShowImage(startIndex);
 
     // 각 컷마다 2초 지연 후 가이드 표시
     ShowGuideAfterDelay();
@@ -276,11 +297,11 @@ void CutSceneWidgetScript::OnDestroy()
     GamePlayManager::GetInstance().SetCutScenePlaying(m_isAlive);
 }
 
-void CutSceneWidgetScript::SkipInput()
+void CutSceneWidgetScript::SkipInput(float deltaSeconds)
 {
     if (Input::IsKeyDown(VK_SPACE))
     {
-        m_pressValue += 3.5f;
+        m_pressValue += 4.5f * deltaSeconds * 300;
 
         if (m_pressValue >= 500.0f)
         {
@@ -289,7 +310,7 @@ void CutSceneWidgetScript::SkipInput()
         }
     }
 
-    m_pressValue -= 1.5f;
+    m_pressValue -= 1.5f * deltaSeconds * 300;
     if (m_pressValue <= 0.0f) m_pressValue = 0.0f;
 }
 
@@ -297,14 +318,12 @@ void CutSceneWidgetScript::LoadCutSceneImages()
 {
 	// 컷씬 이미지 경로들을 추가 (Resource/CutScene/Stage1/ 폴더의 이미지들)
 	m_cutSceneImages.clear();
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\1.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\2.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\3.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\4.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\5.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\6.png");
-
-	// 필요에 따라 더 많은 이미지 추가 가능
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_1_scene01.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_2_scene02.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_2_scene03.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene04.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene05.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\ending.png");
 }
 
 void CutSceneWidgetScript::ShowImage(int index)
@@ -313,6 +332,44 @@ void CutSceneWidgetScript::ShowImage(int index)
 		return;
 
 	m_currentImageIndex = index;
+
+    // 씬별 최대 허용 인덱스 지정
+    std::unordered_map<std::wstring, int> maxIndexPerScene = {
+        { Define::Scene_Stage1, 1 }, // 인덱스 1까지 허용
+        { Define::Scene_Stage2, 2 }, // 인덱스 2까지 허용
+        { Define::Scene_Stage3, 4 }, // 인덱스 4까지 허용
+    };
+
+    std::wstring currScene = SceneManager::GetInstance().m_currentScene->GetName();
+
+    auto it = maxIndexPerScene.find(currScene);
+    if (it != maxIndexPerScene.end())
+    {
+        int maxAllowedIndex = it->second;
+        if (index >= maxAllowedIndex)
+        {
+            m_skipText->SetText(L"건너뛰기");
+
+            m_skipButton->SetStateAction(Define::EButtonState::Pressed, [this]()
+                {
+                    m_uiSound->StopByName(L"UISound");
+                    m_uiSound->PlayByName1(L"UISound", 0.45f);
+
+                    SkipCutScene();
+                    GamePlayManager::GetInstance().StartGame();
+                });
+        }
+
+        if (index > maxAllowedIndex)
+        {
+            GamePlayManager::GetInstance().SetCutSceneIndex(index);
+            return;
+        }
+
+        // 만약 index가 maxAllowedIndex를 넘어가면 로드하지 않고 리턴
+        if (index > maxAllowedIndex)
+            return;
+    }
 
     // 배경 이미지 변경하고 원하는 픽셀 사이즈(1920x1080)로 스케일 적용
     m_background->LoadData(m_cutSceneImages[index]);
@@ -331,10 +388,10 @@ void CutSceneWidgetScript::ShowImage(int index)
     // 이전 오버레이 제거
     ClearOverlays();
     // 해당 페이지에 등록된 추가 스프라이트 생성
-    auto it = m_pageOverlays.find(index);
-    if (it != m_pageOverlays.end())
+    auto overlayIt = m_pageOverlays.find(index);
+    if (overlayIt != m_pageOverlays.end())
     {
-        for (const auto& desc : it->second)
+        for (const auto& desc : overlayIt->second)
         {
             auto* spr = m_owner->AddComponent<SpriteRenderer>();
             spr->SetDrawType(Define::EDrawType::ScreenSpace);

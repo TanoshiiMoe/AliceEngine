@@ -116,8 +116,9 @@ void Scene_Stage3::OnEnter()
 
     // 로케이션 인디케이터 위젯
     auto hud = GetWorld()->NewObject<gameObject>(L"LocationHUD");
-    hud->AddComponent<LocationIndicatorWidgetScript>();
-    hud->GetComponent<LocationIndicatorWidgetScript>()->SetStartX(m_player->GetPosition().x);
+    auto* indicatorWidget = hud->AddComponent<LocationIndicatorWidgetScript>();
+    indicatorWidget->SetStartX(m_player->GetPosition().x);
+    indicatorWidget->SetBossState(true);
 
     // 디버그용 씬 전환
     gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");

@@ -21,6 +21,7 @@ public:
 
 	static void SpawnBossAt(const FVector2& worldPos);
 	static void SpawnBossDroneAt(const FVector2& worldPos);
+    static void SpawnEnemyInBossModeAt(int _enemyTypeId, const FVector2& worldPos);
     static void SpawnEnemyAt(int _enemyTypeId, const FVector2& worldPos);
 private:
     Collider* m_collider{ nullptr };

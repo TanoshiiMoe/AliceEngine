@@ -19,6 +19,9 @@ public:
     void Update(const float& deltaSeconds) override;
 	virtual void OnTriggerEnter2D(Collider* collider) override;
 
+	bool GetSkewed() const { return bSkewed; }
+	void SetSkewed(const bool value) { bSkewed = value; }
+
     // 총알 등으로 사망 시 지연 파괴
     void DelayDestroy();
 protected:
