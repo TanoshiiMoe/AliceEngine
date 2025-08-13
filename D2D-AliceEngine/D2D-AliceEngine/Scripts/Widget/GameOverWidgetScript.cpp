@@ -47,7 +47,8 @@ void GameOverWidgetScript::OnStart()
 
 	auto background = m_owner->AddComponent<SpriteRenderer>();
 
-	auto gameOverText = m_owner->AddComponent<TextRenderComponent>();
+	auto errorPopup = m_owner->AddComponent<SpriteRenderer>();
+
 	auto toRestartButton = m_owner->AddComponent<ButtonComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
 
@@ -55,62 +56,67 @@ void GameOverWidgetScript::OnStart()
 	auto toRestartText = m_owner->AddComponent<TextRenderComponent>();
 
 	// ==================== //
-	background->LoadData(L"");
+	background->LoadData(L"UI\\UI_Score_FAIL.png");
+	background->SetDrawType(EDrawType::ScreenSpace);
+	background->m_layer = Define::NormalUILayer;
 
-	gameOverText->SetFontSize(70.f);
-	gameOverText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	gameOverText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	gameOverText->SetText(L"...스러지다");
-	gameOverText->SetColor(FColor(242, 207, 238, 255));
-	gameOverText->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(gameOverText->GetRelativeSize(), FVector2(-0.5, -0.5))
-		+ FVector2(300, -300));
-	gameOverText->m_layer = Define::NormalTextLayer;
+	errorPopup->LoadData(L"UI\\UI_ERROR_Popup.png");
+	errorPopup->SetDrawType(EDrawType::ScreenSpace);
+	errorPopup->m_layer = Define::PopupLayer;
 
 	toRestartText->SetFontSize(45.f);
 	toRestartText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	toRestartText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	toRestartText->SetText(L"임무 재도전");
-	toRestartText->SetColor(FColor::White);
+	toRestartText->SetText(L"예");
+	toRestartText->SetColor(FColor::Black);
 	toRestartText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(toRestartText->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(0, 0));
-	toRestartText->m_layer = Define::ButtonTextLayer;
+	toRestartText->m_layer = Define::PopupTextLayer;
 	toRestartText->RemoveFromParent();
 	toRestartButton->AddChildComponent(toRestartText);
 
 	toMainText->SetFontSize(45.f);
 	toMainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	toMainText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	toMainText->SetText(L"처음 화면으로");
-	toMainText->SetColor(FColor::White);
+	toMainText->SetText(L"아니오");
+	toMainText->SetColor(FColor::Black);
 	toMainText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(toMainText->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(0, 0));
-	toMainText->m_layer = Define::ButtonTextLayer;
+	toMainText->m_layer = Define::PopupTextLayer;
 	toMainText->RemoveFromParent();
 	toMainButton->AddChildComponent(toMainText);
 
 	// ==================== Button
-	toRestartButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	toRestartButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	toRestartButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	toRestartButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	toRestartButton->m_layer = Define::ButtonLayer;
+	toRestartButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_ERRORButton.png");
+	toRestartButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_ERRORButton.png");
+	toRestartButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ERRORButton.png");
+	toRestartButton->LoadData(Define::EButtonState::Release, L"UI\\UI_ERRORButton.png");
+	toRestartButton->m_layer = Define::PopupButtonLayer;
 	toRestartButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(toRestartButton->GetRelativeSize(), FVector2(1, 0))
-		+ FVector2(400, 0));
+		+ FVector2(-100, 20));
 
-	toMainButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	toMainButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	toMainButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	toMainButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	toMainButton->m_layer = Define::ButtonLayer;
+	toMainButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_ERRORButton.png");
+	toMainButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_ERRORButton.png");
+	toMainButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ERRORButton.png");
+	toMainButton->LoadData(Define::EButtonState::Release, L"UI\\UI_ERRORButton.png");
+	toMainButton->m_layer = Define::PopupButtonLayer;
 	toMainButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(toMainButton->GetRelativeSize(), FVector2(1, 0))
-		+ FVector2(400, 100));
+		+ FVector2(100, 20));
 
 	// ==================== Delegate
+
+
+
+
+
+
+
+
+
 	toRestartButton->SetStateAction(Define::EButtonState::Hover, [toRestartButton]()
 		{
 			toRestartButton->StartHoverPulse(0.8f, 0.04f);
