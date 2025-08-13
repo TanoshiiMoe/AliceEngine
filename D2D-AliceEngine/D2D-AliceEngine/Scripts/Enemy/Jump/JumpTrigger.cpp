@@ -6,6 +6,8 @@
 #include <Scripts/Player/PlayerManager.h>
 #include "Manager/UpdateTaskManager.h"
 #include "Component/BoxComponent.h"
+#include "../../Audio/StageAudioScript.h"
+#include "Component/AudioComponent.h"
 
 void JumpTrigger::Initialize()
 {
@@ -39,6 +41,12 @@ void JumpTrigger::Update(const float& deltaSeconds)
 void JumpTrigger::OnTriggerEnter2D(Collider* collider)
 {
 	if (collider->GetOwner()->GetTag() == L"Player") {
+		// 사운드 재생
+		std::wstring audName = L"Player/character_Player_Sfx_Rev.mp3";
+		auto& m_Sfx = StageAudioScript::instance->m_Sfx;
+		if (m_Sfx.find(audName) != m_Sfx.end())
+			m_Sfx[audName]->PlayByName(audName, 0.6f, 0.4f);
+
 		GamePlayManager::GetInstance().GetPlayer()->GetComponent<PlayerManager>()->Jump();
 	}
 }

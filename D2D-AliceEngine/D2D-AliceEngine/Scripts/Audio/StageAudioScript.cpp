@@ -64,6 +64,10 @@ void StageAudioScript::OnStart()
 	m_Ambience = m_owner->AddComponent<AudioComponent>(L"Ambience");
 	m_Ambience->LoadData(L"BG_Ambience_Loop.wav", AudioMode::StreamLoop, SoundType::SFX);
 
+	m_MotorSound = m_owner->AddComponent<AudioComponent>(L"MotorSound");
+	m_MotorSound->LoadData(L"Player/character_Player_Sfx_Rev_Idle.mp3", AudioMode::StreamLoop, SoundType::SFX);
+	
+
 	std::wstring SceneName = SceneManager::GetInstance().m_currentScene->GetName();
 
 	if (SceneName == Define::Scene_Stage1)
@@ -90,9 +94,11 @@ void StageAudioScript::OnStart()
 		L"Player/character_Player_sfx_accelation_short.wav",
 		L"Player/character_Player_sfx_Gameover.wav",
 		L"Player/character_Player_sfx_hit.wav",
+		L"Player/character_Player_sfx_itempickup.wav",
 		L"Player/character_Player_sfx_move_up.wav",
 		L"Player/character_Player_sfx_Sandebistan.wav",
-		L"Player/character_Player_Sfx_stage_clear.mp3"
+		L"Player/character_Player_Sfx_stage_clear.mp3",
+		L"Player/character_Player_Sfx_Rev.mp3"
 	};
 
 	for (auto& wstr : sfxList) {
@@ -108,6 +114,7 @@ void StageAudioScript::OnEnd()
 	if (m_Stage2Audio->IsPlaying()) m_Stage2Audio->Stop();
 	if (m_Stage3Audio->IsPlaying()) m_Stage3Audio->Stop();
 	if (m_Ambience->IsPlaying()) m_Ambience->Stop();
+	if (m_MotorSound->IsPlaying()) m_Ambience->Stop();
 
 	for (auto& pair : m_Sfx) {
 		auto& audio = pair.second;

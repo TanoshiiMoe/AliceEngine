@@ -21,6 +21,7 @@
 
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Widget/CutSceneWidgetScript.h>
+#include "../Audio/StageAudioScript.h"
 
 void StageWidgetScript::Initialize()
 {
