@@ -68,8 +68,8 @@ void Scene_Stage3::OnEnter()
     if (auto* tileMgr = m_tile->AddComponent<TileMapManager>())
     {
         tileMgr->SetTilePaths(
-            L"TileMap/stage03_real/stage_shooting_003.tmj",
-            L"TileMap/stage03_real/Tile_Road_00.tsj",
+            L"TileMap/stage03_real/stage03_real.tmj",
+            L"TileMap/stage03_real/Tile_Road.tsj",
             L"TileMap/TileMapColiderInfo.json");
     }
 
