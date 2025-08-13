@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <Component/ScriptComponent.h>
 #include <Manager/TimerManager.h>
+#include "../Audio.h"
 
 struct FDroneSpritePath
 {
