@@ -320,3 +320,13 @@ void PlayerManager::CrashSlow()
 {
 	owner->GetComponent<PlayerMovement>()->CrashSlow();
 }
+
+void PlayerManager::SetMove(bool _val)
+{
+	if (auto pm = owner->GetComponent<PlayerMovement>()) {
+		if (_val)
+			pm->Start();
+		else
+			pm->Stop();
+	}
+}
