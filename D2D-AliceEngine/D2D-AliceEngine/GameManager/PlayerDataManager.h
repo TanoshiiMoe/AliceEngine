@@ -1,20 +1,20 @@
-#pragma once
+ï»¿#pragma once
 #include <Core/Singleton.h>
 #include <string>
 
-// ÇÃ·¹ÀÌ¾î ½ºÅÈ ±¸Á¶Ã¼
+// í”Œë ˆì´ì–´ ìŠ¤íƒ¯ êµ¬ì¡°ì²´
 struct FPlayerStats
 {
     int   maxHP       = 0;
     int   hp          = 0;
     float battery     = 0.0f;
-    float moveSpeed   = 0.0f;
+    float bulletSpeed = 0.0f;
     float attackDelay = 0.0f;
     float damage      = 0.0f;
 };
 
 /*
- * @brief ÇÃ·¹ÀÌ¾î ½ºÅÈ µ¥ÀÌÅÍ¸¦ ·ÎµåÇÏ°í Á¦°øÇÏ´Â ¸Å´ÏÀú
+ * @brief í”Œë ˆì´ì–´ ìŠ¤íƒ¯ ë°ì´í„°ë¥¼ ë¡œë“œí•˜ê³  ì œê³µí•˜ëŠ” ë§¤ë‹ˆì €
  */
 class PlayerDataManager : public Singleton<PlayerDataManager>
 {
@@ -25,10 +25,10 @@ public:
     void LoadData(const std::wstring& relativePath);
     bool LoadFromJson(const std::wstring& relativePath);
 
-    // µ¥ÀÌÅÍ°¡ ·ÎµåµÇ¾ú´ÂÁö
+    // ë°ì´í„°ê°€ ë¡œë“œë˜ì—ˆëŠ”ì§€
     bool HasData() const { return m_loaded; }
 
-    // ½ºÅÈ °¡Á®¿À±â (·Îµå ½ÇÆĞ ½Ã ±âº»°ª ¹İÈ¯)
+    // ìŠ¤íƒ¯ ê°€ì ¸ì˜¤ê¸° (ë¡œë“œ ì‹¤íŒ¨ ì‹œ ê¸°ë³¸ê°’ ë°˜í™˜)
     const FPlayerStats& GetStats() const { return m_stats; }
 
 private:

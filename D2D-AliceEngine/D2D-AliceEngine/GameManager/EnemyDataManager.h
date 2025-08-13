@@ -9,7 +9,7 @@ struct FEnemyStats
     int   maxHP      = 0;
     int   hp         = 0;
     float battery    = 0.0f;
-    float moveSpeed  = 0.0f;
+    float bulletSpeed  = 0.0f;
     float attackDelay= 0.0f;
     float damage     = 0.0f;
 };
