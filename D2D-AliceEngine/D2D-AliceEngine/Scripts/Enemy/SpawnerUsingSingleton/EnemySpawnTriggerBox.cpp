@@ -150,6 +150,7 @@ void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
         {
             drone->SetDamage(stats.damage);
             drone->SetAttackDelay(stats.attackDelay);
+            drone->SetBulletSpeed(stats.bulletSpeed);
         }
 	}
 

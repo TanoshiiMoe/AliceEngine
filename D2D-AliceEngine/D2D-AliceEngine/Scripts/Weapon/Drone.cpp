@@ -148,7 +148,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 			float currentSpeed = 0.0f;
 			if (auto bike = owner->GetComponent<BikeMovementScript>())
 				currentSpeed = bike->GetCurrSpeed();
-
+			currentSpeed += m_bulletSpeed;
 			const FVector2 speed{ currentSpeed, 0.0f };
 			BulletManager::GetInstance().FireBullet(bodyPos, worldMousePos, speed, droneType, damage);
 
@@ -174,6 +174,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 				float currentSpeed = 0.0f;
 				if (auto bike = player->GetComponent<BikeMovementScript>())
 					currentSpeed = bike->GetCurrSpeed();
+				currentSpeed += m_bulletSpeed;
 				const FVector2 speed{ currentSpeed, 0.0f };
 
 				// 0도(원본)
@@ -514,7 +515,7 @@ void Drone::FireOneBurstShot()
 	float currentSpeed = 1.0f;
 	if (auto bike = player->GetComponent<BikeMovementScript>())
 		currentSpeed = bike->GetCurrSpeed();
-
+	
 	switch (droneType)
 	{
 	case EDroneType::Enemy:
@@ -526,7 +527,7 @@ void Drone::FireOneBurstShot()
 		currentSpeed *= 0.5f;
 		break;
 	}
-
+	currentSpeed += m_bulletSpeed;
 	const FVector2 speed{ currentSpeed, 0.0f };
 
     // 발사
