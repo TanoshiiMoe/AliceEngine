@@ -18,6 +18,7 @@
 #include <GameManager/GamePlayManager.h>
 #include <Helpers/Logger.h>
 #include <Component/TextRenderComponent.h>
+#include <Component/SpriteRenderer.h>
 
 void GameOverWidgetScript::Initialize()
 {
@@ -44,12 +45,17 @@ void GameOverWidgetScript::OnStart()
 
 	GetCamera()->AddChildObject(m_owner);
 
+	auto background = m_owner->AddComponent<SpriteRenderer>();
+
 	auto gameOverText = m_owner->AddComponent<TextRenderComponent>();
 	auto toRestartButton = m_owner->AddComponent<ButtonComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
 
 	auto toMainText = m_owner->AddComponent<TextRenderComponent>();
 	auto toRestartText = m_owner->AddComponent<TextRenderComponent>();
+
+	// ==================== //
+	background->LoadData(L"");
 
 	gameOverText->SetFontSize(70.f);
 	gameOverText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");

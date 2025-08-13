@@ -515,7 +515,7 @@ void CutSceneWidgetScript::ShowGuideAfterDelay()
             if (!m_isAlive) { TimerManager::GetInstance().ClearTimer(m_guideDelayTimer); return; }
             // 2초 경과 후 가이드 페이드 인 시작 및 입력 허용
             m_canAdvance = true;
-            StartGuideFadeIn(0.3f);
+            //StartGuideFadeIn(0.3f);
         },
         2.0f,
         false,
