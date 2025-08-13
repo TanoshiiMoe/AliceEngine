@@ -77,7 +77,7 @@ void StageWidgetScript::Update(const float& deltaSeconds)
 	if (WeakObjectPtr<gameObject> player = GetWorld()->FindObjectByTag<gameObject>(L"Player"))
 	{
 		if (BikeMovementScript* pm = player->GetComponent<BikeMovementScript>())
-			playerSpeed = pm->GetMaxSpeed() * pm->GetSpeedModifierValue();
+			playerSpeed = pm->GetCurrentSpeed();// * pm->GetSpeedModifierValue();
 	}
 
 	float progress = playerSpeed / 600.0f;
