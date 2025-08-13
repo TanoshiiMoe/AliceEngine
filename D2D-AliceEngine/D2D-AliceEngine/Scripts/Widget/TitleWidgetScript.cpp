@@ -173,9 +173,10 @@ void TitleWidgetScript::OnStart()
 	//tutorial->SetRelativePosition(FVector2(-960, -550));
 
 	auto PopupTab = m_owner->AddComponent<SpriteRenderer>();
-	PopupTab->LoadData(L"UI\\PopupTab.png");
+	PopupTab->LoadData(L"UI\\UI_NewPopup.png");
+	PopupTab->SetRelativeScale(1.f);
 	PopupTab->m_layer = Define::Disable;
-	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f));
+	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f + 50));
 
 	auto qrCodeSprite = m_owner->AddComponent<SpriteRenderer>();
 	qrCodeSprite->LoadData(L"UI\\Github.jpg");
@@ -192,7 +193,7 @@ void TitleWidgetScript::OnStart()
 	if (!closeText || !closeButton) return;
 	if (!sound || !PopupTab) return;
 
-	float buttonBasePos = 400;
+	float buttonBasePos = 270;
 
 	// ======================== startButton
 	//startButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -206,51 +207,50 @@ void TitleWidgetScript::OnStart()
 	//startButton->m_layer = Define::ButtonLayer;
 
 	// ======================== continueButton
-	continueButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	continueButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	continueButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	continueButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	continueButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_alpha.png");
+	continueButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_alpha.png");
+	continueButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_alpha.png");
+	continueButton->LoadData(Define::EButtonState::Release, L"UI\\Button_alpha.png");
 	FVector2 continueButtonSize = continueButton->GetRelativeSize();
 	continueButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(continueButtonSize, FVector2(1, 0))
-		+ FVector2(buttonBasePos, 0));
+		+ FVector2(buttonBasePos, 130));
 	continueButton->SetRelativeScale(FVector2(1, 1));
 	continueButton->m_layer = Define::ButtonLayer;
 
 	// ======================== optionButton
-	optionButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	optionButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	optionButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	optionButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	optionButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_alpha.png");
+	optionButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_alpha.png");
+	optionButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_alpha.png");
+	optionButton->LoadData(Define::EButtonState::Release, L"UI\\Button_alpha.png");
 	FVector2 optionButtonSize = optionButton->GetRelativeSize();
 	optionButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(optionButtonSize, FVector2(1, 0))
-		+ FVector2(buttonBasePos, 150));
+		+ FVector2(buttonBasePos, 210));
 	optionButton->SetRelativeScale(FVector2(1, 1));
 	optionButton->m_layer = Define::ButtonLayer;
 
 	// ======================== staffButton
-	staffButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	staffButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	staffButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	staffButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	staffButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_alpha.png");
+	staffButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_alpha.png");
+	staffButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_alpha.png");
+	staffButton->LoadData(Define::EButtonState::Release, L"UI\\Button_alpha.png");
 	FVector2 staffButtonSize = staffButton->GetRelativeSize();
 	staffButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(staffButtonSize, FVector2(1, 0))
-		+ FVector2(buttonBasePos, 300));
+		+ FVector2(buttonBasePos + 30, 290));
 	staffButton->SetRelativeScale(FVector2(1, 1));
 	staffButton->m_layer = Define::ButtonLayer;
 
 	// ======================== quitButton
-	quitButton->SetTag(L"Button");
-	quitButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	quitButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	quitButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	quitButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+	quitButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_alpha.png");
+	quitButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_alpha.png");
+	quitButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_alpha.png");
+	quitButton->LoadData(Define::EButtonState::Release, L"UI\\Button_alpha.png");
 	FVector2 quitButtonSize = quitButton->GetRelativeSize();
 	quitButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(quitButtonSize, FVector2(1, 0))
-		+ FVector2(buttonBasePos, 450));
+		+ FVector2(buttonBasePos, 370));
 	quitButton->SetRelativeScale(FVector2(1, 1));
 	quitButton->SetRelativeRotation(0);
 	quitButton->m_layer = Define::ButtonLayer;
@@ -408,7 +408,7 @@ void TitleWidgetScript::OnStart()
 	continueText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	continueText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	continueText->SetText(L"임무 선택");
-	continueText->SetColor(FColor::White);
+	continueText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 continueTextRectSize = continueText->GetRelativeSize();
 	continueText->SetRelativePosition(CoordHelper::RatioCoordToScreen(continueTextRectSize, FVector2(-0.5, -0.5)));
 	continueText->SetRelativeScale(FVector2(1, 1));
@@ -435,7 +435,7 @@ void TitleWidgetScript::OnStart()
 	optionText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	optionText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	optionText->SetText(L"음량 조절");
-	optionText->SetColor(FColor::White);
+	optionText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 optionTextRectSize = optionText->GetRelativeSize();
 	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionTextRectSize, FVector2(-0.5, -0.5)));
 	optionText->SetRelativeScale(FVector2(1, 1));
@@ -486,7 +486,7 @@ void TitleWidgetScript::OnStart()
 	staffText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	staffText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	staffText->SetText(L"제작진");
-	staffText->SetColor(FColor::White);
+	staffText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 staffTextRectSize = continueText->GetRelativeSize();
 	staffText->SetRelativePosition(CoordHelper::RatioCoordToScreen(staffTextRectSize, FVector2(-0.5, -0.5)) + FVector2(20,0));
 	staffText->SetRelativeScale(FVector2(1, 1));
@@ -503,7 +503,7 @@ void TitleWidgetScript::OnStart()
 	FVector2 staffTabTextSize = staffTabText->GetRelativeSize();
 	staffTabText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(staffTabTextSize, FVector2(-0.5, -0.5))
-		+ FVector2(0, -350)
+		+ FVector2(0, -300)
 	);
 	staffTabText->SetRelativeRotation(0);
 	staffTabText->m_layer = Define::Disable;
@@ -521,7 +521,7 @@ void TitleWidgetScript::OnStart()
 		L"프로그래밍\n"
 		L"이창진 | 강성근 | 황태현\n"
 	);
-	staffNameText->SetColor(FColor::Black);
+	staffNameText->SetColor(FColor::White);
 	FVector2 staffNameTextSize = staffNameText->GetRelativeSize();
 	staffNameText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(staffNameTextSize, FVector2(-0.5, -0.5))
@@ -533,16 +533,17 @@ void TitleWidgetScript::OnStart()
 	FVector2 qrCodeSpriteSize = qrCodeSprite->GetRelativeSize();
 	qrCodeSprite->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(qrCodeSpriteSize, FVector2(-0.5, -0.5))
-		+ FVector2(-250, -80)
+		+ FVector2(500, 350)
 	);
+	qrCodeSprite->SetRelativeScale(0.6);
 	qrCodeSprite->m_layer = Define::Disable;
 
 	githubGuideTeamSprite->SetDrawType(Define::EDrawType::ScreenSpace);
-	githubGuideTeamSprite->SetRelativeScale(FVector2(0.67,0.70));
+	githubGuideTeamSprite->SetRelativeScale(FVector2(0.5,0.57));
 	FVector2 githubGuideTeamSpriteSize = githubGuideTeamSprite->GetRelativeSize();
 	githubGuideTeamSprite->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(githubGuideTeamSpriteSize, FVector2(-0.5, -0.5))
-		+ FVector2(-250, 275)
+		+ FVector2(-250, 260)
 	);
 	githubGuideTeamSprite->m_layer = Define::Disable;
 
@@ -551,7 +552,7 @@ void TitleWidgetScript::OnStart()
 	quitText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
 	quitText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	quitText->SetText(L"오락 종료");
-	quitText->SetColor(FColor::White);
+	quitText->SetColor(FColor(0, 234, 255, 255));
 	FVector2 quitTextRectSize = quitText->GetRelativeSize();
 	quitText->SetRelativePosition(CoordHelper::RatioCoordToScreen(quitTextRectSize, FVector2(-0.5, -0.5)));
 	quitText->SetRelativeScale(FVector2(1, 1));
@@ -674,6 +675,7 @@ void TitleWidgetScript::OnStart()
 			artBookButton->StartEffectAnimation(0.1f, 0.0f, FColor(64, 224, 208, 255));
 		});
 
+	// TODO : 씬전환
 	artBookButton->SetStateAction(Define::EButtonState::Pressed, []()
 		{
 			OutputDebugStringW(L"SetAction click!\n");
@@ -935,22 +937,22 @@ void TitleWidgetScript::OnStart()
 			Application::GetInstance().GameQuit();
 		});
 
-	quitButton->SetStateAction(Define::EButtonState::Hover, [quitButton]()
+	quitButton->SetStateAction(Define::EButtonState::Hover, [quitButton, quitText]()
 	{
 		quitButton->StartHoverPulse(0.8f, 0.04f);
-		quitButton->StartEffectAnimation(0.3f, 1.2f, FColor::White);
+		quitText->SetColor(FColor::White);
 	});
 
-	quitButton->SetStateAction(Define::EButtonState::HoverLeave, [quitButton]()
+	quitButton->SetStateAction(Define::EButtonState::HoverLeave, [quitButton, quitText]()
 	{
 		quitButton->StopHoverPulse();
-		quitButton->StartEffectAnimation(0.2f, 0.0f, FColor::White);
+		quitText->SetColor(FColor(0, 234, 255, 255));
 	});
 
-	quitButton->SetStateAction(Define::EButtonState::Release, [quitButton]()
+	quitButton->SetStateAction(Define::EButtonState::Release, [quitButton, quitText]()
 	{
 		quitButton->StopHoverPulse();
-		quitButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
+		quitText->SetColor(FColor(0, 234, 255, 255));
 	});
 
 	spineShowButton->SetStateAction(Define::EButtonState::Pressed, [this]()
@@ -994,61 +996,58 @@ void TitleWidgetScript::OnStart()
 			spineShowButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 		});
 
-	// optionButton Hover 효과 (노란색 글로우)
-	optionButton->SetStateAction(Define::EButtonState::Hover, [optionButton]()
+	optionButton->SetStateAction(Define::EButtonState::Hover, [optionButton, optionText]()
 	{
 		optionButton->StartHoverPulse(0.8f, 0.04f);
-		optionButton->StartEffectAnimation(0.3f, 1.2f, FColor::Yellow);
+		optionText->SetColor(FColor::White);
 	});
 
-	optionButton->SetStateAction(Define::EButtonState::HoverLeave, [optionButton]()
+	optionButton->SetStateAction(Define::EButtonState::HoverLeave, [optionButton, optionText]()
 	{
 		optionButton->StopHoverPulse();
-		optionButton->StartEffectAnimation(0.2f, 0.0f, FColor::Yellow);
+		optionText->SetColor(FColor(0, 234, 255, 255));
 	});
 
-	optionButton->SetStateAction(Define::EButtonState::Release, [optionButton]()
+	optionButton->SetStateAction(Define::EButtonState::Release, [optionButton, optionText]()
 	{
 		optionButton->StopHoverPulse();
-		optionButton->StartEffectAnimation(0.1f, 0.0f, FColor::Yellow);
+		optionText->SetColor(FColor(0, 234, 255, 255));
 	});
 
-	// staffButton Hover 효과 (보라색 글로우)
-	staffButton->SetStateAction(Define::EButtonState::Hover, [staffButton]()
+	staffButton->SetStateAction(Define::EButtonState::Hover, [staffButton, staffText]()
 	{
 		staffButton->StartHoverPulse(0.8f, 0.04f);
-		staffButton->StartEffectAnimation(0.3f, 1.2f, FColor::Purple);
+		staffText->SetColor(FColor::White);
 	});
 
-	staffButton->SetStateAction(Define::EButtonState::HoverLeave, [staffButton]()
+	staffButton->SetStateAction(Define::EButtonState::HoverLeave, [staffButton, staffText]()
 	{
 		staffButton->StopHoverPulse();
-		staffButton->StartEffectAnimation(0.2f, 0.0f, FColor::Purple);
+		staffText->SetColor(FColor(0, 234, 255, 255));
 	});
 
-	staffButton->SetStateAction(Define::EButtonState::Release, [staffButton]()
+	staffButton->SetStateAction(Define::EButtonState::Release, [staffButton, staffText]()
 	{
 		staffButton->StopHoverPulse();
-		staffButton->StartEffectAnimation(0.1f, 0.0f, FColor::Purple);
+		staffText->SetColor(FColor(0, 234, 255, 255));
 	});
 
-	// continueButton Hover 효과 (초록색 글로우)
-	continueButton->SetStateAction(Define::EButtonState::Hover, [continueButton]()
+	continueButton->SetStateAction(Define::EButtonState::Hover, [continueButton, continueText]()
 	{
 		continueButton->StartHoverPulse(0.8f, 0.04f);
-		continueButton->StartEffectAnimation(0.3f, 1.2f, FColor::Green);
+		continueText->SetColor(FColor::White);
 	});
 
-	continueButton->SetStateAction(Define::EButtonState::HoverLeave, [continueButton]()
+	continueButton->SetStateAction(Define::EButtonState::HoverLeave, [continueButton, continueText]()
 	{
 		continueButton->StopHoverPulse();
-		continueButton->StartEffectAnimation(0.2f, 0.0f, FColor::Green);
+		continueText->SetColor(FColor(0, 234, 255, 255));
 	});
 
-	continueButton->SetStateAction(Define::EButtonState::Release, [continueButton]()
+	continueButton->SetStateAction(Define::EButtonState::Release, [continueButton, continueText]()
 	{
 		continueButton->StopHoverPulse();
-		continueButton->StartEffectAnimation(0.1f, 0.0f, FColor::Green);
+		continueText->SetColor(FColor(0, 234, 255, 255));
 	});
 
 	// closeButton Hover 효과 (주황색 글로우)
