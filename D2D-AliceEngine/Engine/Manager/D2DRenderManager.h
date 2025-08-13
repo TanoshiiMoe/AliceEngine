@@ -88,7 +88,7 @@ public:
 		m_eTransformType = _type;
 	}
 
-	bool bRenderedBoxRect = true;
+	bool bRenderedBoxRect = false;
 
 	ComPtr<ID2D1PathGeometry> CreatePieGeometry(
 		float centerX, float centerY, float radiusX, float radiusY,
