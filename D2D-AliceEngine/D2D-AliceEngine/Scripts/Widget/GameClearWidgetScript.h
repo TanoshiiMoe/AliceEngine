@@ -1,7 +1,10 @@
 ﻿#pragma once
 #include <Component/ScriptComponent.h>
+#include <Manager/TimerManager.h>
 
 class gameObject;
+class SpriteRenderer;
+class TextRenderComponent;
 class GameClearWidgetScript : public ScriptComponent
 {
 public:
@@ -14,6 +17,11 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+	SpriteRenderer* m_grade;
+	FTimerHandle m_fadeHandle;
+
+	TextRenderComponent* m_passedTime;
+	TextRenderComponent* m_killCount;
 
 	static std::wstring s_prevScene;
 };
