@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Windows.h>
 namespace Input
 {
@@ -8,11 +8,12 @@ namespace Input
 	bool IsKeyPressed(int vKey);
 	bool IsKeyReleased(int vKey);
 	bool AnyKeyPressed();
+	void ResetKeyState(int vKey);
 	FVector2 GetMousePosition();
 	FVector2 GetMouseWorldPosition();
 	FVector2 GetMouseWorldPositionInCanvas();
 	void SetMousePosition(HWND hWnd, int mousePosX, int mousePosY);
-	void ResetMouseState(); // ¸¶¿ì½º »óÅÂ ÃÊ±âÈ­
+	void ResetMouseState(); // ë§ˆìš°ìŠ¤ ìƒíƒœ ì´ˆê¸°í™”
 
 	//FVector2 GetMouseWorldPosition(std::weak_ptr<ACameraActor> camera);
 	bool IsMouseLeftReleased();

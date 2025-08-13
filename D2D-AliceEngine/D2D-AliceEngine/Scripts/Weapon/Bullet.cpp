@@ -22,6 +22,8 @@
 #include "../Player/PlayerManager.h"
 #include <Helper/ParticleHelper.h>
 #include "BulletColl.h"
+#include "../Audio/StageAudioScript.h"
+#include "Component/AudioComponent.h"
 
 static FVector2 CatmullRomPoint(const FVector2& p0, const FVector2& p1, const FVector2& p2, const FVector2& p3, float t)
 {
@@ -206,6 +208,14 @@ void Bullet::OnStart()
 	const float angleRad = std::atan2f(moveDir.y, moveDir.x);
 	const float angleDeg = angleRad * 180.0f / Define::PI;
 	sp->SetRelativeRotation(angleDeg);
+
+
+	// 사운드 재생
+	std::wstring audName = L"Enemy/character_Enemy_sfx_shot.wav";
+	StageAudioScript::instance->m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+	/*audioComp = owner->AddComponent<AudioComponent>(L"BulletShoot");
+	audioComp->LoadData(L"Enemy/character_Enemy_sfx_shot.wav", AudioMode::Memory, SoundType::SFX);
+	audioComp->PlayByName(L"BulletShoot", 0.0f, 0.5f);*/
 }
 
 void Bullet::OnEnd()
@@ -265,6 +275,12 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 		{
 			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 			{
+				// 사운드 재생
+				std::wstring audName = L"Player/character_Player_sfx_hit.wav";
+				auto& m_Sfx = StageAudioScript::instance->m_Sfx;
+				if (m_Sfx.find(audName) != m_Sfx.end())
+					m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+
 				// Bullet의 damage 변수 사용
 				if (!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
@@ -272,6 +288,12 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
 			{
 				if (auto bs = es->target->GetComponent<BikeStatScript>()) {
+					// 사운드 재생
+					std::wstring audName = L"Player/character_Player_sfx_hit.wav";
+					auto& m_Sfx = StageAudioScript::instance->m_Sfx;
+					if (m_Sfx.find(audName) != m_Sfx.end())
+						m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+
 					// Bullet의 damage 변수 사용
 					if (!PlayerManager::instance->GetInvincible())
 						bs->m_bikeStat->DecreaseAbility("HP", damage);
@@ -298,12 +320,24 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 		{
 			if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
 			{
+				// 사운드 재생
+				std::wstring audName = L"Player/character_Player_sfx_hit.wav";
+				auto& m_Sfx = StageAudioScript::instance->m_Sfx;
+				if (m_Sfx.find(audName) != m_Sfx.end())
+					m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+
 				// Bullet의 damage 변수 사용
 				if(!PlayerManager::instance->GetInvincible())
 					bs->m_bikeStat->DecreaseAbility("HP", damage);
 			}
 			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
 			{
+				// 사운드 재생
+				std::wstring audName = L"Player/character_Player_sfx_hit.wav";
+				auto& m_Sfx = StageAudioScript::instance->m_Sfx;
+				if (m_Sfx.find(audName) != m_Sfx.end())
+					m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+
 				// Bullet의 damage 변수 사용
 				if(!es->target.expired())
 					if(auto* ess = es->target->GetComponent<EnemyStatScript>())

@@ -200,7 +200,7 @@ void SelectWidgetScript::OnStart()
 
 	stage2Sprite->SetRelativeScale(FVector2(0.35f));
 	stage2Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
-	stage2Sprite->LoadData(L"CutScene/Stage2/stage_2_scene02.png");
+	stage2Sprite->LoadData(L"CutScene/Stage2/stage_2_scene03.png");
 	stage2Sprite->RemoveFromParent();
 	stage2->AddChildComponent(stage2Sprite);
 	FVector2 stage2SpriteSize = stage2Sprite->GetRelativeSize();
@@ -212,7 +212,7 @@ void SelectWidgetScript::OnStart()
 
 	stage3Sprite->SetRelativeScale(FVector2(0.35f));
 	stage3Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
-	stage3Sprite->LoadData(L"CutScene/Stage3/stage_3_scene04.png");
+	stage3Sprite->LoadData(L"CutScene/Stage3/stage_3_scene05.png");
 	stage3Sprite->RemoveFromParent();
 	stage3->AddChildComponent(stage3Sprite);
 	FVector2 stage3SpriteSize = stage3Sprite->GetRelativeSize();

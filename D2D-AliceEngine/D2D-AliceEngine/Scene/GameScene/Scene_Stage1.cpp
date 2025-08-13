@@ -40,6 +40,7 @@
 #include <Component/Effect/ParticleComponent.h>
 #include <Scripts/Audio/StageAudioScript.h>
 #include <Scripts/Widget/LocationIndicatorWidgetScript.h>
+#include "Scripts/Audio.h"
 
 void Scene_Stage1::Initialize()
 {

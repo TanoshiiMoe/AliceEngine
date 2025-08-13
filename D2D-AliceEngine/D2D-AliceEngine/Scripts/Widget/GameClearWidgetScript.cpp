@@ -272,7 +272,7 @@ void GameClearWidgetScript::OnStart()
 		},
 		0.1f,
 		false,
-		4.5f
+		3.0f
 	);
 }
 

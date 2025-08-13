@@ -19,6 +19,8 @@
 #include "Scripts/Bike/BikeMovementScript.h"
 #include <Helper/ParticleHelper.h>
 #include "Scripts/Weapon/BulletColl.h"
+#include "Scripts/Audio/StageAudioScript.h"
+#include "Component/AudioComponent.h"
 
 void Car::Initialize()
 {
@@ -157,6 +159,12 @@ void Car::OnTriggerEnter2D(Collider* collider)
 
 		if (BikeStatScript* bs = PlayerManager::instance->GetOwner()->GetComponent<BikeStatScript>())
 		{
+			// 사운드 재생
+			std::wstring audName = L"Enemy/character_Enemy_sfx_downed.wav";
+			auto& m_Sfx = StageAudioScript::instance->m_Sfx;
+			if (m_Sfx.find(audName) != m_Sfx.end())
+				m_Sfx[audName]->PlayByName(audName, 0.0f, 1.0f);
+
 			// 크래시 상태
 			bs->m_bikeStat->DecreaseAbility("HP", 8);
 			PlayerManager::instance->CrashSlow();
@@ -265,6 +273,12 @@ void Car::DelayDestroy()
 
 void Car::DestroybColl()
 {
+	// 사운드 재생
+	std::wstring audName = L"Player/character_Player_sfx_itempickup.wav";
+	auto& m_Sfx = StageAudioScript::instance->m_Sfx;
+	if(m_Sfx.find(audName) != m_Sfx.end())
+		m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+
 	for (auto& obj : colObjs) {
 		GetWorld()->RemoveObject(obj);
 	}
