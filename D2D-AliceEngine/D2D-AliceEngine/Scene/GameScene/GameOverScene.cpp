@@ -28,11 +28,11 @@ void GameOverScene::OnEnter()
     __super::OnEnter();
 
     m_textGO = NewObject<gameObject>(L"GameOverLabel");
-    auto* text = m_textGO->AddComponent<TextRenderComponent>();
-    text->SetText(L"<현재 씬> GameOverScene");
-    text->SetTextAlignment(ETextFormat::TopLeft);
-    text->SetRelativePosition(FVector2(20, 10));
-    text->SetFontSize(32.0f);
+    //auto* text = m_textGO->AddComponent<TextRenderComponent>();
+	//text->SetText(L"<현재 씬> GameOverScene");
+	//text->SetTextAlignment(ETextFormat::TopLeft);
+	//text->SetRelativePosition(FVector2(20, 10));
+	//text->SetFontSize(32.0f);
 
     //m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
     //{

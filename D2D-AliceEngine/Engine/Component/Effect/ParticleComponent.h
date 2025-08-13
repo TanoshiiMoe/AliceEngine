@@ -189,7 +189,6 @@ private:
 
     // 랜덤
     std::mt19937 m_rng;
-    
 };
 
 

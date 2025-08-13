@@ -36,6 +36,7 @@ void TitleScene::Update()
 void TitleScene::OnEnter()
 {
 	__super::OnEnter();
+	SetClickable(true);
 	m_cameraController = NewObject<gameObject>(L"Camera");
 
 	m_widget = NewObject<gameObject>(L"Widget");
