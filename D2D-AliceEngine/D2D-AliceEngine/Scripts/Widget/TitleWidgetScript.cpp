@@ -79,6 +79,8 @@ void TitleWidgetScript::OnStart()
 
 	auto background = m_owner->AddComponent<SpriteRenderer>();
 
+	auto textLogo = m_owner->AddComponent<SpriteRenderer>();
+
 	auto startText = m_owner->AddComponent<TextRenderComponent>();
 	auto startButton = m_owner->AddComponent<ButtonComponent>();
 	//startButton->RemoveFromParent();
@@ -364,28 +366,28 @@ void TitleWidgetScript::OnStart()
 	sfxMinusButton->m_layer = Define::Disable;
 
 	// ======================== mainTitle
-	mainTitle->SetFontSize(120.0f);
-	mainTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	mainTitle->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	mainTitle->SetText(L"높다락길의 질주");
-	mainTitle->SetColor(FColor(242, 207, 238, 255));
-	FVector2 mainTitleRectSize = mainTitle->GetRelativeSize();
-	mainTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(mainTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, -300));
-	mainTitle->SetRelativeScale(FVector2(1, 1));
-	mainTitle->SetRelativeRotation(0);
-	mainTitle->m_layer = Define::NormalTextLayer;
+	//mainTitle->SetFontSize(120.0f);
+	//mainTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	//mainTitle->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	//mainTitle->SetText(L"높다락길의 질주");
+	//mainTitle->SetColor(FColor(242, 207, 238, 255));
+	//FVector2 mainTitleRectSize = mainTitle->GetRelativeSize();
+	//mainTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(mainTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, -300));
+	//mainTitle->SetRelativeScale(FVector2(1, 1));
+	//mainTitle->SetRelativeRotation(0);
+	//mainTitle->m_layer = Define::NormalTextLayer;
 
 	// ======================== subTitle
-	subTitle->SetFontSize(60.0f);
-	subTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	subTitle->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	subTitle->SetText(L"~활빈은 두령을 쫒는다~");
-	subTitle->SetColor(FColor(242, 207, 238, 255));
-	FVector2 subTitleRectSize = subTitle->GetRelativeSize();
-	subTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(subTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, 0));
-	subTitle->SetRelativeScale(FVector2(1, 1));
-	subTitle->SetRelativeRotation(0);
-	subTitle->m_layer = Define::NormalTextLayer;
+	//subTitle->SetFontSize(60.0f);
+	//subTitle->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	//subTitle->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	//subTitle->SetText(L"~활빈은 두령을 쫒는다~");
+	//subTitle->SetColor(FColor(242, 207, 238, 255));
+	//FVector2 subTitleRectSize = subTitle->GetRelativeSize();
+	//subTitle->SetRelativePosition(CoordHelper::RatioCoordToScreen(subTitleRectSize, FVector2(-0.5, -0.5)) + FVector2(300, 0));
+	//subTitle->SetRelativeScale(FVector2(1, 1));
+	//subTitle->SetRelativeRotation(0);
+	//subTitle->m_layer = Define::NormalTextLayer;
 
 	// ======================== startText
 	//startText->SetFontSize(55.0f);
@@ -609,6 +611,18 @@ void TitleWidgetScript::OnStart()
 	background->SetRelativePosition(CoordHelper::RatioCoordToScreen(backgroundSize, FVector2(0, 0)));
 	background->SetRelativeScale(FVector2(1, 1));
 	background->SetRelativeRotation(0);
+	background->m_layer = 0;
+
+	textLogo->LoadData(L"UI\\LOGO.png");
+	textLogo->SetDrawType(EDrawType::ScreenSpace);
+	textLogo->SetFilter(FColor(0, 234, 255, 255));
+	textLogo->SetRelativePosition(
+		CoordHelper::RatioCoordToScreen(textLogo->GetRelativeSize(), FVector2(0, 0))
+		+ FVector2(470, -50)
+	);
+	textLogo->SetRelativeScale(FVector2(1, 1));
+	textLogo->SetRelativeRotation(0);
+	textLogo->m_layer = Define::NormalTextLayer;
 
 	// ======================== Delegete
 	/*startButton->SetStateAction(Define::EButtonState::Pressed, [
