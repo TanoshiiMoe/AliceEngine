@@ -137,7 +137,7 @@ void GamePlayManager::PlayBossMode()
 					/*FVector2 center = m_player->GetPosition();
 					FVector2 randomPoint = FRandom::GetRandomPointInCircle2D(center.x, center.y, 20);
 					EnemySpawnTriggerBox::SpawnEnemyAt(0, randomPoint + FVector2(600, 0));*/
-
+                    if (GamePlayManager::GetInstance().IsPaused()) return;
                     // 보스 드론 소환
                     FVector2 randomPoint = FRandom::GetRandomPointInTorus2D(0, 0, 300, 600);
                     EnemySpawnTriggerBox::SpawnBossDroneAt(randomPoint + FVector2(300, 0));
