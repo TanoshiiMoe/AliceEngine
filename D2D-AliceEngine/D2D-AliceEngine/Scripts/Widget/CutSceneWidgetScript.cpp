@@ -297,12 +297,12 @@ void CutSceneWidgetScript::LoadCutSceneImages()
 {
 	// 컷씬 이미지 경로들을 추가 (Resource/CutScene/Stage1/ 폴더의 이미지들)
 	m_cutSceneImages.clear();
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\1.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\2.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\3.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\4.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\5.png");
-	m_cutSceneImages.push_back(L"CutScene\\Stage1\\6.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_1_scene01.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_2_scene02.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_2_scene03.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene04.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\stage_3_scene05.png");
+	m_cutSceneImages.push_back(L"CutScene\\Stage1\\ending.png");
 
 	// 필요에 따라 더 많은 이미지 추가 가능
 }
