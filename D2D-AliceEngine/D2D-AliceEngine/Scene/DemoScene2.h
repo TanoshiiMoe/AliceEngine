@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
 
+class SpineScript;
 class DemoScene2 : public Scene
 {
 public:
@@ -34,5 +35,6 @@ public:
 	gameObject* m_widget6;
 	gameObject* m_widget7;
 	gameObject* spineObject;
+	SpineScript* spine;
 };
 

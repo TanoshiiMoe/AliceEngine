@@ -1,4 +1,4 @@
-#include "SpineScript.h"
+ï»¿#include "SpineScript.h"
 #include "SpineScript.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
@@ -28,21 +28,21 @@ void SpineScript::Initialize()
 	spineRenderer->RegistSystem(owner.Get());
 	spineRenderer->Initialize();
 
-	// ÀÔ·ÂÀÌ ³¡³­ ÀÌÈÄ¿¡ Update°¡ ½ÇÇàµÇ¾î¾ßÇÔ. ¿Ö³ÄÇÏ¸é 
+	// ì…ë ¥ì´ ëë‚œ ì´í›„ì— Updateê°€ ì‹¤í–‰ë˜ì–´ì•¼í•¨. ì™œëƒí•˜ë©´ 
 	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_NewlySpawned);
 }
 
 void SpineScript::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void SpineScript::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 	MSG msg;
 	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
@@ -57,7 +57,7 @@ void SpineScript::Update(const float& deltaSeconds)
 void SpineScript::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
@@ -67,7 +67,7 @@ void SpineScript::Awake()
 
 void SpineScript::OnStart()
 {
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	m_owner = GetOwner();
 	//RenderSystem::GetInstance().m_spineRenders.push_back({ m_owner->GetHandle(), [this]() { spineRenderer->Render(); } });
 	//spineRenderer->LoadSpine(L"Spine2D/Monster_1.atlas", L"Spine2D/Monster_1.json");
@@ -83,7 +83,7 @@ void SpineScript::OnStart()
 
 void SpineScript::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 void SpineScript::OnDestroy()
@@ -99,59 +99,63 @@ void SpineScript::LoadData(const std::wstring& atlasPath, const std::wstring& js
 
 void SpineScript::OnCollisionEnter2D(Collision2D* collider)
 {
-	std::cout << "OnCollisionEnter2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionEnter2D È£ÃâµÊ\n");
+	std::cout << "OnCollisionEnter2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnCollisionEnter2D í˜¸ì¶œë¨\n");
 }
 
 void SpineScript::OnCollisionStay2D(Collision2D* collider)
 {
-	std::cout << "OnCollisionStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionStay2D È£ÃâµÊ\n");
+	std::cout << "OnCollisionStay2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnCollisionStay2D í˜¸ì¶œë¨\n");
 }
 
 void SpineScript::OnCollisionExit2D(Collision2D* collider)
 {
-	std::cout << "OnCollisionExit2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnCollisionExit2D È£ÃâµÊ\n");
+	std::cout << "OnCollisionExit2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnCollisionExit2D í˜¸ì¶œë¨\n");
 }
 
 void SpineScript::OnTriggerEnter2D(Collider* collider)
 {
-	std::cout << "OnTriggerEnter2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerEnter2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerEnter2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerEnter2D í˜¸ì¶œë¨\n");
 }
 
 void SpineScript::OnTriggerStay2D(Collider* collider)
 {
-	std::cout << "OnTriggerStay2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerStay2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerStay2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerStay2D í˜¸ì¶œë¨\n");
 }
 
 void SpineScript::OnTriggerExit2D(Collider* collider)
 {
-	std::cout << "OnTriggerExit2D È£ÃâµÊ" << std::endl;
-	OutputDebugStringW(L"OnTriggerExit2D È£ÃâµÊ\n");
+	std::cout << "OnTriggerExit2D í˜¸ì¶œë¨" << std::endl;
+	OutputDebugStringW(L"OnTriggerExit2D í˜¸ì¶œë¨\n");
 }
 
 void SpineScript::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
-	if (Input::IsKeyPressed(VK_SPACE)) {
-		spineRenderer->SetNextAnimation();
-	}
-	else if (Input::IsKeyPressed(VK_BACK)) {
-		spineRenderer->SetPreviousAnimation();
-	}
-	else if (Input::IsKeyPressed('1')) {
-		spineRenderer->SetAnimation("Idle");
-	}
-	else if (Input::IsKeyPressed('2')) {
-		spineRenderer->SetAnimation("Move");
-	}
-	else if (Input::IsKeyPressed('3')) {
-		spineRenderer->SetAnimation("Attack_Melee");
-	}
-	else if (Input::IsKeyPressed('5')) {
-		SceneManager::GetInstance().ChangeScene(L"TitleScene");
-	}
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
+	//if (Input::IsKeyPressed(VK_SPACE)) {
+	//	spineRenderer->SetNextAnimation();
+	//}
+	//else if (Input::IsKeyPressed(VK_BACK)) {
+	//	spineRenderer->SetPreviousAnimation();
+	//}
+	//else if (Input::IsKeyPressed('1')) {
+	//	spineRenderer->SetAnimation("Idle");
+	//}
+	//else if (Input::IsKeyPressed('2')) {
+	//	spineRenderer->SetAnimation("Move");
+	//}
+	//else if (Input::IsKeyPressed('3')) {
+	//	spineRenderer->SetAnimation("Attack_Melee");
+	//}
+	//else if (Input::IsKeyPressed('5')) {
+	//	SceneManager::GetInstance().ChangeScene(L"TitleScene");
+	//}
+
+	//if (Input::IsKeyPressed('5')) {
+	//	SceneManager::GetInstance().ChangeScene(L"TitleScene");
+	//}
 }

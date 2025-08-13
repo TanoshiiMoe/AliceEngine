@@ -18,6 +18,8 @@
 #include <spine/Bone.h>
 #include <spine/Animation.h>
 #include <spine/BoneData.h>
+#include <algorithm>
+#include <spine/MeshAttachment.h>
 
 #pragma comment(lib, "d3d11.lib")
 
@@ -35,6 +37,8 @@
 #include <Helpers/StringHelper.h>
 #include <System/RenderSystem.h>
 #include <Manager/PackageResourceManager.h>
+
+static inline float clampf(float v, float lo, float hi) { return v < lo ? lo : (v > hi ? hi : v); }
 
 // Direct2DTextureLoader 구현
 Direct2DTextureLoader::Direct2DTextureLoader(ID2D1RenderTarget* renderTarget)
@@ -105,6 +109,24 @@ void SpineRenderer::Initialize()
 	if (!m_textureLoader)
 	{
 		OutputDebugStringW(L"spineRenderer Initialize() Error!\n");
+	}
+
+	// 디버그 렌더링 리소스 생성
+	HRESULT hr = S_OK;
+	if (!m_brush)
+	{
+		hr = D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Lime, 1.0f), m_brush.ReleaseAndGetAddressOf());
+	}
+	if (!m_dwriteFactory)
+	{
+		hr = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)m_dwriteFactory.ReleaseAndGetAddressOf());
+	}
+	if (!m_textFormat && m_dwriteFactory)
+	{
+		hr = m_dwriteFactory->CreateTextFormat(L"Consolas", nullptr, DWRITE_FONT_WEIGHT_REGULAR,
+			DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 14.0f, L"ko-kr",
+			m_textFormat.ReleaseAndGetAddressOf());
 	}
 
 }
@@ -185,7 +207,7 @@ void SpineRenderer::Render()
 	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 
 	// 캐릭터의 월드 위치
-	D2D1::Matrix3x2F worldTransform = D2D1::Matrix3x2F::Translation(m_CharacterPosition.x, m_CharacterPosition.y);
+	D2D1::Matrix3x2F worldTransform = D2D1::Matrix3x2F::Scale(m_CharacterScale.x, m_CharacterScale.y) * D2D1::Matrix3x2F::Translation(m_CharacterPosition.x, m_CharacterPosition.y);
 	// 유니티 좌표계 변환을 위해 사전 Y축 반전
 	D2D1::Matrix3x2F renderTransform = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	// 카메라 기준 좌표계 변환을 위해 역행렬 계산
@@ -207,84 +229,185 @@ void SpineRenderer::Render()
 	//	m_textFormat.Get(), D2D1::RectF(0, 20, 100, 30), m_brush.Get());
 
 	// 슬롯별로 렌더링
-	const auto& drawOrder = m_skeleton->getDrawOrder();
-	for (size_t i = 0; i < drawOrder.size(); ++i)
+	const auto& slotOrder = m_useSetupSlotOrder ? m_skeleton->getSlots() : m_skeleton->getDrawOrder();
+	//for (size_t i = slotOrder.size() - 1; i >= 0; --i)
+	for (size_t i = 0; i < slotOrder.size(); ++i)
 	{
-		spine::Slot* slot = drawOrder[i];
+		spine::Slot* slot = slotOrder[i];
 		spine::Attachment* attachment = slot->getAttachment();
 		if (!attachment)
 			continue;
 
-		if (!attachment->getRTTI().isExactly(spine::RegionAttachment::rtti))
-			continue; // RegionAttachment만 처리
+		if (attachment->getRTTI().isExactly(spine::RegionAttachment::rtti))
+		{
+			spine::RegionAttachment* regionAtt = static_cast<spine::RegionAttachment*>(attachment);
+			spine::TextureRegion* region = regionAtt->getRegion();
+			if (!region)
+				continue;
 
-		spine::RegionAttachment* regionAtt = static_cast<spine::RegionAttachment*>(attachment);
-		spine::TextureRegion* region = regionAtt->getRegion();
-		if (!region)
+			spine::AtlasRegion* atlasRegion = static_cast<spine::AtlasRegion*>(region);
+			if (!atlasRegion)
+				continue;
+
+			ID2D1Bitmap* bitmap = reinterpret_cast<ID2D1Bitmap*>(region->rendererObject);
+			if (!bitmap)
+				continue;
+
+			// region.rotate 확인
+			assert(atlasRegion->degrees == 0 || atlasRegion->degrees == 90);
+
+			// 텍스처 이미지 배치 최적화로 이미지가 회전된 경우는 예외처리가 필요하다.
+			bool rotated = (atlasRegion->degrees == 90);
+			float srcW = rotated ? atlasRegion->height : atlasRegion->width;
+			float srcH = rotated ? atlasRegion->width : atlasRegion->height;
+			D2D1_RECT_F srcRect;
+			srcRect.left = (float)atlasRegion->x;
+			srcRect.top = (float)atlasRegion->y;
+			srcRect.right = srcRect.left + srcW;
+			srcRect.bottom = srcRect.top + srcH;
+
+			// 2. destRect + offset 적용
+			float destW = rotated ? atlasRegion->originalHeight : atlasRegion->originalWidth;
+			float destH = rotated ? atlasRegion->originalWidth : atlasRegion->originalHeight;
+			float offsetX = rotated ? atlasRegion->offsetY : atlasRegion->offsetX;
+			float offsetY = rotated ? atlasRegion->offsetX : atlasRegion->offsetY;
+			float attachX = regionAtt->getX() + offsetX;
+			float attachY = regionAtt->getY() + offsetY;
+			float attachRot = regionAtt->getRotation() + (rotated ? -90.0f : 0.0f);
+
+			D2D1::Matrix3x2F attachmentMatrix =
+				D2D1::Matrix3x2F::Scale(regionAtt->getScaleX(), regionAtt->getScaleY()) *
+				D2D1::Matrix3x2F::Rotation(attachRot) *
+				D2D1::Matrix3x2F::Translation(attachX, attachY);
+
+			D2D1_RECT_F destRect;
+			destRect.left = -destW / 2;
+			destRect.top = -destH / 2;
+			destRect.right = destRect.left + destW;
+			destRect.bottom = destRect.top + destH;
+
+			// 4. 본(Bone)의 월드 변환
+			spine::Bone& bone = slot->getBone();
+			D2D1::Matrix3x2F boneWorldMatrix =
+				D2D1::Matrix3x2F::Scale(bone.getScaleX(), bone.getScaleY()) *
+				D2D1::Matrix3x2F::Rotation(bone.getWorldRotationX()) *
+				D2D1::Matrix3x2F::Translation(bone.getWorldX(), bone.getWorldY());
+
+			D2D1::Matrix3x2F finalMatrix = renderTransform * attachmentMatrix * boneWorldMatrix * worldTransform * cameraInv * m_UnityScreen;
+			D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(finalMatrix);
+
+			// 이미지 그리기
+			D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawBitmap(bitmap, destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, srcRect);
+		}
+		else if (attachment->getRTTI().isExactly(spine::MeshAttachment::rtti))
+		{
+			// MeshAttachment 정확 렌더(2D 변환 상에서의 삼각형 텍스처 매핑):
+			// 각 삼각형에 대해 UV→World의 어파인 변환을 계산하여 BitmapBrush로 채운다.
+			spine::MeshAttachment* mesh = static_cast<spine::MeshAttachment*>(attachment);
+			spine::TextureRegion* region = mesh->getRegion();
+			if (!region) continue;
+			spine::AtlasRegion* atlasRegion = static_cast<spine::AtlasRegion*>(region);
+			ID2D1Bitmap* pageBitmap = reinterpret_cast<ID2D1Bitmap*>(region->rendererObject);
+			if (!pageBitmap) continue;
+
+			// 월드 버텍스 및 UV 준비
+			spine::Vector<float> worldVerts; worldVerts.setSize(mesh->getWorldVerticesLength(), 0);
+			mesh->computeWorldVertices(*slot, 0, mesh->getWorldVerticesLength(), worldVerts, 0, 2);
+			const float* uvs = mesh->getUVs().buffer();
+			const spine::Vector<unsigned short>& tris = mesh->getTriangles();
+			if (tris.size() < 3) continue;
+
+			// 페이지 크기 (UV는 0..1 기준이므로 픽셀 좌표로 변환)
+			float pageW = (float)atlasRegion->page->width;
+			float pageH = (float)atlasRegion->page->height;
+
+			// 고정 변환: 월드→스크린 (Spine 좌표를 D2D 화면에)
+			D2D1::Matrix3x2F finalMatrix = worldTransform * cameraInv * m_UnityScreen;
+			D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(finalMatrix);
+
+			auto solveAffine = [](float sx0, float sy0, float sx1, float sy1, float sx2, float sy2,
+								   float dx0, float dy0, float dx1, float dy1, float dx2, float dy2,
+								   D2D1_MATRIX_3X2_F& outM) -> bool
+			{
+				// Solve for m11,m21,dx from sx,sy -> x; and m12,m22,dy from sx,sy -> y
+				auto solve3 = [](float a0,float b0,float c0,float r0,
+								  float a1,float b1,float c1,float r1,
+								  float a2,float b2,float c2,float r2,
+								  float& x,float& y,float& z)->bool{
+					float det = a0*(b1*c2-b2*c1) - b0*(a1*c2-a2*c1) + c0*(a1*b2-a2*b1);
+					if (fabsf(det) < 1e-6f) return false;
+					float detX = r0*(b1*c2-b2*c1) - b0*(r1*c2-r2*c1) + c0*(r1*b2-r2*b1);
+					float detY = a0*(r1*c2-r2*c1) - r0*(a1*c2-a2*c1) + c0*(a1*r2-a2*r1);
+					float detZ = a0*(b1*r2-b2*r1) - b0*(a1*r2-a2*r1) + r0*(a1*b2-a2*b1);
+					x = detX/det; y = detY/det; z = detZ/det; return true; };
+
+				float m11,m21,dx; // x = m11*sx + m21*sy + dx
+				float m12,m22,dy; // y = m12*sx + m22*sy + dy
+				bool okx = solve3(sx0, sy0, 1.0f, dx0,
+								  sx1, sy1, 1.0f, dx1,
+								  sx2, sy2, 1.0f, dx2,
+								  m11, m21, dx);
+				bool oky = solve3(sx0, sy0, 1.0f, dy0,
+								  sx1, sy1, 1.0f, dy1,
+								  sx2, sy2, 1.0f, dy2,
+								  m12, m22, dy);
+				if (!okx || !oky) return false;
+				outM = D2D1::Matrix3x2F(m11, m12, m21, m22, dx, dy);
+				return true;
+			};
+
+			// 브러시 생성 (페이지 비트맵 기반)
+			ComPtr<ID2D1BitmapBrush> brush;
+			D2D1_BITMAP_BRUSH_PROPERTIES bbp{};
+			bbp.extendModeX = D2D1_EXTEND_MODE_CLAMP;
+			bbp.extendModeY = D2D1_EXTEND_MODE_CLAMP;
+			bbp.interpolationMode = D2D1_BITMAP_INTERPOLATION_MODE_LINEAR;
+			D2DRenderManager::GetD2DDevice()->CreateBitmapBrush(pageBitmap, &bbp, nullptr, &brush);
+			if (!brush) continue;
+
+			// 삼각형 단위로 그리기
+			for (size_t ti = 0; ti + 2 < tris.size(); ti += 3)
+			{
+				unsigned short i0 = tris[ti];
+				unsigned short i1 = tris[ti+1];
+				unsigned short i2 = tris[ti+2];
+				// 목적지(월드) 좌표
+				D2D1_POINT_2F p0{ worldVerts[2*i0], worldVerts[2*i0+1] };
+				D2D1_POINT_2F p1{ worldVerts[2*i1], worldVerts[2*i1+1] };
+				D2D1_POINT_2F p2{ worldVerts[2*i2], worldVerts[2*i2+1] };
+				// 소스(페이지 픽셀) 좌표 (UV*pageSize)
+				D2D1_POINT_2F s0{ uvs[2*i0]*pageW, uvs[2*i0+1]*pageH };
+				D2D1_POINT_2F s1{ uvs[2*i1]*pageW, uvs[2*i1+1]*pageH };
+				D2D1_POINT_2F s2{ uvs[2*i2]*pageW, uvs[2*i2+1]*pageH };
+
+				// 어파인 변환(소스→월드) 계산
+				D2D1_MATRIX_3X2_F M;
+				if (!solveAffine(s0.x, s0.y, s1.x, s1.y, s2.x, s2.y,
+								 p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, M))
+				{
+					continue;
+				}
+				brush->SetTransform(M);
+
+				// 목적 삼각형 지오메트리 생성
+				ComPtr<ID2D1PathGeometry> geom;
+				D2DRenderManager::GetInstance().m_d2dFactory->CreatePathGeometry(&geom);
+				if (!geom) continue;
+				ComPtr<ID2D1GeometrySink> sink;
+				geom->Open(&sink);
+				sink->BeginFigure(p0, D2D1_FIGURE_BEGIN_FILLED);
+				sink->AddLine(p1);
+				sink->AddLine(p2);
+				sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+				sink->Close();
+
+				D2DRenderManager::GetD2DDevice()->FillGeometry(geom.Get(), brush.Get());
+			}
+		}
+		else
+		{
 			continue;
-
-		spine::AtlasRegion* atlasRegion = static_cast<spine::AtlasRegion*>(region);
-		if (!atlasRegion)
-			continue;
-
-		ID2D1Bitmap* bitmap = reinterpret_cast<ID2D1Bitmap*>(region->rendererObject);
-		if (!bitmap)
-			continue;
-
-		// region.rotate 확인
-		assert(atlasRegion->degrees == 0 || atlasRegion->degrees == 90);
-
-		// 텍스처 이미지 배치 최적화로 이미지가 회전된 경우는 예외처리가 필요하다.
-		bool rotated = (atlasRegion->degrees == 90);
-		float srcW = rotated ? atlasRegion->height : atlasRegion->width;
-		float srcH = rotated ? atlasRegion->width : atlasRegion->height;
-		D2D1_RECT_F srcRect;
-		srcRect.left = (float)atlasRegion->x;
-		srcRect.top = (float)atlasRegion->y;
-		srcRect.right = srcRect.left + srcW;
-		srcRect.bottom = srcRect.top + srcH;
-
-		// 2. destRect + offset 적용
-		float destW = rotated ? atlasRegion->originalHeight : atlasRegion->originalWidth;
-		float destH = rotated ? atlasRegion->originalWidth : atlasRegion->originalHeight;
-		float offsetX = rotated ? atlasRegion->offsetY : atlasRegion->offsetX;
-		float offsetY = rotated ? atlasRegion->offsetX : atlasRegion->offsetY;
-		float attachX = regionAtt->getX() + offsetX;
-		float attachY = regionAtt->getY() + offsetY;
-		float attachRot = regionAtt->getRotation() + (rotated ? -90.0f : 0.0f);
-
-		D2D1::Matrix3x2F attachmentMatrix =
-			D2D1::Matrix3x2F::Scale(regionAtt->getScaleX(), regionAtt->getScaleY()) *
-			D2D1::Matrix3x2F::Rotation(attachRot) *
-			D2D1::Matrix3x2F::Translation(attachX, attachY);
-
-		D2D1_RECT_F destRect;
-		destRect.left = -destW / 2;
-		destRect.top = -destH / 2;
-		destRect.right = destRect.left + destW;
-		destRect.bottom = destRect.top + destH;
-
-		// 4. 본(Bone)의 월드 변환
-		spine::Bone& bone = slot->getBone();
-		D2D1::Matrix3x2F boneWorldMatrix =
-			D2D1::Matrix3x2F::Scale(bone.getScaleX(), bone.getScaleY()) *
-			D2D1::Matrix3x2F::Rotation(bone.getWorldRotationX()) *
-			D2D1::Matrix3x2F::Translation(bone.getWorldX(), bone.getWorldY());
-
-		D2D1::Matrix3x2F finalMatrix = renderTransform * attachmentMatrix * boneWorldMatrix * worldTransform * cameraInv * m_UnityScreen;
-		D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(finalMatrix);
-
-		D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 255, 0, 255);
-
-		// 확인용 영역 그리기
-		//if (rotated)
-		//	m_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Blue, 0.1f));
-		//else
-		//	m_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Green, 0.1f));
-		//D2DRenderManager::GetInstance().m_d2dDeviceContext->FillRectangle(destRect, m_brush.Get());
-		
-		// 이미지 그리기
-		D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawBitmap(bitmap, destRect, 1.0f, D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, srcRect);
+		}
 	}
 
 	// 본의 원점에 + 라인과 이름 표시
@@ -299,8 +422,8 @@ void SpineRenderer::Render()
 				D2D1::Matrix3x2F::Rotation(bone.getWorldRotationX()) *
 				D2D1::Matrix3x2F::Translation(bone.getWorldX(), bone.getWorldY());
 
-			D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(renderTransform * boneWorldMatrix * worldTransform * cameraInv * m_UnityScreen);
-			float x = 0, y = 0, crossLen = 8.0f;
+			//D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(renderTransform * boneWorldMatrix * worldTransform * cameraInv * m_UnityScreen);
+			//float x = 0, y = 0, crossLen = 8.0f;
 			//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(x - crossLen, y), D2D1::Point2F(x + crossLen, y), m_brush.Get(), 2.0f);
 			//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(x, y - crossLen), D2D1::Point2F(x, y + crossLen), m_brush.Get(), 2.0f);
 			//std::wstring wBoneName(bone.getData().getName().buffer(), bone.getData().getName().buffer() + bone.getData().getName().length());
@@ -308,6 +431,51 @@ void SpineRenderer::Render()
 			//	m_textFormat.Get(), D2D1::RectF(x + 10, y - 10, x + 100, y + 10), m_brush.Get());
 		}
 	}
+}
+
+D2D1_RECT_F SpineRenderer::MakeSrcRect(spine::AtlasRegion* atlasRegion, bool rotated, float srcW, float srcH)
+{
+	D2D1_RECT_F srcRect;
+	srcRect.left = (float)atlasRegion->x;
+	srcRect.top = (float)atlasRegion->y;
+	srcRect.right = srcRect.left + srcW;
+	srcRect.bottom = srcRect.top + srcH;
+	return srcRect;
+}
+
+void SpineRenderer::ComputeRegionPlacement(
+	spine::RegionAttachment* regionAtt,
+	spine::AtlasRegion* atlasRegion,
+	float srcW, float srcH, bool rotated,
+	float& outDestW, float& outDestH,
+	float& outAttachX, float& outAttachY,
+	float& outAttachRot)
+{
+	// 원본 크기(트리밍 이전)
+	float origW = (float)atlasRegion->originalWidth;
+	float origH = (float)atlasRegion->originalHeight;
+	if (origW <= 0.0f) origW = rotated ? srcH : srcW;
+	if (origH <= 0.0f) origH = rotated ? srcW : srcH;
+
+	// 회전 전 기준의 실제 잘린 영역 크기
+	float regionWUnrot = rotated ? srcH : srcW;
+	float regionHUnrot = rotated ? srcW : srcH;
+
+	// 스케일 팩터(트리밍/스케일 반영)
+	float scaleX = (origW > 0.0f) ? (regionWUnrot / origW) : 1.0f;
+	float scaleY = (origH > 0.0f) ? (regionHUnrot / origH) : 1.0f;
+
+	// 오프셋 스케일링 및 회전 보정
+	float offX = (float)atlasRegion->offsetX * scaleX;
+	float offY = (float)atlasRegion->offsetY * scaleY;
+	float offsetX = rotated ? offY : offX;
+	float offsetY = rotated ? offX : offY;
+
+	outDestW = origW * scaleX;
+	outDestH = origH * scaleY;
+	outAttachX = regionAtt->getX() + offsetX;
+	outAttachY = regionAtt->getY() + offsetY;
+	outAttachRot = regionAtt->getRotation() + (rotated ? -90.0f : 0.0f);
 }
 
 // --- 키보드 입력 처리 ---
