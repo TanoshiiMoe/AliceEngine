@@ -111,12 +111,9 @@ public:
     void SetCutScenePlaying(bool bEvent) { isCutScenePlaying = bEvent; }
     bool IsCutScenePlaying() { return isCutScenePlaying; }
 
-    void SetCutSceneIndex(int index) { m_cutSceneIndex = index; }
-    int GetCutSceneIndex() { return m_cutSceneIndex; }
-
 	int GetEndSubDistance() const { return m_endSubDistance; }
 	void SetEndSubDistance(const int value) { m_endSubDistance = value; }
-
+  
     int batteryCount = 0;
 
 private:
@@ -129,6 +126,6 @@ private:
     int m_stopXAxis{10200};
 
     bool isCutScenePlaying = false;
-    int m_cutSceneIndex = 0;
+
     int m_endSubDistance = 1300;
 };
