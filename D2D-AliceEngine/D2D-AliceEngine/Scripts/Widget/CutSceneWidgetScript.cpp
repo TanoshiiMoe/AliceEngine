@@ -260,19 +260,19 @@ void CutSceneWidgetScript::OnStart()
 	// 이미지 이어서 표시
     int startIndex = 0;
 
-    std::wstring currScene = SceneManager::GetInstance().m_currentScene->GetName();
+    m_currSceneName = SceneManager::GetInstance().m_currentScene->GetName();
 
-    if (currScene == Define::Scene_Stage1)
+    if (m_currSceneName == Define::Scene_Stage1)
     {
         startIndex = 0;
     }
 
-    if (currScene == Define::Scene_Stage2)
+    if (m_currSceneName == Define::Scene_Stage2)
     {
         startIndex = 2;
     }
 
-    if (currScene == Define::Scene_Stage3)
+    if (m_currSceneName == Define::Scene_Stage3)
     {
         startIndex = 3;
     }
@@ -302,7 +302,11 @@ void CutSceneWidgetScript::OnDestroy()
 
 void CutSceneWidgetScript::SkipInput(float deltaSeconds)
 {
-    if (Input::IsKeyReleased(VK_SPACE))
+    if (m_currSceneName == Define::Scene_Stage1 && Input::IsKeyReleased(VK_SPACE))
+    {
+        m_isSpaceReleased = true;
+    }
+    else if (m_currSceneName == Define::Scene_Stage2 || m_currSceneName == Define::Scene_Stage3)
     {
         m_isSpaceReleased = true;
     }
