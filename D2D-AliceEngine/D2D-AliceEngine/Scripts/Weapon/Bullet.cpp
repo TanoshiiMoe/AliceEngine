@@ -220,8 +220,8 @@ void Bullet::OnDestroy()
 
 void Bullet::OnTriggerEnter2D(Collider* collider)
 {
-	std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
-	OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
+	//std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
+	//OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
 
 	if (!collider->GetOwner()) return;
 	switch (droneType)
@@ -305,7 +305,9 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
 			{
 				// Bullet의 damage 변수 사용
-				es->target->GetComponent<EnemyStatScript>()->m_enemyStat->DecreaseAbility("HP", damage);
+				if(!es->target.expired())
+					if(auto* ess = es->target->GetComponent<EnemyStatScript>())
+						ess->m_enemyStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 
@@ -335,7 +337,9 @@ void Bullet::OnTriggerEnter2D(Collider* collider)
 			else if (auto es = collider->GetOwner()->GetComponent<BulletColl>())
 			{
 				// Bullet의 damage 변수 사용
-				es->target->GetComponent<EnemyStatScript>()->m_enemyStat->DecreaseAbility("HP", damage);
+				if (!es->target.expired())
+					if(auto* ess = es->target->GetComponent<EnemyStatScript>())
+						ess->m_enemyStat->DecreaseAbility("HP", damage);
 			}
 			GetWorld()->RemoveObject(GetOwner());
 

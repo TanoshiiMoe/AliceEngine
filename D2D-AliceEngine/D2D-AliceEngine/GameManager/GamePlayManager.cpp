@@ -195,7 +195,6 @@ void GamePlayManager::SpawnBlackOut(int modeIndex, bool useCrossFade, float dura
     }
 }
 
-
 void GamePlayManager::PauseGame()
 {
     if (IsPaused()) return;

@@ -77,7 +77,7 @@ void ParticleComponent::Update(const float& deltaSeconds)
 
             emitBurstCommon(mp, 4,
                 10.0f, 30.0f, // speed
-                14.0f, 18.0f,  // size
+                24.0f, 30.0f,  // size
                 0.25f, 0.45f, // life
                 D2D1::ColorF(1.0f, 1.0f, 0.8f, 0.9f),
                 D2D1::ColorF(0.9f, 0.6f, 0.2f, 0.0f),
