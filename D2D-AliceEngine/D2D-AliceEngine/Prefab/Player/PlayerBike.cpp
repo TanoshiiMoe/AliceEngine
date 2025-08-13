@@ -17,6 +17,7 @@
 #include <Scripts/Weapon/Drone.h>
 #include <Scripts/Bike/BikeStatScript.h>
 #include "Scripts/Player/PlayerMovement.h"
+#include <GameManager/PlayerDataManager.h>
 
 void PlayerBike::Initialize()
 {
@@ -39,7 +40,10 @@ void PlayerBike::Initialize()
 	{
 		drone->SetDroneType(EDroneType::Player);
 		drone->initBodyPos = FVector2(-70, 120);
-		drone->SetAttackDelay(0.2f);
+
+		FPlayerStats stat = PlayerDataManager::GetInstance().GetStats();
+		drone->SetDamage(stat.damage);
+		drone->SetAttackDelay(stat.attackDelay);
 	}
 	owner->AddComponent<BikeStatScript>();
 
