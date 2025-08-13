@@ -105,16 +105,16 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 				}*/
 			}
 
-			tr->SetRealPos(pos);
+			
 
 
 			if (auto transform = m_owner->transform()) {
 				//transform->AddPosition((finalSpeed + m_jumpWeightX) * deltaSeconds, 0);
-			
-				FVector2 pos = tr->GetRealPos();
+
 				pos.x += (m_jumpWeightX * 3.0f) * deltaSeconds;
-				tr->SetRealPos(pos);
 			}
+
+			tr->SetRealPos(pos);
 		}
 	}
 }

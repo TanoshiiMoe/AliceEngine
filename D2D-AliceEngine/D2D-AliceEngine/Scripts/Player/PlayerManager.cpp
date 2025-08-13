@@ -277,6 +277,11 @@ void PlayerManager::Boost(float _time, bool _battDec)
 
 				pm->SetBoost(false);
 			}
+
+			// 프리즘 가져오기
+			auto prism = owner->GetComponent<Prism>();
+
+			prism->SetActive(bSande || bBoost);
 		}
 	}
 }
@@ -288,7 +293,7 @@ void PlayerManager::Sande(float _time)
 		if (auto prism = owner->GetComponent<Prism>())
 		{
 			// 조건 저장
-			bool bVal = !prism->IsActive();
+			bool bVal = !bSande;
 			
 			// 배터리 조건계산
 			int& batteryCount = GamePlayManager::GetInstance().batteryCount;
@@ -298,7 +303,6 @@ void PlayerManager::Sande(float _time)
 					batteryCount -= 3;
 
 					// 조건 설정
-					prism->SetActive(true);
 					bSande = true;
 
 					// 타이머 설정
@@ -315,7 +319,6 @@ void PlayerManager::Sande(float _time)
 			}
 			else {
 				// 조건 설정
-				prism->SetActive(false);
 				bSande = false;
 
 				// 타이머 설정
@@ -326,6 +329,8 @@ void PlayerManager::Sande(float _time)
 				TimerManager::GetInstance().SetGlobalTimeScale(1.0f);
 				playerTimeScale = 1.0f;
 			}
+
+			prism->SetActive(bSande || bBoost);
 		}
 		else {
 			OutputDebugStringW(L"플레이어에게 Prism 컴포넌트가 없음!!\n");
