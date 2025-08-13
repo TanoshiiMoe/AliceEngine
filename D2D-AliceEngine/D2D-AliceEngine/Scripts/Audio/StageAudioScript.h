@@ -23,6 +23,7 @@ public:
 	AudioComponent* m_Stage2Audio;
 	AudioComponent* m_Stage3Audio;
 	AudioComponent* m_Ambience;
+	AudioComponent* m_MotorSound;
 
 	std::vector<std::wstring> sfxList;
 	std::unordered_map<std::wstring, AudioComponent*> m_Sfx;

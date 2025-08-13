@@ -18,6 +18,8 @@
 #include <Prefab/Enemy/Core/Car.h>
 #include "Scripts/Player/PlayerMovement.h"
 #include "../Weapon/BulletColl.h"
+#include "../Audio/StageAudioScript.h"
+#include "Component/AudioComponent.h"
 
 PlayerManager* PlayerManager::instance = nullptr;
 
@@ -86,6 +88,9 @@ void PlayerManager::OnStart()
 	BulletColl* bc = bColObj->AddComponent<BulletColl>();
 	bc->SetTarget(owner);
 	bc->SetCollSize(FVector2(70.0f, 30.0f));
+
+	// 사운드 재생
+	StageAudioScript::instance->m_MotorSound->PlayByName(L"MotorSound", 0.0f, 0.1f);
 }
 
 void PlayerManager::OnEnd()
@@ -260,6 +265,15 @@ void PlayerManager::Boost(float _time, bool _battDec)
 			int& batteryCount = GamePlayManager::GetInstance().batteryCount;
 
 			if (!bBoost && batteryCount >= 3 || !_battDec) {
+				// 사운드 재생
+				std::wstring audName;
+				if(_time <= 3.5f)
+					audName = L"Player/character_Player_sfx_accelation_short.wav";
+				else
+					audName = L"Player/character_Player_sfx_accelation.wav";
+				 
+				StageAudioScript::instance->m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+
 				if(_battDec)
 					batteryCount -= 3;
 				bBoost = true;
@@ -301,6 +315,9 @@ void PlayerManager::Sande(float _time)
 			if (bVal) {
 				if (batteryCount >= 3) {
 					batteryCount -= 3;
+					// 사운드 재생
+					std::wstring audName = L"Player/character_Player_sfx_Sandebistan.wav";
+					StageAudioScript::instance->m_Sfx[audName]->PlayByName(audName, 0.0f, 1.0f);
 
 					// 조건 설정
 					bSande = true;

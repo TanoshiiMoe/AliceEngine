@@ -8,6 +8,8 @@
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 #include <Scene/Scene.h>
 #include <Scripts/Player/PlayerManager.h>
+#include "Scripts/Audio/StageAudioScript.h"
+#include "Component/AudioComponent.h"
 
 GamePlayManager::GamePlayManager()
 {
@@ -71,6 +73,10 @@ void GamePlayManager::StartGame()
 
 void GamePlayManager::GameOver()
 {
+	// 사운드 멈춤
+    if(StageAudioScript::instance->m_MotorSound->IsPlaying())
+	    StageAudioScript::instance->m_MotorSound->StopByName(L"MotorSound");
+
     SpawnBlackOut(static_cast<int>(EBlackOutLightingMode::VignetteOnly), true, 2.0f, 1.0f);
 
     TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
@@ -97,6 +103,10 @@ void GamePlayManager::GameOver()
 
 void GamePlayManager::GameClear()
 {
+	// 사운드 멈춤
+	if (StageAudioScript::instance->m_MotorSound->IsPlaying())
+		StageAudioScript::instance->m_MotorSound->StopByName(L"MotorSound");
+
     SpawnVignette(2.0f, 1.0f);
     PlayerManager::instance->SetMove(false);
     //TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
