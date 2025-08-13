@@ -8,10 +8,14 @@
 #include <GameManager/GamePlayManager.h>
 #include <Scripts/Widget/GameClearWidgetScript.h>
 #include <Scripts/Audio/GameClearAudioScript.h>
+#include <Scripts/Widget/CutSceneWidgetScript.h>
 
 void GameClearScene::Initialize()
 {
     __super::Initialize();
+
+    m_sound = NewObject<gameObject>(L"Sound");
+    m_sound->AddComponent<GameClearAudioScript>();
 }
 
 void GameClearScene::Release()
@@ -34,6 +38,8 @@ void GameClearScene::OnEnter()
     text->SetTextAlignment(ETextFormat::TopLeft);
     text->SetRelativePosition(FVector2(20, 10));
     text->SetFontSize(32.0f);
+
+    m_background = NewObject<gameObject>(L"BackGround");
 
 	m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
     {
@@ -63,9 +69,6 @@ void GameClearScene::OnEnter()
 		text->SetFontSize(28.0f);
 		text->SetColor(FColor::Gold);
 	}
-
-    m_sound = NewObject<gameObject>(L"Sound");
-    m_sound->AddComponent<GameClearAudioScript>();
 
     // 중앙 클라우드 이미지
     if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))

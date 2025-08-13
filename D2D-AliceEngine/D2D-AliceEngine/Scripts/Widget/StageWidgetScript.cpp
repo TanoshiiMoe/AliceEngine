@@ -353,27 +353,27 @@ void StageWidgetScript::OnStart()
 	selectText->SetRelativePosition(CoordHelper::RatioCoordToScreen(selectText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	selectText->m_layer = Define::Disable;
 
-	m_speedText->SetFontSize(30.f);
-	m_speedText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	m_speedText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	m_speedText->SetFontSize(40.f);
+	m_speedText->SetFontFromFile(L"Fonts\\digital.ttf");
+	m_speedText->SetFont(L"Digital-7 Mono", L"en-US");
 	m_speedText->SetColor(FColor(0, 234, 255, 255));
 	m_speedText->SetDrawType(EDrawType::ScreenSpace);
 	m_speedText->m_layer = Define::NormalTextLayer;
 	m_speedText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_speedText->GetRelativeSize(), FVector2(-0.5, -0.5))
-	+ FVector2(-850,330)
+	+ FVector2(-865,330)
 	);
 
-	velocityText->SetFontSize(20.f);
-	velocityText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	velocityText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	velocityText->SetFontSize(15.f);
+	velocityText->SetFontFromFile(L"Fonts\\digital.ttf");
+	velocityText->SetFont(L"Digital-7 Mono", L"en-US");
 	velocityText->SetText(L"km/h");
 	velocityText->SetColor(FColor(0, 234, 255, 255));
 	velocityText->SetDrawType(EDrawType::ScreenSpace);
 	velocityText->m_layer = Define::NormalTextLayer;
 	velocityText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(velocityText->GetRelativeSize(), FVector2(-0.5, -0.5))
-		+ FVector2(-800, 360)
+		+ FVector2(-795, 335)
 	);
 
 	// ========================== pauseButton
@@ -974,10 +974,10 @@ void StageWidgetScript::OnStart()
 	m_passedTimeText = m_owner->AddComponent<TextRenderComponent>();
 	m_passedTimeText->SetText(std::wstring());
 	m_passedTimeText->SetFontSize(45.0f);
-	m_passedTimeText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	m_passedTimeText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	m_passedTimeText->SetFontFromFile(L"Fonts\\digital.ttf");
+	m_passedTimeText->SetFont(L"Digital-7 Mono", L"en-US");
 	m_passedTimeText->SetTextAlignment(ETextFormat::TopLeft);
-	m_passedTimeText->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f + 65, -SCREEN_HEIGHT / 2.0f + 80));
+	m_passedTimeText->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f + 59, -SCREEN_HEIGHT / 2.0f + 80));
 	m_passedTimeText->SetColor(FColor(0, 234, 255, 255));
 	m_passedTimeText->m_layer = Define::NormalTextLayer;
 
