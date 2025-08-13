@@ -27,48 +27,14 @@ void GameOverScene::OnEnter()
 {
     __super::OnEnter();
 
-    m_textGO = NewObject<gameObject>(L"GameOverLabel");
-    //auto* text = m_textGO->AddComponent<TextRenderComponent>();
-	//text->SetText(L"<현재 씬> GameOverScene");
-	//text->SetTextAlignment(ETextFormat::TopLeft);
-	//text->SetRelativePosition(FVector2(20, 10));
-	//text->SetFontSize(32.0f);
-
-    //m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
-    //{
-    //    auto* text = m_passedTimeText->AddComponent<TextRenderComponent>();
-    //    text->SetText(std::to_wstring(GamePlayManager::GetInstance().GetPassedTime()));
-    //    text->SetTextAlignment(ETextFormat::TopLeft);
-    //    text->SetRelativePosition(FVector2(350, 585));
-    //    text->SetFontSize(28.0f);
-    //    text->SetColor(FColor::Gold);
-    //}
-
-    //m_killEnemyText = NewObject<gameObject>(L"m_killEnemyText");
-    //{
-    //    auto* text = m_killEnemyText->AddComponent<TextRenderComponent>();
-    //    text->SetText(std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
-    //    text->SetTextAlignment(ETextFormat::TopLeft);
-    //    text->SetRelativePosition(FVector2(350, 553));
-    //    text->SetFontSize(28.0f);
-    //    text->SetColor(FColor::Gold);
-    //}
-
-    // 중앙 클라우드 이미지
-    if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))
-    {
-        auto* sr = cloudObj->AddComponent<SpriteRenderer>();
-        sr->SetDrawType(Define::EDrawType::ScreenSpace);
-        sr->LoadData(L"cloud.jpg");
-        // 중앙 배치
-        sr->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
-        // 기본 비율 유지 (원본 사이즈)
-    }
+    m_textGO = NewObject<gameObject>(L"GameClearLabel");
+    auto* text = m_textGO->AddComponent<TextRenderComponent>();
 
     m_widget = NewObject<gameObject>(L"Widget");
     m_widget->AddComponent<GameOverWidgetScript>();
 
     // VK_3 눌러 TitleScene 복귀
+    // TODO : 디버깅 끝나면 지우기
     auto* input = m_textGO->AddComponent<InputComponent>();
     input->SetAction(m_textGO->GetHandle(), []() {
         if (Input::IsKeyDown(VK_3)) {

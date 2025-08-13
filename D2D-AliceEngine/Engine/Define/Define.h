@@ -37,6 +37,7 @@ namespace Define
 // Scene : 350000 ~ 359999
 	static const int CutSceneLayer = 350001;
 	// UI : 50000 ~
+	static const int NormalUILayer = 50000;
 	static const int NormalTextLayer = 50010;
 	static const int ButtonLayer = 50020;
 	static const int ButtonTextLayer = 50021;
