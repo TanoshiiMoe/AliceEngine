@@ -148,7 +148,7 @@ void GameClearWidgetScript::OnStart()
 	// =================== //
 	background->LoadData(L"UI/UI_Score.png");
 	background->SetDrawType(Define::EDrawType::ScreenSpace);
-	background->m_layer = Define::Disable;
+	background->m_layer = Define::NormalUILayer;
 
 	cutScene->LoadData(L"CutScene\\Clear\\ending.png");
 	cutScene->SetDrawType(EDrawType::ScreenSpace);
@@ -183,7 +183,7 @@ void GameClearWidgetScript::OnStart()
 		});
 
 	skipButton->SetStateAction(EButtonState::Pressed, [skipButton, skipText, cutScene,
-		toMainButton, passedTime, killCount
+		toMainButton, toMainText, passedTime, killCount
 	] {
 		cutScene->m_layer = Define::Disable;
 		skipButton->m_layer = Define::Disable;
@@ -193,7 +193,10 @@ void GameClearWidgetScript::OnStart()
 		killCount->m_layer = Define::NormalTextLayer;
 
 		skipButton->SetActive(false);
+
 		toMainButton->SetActive(true);
+		toMainButton->m_layer = Define::ButtonLayer;
+		toMainText->m_layer = Define::ButtonTextLayer;
 		});
 
 	if (s_prevScene != Define::Scene_Stage3)
