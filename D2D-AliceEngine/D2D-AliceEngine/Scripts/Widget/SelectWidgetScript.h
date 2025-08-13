@@ -21,6 +21,8 @@ public:
 
 	float m_pressValue = 0.0f;
 
+	float m_seconds = 0.0f;
+
 	ProgressBarComponent* m_progress;
 	SpriteRenderer* m_progressSprite;
 	TextRenderComponent* m_guideText;
@@ -37,5 +39,5 @@ public:
 
 private:
 	AudioComponent* m_sound;
-	void SkipInput();
+	void SkipInput(float deltaSeconds);
 };
