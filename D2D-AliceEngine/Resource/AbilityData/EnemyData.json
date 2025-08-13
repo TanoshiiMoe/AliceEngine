@@ -50,7 +50,16 @@
     "hp": 23.0,
     "battery": 20.0,
     "moveSpeed": 35.0,
-    "attackDelay": 1.5,
+    "attackDelay": 4.5,
     "damage": 1.0
+  },
+  {
+    "typeId": 1000.0,
+    "maxHP": 23.0,
+    "hp": 23.0,
+    "battery": 20.0,
+    "moveSpeed": 35.0,
+    "attackDelay": 1.5,
+    "damage": 2.0
   }
 ]
