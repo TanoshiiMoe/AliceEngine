@@ -35,43 +35,15 @@ void GameClearScene::OnEnter()
     m_textGO = NewObject<gameObject>(L"GameClearLabel");
     auto* text = m_textGO->AddComponent<TextRenderComponent>();
 
-	m_passedTimeText = NewObject<gameObject>(L"m_passedTimeText");
+	m_passedTimeText = NewObject<gameObject>(L"PassedTime");
     {
         auto* text = m_passedTimeText->AddComponent<TextRenderComponent>();
-        
-        float timeSec = GamePlayManager::GetInstance().GetPassedTime();
-
-        int minutes = static_cast<int>(timeSec) / 60;
-        int seconds = static_cast<int>(timeSec) % 60;
-        int milliseconds = static_cast<int>((timeSec - static_cast<int>(timeSec)) * 100.0f);
-
-        wchar_t buffer[16];
-        swprintf(buffer, 16, L"%02d:%02d:%02d", minutes, seconds, milliseconds);
-        text->SetText(std::wstring(buffer));
-        text->SetTextAlignment(ETextFormat::TopLeft);
-        text->SetRelativePosition(FVector2(350, 585));
-        text->SetFontSize(28.0f);
-        text->SetColor(FColor::Gold);
     }
 
-    m_killEnemyText = NewObject<gameObject>(L"m_killEnemyText");
+    m_killEnemyText = NewObject<gameObject>(L"KillCount");
 	{
 		auto* text = m_killEnemyText->AddComponent<TextRenderComponent>();
-		text->SetText(std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
-		text->SetTextAlignment(ETextFormat::TopLeft);
-		text->SetRelativePosition(FVector2(350, 553));
-		text->SetFontSize(28.0f);
-		text->SetColor(FColor::Gold);
 	}
-
-    // 중앙 클라우드 이미지
-    if (auto* cloudObj = NewObject<gameObject>(L"Cloud"))
-    {
-        auto* sr = cloudObj->AddComponent<SpriteRenderer>();
-        sr->SetDrawType(Define::EDrawType::ScreenSpace);
-        sr->LoadData(L"UI/UI_Score.png");
-        sr->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
-    }
 
     // VK_3 눌러 TitleScene 복귀
     // TODO : 디버깅 끝나면 지우기
@@ -90,4 +62,6 @@ void GameClearScene::OnExit()
 {
     __super::OnExit();
     GamePlayManager::GetInstance().ReleaseTimers();
+
+    GameClearWidgetScript::s_prevScene = L"";
 }
