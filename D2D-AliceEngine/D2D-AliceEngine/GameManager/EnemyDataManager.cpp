@@ -32,7 +32,7 @@ bool EnemyDataManager::LoadFromJson(const std::wstring& relativePath)
             st.maxHP       = entry.value("maxHP", 0);
             st.hp          = entry.value("hp", st.maxHP);
             st.battery     = entry.value("battery", 0.0f);
-            st.moveSpeed   = entry.value("moveSpeed", 0.0f);
+            st.bulletSpeed = entry.value("bulletSpeed", 0.0f);
             st.attackDelay = entry.value("attackDelay", 0.0f);
             st.damage      = entry.value("damage", 0.0f);
             m_stats[typeId] = st;

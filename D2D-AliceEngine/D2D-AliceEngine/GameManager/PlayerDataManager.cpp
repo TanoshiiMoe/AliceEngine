@@ -1,4 +1,4 @@
-// Implement PlayerDataManager
+ï»¿// Implement PlayerDataManager
 #include "PlayerDataManager.h"
 #include <Define/Define.h>
 #include <Extension/json.hpp>
@@ -11,7 +11,7 @@ void PlayerDataManager::LoadData(const std::wstring& relativePath)
 {
     if (m_loaded) return;
     LoadFromJson(Define::BASE_RESOURCE_PATH + relativePath);
-    m_loaded = true; // Áßº¹ ·Îµå ¹æÁö (¼º°ø/½ÇÆĞ °ü°è¾øÀÌ ÇÑ¹ø¸¸ ½Ãµµ)
+    m_loaded = true; // ì¤‘ë³µ ë¡œë“œ ë°©ì§€ (ì„±ê³µ/ì‹¤íŒ¨ ê´€ê³„ì—†ì´ í•œë²ˆë§Œ ì‹œë„)
 }
 
 bool PlayerDataManager::LoadFromJson(const std::wstring& relativePath)
@@ -23,11 +23,11 @@ bool PlayerDataManager::LoadFromJson(const std::wstring& relativePath)
         if (!in.is_open()) return false;
         json j; in >> j; in.close();
         if (!j.is_array() || j.empty()) return false;
-        const auto& entry = j.front(); // ÇÃ·¹ÀÌ¾î µ¥ÀÌÅÍ´Â ÇÏ³ª¸¸ ÀÖ´Ù°í °¡Á¤
+        const auto& entry = j.front(); // í”Œë ˆì´ì–´ ë°ì´í„°ëŠ” í•˜ë‚˜ë§Œ ìˆë‹¤ê³  ê°€ì •
         m_stats.maxHP       = entry.value("maxHP", 0);
         m_stats.hp          = entry.value("hp", m_stats.maxHP);
         m_stats.battery     = entry.value("battery", 0.0f);
-        m_stats.moveSpeed   = entry.value("moveSpeed", 0.0f);
+        m_stats.bulletSpeed = entry.value("bulletSpeed", 0.0f);
         m_stats.attackDelay = entry.value("attackDelay", 0.0f);
         m_stats.damage      = entry.value("damage", 0.0f);
         return true;

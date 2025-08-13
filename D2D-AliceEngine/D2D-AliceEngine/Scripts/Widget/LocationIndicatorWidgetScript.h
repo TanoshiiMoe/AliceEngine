@@ -49,6 +49,7 @@ private:
     bool bBossState = false;
 
     float bossSpawnRelativeRatio = 0.7f;
+    
 };
 
 

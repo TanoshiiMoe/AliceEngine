@@ -111,7 +111,7 @@ void Car::Update(const float& deltaSeconds)
 		}
 		
 		// 보스의 체력에 비례하여 플레이어로부터의 거리 조정
-		float baseDistance = 900.0f; // 기본 거리
+		float baseDistance = 1300.0f; // 기본 거리
 		float currentDistance = baseDistance;
 		
 		// EnemyStatScript에서 현재 체력과 최대 체력 가져오기
@@ -124,7 +124,7 @@ void Car::Update(const float& deltaSeconds)
 			if (maxHP > 0.0f)
 			{
 				// 체력이 줄어들수록 플레이어에게 가까워짐 (거리가 줄어듦)
-				float healthRatio = currentHP / maxHP;
+				float healthRatio = max(0.3f, currentHP / maxHP);
 				// 체력이 100%일 때는 baseDistance, 0%일 때는 baseDistance * 0.3 (최소 거리)
 				currentDistance = baseDistance * (0.3f + 0.7f * healthRatio);
 			}

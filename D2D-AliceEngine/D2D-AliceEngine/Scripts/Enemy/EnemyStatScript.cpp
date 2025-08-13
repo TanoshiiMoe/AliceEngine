@@ -39,7 +39,7 @@ void EnemyStatScript::OnStart()
         m_enemyStat->SetStat("MAXHP", static_cast<float>(stats.maxHP));
         m_enemyStat->SetStat("HP",    static_cast<float>(stats.hp));
         m_enemyStat->SetStat("BATTERY",      stats.battery);
-        m_enemyStat->SetStat("MOVE_SPEED",   stats.moveSpeed);
+        m_enemyStat->SetStat("BULLET_SPEED",   stats.bulletSpeed);
         m_enemyStat->SetStat("ATTACK_DELAY", stats.attackDelay);
         m_enemyStat->SetStat("DAMAGE",       stats.damage);
     }

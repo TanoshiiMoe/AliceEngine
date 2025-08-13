@@ -25,7 +25,7 @@ public:
 
 	gameObject* m_bg;
 
-	gameObject* m_UI;
+	gameObject* m_widget;
 	gameObject* m_button;
 
 	gameObject* iamge;

@@ -7,6 +7,7 @@
 #include <Scripts/Widget/VignetteWidgetScript.h>
 #include <Scripts/Enemy/SpawnerUsingSingleton/EnemySpawnTriggerBox.h>
 #include <Scene/Scene.h>
+#include <Scripts/Player/PlayerManager.h>
 
 GamePlayManager::GamePlayManager()
 {
@@ -97,6 +98,7 @@ void GamePlayManager::GameOver()
 void GamePlayManager::GameClear()
 {
     SpawnVignette(2.0f, 1.0f);
+    PlayerManager::instance->SetMove(false);
     //TimerManager::GetInstance().ClearTimer(gameOverTransitionTimer);
     TimerManager::GetInstance().SetTimer(gameOverTransitionTimer, [this]()
     {

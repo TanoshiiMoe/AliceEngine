@@ -14,11 +14,15 @@ public:
     void OnEnter() override;
     void OnExit() override;
 
+    gameObject* m_UI;
+
+    gameObject* m_sound;
+    gameObject* m_widget;
+
+    gameObject* m_background;
+
 private:
     gameObject* m_textGO{ nullptr };
 	gameObject* m_passedTimeText{ nullptr };
 	gameObject* m_killEnemyText{ nullptr };
-
-    gameObject* m_sound;
-    gameObject* m_widget;
 };

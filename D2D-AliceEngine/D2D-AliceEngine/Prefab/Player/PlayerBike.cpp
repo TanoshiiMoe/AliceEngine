@@ -44,6 +44,7 @@ void PlayerBike::Initialize()
 		FPlayerStats stat = PlayerDataManager::GetInstance().GetStats();
 		drone->SetDamage(stat.damage);
 		drone->SetAttackDelay(stat.attackDelay);
+		drone->SetBulletSpeed(stat.bulletSpeed);
 	}
 	owner->AddComponent<BikeStatScript>();
 
