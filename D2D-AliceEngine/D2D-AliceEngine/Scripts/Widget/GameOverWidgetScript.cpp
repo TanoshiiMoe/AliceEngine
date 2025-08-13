@@ -10,7 +10,7 @@
 
 #include <UI/UIImage.h>
 #include <UI/UIText.h>
-#include <Scene/Scene.h
+#include <Scene/Scene.h>
  #include <Component/ButtonComponent.h>
 
 #include <Manager/SceneManager.h>
