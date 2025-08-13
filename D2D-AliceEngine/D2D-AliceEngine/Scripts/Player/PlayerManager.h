@@ -41,6 +41,9 @@ public:
 	// 충돌 감속효과
 	void CrashSlow();
 
+	// 플레이어 조작여부
+	void SetMove(bool _val);
+
 private:
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
