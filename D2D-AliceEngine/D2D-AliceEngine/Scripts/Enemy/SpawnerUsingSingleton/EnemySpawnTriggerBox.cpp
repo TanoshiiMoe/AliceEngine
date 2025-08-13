@@ -107,6 +107,8 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
 	enemy->SetPosition(playerPos + worldPos);
 }
 
+// 보스가 소환해내는 드론. 
+// 보스 옆에 달려있는거 아닙니다. 보스가 시간초마다 소환하는 드론입니다.
 void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
 {
 	// 이름 정하기
@@ -147,10 +149,44 @@ void EnemySpawnTriggerBox::SpawnBossDroneAt(const FVector2& worldPos)
         if (EnemyDataManager::GetInstance().GetStats(999, stats))
         {
             drone->SetDamage(stats.damage);
+            drone->SetAttackDelay(stats.attackDelay);
         }
 	}
 
 	enemy->SetPosition(worldPos);
+}
+
+void EnemySpawnTriggerBox::SpawnEnemyInBossModeAt(int _enemyTypeId, const FVector2& worldPos)
+{
+	// 이름 정하기
+	std::wstring name = L"EnemyBike";
+	// 적 오브젝트 생성 및 공통 세팅
+	gameObject* enemy = SceneManager::GetInstance().GetWorld()->NewObject<gameObject>(name);
+
+	enemy->AddComponent<Collider>()->SetBoxSize(FVector2(80, 80));
+	FEnemyStats stats{};
+	bool t = EnemyDataManager::GetInstance().GetStats(_enemyTypeId, stats);
+
+	FDroneSpritePath dronePath(
+		L"Enemy/Drone/enermy_Drone_body.png",
+		L"Enemy/Drone/enermy_Drone_arm.png"
+	);
+
+	enemy->SetTag(L"Enemy");
+	auto* eb = enemy->AddComponent<EnemyBike>();
+    eb->SetSkewed(false);
+	if (auto* statScript = enemy->AddComponent<EnemyStatScript>())
+		statScript->SetEnemyTypeId(_enemyTypeId);
+	if (auto* drone = enemy->AddComponent<Drone>(dronePath))
+	{
+		drone->initBodyPos = FVector2(-120.0f, 85.0f);
+		drone->initBodySize = FVector2(0.7f, 0.7f);
+		drone->SetDroneType(EDroneType::Enemy);
+		drone->SetDamage(stats.damage);
+		drone->SetAttackDelay(stats.attackDelay);
+	}
+
+	enemy->transform()->SetPosition(worldPos);
 }
 
 void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldPos)
@@ -173,8 +209,8 @@ void EnemySpawnTriggerBox::SpawnEnemyAt(int _enemyTypeId, const FVector2& worldP
     bool t = EnemyDataManager::GetInstance().GetStats(_enemyTypeId, stats);
 
     FDroneSpritePath dronePath(
-        L"Enemy/Drone/enermy_Drone_body.png",
-        L"Enemy/Drone/enermy_Drone_arm.png"
+		L"Enemy/Drone/enermy_Drone_body.png",
+		L"Enemy/Drone/enermy_Drone_arm.png"
     );
 
     switch (etype)
