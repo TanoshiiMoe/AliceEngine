@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "format":"tmx"
+        }
+    },
  "height":4,
  "infinite":false,
  "layers":[
@@ -26,11 +33,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"Tile_Road.tsx"
-        }, 
-        {
-         "firstgid":16,
-         "source":"Tile_Road.tsj"
+         "source":"..\/Tile_Road_real_Final.tsx"
         }],
  "tilewidth":120,
  "type":"map",
