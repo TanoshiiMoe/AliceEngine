@@ -22,7 +22,6 @@
 #include <Component/AudioComponent.h>
 #include <GameManager/GamePlayManager.h>
 #include <Helpers/Logger.h>
-#include <Manager/TimerManager.h>
 #include <Scene/GameScene/GameClearScene.h>
 #include <memory>
 
@@ -69,12 +68,12 @@ void GameClearWidgetScript::OnStart()
 	auto toMainText = m_owner->AddComponent<TextRenderComponent>();
 	auto toMainButton = m_owner->AddComponent<ButtonComponent>();
 
-	auto grade = m_owner->AddComponent<SpriteRenderer>();
+	m_grade = m_owner->AddComponent<SpriteRenderer>();
 
 	// ========================= //
 	auto timeObj = GetWorld()->FindObjectByName<gameObject>(L"PassedTime");
 	if (!timeObj) return;
-	auto passedTime = timeObj->GetComponent<TextRenderComponent>();
+	m_passedTime = timeObj->GetComponent<TextRenderComponent>();
 	float timeSec = GamePlayManager::GetInstance().GetPassedTime();
 
 	int minutes = static_cast<int>(timeSec) / 60;
@@ -83,27 +82,27 @@ void GameClearWidgetScript::OnStart()
 
 	wchar_t buffer[16];
 	swprintf(buffer, 16, L"%02d:%02d:%02d", minutes, seconds, milliseconds);
-	passedTime->SetFontSize(28.0f);
-	passedTime->SetText(std::wstring(buffer));
-	passedTime->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	passedTime->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	passedTime->SetTextAlignment(ETextFormat::TopLeft);
-	passedTime->SetRelativePosition(FVector2(350, 585));
-	passedTime->SetColor(FColor(0, 234, 255, 255));
-	passedTime->m_layer = Define::Disable;
+	m_passedTime->SetFontSize(28.0f);
+	m_passedTime->SetText(std::wstring(buffer));
+	m_passedTime->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	m_passedTime->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	m_passedTime->SetTextAlignment(ETextFormat::TopLeft);
+	m_passedTime->SetRelativePosition(FVector2(350, 585));
+	m_passedTime->SetColor(FColor(0, 234, 255, 255));
+	m_passedTime->m_layer = Define::Disable;
 
 	auto killObj = GetWorld()->FindObjectByName<gameObject>(L"KillCount");
 	if (!killObj) return;
-	auto killCount = killObj->GetComponent<TextRenderComponent>();
+	m_killCount = killObj->GetComponent<TextRenderComponent>();
 
-	killCount->SetText(std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
-	killCount->SetFontSize(28.0f);
-	killCount->SetTextAlignment(ETextFormat::TopLeft);
-	killCount->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
-	killCount->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
-	killCount->SetRelativePosition(FVector2(350, 553));
-	killCount->SetColor(FColor(0, 234, 255, 255));
-	killCount->m_layer = Define::Disable;
+	m_killCount->SetText(std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
+	m_killCount->SetFontSize(28.0f);
+	m_killCount->SetTextAlignment(ETextFormat::TopLeft);
+	m_killCount->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
+	m_killCount->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
+	m_killCount->SetRelativePosition(FVector2(350, 553));
+	m_killCount->SetColor(FColor(0, 234, 255, 255));
+	m_killCount->m_layer = Define::Disable;
 
 	skipText->SetFontSize(55.0f);
 	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -164,6 +163,9 @@ void GameClearWidgetScript::OnStart()
 		cutScene->m_layer = CutSceneLayer;
 	}
 
+	m_grade->LoadData(L"UI\\UI_Grade.png");
+	m_grade->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f ,-900));
+
 	skipButton->SetStateAction(Define::EButtonState::Hover, [skipButton]()
 		{
 			skipButton->StartHoverPulse(0.8f, 0.04f);
@@ -182,15 +184,17 @@ void GameClearWidgetScript::OnStart()
 			skipButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
 		});
 
-	skipButton->SetStateAction(EButtonState::Pressed, [skipButton, skipText, cutScene,
-		toMainButton, toMainText, passedTime, killCount
+	skipButton->SetStateAction(EButtonState::Pressed, [
+		weak = WeakFromThis<GameClearWidgetScript>(),
+		skipButton, skipText, cutScene,
+		toMainButton, toMainText
 	] {
 		cutScene->m_layer = Define::Disable;
 		skipButton->m_layer = Define::Disable;
 		skipText->m_layer = Define::Disable;
 
-		passedTime->m_layer = Define::NormalTextLayer;
-		killCount->m_layer = Define::NormalTextLayer;
+		weak.Get()->m_passedTime->m_layer = Define::NormalTextLayer;
+		weak.Get()->m_killCount->m_layer = Define::NormalTextLayer;
 
 		skipButton->SetActive(false);
 
@@ -234,6 +238,39 @@ void GameClearWidgetScript::OnStart()
 		
 		SceneManager::ChangeScene(L"TitleScene");
 		});
+
+	//if()
+
+	TimerManager::GetInstance().ClearTimer(m_fadeHandle);
+	TimerManager::GetInstance().SetTimer(
+		m_fadeHandle,
+		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
+			weak.Get()->m_killCount->m_layer = Define::PopupObjectLayer;
+		},
+		0.1f,
+		false,
+		1.0f
+	);
+
+	TimerManager::GetInstance().SetTimer(
+		m_fadeHandle,
+		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
+			weak.Get()->m_passedTime->m_layer = Define::PopupObjectLayer;
+		},
+		0.1f,
+		false,
+		2.0f
+	);
+
+	TimerManager::GetInstance().SetTimer(
+		m_fadeHandle,
+		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
+			weak.Get()->m_grade->m_layer = Define::PopupObjectLayer;
+		},
+		0.1f,
+		false,
+		3.0f
+	);
 }
 
 void GameClearWidgetScript::OnEnd()
@@ -242,4 +279,5 @@ void GameClearWidgetScript::OnEnd()
 
 void GameClearWidgetScript::OnDestroy()
 {
+	TimerManager::GetInstance().ClearTimer(m_fadeHandle);
 }
