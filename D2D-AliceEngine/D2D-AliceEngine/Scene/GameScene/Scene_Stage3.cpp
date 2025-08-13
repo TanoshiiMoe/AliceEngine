@@ -42,6 +42,13 @@ void Scene_Stage3::Update()
 {
     __super::Update();
     GamePlayManager::GetInstance().AddPassedTime(TimerManager::GetInstance().unscaledDeltaTime);
+	if (m_player)
+	{
+		if (m_player->GetPosition().x >= GamePlayManager::GetInstance().GetStopXAxis() - GamePlayManager::GetInstance().GetEndSubDistance())
+		{
+			GamePlayManager::GetInstance().GameClear();
+		}
+	}
 }
 
 void Scene_Stage3::OnEnter()
