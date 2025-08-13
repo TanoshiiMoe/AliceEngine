@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <Component/ScriptComponent.h>
+#include <Manager/TimerManager.h>
 
 class gameObject;
 class GameOverWidgetScript : public ScriptComponent
@@ -14,5 +15,7 @@ public:
 	virtual void OnDestroy() override;
 
 	gameObject* m_owner;
+
+	FTimerHandle m_fadeHandle;
 };
 

@@ -94,45 +94,38 @@ void GameOverWidgetScript::OnStart()
 	toRestartButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ERRORButton.png");
 	toRestartButton->LoadData(Define::EButtonState::Release, L"UI\\UI_ERRORButton.png");
 	toRestartButton->m_layer = Define::PopupButtonLayer;
+	toRestartButton->SetDrawType(EDrawType::ScreenSpace);
 	toRestartButton->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(toRestartButton->GetRelativeSize(), FVector2(1, 0))
-		+ FVector2(-100, 20));
+		CoordHelper::RatioCoordToScreen(toRestartButton->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(-180 + 100, 100));
 
 	toMainButton->LoadData(Define::EButtonState::Idle, L"UI\\UI_ERRORButton.png");
 	toMainButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_ERRORButton.png");
 	toMainButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ERRORButton.png");
 	toMainButton->LoadData(Define::EButtonState::Release, L"UI\\UI_ERRORButton.png");
+	toMainButton->SetDrawType(EDrawType::ScreenSpace);
 	toMainButton->m_layer = Define::PopupButtonLayer;
 	toMainButton->SetRelativePosition(
-		CoordHelper::RatioCoordToScreen(toMainButton->GetRelativeSize(), FVector2(1, 0))
-		+ FVector2(100, 20));
+		CoordHelper::RatioCoordToScreen(toMainButton->GetRelativeSize(), FVector2(-0.5, -0.5))
+		+ FVector2(180, 100));
 
 	// ==================== Delegate
-
-
-
-
-
-
-
-
-
 	toRestartButton->SetStateAction(Define::EButtonState::Hover, [toRestartButton]()
 		{
 			toRestartButton->StartHoverPulse(0.8f, 0.04f);
-			toRestartButton->StartEffectAnimation(0.3f, 1.2f, FColor::White);
+			toRestartButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
 		});
 
 	toRestartButton->SetStateAction(Define::EButtonState::HoverLeave, [toRestartButton]()
 		{
 			toRestartButton->StopHoverPulse();
-			toRestartButton->StartEffectAnimation(0.2f, 0.0f, FColor::White);
+			toRestartButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
 		});
 
 	toRestartButton->SetStateAction(Define::EButtonState::Release, [toRestartButton]()
 		{
 			toRestartButton->StopHoverPulse();
-			toRestartButton->StartEffectAnimation(0.1f, 0.0f, FColor::White);
+			toRestartButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
 		});
 
 	toRestartButton->SetStateAction(Define::EButtonState::Pressed, [] {
@@ -143,24 +136,43 @@ void GameOverWidgetScript::OnStart()
 	toMainButton->SetStateAction(Define::EButtonState::Hover, [toMainButton]()
 		{
 			toMainButton->StartHoverPulse(0.8f, 0.04f);
-			toMainButton->StartEffectAnimation(0.3f, 1.2f, FColor::Orange);
+			toMainButton->StartEffectAnimation(0.3f, 1.2f, FColor(0, 234, 255, 255));
 		});
 
 	toMainButton->SetStateAction(Define::EButtonState::HoverLeave, [toMainButton]()
 		{
 			toMainButton->StopHoverPulse();
-			toMainButton->StartEffectAnimation(0.2f, 0.0f, FColor::Orange);
+			toMainButton->StartEffectAnimation(0.2f, 0.0f, FColor(0, 234, 255, 255));
 		});
 
 	toMainButton->SetStateAction(Define::EButtonState::Release, [toMainButton]()
 		{
 			toMainButton->StopHoverPulse();
-			toMainButton->StartEffectAnimation(0.1f, 0.0f, FColor::Orange);
+			toMainButton->StartEffectAnimation(0.1f, 0.0f, FColor(0, 234, 255, 255));
 		});
 
 	toMainButton->SetStateAction(Define::EButtonState::Pressed, [] {
 		SceneManager::ChangeScene(L"TitleScene");
 		});
+
+	//TimerManager::GetInstance().ClearTimer(m_fadeHandle);
+	//TimerManager::GetInstance().SetTimer(
+	//	m_fadeHandle,
+	//	[errorPopup]() mutable {
+	//		float scale = 0.0f;
+
+	//		scale += 0.1f * TimerManager::GetInstance().unscaledDeltaTime;
+
+	//		if (scale > 1.0f) scale = 1.0f;
+
+	//		errorPopup->SetRelativeScale(scale);
+
+
+	//	},
+	//	1.0f,
+	//	false,
+	//	1.0f
+	//	);
 }
 
 void GameOverWidgetScript::OnEnd()
