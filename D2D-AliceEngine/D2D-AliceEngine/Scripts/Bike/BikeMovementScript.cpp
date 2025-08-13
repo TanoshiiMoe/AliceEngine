@@ -90,7 +90,6 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 			{
 				// 콜라이더 돌려놓기
 				owner->GetComponent<Collider>()->SetLayer(prevCollLayer);
-				PlayerManager::instance->GetCrashColl()->SetLayer(5);
 
 				// 부스터 설정
 				PlayerManager::instance->Boost(3.0f, false);
@@ -203,7 +202,6 @@ void BikeMovementScript::Jump()
 		// 콜라이더 쌉무시
 		prevCollLayer = owner->GetComponent<Collider>()->GetLayer();
 		owner->GetComponent<Collider>()->SetLayer(10);
-		PlayerManager::instance->GetCrashColl()->SetLayer(10);
 
 		m_isJumping = true;
 		m_groundY = owner->GetComponent<SkewTransform>()->GetRealPos().y;

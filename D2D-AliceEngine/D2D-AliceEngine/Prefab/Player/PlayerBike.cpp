@@ -17,7 +17,6 @@
 #include <Scripts/Weapon/Drone.h>
 #include <Scripts/Bike/BikeStatScript.h>
 #include "Scripts/Player/PlayerMovement.h"
-#include "Scripts/Player/PlayerCrashColl.h"
 #include <GameManager/PlayerDataManager.h>
 
 void PlayerBike::Initialize()
@@ -51,5 +50,4 @@ void PlayerBike::Initialize()
 	// 게임 스크립트 컴포넌트
 	owner->AddComponent<PlayerManager>();
 	owner->AddComponent<PlayerMovement>();
-	owner->AddComponent<PlayerCrashColl>();
 }

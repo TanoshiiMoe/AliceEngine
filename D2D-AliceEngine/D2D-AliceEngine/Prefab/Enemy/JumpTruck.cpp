@@ -65,15 +65,10 @@ void JumpTruck::OnStart()
 
 	// 점프 콜라이더 설정 넣기
 	gameObject* lc = GetWorld()->NewObject<gameObject>(L"JumpCollider");
-	Collider* lcc = lc->AddComponent<Collider>();
-	lcc->SetBoxSize(FVector2(5.0f, height * 0.3f));
-	lcc->SetLayer(5);
-	/*lc->transform()->SetPosition(owner->transform()->GetPosition());
-	lc->transform()->AddPosition(-(width * 0.4f), -(height * 0.25f));*/
 	JumpTrigger* jt = lc->AddComponent<JumpTrigger>();
-	jt->target = owner;
+	jt->SetBoxSize(FVector2(5.0f, height * 0.3f));
 	jt->SetOffSet(FVector2(-(width * 0.3f), -(height * 0.25f)));
-	
+	jt->target = owner;
 
 	// zPos 오프셋 넣기
 	SkewTransform* st = owner->GetComponent<SkewTransform>();
@@ -82,6 +77,6 @@ void JumpTruck::OnStart()
 	// 콜라이더 설정
 	Collider* coll = owner->GetComponent<Collider>();
 	coll->SetLayer(5);
-	coll->boxComponent->SetSize(FVector2(250, 70));
-	coll->boxComponent->SetRelativePosition(FVector2(50.0f, -40.0f));
+	coll->boxComponent->SetSize(FVector2(100, 70));
+	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
 }

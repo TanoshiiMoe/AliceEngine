@@ -8,6 +8,8 @@
 #include "Component/SkewTransform.h"
 #include "Component/Collider.h"
 #include <Component/BoxComponent.h>
+#include "Scene/Scene.h"
+#include "Scripts/Weapon/BulletColl.h"
 
 void EnemyBike::Initialize()
 {
@@ -48,6 +50,14 @@ void EnemyBike::OnStart()
 
 	// 콜라이더 설정
 	Collider* coll = owner->GetComponent<Collider>();
-	coll->boxComponent->SetSize(FVector2(150, 70));
-	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -30.0f));
+	coll->boxComponent->SetSize(FVector2(150, 10));
+	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -50.0f));
+
+	// 총알받이 설정
+	gameObject* bColObj = GetWorld()->NewObject<gameObject>(L"EnemyBikeColl");
+	bColObj->SetTag(L"Enemy");
+	BulletColl* bc = bColObj->AddComponent<BulletColl>();
+	bc->SetTarget(owner);
+	bc->SetCollSize(FVector2(150.0f, 70.0f));
+	colObjs.push_back(bColObj);
 }

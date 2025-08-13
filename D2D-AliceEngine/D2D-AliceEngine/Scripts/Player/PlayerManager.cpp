@@ -16,7 +16,8 @@
 #include <GameManager/GamePlayManager.h>
 #include <Object/gameObject.h>
 #include <Prefab/Enemy/Core/Car.h>
-#include "PlayerMovement.h"
+#include "Scripts/Player/PlayerMovement.h"
+#include "../Weapon/BulletColl.h"
 
 PlayerManager* PlayerManager::instance = nullptr;
 
@@ -42,12 +43,12 @@ void PlayerManager::OnStart()
 	// SkewTransform 설정
 	if (auto st = owner->GetComponent<SkewTransform>())
 		st->groundTile = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"TileMap");
-
+	
 	// SRT 설정
 	owner->transform()->SetPosition(0, 0);
 	owner->transform()->SetRotation(0);
-	owner->transform()->SetScale(0.7f, 0.7f);
-	owner->transform()->SetPivot(0.5f);
+	//owner->transform()->SetScale(0.7f, 0.7f);
+	//owner->transform()->SetPivot(0.5f);
 
 	// 애니메이터 설정
 	AnimatorController::LoadAnimatorController(L"Player/KillDong/killdong_idle_AnimController.json", animController);
@@ -59,16 +60,32 @@ void PlayerManager::OnStart()
 	animInstance->Play();
 	animInstance->OnStart();
 
-	// 총알 콜라이더 설정
-	owner->GetComponent<Collider>()->SetBoxSize(FVector2(110, 50));
+	animInstance->SetRelativeScale(FVector2(0.7f, 0.7f));
+
+	// 충돌 콜라이더 설정
+	/*owner->GetComponent<Collider>()->SetBoxSize(FVector2(110, 50));
 	if (auto collider = owner->GetComponent<Collider>())
 	{
 		collider->SetLayer(0);
 		collider->boxComponent->SetRelativePosition(FVector2(0, -20));
+	}*/
+
+	owner->GetComponent<Collider>()->SetBoxSize(FVector2(150, 10));
+	if (auto collider = owner->GetComponent<Collider>())
+	{
+		collider->SetLayer(5);
+		collider->boxComponent->SetRelativePosition(FVector2(0, -50));
 	}
 
 	// 인풋 컴포넌트
 	owner->AddComponent<InputComponent>()->SetAction(owner->GetHandle(), [this]() { Input(); });
+
+	// 총알받이 설정
+	gameObject* bColObj = GetWorld()->NewObject<gameObject>(L"EnemyBikeColl");
+	bColObj->SetTag(L"Player");
+	BulletColl* bc = bColObj->AddComponent<BulletColl>();
+	bc->SetTarget(owner);
+	bc->SetCollSize(FVector2(70.0f, 30.0f));
 }
 
 void PlayerManager::OnEnd()
@@ -319,13 +336,6 @@ void PlayerManager::Sande(float _time)
 void PlayerManager::CrashSlow()
 {
 	owner->GetComponent<PlayerMovement>()->CrashSlow();
-}
-
-void PlayerManager::SetCrashColl(Collider* coll)
-{
-	if (coll) {
-		crashColl = coll;
-	}
 }
 
 void PlayerManager::SetMove(bool _val)

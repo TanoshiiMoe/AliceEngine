@@ -18,6 +18,7 @@
 #include "Scripts/Player/PlayerManager.h"
 #include "Scripts/Bike/BikeMovementScript.h"
 #include <Helper/ParticleHelper.h>
+#include "Scripts/Weapon/BulletColl.h"
 
 void Car::Initialize()
 {
@@ -41,7 +42,9 @@ void Car::Initialize()
         owner->AddComponent<EnemyManager>();
 
 		// 기본 콜라이더 (총알 콜라이더는 레이어 0, 차량충돌은 5)
-		owner->AddComponent<Collider>()->SetBoxSize(FVector2(0.0f, 0.0f));
+		Collider* col = owner->AddComponent<Collider>();
+		col->SetBoxSize(FVector2(0.0f, 0.0f));
+		col->SetLayer(5);
     }
 
 	TimerManager::GetInstance().ClearTimer(timer);
@@ -148,10 +151,7 @@ void Car::OnTriggerEnter2D(Collider* collider)
 	if (!collider->GetOwner()) return;
 	if (collider->GetOwner()->GetTag() == L"Player")
 	{
-		if (owner->GetComponent<Collider>()->GetLayer() != 5)
-			return;
-
-		if (BikeStatScript* bs = collider->GetOwner()->GetComponent<BikeStatScript>())
+		if (BikeStatScript* bs = PlayerManager::instance->GetOwner()->GetComponent<BikeStatScript>())
 		{
 			// 크래시 상태
             if (!PlayerManager::instance->GetInvincible()) {
@@ -259,4 +259,11 @@ void Car::DelayDestroy()
     m_fadeDuration = 1.0f;
     m_isFading = true;
     m_fadeTargetSR = ghostSR ? ghostSR : srSelf;
+}
+
+void Car::DestroybColl()
+{
+	for (auto& obj : colObjs) {
+		GetWorld()->RemoveObject(obj);
+	}
 }
