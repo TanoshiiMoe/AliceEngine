@@ -327,3 +327,13 @@ void PlayerManager::SetCrashColl(Collider* coll)
 		crashColl = coll;
 	}
 }
+
+void PlayerManager::SetMove(bool _val)
+{
+	if (auto pm = owner->GetComponent<PlayerMovement>()) {
+		if (_val)
+			pm->Start();
+		else
+			pm->Stop();
+	}
+}

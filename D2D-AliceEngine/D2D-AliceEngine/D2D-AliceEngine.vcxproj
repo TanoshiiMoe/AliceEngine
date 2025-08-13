@@ -173,8 +173,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BulletColl.h" />
     <ClInclude Include="Helper\ParticleHelper.h" />
-    <ClInclude Include="Scripts\Player\PlayerCrashColl.h" />
     <ClInclude Include="Scripts\Widget\LocationIndicatorWidgetScript.h" />
     <ClInclude Include="Scripts\Audio\GameClearAudioScript.h" />
     <ClInclude Include="Scripts\Enemy\Jump\JumpTrigger.h" />
@@ -257,8 +257,8 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BulletColl.cpp" />
     <ClCompile Include="Helper\ParticleHelper.cpp" />
-    <ClCompile Include="Scripts\Player\PlayerCrashColl.cpp" />
     <ClCompile Include="Scripts\Widget\LocationIndicatorWidgetScript.cpp" />
     <ClCompile Include="Scripts\Audio\GameClearAudioScript.cpp" />
     <ClCompile Include="Scripts\Enemy\Jump\JumpTrigger.cpp" />

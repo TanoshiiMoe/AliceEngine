@@ -29,6 +29,12 @@ public:
 
 	// 충돌시 InitSpeed로 전환
 	void CrashSlow();
+
+	// 멈춰!
+	void Stop();
+
+	// 시작해
+	void Start();
 private:
 	BikeMovementScript* bMovement;
 	float initSpeed;					// 기본 스피드
@@ -36,6 +42,8 @@ private:
 	FVector2 moveDir = { 0.0f, 0.0f };	// 가속방향
 	float playerDeltaSeconds;
 	bool isBoosting = false;
+
+	bool isMoving = true;
 
 	float minZ = -220.0f;
 	float maxZ = 380.0f;

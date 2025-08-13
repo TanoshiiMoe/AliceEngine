@@ -45,6 +45,9 @@ public:
 	Collider* GetCrashColl() { return crashColl; }
 	void SetCrashColl(Collider* coll);
 
+	// 플레이어 조작여부
+	void SetMove(bool _val);
+
 private:
 	AnimatorInstance* animInstance = nullptr;
 	AnimatorController animController;
