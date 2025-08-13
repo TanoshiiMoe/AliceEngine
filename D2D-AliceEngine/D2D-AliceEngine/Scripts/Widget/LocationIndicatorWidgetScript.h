@@ -18,6 +18,9 @@ public:
     // 진행 시작점(플레이 중 첫 탐지된 플레이어 X) 강제 설정이 필요하면 외부에서 지정 가능
     void SetStartX(float x) { m_startX = x; m_hasStartX = true; }
 
+	bool GetBossState() const { return bBossState; }
+	void SetBossState(const bool& value) { bBossState = value; }
+
 private:
     // UI 구성요소
     SpriteRenderer*         m_barEmpty = nullptr;   // 배경(빈 바)
@@ -42,6 +45,10 @@ private:
     void updateProgressAndMarker(const float& deltaSeconds);
 
     float m_trailAccumulator{ 0 };
+
+    bool bBossState = false;
+
+    float bossSpawnRelativeRatio = 0.7f;
 };
 
 
