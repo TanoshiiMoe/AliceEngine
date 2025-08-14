@@ -105,10 +105,21 @@ void Scene::OnEnter()
 {
 	// 씬 진입 시 마우스 상태 초기화
 	Input::ResetMouseState();
-	
-	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
+
+	// 현재 프레임 스냅샷(키만 복사)
+	// 스냅샷에 대해만 실행 (중간에 Enque/삭제되어도 안전)
+	std::vector<std::wstring> keys;
+	keys.reserve(m_objects.size());
+	for (const auto& kv : m_objects)
+		keys.push_back(kv.first);
+
+	for (const auto& k : keys)
 	{
-		it->second->OnStart();
+		auto it = m_objects.find(k);
+		if (it != m_objects.end() && it->second)  // 삭제되었으면 건너뜀
+		{
+			it->second->OnStart();                // 여기서 자기 자신을 삭제해도 OK
+		}
 	}
 
     m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
@@ -195,6 +206,13 @@ void Scene::UpdateDebugHUD(float /*deltaTime*/)
         auto* t = m_fpsWidget->GetComponent<TextRenderComponent>();
         t->SetText(L"FPS: " + std::to_wstring(static_cast<int>(std::round(fps))));
     }
+}
+
+Camera* Scene::GetCamera()
+{
+	if (!m_mainCamera.expired())
+		return m_mainCamera.Get();
+	return nullptr;
 }
 
 bool Scene::RemoveObject(gameObject* targetObj)

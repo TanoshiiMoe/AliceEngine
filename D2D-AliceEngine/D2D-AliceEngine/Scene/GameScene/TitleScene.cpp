@@ -23,10 +23,6 @@ void TitleScene::Initialize()
 
     GamePlayManager& GPM = GamePlayManager::GetInstance();
 	GPM.StartGame();
-
-
-	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<TitleAudioScript>();
 }
 
 void TitleScene::Release()
@@ -42,6 +38,8 @@ void TitleScene::Update()
 void TitleScene::OnEnter()
 {
 	__super::OnEnter();
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<TitleAudioScript>();
 	SetClickable(true);
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraController>();

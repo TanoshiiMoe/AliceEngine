@@ -58,7 +58,7 @@ void Scene_Stage1::Release()
 
 void Scene_Stage1::Update()
 {
-	__super::Update();
+    __super::Update();
 
 	GamePlayManager::GetInstance().AddPassedTime(TimerManager::GetInstance().unscaledDeltaTime);
 	if (m_player)

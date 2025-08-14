@@ -71,6 +71,12 @@ void gameObject::Initialize(const FVector2& position = FVector2(0.0f), const flo
 	m_transformComponent.lock()->SetTransform(position, rotation, scale, pivot);
 }
 
+TransformComponent* gameObject::transform() const
+{
+	if (m_transformComponent.expired()) return nullptr;
+	return m_transformComponent.Get();
+}
+
 void gameObject::AddChildObject(const gameObject* obj)
 {
 	if (auto weakThis = WeakFromThis<gameObject>())

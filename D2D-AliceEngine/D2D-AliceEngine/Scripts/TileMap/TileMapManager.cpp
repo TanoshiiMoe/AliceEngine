@@ -11,6 +11,7 @@ TileMapManager* TileMapManager::instance = nullptr;
 
 void TileMapManager::Initialize()
 {
+	__super::Initialize();
 	//REGISTER_SCRIPT_METHOD(OnStart);
 
 	// 싱글톤으로 따로 빼서 사용하기로 함.

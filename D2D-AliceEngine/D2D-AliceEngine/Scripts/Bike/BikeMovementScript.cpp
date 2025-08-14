@@ -69,7 +69,7 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 	float finalSpeed = m_currentSpeed * m_speedModifier;
 	m_prevMoveAmount = finalSpeed;
 	// 오른쪽으로 이동
-	if (auto transform = m_owner->transform())
+	if (auto transform = owner->transform())
 		transform->AddPosition(finalSpeed * deltaSeconds, 0);
 
 
@@ -81,7 +81,7 @@ void BikeMovementScript::Update(const float& deltaSeconds)
 
 		float dy = m_jumpVelocity * deltaSeconds;
 
-		if (auto tr = m_owner->GetComponent<SkewTransform>())
+		if (auto tr = owner->GetComponent<SkewTransform>())
 		{
 			FVector2 pos = tr->GetRealPos();
 			pos.y += dy;

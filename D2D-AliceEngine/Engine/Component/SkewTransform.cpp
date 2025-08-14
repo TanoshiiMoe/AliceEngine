@@ -21,9 +21,9 @@ const void SkewTransform::SetRealPos(FVector2 _pos)
 
 void SkewTransform::Initialize()
 {
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_TICK(Update);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_TICK(Update);
 	//REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_EndPhysics);
 }
 

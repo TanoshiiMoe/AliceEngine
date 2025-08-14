@@ -34,13 +34,11 @@ void TileMapComponent::Initialize()
 {
 	__super::Initialize();
 	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
-
 }
 
 void TileMapComponent::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	go;
 }
 
 void TileMapComponent::LoadTileMapData(const std::wstring& path)

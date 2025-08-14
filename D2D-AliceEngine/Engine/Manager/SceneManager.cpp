@@ -31,6 +31,7 @@ void SceneManager::Update()
     {
         PerformSceneChange(m_nextSceneName);
         m_nextSceneName.clear();
+        return;
     }
 
     if (WeakObjectPtr<Scene> scene = m_currentScene)

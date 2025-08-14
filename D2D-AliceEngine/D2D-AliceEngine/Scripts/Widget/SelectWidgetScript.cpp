@@ -426,7 +426,7 @@ void SelectWidgetScript::SkipInput(float deltaSeconds)
 		if (m_pressValue >= 500.0f)
 		{
 			m_sound->StopByName(L"Tutorial");
-			SceneManager::ChangeScene(Define::Scene_Stage1);
+   			SceneManager::ChangeScene(Define::Scene_Stage1);
 		}
 	}
 

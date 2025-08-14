@@ -24,12 +24,7 @@ public:
 	void VisibleMemoryInfo();
     void UpdateDebugHUD(float deltaTime);
 
-	Camera* GetCamera()
-	{
-		if(!m_mainCamera.expired())
-			return m_mainCamera.Get();
-		return nullptr;
-	}
+	Camera* GetCamera();
 
 public:
 	template<class TReturnType, typename... Args>
@@ -37,14 +32,15 @@ public:
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
 		std::unique_ptr<TReturnType> createdObj = std::make_unique<TReturnType>(std::forward<Args>(args)...);
+		std::wstring uuid = NewobjectName + StringHelper::MakeUniqueName();
 
 		createdObj->SetName(NewobjectName);
-		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
-		m_nameToUUIDs[NewobjectName].insert(createdObj->GetUUID());
-		TReturnType* rawPtr = createdObj.get();
-		m_objects[createdObj->GetUUID()] = std::move(createdObj);
+		createdObj->SetUUID(uuid);
+		m_nameToUUIDs[NewobjectName].insert(uuid);
+		TReturnType* returnObject = createdObj.get();
+		m_objects[uuid] = std::move(createdObj);
 
-		return rawPtr;
+		return returnObject;
 	}
 
 	bool RemoveObject(gameObject* targetObj);
@@ -81,9 +77,11 @@ public:
 	{
 		//static_assert(std::is_base_of_v<IComponent, TReturnType>, "TReturnType must be derived from IComponent");
 		TReturnType* createdObj = new TReturnType(std::forward<Args>(args)...);
+		std::wstring uuid = NewobjectName + StringHelper::MakeUniqueName();
+
 		createdObj->SetName(NewobjectName);
-		createdObj->SetUUID(NewobjectName + StringHelper::MakeUniqueName());
-		m_objects.emplace(createdObj->GetUUID(), createdObj);
+		createdObj->SetUUID(uuid);
+		m_objects.emplace(uuid, createdObj);
 
 		return WeakObjectPtr<TReturnType>(createdObj);
 	}
@@ -188,10 +186,10 @@ private:
 
 	std::wstring FindUUIDByPointer(gameObject* ptr) const;
 
-
 public:
 	bool GetClickable() const { return m_bClickable; }
 	void SetClickable(const bool value) { m_bClickable = value; }
+
 private:
 	bool m_bClickable = false;
 };

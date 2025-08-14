@@ -39,6 +39,7 @@ void UpdateTaskManager::StartFrame()
 void UpdateTaskManager::EndFrame()
 {
 	//ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_OnEnd);
+	ScriptSystem::GetInstance().Context.DeltaSeconds = Context.DeltaSeconds;
 	ScriptSystem::GetInstance().ProcessScriptUpdateGroup(Define::ESCriptUpdateGroup::SG_Update);
 	ScriptSystem::GetInstance().ProcessScriptUpdateGroup(Define::ESCriptUpdateGroup::SG_LateUpdate);
 	ScriptSystem::GetInstance().ProcessScriptUpdateGroup(Define::ESCriptUpdateGroup::SG_FixedUpdate);
