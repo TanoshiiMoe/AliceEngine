@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "UpdateTaskManager.h"
 #include <Manager/SceneManager.h>
 #include <Manager/TimerManager.h>
@@ -39,6 +39,10 @@ void UpdateTaskManager::StartFrame()
 void UpdateTaskManager::EndFrame()
 {
 	//ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_OnEnd);
+	ScriptSystem::GetInstance().Context.DeltaSeconds = Context.DeltaSeconds;
+	ScriptSystem::GetInstance().ProcessScriptUpdateGroup(Define::ESCriptUpdateGroup::SG_Update);
+	ScriptSystem::GetInstance().ProcessScriptUpdateGroup(Define::ESCriptUpdateGroup::SG_LateUpdate);
+	ScriptSystem::GetInstance().ProcessScriptUpdateGroup(Define::ESCriptUpdateGroup::SG_FixedUpdate);
 }
 
 void UpdateTaskManager::SetWorld()
@@ -58,10 +62,10 @@ void UpdateTaskManager::TickAll()
 	{
 		Context.TickGroup = static_cast<Define::ETickingGroup>(group);
 
-		// ÇöÀç TickList¸¦ º¹»çÇÏ°í ¿øº»Àº ºñ¿öµĞ´Ù.
+		// í˜„ì¬ TickListë¥¼ ë³µì‚¬í•˜ê³  ì›ë³¸ì€ ë¹„ì›Œë‘”ë‹¤.
 		auto& currentList = m_TickLists[Context.TickGroup];
 		std::vector<UpdateWrapper> tempList;
-		tempList.swap(currentList); // currentList´Â ºñ¿öÁö°í tempList¿¡ ±âÁ¸ ³»¿ëÀÌ µé¾î°¨
+		tempList.swap(currentList); // currentListëŠ” ë¹„ì›Œì§€ê³  tempListì— ê¸°ì¡´ ë‚´ìš©ì´ ë“¤ì–´ê°
 
 		for (auto it = tempList.begin(); it != tempList.end(); )
 		{
@@ -84,12 +88,12 @@ void UpdateTaskManager::TickAll()
 			}
 			else
 			{
-				it = tempList.erase(it); // ¼Ò¸êµÈ °´Ã¼ Á¦°Å
+				it = tempList.erase(it); // ì†Œë©¸ëœ ê°ì²´ ì œê±°
 			}
 		}
 
-		// ÀÌ¹ø ÇÁ·¹ÀÓ Áß Ãß°¡µÈ TickWrapperµéÀº m_TickLists[Context.TickGroup]¿¡ ÀÌ¹Ì ½×¿© ÀÖÀ½.
-		// »ì¾Æ³²Àº ±âÁ¸ TickWrapperµµ ´ÙÀ½ ÇÁ·¹ÀÓÀ» À§ÇØ ´Ù½Ã Ãß°¡.
+		// ì´ë²ˆ í”„ë ˆì„ ì¤‘ ì¶”ê°€ëœ TickWrapperë“¤ì€ m_TickLists[Context.TickGroup]ì— ì´ë¯¸ ìŒ“ì—¬ ìˆìŒ.
+		// ì‚´ì•„ë‚¨ì€ ê¸°ì¡´ TickWrapperë„ ë‹¤ìŒ í”„ë ˆì„ì„ ìœ„í•´ ë‹¤ì‹œ ì¶”ê°€.
 		auto& nextTickList = m_TickLists[Context.TickGroup];
 		nextTickList.insert(
 			nextTickList.end(),

@@ -17,9 +17,9 @@
 void EnemyStatScript::Initialize()
 {
     __super::Initialize();
-    REGISTER_SCRIPT_METHOD(OnStart);
-    REGISTER_SCRIPT_METHOD(OnEnd);
-    REGISTER_SCRIPT_METHOD(OnDestroy);
+    //REGISTER_SCRIPT_METHOD(OnStart);
+    //REGISTER_SCRIPT_METHOD(OnEnd);
+    //REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
 void EnemyStatScript::Update(const float& deltaSeconds)

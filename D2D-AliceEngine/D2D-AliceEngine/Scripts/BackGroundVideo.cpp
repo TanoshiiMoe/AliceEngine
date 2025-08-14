@@ -1,4 +1,4 @@
-#include "BackGroundVideo.h"
+ï»¿#include "BackGroundVideo.h"
 #include <Object/gameObject.h>
 #include <Component/TransformComponent.h>
 #include <Math/Transform.h>
@@ -14,7 +14,7 @@
 void BackGroundVideo::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void BackGroundVideo::Update(const float& deltaSeconds)
@@ -28,7 +28,7 @@ void BackGroundVideo::Update(const float& deltaSeconds)
 
 	FVector2 size = m_owner->GetComponent<BackGroundComponent>()->GetSize();
 
-	m_owner->transform()->SetPosition(playerPos.x - size.x / 2, (size.y /*+ Å¸ÀÏ¸Ê ÀÌ¹ÌÁö »çÀÌÁî*/) / 2);
+	m_owner->transform()->SetPosition(playerPos.x - size.x / 2, (size.y /*+ íƒ€ì¼ë§µ ì´ë¯¸ì§€ ì‚¬ì´ì¦ˆ*/) / 2);
 	//m_owner->transform()->SetPosition(playerPos.x, Define::SCREEN_HEIGHT);
 }
 

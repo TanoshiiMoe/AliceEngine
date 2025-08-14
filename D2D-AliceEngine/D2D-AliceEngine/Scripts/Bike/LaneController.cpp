@@ -1,4 +1,4 @@
-#include "LaneController.h"
+ï»¿#include "LaneController.h"
 #include "Manager/UpdateTaskManager.h"
 #include "System/ScriptSystem.h"
 
@@ -57,8 +57,9 @@ void LaneController::RemoveAction(ObjectHandle _handle, ActionType _type)
 
 void LaneController::Initialize()
 {
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+	//REGISTER_SCRIPT_TICK(Update);
 }
 
 void LaneController::OnStart()
@@ -69,10 +70,10 @@ void LaneController::OnStart()
 	if (!st) {
 		std::wstring errorMessage;
 		errorMessage += owner->GetUUID();
-		errorMessage += L"ÀÇ LaneController¿¡¼­ SkewTransform ÄÄÆ÷³ÍÆ®¸¦ ºÒ·¯¿À´Âµ¥ ½ÇÆÐÇÔ!!";
+		errorMessage += L"ì˜ LaneControllerì—ì„œ SkewTransform ì»´í¬ë„ŒíŠ¸ë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ”ë° ì‹¤íŒ¨í•¨!!";
 
 		OutputDebugStringW(errorMessage.c_str());
-		// SkewTransform ¾øÀ»½Ã¿¡ »èÁ¦
+		// SkewTransform ì—†ì„ì‹œì— ì‚­ì œ
 		owner->RemoveComponent(this);
 	}
 }

@@ -29,10 +29,10 @@
 void TitleWidgetScript::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
-	REGISTER_SCRIPT_METHOD(OnDestroy);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
 void TitleWidgetScript::Update(const float& deltaSeconds)

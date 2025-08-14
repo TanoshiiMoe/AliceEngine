@@ -7,8 +7,9 @@
 
 void BulletColl::Initialize()
 {
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_TICK(Update);
+	//REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
 
 	owner->AddComponent<Collider>()->SetBoxSize(FVector2(70.0f, 70.0f));
 }

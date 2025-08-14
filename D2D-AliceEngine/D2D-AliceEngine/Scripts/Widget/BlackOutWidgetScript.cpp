@@ -9,12 +9,13 @@
 void BlackOutWidgetScript::Initialize()
 {
     __super::Initialize();
-    REGISTER_SCRIPT_METHOD(OnStart);
+    //REGISTER_SCRIPT_METHOD(OnStart);
+    //REGISTER_SCRIPT_TICK(Update);
 }
 
 void BlackOutWidgetScript::OnStart()
 {
-    REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostUpdateWork);
+    //REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostUpdateWork);
 
     // 오버레이 생성
     m_overlay = owner->AddComponent<SpriteRenderer>();

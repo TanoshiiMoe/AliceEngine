@@ -1,4 +1,4 @@
-#include "Moon.h"
+ï»¿#include "Moon.h"
 #include <Object/gameObject.h>
 #include <Component/TransformComponent.h>
 #include <Math/Transform.h>
@@ -12,13 +12,13 @@
 void Moon::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void Moon::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	m_moon->transform()->AddRotation(2.0f); // ´Þ ÀÚÀü
+	m_moon->transform()->AddRotation(2.0f); // ë‹¬ ìžì „
 }
 
 void Moon::OnStart()
@@ -65,7 +65,7 @@ void Moon::Input()
 	{
 		m_moon->transform()->AddPosition(-5.0f, 0);
 	}
-	if (Input::IsKeyDown(VK_OEM_1)) // º¸Åë ; Å°
+	if (Input::IsKeyDown(VK_OEM_1)) // ë³´í†µ ; í‚¤
 	{
 		m_moon->transform()->AddPosition(5.0f, 0);
 	}

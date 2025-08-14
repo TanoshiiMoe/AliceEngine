@@ -25,10 +25,10 @@
 void SelectWidgetScript::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
-	REGISTER_SCRIPT_METHOD(OnDestroy);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
 void SelectWidgetScript::Update(const float& deltaSeconds)
@@ -426,7 +426,7 @@ void SelectWidgetScript::SkipInput(float deltaSeconds)
 		if (m_pressValue >= 500.0f)
 		{
 			m_sound->StopByName(L"Tutorial");
-			SceneManager::ChangeScene(Define::Scene_Stage1);
+   			SceneManager::ChangeScene(Define::Scene_Stage1);
 		}
 	}
 

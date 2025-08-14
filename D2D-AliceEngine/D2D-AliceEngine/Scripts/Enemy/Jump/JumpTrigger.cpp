@@ -11,8 +11,9 @@
 
 void JumpTrigger::Initialize()
 {
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_SCRIPT_TICK(Update);
 
 	Collider* col = owner->AddComponent<Collider>();
 	col->SetBoxSize(FVector2(10.0f, 50.0f));

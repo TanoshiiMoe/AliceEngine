@@ -10,13 +10,14 @@
 void VignetteWidgetScript::Initialize()
 {
     __super::Initialize();
-    REGISTER_SCRIPT_METHOD(OnStart);
+    //REGISTER_SCRIPT_METHOD(OnStart);
+    //REGISTER_SCRIPT_TICK(Update);
 }
 
 void VignetteWidgetScript::OnStart()
 {
     // 시작 즉시 업데이트 루프로 등록
-    REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostUpdateWork);
+    //REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostUpdateWork);
 
     // 단일 오버레이 스프라이트 생성 (CutSceneWidget과 동일한 방법)
     // 카메라에 붙여 화면을 정확히 덮도록 함

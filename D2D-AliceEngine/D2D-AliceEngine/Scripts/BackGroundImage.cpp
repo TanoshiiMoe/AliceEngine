@@ -1,4 +1,4 @@
-#include "BackGroundImage.h"
+ï»¿#include "BackGroundImage.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
@@ -14,33 +14,33 @@
 void BackGroundImage::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void BackGroundImage::FixedUpdate(const float& deltaSeconds)
 {
 	__super::FixedUpdate(deltaSeconds);
-	// ¿©±â¿¡ FixedUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— FixedUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void BackGroundImage::Update(const float& deltaSeconds)
 {
 	__super::Update(deltaSeconds);
-	// ¿©±â¿¡ Update¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Updateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void BackGroundImage::LateUpdate(const float& deltaSeconds)
 {
 	__super::LateUpdate(deltaSeconds);
-	// ¿©±â¿¡ LateUpdate¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— LateUpdateì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 }
 
 void BackGroundImage::OnStart()
 {
-	// ¿©±â¿¡ OnStart¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnStartì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 	m_owner = GetOwner();
 	//m_owner->transform()->SetPosition(0, 0);
 	//m_owner->transform()->SetRotation(0);
@@ -61,12 +61,12 @@ void BackGroundImage::OnStart()
 
 void BackGroundImage::OnEnd()
 {
-	// ¿©±â¿¡ OnEnd¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— OnEndì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 }
 
 void BackGroundImage::Input()
 {
-	// ¿©±â¿¡ Input¿¡ ´ëÇÑ ·ÎÁ÷ ÀÛ¼º
+	// ì—¬ê¸°ì— Inputì— ëŒ€í•œ ë¡œì§ ì‘ì„±
 
 	if (Input::IsKeyPressed(VK_P))
 	{

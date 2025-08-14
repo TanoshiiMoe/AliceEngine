@@ -26,12 +26,13 @@ Drone::Drone(FDroneSpritePath path)
 void Drone::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
-	REGISTER_SCRIPT_METHOD(OnDestroy);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnDestroy);
 
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+	//REGISTER_SCRIPT_TICK(Update);
 
 	TimerManager::GetInstance().ClearTimer(timer);
 	TimerManager::GetInstance().SetTimer(

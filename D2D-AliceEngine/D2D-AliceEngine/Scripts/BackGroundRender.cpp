@@ -20,10 +20,10 @@
 void BackGroundRender::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
-	REGISTER_SCRIPT_METHOD(OnDestroy);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnDestroy);
 
     // 컬링 스케일을 넉넉하게 키움
     if (auto cam = SceneManager::GetCamera())

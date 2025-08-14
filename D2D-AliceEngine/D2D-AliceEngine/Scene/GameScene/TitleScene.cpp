@@ -13,6 +13,7 @@
 #include <Scripts/Spine2D/SpineScript.h>
 #include <Scripts/Legacy/CameraController.h>
 #include <Scripts/Widget/GameClearWidgetScript.h>
+#include <Scripts/Example/ScriptExample.h>
 
 void TitleScene::Initialize()
 {
@@ -22,10 +23,6 @@ void TitleScene::Initialize()
 
     GamePlayManager& GPM = GamePlayManager::GetInstance();
 	GPM.StartGame();
-
-
-	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<TitleAudioScript>();
 }
 
 void TitleScene::Release()
@@ -41,6 +38,8 @@ void TitleScene::Update()
 void TitleScene::OnEnter()
 {
 	__super::OnEnter();
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<TitleAudioScript>();
 	SetClickable(true);
 	m_cameraController = NewObject<gameObject>(L"Camera");
 	m_cameraController->AddComponent<CameraController>();
@@ -74,6 +73,9 @@ void TitleScene::OnEnter()
 	//	spine2->spineRenderer->SetPosition(FVector2(100, 0));
 	//	spine2->spineRenderer->SetRendered(false);
 	//}
+
+	gameObject* test = NewObject<gameObject>(L"test");
+	test->AddComponent<ScriptExample>();
 
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");

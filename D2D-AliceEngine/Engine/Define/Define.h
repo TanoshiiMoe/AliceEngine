@@ -123,6 +123,13 @@ namespace Define
 		SG_MAX,
 	};
 
+	enum class ESCriptUpdateGroup
+	{
+		SG_Update,
+		SG_LateUpdate,
+		SG_FixedUpdate
+	};
+
 	enum class ParameterType { Int, Float, Bool, Trigger };
 
 	enum class EBoxType { RenderDebugBox, ColliderDebugBox, Max };
