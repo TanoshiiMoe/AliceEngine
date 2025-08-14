@@ -19,17 +19,18 @@
 void SpineScript::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
-	REGISTER_SCRIPT_METHOD(OnDestroy);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnDestroy);
 
 	spineRenderer = std::make_unique<SpineRenderer>();
 	spineRenderer->RegistSystem(owner.Get());
 	spineRenderer->Initialize();
 
 	// 입력이 끝난 이후에 Update가 실행되어야함. 왜냐하면 
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_NewlySpawned);
+	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_NewlySpawned);
+	//REGISTER_SCRIPT_TICK(Update);
 }
 
 void SpineScript::FixedUpdate(const float& deltaSeconds)

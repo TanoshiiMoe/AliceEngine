@@ -13,6 +13,7 @@
 #include <Scripts/Spine2D/SpineScript.h>
 #include <Scripts/Legacy/CameraController.h>
 #include <Scripts/Widget/GameClearWidgetScript.h>
+#include <Scripts/Example/ScriptExample.h>
 
 void TitleScene::Initialize()
 {
@@ -74,6 +75,9 @@ void TitleScene::OnEnter()
 	//	spine2->spineRenderer->SetPosition(FVector2(100, 0));
 	//	spine2->spineRenderer->SetRendered(false);
 	//}
+
+	gameObject* test = NewObject<gameObject>(L"test");
+	test->AddComponent<ScriptExample>();
 
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");

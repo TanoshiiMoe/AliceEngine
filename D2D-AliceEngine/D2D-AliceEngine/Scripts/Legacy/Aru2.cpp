@@ -16,8 +16,8 @@ void Aru2::Initialize()
 {
 	__super::Initialize();
 	(void)StatTraits<AruStat2>::GetOffsetMap();
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
 }
 
 

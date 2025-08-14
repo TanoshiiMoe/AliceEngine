@@ -19,12 +19,13 @@
 void BikeMovementScript::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
-	REGISTER_SCRIPT_METHOD(OnDestroy);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnDestroy);
 
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
+	REGISTER_SCRIPT_TICK(Update);
 }
 
 void BikeMovementScript::FixedUpdate(const float& deltaSeconds)
@@ -35,7 +36,7 @@ void BikeMovementScript::FixedUpdate(const float& deltaSeconds)
 
 void BikeMovementScript::Update(const float& deltaSeconds)
 {
-	__super::Update(deltaSeconds);
+  	__super::Update(deltaSeconds);
 	// 여기에 Update에 대한 로직 작성
 	// 슬로우/부스트 효과 시간 감소
 	if (m_modifierDuration > 0.0f)

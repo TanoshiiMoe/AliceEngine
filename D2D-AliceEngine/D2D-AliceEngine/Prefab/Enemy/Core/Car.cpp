@@ -25,9 +25,10 @@
 void Car::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
     // 보스 위치 보정을 위해 매 프레임 갱신 필요
-    REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
+    //REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_SCRIPT_TICK(Update);
 
 	//?븷?땲硫붿씠?꽣 ?엳?쓣?떆
 	//owner->AddComponent<Animator>();

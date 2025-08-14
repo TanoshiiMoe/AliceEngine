@@ -14,7 +14,7 @@ void JumpTruck::Initialize()
 {
 	__super::Initialize();
 
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void JumpTruck::OnStart()

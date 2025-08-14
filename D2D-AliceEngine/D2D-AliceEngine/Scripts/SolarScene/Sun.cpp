@@ -1,4 +1,4 @@
-#include "Sun.h"
+﻿#include "Sun.h"
 #include <Object/gameObject.h>
 #include <Component/TransformComponent.h>
 #include <Math/Transform.h>
@@ -14,7 +14,7 @@
 void Sun::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void Sun::Update(const float& deltaSeconds)
@@ -52,7 +52,7 @@ void Sun::Input()
 	if (Input::IsKeyPressed(VK_4))
 	{
 		if (m_sun->GetComponent<TextRenderComponent>()->GetText() == L"Sun")
-			m_sun->GetComponent<TextRenderComponent>()->SetText(L"�¾�");
+			m_sun->GetComponent<TextRenderComponent>()->SetText(L"태양");
 		else
 			m_sun->GetComponent<TextRenderComponent>()->SetText(L"Sun");
 	}

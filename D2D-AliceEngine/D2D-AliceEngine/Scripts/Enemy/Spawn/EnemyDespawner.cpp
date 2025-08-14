@@ -8,8 +8,9 @@
 
 void EnemyDespawner::Initialize()
 {
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_SCRIPT_TICK(Update);
 }
 
 void EnemyDespawner::OnStart()

@@ -1,4 +1,4 @@
-#include "TitleUIScript.h"
+ï»¿#include "TitleUIScript.h"
 #include <Scene/Scene.h>
 
 #include <System/ScriptSystem.h>
@@ -20,10 +20,10 @@
 void TitleUIScript::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
-	REGISTER_SCRIPT_METHOD(OnDestroy);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnDestroy);
 }
 
 void TitleUIScript::Update(const float& deltaSeconds)
@@ -49,7 +49,7 @@ void TitleUIScript::OnStart()
 		!subTitle
 		) return;
 
-	//Anchor¸¦ ÁöÁ¤ÇÏ¸é OffsetÀº D2DÁÂÇ¥°è¸¦ »ç¿ëÇÕ´Ï´Ù.
+	//Anchorë¥¼ ì§€ì •í•˜ë©´ Offsetì€ D2Dì¢Œí‘œê³„ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
 
 	image->LoadData(L"Mushroom.png");
 	//image->SetScale(150);
@@ -65,14 +65,14 @@ void TitleUIScript::OnStart()
 		});
 
 	// text
-	mainTitle->SetText(L"³ô´Ù¶ô±æÀÇ ÁúÁÖ");
+	mainTitle->SetText(L"ë†’ë‹¤ë½ê¸¸ì˜ ì§ˆì£¼");
 	mainTitle->SetFontSize(60.0f);
 	mainTitle->SetColor(FColor(0, 0, 0, 255));
 	//text->SetPosition(FVector2(Define::SCREEN_WIDTH / 2, 40));
 	mainTitle->SetAnchor(EUIScreenAnchor::MiddleRight);
 	mainTitle->m_layer = 500;
 
-	subTitle->SetText(L"~È°ºóÀº µÎ·ÉÀ» ¦i´Â´Ù~");
+	subTitle->SetText(L"~í™œë¹ˆì€ ë‘ë ¹ì„ ì«’ëŠ”ë‹¤~");
 	subTitle->SetFontSize(30.0f);
 	subTitle->SetColor(FColor::Black);
 	subTitle->SetAnchor(EUIScreenAnchor::MiddleRight, 0, 50);
@@ -80,7 +80,7 @@ void TitleUIScript::OnStart()
 
 	button->SetImages(L"Button_Idle.png",L"Button_Hover.png", L"Button_Pressed.png");
 	//button->SetScale(150);
-	// º¸·ù
+	// ë³´ë¥˜
 	//button->SetHoverScale(160);
 	button->SetAnchor(EUIScreenAnchor::MiddleCenter, 0, 250);
 	//button->SetPosition(FVector2(100,100));

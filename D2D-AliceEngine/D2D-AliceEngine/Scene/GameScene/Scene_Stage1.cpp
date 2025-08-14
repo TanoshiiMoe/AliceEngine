@@ -41,6 +41,7 @@
 #include <Scripts/Audio/StageAudioScript.h>
 #include <Scripts/Widget/LocationIndicatorWidgetScript.h>
 #include "Scripts/Audio.h"
+#include <Scripts/Legacy/CameraController.h>
 
 void Scene_Stage1::Initialize()
 {
@@ -73,6 +74,9 @@ void Scene_Stage1::OnEnter()
 {
 	__super::OnEnter();
 	m_mouseParticle->ToggleMouseTrail();
+
+	//gameObject* m_camera = NewObject<gameObject>(L"Camera");
+	//m_camera->AddComponent<CameraController>();
 	
 	// 스테이지 진입 시 마우스 상태 초기화
 	Input::ResetMouseState();

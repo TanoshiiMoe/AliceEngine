@@ -1,4 +1,4 @@
-#include "CameraController.h"
+﻿#include "CameraController.h"
 #include <Object/gameObject.h>
 #include <Component/TransformComponent.h>
 #include <Math/Transform.h>
@@ -15,7 +15,7 @@
 void CameraController::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void CameraController::Update(const float& deltaSeconds)

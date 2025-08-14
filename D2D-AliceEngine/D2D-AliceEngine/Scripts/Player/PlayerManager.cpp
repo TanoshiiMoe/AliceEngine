@@ -26,10 +26,11 @@ PlayerManager* PlayerManager::instance = nullptr;
 void PlayerManager::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(OnEnd);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnEnd);
 
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+	//REGISTER_SCRIPT_TICK(Update);
 }
 
 void PlayerManager::OnStart()

@@ -1,4 +1,4 @@
-#include "YuukaVideo.h"
+﻿#include "YuukaVideo.h"
 #include <Object/gameObject.h>
 #include <Component/TransformComponent.h>
 #include <Math/Transform.h>
@@ -13,7 +13,7 @@
 void YuukaVideo::Initialize()
 {
 	__super::Initialize();
-	REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(OnStart);
 }
 
 void YuukaVideo::Update(const float& deltaSeconds)

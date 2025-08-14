@@ -8,9 +8,10 @@
 
 void CameraMover::Initialize()
 {
-	REGISTER_SCRIPT_METHOD(OnStart);
-	REGISTER_SCRIPT_METHOD(Awake);
-	REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+	//REGISTER_SCRIPT_METHOD(OnStart);
+	//REGISTER_SCRIPT_METHOD(Awake);
+	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
+	//REGISTER_SCRIPT_TICK(Update);
 }
 
 void CameraMover::Awake()
@@ -44,11 +45,11 @@ void CameraMover::Update(const float& dt)
 	////xPos += playerBM->GetCurrSpeed() * playerBM->GetSpeedModifier() * dt;
 	//xPos = player->transform()->GetPosition().x;
 	//
-	////camera->SetPosition(xPos, yPos);
+	////camera->SetPosition(xPos, yPos);a
 	//camera->SetPosition(xPos, yPos);
 
 
-	if (!playerST) return;
+ 	if (!playerST) return;
 	if (!player) return;
 
 	FVector2 playerPos = playerST->GetRealPos();
@@ -71,5 +72,5 @@ void CameraMover::Update(const float& dt)
 
 	// 느리게 따라오기 (선형 보간 방식)
 	FVector2 newPos = cameraPos + delta * dt * lerpSpeed;
-	camera->SetRelativePosition(newPos);
+ 	camera->SetRelativePosition(newPos);
 }
