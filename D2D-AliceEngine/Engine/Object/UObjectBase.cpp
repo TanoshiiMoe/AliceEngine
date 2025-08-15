@@ -30,3 +30,13 @@ void UObjectBase::SetTag(const std::wstring& value)
 {
 	m_tag = value;
 }
+
+std::wstring& UObjectBase::GetClassType()
+{
+	return m_classType;
+}
+
+void UObjectBase::SetClassType(const std::wstring& value)
+{
+	m_classType = value;
+}

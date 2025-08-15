@@ -25,7 +25,7 @@ void PlayerMovement::OnStart()
 
 	if (bMovement) {
 		initSpeed = minSpeed +  minSpeed * 0.25;
-		bMovement->SetAcceleration(100.0f);
+		bMovement->SetAcceleration(100);
 	}
 
 	if (auto ic = owner->GetComponent<InputComponent>())
