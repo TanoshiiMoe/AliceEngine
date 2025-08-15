@@ -319,7 +319,7 @@
     <ClInclude Include="Scripts\Widget\LocationIndicatorWidgetScript.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
-    <ClInclude Include="BulletColl.h">
+    <ClInclude Include="Scripts\Weapon\BulletColl.h">
       <Filter>PreCompiledHeader</Filter>
     </ClInclude>
   </ItemGroup>
@@ -549,7 +549,7 @@
       <Filter>Scripts\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Widget\LocationIndicatorWidgetScript.cpp" />
-    <ClCompile Include="BulletColl.cpp" />
+    <ClCompile Include="Scripts\Weapon\BulletColl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scripts\Player\PlayerMovement.h" />
