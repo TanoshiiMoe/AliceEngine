@@ -24,18 +24,7 @@ Animator::~Animator()
 void Animator::Initialize()
 {
 	__super::Initialize();
-
-	UpdateTaskManager::GetInstance().Enque(
-		WeakFromThis<ITickable>(),
-		Define::ETickingGroup::TG_PostPhysics,
-		[weak = WeakFromThis<ITickable>()](const float& dt)
-	{
-		if (auto sp = weak.lock())
-		{
-			sp->Update(dt);
-		}
-	}
-	);
+	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PostPhysics);
 }
 
 void Animator::Update(const float& deltaSeconds)

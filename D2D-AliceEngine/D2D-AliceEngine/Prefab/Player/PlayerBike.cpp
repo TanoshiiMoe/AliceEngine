@@ -25,7 +25,7 @@ void PlayerBike::Initialize()
 
 	owner->SetTag(L"Player");
 	// 여기에 컴포넌트 추가	
-	owner->AddComponent<AnimatorInstance>();
+  	owner->AddComponent<AnimatorInstance>();
 	//owner->AddComponent<BackGroundRender>();
 	owner->AddComponent<SkewTransform>();
 	owner->AddComponent<Collider>();

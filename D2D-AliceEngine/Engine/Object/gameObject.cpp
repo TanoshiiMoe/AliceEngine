@@ -36,27 +36,16 @@ gameObject::~gameObject()
 
 void gameObject::OnStart()
 {
-	for (auto& component : m_components)
-	{
-		if (WeakObjectPtr<Component> comp = component)
-			comp.lock()->OnStart();
-	}
+	//for (auto& component : m_components)
+	//{
+	//	if (WeakObjectPtr<Component> comp = component)
+	//		comp.lock()->OnStart();
+	//}
 }
 
 void gameObject::OnEnd()
 {
-	for (auto& component : m_components)
-	{
-		if (WeakObjectPtr<Component> comp = component)
-		{
-			comp.lock()->OnEnd();
-		}
-	}
-	for (auto& component : m_components)
-	{
-		delete component;
-	}
-	m_components.clear();
+	
 }
 
 void gameObject::Initialize()
@@ -207,5 +196,9 @@ void gameObject::Update()
 
 void gameObject::Release()
 {
-	//RemoveComponent<TransformComponent>(m_transformComponent.Get());
+	for (auto& component : m_components)
+	{
+		delete component;
+	}
+	m_components.clear();
 }

@@ -64,40 +64,10 @@ void Scene::Update()
 {
 	UpdateTaskManager::GetInstance().StartFrame();
 	UpdateTaskManager::GetInstance().TickAll();
-    // F2 토글
-    if (Input::IsKeyPressed(VK_F2)) {
-        m_debugHudVisible = !m_debugHudVisible;
-        if (m_sysinfoWidget) m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
-        if (m_fpsWidget) m_fpsWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
-    }
-	if (Input::IsKeyPressed(VK_F3)) {
-		D2DRenderManager::GetInstance().bRenderedBoxRect = !D2DRenderManager::GetInstance().bRenderedBoxRect;
-	}
-	if (Input::IsKeyPressed(VK_F4)) {
-		m_mouseParticle->ToggleMouseTrail();
-	}
-
-	if (m_bClickable && TimerManager::GetInstance().GetGlobalTimeScale() > 0 && Input::IsMouseLeftPressed())
-	{
-		/*WeakObjectPtr<gameObject> go  = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
-		GetCamera()->AddChildObject(go.Get());
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->LoadData(L"Effect/MouseClick.png");
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		pc->SetAdditiveBlend(true);
-		pc->EmitClickBurst(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()), true);*/
-		WeakObjectPtr<gameObject> go = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
-		GetCamera()->AddChildObject(go.Get());
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->LoadData(L"Effect/MouseClick.png");
-		pc->SetDrawType(Define::EDrawType::ScreenSpace);
-		pc->SetAdditiveBlend(true);
-		pc->EmitClickBurst(Input::GetMousePosition(), true);
-	}
-    // FPS 갱신 (TimerManager 값을 그대로 사용)
+	MouseTrailAndClick();
     UpdateDebugHUD(0.0f);
 	VisibleMemoryInfo();
-	FlushPendingRemovals(); // 프레임 끝에서 삭제 처리
+	FlushPendingRemovals(); // 프레임 끝에서 업데이트 처리
 	UpdateTaskManager::GetInstance().EndFrame();
 }
 
@@ -105,22 +75,6 @@ void Scene::OnEnter()
 {
 	// 씬 진입 시 마우스 상태 초기화
 	Input::ResetMouseState();
-
-	// 현재 프레임 스냅샷(키만 복사)
-	// 스냅샷에 대해만 실행 (중간에 Enque/삭제되어도 안전)
-	std::vector<std::wstring> keys;
-	keys.reserve(m_objects.size());
-	for (const auto& kv : m_objects)
-		keys.push_back(kv.first);
-
-	for (const auto& k : keys)
-	{
-		auto it = m_objects.find(k);
-		if (it != m_objects.end() && it->second)  // 삭제되었으면 건너뜀
-		{
-			it->second->OnStart();                // 여기서 자기 자신을 삭제해도 OK
-		}
-	}
 
     m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
     GetCamera()->AddChildObject(m_sysinfoWidget);
@@ -154,11 +108,7 @@ void Scene::OnExit()
 {
 	// 씬 종료 시 마우스 상태 초기화
 	Input::ResetMouseState();
-	
-	for (auto it = m_objects.begin(); it != m_objects.end(); ++it)
-	{
-		it->second->OnEnd();
-	}
+	UpdateTaskManager::GetInstance().ExitScene();
 	D2DRenderManager::GetInstance().m_dxgiDevice->Trim();
 	PackageResourceManager::GetInstance().UnloadData();
 }
@@ -310,4 +260,37 @@ gameObject* Scene::Instantiate(gameObject* obj)
 	}
 	target->transform()->SetDirty();
 	return target;
+}
+
+void Scene::MouseTrailAndClick()
+{
+	if (Input::IsKeyPressed(VK_F2)) {
+		m_debugHudVisible = !m_debugHudVisible;
+		if (m_sysinfoWidget) m_sysinfoWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
+		if (m_fpsWidget) m_fpsWidget->GetComponent<TextRenderComponent>()->SetOpacity(m_debugHudVisible ? 1.0f : 0.0f);
+	}
+	if (Input::IsKeyPressed(VK_F3)) {
+		D2DRenderManager::GetInstance().bRenderedBoxRect = !D2DRenderManager::GetInstance().bRenderedBoxRect;
+	}
+	if (Input::IsKeyPressed(VK_F4)) {
+		m_mouseParticle->ToggleMouseTrail();
+	}
+
+	if (m_bClickable && TimerManager::GetInstance().GetGlobalTimeScale() > 0 && Input::IsMouseLeftPressed())
+	{
+		/*WeakObjectPtr<gameObject> go  = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
+		GetCamera()->AddChildObject(go.Get());
+		auto* pc = go->AddComponent<ParticleComponent>();
+		pc->LoadData(L"Effect/MouseClick.png");
+		pc->SetDrawType(Define::EDrawType::WorldSpace);
+		pc->SetAdditiveBlend(true);
+		pc->EmitClickBurst(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()), true);*/
+		WeakObjectPtr<gameObject> go = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
+		GetCamera()->AddChildObject(go.Get());
+		auto* pc = go->AddComponent<ParticleComponent>();
+		pc->LoadData(L"Effect/MouseClick.png");
+		pc->SetDrawType(Define::EDrawType::ScreenSpace);
+		pc->SetAdditiveBlend(true);
+		pc->EmitClickBurst(Input::GetMousePosition(), true);
+	}
 }

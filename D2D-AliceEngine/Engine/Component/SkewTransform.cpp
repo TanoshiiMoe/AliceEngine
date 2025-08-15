@@ -21,6 +21,7 @@ const void SkewTransform::SetRealPos(FVector2 _pos)
 
 void SkewTransform::Initialize()
 {
+	__super::Initialize();
 	//REGISTER_SCRIPT_METHOD(Awake);
 	//REGISTER_SCRIPT_METHOD(OnStart);
 	//REGISTER_SCRIPT_TICK(Update);
@@ -39,51 +40,12 @@ void SkewTransform::OnStart()
 	renderTransform = owner->transform();
 }
 
-void SkewTransform::Update(const float& deltaSeconds)
-{
-	__super::Update(deltaSeconds);
-
-	// 오프셋 안한 트랜스폼 저장하기
-	realPos = owner->GetPosition() - offset + realOffset;
-
-	if (!Math::Approximately(prevzPos, zPos)) {
-
-		// prevPos에 저장하기
-		prevzPos = zPos;
-
-		skewDeg = GetSkew();
-
-		// 원래대로 돌려놓기
-		owner->AddPosition(FVector2( - offset.x, -offset.y));
-
-		float rad = Math::Deg2Rad(skewDeg);
-
-		offset.x = -std::sin(rad) * zPos;
-		offset.y = std::cos(rad) * zPos;
-
-		// 트랜스폼 적용하기
-		owner->AddPosition(FVector2(offset.x, offset.y));
-		//renderTransform->AddPosition(realOffset);
-
-		// 렌더 레이어 설정하기
-		SetRenderLayer();
-
-		// 디버깅용
-		/*std::wstring message = owner->GetName() + L" : Zpos = " + std::to_wstring(zPos) + L"\n";
-		OutputDebugStringW(message.c_str());*/
-	}
-
-	realOffset = { 0.0f , 0.0f };
-}
-
 //void SkewTransform::Update(const float& deltaSeconds)
 //{
 //	__super::Update(deltaSeconds);
-//	if (!renderTransform)
-//		return;
 //
 //	// 오프셋 안한 트랜스폼 저장하기
-//	realPos = renderTransform->GetPosition() - offset + realOffset;
+//	realPos = owner->GetPosition() - offset + realOffset;
 //
 //	if (!Math::Approximately(prevzPos, zPos)) {
 //
@@ -93,7 +55,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 //		skewDeg = GetSkew();
 //
 //		// 원래대로 돌려놓기
-//		renderTransform->AddPosition(-offset.x, -offset.y);
+//		owner->AddPosition(FVector2( - offset.x, -offset.y));
 //
 //		float rad = Math::Deg2Rad(skewDeg);
 //
@@ -101,7 +63,7 @@ void SkewTransform::Update(const float& deltaSeconds)
 //		offset.y = std::cos(rad) * zPos;
 //
 //		// 트랜스폼 적용하기
-//		renderTransform->AddPosition(offset.x, offset.y);
+//		owner->AddPosition(FVector2(offset.x, offset.y));
 //		//renderTransform->AddPosition(realOffset);
 //
 //		// 렌더 레이어 설정하기
@@ -114,6 +76,45 @@ void SkewTransform::Update(const float& deltaSeconds)
 //
 //	realOffset = { 0.0f , 0.0f };
 //}
+
+void SkewTransform::Update(const float& deltaSeconds)
+{
+	__super::Update(deltaSeconds);
+	if (!renderTransform)
+		return;
+
+	// 오프셋 안한 트랜스폼 저장하기
+	realPos = renderTransform->GetPosition() - offset + realOffset;
+
+	if (!Math::Approximately(prevzPos, zPos)) {
+
+		// prevPos에 저장하기
+		prevzPos = zPos;
+
+		skewDeg = GetSkew();
+
+		// 원래대로 돌려놓기
+		renderTransform->AddPosition(-offset.x, -offset.y);
+
+		float rad = Math::Deg2Rad(skewDeg);
+
+		offset.x = -std::sin(rad) * zPos;
+		offset.y = std::cos(rad) * zPos;
+
+		// 트랜스폼 적용하기
+		renderTransform->AddPosition(offset.x, offset.y);
+		//renderTransform->AddPosition(realOffset);
+
+		// 렌더 레이어 설정하기
+		SetRenderLayer();
+
+		// 디버깅용
+		/*std::wstring message = owner->GetName() + L" : Zpos = " + std::to_wstring(zPos) + L"\n";
+		OutputDebugStringW(message.c_str());*/
+	}
+
+	realOffset = { 0.0f , 0.0f };
+}
 
 void SkewTransform::ToSkewPos()
 {

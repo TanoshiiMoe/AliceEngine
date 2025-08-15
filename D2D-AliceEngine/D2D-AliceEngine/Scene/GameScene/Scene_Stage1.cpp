@@ -46,9 +46,6 @@
 void Scene_Stage1::Initialize()
 {
 	__super::Initialize();
-
-	m_sound = NewObject<gameObject>(L"Sound");
-	m_sound->AddComponent<StageAudioScript>();
 }
 
 void Scene_Stage1::Release()
@@ -73,6 +70,9 @@ void Scene_Stage1::Update()
 void Scene_Stage1::OnEnter()
 {
 	__super::OnEnter();
+	m_sound = NewObject<gameObject>(L"Sound");
+	m_sound->AddComponent<StageAudioScript>();
+
 	m_mouseParticle->ToggleMouseTrail();
 
 	//gameObject* m_camera = NewObject<gameObject>(L"Camera");
@@ -94,7 +94,7 @@ void Scene_Stage1::OnEnter()
 	m_cameraController->AddComponent<CameraMover>();
 
 	// 플레이어 생성
-	m_player = NewObject<gameObject>(L"Player");
+  	m_player = NewObject<gameObject>(L"Player");
 	m_player->AddComponent<PlayerBike>();
 	m_player->AddComponent<BackGroundRender>();
 
@@ -145,19 +145,24 @@ void Scene_Stage1::OnEnter()
 	// 디버그용 씬 전환
 	gameObject* sceneChanger = NewObject<gameObject>(L"SceneChanger");
 	sceneChanger->AddComponent<InputComponent>()->SetAction(sceneChanger->GetHandle(), [this]() {
-		if (Input::IsKeyPressed(VK_3)) {
+		if (Input::IsKeyPressed(VK_3)) 
+		{
 			SceneManager::ChangeScene(L"TitleScene");
 		}
-		if (Input::IsKeyPressed(VK_4)) {
+		if (Input::IsKeyPressed(VK_4)) 
+		{
 			GamePlayManager::GetInstance().GameClear();
 		}
-		if (Input::IsKeyPressed(VK_5)) {
+		if (Input::IsKeyPressed(VK_5)) 
+		{
 			GamePlayManager::GetInstance().GameOver();
 		}
-		if (Input::IsKeyPressed(VK_6)) {
+		if (Input::IsKeyPressed(VK_6)) 
+		{
 			GamePlayManager::GetInstance().PlayBossMode();
 		}
-		if (Input::IsKeyDown(VK_P)) {
+		if (Input::IsKeyDown(VK_P)) 
+		{
 			if (BikeMovementScript* t = m_player->GetComponent<BikeMovementScript>())
 			{
 				t->AddMaxSpeed(50);

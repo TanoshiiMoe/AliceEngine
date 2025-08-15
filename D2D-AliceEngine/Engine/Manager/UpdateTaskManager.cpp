@@ -29,6 +29,11 @@ void UpdateTaskManager::Dequeue(WeakObjectPtr<ITickable> InTarget)
 	}
 }
 
+void UpdateTaskManager::DequeueAll()
+{
+	m_TickLists.clear();
+}
+
 void UpdateTaskManager::StartFrame()
 {
 	Context.DeltaSeconds = TimerManager::GetInstance().GetElapsedTime();
@@ -54,6 +59,11 @@ void UpdateTaskManager::ClearWorld()
 {
 	Context.World = nullptr;
 	m_TickLists.clear();
+}
+
+void UpdateTaskManager::ExitScene()
+{
+	ScriptSystem::GetInstance().ProcessScriptGroup(Define::EScriptGroup::SG_OnEnd);
 }
 
 void UpdateTaskManager::TickAll()

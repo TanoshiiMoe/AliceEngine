@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <Core/Singleton.h>
 #include <memory>
 #include <vector>
@@ -38,34 +38,34 @@
 	)
 
 /*
-* @brief : Update()¾È¿¡¼­ÀÇ ¼ø¼­¸¦ Á¤ÇÏ±â À§ÇÑ ¸Å´ÏÀúÀÔ´Ï´Ù
+* @brief : Update()ì•ˆì—ì„œì˜ ìˆœì„œë¥¼ ì •í•˜ê¸° ìœ„í•œ ë§¤ë‹ˆì €ì…ë‹ˆë‹¤
 * @details :
-*	Update ÇÔ¼öÀÇ ´Ü°è¸¦ ³ª´©¾î µî·ÏµÈ ¼ø¼­´ë·Î(È¤Àº Á¤·ÄÇÏ¿©) °¢°¢ÀÇ ÇÔ¼ö Æ÷ÀÎÅÍ¸¦ ½ÇÇàÇÕ´Ï´Ù.
-*	¿©±â´Â ³»ºÎ¸¦ ¾ğ¸®¾ó ½ºÅ¸ÀÏ·Î ¸¸µé¾ú½À´Ï´Ù.
+*	Update í•¨ìˆ˜ì˜ ë‹¨ê³„ë¥¼ ë‚˜ëˆ„ì–´ ë“±ë¡ëœ ìˆœì„œëŒ€ë¡œ(í˜¹ì€ ì •ë ¬í•˜ì—¬) ê°ê°ì˜ í•¨ìˆ˜ í¬ì¸í„°ë¥¼ ì‹¤í–‰í•©ë‹ˆë‹¤.
+*	ì—¬ê¸°ëŠ” ë‚´ë¶€ë¥¼ ì–¸ë¦¬ì–¼ ìŠ¤íƒ€ì¼ë¡œ ë§Œë“¤ì—ˆìŠµë‹ˆë‹¤.
 */
 
-// Unreal ¡ê Unity ÁÖ¿ä Tick/Update ºñ±³
-// TG_PrePhysics       : EarlyUpdate         // (AI/ÀÔ·Â, UnityÀÇ EarlyUpdate)
-// TG_StartPhysics     : FixedUpdate ½ÃÀÛ Àü // (Unity¿¡ Á÷Á¢ ´ëÀÀ ¾øÀ½, º¸Åë FixedUpdate ÁØºñ)
-// TG_DuringPhysics    : FixedUpdate         // (¹°¸® ¿¬»ê, UnityÀÇ FixedUpdate)
-// TG_EndPhysics       : FixedUpdate Á¾·á ÈÄ // (Unity¿¡ Á÷Á¢ ´ëÀÀ ¾øÀ½, º¸Åë FixedUpdate ÈÄÃ³¸®)
-// TG_PostPhysics      : Update/LateUpdate   // (°ÔÀÓ·ÎÁ÷, UnityÀÇ Update/LateUpdate)
-// TG_PostUpdateWork   : PreRender/Render    // (Ä«¸Ş¶ó, ·»´õ¸µ, UnityÀÇ PreRender/Render)
-// TG_LastDemotable    : (Æ¯¼ö »óÈ²¿ë, ¾ğ¸®¾ó¸¸ÀÇ ´Ü°è)
-// TG_NewlySpawned     : (»õ °´Ã¼ Ã³¸®¿ë, ¾ğ¸®¾ó¸¸ÀÇ ´Ü°è)
+// Unreal â†” Unity ì£¼ìš” Tick/Update ë¹„êµ
+// TG_PrePhysics       : EarlyUpdate         // (AI/ì…ë ¥, Unityì˜ EarlyUpdate)
+// TG_StartPhysics     : FixedUpdate ì‹œì‘ ì „ // (Unityì— ì§ì ‘ ëŒ€ì‘ ì—†ìŒ, ë³´í†µ FixedUpdate ì¤€ë¹„)
+// TG_DuringPhysics    : FixedUpdate         // (ë¬¼ë¦¬ ì—°ì‚°, Unityì˜ FixedUpdate)
+// TG_EndPhysics       : FixedUpdate ì¢…ë£Œ í›„ // (Unityì— ì§ì ‘ ëŒ€ì‘ ì—†ìŒ, ë³´í†µ FixedUpdate í›„ì²˜ë¦¬)
+// TG_PostPhysics      : Update/LateUpdate   // (ê²Œì„ë¡œì§, Unityì˜ Update/LateUpdate)
+// TG_PostUpdateWork   : PreRender/Render    // (ì¹´ë©”ë¼, ë Œë”ë§, Unityì˜ PreRender/Render)
+// TG_LastDemotable    : (íŠ¹ìˆ˜ ìƒí™©ìš©, ì–¸ë¦¬ì–¼ë§Œì˜ ë‹¨ê³„)
+// TG_NewlySpawned     : (ìƒˆ ê°ì²´ ì²˜ë¦¬ìš©, ì–¸ë¦¬ì–¼ë§Œì˜ ë‹¨ê³„)
 
-/** Update() ÇÔ¼ö°¡ ½ÇÇàÇØ¾ß¸¸ ÇÏ´Â ¸ñ·ÏµéÀÔ´Ï´Ù */
+/** Update() í•¨ìˆ˜ê°€ ì‹¤í–‰í•´ì•¼ë§Œ í•˜ëŠ” ëª©ë¡ë“¤ì…ë‹ˆë‹¤ */
 struct FTickContext
 {
-	/** Update µÇ°í ÀÖ´Â µ¿¾È °¡Áö°í ÀÖÀ» ¾À */
+	/** Update ë˜ê³  ìˆëŠ” ë™ì•ˆ ê°€ì§€ê³  ìˆì„ ì”¬ */
 	Scene* World;
-	// ÇöÀç UpdateÁßÀÎ GroupÀÌ ¹«¾ùÀÎÁö ¾Ë·ÁÁÖ´Â º¯¼ö
+	// í˜„ì¬ Updateì¤‘ì¸ Groupì´ ë¬´ì—‡ì¸ì§€ ì•Œë ¤ì£¼ëŠ” ë³€ìˆ˜
 	Define::ETickingGroup TickGroup;
-	/** Update¿¡ ´ëÇÑ deltatime */
+	/** Updateì— ëŒ€í•œ deltatime */
 	float DeltaSeconds;
-	/** FixedUpdate¿¡ ´ëÇÑ deltatime */
+	/** FixedUpdateì— ëŒ€í•œ deltatime */
 	float FixedDeltaSeconds;
-	/** true¸é Update¸¦ ·Î±× Ã³¸®ÇÔ */
+	/** trueë©´ Updateë¥¼ ë¡œê·¸ ì²˜ë¦¬í•¨ */
 	bool bLogTick;
 
 	FTickContext(float InDeltaSeconds = 0.0f, float InFixedDeltaSeconds = 0.0f, Define::ETickingGroup InTickGroup = Define::ETickingGroup::TG_PrePhysics)
@@ -100,11 +100,14 @@ public:
 
 	void Enque(WeakObjectPtr<ITickable> InTarget, Define::ETickingGroup InGroup, std::function<void(const float&)> TickFunc);
 	void Dequeue(WeakObjectPtr<ITickable> InTarget);
+	void DequeueAll();
 
 	void StartFrame();
 	void EndFrame();
 	void SetWorld();
 	void ClearWorld();
+
+	void ExitScene();
 
 	void TickAll();
 };

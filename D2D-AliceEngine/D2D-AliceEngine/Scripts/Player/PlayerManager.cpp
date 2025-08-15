@@ -35,10 +35,10 @@ void PlayerManager::Initialize()
 
 void PlayerManager::OnStart()
 {
-	__super::Initialize();
+	__super::OnStart();
 
 	// instance 설정
-	if (instance == nullptr)
+   	if (instance == nullptr)
 		instance = this;
 	else
 		SceneManager::GetInstance().GetWorld()->RemoveObject(this->owner.lock());

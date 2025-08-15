@@ -32,6 +32,10 @@ public:
 		T* createdComp = new T(std::forward<Args>(args)...);
 		createdComp->SetOwner(WeakFromThis<gameObject>());
 		createdComp->Initialize();
+
+		const char* p = typeid(T).name();
+		createdComp->SetClassType(std::wstring(p, p + std::strlen(p)));
+
 		m_components.emplace_back(createdComp);
 
 		return createdComp;
@@ -88,6 +92,10 @@ public:
 		T* createdComp = new T(std::forward<Args>(args)...);
 		createdComp->Initialize();
 		createdComp->SetOwner(WeakFromThis<gameObject>());
+
+		const char* p = typeid(T).name();
+		createdComp->SetClassType(std::wstring(p, p + std::strlen(p)));
+
 		m_components.emplace_back(createdComp);
 		return WeakObjectPtr<T>(createdComp);
 	}

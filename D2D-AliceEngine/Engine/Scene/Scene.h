@@ -172,6 +172,7 @@ public:
 	}
 
 	gameObject* Instantiate(gameObject* obj);
+	void MouseTrailAndClick();
 protected:
 	ParticleComponent* m_mouseParticle;
 private:

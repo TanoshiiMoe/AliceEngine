@@ -8,6 +8,7 @@
 
 void CameraMover::Initialize()
 {
+	__super::Initialize();
 	//REGISTER_SCRIPT_METHOD(OnStart);
 	//REGISTER_SCRIPT_METHOD(Awake);
 	//REGISTER_UPDATE_TASK_IN_SCRIPT(Update, Define::ETickingGroup::TG_PostPhysics);
@@ -24,16 +25,19 @@ void CameraMover::OnStart()
 	// 플레이어 찾아서 넣기
 	player = SceneManager::GetInstance().GetWorld()->FindObjectByName<gameObject>(L"Player");
 
-	camera = GetCamera();
+	if (auto* cameraPtr = GetCamera())
+	{
+		camera = cameraPtr;
+	}
 
 	if (player) {
-		playerST = player->GetComponent<SkewTransform>();
+ 		playerST = player->GetComponent<SkewTransform>();
 
 		player->RemoveFromParent();
 		player->AddChildTransform(&GetCamera()->relativeTransform);
-		GetCamera()->SetRelativeScale(player->GetScaleInv());
-		GetCamera()->SetRelativePosition(FVector2(0, 0));
-		GetCamera()->RemoveFromParent();
+		camera->SetRelativeScale(player->GetScaleInv());
+		camera->SetRelativePosition(FVector2(0, 0));
+		camera->RemoveFromParent();
 	}
 }
 
