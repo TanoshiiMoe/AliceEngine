@@ -211,8 +211,8 @@ void Bullet::OnStart()
 
 
 	// 사운드 재생
-	std::wstring audName = L"Enemy/character_Enemy_sfx_shot.wav";
-	StageAudioScript::instance->m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
+	//std::wstring audName = L"Enemy/character_Enemy_sfx_shot.wav";
+	//StageAudioScript::instance->m_Sfx[audName]->PlayByName(audName, 0.0f, 0.5f);
 	/*audioComp = owner->AddComponent<AudioComponent>(L"BulletShoot");
 	audioComp->LoadData(L"Enemy/character_Enemy_sfx_shot.wav", AudioMode::Memory, SoundType::SFX);
 	audioComp->PlayByName(L"BulletShoot", 0.0f, 0.5f);*/
