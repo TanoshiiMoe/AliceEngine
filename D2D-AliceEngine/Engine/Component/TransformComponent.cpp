@@ -1,7 +1,8 @@
-#include "pch.h"
+Ôªø#include "pch.h"
 #include "TransformComponent.h"
 #include <Manager/UpdateTaskManager.h>
 #include <Math/Transform.h>
+#include <System/TransformSystem.h>
 
 TransformComponent::TransformComponent()
 {
@@ -14,11 +15,13 @@ TransformComponent::~TransformComponent()
 
 void TransformComponent::Initialize()
 {
-	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
+	//REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_NewlySpawned);
+	TransformSystem::GetInstance().Regist(WeakFromThis<TransformComponent>());
 }
 
 void TransformComponent::Release()
 {
+	TransformSystem::GetInstance().UnRegist(WeakFromThis<TransformComponent>());
 	for (auto child : children)
 	{
 		if (child.lock())
@@ -26,7 +29,20 @@ void TransformComponent::Release()
 			child.lock()->parent.reset();
 		}
 	}
-	UpdateTaskManager::GetInstance().Dequeue(WeakFromThis<ITickable>());
+}
+
+void TransformComponent::RecalcWorldRecursive(const D2D1::Matrix3x2F& parentWorld)
+{
+	// local/world dirty Ï≤¥ÌÅ¨Îäî Transform::ToMatrix()Í∞Ä ÎÇ¥Î∂Ä Ï∫êÏãúÎ°ú Ìï¥Í≤∞
+	const auto local = m_localTransform.ToMatrix();
+	const auto world = local * parentWorld;
+	m_worldTransform.SetFromMatrix(world);
+
+	for (auto& ch : children)
+	{
+		if (auto c = ch.lock())
+			c->RecalcWorldRecursive(world);
+	}
 }
 
 void TransformComponent::Update(const float& deltaSeconds)
@@ -74,9 +90,9 @@ void TransformComponent::AddChildObject(WeakObjectPtr<TransformComponent> child)
 void TransformComponent::RemoveFromParent()
 {
 	auto parentPtr = parent.lock();
-	if (!parentPtr) return; // ∫Œ∏∞° æ¯¿∏∏È æ∆π´∞Õµµ «œ¡ˆ æ ¿Ω
+	if (!parentPtr) return; // Î∂ÄÎ™®Í∞Ä ÏóÜÏúºÎ©¥ ÏïÑÎ¨¥Í≤ÉÎèÑ ÌïòÏßÄ ÏïäÏùå
 	
-	// ∫Œ∏¿« children ∏ÆΩ∫∆Æø°º≠ ¿⁄Ω≈¿ª ¡¶∞≈
+	// Î∂ÄÎ™®Ïùò children Î¶¨Ïä§Ìä∏ÏóêÏÑú ÏûêÏã†ÏùÑ Ï†úÍ±∞
 	for (auto it = parentPtr->children.begin(); it != parentPtr->children.end(); ++it)
 	{
 		if (it->lock() == this)
@@ -86,7 +102,7 @@ void TransformComponent::RemoveFromParent()
 		}
 	}
 	
-	// ¿⁄Ω≈¿« parent ¬¸¡∂ ¡¶∞≈
+	// ÏûêÏã†Ïùò parent Ï∞∏Ï°∞ Ï†úÍ±∞
 	parent.reset();
 }
 

@@ -12,14 +12,12 @@
 #include <Core/Input.h>
 #include <Math/TColor.h>
 #include "../../Scripts/BackGroundImage.h"
-#include "../../Scripts/UI_Script.h"
 #include "../../Scripts/BackGroundVideo.h"
 #include "../../Prefab/Truck.h"
 #include "../../Scripts/BackGroundRender.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
-#include <UI/UIButton.h>
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
 #include <Effect/Prism.h>

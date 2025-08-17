@@ -82,10 +82,10 @@ void DemoScene2::OnEnter()
 
 	spineObject = NewObject<gameObject>(L"spineObject");
 	spine = spineObject->AddComponent<SpineScript>();
-	spine->LoadData(L"Spine2D\\MAIN_SPINE.atlas", L"Spine2D\\MAIN_SPINE.json");
+	spine->LoadData(L"Spine2D_g\\Monster_1.atlas", L"Spine2D_g\\Monster_1.json");
 	if (spine->spineRenderer)
 	{
-		spine->spineRenderer->SetAnimation("animation");
+		spine->spineRenderer->SetAnimation("Idle");
 		spine->spineRenderer->SetPosition(FVector2(0, 0));
 		spine->spineRenderer->SetRendered(true);
 		spine->spineRenderer->SetLayer(94548823);
@@ -138,10 +138,10 @@ void DemoScene2::OnEnter()
 		L" [H] : 아루2 7 회복하기 \n"
 		L" [J] : 아루 최대체력 15 늘리기"
 	);
-	FVector2 widgetSize = m_widget->GetComponent<TextRenderComponent>()->GetRelativeSize();
-	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen(widgetSize, FVector2(0.1, 0.1)));
-	//m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 50));
-	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
+	m_widget->SetPosition(FVector2(0, 0));
+	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.02, 0.1)));
+	//m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 50))
+	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(22.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
 
 	m_widget2->transform()->SetPosition(0, 0);

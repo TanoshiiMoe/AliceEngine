@@ -8,7 +8,6 @@
 #include <Component/Animator.h>
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
-#include <Component/UIComponent.h>
 #include <tuple>
 #include <Define/Define.h>
 //#include <UI/UIImage.h>
@@ -138,6 +137,21 @@ void RenderSystem::UnInitialize()
 
 void RenderSystem::Render()
 {
+	// 만료된 아이템 제거
+	m_renderQueue.erase(std::remove_if(m_renderQueue.begin(), m_renderQueue.end(),
+		[](const RenderItem& item) { return !item.IsValid(); }), m_renderQueue.end());
+
+	RenderReady();
+	RenderWorldSpace();
+	DebugCamera();
+	RenderAfterEffect();
+	RenderScreenSpace();
+
+	D2DRenderManager::GetInstance().m_dxgiSwapChain->Present(1, 0);
+}
+
+void RenderSystem::RenderReady()
+{
 	ComPtr<ID2D1DeviceContext7> deviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
 	if (!deviceContext.Get()) return;
 	bool m_resizePending = D2DRenderManager::GetInstance().m_resizePending;
@@ -151,106 +165,51 @@ void RenderSystem::Render()
 	}
 	deviceContext->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
 	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-
-	// 통합 렌더링 사용
-	RenderUnified();
-	if(D2DRenderManager::GetInstance().bRenderedBoxRect)
-		DebugCamera();
-
-	if(D2DRenderManager::GetInstance().m_sceneEffect.Get())
-	{
-		deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-		D2D1_SIZE_F size = D2DRenderManager::GetInstance().m_screenBitmap->GetSize();	//	그릴 크기
-		D2D1_RECT_F DestRect{ 0,0,size.width,size.height };
-		deviceContext->DrawBitmap(
-			D2DRenderManager::GetInstance().m_overlayBitmap.Get(),
-			DestRect,           // g_d2dBitmapScene 크기에 맞게 늘림
-			1.0f,              // Opacity (0.0 ~ 1.0)
-			D2D1_INTERPOLATION_MODE_LINEAR,
-			nullptr            // 이미지 원본 영역 전체 사용
-		);
-	}
-	
-	HRESULT hr = deviceContext->EndDraw();
-	if (FAILED(hr)) {
-		D2DRenderManager::GetInstance().OutputError(hr);
-	}
-
-	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_bitmapTarget.Get());
-	deviceContext->BeginDraw();
-
-	if (D2DRenderManager::GetInstance().m_sceneEffect.Get())
-		deviceContext->DrawImage(
-			D2DRenderManager::GetInstance().m_sceneEffect.Get(),
-			nullptr,
-			nullptr,
-			D2D1_INTERPOLATION_MODE_LINEAR,
-			D2D1_COMPOSITE_MODE_SOURCE_OVER
-		);
-	else
-	{
-		deviceContext->DrawBitmap(D2DRenderManager::GetInstance().m_screenBitmap.Get());
-	}
-
-	deviceContext->EndDraw();
-
-	D2DRenderManager::GetInstance().m_dxgiSwapChain->Present(1, 0);
 }
 
-void RenderSystem::RenderUnified()
+void RenderSystem::RenderWorldSpace()
 {
-	// 만료된 아이템 제거
-	m_renderQueue.erase(std::remove_if(m_renderQueue.begin(), m_renderQueue.end(),
-		[](const RenderItem& item) { return !item.IsValid(); }), m_renderQueue.end());
-
-	// 레이어 순서로 정렬
-	std::sort(m_renderQueue.begin(), m_renderQueue.end(), RenderItemSortCompare);
-
 	ViewRect view = GetCameraView();
 
-	// 통합 렌더링 루프
-	for (const auto& item : m_renderQueue)
-	{
-		if (!item.IsValid()) continue;
+	std::vector<RenderItem> worldQueue;
+	worldQueue.reserve(m_renderQueue.size());
 
-		if (item.type == Define::ERenderType::D2D)
-		{
-			// D2D 렌더링
-			if (ObjectHandler::GetInstance().IsValid(item.objectHandle))
-			{
-				// 카메라 컬링 체크 (WorldSpace인 경우에만)
-				switch (item.drawType)
-				{
-				case Define::EDrawType::WorldSpace:
-					if (!CheckCameraCulling(item.D2DObject, view))
-					{
-						item.RenderFunc();
-					}
-					break;
-				case Define::EDrawType::ScreenSpace:
-					// ScreenSpace는 컬링 체크를 하지 않음
-					item.RenderFunc();
-					break;
-				default:
-					break;
+	std::copy_if(
+		m_renderQueue.begin(), m_renderQueue.end(),
+		std::back_inserter(worldQueue),
+		[](const RenderItem& item) {
+			return item.drawType == Define::EDrawType::WorldSpace && item.IsValid();
+		}
+	);
+
+	std::sort(
+		worldQueue.begin(), worldQueue.end(),
+		[](const RenderItem& a, const RenderItem& b) {
+			return RenderItemSortCompare(a, b);
+		}
+	);
+
+	std::for_each(
+		worldQueue.begin(), worldQueue.end(),
+		[view](const RenderItem& item) {
+			if (!item.IsValid()) return;
+			if (!ObjectHandler::GetInstance().IsValid(item.objectHandle)) return;
+
+			if (item.type == Define::ERenderType::D2D) {
+				if (!RenderSystem::CheckCameraCulling(item.D2DObject, view)) {
+					if (item.RenderFunc) item.RenderFunc();
 				}
-				//renderer->Render();
+			}
+			else if (item.type == Define::ERenderType::Spine2D) {
+				if (item.RenderFunc) item.RenderFunc();
 			}
 		}
-		else if (item.type == Define::ERenderType::Spine2D)
-		{
-			// Spine2D 렌더링
-			if (ObjectHandler::GetInstance().IsValid(item.objectHandle))
-			{
-				item.RenderFunc();
-			}
-		}
-	}
+	);
 }
 
 void RenderSystem::DebugCamera()
 {
+	if (!D2DRenderManager::GetInstance().bRenderedBoxRect) return;
 	ComPtr<ID2D1DeviceContext7> deviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
 	if (!deviceContext.Get()) return;
 	if (Camera* camera = SceneManager::GetCamera())
@@ -369,4 +328,87 @@ bool RenderSystem::RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, co
 bool RenderSystem::RenderItemSortCompare(const RenderItem& a, const RenderItem& b)
 {
 	return *(a.layer) < *(b.layer);
+}
+
+void RenderSystem::RenderAfterEffect()
+{
+	ComPtr<ID2D1DeviceContext7> deviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
+	if (!deviceContext.Get()) return;
+
+	if (D2DRenderManager::GetInstance().m_sceneEffect.Get())
+	{
+		deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+		D2D1_SIZE_F size = D2DRenderManager::GetInstance().m_screenBitmap->GetSize();	//	그릴 크기
+		D2D1_RECT_F DestRect{ 0,0,size.width,size.height };
+		deviceContext->DrawBitmap(
+			D2DRenderManager::GetInstance().m_overlayBitmap.Get(),
+			DestRect,           // g_d2dBitmapScene 크기에 맞게 늘림
+			1.0f,              // Opacity (0.0 ~ 1.0)
+			D2D1_INTERPOLATION_MODE_LINEAR,
+			nullptr            // 이미지 원본 영역 전체 사용
+		);
+	}
+
+	HRESULT hr = deviceContext->EndDraw();
+	if (FAILED(hr)) {
+		D2DRenderManager::GetInstance().OutputError(hr);
+	}
+
+	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+	deviceContext->SetTarget(D2DRenderManager::GetInstance().m_bitmapTarget.Get());
+	deviceContext->BeginDraw();
+
+	if (D2DRenderManager::GetInstance().m_sceneEffect.Get())
+		deviceContext->DrawImage(
+			D2DRenderManager::GetInstance().m_sceneEffect.Get(),
+			nullptr,
+			nullptr,
+			D2D1_INTERPOLATION_MODE_LINEAR,
+			D2D1_COMPOSITE_MODE_SOURCE_OVER
+		);
+	else
+	{
+		deviceContext->DrawBitmap(D2DRenderManager::GetInstance().m_screenBitmap.Get());
+	}
+	deviceContext->EndDraw();
+}
+
+void RenderSystem::RenderScreenSpace()
+{
+	ViewRect view = GetCameraView();
+
+	std::vector<RenderItem> screenQueue;
+	screenQueue.reserve(m_renderQueue.size());
+
+	std::copy_if(
+		m_renderQueue.begin(), m_renderQueue.end(),
+		std::back_inserter(screenQueue),
+		[](const RenderItem& item) {
+			return item.drawType == Define::EDrawType::ScreenSpace && item.IsValid();
+		}
+	);
+
+	std::sort(
+		screenQueue.begin(), screenQueue.end(),
+		[](const RenderItem& a, const RenderItem& b) {
+			return RenderItemSortCompare(a, b);
+		}
+	);
+
+	ComPtr<ID2D1DeviceContext7> deviceContext = D2DRenderManager::GetInstance().m_d2dDeviceContext;
+	if (!deviceContext.Get()) return;
+
+	deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
+	deviceContext->BeginDraw();
+
+	std::for_each(
+		screenQueue.begin(), screenQueue.end(),
+		[](const RenderItem& item) {
+			if (!item.IsValid()) return;
+			if (!ObjectHandler::GetInstance().IsValid(item.objectHandle)) return;
+
+			if (item.RenderFunc) item.RenderFunc();
+		}
+	);
+	deviceContext->EndDraw();
 }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Component.h"
 #include <Math/Transform.h>
 #include <Core/ObjectHandler.h>
@@ -11,21 +11,22 @@ public:
 public:
 	void Initialize() override;
 	void Release() override;
+	void RecalcWorldRecursive(const D2D1::Matrix3x2F& parentWorld);
 	void Update(const float& deltaSeconds) override;
 	void SetTransform(const FVector2& position, const float& rotation, const FVector2& scale, const FVector2& pivot);
 
 public:
-	// °èÃş±¸Á¶ °ü¸®
+	// ê³„ì¸µêµ¬ì¡° ê´€ë¦¬
 	WeakObjectPtr<TransformComponent> parent;
 	std::vector<WeakObjectPtr<TransformComponent>> children;
 
 	void AddChildObject(WeakObjectPtr<TransformComponent> child);
 	void RemoveFromParent();
 
-	FVector2 m_pivot{ 0.5f,0.5f }; // ÁÂÇ¥ Áß½ÉÁ¡
-	Transform m_localTransform; // Transform ÄÄÆ÷³ÍÆ®
-	Transform m_worldTransform; // Transform ÄÄÆ÷³ÍÆ®
-	bool bMoved = false; // ÃÖÃÊ Collision¿¡ ¾²ÀÌ´Â º¯¼ö
+	FVector2 m_pivot{ 0.5f,0.5f }; // ì¢Œí‘œ ì¤‘ì‹¬ì 
+	Transform m_localTransform; // Transform ì»´í¬ë„ŒíŠ¸
+	Transform m_worldTransform; // Transform ì»´í¬ë„ŒíŠ¸
+	bool bMoved = false; // ìµœì´ˆ Collisionì— ì“°ì´ëŠ” ë³€ìˆ˜
 
 	FVector2 GetPosition() const;
 	void SetPosition(const float& _x, const float& _y);

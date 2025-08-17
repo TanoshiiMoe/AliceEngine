@@ -118,12 +118,6 @@
     <ClInclude Include="Scene\ExampleScene\ExampleScene.h">
       <Filter>Scene\ExampleScene</Filter>
     </ClInclude>
-    <ClInclude Include="Scripts\UI_Script.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\TitleUIScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Scripts\Bike\Battery.h">
       <Filter>Scripts\Bike</Filter>
     </ClInclude>
@@ -359,12 +353,6 @@
     </ClCompile>
     <ClCompile Include="Scene\ExampleScene\ExampleScene.cpp">
       <Filter>Scene\ExampleScene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\UI_Script.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\TitleUIScript.cpp">
-      <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="Scripts\Bike\Battery.cpp">
       <Filter>Scripts\Bike</Filter>

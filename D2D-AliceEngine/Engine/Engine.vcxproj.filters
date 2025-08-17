@@ -64,6 +64,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{eb5df3d8-5caf-4545-ae90-e0849e21f6ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Effect">
+      <UniqueIdentifier>{c720da2c-efd3-434c-9d89-6b67bb1fd9b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\VideoComponent.h">
@@ -243,23 +246,11 @@
     <ClInclude Include="TileMap\TileMapLoader.h">
       <Filter>TileMap</Filter>
     </ClInclude>
-    <ClInclude Include="Component\UIComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIImage.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIText.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Component\TileMapRenderer.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Effect\Prism.h">
       <Filter>Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIButton.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Component\BackGroundComponent.h">
       <Filter>Component</Filter>
@@ -276,11 +267,22 @@
     <ClInclude Include="Helpers\Logger.h">
       <Filter>Helper</Filter>
     </ClInclude>
-    <ClInclude Include="Component\ProgressBarComponent.h" />
-    <ClInclude Include="Component\Effect\ParticleComponent.h" />
-    <ClInclude Include="Component\Effect\VertexShaderRenderer.h" />
-    <ClInclude Include="Component\Effect\PixelShaderRenderer.h" />
-    <ClInclude Include="Component\Effect\ShaderParticleComponent.h" />
+    <ClInclude Include="Component\Effect\ParticleComponent.h">
+      <Filter>Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Effect\PixelShaderRenderer.h">
+      <Filter>Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Effect\ShaderParticleComponent.h">
+      <Filter>Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Effect\VertexShaderRenderer.h">
+      <Filter>Component\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ProgressBarComponent.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="System\TransformSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -457,23 +459,11 @@
     <ClCompile Include="TileMap\TileMapLoader.cpp">
       <Filter>TileMap</Filter>
     </ClCompile>
-    <ClCompile Include="Component\UIComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIImage.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIText.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Component\TileMapRenderer.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Effect\Prism.cpp">
       <Filter>Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIButton.cpp">
-      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Component\BackGroundComponent.cpp">
       <Filter>Component</Filter>
@@ -490,11 +480,22 @@
     <ClCompile Include="Helpers\Logger.cpp">
       <Filter>Helper</Filter>
     </ClCompile>
-    <ClCompile Include="Component\ProgressBarComponent.cpp" />
-    <ClCompile Include="Component\Effect\PixelShaderRenderer.cpp" />
-    <ClCompile Include="Component\Effect\ShaderParticleComponent.cpp" />
-    <ClCompile Include="Component\Effect\VertexShaderRenderer.cpp" />
-    <ClCompile Include="Component\Effect\ParticleComponent.cpp" />
+    <ClCompile Include="Component\Effect\ParticleComponent.cpp">
+      <Filter>Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Effect\PixelShaderRenderer.cpp">
+      <Filter>Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Effect\ShaderParticleComponent.cpp">
+      <Filter>Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Effect\VertexShaderRenderer.cpp">
+      <Filter>Component\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ProgressBarComponent.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="System\TransformSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GradationShader.hlsl">

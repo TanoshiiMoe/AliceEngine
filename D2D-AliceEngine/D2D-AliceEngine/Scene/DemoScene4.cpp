@@ -17,13 +17,11 @@
 #include "../Scripts/Legacy/Player.h"
 #include "../Scripts/Legacy/Enemy.h"
 #include "../Scripts/Audio.h"
-#include "../Scripts/UI_Script.h"
 #include "../Scripts/BackGroundVideo.h"
 #include "../Scripts/BackGroundRender.h"
 #include <Component/Collider.h>
 #include <Component/Rigidbody2D.h>
 #include <TileMap/TileMapComponent.h>
-#include <UI/UIButton.h>
 #include <Component/BackGroundComponent.h>
 #include <Component/SkewTransform.h>
 #include <Effect/Prism.h>
@@ -99,8 +97,6 @@ void DemoScene4::OnEnter()
 	//m_button->GetComponent<ButtonComponent>()->SetStateAction(Define::EButtonState::Pressed,[]() {});
 	//m_button->GetComponent<ButtonComponent>()->m_layer = 510;
 
-	m_UI = NewObject<gameObject>(L"UI");
-	m_UI->AddComponent<UI_Script>();
 	//m_UI->AddComponent<StageWidgetScript>();
 	// Truck(점프대)
 	m_truck = NewObject<gameObject>(L"Truck");

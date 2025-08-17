@@ -77,7 +77,6 @@ void Scene::OnEnter()
 	Input::ResetMouseState();
 
     m_sysinfoWidget = NewObject<gameObject>(L"SystemInfoWidget");
-    GetCamera()->AddChildObject(m_sysinfoWidget);
     auto* sysText = m_sysinfoWidget->AddComponent<TextRenderComponent>();
     sysText->SetDrawType(Define::EDrawType::ScreenSpace);
 	sysText->SetColor(FColor(200, 0, 0, 255));
@@ -88,7 +87,6 @@ void Scene::OnEnter()
 
     // FPS 위젯
     m_fpsWidget = NewObject<gameObject>(L"FPSWidget");
-    GetCamera()->AddChildObject(m_fpsWidget);
     auto* fpsText = m_fpsWidget->AddComponent<TextRenderComponent>();
     fpsText->SetDrawType(Define::EDrawType::ScreenSpace);
     fpsText->SetColor(FColor(0, 255, 0, 255));
@@ -97,10 +95,9 @@ void Scene::OnEnter()
 	fpsText->m_layer = 987654321;
 
 	m_mouseTrail = NewObject<gameObject>(L"Scene_Default_ParticleScreenTrail");
-	GetCamera()->AddChildObject(m_mouseTrail);
 	m_mouseParticle = m_mouseTrail->AddComponent<ParticleComponent>();
 	m_mouseParticle->LoadData(L"Effect/MouseTrail.png");
-	m_mouseParticle->SetDrawType(Define::EDrawType::WorldSpace);
+	m_mouseParticle->SetDrawType(Define::EDrawType::ScreenSpace);
 	m_mouseParticle->ToggleMouseTrail(true);
 }
 
@@ -278,15 +275,7 @@ void Scene::MouseTrailAndClick()
 
 	if (m_bClickable && TimerManager::GetInstance().GetGlobalTimeScale() > 0 && Input::IsMouseLeftPressed())
 	{
-		/*WeakObjectPtr<gameObject> go  = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
-		GetCamera()->AddChildObject(go.Get());
-		auto* pc = go->AddComponent<ParticleComponent>();
-		pc->LoadData(L"Effect/MouseClick.png");
-		pc->SetDrawType(Define::EDrawType::WorldSpace);
-		pc->SetAdditiveBlend(true);
-		pc->EmitClickBurst(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()), true);*/
 		WeakObjectPtr<gameObject> go = GetWorld()->NewObject<gameObject>(L"Scene_Default_ParticleScreenClick");
-		GetCamera()->AddChildObject(go.Get());
 		auto* pc = go->AddComponent<ParticleComponent>();
 		pc->LoadData(L"Effect/MouseClick.png");
 		pc->SetDrawType(Define::EDrawType::ScreenSpace);

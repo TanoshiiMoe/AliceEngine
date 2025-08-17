@@ -18,6 +18,7 @@
 #include <System/PhysicsSystem.h>
 #include <Scene/Scene.h>
 #include <Object/Camera.h>
+#include <System/TransformSystem.h>
 
 
 Application::Application()
@@ -43,6 +44,7 @@ Application::~Application()
 	ClassManager::Destroy();
 	PhysicsSystem::Destroy();
 	AudioManager::Destroy();
+	TransformSystem::Destroy();
 }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -83,6 +85,7 @@ void Application::Initialize()
 	CollisionSystem			::Create();
 	PhysicsSystem			::Create();
 	AudioManager			::Create();
+	TransformSystem			::Create();
 
 	char szPath[MAX_PATH] = { 0, };
 	GetModuleFileNameA(NULL, szPath, MAX_PATH); // 현재 모듈의 경로
@@ -148,6 +151,7 @@ void Application::Update()
 {
 	TimerManager::GetInstance().UpdateTime();
 	SceneManager::GetInstance().Update();
+	TransformSystem::GetInstance().Flush();
 	Input::Update();
 }
 
@@ -171,6 +175,7 @@ void Application::Uninitialize()
 	InputSystem::GetInstance().UnRegistAll();
 	CollisionSystem::GetInstance().UnRegistAll();
 	PhysicsSystem::GetInstance().UnRegistAll();
+	TransformSystem::GetInstance().UnRegistAll();
 	CoUninitialize();
 }
 
