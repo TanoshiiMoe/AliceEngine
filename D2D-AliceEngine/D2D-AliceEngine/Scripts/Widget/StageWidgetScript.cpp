@@ -7,8 +7,6 @@
 #include <Helpers/CoordHelper.h>
 
 #include <Core/Input.h>
-#include <UI/UIImage.h>
-#include <UI/UIText.h>
 #include <Scene/Scene.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/TextRenderComponent.h>
@@ -22,6 +20,7 @@
 #include <Scripts/Bike/BikeMovementScript.h>
 #include <Scripts/Widget/CutSceneWidgetScript.h>
 #include "../Audio/StageAudioScript.h"
+#include <Component/InputComponent.h>
 
 void StageWidgetScript::Initialize()
 {

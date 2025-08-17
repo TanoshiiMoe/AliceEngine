@@ -8,7 +8,6 @@
 #include <Component/Animator.h>
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
-#include <Component/UIComponent.h>
 #include <tuple>
 #include <Define/Define.h>
 //#include <UI/UIImage.h>

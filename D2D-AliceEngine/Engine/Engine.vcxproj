@@ -216,11 +216,7 @@
     <ClInclude Include="Component\TileMapRenderer.h" />
     <ClInclude Include="TileMap\TileMapLoader.h" />
     <ClInclude Include="TileMap\TileMapComponent.h" />
-    <ClInclude Include="Component\UIComponent.h" />
     <ClInclude Include="System\TransformSystem.h" />
-    <ClInclude Include="UI\UIButton.h" />
-    <ClInclude Include="UI\UIText.h" />
-    <ClInclude Include="UI\UIImage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ButtonComponent.cpp" />
@@ -298,11 +294,7 @@
     <ClCompile Include="Component\TileMapRenderer.cpp" />
     <ClCompile Include="TileMap\TileMapLoader.cpp" />
     <ClCompile Include="TileMap\TileMapComponent.cpp" />
-    <ClCompile Include="Component\UIComponent.cpp" />
     <ClCompile Include="System\TransformSystem.cpp" />
-    <ClCompile Include="UI\UIButton.cpp" />
-    <ClCompile Include="UI\UIText.cpp" />
-    <ClCompile Include="UI\UIImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GradationShader.hlsl">

@@ -246,23 +246,11 @@
     <ClInclude Include="TileMap\TileMapLoader.h">
       <Filter>TileMap</Filter>
     </ClInclude>
-    <ClInclude Include="Component\UIComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIImage.h">
-      <Filter>UI</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIText.h">
-      <Filter>UI</Filter>
-    </ClInclude>
     <ClInclude Include="Component\TileMapRenderer.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Effect\Prism.h">
       <Filter>Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UIButton.h">
-      <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="Component\BackGroundComponent.h">
       <Filter>Component</Filter>
@@ -471,23 +459,11 @@
     <ClCompile Include="TileMap\TileMapLoader.cpp">
       <Filter>TileMap</Filter>
     </ClCompile>
-    <ClCompile Include="Component\UIComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIImage.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIText.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
     <ClCompile Include="Component\TileMapRenderer.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Effect\Prism.cpp">
       <Filter>Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UIButton.cpp">
-      <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="Component\BackGroundComponent.cpp">
       <Filter>Component</Filter>

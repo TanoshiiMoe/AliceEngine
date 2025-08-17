@@ -12,8 +12,6 @@
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
-#include <UI/UIImage.h>
-#include <UI/UIText.h>
 #include <Scene/Scene.h>
 #include <Component/ButtonComponent.h>
 #include <Helpers/CoordHelper.h>
@@ -71,8 +69,6 @@ void TitleWidgetScript::OnStart()
 
 	m_owner = GetOwner();
 	m_owner->transform()->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f,0.5f)));
-
-	GetCamera()->AddChildObject(m_owner);
 
 	float guargeSize = 1.0f;
 	float soundUISize = 1.0f;

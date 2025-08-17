@@ -58,7 +58,7 @@ void DemoGameApp::Initialize()
 	SceneManager::AddScene<Scene_Stage3>(Define::Scene_Stage3);	// stage select
 	SceneManager::AddScene<GameClearScene>(Define::Scene_GameClear);	// stage select
 	SceneManager::AddScene<GameOverScene>(Define::Scene_GameOver);	// stage select
-	SceneManager::ChangeScene(L"aruScene");
+	SceneManager::ChangeScene(L"TitleScene");
 }
 
 void DemoGameApp::Run()
