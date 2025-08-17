@@ -55,7 +55,7 @@ void EnemyStatScript::OnStart()
         FVector2 size = m_hpBarBack->GetRelativeSize();
         m_hpBarBack->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
     }
-    m_hpBarBack->m_layer = 10004;
+    m_hpBarBack->SetLayer(10004);
 
     m_hpBarFill = owner->AddComponent<ProgressBarComponent>();
     m_hpBarFill->LoadData(L"UI/HealthBar_Red.png");
@@ -66,7 +66,7 @@ void EnemyStatScript::OnStart()
         FVector2 size = m_hpBarFill->GetRelativeSize();
         m_hpBarFill->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
     }
-    m_hpBarFill->m_layer = m_hpBarBack->m_layer + 1;
+    m_hpBarFill->SetLayer(m_hpBarBack->GetLayer() + 1);
 
     // 델리게이트 연동: HP/MAXHP 변경 시 진행도 갱신
     m_enemyStat->OnChangeStatMap["HP"].Add(owner->GetHandle(), [this](float /*oldVal*/, float newVal)

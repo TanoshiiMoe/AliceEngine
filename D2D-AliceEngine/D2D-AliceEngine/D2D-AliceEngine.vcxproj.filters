@@ -145,9 +145,6 @@
     <ClInclude Include="Scripts\Bike\BikeMovementScript.h">
       <Filter>Scripts\Bike</Filter>
     </ClInclude>
-    <ClInclude Include="Spine2D\SpineRenderer.h">
-      <Filter>Spine2D</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\SpineScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -381,9 +378,6 @@
     <ClCompile Include="Scripts\Bike\BikeMovementScript.cpp">
       <Filter>Scripts\Bike</Filter>
     </ClCompile>
-    <ClCompile Include="Spine2D\SpineRenderer.cpp">
-      <Filter>Spine2D</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\SpineScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -504,10 +498,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scripts\SolarScene\Sun.cpp" />
     <ClCompile Include="Scripts\Video\YuukaVideo.cpp" />
-    <ClCompile Include="Scripts\UI_Script.cpp" />
     <ClCompile Include="Prefab\Truck.cpp" />
     <ClCompile Include="Scene\GameScene\TitleScene.cpp" />
-    <ClCompile Include="Scripts\TitleUIScript.cpp" />
     <ClCompile Include="Scripts\Widget\TitleWidgetScript.cpp" />
     <ClCompile Include="Scene\SelectScene.cpp" />
     <ClCompile Include="Scripts\Widget\SelectWidgetScript.cpp" />
@@ -605,10 +597,8 @@
     <ClInclude Include="Scene\GameScene\Scene_Stage1.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Scripts\Video\YuukaVideo.h" />
-    <ClInclude Include="Scripts\UI_Script.h" />
     <ClInclude Include="Prefab\Truck.h" />
     <ClInclude Include="Scene\GameScene\TitleScene.h" />
-    <ClInclude Include="Scripts\TitleUIScript.h" />
     <ClInclude Include="Scripts\Widget\TitleWidgetScript.h" />
     <ClInclude Include="Scripts\TileMap\TileMapManager.h" />
     <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />

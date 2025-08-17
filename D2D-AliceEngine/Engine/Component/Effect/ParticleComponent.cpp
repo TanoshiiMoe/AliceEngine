@@ -12,7 +12,7 @@
 // WorldSpace 입력 좌표를 내부 시뮬레이션 좌표로 변환 (Y 반전 옵션)
 FVector2 ParticleComponent::ToSimPos(const FVector2& in) const
 {
-    if (drawType == Define::EDrawType::WorldSpace && m_flipWorldYInput)
+    if (GetDrawType() == Define::EDrawType::WorldSpace && m_flipWorldYInput)
         return FVector2(in.x, -in.y);
     return in;
 }
@@ -71,7 +71,7 @@ void ParticleComponent::Update(const float& deltaSeconds)
         while (m_trailAccumulator >= interval)
         {
             m_trailAccumulator -= interval;
-            FVector2 mp = (drawType == Define::EDrawType::WorldSpace)
+            FVector2 mp = (GetDrawType() == Define::EDrawType::WorldSpace)
                 ? ToSimPos(CoordHelper::ConvertD2DToUnity(Input::GetMousePosition()))
                 : Input::GetMousePosition();
 

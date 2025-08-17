@@ -25,6 +25,7 @@ void Rigidbody2D::Initialize()
 	m_prevPosition = m_currentPosition;
 	m_currentPosition = owner->transform()->GetPosition();
 	m_prevRotation = m_currentRotation = owner->transform()->GetRotation();
+	attachedCollider = GetOwner() ? GetOwner()->GetComponent<Collider>() : nullptr;
 }
 
 void Rigidbody2D::Update(const float& deltaSeconds)
@@ -35,7 +36,7 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 	if (!GetOwner()->transform()->bMoved)
 		return;
 
-	// FixedUpdate 시작 시 이전 위치 저장
+	// FixedUpdate 이후 현재 위치 갱신
 	m_prevPosition = m_currentPosition;
 	m_prevRotation = m_currentRotation;
 
@@ -64,7 +65,7 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 	calcPos.y += calcVel.y * dt;
 	calcAngle += calcAngularVel * dt;
 
-		// x축 터널링 방지 알고리즘도 calcPos 기준으로!
+		// x축 단축선 충돌 판정은 calcPos 갱신전에 수행!
 	FVector2 prevPos = calcPos;
 	FVector2 nextPos = prevPos + FVector2(calcVel.x * dt, 0);
 	bool blockedX = false;
@@ -100,7 +101,7 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 		calcPos.x += calcVel.x * dt;
 	}
 
-	// 바운스 방지
+	// 접지 처리
 	if ((m_eRigidBodyState == Define::ERigidBodyState::Ground ||
 		m_eRigidBodyState == Define::ERigidBodyState::OnRigidBody) &&
 		calcVel.y < 0)
@@ -108,10 +109,9 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 		calcVel.y = 0.0f;
 	}
 
-	// 최종 적용
-	 // 물리 계산 완료 후 현재 위치 저장
-    m_currentPosition = calcPos;
-    m_currentRotation = calcAngle;
+	// 최종 반영: 프레임 완료 후 현재 위치 갱신
+	m_currentPosition = calcPos;
+	m_currentRotation = calcAngle;
 
 	owner->transform()->SetPosition(calcPos);
 	owner->transform()->SetRotation(calcAngle);
@@ -119,7 +119,7 @@ void Rigidbody2D::Update(const float& deltaSeconds)
 	velocity = calcVel;
 	angularVelocity = calcAngularVel;
 
-	// 이후 (CollisionSystem 등) 프레임당 1회만 Update
+	// 다음 (CollisionSystem 등) 업데이트 전 1회만 Update
 	force = FVector2(0.0f, 0.0f);
 	torque = 0.0f;
 }
@@ -139,7 +139,7 @@ FVector2 Rigidbody2D::GetPredictedPosition() const
 	float alpha = TimerManager::GetInstance().GetAccumulator() / TimerManager::GetInstance().fixedDeltaTime;
 	alpha = Math::clamp(alpha, 0.0f, 1.0f);
 
-	// 속도를 고려한 더 정확한 예측 위치 계산
+	// 속력을 반영한 예측 위치 값
 	FVector2 predictedDelta = velocity * alpha * TimerManager::GetInstance().fixedDeltaTime;
 	return m_currentPosition + predictedDelta;
 }

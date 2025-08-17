@@ -200,7 +200,7 @@ void PlayerManager::DelayDestroy()
                 ghostSR = temp->AddComponent<SpriteRenderer>();
                 std::wstring textureRelPath = StringHelper::string_to_wstring(animator->sheet->texture);
                 ghostSR->LoadData(textureRelPath);
-                ghostSR->m_layer = srSelf ? srSelf->m_layer : animator->m_layer;
+                ghostSR->SetLayer(srSelf ? srSelf->GetLayer() : animator->GetLayer());
 
                 temp->transform()->SetPosition(owner->transform()->GetPosition());
                 temp->transform()->SetRotation(owner->transform()->GetRotation());

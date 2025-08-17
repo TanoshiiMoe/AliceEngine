@@ -83,7 +83,7 @@ void Scene::OnEnter()
 	sysText->SetOpacity(0);
     // ScreenSpace 좌표 (좌상단 0,0)
     sysText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.1f));
-	sysText->m_layer = 987654321;
+	sysText->SetLayer(987654321);
 
     // FPS 위젯
     m_fpsWidget = NewObject<gameObject>(L"FPSWidget");
@@ -92,7 +92,7 @@ void Scene::OnEnter()
     fpsText->SetColor(FColor(0, 255, 0, 255));
 	fpsText->SetOpacity(1);
     fpsText->SetRelativePosition(FVector2(Define::SCREEN_WIDTH * 0.8f, Define::SCREEN_HEIGHT * 0.05f));
-	fpsText->m_layer = 987654321;
+	fpsText->SetLayer(987654321);
 
 	m_mouseTrail = NewObject<gameObject>(L"Scene_Default_ParticleScreenTrail");
 	m_mouseParticle = m_mouseTrail->AddComponent<ParticleComponent>();

@@ -8,8 +8,6 @@
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 
-#include <UI/UIImage.h>
-#include <UI/UIText.h>
 #include <Scene/Scene.h>
  #include <Component/ButtonComponent.h>
 
@@ -43,9 +41,9 @@ void GameOverWidgetScript::Update(const float& deltaSeconds)
 
 		if (m_scale >= 1.0f) m_scale = 1.0f;
 
-		m_errorPopup->m_layer = Define::PopupLayer;
-		m_toMainButton->m_layer = Define::PopupButtonLayer;
-		m_toRestartButton->m_layer = Define::PopupButtonLayer;
+		m_errorPopup->SetLayer(Define::PopupLayer);
+		m_toMainButton->SetLayer(Define::PopupButtonLayer);
+		m_toRestartButton->SetLayer(Define::PopupButtonLayer);
 		m_errorPopup->SetRelativeScale(m_scale);
 	}
 }
@@ -74,11 +72,11 @@ void GameOverWidgetScript::OnStart()
 	// ==================== //
 	background->LoadData(L"UI\\UI_Score_FAIL.png");
 	background->SetDrawType(EDrawType::ScreenSpace);
-	background->m_layer = Define::NormalUILayer;
+	background->SetLayer(Define::NormalUILayer);
 
 	m_errorPopup->LoadData(L"UI\\UI_ERROR_Popup.png");
 	m_errorPopup->SetDrawType(EDrawType::ScreenSpace);
-	m_errorPopup->m_layer = Define::Disable;
+	m_errorPopup->SetLayer(Define::Disable);
 
 	toRestartText->SetFontSize(45.f);
 	toRestartText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -88,7 +86,7 @@ void GameOverWidgetScript::OnStart()
 	toRestartText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(toRestartText->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(0, 0));
-	toRestartText->m_layer = Define::PopupTextLayer;
+	toRestartText->SetLayer(Define::PopupTextLayer);
 	toRestartText->RemoveFromParent();
 	m_toRestartButton->AddChildComponent(toRestartText);
 
@@ -100,7 +98,7 @@ void GameOverWidgetScript::OnStart()
 	toMainText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(toMainText->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(0, 0));
-	toMainText->m_layer = Define::PopupTextLayer;
+	toMainText->SetLayer(Define::PopupTextLayer);
 	toMainText->RemoveFromParent();
 	m_toMainButton->AddChildComponent(toMainText);
 
@@ -109,7 +107,7 @@ void GameOverWidgetScript::OnStart()
 	m_toRestartButton->LoadData(Define::EButtonState::Hover, L"UI\\UI_ERRORButton.png");
 	m_toRestartButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ERRORButton.png");
 	m_toRestartButton->LoadData(Define::EButtonState::Release, L"UI\\UI_ERRORButton.png");
-	m_toRestartButton->m_layer = Define::Disable;
+	m_toRestartButton->SetLayer(Define::Disable);
 	m_toRestartButton->SetDrawType(EDrawType::ScreenSpace);
 	m_toRestartButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_toRestartButton->GetRelativeSize(), FVector2(-0.5, -0.5))
@@ -120,7 +118,7 @@ void GameOverWidgetScript::OnStart()
 	m_toMainButton->LoadData(Define::EButtonState::Pressed, L"UI\\UI_ERRORButton.png");
 	m_toMainButton->LoadData(Define::EButtonState::Release, L"UI\\UI_ERRORButton.png");
 	m_toMainButton->SetDrawType(EDrawType::ScreenSpace);
-	m_toMainButton->m_layer = Define::Disable;
+	m_toMainButton->SetLayer(Define::Disable);
 	m_toMainButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_toMainButton->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(180, 100));

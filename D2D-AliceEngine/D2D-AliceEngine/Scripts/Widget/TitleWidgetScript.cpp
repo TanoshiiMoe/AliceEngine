@@ -134,7 +134,7 @@ void TitleWidgetScript::OnStart()
 
     auto soundControl = m_owner->AddComponent<SpriteRenderer>();
     soundControl->LoadData(L"UI\\UI_SoundController.png");
-    soundControl->m_layer = Define::Disable;
+    soundControl->SetLayer(Define::Disable);
     soundControl->SetRelativeScale(soundUISize);
     soundControl->SetDrawType(EDrawType::ScreenSpace);
     // 중앙 배치
@@ -148,7 +148,7 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(bgmControl->GetRelativeSize(), FVector2(0, 0))
 		+ FVector2(5, 3));
 	bgmControl->SetProgress(bgmVolume);
-	bgmControl->m_layer = Define::Disable;
+	bgmControl->SetLayer(Define::Disable);
 
 	sfxControl->SetDrawType(Define::EDrawType::ScreenSpace);
 	sfxControl->LoadData(L"UI\\ControlBar.png");
@@ -158,7 +158,7 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(sfxControl->GetRelativeSize(), FVector2(0, 0))
 		+ FVector2(5, 66));
 	sfxControl->SetProgress(sfxVolume);
-	sfxControl->m_layer = Define::Disable;
+	sfxControl->SetLayer(Define::Disable);
 
 	//auto uiSound = m_owner->AddComponent<AudioComponent>(L"UISound");
 	//uiSound->LoadData(L"UI_interact_sound.wav", AudioMode::Memory, SoundType::SFX);	// UISound is Included in SFX.
@@ -171,7 +171,7 @@ void TitleWidgetScript::OnStart()
 	auto PopupTab = m_owner->AddComponent<SpriteRenderer>();
 	PopupTab->LoadData(L"UI\\UI_NewPopup.png");
 	PopupTab->SetRelativeScale(1.f);
-	PopupTab->m_layer = Define::Disable;
+	PopupTab->SetLayer(Define::Disable);
 	PopupTab->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f , -SCREEN_HEIGHT / 2.0f + 50));
 
 	auto qrCodeSprite = m_owner->AddComponent<SpriteRenderer>();
@@ -212,7 +212,7 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(continueButtonSize, FVector2(1, 0))
 		+ FVector2(buttonBasePos, 130));
 	continueButton->SetRelativeScale(FVector2(1, 1));
-	continueButton->m_layer = Define::ButtonLayer;
+	continueButton->SetLayer(Define::ButtonLayer);
 
 	// ======================== optionButton
 	optionButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_alpha.png");
@@ -224,7 +224,7 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(optionButtonSize, FVector2(1, 0))
 		+ FVector2(buttonBasePos, 210));
 	optionButton->SetRelativeScale(FVector2(1, 1));
-	optionButton->m_layer = Define::ButtonLayer;
+	optionButton->SetLayer(Define::ButtonLayer);
 
 	// ======================== staffButton
 	staffButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_alpha.png");
@@ -236,7 +236,7 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(staffButtonSize, FVector2(1, 0))
 		+ FVector2(buttonBasePos + 30, 290));
 	staffButton->SetRelativeScale(FVector2(1, 1));
-	staffButton->m_layer = Define::ButtonLayer;
+	staffButton->SetLayer(Define::ButtonLayer);
 
 	// ======================== quitButton
 	quitButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_alpha.png");
@@ -249,7 +249,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(buttonBasePos, 370));
 	quitButton->SetRelativeScale(FVector2(1, 1));
 	quitButton->SetRelativeRotation(0);
-	quitButton->m_layer = Define::ButtonLayer;
+	quitButton->SetLayer(Define::ButtonLayer);
 
 	// ======================== spineShowButton
 	//spineShowButton->SetTag(L"Button");
@@ -273,7 +273,7 @@ void TitleWidgetScript::OnStart()
 	closeButton->SetRelativePosition(FVector2(0,350));
 	closeButton->SetRelativeScale(FVector2(1, 1));
 	closeButton->SetActive(false);
-	closeButton->m_layer = Define::Disable;
+			closeButton->SetLayer(Define::Disable);
 
 	smallClose->LoadData(Define::EButtonState::Idle, L"UI\\Close.png");
 	smallClose->LoadData(Define::EButtonState::Hover, L"UI\\Close.png");
@@ -282,7 +282,7 @@ void TitleWidgetScript::OnStart()
     smallClose->SetDrawType(EDrawType::ScreenSpace);
     smallClose->SetRelativeScale(0.43f);
     smallClose->SetActive(false);
-    smallClose->m_layer = Define::Disable;
+    smallClose->SetLayer(Define::Disable);
     // 패널 우상단 모서리 근처에 배치
     {
         const float hw = soundControl->GetBitmapSizeX() * soundUISize * 0.5f;
@@ -292,13 +292,13 @@ void TitleWidgetScript::OnStart()
     }
 
 	// ======================== artBookButton
-	artBookButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
-	artBookButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
-	artBookButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
-	artBookButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
-	artBookButton->SetRelativePosition(FVector2(-400, 0));
-	artBookButton->SetRelativeScale(FVector2(1, 1));
-	artBookButton->m_layer = Define::Disable;
+	    artBookButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
+    artBookButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
+    artBookButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
+    artBookButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
+    artBookButton->SetRelativePosition(FVector2(-400, 0));
+    artBookButton->SetRelativeScale(FVector2(1, 1));
+    artBookButton->SetLayer(Define::Disable);
 
 	// ======================== soundButton
 	bgmPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
@@ -313,8 +313,8 @@ void TitleWidgetScript::OnStart()
         const float rowY = -panelH * 0.25f; // 위쪽 라인
         bgmPlusButton->SetRelativePosition(FVector2(hw - marginX, rowY + marginY));
     }
-	bgmPlusButton->SetActive(false);
-	bgmPlusButton->m_layer = Define::Disable;
+	    bgmPlusButton->SetActive(false);
+    bgmPlusButton->SetLayer(Define::Disable);
 
 	bgmMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundMinus_Idle.png");
 	bgmMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
@@ -328,8 +328,8 @@ void TitleWidgetScript::OnStart()
         const float rowY = -panelH * 0.25f;
         bgmMinusButton->SetRelativePosition(FVector2(-hw + marginX, rowY + marginY));
     }
-	bgmMinusButton->SetActive(false);
-	bgmMinusButton->m_layer = Define::Disable;
+	    bgmMinusButton->SetActive(false);
+    bgmMinusButton->SetLayer(Define::Disable);
 
 	sfxPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
 	sfxPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
@@ -343,8 +343,8 @@ void TitleWidgetScript::OnStart()
         const float rowY = panelH * 0.25f; // 아래쪽 라인
         sfxPlusButton->SetRelativePosition(FVector2(hw - marginX, rowY - marginY));
     }
-	sfxPlusButton->SetActive(false);
-	sfxPlusButton->m_layer = Define::Disable;
+	    sfxPlusButton->SetActive(false);
+    sfxPlusButton->SetLayer(Define::Disable);
 
 	sfxMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundMinus_Idle.png");
 	sfxMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
@@ -358,8 +358,8 @@ void TitleWidgetScript::OnStart()
         const float rowY = panelH * 0.25f;
         sfxMinusButton->SetRelativePosition(FVector2(-hw + marginX, rowY - marginY));
     }
-	sfxMinusButton->SetActive(false);
-	sfxMinusButton->m_layer = Define::Disable;
+		sfxMinusButton->SetActive(false);
+		sfxMinusButton->SetLayer(Define::Disable);
 
 	// ======================== mainTitle
 	//mainTitle->SetFontSize(120.0f);
@@ -409,7 +409,7 @@ void TitleWidgetScript::OnStart()
 	continueText->SetRelativePosition(CoordHelper::RatioCoordToScreen(continueTextRectSize, FVector2(-0.5, -0.5)));
 	continueText->SetRelativeScale(FVector2(1, 1));
 	continueText->SetRelativeRotation(0);
-	continueText->m_layer = Define::ButtonTextLayer;
+	continueText->SetLayer(Define::ButtonTextLayer);
 	continueText->RemoveFromParent();
 	continueButton->AddChildComponent(continueText);
 
@@ -436,7 +436,7 @@ void TitleWidgetScript::OnStart()
 	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionTextRectSize, FVector2(-0.5, -0.5)));
 	optionText->SetRelativeScale(FVector2(1, 1));
 	optionText->SetRelativeRotation(0);
-	optionText->m_layer = Define::ButtonTextLayer;
+	optionText->SetLayer(Define::ButtonTextLayer);
 	optionText->RemoveFromParent();
 	optionButton->AddChildComponent(optionText);
 
@@ -451,7 +451,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(0, -85)
 	);
 	optionTabText->SetRelativeRotation(0);
-	optionTabText->m_layer = Define::Disable;
+	optionTabText->SetLayer(Define::Disable);
 
 	optionTabBGMText->SetFontSize(20.0f);
 	optionTabBGMText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -463,7 +463,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(0, -30)
 	);
 	optionTabBGMText->SetRelativeRotation(0);
-	optionTabBGMText->m_layer = Define::Disable;
+	optionTabBGMText->SetLayer(Define::Disable);
 
 	optionTabSFXText->SetFontSize(20.0f);
 	optionTabSFXText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -475,7 +475,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(0, 35)
 	);
 	optionTabSFXText->SetRelativeRotation(0);
-	optionTabSFXText->m_layer = Define::Disable;
+	optionTabSFXText->SetLayer(Define::Disable);
 
 	// ======================== staffText
 	staffText->SetFontSize(55.0f);
@@ -487,7 +487,7 @@ void TitleWidgetScript::OnStart()
 	staffText->SetRelativePosition(CoordHelper::RatioCoordToScreen(staffTextRectSize, FVector2(-0.5, -0.5)) + FVector2(20,0));
 	staffText->SetRelativeScale(FVector2(1, 1));
 	staffText->SetRelativeRotation(0);
-	staffText->m_layer = Define::ButtonTextLayer;
+	staffText->SetLayer(Define::ButtonTextLayer);
 	staffText->RemoveFromParent();
 	staffButton->AddChildComponent(staffText);
 
@@ -502,7 +502,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(0, -300)
 	);
 	staffTabText->SetRelativeRotation(0);
-	staffTabText->m_layer = Define::Disable;
+	staffTabText->SetLayer(Define::Disable);
 
 	staffNameText->SetFontSize(55.0f);
 	staffNameText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -523,7 +523,7 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(staffNameTextSize, FVector2(-0.5, -0.5))
 		+ FVector2(0, 50)
 	);
-	staffNameText->m_layer = Define::Disable;
+	staffNameText->SetLayer(Define::Disable);
 
 	qrCodeSprite->SetDrawType(Define::EDrawType::ScreenSpace);
 	FVector2 qrCodeSpriteSize = qrCodeSprite->GetRelativeSize();
@@ -532,7 +532,7 @@ void TitleWidgetScript::OnStart()
 		+ FVector2(500, 350)
 	);
 	qrCodeSprite->SetRelativeScale(0.6);
-	qrCodeSprite->m_layer = Define::Disable;
+	qrCodeSprite->SetLayer(Define::Disable);
 
 	githubGuideTeamSprite->SetDrawType(Define::EDrawType::ScreenSpace);
 	githubGuideTeamSprite->SetRelativeScale(FVector2(0.5,0.57));
@@ -541,7 +541,7 @@ void TitleWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(githubGuideTeamSpriteSize, FVector2(-0.5, -0.5))
 		+ FVector2(-250, 260)
 	);
-	githubGuideTeamSprite->m_layer = Define::Disable;
+	githubGuideTeamSprite->SetLayer(Define::Disable);
 
 	// ======================== quitText
 	quitText->SetFontSize(55.0f);
@@ -553,7 +553,7 @@ void TitleWidgetScript::OnStart()
 	quitText->SetRelativePosition(CoordHelper::RatioCoordToScreen(quitTextRectSize, FVector2(-0.5, -0.5)));
 	quitText->SetRelativeScale(FVector2(1, 1));
 	quitText->SetRelativeRotation(0);
-	quitText->m_layer = Define::ButtonTextLayer;
+	quitText->SetLayer(Define::ButtonTextLayer);
 	quitText->RemoveFromParent();
 	quitButton->AddChildComponent(quitText);
 
@@ -581,7 +581,7 @@ void TitleWidgetScript::OnStart()
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
 	closeText->SetRelativeScale(FVector2(1, 1));
 	closeText->SetRelativeRotation(0);
-	closeText->m_layer = Define::Disable;
+	closeText->SetLayer(Define::Disable);
 	closeButton->SetActive(false);
 	closeText->RemoveFromParent();
 	closeButton->AddChildComponent(closeText);
@@ -596,7 +596,7 @@ void TitleWidgetScript::OnStart()
 	artBookText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextRectSize, FVector2(-0.5, -0.5)));
 	artBookText->SetRelativeScale(FVector2(1, 1));
 	artBookText->SetRelativeRotation(0);
-	artBookText->m_layer = Define::Disable;
+	artBookText->SetLayer(Define::Disable);
 	artBookButton->SetActive(true);
 	artBookText->RemoveFromParent();
 	artBookButton->AddChildComponent(artBookText);
@@ -608,7 +608,7 @@ void TitleWidgetScript::OnStart()
 	background->SetRelativePosition(CoordHelper::RatioCoordToScreen(backgroundSize, FVector2(0, 0)));
 	background->SetRelativeScale(FVector2(1, 1));
 	background->SetRelativeRotation(0);
-	background->m_layer = 0;
+	background->SetLayer(0);
 
 	textLogo->LoadData(L"UI\\LOGO.png");
 	textLogo->SetDrawType(EDrawType::ScreenSpace);
@@ -619,7 +619,7 @@ void TitleWidgetScript::OnStart()
 	);
 	textLogo->SetRelativeScale(FVector2(1, 1));
 	textLogo->SetRelativeRotation(0);
-	textLogo->m_layer = Define::NormalTextLayer;
+	textLogo->SetLayer(Define::NormalTextLayer);
 
 	// ======================== Delegete
 	/*startButton->SetStateAction(Define::EButtonState::Pressed, [
@@ -642,15 +642,15 @@ void TitleWidgetScript::OnStart()
 		optionButton->SetActive(false);
 		continueButton->SetActive(false);
 
-		closeButton->m_layer = 503;
+		closeButton->SetLayer(503);
 		closeButton->SetActive(true);
-		closeText->m_layer = 504;
+		closeText->SetLayer(504);
 
-		artBookButton->m_layer = Define::PopupButtonLayer;
+		artBookButton->SetLayer(Define::PopupButtonLayer);
 		artBookButton->SetActive(true);
-		artBookText->m_layer = Define::PopupTextLayer;
+		artBookText->SetLayer(Define::PopupTextLayer);
 
-		tutorial->m_layer = Define::PopupLayer;
+		tutorial->SetLayer(Define::PopupLayer);
 		tutorial->Play();
 	});*/
 	artBookButton->SetStateAction(Define::EButtonState::Hover, [artBookButton]()
@@ -707,7 +707,7 @@ void TitleWidgetScript::OnStart()
 
 			//continueTabText->m_layer = 503;
 
-			//PopupTab->m_layer = 502;
+							//PopupTab->SetLayer(502);
 		});
 
 	closeButton->SetStateAction(Define::EButtonState::Pressed, [
@@ -733,23 +733,23 @@ void TitleWidgetScript::OnStart()
 			staffButton->SetActive(true);
 			optionButton->SetActive(true);
 
-			closeButton->m_layer = Define::Disable;
+			closeButton->SetLayer(Define::Disable);
 			closeButton->SetActive(false);
-			closeText->m_layer = Define::Disable;
+			closeText->SetLayer(Define::Disable);
 
-			continueTabText->m_layer = Define::Disable;
+			continueTabText->SetLayer(Define::Disable);
 			//optionTabText->m_layer = -1000;
-			staffTabText->m_layer = Define::Disable;
-			staffNameText->m_layer = Define::Disable;
-			qrCodeSprite->m_layer = Define::Disable;
-			githubGuideTeamSprite->m_layer = Define::Disable;
-			artBookButton->m_layer = Define::Disable;
-			artBookText->m_layer = Define::Disable;
+			staffTabText->SetLayer(Define::Disable);
+			staffNameText->SetLayer(Define::Disable);
+			qrCodeSprite->SetLayer(Define::Disable);
+			githubGuideTeamSprite->SetLayer(Define::Disable);
+			artBookButton->SetLayer(Define::Disable);
+			artBookText->SetLayer(Define::Disable);
 
 			//tutorial->m_layer = Define::Disable;
 			//tutorial->Stop();
 
-			PopupTab->m_layer = Define::Disable;
+			PopupTab->SetLayer(Define::Disable);
 		});
 
 	smallClose->SetStateAction(Define::EButtonState::Pressed, [
@@ -767,26 +767,26 @@ void TitleWidgetScript::OnStart()
 		staffButton->SetActive(true);
 		optionButton->SetActive(true);
 
-		smallClose->m_layer = Define::Disable;
+		smallClose->SetLayer(Define::Disable);
 		smallClose->SetActive(false);
 
 		bgmMinusButton->SetActive(false);
 		bgmPlusButton->SetActive(false);
-		bgmMinusButton->m_layer = Define::Disable;
-		bgmPlusButton->m_layer = Define::Disable;
+		bgmMinusButton->SetLayer(Define::Disable);
+		bgmPlusButton->SetLayer(Define::Disable);
 
 		sfxPlusButton->SetActive(false);
 		sfxMinusButton->SetActive(false);
-		sfxPlusButton->m_layer = Define::Disable;
-		sfxMinusButton->m_layer = Define::Disable;
+		sfxPlusButton->SetLayer(Define::Disable);
+		sfxMinusButton->SetLayer(Define::Disable);
 
-		optionTabText->m_layer = Define::Disable;
-		optionTabBGMText->m_layer = Define::Disable;
-		optionTabSFXText->m_layer = Define::Disable;
+			optionTabText->SetLayer(Define::Disable);
+			optionTabBGMText->SetLayer(Define::Disable);
+			optionTabSFXText->SetLayer(Define::Disable);
 
-		sfxControl->m_layer = Define::Disable;
-		bgmControl->m_layer = Define::Disable;
-		soundControl->m_layer = Define::Disable;
+			sfxControl->SetLayer(Define::Disable);
+			bgmControl->SetLayer(Define::Disable);
+			soundControl->SetLayer(Define::Disable);
 		});
 
 	optionButton->SetStateAction(Define::EButtonState::Pressed, [
@@ -812,26 +812,26 @@ void TitleWidgetScript::OnStart()
 			optionButton->SetActive(false);
 			
 			smallClose->SetActive(true);
-			smallClose->m_layer = Define::PopupButtonLayer;
+			smallClose->SetLayer(Define::PopupButtonLayer);
 
 			//optionTabText->m_layer = 503;
 			bgmMinusButton->SetActive(true);
 			bgmPlusButton->SetActive(true);
-			bgmMinusButton->m_layer = Define::PopupButtonLayer;
-			bgmPlusButton->m_layer = Define::PopupButtonLayer;
+			bgmMinusButton->SetLayer(Define::PopupButtonLayer);
+			bgmPlusButton->SetLayer(Define::PopupButtonLayer);
 
 			sfxPlusButton->SetActive(true);
 			sfxMinusButton->SetActive(true);
-			sfxPlusButton->m_layer = Define::PopupButtonLayer;
-			sfxMinusButton->m_layer = Define::PopupButtonLayer;
+			sfxPlusButton->SetLayer(Define::PopupButtonLayer);
+			sfxMinusButton->SetLayer(Define::PopupButtonLayer);
 
-			optionTabText->m_layer = Define::PopupTextLayer;
-			optionTabBGMText->m_layer = Define::PopupTextLayer;
-			optionTabSFXText->m_layer = Define::PopupTextLayer;
+			optionTabText->SetLayer(Define::PopupTextLayer);
+			optionTabBGMText->SetLayer(Define::PopupTextLayer);
+			optionTabSFXText->SetLayer(Define::PopupTextLayer);
 
-			sfxControl->m_layer = Define::PopupObjectLayer;
-			bgmControl->m_layer = Define::PopupObjectLayer;
-			soundControl->m_layer = Define::PopupLayer;
+			sfxControl->SetLayer(Define::PopupObjectLayer);
+			bgmControl->SetLayer(Define::PopupObjectLayer);
+			soundControl->SetLayer(Define::PopupLayer);
 		});
 
 	staffButton->SetStateAction(Define::EButtonState::Pressed, [
@@ -856,18 +856,18 @@ void TitleWidgetScript::OnStart()
 			staffButton->SetActive(false);
 			optionButton->SetActive(false);
 
-			closeButton->m_layer = Define::PopupButtonLayer;
+			closeButton->SetLayer(Define::PopupButtonLayer);
 			closeButton->SetActive(true);
-			closeText->m_layer = Define::PopupTextLayer;
+			closeText->SetLayer(Define::PopupTextLayer);
 
-			staffTabText->m_layer = Define::PopupTextLayer;
-			staffNameText->m_layer = Define::PopupTextLayer;
-			qrCodeSprite->m_layer = Define::PopupTextLayer;
-			githubGuideTeamSprite->m_layer = Define::PopupTextLayer;
-			artBookButton->m_layer = Define::PopupButtonLayer;
-			artBookText->m_layer = Define::PopupTextLayer;
+			staffTabText->SetLayer(Define::PopupTextLayer);
+			staffNameText->SetLayer(Define::PopupTextLayer);
+			qrCodeSprite->SetLayer(Define::PopupTextLayer);
+			githubGuideTeamSprite->SetLayer(Define::PopupTextLayer);
+			artBookButton->SetLayer(Define::PopupButtonLayer);
+			artBookText->SetLayer(Define::PopupTextLayer);
 
-			PopupTab->m_layer = Define::PopupLayer;
+			PopupTab->SetLayer(Define::PopupLayer);
 		});
 
 	// bgmVolume

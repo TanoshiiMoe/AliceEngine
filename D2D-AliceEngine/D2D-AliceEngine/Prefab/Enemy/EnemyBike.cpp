@@ -49,15 +49,23 @@ void EnemyBike::OnStart()
 	}
 
 	// 콜라이더 설정
-	Collider* coll = owner->GetComponent<Collider>();
-	coll->boxComponent->SetSize(FVector2(150, 10));
-	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -50.0f));
+	// 본체 충돌용 콜라이더 (채널 5)
+	if (Collider* body = owner->GetComponent<Collider>())
+	{
+		body->SetLayer(5);
+		if (body->boxComponent) {
+			body->boxComponent->SetSize(FVector2(150, 10));
+			body->boxComponent->SetRelativePosition(FVector2(0.0f, -50.0f));
+		}
+	}
+	// 총알 히트박스용 콜라이더 추가 (채널 0)
+	if (Collider* hitbox = owner->AddComponent<Collider>())
+	{
+		hitbox->SetLayer(0);
+		if (hitbox->boxComponent) {
+			hitbox->boxComponent->SetSize(FVector2(150, 70));
+			hitbox->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
+		}
+	}
 
-	// 총알받이 설정
-	gameObject* bColObj = GetWorld()->NewObject<gameObject>(L"EnemyBikeColl");
-	bColObj->SetTag(L"Enemy");
-	BulletColl* bc = bColObj->AddComponent<BulletColl>();
-	bc->SetTarget(owner);
-	bc->SetCollSize(FVector2(150.0f, 70.0f));
-	colObjs.push_back(bColObj);
 }

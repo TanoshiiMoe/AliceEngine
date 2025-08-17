@@ -107,7 +107,7 @@ void BikeStatScript::OnStart()
         FVector2 size = m_hpBarBack->GetRelativeSize();
         m_hpBarBack->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
     }
-	m_hpBarBack->m_layer = 10004;
+	m_hpBarBack->SetLayer(10004);
 
     // 체력바 전경(채워지는 부분)
     m_hpBarFill = owner->AddComponent<ProgressBarComponent>();
@@ -119,7 +119,7 @@ void BikeStatScript::OnStart()
         FVector2 size = m_hpBarFill->GetRelativeSize();
         m_hpBarFill->SetRelativePosition(CoordHelper::RatioCoordToScreen(size, FVector2(0.0f, 2.0f)));
     }
-	m_hpBarFill->m_layer = m_hpBarBack->m_layer + 1;
+	m_hpBarFill->SetLayer(m_hpBarBack->GetLayer() + 1);
 
     // 델리게이트: HP, MAXHP 변경 시 진행도 갱신
     m_bikeStat->OnChangeStatMap["HP"].Add(m_bikeStat->GetHandle(), [this](float /*oldVal*/, float newVal)

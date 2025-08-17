@@ -120,7 +120,7 @@ void BackGroundRender::OnStart()
 	m_sky = GetWorld()->NewObject<gameObject>(L"TopFar");
 	SpriteRenderer* bgsr = m_sky->AddComponent<SpriteRenderer>();
 	bgsr->LoadData(L"BackGround\\BG_Sky.png");
-	bgsr->m_layer = -5000 + m_backgroundRelativeLayer;
+	bgsr->SetLayer(-5000 + m_backgroundRelativeLayer);
 	GetWorld()->GetCamera()->AddChildObject(m_sky);
     m_sky->transform()->SetPosition(0.0f, 180.0f);
     //AddLooping(L"TopFar",    L"BackGround\\BG_Sky.png", -5000 + m_backgroundRelativeLayer, 400.0f, 1.0f);
@@ -129,7 +129,7 @@ void BackGroundRender::OnStart()
 	gameObject* bg2 = GetWorld()->NewObject<gameObject>(L"TopFar2");
 	SpriteRenderer* bgsr2 = bg2->AddComponent<SpriteRenderer>();
 	bgsr2->LoadData(L"BackGround\\BG_Sky.png");
-	bgsr2->m_layer = -5001 + m_backgroundRelativeLayer;
+	bgsr2->SetLayer(-5001 + m_backgroundRelativeLayer);
 	GetWorld()->GetCamera()->AddChildObject(bg2);
 
     AddLooping(L"TopMid1",    L"BackGround\\BG_Building_1.png",    -7  + m_topRelativeLayer, 500.0f, 0.5f);
@@ -166,7 +166,7 @@ void BackGroundRender::AddLooping(const std::wstring& name, const std::wstring& 
         auto* sr = obj->AddComponent<SpriteRenderer>();
         sr->LoadData(texturePath);
         sr->SetDrawType(EDrawType::WorldSpace);
-        sr->m_layer = layer + m_backgroundRelativeLayer;
+        sr->SetLayer(layer + m_backgroundRelativeLayer);
         obj->transform()->SetPosition(FVector2(xpos, y));
         bg.tiles.push_back(obj);
         if (bg.width <= 0.0f) bg.width = sr->GetBitmapSizeX();

@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 #include <Component/RenderComponent.h>
-#include <Animation/TextureLoader.h>
+#include <Animation/SpriteAnimationTextureLoader.h>
 
 struct TileMap;
 struct TileSet;
@@ -19,7 +19,7 @@ public:
 	void AddTileToSpriteBatch();
 
 	std::vector<int> tileData;
-	std::wstring filePath; // ÆÄÀÏÀÇ °æ·Î
+	std::wstring filePath; // íŒŒì¼ì˜ ê²½ë¡œ
 	std::shared_ptr<ID2D1Bitmap1> m_bitmap;
 
 	int mapWidth = 0;
@@ -29,7 +29,7 @@ public:
 	int tilesetColumns = 0;
 	int gid = 0;
 
-	SpriteInfo spriteInfo; // ½ºÇÁ¶óÀÌÆ® Á¤º¸
+	SpriteInfo spriteInfo; // ìŠ¤í”„ë¼ì´íŠ¸ ì •ë³´
 
 	virtual float GetBitmapSizeX() override;
 	virtual float GetBitmapSizeY() override;

@@ -8,7 +8,7 @@
 #include <Component/InputComponent.h>
 #include <System/ScriptSystem.h>
 #include <Animation/AnimatorInstance.h>
-#include <Animation/TextureLoader.h>
+#include <Animation/SpriteAnimationTextureLoader.h>
 #include <Component/Animator.h>
 #include <FSM/FiniteStateMachine.h>
 #include <fsm/FSMState.h>
@@ -62,7 +62,7 @@ void Enemy::OnStart()
 	animInstance->ApplyClipDurationsToStates();
 	//animInstance->SetLooping(true);
 	animInstance->Play();
-	animInstance->m_layer = 3;
+	animInstance->SetLayer(3);
 	animInstance->OnStart();
 }
 

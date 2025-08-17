@@ -13,8 +13,6 @@
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
-#include <UI/UIImage.h>
-#include <UI/UIText.h>
 #include <Scene/Scene.h>
 #include <Component/ButtonComponent.h>
 #include <Helpers/CoordHelper.h>
@@ -93,7 +91,7 @@ void GameClearWidgetScript::OnStart()
 	m_passedTime->SetTextAlignment(ETextFormat::TopLeft);
 	m_passedTime->SetRelativePosition(FVector2(350, 585));
 	m_passedTime->SetColor(FColor(0, 234, 255, 255));
-	m_passedTime->m_layer = Define::Disable;
+	m_passedTime->SetLayer(Define::Disable);
 
 	auto killObj = GetWorld()->FindObjectByName<gameObject>(L"KillCount");
 	if (!killObj) return;
@@ -108,7 +106,7 @@ void GameClearWidgetScript::OnStart()
 	m_killCount->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	m_killCount->SetRelativePosition(FVector2(350, 553));
 	m_killCount->SetColor(FColor(0, 234, 255, 255));
-	m_killCount->m_layer = Define::Disable;
+	m_killCount->SetLayer(Define::Disable);
 
 	skipText->SetFontSize(55.0f);
 	skipText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -119,7 +117,7 @@ void GameClearWidgetScript::OnStart()
 	skipText->SetRelativeScale(FVector2(1, 1));
 	skipText->RemoveFromParent();
 	skipButton->AddChildComponent(skipText);
-	skipText->m_layer = Define::CutSceneLayer + Define::ButtonTextLayer;
+	skipText->SetLayer(Define::CutSceneLayer + Define::ButtonTextLayer);
 	
 	skipButton->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
 	skipButton->LoadData(Define::EButtonState::Hover, L"UI\\Button_Idle.png");
@@ -128,7 +126,7 @@ void GameClearWidgetScript::OnStart()
 	skipButton->SetRelativePosition(FVector2(0, 400));
 	skipButton->SetRelativeScale(FVector2(1.f, 1.f));
 	skipButton->SetActive(true);
-	skipButton->m_layer = Define::CutSceneLayer + Define::ButtonLayer;
+	skipButton->SetLayer(Define::CutSceneLayer + Define::ButtonLayer);
 
 	toMainText->SetFontSize(55.0f);
 	toMainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -138,7 +136,7 @@ void GameClearWidgetScript::OnStart()
 	toMainText->SetRelativePosition(CoordHelper::RatioCoordToScreen(toMainText->GetRelativeSize(), FVector2(-0.5, -0.5)));
 	toMainText->SetRelativeScale(FVector2(1, 1));
 	toMainText->SetRelativeRotation(0);
-	toMainText->m_layer = Define::Disable;
+	toMainText->SetLayer(Define::Disable);
 	toMainText->RemoveFromParent();
 	toMainButton->AddChildComponent(toMainText);
 
@@ -147,13 +145,13 @@ void GameClearWidgetScript::OnStart()
 	toMainButton->LoadData(Define::EButtonState::Pressed, L"UI\\Button_Idle.png");
 	toMainButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	toMainButton->SetRelativePosition(FVector2(0, 400));
-	toMainButton->m_layer = Define::Disable;
+	toMainButton->SetLayer(Define::Disable);
 	toMainButton->SetActive(false);
 
 	// =================== //
 	background->LoadData(L"UI/UI_Score.png");
 	background->SetDrawType(Define::EDrawType::ScreenSpace);
-	background->m_layer = Define::NormalUILayer;
+	background->SetLayer(Define::NormalUILayer);
 
 	cutScene->LoadData(L"CutScene\\Clear\\ending.png");
 	cutScene->SetDrawType(EDrawType::ScreenSpace);
@@ -166,7 +164,7 @@ void GameClearWidgetScript::OnStart()
 	{
 		const FVector2 scale(targetW / bmpW, targetH / bmpH);
 		cutScene->SetRelativeScale(scale);
-		cutScene->m_layer = CutSceneLayer;
+		cutScene->SetLayer(CutSceneLayer);
 	}
 
 	m_grade->LoadData(L"UI\\UI_Grade.png");
@@ -197,30 +195,30 @@ void GameClearWidgetScript::OnStart()
 	] {
 		if (weak.expired())return;
 			
-		cutScene->m_layer = Define::Disable;
-		skipButton->m_layer = Define::Disable;
-		skipText->m_layer = Define::Disable;
+		cutScene->SetLayer(Define::Disable);
+		skipButton->SetLayer(Define::Disable);
+		skipText->SetLayer(Define::Disable);
 
-		weak.Get()->m_passedTime->m_layer = Define::NormalTextLayer;
-		weak.Get()->m_killCount->m_layer = Define::NormalTextLayer;
+		weak.Get()->m_passedTime->SetLayer(Define::NormalTextLayer);
+		weak.Get()->m_killCount->SetLayer(Define::NormalTextLayer);
 
 		skipButton->SetActive(false);
 
 		toMainButton->SetActive(true);
-		toMainButton->m_layer = Define::ButtonLayer;
-		toMainText->m_layer = Define::ButtonTextLayer;
+		toMainButton->SetLayer(Define::ButtonLayer);
+		toMainText->SetLayer(Define::ButtonTextLayer);
 		});
 
 	if (s_prevScene != Define::Scene_Stage3)
 	{
-		cutScene->m_layer = Define::Disable;
-		skipButton->m_layer = Define::Disable;
-		skipText->m_layer = Define::Disable;
+		cutScene->SetLayer(Define::Disable);
+		skipButton->SetLayer(Define::Disable);
+		skipText->SetLayer(Define::Disable);
 		skipButton->SetActive(false);
 
 		toMainButton->SetActive(true);
-		toMainButton->m_layer = Define::ButtonLayer;
-		toMainText->m_layer = Define::ButtonTextLayer;
+		toMainButton->SetLayer(Define::ButtonLayer);
+		toMainText->SetLayer(Define::ButtonTextLayer);
 	}
 
 	// ====================== Delegate
@@ -257,7 +255,7 @@ void GameClearWidgetScript::OnStart()
 		m_killHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
 			if (weak.expired())return;
-			weak.Get()->m_killCount->m_layer = Define::PopupObjectLayer;
+			weak.Get()->m_killCount->SetLayer(Define::PopupObjectLayer);
 		},
 		0.1f,
 		false,
@@ -268,7 +266,7 @@ void GameClearWidgetScript::OnStart()
 		m_timeHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
 			if (weak.expired())return;
-			weak.Get()->m_passedTime->m_layer = Define::PopupObjectLayer;
+			weak.Get()->m_passedTime->SetLayer(Define::PopupObjectLayer);
 		},
 		0.1f,
 		false,
@@ -279,7 +277,7 @@ void GameClearWidgetScript::OnStart()
 		m_gradeHandle,
 		[weak = WeakFromThis<GameClearWidgetScript>()]() mutable {
 			if (weak.expired())return;
-			weak.Get()->m_grade->m_layer = Define::PopupObjectLayer;
+			weak.Get()->m_grade->SetLayer(Define::PopupObjectLayer);
 		},
 		0.1f,
 		false,

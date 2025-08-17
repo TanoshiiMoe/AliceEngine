@@ -29,7 +29,7 @@ void NormalCar::OnStart()
 
 		anim->Play();
 		anim->OnStart();
-		anim->m_layer = 19999;
+		anim->SetLayer(19999);
 		// 스케일 조정
 		anim->SetRelativeScale(scale);
 
@@ -45,8 +45,22 @@ void NormalCar::OnStart()
 	}
 
 	// 콜라이더 설정
-	Collider* coll = owner->GetComponent<Collider>();
-	coll->SetLayer(5);
-	coll->boxComponent->SetSize(FVector2(300, 70));
-	coll->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
+	// 본체 충돌
+	if (Collider* body = owner->GetComponent<Collider>())
+	{
+		body->SetLayer(5);
+		if (body->boxComponent) {
+			body->boxComponent->SetSize(FVector2(300, 70));
+			body->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
+		}
+	}
+	// 총알 히트박스 (채널 0)
+	if (Collider* hitbox = owner->AddComponent<Collider>())
+	{
+		hitbox->SetLayer(0);
+		if (hitbox->boxComponent) {
+			hitbox->boxComponent->SetSize(FVector2(280, 60));
+			hitbox->boxComponent->SetRelativePosition(FVector2(0.0f, -40.0f));
+		}
+	}
 }

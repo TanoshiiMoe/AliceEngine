@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "TileMapRenderer.h"
 #include <Manager/D2DRenderManager.h>
 #include <Manager/PackageResourceManager.h>
@@ -8,12 +8,12 @@
 
 TileMapRenderer::TileMapRenderer()
 {
-	drawType = Define::EDrawType::WorldSpace;
+	SetDrawType(Define::EDrawType::WorldSpace);
 }
 
 TileMapRenderer::~TileMapRenderer()
 {
-	PackageResourceManager::GetInstance().UnloadData(filePath); // ºñÆ®¸Ê ¾ğ·Îµå
+	PackageResourceManager::GetInstance().UnloadData(filePath); // ë¹„íŠ¸ë§µ ì–¸ë¡œë“œ
 }
 
 void TileMapRenderer::Initialize()
@@ -28,7 +28,7 @@ void TileMapRenderer::Update(const float& deltaSeconds)
 
 void TileMapRenderer::LoadData(const std::wstring& path)
 {
-	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // ÆÄÀÏ ÀÌ¸§¸¸ ÀúÀå
+	filePath = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + path); // íŒŒì¼ ì´ë¦„ë§Œ ì €ì¥
 	m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(filePath.c_str());
 }
 
@@ -52,7 +52,7 @@ void TileMapRenderer::Render()
 
 	D2D1_MATRIX_3X2_F skewTransform = CoordHelper::GetSkewMatrix(skewAngle, mapHeight * tileHeight);
 	D2D1_MATRIX_3X2_F backD2DTransform = D2D1::Matrix3x2F::Translation(-Define::SCREEN_WIDTH/2 - GetBitmapSizeX() / 2, -Define::SCREEN_HEIGHT / 2);
-	context->SetTransform(backD2DTransform *skewTransform * view); // ÃÖÁ¾ View¿Í °áÇÕ
+	context->SetTransform(backD2DTransform *skewTransform * view); // ìµœì¢… Viewì™€ ê²°í•©
 	context->DrawSpriteBatch(
 		batch,
 		0, batchSize,
@@ -80,9 +80,9 @@ void TileMapRenderer::AddTileToSpriteBatch()
 			int sx = (tileId % tilePerRow) * tileWidth;
 			int sy = (tileId / tilePerRow) * tileHeight;
 			D2D1_RECT_F destRect = D2D1::RectF(
-				(FLOAT)(x * tileWidth),     // X¿¡ ¿ÀÇÁ¼Â Ãß°¡
-				(FLOAT)(y * tileHeight),                        // Y´Â ±×´ë·Î
-				(FLOAT)((x + 1) * tileWidth), // ¿À¸¥ÂÊµµ µ¿ÀÏ ¿ÀÇÁ¼Â
+				(FLOAT)(x * tileWidth),     // Xì— ì˜¤í”„ì…‹ ì¶”ê°€
+				(FLOAT)(y * tileHeight),                        // YëŠ” ê·¸ëŒ€ë¡œ
+				(FLOAT)((x + 1) * tileWidth), // ì˜¤ë¥¸ìª½ë„ ë™ì¼ ì˜¤í”„ì…‹
 				(FLOAT)((y + 1) * tileHeight)
 			);
 			D2D1_RECT_U srcRect = { (UINT32)sx, (UINT32)sy, (UINT32)(sx + tileWidth), (UINT32)(sy + tileHeight) };

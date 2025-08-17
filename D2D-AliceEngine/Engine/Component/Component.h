@@ -1,4 +1,4 @@
-#pragma once
+癤�#pragma once
 
 #include <string>
 #include <memory>
@@ -21,9 +21,6 @@ public:
 	virtual void Update() override {}
 	virtual void Update(const float& deltaSeconds) override;
 	virtual void Release() override {}
-
-	// Render가 필요없는 Component도 있음
-	virtual void Render() {};
 
 	virtual void Awake() {};
 	virtual void OnStart() {}

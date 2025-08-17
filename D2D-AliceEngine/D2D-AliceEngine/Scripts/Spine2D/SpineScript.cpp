@@ -1,11 +1,11 @@
 ﻿#include "SpineScript.h"
-#include "SpineScript.h"
 #include <Core/Input.h>
 #include <Math/Transform.h>
 #include <Object/gameObject.h>
 #include <Component/TransformComponent.h>
 #include <Component/TextRenderComponent.h>
 #include <Component/SpriteRenderer.h>
+#include <Component/SpineRenderer.h>
 #include <Component/BoxComponent.h>
 #include <Component/InputComponent.h>
 #include <Core/Delegate.h>

@@ -701,13 +701,13 @@ void Drone::OnStart()
 	);
 
 	body = owner->AddComponent<SpriteRenderer>();
-	body->m_layer = 20000;
+	body->SetLayer(20000);
 	body->LoadData(spritePath.body);
 	body->SetRelativeScale(initBodySize);
    	body->SetRelativePosition(initBodyPos);
 
 	arm = owner->AddComponent<SpriteRenderer>();
-	arm->m_layer = 20001;
+	arm->SetLayer(20001);
 	arm->LoadData(spritePath.arm);
 	arm->SetRelativeScale(FVector2(1.0f, 1.0f));
 	arm->RemoveFromParent();

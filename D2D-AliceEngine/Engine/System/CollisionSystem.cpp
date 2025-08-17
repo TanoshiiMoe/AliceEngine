@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "CollisionSystem.h"
 #include <Manager/UpdateTaskManager.h>
 #include <Core/Tickable.h>
@@ -6,6 +6,7 @@
 #include <Experimental/Collision/CollisionDetector.h>
 #include <System/PhysicsSystem.h>
 #include <Component/Rigidbody2D.h>
+#include <Component/Collider.h>
 
 CollisionSystem::CollisionSystem()
 {
@@ -46,9 +47,16 @@ void CollisionSystem::UnRegistAll()
 	m_colliders.clear();
 }
 
-void CollisionSystem::Update(const float& deltaSeconds)
+void CollisionSystem::Update(const float& /*deltaSeconds*/)
 {
-	PhysicsSystem::GetInstance().collidedBodies = Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_colliders);
+	// prune expired
+	m_colliders.erase(
+		std::remove_if(m_colliders.begin(), m_colliders.end(), [](const WeakObjectPtr<Collider>& c){ return c.expired(); }),
+		m_colliders.end()
+	);
+
+	// Let detector compute current/previous collisions and fire callbacks
+	Physics::FCollisionDetector::SweepAndPruneOverlapCheck(m_colliders);
 }
 
 void CollisionSystem::Initialize()

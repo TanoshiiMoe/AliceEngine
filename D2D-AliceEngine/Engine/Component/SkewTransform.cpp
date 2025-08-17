@@ -146,9 +146,9 @@ void SkewTransform::SetRenderLayer()
 		int layer = static_cast<int>(-zPos);
 
 		if (auto ani = owner->GetComponent<Animator>())
-			ani->m_layer = layer;
+			ani->SetLayer(layer);
 		else if (auto spr = owner->GetComponent<SpriteRenderer>())
-			spr->m_layer = layer;
+			spr->SetLayer(layer);
 		else {
 			std::wstring message = owner->GetName() + L" : SkewTransform에서 Animator나 SpriteRenderer를 찾을수 없습니다!!\n";
 			OutputDebugStringW(message.c_str());

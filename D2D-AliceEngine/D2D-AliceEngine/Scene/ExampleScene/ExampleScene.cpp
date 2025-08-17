@@ -98,7 +98,7 @@ void ExampleScene::OnEnter()
 	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(18, 60));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
-	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
+	m_widget->GetComponent<TextRenderComponent>()->SetLayer(20);
 
 	// 백그라운드 배경 입니다.
 	m_backgroundImage = NewObject<gameObject>(L"sky");

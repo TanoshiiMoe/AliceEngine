@@ -105,7 +105,7 @@ void SelectWidgetScript::OnStart()
 	background->SetRelativeScale(FVector2(1, 1));
 	
 	tutorial->LoadData(L"BackGround\\movie_tutorial.mp4", 14, L"jpg", 95, true);
-	tutorial->m_layer = Define::Disable;
+	tutorial->SetLayer(Define::Disable);
 	tutorial->SetRelativePosition(FVector2(-960, -550));
 
 	//continueText->SetFontSize(70.0f);
@@ -128,7 +128,7 @@ void SelectWidgetScript::OnStart()
 	closeText->SetRelativePosition(CoordHelper::RatioCoordToScreen(closeTextRectSize, FVector2(-0.5, -0.5)));
 	closeText->SetRelativeScale(FVector2(1, 1));
 	closeText->SetRelativeRotation(0);
-	closeText->m_layer = Define::NormalTextLayer;
+	closeText->SetLayer(Define::NormalTextLayer);
 	closeText->RemoveFromParent();
 	closeButton->AddChildComponent(closeText);
 
@@ -169,7 +169,7 @@ void SelectWidgetScript::OnStart()
 	m_guideText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
 	m_guideText->SetText(L"[SPACE]를 길게 눌러서 튜토리얼 건너뛰기");
 	m_guideText->SetColor(FColor::White);
-	m_guideText->m_layer = Define::Disable;
+	m_guideText->SetLayer(Define::Disable);
 
 	// ===================== stage1
 	stage1->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
@@ -182,7 +182,7 @@ void SelectWidgetScript::OnStart()
 		+ FVector2(-570, 0)
 	);
 	stage1->SetRelativeScale(FVector2(1, 1));
-	stage1->m_layer = Define::NormalTextLayer;
+	stage1->SetLayer(Define::NormalTextLayer);
 
 	stage1Sprite->SetRelativeScale(FVector2(0.35f));
 	stage1Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -194,7 +194,7 @@ void SelectWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(stage1SpriteSize, FVector2(0, 0))
 		+ FVector2(0, 0)
 	);
-	stage1Sprite->m_layer = Define::NormalTextLayer+1;
+	stage1Sprite->SetLayer(Define::NormalTextLayer+1);
 
 	stage2Sprite->SetRelativeScale(FVector2(0.35f));
 	stage2Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -206,7 +206,7 @@ void SelectWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(stage2SpriteSize, FVector2(0, 0))
 		+ FVector2(0, 0)
 	);
-	stage2Sprite->m_layer = Define::NormalTextLayer + 1;
+	stage2Sprite->SetLayer(Define::NormalTextLayer + 1);
 
 	stage3Sprite->SetRelativeScale(FVector2(0.35f));
 	stage3Sprite->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -218,7 +218,7 @@ void SelectWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(stage3SpriteSize, FVector2(0, 0))
 		+ FVector2(0, 0)
 	);
-	stage3Sprite->m_layer = Define::NormalTextLayer + 1;
+	stage3Sprite->SetLayer(Define::NormalTextLayer + 1);
 
 	// ===================== stage2
 	stage2->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
@@ -226,7 +226,7 @@ void SelectWidgetScript::OnStart()
 	stage2->LoadData(Define::EButtonState::Pressed, L"UI\\StageButton_Pressed.png");
 	stage2->LoadData(Define::EButtonState::Release, L"UI\\StageButton_Idle.png");
 	stage2->SetRelativePosition(FVector2(0,0));
-	stage2->m_layer = Define::NormalTextLayer;
+	stage2->SetLayer(Define::NormalTextLayer);
 
 	// ===================== stage3
 	stage3->LoadData(Define::EButtonState::Idle, L"UI\\StageButton_Idle.png");
@@ -239,18 +239,18 @@ void SelectWidgetScript::OnStart()
 		+ FVector2(570, 0)
 	);
 	stage3->SetRelativeScale(FVector2(1, 1));
-	stage3->m_layer = Define::NormalTextLayer;
+	stage3->SetLayer(Define::NormalTextLayer);
 
 	// ========= Progress
 	m_progressSprite->LoadData(L"UI\\PressValue.png");
-	m_progressSprite->m_layer = Define::Disable;
+	m_progressSprite->SetLayer(Define::Disable);
 	m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
 	m_progressSprite->SetRelativePosition(FVector2(0, 0));
 	
 	m_progress->LoadData(L"UI\\ProgressBar.png");
 	m_progress->SetDrawType(EDrawType::ScreenSpace);
 	m_progress->SetRelativePosition(FVector2(0, 0));
-	m_progress->m_layer = Define::Disable;
+	m_progress->SetLayer(Define::Disable);
 	m_progress->SetProgress(m_pressValue);
 
 	// ====================== Delegate & Hover Effects
@@ -282,7 +282,7 @@ void SelectWidgetScript::OnStart()
 		//skipButton->SetActive(true);
 		//skipText->m_layer = Define::PopupTextLayer;
 
-		tutorial->m_layer = Define::PopupLayer;
+		tutorial->SetLayer(Define::PopupLayer);
 		tutorial->Play();
 
 		m_sound->PlayByName(L"Tutorial");
@@ -292,9 +292,9 @@ void SelectWidgetScript::OnStart()
 		stage2->SetActive(false);
 		stage3->SetActive(false);
 
-		m_progressSprite->m_layer = Define::PopupPopLayer;
-		m_progress->m_layer = Define::PopupObjectLayer;
-		m_guideText->m_layer = Define::PopupTextLayer;
+		m_progressSprite->SetLayer(Define::PopupPopLayer);
+		m_progress->SetLayer(Define::PopupObjectLayer);
+		m_guideText->SetLayer(Define::PopupTextLayer);
 
 		m_isInStage1 = true;
 

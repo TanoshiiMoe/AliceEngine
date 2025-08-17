@@ -30,6 +30,8 @@ using Microsoft::WRL::ComPtr;
 #include <string>
 #include <vector>
 #include <map>
+#include <Component/RenderComponent.h>
+#include <Core/Renderable.h>
 
 // Direct2D용 TextureLoader 구현
 class Direct2DTextureLoader : public spine::TextureLoader {
@@ -43,15 +45,18 @@ private:
     std::map<std::string, std::shared_ptr<ID2D1Bitmap>> m_bitmapMap;
 };
 
-class SpineRenderer
+class SpineRenderer : public RenderComponent
 {
 public:
     SpineRenderer();
     ~SpineRenderer();
 
+	virtual float GetBitmapSizeX() override;
+	virtual float GetBitmapSizeY() override;
+
     // 초기화
     void RegistSystem(WeakObjectPtr<UObject> object);
-    void Initialize();
+    virtual void Initialize() override;
     void LoadTextureLoader();
     void Shutdown();
 
@@ -73,19 +78,6 @@ public:
     void LoadSpine(const std::wstring& atlasPath, const std::wstring& jsonPath);
 
     void ReleaseSpine();
-
-    void SetDrawType(Define::EDrawType _type) { m_drawType = _type; }
-    Define::EDrawType GetDrawType() { return m_drawType; }
-
-    void SetLayer(int _layer) { m_layer = _layer; }
-    int* GetLayer () { return &m_layer; }
-
-	void SetPosition(const FVector2& _pos) { m_CharacterPosition = D2D1::Vector2F(_pos.x, _pos.y); }
-    FVector2 GetPosition() { return FVector2(m_CharacterPosition.x, m_CharacterPosition.y); }
-
-    // 크기 설정/조회
-    void SetScale(const FVector2& _scale) { m_CharacterScale = D2D1::Vector2F(_scale.x, _scale.y); }
-    FVector2 GetScale() const { return FVector2(m_CharacterScale.x, m_CharacterScale.y); }
 
 	bool GetRendered() const { return m_bRendered; }
 	void SetRendered(const bool value) { m_bRendered = value; }
@@ -118,12 +110,6 @@ private:
     int m_clientWidth = 0;
     int m_clientHeight = 0;
     bool m_initialized = false;
-    D2D1_VECTOR_2F m_CharacterPosition = D2D1::Vector2F(0.0f, 0.0f);
-    D2D1_VECTOR_2F m_CameraPosition = D2D1::Vector2F(0.0f, 300.0f);
-    D2D1_VECTOR_2F m_CharacterScale = D2D1::Vector2F(1.0f, 1.0f);
-
-    Define::EDrawType m_drawType = Define::EDrawType::ScreenSpace;
-    int m_layer = 1000;
 
     // 내부 함수들(Direct2D/3D 초기화 등)
     void ReleaseResources();

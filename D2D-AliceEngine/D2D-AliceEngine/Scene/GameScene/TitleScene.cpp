@@ -1,8 +1,8 @@
 ﻿#include "TitleScene.h"
 #include <Manager/SceneManager.h>
-#include "Scripts/TitleUIScript.h"
 #include <Scripts/Widget/TitleWidgetScript.h>
 #include <Component/SpriteRenderer.h>
+#include <Component/SpineRenderer.h>
 #include <Component/AudioComponent.h>
 #include <Scripts/Audio/TitleAudioScript.h>
 #include <Core/Input.h>
@@ -54,14 +54,14 @@ void TitleScene::OnEnter()
 	spineObject = NewObject<gameObject>(L"spineObject");
 	SpineScript* spine = spineObject->AddComponent<SpineScript>();
 	spine->LoadData(L"Spine2D/MAIN_SPINE.atlas", L"Spine2D/MAIN_SPINE.json");
-	if (spine->spineRenderer)
+	if (SpineRenderer* t = spine->GetSpineRenderer())
 	{
-		spine->spineRenderer->SetAnimation("animation");
-		spine->spineRenderer->SetPosition(FVector2(0, 300));
-		spine->spineRenderer->SetRendered(true);
-		spine->spineRenderer->SetScale(0.34f);
-		//spine->spineRenderer->SetLayer(94548823);
-		spine->spineRenderer->SetDrawType(Define::EDrawType::WorldSpace);
+		t->SetAnimation("animation");
+		t->SetRelativePosition(FVector2(0, 300));
+		t->SetRendered(true);
+		t->SetRelativeScale(0.34f);
+		t->SetLayer(94548823);
+		t->SetDrawType(Define::EDrawType::WorldSpace);
 	}
 
 	//spineObject2 = scene->NewObject<gameObject>(L"spineObject");

@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 #include <Component/ScriptComponent.h>
-#include <Spine2D/SpineRenderer.h>
 
 class gameObject;
+class SpineRenderer;
 class SpineScript : public ScriptComponent
 {
 public:
@@ -24,6 +24,9 @@ public:
 	virtual void OnTriggerEnter2D(Collider* collider) override;
 	virtual void OnTriggerStay2D(Collider* collider) override;
 	virtual void OnTriggerExit2D(Collider* collider) override;
+
+	SpineRenderer* GetSpineRenderer() { return spineRenderer.get(); }
+	void SetSpineRenderer(std::unique_ptr<SpineRenderer> ptr) { spineRenderer = std::move(ptr); }
 
 	void Input();
 

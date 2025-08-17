@@ -243,7 +243,6 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClInclude Include="Scripts\Widget\SelectWidgetScript.h" />
     <ClInclude Include="Scripts\Enemy\Spawn\SpawnCollider.h" />
     <ClInclude Include="Scripts\Enemy\Spawn\SpawnData.h" />
-    <ClInclude Include="Spine2D\SpineRenderer.h" />
     <ClInclude Include="Scene\SpineScene.h" />
     <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
     <ClInclude Include="Scripts\Widget\StageWidgetScript.h" />
@@ -331,7 +330,6 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
     <ClCompile Include="Scripts\Widget\SelectWidgetScript.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnCollider.cpp" />
     <ClCompile Include="Scripts\Enemy\Spawn\SpawnData.cpp" />
-    <ClCompile Include="Spine2D\SpineRenderer.cpp" />
     <ClCompile Include="Scene\SpineScene.cpp" />
     <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
     <ClCompile Include="Scripts\Audio\TitleAudioScript.cpp" />
@@ -344,9 +342,6 @@ copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod_vc.lib" "$(OutDir)"</Command>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{ff21bb58-7919-4e53-a917-2a8af0469c81}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\spine-cpp\spine-cpp.vcxproj">
-      <Project>{9a954b2e-ffb7-408a-87d1-e75dd7139d0e}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -37,6 +37,7 @@
 #include <Helpers/StringHelper.h>
 #include <System/RenderSystem.h>
 #include <Manager/PackageResourceManager.h>
+#include <Manager/SceneManager.h>
 
 static inline float clampf(float v, float lo, float hi) { return v < lo ? lo : (v > hi ? hi : v); }
 
@@ -51,36 +52,6 @@ void Direct2DTextureLoader::load(spine::AtlasPage& page, const spine::String& pa
 
 	std::shared_ptr<ID2D1Bitmap1> bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(wPath.c_str());
 
-	//Microsoft::WRL::ComPtr<IWICImagingFactory> wicFactory;
-	//HRESULT hr = CoCreateInstance(
-	//	CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&wicFactory));
-	//if (FAILED(hr))
-	//	return;
-	//
-	//Microsoft::WRL::ComPtr<IWICBitmapDecoder> decoder;
-	//hr = wicFactory->CreateDecoderFromFilename(wPath.c_str(), nullptr, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
-	//if (FAILED(hr))
-	//	return;
-	//
-	//Microsoft::WRL::ComPtr<IWICBitmapFrameDecode> frame;
-	//hr = decoder->GetFrame(0, &frame);
-	//if (FAILED(hr))
-	//	return;
-	//
-	//Microsoft::WRL::ComPtr<IWICFormatConverter> converter;
-	//hr = wicFactory->CreateFormatConverter(&converter);
-	//if (FAILED(hr))
-	//	return;
-	//hr = converter->Initialize(frame.Get(), GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0f, WICBitmapPaletteTypeCustom);
-	//if (FAILED(hr))
-	//	return;
-	//
-	//Microsoft::WRL::ComPtr<ID2D1Bitmap> bitmap;
-	//
-	//hr = D2DRenderManager::GetInstance().m_d2dDeviceContext->CreateBitmapFromWicBitmap(converter.Get(), bitmap.GetAddressOf());
-	//if (FAILED(hr))
-	//	return;
-
 	page.texture = bitmap.get();
 	m_bitmapMap[path.buffer()] = bitmap;
 	page.width = static_cast<int>(bitmap->GetSize().width);
@@ -93,18 +64,35 @@ void Direct2DTextureLoader::unload(void* texture)
 }
 
 
-SpineRenderer::SpineRenderer() : m_textureLoader(nullptr), m_atlas(nullptr), m_skeletonData(nullptr), m_skeleton(nullptr), m_stateData(nullptr), m_state(nullptr) {}
-SpineRenderer::~SpineRenderer() { Shutdown(); }
+SpineRenderer::SpineRenderer() : m_textureLoader(nullptr), m_atlas(nullptr), m_skeletonData(nullptr), m_skeleton(nullptr), m_stateData(nullptr), m_state(nullptr) 
+{
+
+}
+
+SpineRenderer::~SpineRenderer() 
+{
+	RenderSystem::GetInstance().UnRegist(WeakFromThis<RenderComponent>());
+	Shutdown(); 
+}
+
+float SpineRenderer::GetBitmapSizeX()
+{
+	return 0.0f;
+}
+
+float SpineRenderer::GetBitmapSizeY()
+{
+	return 0.0f;
+}
 
 void SpineRenderer::RegistSystem(WeakObjectPtr<UObject> object)
 {
 	if (!ObjectHandler::GetInstance().IsValid(object.Get()->GetHandle())) return;
-	
-	RenderSystem::GetInstance().RegistSpine2D(object->GetHandle(), [this]() { Render(); }, GetDrawType(), GetLayer());
 }
 
 void SpineRenderer::Initialize()
 {
+	RenderSystem::GetInstance().Regist(WeakFromThis<RenderComponent>());
 	LoadTextureLoader();
 	if (!m_textureLoader)
 	{
@@ -195,42 +183,27 @@ void SpineRenderer::Clear(const D2D1_COLOR_F& color) {
 	D2DRenderManager::GetInstance().m_d2dDeviceContext->Clear(color);
 }
 
-
-
-// --- 슬롯별 이미지 렌더링 ---
+// Spine에서는 본 구조를 그려야 하기 때문에 RenderComponent의 기본 좌표축 계산인
+// Render() 함수를 실행하지 않고, 독립적으로 좌표를 설정하고 그려냅니다
 void SpineRenderer::Render()
 {
 	if (!m_bRendered) return;
 	if (!m_skeleton || !m_atlas || !D2DRenderManager::GetInstance().m_d2dDeviceContext)
 		return;
 
+	ID2D1DeviceContext7* context = D2DRenderManager::GetD2DDevice();
+	Camera* camera = SceneManager::GetCamera();
+	if (!context || !camera) return;
+
 	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 
-	// 캐릭터의 월드 위치
-	D2D1::Matrix3x2F worldTransform = D2D1::Matrix3x2F::Scale(m_CharacterScale.x, m_CharacterScale.y) * D2D1::Matrix3x2F::Translation(m_CharacterPosition.x, m_CharacterPosition.y);
-	// 유니티 좌표계 변환을 위해 사전 Y축 반전
-	D2D1::Matrix3x2F renderTransform = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
-	// 카메라 기준 좌표계 변환을 위해 역행렬 계산
-	D2D1::Matrix3x2F cameraInv = D2D1::Matrix3x2F::Translation(m_CameraPosition.x, m_CameraPosition.y);
+	D2D1::Matrix3x2F worldTransform = GetOwnerTransform() ? relativeTransform.m_worldTransform.ToMatrix() : D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F flipY = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
+	D2D1::Matrix3x2F cameraInv = camera->relativeTransform.m_worldTransform.ToMatrix();
 	cameraInv.Invert();
-
-	// 좌표계 축 그리기
-	//D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(cameraInv * m_UnityScreen);
-	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(-m_clientWidth), D2D1::Point2F(+m_clientWidth), m_brush.Get(), 1.0f);
-	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(0.0f, -m_clientHeight), D2D1::Point2F(0.0f, m_clientHeight), m_brush.Get(), 1.0f);
-
-	// 애니메이션 이름 표시
-	//D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
-	//std::wstring wMessage = L"Select Animation 1~9.   ,0: BasePose";
-	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawTextW(wMessage.c_str(), (UINT32)wMessage.length(),
-	//	m_textFormat.Get(), D2D1::RectF(0, 0, 300, 10), m_brush.Get());
-	//std::wstring wAnimName(m_currentAnimation.begin(), m_currentAnimation.end());
-	//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawTextW(wAnimName.c_str(), (UINT32)wAnimName.length(),
-	//	m_textFormat.Get(), D2D1::RectF(0, 20, 100, 30), m_brush.Get());
 
 	// 슬롯별로 렌더링
 	const auto& slotOrder = m_useSetupSlotOrder ? m_skeleton->getSlots() : m_skeleton->getDrawOrder();
-	//for (size_t i = slotOrder.size() - 1; i >= 0; --i)
 	for (size_t i = 0; i < slotOrder.size(); ++i)
 	{
 		spine::Slot* slot = slotOrder[i];
@@ -266,7 +239,7 @@ void SpineRenderer::Render()
 			srcRect.right = srcRect.left + srcW;
 			srcRect.bottom = srcRect.top + srcH;
 
-			// 2. destRect + offset 적용
+			// destRect + offset 적용
 			float destW = rotated ? atlasRegion->originalHeight : atlasRegion->originalWidth;
 			float destH = rotated ? atlasRegion->originalWidth : atlasRegion->originalHeight;
 			float offsetX = rotated ? atlasRegion->offsetY : atlasRegion->offsetX;
@@ -286,14 +259,14 @@ void SpineRenderer::Render()
 			destRect.right = destRect.left + destW;
 			destRect.bottom = destRect.top + destH;
 
-			// 4. 본(Bone)의 월드 변환
+			// 본(Bone)의 월드 변환
 			spine::Bone& bone = slot->getBone();
 			D2D1::Matrix3x2F boneWorldMatrix =
 				D2D1::Matrix3x2F::Scale(bone.getScaleX(), bone.getScaleY()) *
 				D2D1::Matrix3x2F::Rotation(bone.getWorldRotationX()) *
 				D2D1::Matrix3x2F::Translation(bone.getWorldX(), bone.getWorldY());
 
-			D2D1::Matrix3x2F finalMatrix = renderTransform * attachmentMatrix * boneWorldMatrix * worldTransform * cameraInv * m_UnityScreen;
+			D2D1::Matrix3x2F finalMatrix = flipY * attachmentMatrix * boneWorldMatrix * worldTransform * cameraInv * m_UnityScreen;
 			D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(finalMatrix);
 
 			// 이미지 그리기
@@ -415,20 +388,13 @@ void SpineRenderer::Render()
 	{
 		auto& bones = m_skeleton->getBones();
 		//m_brush->SetColor(D2D1::ColorF(D2D1::ColorF::Red, 1.0f));
-		for (size_t i = 0; i < bones.size(); ++i) {
+		for (size_t i = 0; i < bones.size(); ++i) 
+		{
 			spine::Bone& bone = *bones[i];
 			D2D1::Matrix3x2F boneWorldMatrix =
 				D2D1::Matrix3x2F::Scale(bone.getScaleX(), bone.getScaleY()) *
 				D2D1::Matrix3x2F::Rotation(bone.getWorldRotationX()) *
 				D2D1::Matrix3x2F::Translation(bone.getWorldX(), bone.getWorldY());
-
-			//D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(renderTransform * boneWorldMatrix * worldTransform * cameraInv * m_UnityScreen);
-			//float x = 0, y = 0, crossLen = 8.0f;
-			//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(x - crossLen, y), D2D1::Point2F(x + crossLen, y), m_brush.Get(), 2.0f);
-			//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawLine(D2D1::Point2F(x, y - crossLen), D2D1::Point2F(x, y + crossLen), m_brush.Get(), 2.0f);
-			//std::wstring wBoneName(bone.getData().getName().buffer(), bone.getData().getName().buffer() + bone.getData().getName().length());
-			//D2DRenderManager::GetInstance().m_d2dDeviceContext->DrawTextW(wBoneName.c_str(), (UINT32)wBoneName.length(),
-			//	m_textFormat.Get(), D2D1::RectF(x + 10, y - 10, x + 100, y + 10), m_brush.Get());
 		}
 	}
 }
@@ -479,12 +445,15 @@ void SpineRenderer::ComputeRegionPlacement(
 }
 
 // --- 키보드 입력 처리 ---
-void SpineRenderer::HandleKeyInput(int keyCode) {
+void SpineRenderer::HandleKeyInput(int keyCode) 
+{
 	std::cout << "Key pressed: " << keyCode << std::endl;
 	// 1~9: 해당 인덱스 애니메이션 재생
-	if (keyCode >= '1' && keyCode <= '9') {
+	if (keyCode >= '1' && keyCode <= '9') 
+	{
 		int idx = keyCode - '1';
-		if (idx >= 0 && idx < (int)m_animationList.size()) {
+		if (idx >= 0 && idx < (int)m_animationList.size()) 
+		{
 			SetAnimation(m_animationList[idx]);
 		}
 		return;
@@ -507,7 +476,8 @@ void SpineRenderer::HandleKeyInput(int keyCode) {
 	}
 }
 
-void SpineRenderer::SetNextAnimation() {
+void SpineRenderer::SetNextAnimation() 
+{
 	if (m_animationList.empty()) return;
 
 	m_currentAnimationIndex = (m_currentAnimationIndex + 1) % m_animationList.size();
