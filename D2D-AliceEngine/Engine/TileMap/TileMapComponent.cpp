@@ -95,17 +95,21 @@ void TileMapComponent::CreateTileCollision()
 				D2D1::Matrix3x2F::Translation(-Define::SCREEN_WIDTH / 2.0f, -Define::SCREEN_HEIGHT / 2.0f) *
 				CoordHelper::GetSkewMatrix(skewAngle, mapHeight * tileHeight) * 
 				D2D1::Matrix3x2F::Scale(1,-1);
-			D2D1_POINT_2F topLeft = CoordHelper::TransformPoint(fullTransform, D2D1::Point2F(destRect.left, destRect.top + tileHeight / 2));
-			D2D1_POINT_2F bottomRight = CoordHelper::TransformPoint(fullTransform, D2D1::Point2F(destRect.right, destRect.bottom));
+			D2D1_POINT_2F tl = CoordHelper::TransformPoint(fullTransform, D2D1::Point2F(destRect.left, destRect.top));
+			D2D1_POINT_2F br = CoordHelper::TransformPoint(fullTransform, D2D1::Point2F(destRect.right, destRect.bottom));
+			const float cx = (tl.x + br.x) * 0.5f;
+			const float cy = (tl.y + br.y) * 0.5f;
 
 			gameObject* collisionGo = GetWorld()->NewObject<gameObject>(L"tileCollision");
-			collisionGo->transform()->SetPosition({ topLeft.x, topLeft.y });
+			collisionGo->transform()->SetPosition({ cx, cy });
 			collisionGo->transform()->SetPivot(0.5f, 0.5f);
 			collisionGo->AddComponent<Collider>();
 			if (auto collider = collisionGo->GetComponent<Collider>())
 			{
 				collider->SetBoxSize(FVector2(tileWidth, tileHeight));
-				collider->boxComponent->SetSkewAngle(FVector2(30, 0));
+				// 레거시 경로와 m_box 모두 일관 반영
+				collider->SetDebugDraw(true);
+				if (collider->boxComponent) collider->boxComponent->SetSkewAngle(FVector2(30.0f, 0.0f));
 				collider->SetLayer(tileCollision[tileId+1].collisionChannel); // 실제 위치를 반환하기 위해 -1 했던것을 다시 +1
 			}
 
@@ -133,7 +137,7 @@ void TileMapComponent::CreateTileRenderers()
 void TileMapComponent::SetTileLayer(const int& layer)
 {
 	TileMapRenderer* tileRenderer = m_tile->GetComponent<TileMapRenderer>();
-	tileRenderer->m_layer = layer;
+	tileRenderer->SetLayer(layer);
 }
 
 void TileMapComponent::Release()
@@ -176,7 +180,7 @@ int TileMapComponent::GetTileLayer()
 {
 	if (TileMapRenderer* tileRenderer = m_tile->GetComponent<TileMapRenderer>())
 	{
-		return tileRenderer->m_layer;
+		return tileRenderer->GetLayer();
 	}
 	return -1;
 }

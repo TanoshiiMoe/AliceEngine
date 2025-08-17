@@ -10,7 +10,6 @@ public:
     void OnStart() override;
     void Update(const float& deltaSeconds) override;
 
-
     void OnTriggerEnter2D(Collider* collider) override;
 
     // 설정 API

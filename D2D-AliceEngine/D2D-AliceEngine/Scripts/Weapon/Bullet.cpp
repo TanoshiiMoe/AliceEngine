@@ -48,7 +48,7 @@ void Bullet::Initialize()
 	if (Collider* co = owner->AddComponent<Collider>())
 	{
 		co->SetBoxSize(FVector2(40, 40));
-		//co->SetLayer(0);
+		co->SetLayer(0); // 총알은 0번 채널
 	}
 
 	TimerManager::GetInstance().ClearTimer(handle); // 이전 타이머 제거
@@ -203,7 +203,7 @@ void Bullet::OnStart()
 
 	SpriteRenderer* sp = owner->AddComponent<SpriteRenderer>();
 	sp->LoadData(spritePath);
-	sp->m_layer = 20002;
+	sp->SetLayer(20002);
 
 	const float angleRad = std::atan2f(moveDir.y, moveDir.x);
 	const float angleDeg = angleRad * 180.0f / Define::PI;

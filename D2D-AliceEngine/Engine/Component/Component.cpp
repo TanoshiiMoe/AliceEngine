@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Component.h"
 #include <Component/TransformComponent.h>
 #include <Object/gameObject.h>
@@ -30,7 +30,7 @@ void Component::Update(const float& deltaSeconds)
 
 const std::wstring& Component::GetOwnerName()
 {
-	// TODO: ¿©±â¿¡ return ¹®À» »ðÀÔÇÕ´Ï´Ù.
+	// TODO: ì—¬ê¸°ì— return ë¬¸ì„ ì‚½ìž…í•©ë‹ˆë‹¤.
 	if (!owner.expired())
 		return owner.lock()->GetName();
 	return L"No Owner";

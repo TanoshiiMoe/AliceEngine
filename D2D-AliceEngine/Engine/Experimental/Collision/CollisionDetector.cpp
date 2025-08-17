@@ -19,9 +19,12 @@ void Physics::FCollisionDetector::BruteForceOverlapCheck(std::vector<WeakObjectP
 		{
 			if (objects[j].expired()) continue;
 
+			// 채널 필터링: 같은 채널만 검사
+			if (objects[i]->GetCollisionChannel() != objects[j]->GetCollisionChannel()) continue;
+
 			if (IsOverlapped(objects[i],objects[j]))
 			{
-                PushOverlappedArea(objects[i].Get(), objects[j].Get());
+				PushOverlappedArea(objects[i].Get(), objects[j].Get());
 				std::wcout << L"[충돌] " << objects[i]->GetName()<< " " << objects[j]->GetName() << " 겹침\n";
 			}
 		}
@@ -80,6 +83,9 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
 				Collider* ca = A.weak.Get();
 				Collider* cb = B.weak.Get();
 				if (!ca || !cb) continue;
+
+				// 채널 필터링: 같은 채널만 이벤트/해결
+				if (ca->GetCollisionChannel() != cb->GetCollisionChannel()) continue;
 
 				PushOverlappedArea(ca, cb);
 				SavePreviousCollisionData(ca, cb, overlappedRigidBodies);

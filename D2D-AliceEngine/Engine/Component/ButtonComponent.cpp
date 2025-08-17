@@ -15,7 +15,7 @@
 
 ButtonComponent::ButtonComponent()
 {
-	drawType = Define::EDrawType::ScreenSpace;
+	SetDrawType(Define::EDrawType::ScreenSpace);
 }
 
 ButtonComponent::~ButtonComponent()
@@ -53,7 +53,8 @@ void ButtonComponent::Update(const float& deltaSeconds)
 	const bool mouseDown = Input::IsMouseLeftDown();
 	const bool mouseUp = Input::IsMouseLeftReleased();
 
-	const FVector2 mousePos = Input::GetMouseWorldPositionInCanvas();
+	//const FVector2 mousePos = Input::GetMouseWorldPositionInCanvas();
+	const FVector2 mousePos = Input::GetMousePosition();
 	const FVector2 relativePos(
 		relativeTransform.GetPosition().x,
 		relativeTransform.GetPosition().y
@@ -154,6 +155,7 @@ void ButtonComponent::Release()
 
 void ButtonComponent::Render()
 {
+	if (!GetVisible()) return;
 	if (!m_bitmap) return;
 	__super::Render();
 

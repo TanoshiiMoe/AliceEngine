@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <Component/RenderComponent.h>
-#include <Animation/TextureLoader.h>
+#include <Animation/SpriteAnimationTextureLoader.h>
 
 using namespace Microsoft::WRL;
 

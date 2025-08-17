@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <d2d1_1.h>
 #include <d2d1_1helper.h>
@@ -9,20 +9,21 @@
 #include <Define/Define.h>
 #include <Math/Transform.h>
 #include <Component/TransformComponent.h>
+#include <Core/Renderable.h>
 
-class RenderComponent : public Component
+class RenderComponent : public Component, public Renderable
 {
 	friend Camera;
 public:
 	RenderComponent();
 	~RenderComponent();
 public:
+
 	void Initialize() override;
 	void Update() override;
 	void Update(const float& deltaSeconds) override;
 	void Release() override;
 
-	void SetDrawType(const Define::EDrawType& type);
 	virtual float GetBitmapSizeX() = 0;
 	virtual float GetBitmapSizeY() = 0;
 	virtual void Render() override;
@@ -44,8 +45,8 @@ public:
 	virtual void AddChildComponent(WeakObjectPtr<RenderComponent> rc);
 	virtual void RemoveFromParent();
 
-	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
-	int m_layer = -999;
+	TransformComponent* GetRelativeTransform() { return &relativeTransform; }
+
 	bool bFlip = false;
 protected:
 	D2D1::Matrix3x2F view;

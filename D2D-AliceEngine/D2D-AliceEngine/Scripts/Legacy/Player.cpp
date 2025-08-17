@@ -10,7 +10,7 @@
 #include <Component/Animator.h>
 #include <System/ScriptSystem.h>
 
-#include <Animation/TextureLoader.h>
+#include <Animation/SpriteAnimationTextureLoader.h>
 #include <Animation/AnimationController.h>
 #include <Animation/AnimatorInstance.h>
 #include <Component/Collider.h>
@@ -177,7 +177,7 @@ void Player::OnStart()
 	animInstance->ApplyClipDurationsToStates();
 	//animInstance->SetLooping(true);
 	animInstance->Play();
-	animInstance->m_layer = 5;
+	animInstance->SetLayer(5);
 	animInstance->OnStart();
 
 	m_owner->AddComponent<Collider>()->SetBoxSize(FVector2(35, 10));

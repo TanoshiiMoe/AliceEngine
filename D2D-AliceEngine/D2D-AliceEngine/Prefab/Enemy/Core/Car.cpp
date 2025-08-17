@@ -237,7 +237,7 @@ void Car::DelayDestroy()
                     std::wstring textureRelPath = StringHelper::string_to_wstring(animator->sheet->texture);
                     ghostSR->LoadData(textureRelPath);
                 }
-                ghostSR->m_layer = srSelf ? srSelf->m_layer : animator->m_layer;
+                ghostSR->SetLayer(srSelf ? srSelf->GetLayer() : animator->GetLayer());
                 
                 // 좌표 변환 동기화
                 temp->transform()->SetPosition(owner->transform()->GetPosition());

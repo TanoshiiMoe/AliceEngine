@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 #include <Scene/Scene.h>
-#include <Spine2D/SpineRenderer.h>
 
 class TextRenderComponent;
+class gameObject;
 class SpineScene : public Scene
 {
 public:

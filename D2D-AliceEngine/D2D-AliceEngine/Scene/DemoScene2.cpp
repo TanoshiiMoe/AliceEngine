@@ -5,6 +5,7 @@
 #include <Component/TextRenderComponent.h>
 #include <Component/BoxComponent.h>
 #include <Component/SpriteRenderer.h>
+#include <Component/SpineRenderer.h>
 #include <Component/TransformComponent.h>
 #include <Component/VideoComponent.h>
 #include <Object/gameObject.h>
@@ -86,7 +87,7 @@ void DemoScene2::OnEnter()
 	if (spine->spineRenderer)
 	{
 		spine->spineRenderer->SetAnimation("Idle");
-		spine->spineRenderer->SetPosition(FVector2(0, 0));
+		spine->spineRenderer->SetRelativePosition(FVector2(0, 0));
 		spine->spineRenderer->SetRendered(true);
 		spine->spineRenderer->SetLayer(94548823);
 	}
@@ -219,7 +220,7 @@ void DemoScene2::OnEnter()
         bar->SetRelativeScale(FVector2(0.8f, 0.8f));
         bar->SetRelativePosition(FVector2(500, 300));
         bar->SetProgress(1.0f);
-		bar->m_layer = 30000;
+		bar->SetLayer(30000);
     }
 }
 
@@ -351,30 +352,30 @@ void DemoScene2::aruInput()
 
 	if (Input::IsKeyDown(VK_W)) // 위
 	{
-		FVector2 pos = spine->spineRenderer->GetPosition();
+		FVector2 pos = spine->spineRenderer->GetRelativePosition();
 		pos.y += moveSpeed; // y 증가 → 위로 이동
-		spine->spineRenderer->SetPosition(pos);
+		spine->spineRenderer->SetRelativePosition(pos);
 	}
 
 	if (Input::IsKeyDown(VK_S)) // 아래
 	{
-		FVector2 pos = spine->spineRenderer->GetPosition();
+		FVector2 pos = spine->spineRenderer->GetRelativePosition();
 		pos.y -= moveSpeed; // y 감소 → 아래로 이동
-		spine->spineRenderer->SetPosition(pos);
+		spine->spineRenderer->SetRelativePosition(pos);
 	}
 
 	if (Input::IsKeyDown(VK_A)) // 왼쪽
 	{
-		FVector2 pos = spine->spineRenderer->GetPosition();
+		FVector2 pos = spine->spineRenderer->GetRelativePosition();
 		pos.x -= moveSpeed; // x 감소 → 왼쪽 이동
-		spine->spineRenderer->SetPosition(pos);
+		spine->spineRenderer->SetRelativePosition(pos);
 	}
 
 	if (Input::IsKeyDown(VK_D)) // 오른쪽
 	{
-		FVector2 pos = spine->spineRenderer->GetPosition();
+		FVector2 pos = spine->spineRenderer->GetRelativePosition();
 		pos.x += moveSpeed; // x 증가 → 오른쪽 이동
-		spine->spineRenderer->SetPosition(pos);
+		spine->spineRenderer->SetRelativePosition(pos);
 	}
 
 	if (Input::IsKeyPressed(VK_F))
@@ -385,19 +386,19 @@ void DemoScene2::aruInput()
 	// 스파인 스케일 조절: [ (축소), ] (확대)
 	if (Input::IsKeyDown(VK_OEM_4)) // '['
 	{
-		FVector2 sc = spine->spineRenderer->GetScale();
+		FVector2 sc = spine->spineRenderer->GetRelativeScale();
 		sc.x *= 0.9f; sc.y *= 0.9f;
 		sc.x = Math::Clamp(sc.x, 0.1f, 5.0f);
 		sc.y = Math::Clamp(sc.y, 0.1f, 5.0f);
-		spine->spineRenderer->SetScale(sc);
+		spine->spineRenderer->SetRelativeScale(sc);
 	}
 	if (Input::IsKeyDown(VK_OEM_6)) // ']'
 	{
-		FVector2 sc = spine->spineRenderer->GetScale();
+		FVector2 sc = spine->spineRenderer->GetRelativeScale();
 		sc.x *= 1.1f; sc.y *= 1.1f;
 		sc.x = Math::Clamp(sc.x, 0.1f, 5.0f);
 		sc.y = Math::Clamp(sc.y, 0.1f, 5.0f);
-		spine->spineRenderer->SetScale(sc);
+		spine->spineRenderer->SetRelativeScale(sc);
 	}
 	
 }

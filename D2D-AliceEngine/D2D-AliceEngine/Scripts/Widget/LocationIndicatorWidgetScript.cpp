@@ -25,7 +25,6 @@ void LocationIndicatorWidgetScript::OnStart()
         enemyIndecatorObj = GetWorld()->NewObject<gameObject>(L"enemyIndecatorObj");
     owner->SetScale(FVector2(1, 0.8f));
     owner->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
-    GetCamera()->AddChildObject(owner.Get());
 
     // 상단 중앙에 진행바 배치
     m_barY = -Define::SCREEN_HEIGHT * 0.5f + 10.0f; // 화면 최상단에서 40px 내려옴
@@ -44,7 +43,7 @@ void LocationIndicatorWidgetScript::OnStart()
         }
     }
     m_barEmpty->SetRelativePosition(FVector2(0.0f, m_barY));
-    m_barEmpty->m_layer = Define::HUDLayer + 5; // HUD 위로 약간 올림
+    m_barEmpty->SetLayer(Define::HUDLayer + 5); // HUD 위로 약간 올림
 
     // 채워지는 컬러 바 (ProgressBar)
     m_barFill = owner->AddComponent<ProgressBarComponent>();
@@ -54,7 +53,7 @@ void LocationIndicatorWidgetScript::OnStart()
     m_barFill->SetRelativePosition(FVector2(0.0f, m_barY));
     m_barFill->SetRelativeScale(FVector2(1.f, 1.f));
     m_barFill->SetProgress(0.0f);
-    m_barFill->m_layer = Define::HUDLayer + 6; // 빈 바보다 위
+    m_barFill->SetLayer( Define::HUDLayer + 6); // 빈 바보다 위
 
     // 현재 위치 마커 (컬러 텍스처 재활용 또는 Empty를 사용하고 Opacity/Pulse)
     m_marker = owner->AddComponent<SpriteRenderer>();
@@ -71,7 +70,7 @@ void LocationIndicatorWidgetScript::OnStart()
         }
     }
     m_marker->SetRelativePosition(FVector2(0.0f, m_barY));
-    m_marker->m_layer = Define::HUDLayer + 7;
+    m_marker->SetLayer(Define::HUDLayer + 7);
 
     if (bBossState)
     {
@@ -89,7 +88,7 @@ void LocationIndicatorWidgetScript::OnStart()
 			}
 		}
 		m_enemyMarker->SetRelativePosition(FVector2(0.0f, m_barY));
-		m_enemyMarker->m_layer = Define::HUDLayer + 7;
+		m_enemyMarker->SetLayer(Define::HUDLayer + 7);
     }
     
 

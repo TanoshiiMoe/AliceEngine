@@ -49,21 +49,28 @@ void BoxComponent::Render()
 	if (!GetOwner() || !context) return;
 	__super::Render();
 
-	FVector2 scale(1.0f, 1.0f);
-	if (bIgnoreOwnerScale) {
-		if (auto transformComp = GetOwner()->transform())
-			scale = transformComp->GetScale();
-	}
-	// 스케일 무시 모드면 scale은 (1,1) 유지
-	float drawWidth = m_size.x / (scale.x != 0 ? scale.x : 1.0f);
-	float drawHeight = m_size.y / (scale.y != 0 ? scale.y : 1.0f);
+	// 로컬 사이즈(상대 트랜스폼 기준). 스케일은 뷰 행렬에서 적용됨
+	float drawWidth = m_size.x;
+	float drawHeight = m_size.y;
 
 	D2D1_MATRIX_3X2_F prevTransform;
 	context->GetTransform(&prevTransform);
 
 	D2D1_MATRIX_3X2_F skewMatrix = CoordHelper::GetSkewMatrix(skewAngle, drawHeight);
 
-	context->SetTransform(skewMatrix * prevTransform);
+	// 부모(Owner) 스케일 무시 옵션: 뷰 행렬에 부모 스케일의 역스케일을 곱해 보정
+	D2D1_MATRIX_3X2_F localAdjust = D2D1::Matrix3x2F::Identity();
+	if (bIgnoreOwnerScale)
+	{
+		FVector2 ownerScale(1.0f, 1.0f);
+		if (auto transformComp = GetOwner() ? GetOwner()->transform() : nullptr)
+			ownerScale = transformComp->GetScale();
+		const float sx = (ownerScale.x != 0.0f) ? (1.0f / ownerScale.x) : 1.0f;
+		const float sy = (ownerScale.y != 0.0f) ? (1.0f / ownerScale.y) : 1.0f;
+		localAdjust = D2D1::Matrix3x2F::Scale(sx, sy);
+	}
+
+	context->SetTransform(localAdjust * skewMatrix * prevTransform);
 
 	D2D1_POINT_2F pivot = 
 	{

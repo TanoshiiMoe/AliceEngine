@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "Animator.h"
 #include <Math/Transform.h>
-#include <Animation/TextureLoader.h>
+#include <Animation/SpriteAnimationTextureLoader.h>
 #include <Component/SpriteRenderer.h>
 #include <Manager/D2DRenderManager.h>
 #include <Manager/UpdateTaskManager.h>
@@ -111,7 +111,7 @@ void Animator::LoadSpriteSheet(const std::wstring& filePath)
 {
 	if (sheet.get())
 	{
-		TextureLoader::LoadSpriteSheet(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath), *sheet.get());
+		SpriteAnimationTextureLoader::LoadSpriteSheet(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath), *sheet.get());
 		const std::wstring path = FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + StringHelper::string_to_wstring(sheet.get()->texture));
 		m_bitmap = PackageResourceManager::GetInstance().CreateBitmapFromFile(path.c_str());
 	}
@@ -122,7 +122,7 @@ void Animator::LoadAnimationClip(const std::wstring& filePath)
 	if (sheet.get())
 	{
 		std::unique_ptr<AnimationClip> clip = std::make_unique<AnimationClip>();
-		TextureLoader::LoadAnimationClip(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath), *clip.get(), *sheet.get());
+		SpriteAnimationTextureLoader::LoadAnimationClip(FileHelper::ToAbsolutePath(Define::BASE_RESOURCE_PATH + filePath), *clip.get(), *sheet.get());
 		animationClips.emplace(clip->clipName, std::move(clip));
 	}
 }

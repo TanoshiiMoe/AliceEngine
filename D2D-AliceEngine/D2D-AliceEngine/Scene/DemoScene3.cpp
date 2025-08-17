@@ -187,28 +187,28 @@ void DemoScene3::OnEnter()
 	m_widget->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(18, 45));
 	m_widget->GetComponent<TextRenderComponent>()->SetFontSize(18.0f);
 	m_widget->GetComponent<TextRenderComponent>()->SetColor(FColor(0, 0, 0, 255));
-	m_widget->GetComponent<TextRenderComponent>()->m_layer = 20;
+	m_widget->GetComponent<TextRenderComponent>()->SetLayer(20);
 
 	m_widget2->transform()->SetPosition(0, 0);
 	m_widget2->AddComponent<TextRenderComponent>()->SetText(L" <씬> \n [3] : 씬 전환");
 	m_widget2->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopRight);
 	m_widget2->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen({ 0.9,0 }));
 	m_widget2->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
-	m_widget2->GetComponent<TextRenderComponent>()->m_layer = 20;
+	m_widget2->GetComponent<TextRenderComponent>()->SetLayer(20);
 
 	m_widget3->transform()->SetPosition(0, 0);
 	m_widget3->AddComponent<TextRenderComponent>()->SetText(L" <현재 씬> " + GetName());
 	m_widget3->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
 	m_widget3->GetComponent<TextRenderComponent>()->SetRelativePosition(FVector2(20, 10));
 	m_widget3->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
-	m_widget3->GetComponent<TextRenderComponent>()->m_layer = 20;
+	m_widget3->GetComponent<TextRenderComponent>()->SetLayer(20);
 
 	m_widget4->transform()->SetPosition(0, 0);
 	m_widget4->AddComponent<TextRenderComponent>()->SetText(L" test");
 	m_widget4->GetComponent<TextRenderComponent>()->SetTextAlignment(ETextFormat::TopLeft);
 	m_widget4->GetComponent<TextRenderComponent>()->SetRelativePosition(CoordHelper::RatioCoordToScreen({ 0.7,0.6 }));
 	m_widget4->GetComponent<TextRenderComponent>()->SetFontSize(20.0f);
-	m_widget4->GetComponent<TextRenderComponent>()->m_layer = 20;
+	m_widget4->GetComponent<TextRenderComponent>()->SetLayer(20);
 
 	m_backgroundImage = NewObject<gameObject>(L"sky");
 	m_backgroundImage->AddComponent<BackGroundImage>();

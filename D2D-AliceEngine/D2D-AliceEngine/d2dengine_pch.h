@@ -1,7 +1,7 @@
-#pragma once
+ï»¿#pragma once
 #include <windows.h>
 #include <assert.h>
-#include <wrl.h>  // ComPtr »ç¿ëÀ» À§ÇÑ Çì´õ
+#include <wrl.h>  // ComPtr ì‚¬ìš©ì„ ìœ„í•œ í—¤ë”
 
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
@@ -41,7 +41,7 @@
 //====================System====================//
 #include <System/ScriptSystem.h>
 //====================Animation====================//
-#include <Animation/TextureLoader.h>
+#include <Animation/SpriteAnimationTextureLoader.h>
 #include <Animation/AnimationController.h>
 #include <FSM/FiniteStateMachine.h>
 #include <fsm/FSMState.h>

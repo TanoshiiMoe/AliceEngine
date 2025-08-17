@@ -7,8 +7,6 @@
 #include <Helpers/CoordHelper.h>
 
 #include <Core/Input.h>
-#include <UI/UIImage.h>
-#include <UI/UIText.h>
 #include <Scene/Scene.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/TextRenderComponent.h>

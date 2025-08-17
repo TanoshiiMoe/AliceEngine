@@ -135,8 +135,6 @@ void StageWidgetScript::OnStart()
 	m_owner = GetOwner();
 	m_owner->SetPosition(CoordHelper::RatioCoordToScreen(FVector2(0.5f, 0.5f)));
 
-	GetCamera()->AddChildObject(m_owner);
-
 	float soundUISize = 1;
 	float soundTabPosX = 450;
 
@@ -184,7 +182,7 @@ void StageWidgetScript::OnStart()
 	//popUpTab->LoadData(L"UI\\UI_PauseTab.png");
 	popUpTab->LoadData(L"UI\\UI_Tab.png");	// 텍스트를 넣읗거면 이거로 사용
 	popUpTab->SetRelativePosition(FVector2(0, 0));
-	popUpTab->m_layer = Define::Disable;
+	popUpTab->SetLayer(Define::Disable);
 	popUpTab->SetOpacity(0);
 
 	UI_Timer->LoadData(L"UI\\UI_Time.png");
@@ -193,7 +191,7 @@ void StageWidgetScript::OnStart()
 	UI_Timer->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(TimerSize, FVector2(0, 0))
 		+ FVector2(-820, -SCREEN_HEIGHT / 2.0f + 80));
-	UI_Timer->m_layer = Define::HUDLayer;
+	UI_Timer->SetLayer(Define::HUDLayer);
 
 	UI_Dashboard->LoadData(L"UI\\UI_Dashboard.png");
 	UI_Dashboard->SetDrawType(EDrawType::ScreenSpace);
@@ -202,7 +200,7 @@ void StageWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(DashboardSize, FVector2(0, 0))
 		+ FVector2(-670, SCREEN_HEIGHT / 2.0f - 210)
 	);
-	UI_Dashboard->m_layer = Define::HUDLayer;
+	UI_Dashboard->SetLayer(Define::HUDLayer);
 
 	// Progress bar
 	m_batteryProgress->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -213,7 +211,7 @@ void StageWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(m_batteryProgress->GetRelativeSize(), FVector2(0, 0))
 		+ FVector2(-596, SCREEN_HEIGHT / 2.0f - 169));
 	m_batteryProgress->SetProgress(0);
-	m_batteryProgress->m_layer = Define::HUDLayer + 10;
+	m_batteryProgress->SetLayer(Define::HUDLayer + 10);
 
 	// Progress bar - (원형 프로그레스)
 	m_speedProgress->SetDrawType(Define::EDrawType::ScreenSpace);
@@ -227,7 +225,7 @@ void StageWidgetScript::OnStart()
 	m_speedProgress->SetStartAngleDeg(74);
 	m_speedProgress->SetClockwise(true);
 	m_speedProgress->SetProgress(1);
-	m_speedProgress->m_layer = Define::HUDLayer + 10;
+	m_speedProgress->SetLayer(Define::HUDLayer + 10);
 
 	// 사운드 관련
 	auto bgmObj = GetWorld()->FindObjectByName<gameObject>(L"Sound");
@@ -239,7 +237,7 @@ void StageWidgetScript::OnStart()
 
 	auto soundControl = m_owner->AddComponent<SpriteRenderer>();
 	soundControl->LoadData(L"UI\\UI_SoundController.png");
-	soundControl->m_layer = Define::Disable;
+	soundControl->SetLayer(Define::Disable);
 	soundControl->SetRelativeScale(soundUISize);
 	soundControl->SetDrawType(EDrawType::ScreenSpace);
 	soundControl->SetRelativePosition(FVector2(soundTabPosX, 0.f));
@@ -253,7 +251,7 @@ void StageWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(bgmControl->GetRelativeSize(), FVector2(0, 0))
 		+ FVector2(soundTabPosX + 5, 3));
 	bgmControl->SetProgress(bgmVolume);
-	bgmControl->m_layer = Define::Disable;
+	bgmControl->SetLayer(Define::Disable);
 
 	sfxControl->SetDrawType(Define::EDrawType::ScreenSpace);
 	sfxControl->LoadData(L"UI\\ControlBar.png");
@@ -263,7 +261,7 @@ void StageWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(sfxControl->GetRelativeSize(), FVector2(0, 0))
 		+ FVector2(soundTabPosX + 5, 66));
 	sfxControl->SetProgress(sfxVolume);
-	sfxControl->m_layer = Define::Disable;
+	sfxControl->SetLayer(Define::Disable);
 
 	pauseText->SetFontSize(85.f);
 	pauseText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -274,7 +272,7 @@ void StageWidgetScript::OnStart()
 		CoordHelper::RatioCoordToScreen(pauseText->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(0, -200)
 	);
-	pauseText->m_layer = Define::Disable;
+	pauseText->SetLayer(Define::Disable);
 
 	optionText->SetFontSize(40.f);
 	optionText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -284,7 +282,7 @@ void StageWidgetScript::OnStart()
 	optionText->RemoveFromParent();
 	toOption->AddChildComponent(optionText);
 	optionText->SetRelativePosition(CoordHelper::RatioCoordToScreen(optionText->GetRelativeSize(), FVector2(-0.5, -0.5)));
-	optionText->m_layer = Define::Disable;
+	optionText->SetLayer(Define::Disable);
 
 	optionTabText->SetFontSize(55.0f);
 	optionTabText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -297,7 +295,7 @@ void StageWidgetScript::OnStart()
 		+ FVector2(soundTabPosX, -85)
 	);
 	optionTabText->SetRelativeRotation(0);
-	optionTabText->m_layer = Define::Disable;
+	optionTabText->SetLayer(Define::Disable);
 
 	optionTabBGMText->SetFontSize(20.0f);
 	optionTabBGMText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -309,7 +307,7 @@ void StageWidgetScript::OnStart()
 		+ FVector2(soundTabPosX, -30)
 	);
 	optionTabBGMText->SetRelativeRotation(0);
-	optionTabBGMText->m_layer = Define::Disable;
+	optionTabBGMText->SetLayer(Define::Disable);
 
 	optionTabSFXText->SetFontSize(20.0f);
 	optionTabSFXText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -321,7 +319,7 @@ void StageWidgetScript::OnStart()
 		+ FVector2(soundTabPosX, 35)
 	);
 	optionTabSFXText->SetRelativeRotation(0);
-	optionTabSFXText->m_layer = Define::Disable;
+	optionTabSFXText->SetLayer(Define::Disable);
 
 	mainText->SetFontSize(40.f);
 	mainText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -331,7 +329,7 @@ void StageWidgetScript::OnStart()
 	mainText->RemoveFromParent();
 	toMain->AddChildComponent(mainText);
 	mainText->SetRelativePosition(CoordHelper::RatioCoordToScreen(mainText->GetRelativeSize(), FVector2(-0.5, -0.5)));
-	mainText->m_layer = Define::Disable;
+	mainText->SetLayer(Define::Disable);
 
 	restartText->SetFontSize(40.f);
 	restartText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -341,7 +339,7 @@ void StageWidgetScript::OnStart()
 	restartText->RemoveFromParent();
 	toRestart->AddChildComponent(restartText);
 	restartText->SetRelativePosition(CoordHelper::RatioCoordToScreen(restartText->GetRelativeSize(), FVector2(-0.5, -0.5)));
-	restartText->m_layer = Define::Disable;
+	restartText->SetLayer(Define::Disable);
 
 	selectText->SetFontSize(40.f);
 	selectText->SetFontFromFile(L"Fonts\\April16thTTF-Promise.ttf");
@@ -351,14 +349,14 @@ void StageWidgetScript::OnStart()
 	selectText->RemoveFromParent();
 	toSelect->AddChildComponent(selectText);
 	selectText->SetRelativePosition(CoordHelper::RatioCoordToScreen(selectText->GetRelativeSize(), FVector2(-0.5, -0.5)));
-	selectText->m_layer = Define::Disable;
+	selectText->SetLayer(Define::Disable);
 
 	m_speedText->SetFontSize(40.f);
 	m_speedText->SetFontFromFile(L"Fonts\\digital.ttf");
 	m_speedText->SetFont(L"Digital-7 Mono", L"en-US");
 	m_speedText->SetColor(FColor(0, 234, 255, 255));
 	m_speedText->SetDrawType(EDrawType::ScreenSpace);
-	m_speedText->m_layer = Define::NormalTextLayer;
+	m_speedText->SetLayer(Define::NormalTextLayer);
 	m_speedText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(m_speedText->GetRelativeSize(), FVector2(-0.5, -0.5))
 	+ FVector2(-865,330)
@@ -370,7 +368,7 @@ void StageWidgetScript::OnStart()
 	velocityText->SetText(L"km/h");
 	velocityText->SetColor(FColor(0, 234, 255, 255));
 	velocityText->SetDrawType(EDrawType::ScreenSpace);
-	velocityText->m_layer = Define::NormalTextLayer;
+	velocityText->SetLayer(Define::NormalTextLayer);
 	velocityText->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(velocityText->GetRelativeSize(), FVector2(-0.5, -0.5))
 		+ FVector2(-795, 335)
@@ -384,9 +382,9 @@ void StageWidgetScript::OnStart()
 	FVector2 pauseSize = pauseButton->GetRelativeSize();
 	pauseButton->SetRelativePosition(
 		CoordHelper::RatioCoordToScreen(pauseSize, FVector2(0, 0))
-		+ FVector2(900, -SCREEN_HEIGHT / 2.0f + 60)
-	);
-	pauseButton->m_layer = Define::ButtonLayer;
+				+ FVector2(900, -SCREEN_HEIGHT / 2.0f + 60)
+		);
+		pauseButton->SetLayer(Define::ButtonLayer);
 
 	// ======================== closeButton
 	closeButton->LoadData(Define::EButtonState::Idle, L"UI\\Close.png");
@@ -397,7 +395,7 @@ void StageWidgetScript::OnStart()
 	closeButton->SetRelativePosition(FVector2(235, -345));
 	closeButton->SetRelativeScale(FVector2(1, 1));
 	closeButton->SetActive(false);
-	closeButton->m_layer = Define::Disable;
+	closeButton->SetLayer(Define::Disable);
 
 	smallClose->LoadData(Define::EButtonState::Idle, L"UI\\Close.png");
 	smallClose->LoadData(Define::EButtonState::Hover, L"UI\\Close.png");
@@ -407,7 +405,7 @@ void StageWidgetScript::OnStart()
 	smallClose->SetRelativePosition(FVector2(680, -130));
 	smallClose->SetRelativeScale(FVector2(0.5, 0.5));
 	smallClose->SetActive(false);
-	smallClose->m_layer = Define::Disable;
+	smallClose->SetLayer(Define::Disable);
 
 	// ======================== toRestart
 	toRestart->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -418,7 +416,7 @@ void StageWidgetScript::OnStart()
 	toRestart->SetRelativePosition(FVector2(0, -50));
 	toRestart->SetRelativeScale(FVector2(1, 1));
 	toRestart->SetActive(false);
-	toRestart->m_layer = Define::Disable;
+	toRestart->SetLayer(Define::Disable);
 
 	// ======================== toSelect
 	toSelect->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -429,7 +427,7 @@ void StageWidgetScript::OnStart()
 	toSelect->SetRelativePosition(FVector2(0, 50));
 	toSelect->SetRelativeScale(FVector2(1, 1));
 	toSelect->SetActive(false);
-	toSelect->m_layer = Define::Disable;
+	toSelect->SetLayer(Define::Disable);
 
 	// ======================== toOption
 	toOption->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -440,7 +438,7 @@ void StageWidgetScript::OnStart()
 	toOption->SetRelativePosition(FVector2(0, 150));
 	toOption->SetRelativeScale(FVector2(1, 1));
 	toOption->SetActive(false);
-	toOption->m_layer = Define::Disable;
+	toOption->SetLayer(Define::Disable);
 	
 	// ======================== toMain
 	toMain->LoadData(Define::EButtonState::Idle, L"UI\\Button_Idle.png");
@@ -451,7 +449,7 @@ void StageWidgetScript::OnStart()
 	toMain->SetRelativePosition(FVector2(0, 250));
 	toMain->SetRelativeScale(FVector2(1, 1));
 	toMain->SetActive(false);
-	toMain->m_layer = Define::Disable;
+	toMain->SetLayer(Define::Disable);
 
 	// ======================== soundButton
 	bgmPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
@@ -467,7 +465,7 @@ void StageWidgetScript::OnStart()
 		bgmPlusButton->SetRelativePosition(FVector2(hw - marginX, rowY + marginY));
 	}
 	bgmPlusButton->SetActive(false);
-	bgmPlusButton->m_layer = Define::Disable;
+	bgmPlusButton->SetLayer(Define::Disable);
 
 	bgmMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundMinus_Idle.png");
 	bgmMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
@@ -482,7 +480,7 @@ void StageWidgetScript::OnStart()
 		bgmMinusButton->SetRelativePosition(FVector2(-hw + marginX, rowY + marginY));
 	}
 	bgmMinusButton->SetActive(false);
-	bgmMinusButton->m_layer = Define::Disable;
+	bgmMinusButton->SetLayer(Define::Disable);
 
 	sfxPlusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundPlus_Idle.png");
 	sfxPlusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundPlus_Idle.png");
@@ -497,7 +495,7 @@ void StageWidgetScript::OnStart()
 		sfxPlusButton->SetRelativePosition(FVector2(hw - marginX, rowY - marginY));
 	}
 	sfxPlusButton->SetActive(false);
-	sfxPlusButton->m_layer = Define::Disable;
+	sfxPlusButton->SetLayer(Define::Disable);
 
 	sfxMinusButton->LoadData(Define::EButtonState::Idle, L"UI\\SoundMinus_Idle.png");
 	sfxMinusButton->LoadData(Define::EButtonState::Hover, L"UI\\SoundMinus_Idle.png");
@@ -512,7 +510,7 @@ void StageWidgetScript::OnStart()
 		sfxMinusButton->SetRelativePosition(FVector2(-hw + marginX, rowY - marginY));
 	}
 	sfxMinusButton->SetActive(false);
-	sfxMinusButton->m_layer = Define::Disable;
+	sfxMinusButton->SetLayer(Define::Disable);
 
 	// ========================= Delegate
 	pauseButton->SetStateAction(Define::EButtonState::Hover, [pauseButton]()
@@ -549,28 +547,28 @@ void StageWidgetScript::OnStart()
 		m_isPaused = !m_isPaused;
 
 		pauseButton->SetActive(false);
-		popUpTab->m_layer = Define::PopupLayer;
+		popUpTab->SetLayer(Define::PopupLayer);
 		popUpTab->SetOpacity(1);
 
-		pauseText->m_layer = Define::PopupTextLayer;
+		pauseText->SetLayer(Define::PopupTextLayer);
 		closeButton->SetActive(true);
-		closeButton->m_layer = Define::PopupButtonLayer;
+		closeButton->SetLayer(Define::PopupButtonLayer);
 
 		toMain->SetActive(true);
-		toMain->m_layer = Define::PopupButtonLayer;
-		mainText->m_layer = Define::PopupTextLayer;
+		toMain->SetLayer(Define::PopupButtonLayer);
+		mainText->SetLayer(Define::PopupTextLayer);
 
 		toRestart->SetActive(true);
-		toRestart->m_layer = Define::PopupButtonLayer;
-		restartText->m_layer = Define::PopupTextLayer;
+		toRestart->SetLayer(Define::PopupButtonLayer);
+		restartText->SetLayer(Define::PopupTextLayer);
 
 		toOption->SetActive(true);
-		toOption->m_layer = Define::PopupButtonLayer;
-		optionText->m_layer = Define::PopupTextLayer;
+		toOption->SetLayer(Define::PopupButtonLayer);
+		optionText->SetLayer(Define::PopupTextLayer);
 
 		toSelect->SetActive(true);
-		toSelect->m_layer = Define::PopupButtonLayer;
-		selectText->m_layer = Define::PopupTextLayer;
+		toSelect->SetLayer(Define::PopupButtonLayer);
+		selectText->SetLayer(Define::PopupTextLayer);
 		});
 
 	//closeButton->SetStateAction(Define::EButtonState::Hover, [closeButton]()
@@ -608,45 +606,45 @@ void StageWidgetScript::OnStart()
 
 		m_isPaused = !m_isPaused;
 
-		pauseText->m_layer = Define::Disable;
+		pauseText->SetLayer(Define::Disable);
 		pauseButton->SetActive(true);
-		popUpTab->m_layer = Define::Disable;
+		popUpTab->SetLayer(Define::Disable);
 		popUpTab->SetOpacity(0);
 
 		closeButton->SetActive(false);
-		closeButton->m_layer = Define::Disable;
+		closeButton->SetLayer(Define::Disable);
 
 		toMain->SetActive(false);
-		toMain->m_layer = Define::Disable;
-		mainText->m_layer = Define::Disable;
+		toMain->SetLayer(Define::Disable);
+		mainText->SetLayer(Define::Disable);
 
 		toRestart->SetActive(false);
-		toRestart->m_layer = Define::Disable;
-		restartText->m_layer = Define::Disable;
+		toRestart->SetLayer(Define::Disable);
+		restartText->SetLayer(Define::Disable);
 
 		toOption->SetActive(false);
-		toOption->m_layer = Define::Disable;
-		optionText->m_layer = Define::Disable;
+		toOption->SetLayer(Define::Disable);
+		optionText->SetLayer(Define::Disable);
 
 		toSelect->SetActive(false);
-		toSelect->m_layer = Define::Disable;
-		selectText->m_layer = Define::Disable;
+		toSelect->SetLayer(Define::Disable);
+		selectText->SetLayer(Define::Disable);
 
-		optionTabText->m_layer = Define::Disable;
-		optionTabBGMText->m_layer = Define::Disable;
-		optionTabSFXText->m_layer = Define::Disable;
+		optionTabText->SetLayer(Define::Disable);
+		optionTabBGMText->SetLayer(Define::Disable);
+		optionTabSFXText->SetLayer(Define::Disable);
 
-		soundControl->m_layer = Define::Disable;
-		bgmControl->m_layer = Define::Disable;
-		sfxControl->m_layer = Define::Disable;
+		soundControl->SetLayer(Define::Disable);
+		bgmControl->SetLayer(Define::Disable);
+		sfxControl->SetLayer(Define::Disable);
 
-		bgmPlusButton->m_layer = Define::Disable;
+		bgmPlusButton->SetLayer(Define::Disable);
 		bgmPlusButton->SetActive(false);
-		bgmMinusButton->m_layer = Define::Disable;
+		bgmMinusButton->SetLayer(Define::Disable);
 		bgmMinusButton->SetActive(false);
-		sfxPlusButton->m_layer = Define::Disable;
+		sfxPlusButton->SetLayer(Define::Disable);
 		sfxPlusButton->SetActive(false);
-		sfxMinusButton->m_layer = Define::Disable;
+		sfxMinusButton->SetLayer(Define::Disable);
 		sfxMinusButton->SetActive(false);
 		});
 
@@ -833,24 +831,24 @@ void StageWidgetScript::OnStart()
 		toRestart->SetActive(false);
 		toSelect->SetActive(false);
 
-		smallClose->SetActive(true);
-		smallClose->m_layer = PopupButtonLayer;
+			smallClose->SetActive(true);
+	smallClose->SetLayer(PopupButtonLayer);
 
-		optionTabText->m_layer = Define::PopupTextLayer;
-		optionTabBGMText->m_layer = Define::PopupTextLayer;
-		optionTabSFXText->m_layer = Define::PopupTextLayer;
+		optionTabText->SetLayer(Define::PopupTextLayer);
+		optionTabBGMText->SetLayer(Define::PopupTextLayer);
+		optionTabSFXText->SetLayer(Define::PopupTextLayer);
 
-		soundControl->m_layer = Define::PopupPopLayer;
-		bgmControl->m_layer = Define::PopupObjectLayer;
-		sfxControl->m_layer = Define::PopupObjectLayer;
+		soundControl->SetLayer(Define::PopupPopLayer);
+		bgmControl->SetLayer(Define::PopupObjectLayer);
+		sfxControl->SetLayer(Define::PopupObjectLayer);
 
-		bgmPlusButton->m_layer = Define::PopupButtonLayer;
+		bgmPlusButton->SetLayer(Define::PopupButtonLayer);
 		bgmPlusButton->SetActive(true);
-		bgmMinusButton->m_layer = Define::PopupButtonLayer;
+		bgmMinusButton->SetLayer(Define::PopupButtonLayer);
 		bgmMinusButton->SetActive(true);
-		sfxPlusButton->m_layer = Define::PopupButtonLayer;
+		sfxPlusButton->SetLayer(Define::PopupButtonLayer);
 		sfxPlusButton->SetActive(true);
-		sfxMinusButton->m_layer = Define::PopupButtonLayer;
+		sfxMinusButton->SetLayer(Define::PopupButtonLayer);
 		sfxMinusButton->SetActive(true);
 		});
 
@@ -871,23 +869,23 @@ void StageWidgetScript::OnStart()
 		toSelect->SetActive(true);
 
 		smallClose->SetActive(false);
-		smallClose->m_layer = Define::Disable;
+		smallClose->SetLayer(Define::Disable);
 
-		optionTabText->m_layer = Define::Disable;
-		optionTabBGMText->m_layer = Define::Disable;
-		optionTabSFXText->m_layer = Define::Disable;
+		optionTabText->SetLayer(Define::Disable);
+		optionTabBGMText->SetLayer(Define::Disable);
+		optionTabSFXText->SetLayer(Define::Disable);
 
-		soundControl->m_layer = Define::Disable;
-		bgmControl->m_layer = Define::Disable;
-		sfxControl->m_layer = Define::Disable;
+		soundControl->SetLayer(Define::Disable);
+		bgmControl->SetLayer(Define::Disable);
+		sfxControl->SetLayer(Define::Disable);
 
-		bgmPlusButton->m_layer = Define::Disable;
+		bgmPlusButton->SetLayer(Define::Disable);
 		bgmPlusButton->SetActive(false);
-		bgmMinusButton->m_layer = Define::Disable;
+		bgmMinusButton->SetLayer(Define::Disable);
 		bgmMinusButton->SetActive(false);
-		sfxPlusButton->m_layer = Define::Disable;
+		sfxPlusButton->SetLayer(Define::Disable);
 		sfxPlusButton->SetActive(false);
-		sfxMinusButton->m_layer = Define::Disable;
+		sfxMinusButton->SetLayer(Define::Disable);
 		sfxMinusButton->SetActive(false);
 
 		});
@@ -922,29 +920,29 @@ void StageWidgetScript::OnStart()
 		std::wstring sceneName = weak->GetWorld()->GetName();
 		SceneManager::GetInstance().ChangeScene(sceneName);
 
-		pauseText->m_layer = Define::Disable;
+		pauseText->SetLayer(Define::Disable);
 		pauseButton->SetActive(true);
-		popUpTab->m_layer = Define::Disable;
+		popUpTab->SetLayer(Define::Disable);
 		popUpTab->SetOpacity(0);
 
 		closeButton->SetActive(false);
-		closeButton->m_layer = Define::Disable;
+		closeButton->SetLayer(Define::Disable);
 
 		toMain->SetActive(false);
-		toMain->m_layer = Define::Disable;
-		mainText->m_layer = Define::Disable;
+		toMain->SetLayer(Define::Disable);
+		mainText->SetLayer(Define::Disable);
 
 		toRestart->SetActive(false);
-		toRestart->m_layer = Define::Disable;
-		restartText->m_layer = Define::Disable;
+		toRestart->SetLayer(Define::Disable);
+		restartText->SetLayer(Define::Disable);
 
 		toOption->SetActive(false);
-		toOption->m_layer = Define::Disable;
-		optionText->m_layer = Define::Disable;
+		toOption->SetLayer(Define::Disable);
+		optionText->SetLayer(Define::Disable);
 
 		toSelect->SetActive(false);
-		toSelect->m_layer = Define::Disable;
-		selectText->m_layer = Define::Disable;
+		toSelect->SetLayer(Define::Disable);
+		selectText->SetLayer(Define::Disable);
 		});
 
 	// 효과 (주황색 글로우)
@@ -979,7 +977,7 @@ void StageWidgetScript::OnStart()
 	m_passedTimeText->SetTextAlignment(ETextFormat::TopLeft);
 	m_passedTimeText->SetRelativePosition(FVector2(-SCREEN_WIDTH / 2.0f + 59, -SCREEN_HEIGHT / 2.0f + 80));
 	m_passedTimeText->SetColor(FColor(0, 234, 255, 255));
-	m_passedTimeText->m_layer = Define::NormalTextLayer;
+	m_passedTimeText->SetLayer(Define::NormalTextLayer);
 
 	//m_killEnemyText = owner->AddComponent<TextRenderComponent>();
 	//m_killEnemyText->SetText(L"<죽인 적수> " + std::to_wstring(GamePlayManager::GetInstance().GetKillEnemyAmount()));
@@ -1012,28 +1010,28 @@ void StageWidgetScript::OnStart()
 			sound->PauseByType(SoundType::SFX);
 
 			pauseButton->SetActive(false);
-			popUpTab->m_layer = Define::PopupLayer;
-			popUpTab->SetOpacity(1);
+					popUpTab->SetLayer(Define::PopupLayer);
+		popUpTab->SetOpacity(1);
 
-			pauseText->m_layer = Define::PopupTextLayer;
-			closeButton->SetActive(true);
-			closeButton->m_layer = Define::PopupButtonLayer;
+					pauseText->SetLayer(Define::PopupTextLayer);
+		closeButton->SetActive(true);
+		closeButton->SetLayer(Define::PopupButtonLayer);
 
-			toMain->SetActive(true);
-			toMain->m_layer = Define::PopupButtonLayer;
-			mainText->m_layer = Define::PopupTextLayer;
+				toMain->SetActive(true);
+	toMain->SetLayer(Define::PopupButtonLayer);
+			mainText->SetLayer(Define::PopupTextLayer);
 
 			toRestart->SetActive(true);
-			toRestart->m_layer = Define::PopupButtonLayer;
-			restartText->m_layer = Define::PopupTextLayer;
+			toRestart->SetLayer(Define::PopupButtonLayer);
+			restartText->SetLayer(Define::PopupTextLayer);
 
 			toOption->SetActive(true);
-			toOption->m_layer = Define::PopupButtonLayer;
-			optionText->m_layer = Define::PopupTextLayer;
+			toOption->SetLayer(Define::PopupButtonLayer);
+			optionText->SetLayer(Define::PopupTextLayer);
 
 			toSelect->SetActive(true);
-			toSelect->m_layer = Define::PopupButtonLayer;
-			selectText->m_layer = Define::PopupTextLayer;
+					toSelect->SetLayer(Define::PopupButtonLayer);
+		selectText->SetLayer(Define::PopupTextLayer);
 		}
 		else if (m_isPaused && Input::IsKeyPressed(VK_ESCAPE))
 		{
@@ -1047,49 +1045,49 @@ void StageWidgetScript::OnStart()
 			sound->ResumeByType(SoundType::BGM);
 			sound->ResumeByType(SoundType::SFX);
 
-			pauseText->m_layer = Define::Disable;
+			pauseText->SetLayer(Define::Disable);
 			pauseButton->SetActive(true);
-			popUpTab->m_layer = Define::Disable;
+			popUpTab->SetLayer(Define::Disable);
 			popUpTab->SetOpacity(0);
 
 			closeButton->SetActive(false);
-			closeButton->m_layer = Define::Disable;
+			closeButton->SetLayer(Define::Disable);
 
 			toMain->SetActive(false);
-			toMain->m_layer = Define::Disable;
-			mainText->m_layer = Define::Disable;
+			toMain->SetLayer(Define::Disable);
+			mainText->SetLayer(Define::Disable);
 
 			toRestart->SetActive(false);
-			toRestart->m_layer = Define::Disable;
-			restartText->m_layer = Define::Disable;
+			toRestart->SetLayer(Define::Disable);
+			restartText->SetLayer(Define::Disable);
 
 			toOption->SetActive(false);
-			toOption->m_layer = Define::Disable;
-			optionText->m_layer = Define::Disable;
+			toOption->SetLayer(Define::Disable);
+			optionText->SetLayer(Define::Disable);
 
 			toSelect->SetActive(false);
-			toSelect->m_layer = Define::Disable;
-			selectText->m_layer = Define::Disable;
+			toSelect->SetLayer(Define::Disable);
+			selectText->SetLayer(Define::Disable);
 
-			optionTabText->m_layer = Define::Disable;
-			optionTabBGMText->m_layer = Define::Disable;
-			optionTabSFXText->m_layer = Define::Disable;
+			optionTabText->SetLayer(Define::Disable);
+			optionTabBGMText->SetLayer(Define::Disable);
+			optionTabSFXText->SetLayer(Define::Disable);
 
-			soundControl->m_layer = Define::Disable;
-			bgmControl->m_layer = Define::Disable;
-			sfxControl->m_layer = Define::Disable;
+			soundControl->SetLayer(Define::Disable);
+			bgmControl->SetLayer(Define::Disable);
+			sfxControl->SetLayer(Define::Disable);
 
-			bgmPlusButton->m_layer = Define::Disable;
+			bgmPlusButton->SetLayer(Define::Disable);
 			bgmPlusButton->SetActive(false);
-			bgmMinusButton->m_layer = Define::Disable;
+			bgmMinusButton->SetLayer(Define::Disable);
 			bgmMinusButton->SetActive(false);
-			sfxPlusButton->m_layer = Define::Disable;
+			sfxPlusButton->SetLayer(Define::Disable);
 			sfxPlusButton->SetActive(false);
-			sfxMinusButton->m_layer = Define::Disable;
+			sfxMinusButton->SetLayer(Define::Disable);
 			sfxMinusButton->SetActive(false);
 
 			smallClose->SetActive(false);
-			smallClose->m_layer = Define::Disable;
+			smallClose->SetLayer(Define::Disable);
 		}
 		});
 }

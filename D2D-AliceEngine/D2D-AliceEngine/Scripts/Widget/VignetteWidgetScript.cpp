@@ -31,7 +31,7 @@ void VignetteWidgetScript::OnStart()
     if (w <= 0 || h <= 0) return;
     m_overlay->SetRelativeScale(FVector2(Define::SCREEN_WIDTH / w, Define::SCREEN_HEIGHT / h));
     m_overlay->SetRelativePosition(CoordHelper::RatioCoordToScreen(FVector2(0.5, 0.5)));
-    m_overlay->m_layer = 999999; // 화면 최상위로
+    m_overlay->SetLayer(999999); // 화면 최상위로
     // D2D Vignette + Opacity 이펙트 체인 구성
     if (auto* ctx = D2DRenderManager::GetD2DDevice())
     {

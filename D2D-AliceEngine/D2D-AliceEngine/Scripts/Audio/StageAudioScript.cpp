@@ -12,8 +12,6 @@
 #include <Core/Delegate.h>
 #include <Core/StatTraits.h>
 #include <System/ScriptSystem.h>
-#include <UI/UIImage.h>
-#include <UI/UIText.h>
 #include <Scene/Scene.h>
 #include <Component/ButtonComponent.h>
 #include <Helpers/CoordHelper.h>

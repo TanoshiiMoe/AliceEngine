@@ -29,7 +29,11 @@ void BulletColl::Update(const float& deltaSeconds)
 
 void BulletColl::SetCollSize(FVector2 _size)
 {
-	owner->GetComponent<Collider>()->boxComponent->SetSize(_size);
+	if (auto c = owner->GetComponent<Collider>())
+	{
+		c->SetLayer(6); // 히트박스 채널
+		if (c->boxComponent) c->boxComponent->SetSize(_size);
+	}
 }
 
 void BulletColl::SetTarget(WeakObjectPtr<gameObject>& _target)

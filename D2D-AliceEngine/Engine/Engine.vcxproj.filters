@@ -201,7 +201,7 @@
     <ClInclude Include="Object\UObjectBase.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Animation\TextureLoader.h">
+    <ClInclude Include="Animation\SpriteAnimationTextureLoader.h">
       <Filter>Animation</Filter>
     </ClInclude>
     <ClInclude Include="Animation\AnimationController.h">
@@ -283,6 +283,100 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="System\TransformSystem.h" />
+    <ClInclude Include="spine\Animation.h" />
+    <ClInclude Include="spine\AnimationState.h" />
+    <ClInclude Include="spine\AnimationStateData.h" />
+    <ClInclude Include="spine\Atlas.h" />
+    <ClInclude Include="spine\AtlasAttachmentLoader.h" />
+    <ClInclude Include="spine\Attachment.h" />
+    <ClInclude Include="spine\AttachmentLoader.h" />
+    <ClInclude Include="spine\AttachmentTimeline.h" />
+    <ClInclude Include="spine\AttachmentType.h" />
+    <ClInclude Include="spine\BlendMode.h" />
+    <ClInclude Include="spine\BlockAllocator.h" />
+    <ClInclude Include="spine\Bone.h" />
+    <ClInclude Include="spine\BoneData.h" />
+    <ClInclude Include="spine\BoundingBoxAttachment.h" />
+    <ClInclude Include="spine\ClippingAttachment.h" />
+    <ClInclude Include="spine\Color.h" />
+    <ClInclude Include="spine\ColorTimeline.h" />
+    <ClInclude Include="spine\ConstraintData.h" />
+    <ClInclude Include="spine\ContainerUtil.h" />
+    <ClInclude Include="spine\CurveTimeline.h" />
+    <ClInclude Include="spine\Debug.h" />
+    <ClInclude Include="spine\DeformTimeline.h" />
+    <ClInclude Include="spine\dll.h" />
+    <ClInclude Include="spine\DrawOrderTimeline.h" />
+    <ClInclude Include="spine\Event.h" />
+    <ClInclude Include="spine\EventData.h" />
+    <ClInclude Include="spine\EventTimeline.h" />
+    <ClInclude Include="spine\Extension.h" />
+    <ClInclude Include="spine\HashMap.h" />
+    <ClInclude Include="spine\HasRendererObject.h" />
+    <ClInclude Include="spine\IkConstraint.h" />
+    <ClInclude Include="spine\IkConstraintData.h" />
+    <ClInclude Include="spine\IkConstraintTimeline.h" />
+    <ClInclude Include="spine\Inherit.h" />
+    <ClInclude Include="spine\InheritTimeline.h" />
+    <ClInclude Include="spine\Json.h" />
+    <ClInclude Include="spine\LinkedMesh.h" />
+    <ClInclude Include="spine\Log.h" />
+    <ClInclude Include="spine\MathUtil.h" />
+    <ClInclude Include="spine\MeshAttachment.h" />
+    <ClInclude Include="spine\MixBlend.h" />
+    <ClInclude Include="spine\MixDirection.h" />
+    <ClInclude Include="spine\PathAttachment.h" />
+    <ClInclude Include="spine\PathConstraint.h" />
+    <ClInclude Include="spine\PathConstraintData.h" />
+    <ClInclude Include="spine\PathConstraintMixTimeline.h" />
+    <ClInclude Include="spine\PathConstraintPositionTimeline.h" />
+    <ClInclude Include="spine\PathConstraintSpacingTimeline.h" />
+    <ClInclude Include="spine\Physics.h" />
+    <ClInclude Include="spine\PhysicsConstraint.h" />
+    <ClInclude Include="spine\PhysicsConstraintData.h" />
+    <ClInclude Include="spine\PhysicsConstraintTimeline.h" />
+    <ClInclude Include="spine\PointAttachment.h" />
+    <ClInclude Include="spine\Pool.h" />
+    <ClInclude Include="spine\PositionMode.h" />
+    <ClInclude Include="spine\Property.h" />
+    <ClInclude Include="spine\RegionAttachment.h" />
+    <ClInclude Include="spine\RotateMode.h" />
+    <ClInclude Include="spine\RotateTimeline.h" />
+    <ClInclude Include="spine\RTTI.h" />
+    <ClInclude Include="spine\ScaleTimeline.h" />
+    <ClInclude Include="spine\Sequence.h" />
+    <ClInclude Include="spine\SequenceTimeline.h" />
+    <ClInclude Include="spine\ShearTimeline.h" />
+    <ClInclude Include="spine\Skeleton.h" />
+    <ClInclude Include="spine\SkeletonBinary.h" />
+    <ClInclude Include="spine\SkeletonBounds.h" />
+    <ClInclude Include="spine\SkeletonClipping.h" />
+    <ClInclude Include="spine\SkeletonData.h" />
+    <ClInclude Include="spine\SkeletonJson.h" />
+    <ClInclude Include="spine\SkeletonRenderer.h" />
+    <ClInclude Include="spine\Skin.h" />
+    <ClInclude Include="spine\Slot.h" />
+    <ClInclude Include="spine\SlotData.h" />
+    <ClInclude Include="spine\SpacingMode.h" />
+    <ClInclude Include="spine\spine.h" />
+    <ClInclude Include="spine\spine-cpp-lite.h" />
+    <ClInclude Include="spine\SpineObject.h" />
+    <ClInclude Include="spine\SpineString.h" />
+    <ClInclude Include="spine\TextureLoader.h" />
+    <ClInclude Include="spine\TextureRegion.h" />
+    <ClInclude Include="spine\Timeline.h" />
+    <ClInclude Include="spine\TransformConstraint.h" />
+    <ClInclude Include="spine\TransformConstraintData.h" />
+    <ClInclude Include="spine\TransformConstraintTimeline.h" />
+    <ClInclude Include="spine\TranslateTimeline.h" />
+    <ClInclude Include="spine\Triangulator.h" />
+    <ClInclude Include="spine\Updatable.h" />
+    <ClInclude Include="spine\Vector.h" />
+    <ClInclude Include="spine\Version.h" />
+    <ClInclude Include="spine\VertexAttachment.h" />
+    <ClInclude Include="spine\Vertices.h" />
+    <ClInclude Include="Component\SpineRenderer.h" />
+    <ClInclude Include="Core\Renderable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\VideoComponent.cpp">
@@ -414,7 +508,7 @@
     <ClCompile Include="Object\UObjectBase.cpp">
       <Filter>Object</Filter>
     </ClCompile>
-    <ClCompile Include="Animation\TextureLoader.cpp">
+    <ClCompile Include="Animation\SpriteAnimationTextureLoader.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
     <ClCompile Include="Animation\AnimationController.cpp">
@@ -496,6 +590,76 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="System\TransformSystem.cpp" />
+    <ClCompile Include="spine\Animation.cpp" />
+    <ClCompile Include="spine\AnimationState.cpp" />
+    <ClCompile Include="spine\AnimationStateData.cpp" />
+    <ClCompile Include="spine\Atlas.cpp" />
+    <ClCompile Include="spine\AtlasAttachmentLoader.cpp" />
+    <ClCompile Include="spine\Attachment.cpp" />
+    <ClCompile Include="spine\AttachmentLoader.cpp" />
+    <ClCompile Include="spine\AttachmentTimeline.cpp" />
+    <ClCompile Include="spine\Bone.cpp" />
+    <ClCompile Include="spine\BoneData.cpp" />
+    <ClCompile Include="spine\BoundingBoxAttachment.cpp" />
+    <ClCompile Include="spine\ClippingAttachment.cpp" />
+    <ClCompile Include="spine\ColorTimeline.cpp" />
+    <ClCompile Include="spine\ConstraintData.cpp" />
+    <ClCompile Include="spine\CurveTimeline.cpp" />
+    <ClCompile Include="spine\DeformTimeline.cpp" />
+    <ClCompile Include="spine\DrawOrderTimeline.cpp" />
+    <ClCompile Include="spine\Event.cpp" />
+    <ClCompile Include="spine\EventData.cpp" />
+    <ClCompile Include="spine\EventTimeline.cpp" />
+    <ClCompile Include="spine\Extension.cpp" />
+    <ClCompile Include="spine\IkConstraint.cpp" />
+    <ClCompile Include="spine\IkConstraintData.cpp" />
+    <ClCompile Include="spine\IkConstraintTimeline.cpp" />
+    <ClCompile Include="spine\InheritTimeline.cpp" />
+    <ClCompile Include="spine\Json.cpp" />
+    <ClCompile Include="spine\LinkedMesh.cpp" />
+    <ClCompile Include="spine\Log.cpp" />
+    <ClCompile Include="spine\MathUtil.cpp" />
+    <ClCompile Include="spine\MeshAttachment.cpp" />
+    <ClCompile Include="spine\PathAttachment.cpp" />
+    <ClCompile Include="spine\PathConstraint.cpp" />
+    <ClCompile Include="spine\PathConstraintData.cpp" />
+    <ClCompile Include="spine\PathConstraintMixTimeline.cpp" />
+    <ClCompile Include="spine\PathConstraintPositionTimeline.cpp" />
+    <ClCompile Include="spine\PathConstraintSpacingTimeline.cpp" />
+    <ClCompile Include="spine\PhysicsConstraint.cpp" />
+    <ClCompile Include="spine\PhysicsConstraintData.cpp" />
+    <ClCompile Include="spine\PhysicsConstraintTimeline.cpp" />
+    <ClCompile Include="spine\PointAttachment.cpp" />
+    <ClCompile Include="spine\RegionAttachment.cpp" />
+    <ClCompile Include="spine\RotateTimeline.cpp" />
+    <ClCompile Include="spine\RTTI.cpp" />
+    <ClCompile Include="spine\ScaleTimeline.cpp" />
+    <ClCompile Include="spine\Sequence.cpp" />
+    <ClCompile Include="spine\SequenceTimeline.cpp" />
+    <ClCompile Include="spine\ShearTimeline.cpp" />
+    <ClCompile Include="spine\Skeleton.cpp" />
+    <ClCompile Include="spine\SkeletonBinary.cpp" />
+    <ClCompile Include="spine\SkeletonBounds.cpp" />
+    <ClCompile Include="spine\SkeletonClipping.cpp" />
+    <ClCompile Include="spine\SkeletonData.cpp" />
+    <ClCompile Include="spine\SkeletonJson.cpp" />
+    <ClCompile Include="spine\SkeletonRenderer.cpp" />
+    <ClCompile Include="spine\Skin.cpp" />
+    <ClCompile Include="spine\Slot.cpp" />
+    <ClCompile Include="spine\SlotData.cpp" />
+    <ClCompile Include="spine\spine-cpp-lite.cpp" />
+    <ClCompile Include="spine\SpineObject.cpp" />
+    <ClCompile Include="spine\TextureLoader.cpp" />
+    <ClCompile Include="spine\Timeline.cpp" />
+    <ClCompile Include="spine\TransformConstraint.cpp" />
+    <ClCompile Include="spine\TransformConstraintData.cpp" />
+    <ClCompile Include="spine\TransformConstraintTimeline.cpp" />
+    <ClCompile Include="spine\TranslateTimeline.cpp" />
+    <ClCompile Include="spine\Triangulator.cpp" />
+    <ClCompile Include="spine\Updatable.cpp" />
+    <ClCompile Include="spine\VertexAttachment.cpp" />
+    <ClCompile Include="Component\SpineRenderer.cpp" />
+    <ClCompile Include="Core\Renderable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\GradationShader.hlsl">

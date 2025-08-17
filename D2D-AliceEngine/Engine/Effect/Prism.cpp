@@ -137,7 +137,7 @@ void Prism::MakeEffect()
 		// 오브젝트들 렌더순서 변경
 		for (auto& object : objects) {
 			if (object) {
-				object->GetComponent<SpriteRenderer>()->m_layer -= 1;
+				object->GetComponent<SpriteRenderer>()->AddLayer(-1);
 			}
 		}
 	}
@@ -305,7 +305,7 @@ void Prism::SetSpriteRenderer(gameObject* go)
 {
 	SpriteRenderer* sr = go->AddComponent<SpriteRenderer>();
 	sr->m_bitmap = bitmap.lock();
-	sr->m_layer = animator->m_layer;
+	sr->SetLayer(animator->GetLayer());
 	sr->SetFlip(animator->bFlip);
 	// y값에 왜 Height만큼 빼야함????????????????? <- x,y 점이 좌하단에 찍히기 때문에 - height 해야 정상화된다.
 	sr->SetSlice(spriteInfo->x, spriteInfo->y - spriteInfo->height, spriteInfo->width, spriteInfo->height);

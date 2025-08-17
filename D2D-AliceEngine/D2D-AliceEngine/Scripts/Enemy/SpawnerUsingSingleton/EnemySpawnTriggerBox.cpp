@@ -34,14 +34,9 @@ void EnemySpawnTriggerBox::OnStart()
     m_bSpawnable = true;
 }
 
-void EnemySpawnTriggerBox::Update(const float& /*deltaSeconds*/)
+void EnemySpawnTriggerBox::Update(const float& deltaSeconds)
 {
-    __super::Update(0.0f);
-
-    if (auto player = BulletManager::GetInstance().GetPlayer())
-    {
-        owner->SetPosition(player->GetPosition());
-    }
+	__super::Update(deltaSeconds);
 }
 
 // 일단 4번으로 보스가 나온다고 가정
@@ -53,7 +48,7 @@ void EnemySpawnTriggerBox::SpawnBossAt(const FVector2& worldPos)
 
     enemy->AddComponent<Car>(false);
     enemy->AddComponent<SpriteRenderer>()->LoadData(L"Enemy/Durang/boss_idle_notfix.png");
-    enemy->GetComponent<SpriteRenderer>()->m_layer = 19999;
+    enemy->GetComponent<SpriteRenderer>()->SetLayer(19999);
     enemy->AddComponent<Collider>()->SetBoxSize(FVector2(180, 180));
     enemy->SetScale(FVector2(1.2f, 1.2f));
    

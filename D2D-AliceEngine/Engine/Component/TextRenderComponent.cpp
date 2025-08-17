@@ -16,13 +16,13 @@
 TextRenderComponent::TextRenderComponent()
 {
 	m_color = FColor::Black;
-	drawType = EDrawType::ScreenSpace;
+	SetDrawType(EDrawType::ScreenSpace);
 	m_layer = 101;
 }
 
 TextRenderComponent::TextRenderComponent(const std::wstring& content = L"", const FColor& color = FColor::Black, const std::wstring& font = L"Consolas", const float& fontSize = 24.0f)
 {
-	drawType = EDrawType::ScreenSpace;
+	SetDrawType(EDrawType::ScreenSpace);
 	m_content = content;
 	m_color = color;
 	m_font = font;

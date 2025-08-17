@@ -1,7 +1,5 @@
 ﻿#include "pch.h"
 #include "RenderSystem.h"
-#include "Component/TextRenderComponent.h"
-#include <Component/RenderComponent.h>
 #include <Component/SpriteRenderer.h>
 #include <Component/VideoComponent.h>
 #include <Component/BoxComponent.h>
@@ -10,46 +8,15 @@
 #include <Manager/D2DRenderManager.h>
 #include <tuple>
 #include <Define/Define.h>
-//#include <UI/UIImage.h>
-
-RenderItem::RenderItem()
-	: type(Define::ERenderType::D2D),
-	layer(0),
-	objectHandle(),
-	drawType(Define::EDrawType::WorldSpace),
-	D2DObject(nullptr),
-	RenderFunc(nullptr)
-{
-}
-
-RenderItem::RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer)
-	: type(Define::ERenderType::D2D), objectHandle(handle), D2DObject(object), RenderFunc(func), drawType(_drawType), layer(renderLayer)
-{
-	if (!ObjectHandler::GetInstance().IsValid(handle)) {
-		// 유효하지 않으면 이후 렌더링 시 IsValid()에서 걸러지므로 이 자리에서 강제 탈출하지 않아도 됩니다.
-	}
-}
-
-RenderItem::RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer)
-	: type(_type), objectHandle(handle), RenderFunc(func), drawType(_drawType), layer(renderLayer)
-{
-}
-
-bool RenderItem::IsValid() const
-{
-	return ObjectHandler::GetInstance().IsValid(objectHandle);
-}
 
 RenderSystem::RenderSystem()
 {
 	m_renderers.clear();
-	m_renderQueue.clear();
 }
 
 RenderSystem::~RenderSystem()
 {
 	m_renderers.clear();
-	m_renderQueue.clear();
 }
 
 void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
@@ -57,32 +24,8 @@ void RenderSystem::Regist(WeakObjectPtr<RenderComponent>&& renderer)
 	if (!renderer.expired())
 	{
 		m_renderers.push_back(renderer);
-
-		// 통합 렌더링 큐에도 추가
-		m_renderQueue.emplace_back(
-			renderer->GetHandle(),
-			renderer.Get(),
-			[w = renderer](){ if(auto weak = w.lock()) weak->Render(); },
-			renderer->drawType,
-			&renderer->m_layer
-		);
 	}
 }
-
-void RenderSystem::RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType, int* _layer)
-{
-	// 기존 방식 유지 (하위 호환성)
-	m_spineRenders.push_back({ objectHandle, f });
-	// 통합 렌더링 큐에 추가
-	m_renderQueue.emplace_back(
-		Define::ERenderType::Spine2D,
-		objectHandle,
-		f,
-		_drawType,
-		_layer
-	);
-}
-
 void RenderSystem::UnRegist(WeakObjectPtr<RenderComponent>&& renderer)
 {
 	if (auto ptr = renderer.lock())
@@ -93,53 +36,30 @@ void RenderSystem::UnRegist(WeakObjectPtr<RenderComponent>&& renderer)
 			{
 				return r.handle == renderer.handle;
 			}), m_renderers.end());
-
-		// 통합 렌더링 큐에서도 제거
-		ObjectHandle targetHandle = ptr->GetHandle();
-		m_renderQueue.erase(std::remove_if(m_renderQueue.begin(), m_renderQueue.end(),
-			[&](const RenderItem& item)
-			{
-				return item.objectHandle == targetHandle && item.type == Define::ERenderType::D2D;
-			}), m_renderQueue.end());
 	}
 }
 
 void RenderSystem::UnRegistAll()
 {
 	m_renderers.clear();
-	m_renderQueue.clear();
 }
 
 void RenderSystem::Initialize()
 {
-	for (auto& renderer : m_renderers)
-	{
-		if (auto render = renderer.lock())
-		{
-			render->Initialize();
-		}
-	}
+
 }
 
 void RenderSystem::UnInitialize()
 {
-	for (auto& renderer : m_renderers)
-	{
-		if (auto render = renderer.lock())
-		{
-			render->Release();
-		}
-	}
 	UnRegistAll();
 	m_renderers.clear();
-	m_renderQueue.clear();
 }
 
 void RenderSystem::Render()
 {
 	// 만료된 아이템 제거
-	m_renderQueue.erase(std::remove_if(m_renderQueue.begin(), m_renderQueue.end(),
-		[](const RenderItem& item) { return !item.IsValid(); }), m_renderQueue.end());
+	m_renderers.erase(std::remove_if(m_renderers.begin(), m_renderers.end(),
+		[](const WeakObjectPtr<RenderComponent>& item) { return item.expired(); }), m_renderers.end());
 
 	RenderReady();
 	RenderWorldSpace();
@@ -171,37 +91,32 @@ void RenderSystem::RenderWorldSpace()
 {
 	ViewRect view = GetCameraView();
 
-	std::vector<RenderItem> worldQueue;
-	worldQueue.reserve(m_renderQueue.size());
+	std::vector<WeakObjectPtr<RenderComponent>> worldQueue;
+	worldQueue.reserve(m_renderers.size());
 
 	std::copy_if(
-		m_renderQueue.begin(), m_renderQueue.end(),
+		m_renderers.begin(), m_renderers.end(),
 		std::back_inserter(worldQueue),
-		[](const RenderItem& item) {
-			return item.drawType == Define::EDrawType::WorldSpace && item.IsValid();
+		[&](const WeakObjectPtr<RenderComponent>& item) {
+			return !item.expired() && item->GetDrawType() == Define::EDrawType::WorldSpace;
 		}
 	);
 
 	std::sort(
 		worldQueue.begin(), worldQueue.end(),
-		[](const RenderItem& a, const RenderItem& b) {
-			return RenderItemSortCompare(a, b);
+		[](const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b) {
+			return RenderSortCompare(a, b);
 		}
 	);
 
 	std::for_each(
 		worldQueue.begin(), worldQueue.end(),
-		[view](const RenderItem& item) {
-			if (!item.IsValid()) return;
-			if (!ObjectHandler::GetInstance().IsValid(item.objectHandle)) return;
+		[view](const WeakObjectPtr<RenderComponent>& item) {
+			if (item.expired()) return;
 
-			if (item.type == Define::ERenderType::D2D) {
-				if (!RenderSystem::CheckCameraCulling(item.D2DObject, view)) {
-					if (item.RenderFunc) item.RenderFunc();
-				}
-			}
-			else if (item.type == Define::ERenderType::Spine2D) {
-				if (item.RenderFunc) item.RenderFunc();
+			if (!RenderSystem::CheckCameraCulling(item, view))
+			{
+				item->Render();
 			}
 		}
 	);
@@ -241,7 +156,7 @@ void RenderSystem::RenderD2D()
 			it = m_renderers.erase(it);
 			continue;
 		}
-		if (it->lock()->drawType == Define::EDrawType::WorldSpace && CheckCameraCulling(*it, view))
+		if (it->lock()->GetDrawType() == Define::EDrawType::WorldSpace && CheckCameraCulling(*it, view))
 		{
 			++it;
 			continue;
@@ -251,20 +166,6 @@ void RenderSystem::RenderD2D()
 		{
 			renderer->Render();
 		}
-		++it;
-	}
-}
-
-void RenderSystem::RenderSpine2D()
-{
-	for (auto it = m_spineRenders.begin(); it != m_spineRenders.end(); )
-	{
-		if (!ObjectHandler::GetInstance().IsValid(it->first))
-		{
-			it = m_spineRenders.erase(it);
-			continue;
-		}
-		it->second();
 		++it;
 	}
 }
@@ -289,9 +190,9 @@ ViewRect RenderSystem::GetCameraView()
 // 컬링이 되는걸 확실하게 보려면 주석처리 된 부분을 사용
 bool RenderSystem::CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view)
 {
-	auto* transform = renderer->GetOwnerTransform();
-	const auto pos = transform ? transform->GetPosition() : D2D1_VECTOR_2F{ 0, 0 };
-	const auto scale = transform ? transform->GetScale() : D2D1_VECTOR_2F{ 1, 1 };
+	TransformComponent* transform = renderer->GetRelativeTransform();
+	const auto pos = transform ? transform->GetPosition() : FVector2{ 0, 0 };
+	const auto scale = transform ? transform->GetScale() : FVector2{ 1, 1 };
 
 	/*const float shrinkRatio = 0.5;
 	const float halfW = renderer->GetSizeX() * 0.5f * scale.x * shrinkRatio;
@@ -322,12 +223,7 @@ bool RenderSystem::RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, co
 {
 	if (a.expired()) return false;
 	if (b.expired()) return false;
-	return a->m_layer < b->m_layer;
-}
-
-bool RenderSystem::RenderItemSortCompare(const RenderItem& a, const RenderItem& b)
-{
-	return *(a.layer) < *(b.layer);
+	return a->GetLayer() < b->GetLayer();
 }
 
 void RenderSystem::RenderAfterEffect()
@@ -377,21 +273,21 @@ void RenderSystem::RenderScreenSpace()
 {
 	ViewRect view = GetCameraView();
 
-	std::vector<RenderItem> screenQueue;
-	screenQueue.reserve(m_renderQueue.size());
+	std::vector<WeakObjectPtr<RenderComponent>> screenQueue;
+	screenQueue.reserve(m_renderers.size());
 
 	std::copy_if(
-		m_renderQueue.begin(), m_renderQueue.end(),
+		m_renderers.begin(), m_renderers.end(),
 		std::back_inserter(screenQueue),
-		[](const RenderItem& item) {
-			return item.drawType == Define::EDrawType::ScreenSpace && item.IsValid();
+		[](const WeakObjectPtr<RenderComponent>& item) {
+			return !item.expired() && item->GetDrawType() == Define::EDrawType::ScreenSpace;
 		}
 	);
 
 	std::sort(
 		screenQueue.begin(), screenQueue.end(),
-		[](const RenderItem& a, const RenderItem& b) {
-			return RenderItemSortCompare(a, b);
+		[](const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b) {
+			return RenderSortCompare(a, b);
 		}
 	);
 
@@ -403,11 +299,9 @@ void RenderSystem::RenderScreenSpace()
 
 	std::for_each(
 		screenQueue.begin(), screenQueue.end(),
-		[](const RenderItem& item) {
-			if (!item.IsValid()) return;
-			if (!ObjectHandler::GetInstance().IsValid(item.objectHandle)) return;
-
-			if (item.RenderFunc) item.RenderFunc();
+		[](const WeakObjectPtr<RenderComponent>& item) {
+			if (item.expired()) return;
+			item->Render();
 		}
 	);
 	deviceContext->EndDraw();

@@ -89,14 +89,14 @@ void CutSceneWidgetScript::OnStart()
 
     // ========= Progress
     m_progressSprite->LoadData(L"UI\\PressValue.png");
-    m_progressSprite->m_layer = Define::PopupObjectLayer + Define::CutSceneLayer;
+    m_progressSprite->SetLayer(Define::PopupObjectLayer + Define::CutSceneLayer);
     m_progressSprite->SetDrawType(EDrawType::ScreenSpace);
     m_progressSprite->SetRelativePosition(FVector2(0, 0));
     
     m_progress->LoadData(L"UI\\ProgressBar.png");
     m_progress->SetDrawType(EDrawType::ScreenSpace);
     m_progress->SetRelativePosition(FVector2(0, 0));
-    m_progress->m_layer = Define::PopupObjectLayer +1 + Define::CutSceneLayer;
+    m_progress->SetLayer(Define::PopupObjectLayer +1 + Define::CutSceneLayer);
     m_progress->SetProgress(m_pressValue);
 
 	// 컷씬 이미지 로드
@@ -130,7 +130,7 @@ void CutSceneWidgetScript::OnStart()
     const float targetH = 1080.f;
     // 아직 비트맵이 로드되지 않았으므로, 첫 ShowImage에서 실제 스케일을 적용합니다.
     // 임시로 layer만 설정 (상대 레이어 적용)
-    m_background->m_layer = 0 + Define::CutSceneLayer;
+    m_background->SetLayer(0 + Define::CutSceneLayer);
 
 	// Next 버튼 설정
     // Next 버튼 주석 처리
@@ -145,7 +145,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipButton->LoadData(Define::EButtonState::Release, L"UI\\Button_Idle.png");
 	m_skipButton->SetRelativePosition(FVector2(0, 350));
 	m_skipButton->SetRelativeScale(FVector2(1.f, 1.f));
-    m_skipButton->m_layer = Define::ButtonLayer + Define::CutSceneLayer;
+    m_skipButton->SetLayer(Define::ButtonLayer + Define::CutSceneLayer);
 
 	// 텍스트 설정
     // Next 텍스트 주석 처리
@@ -159,7 +159,7 @@ void CutSceneWidgetScript::OnStart()
 	m_skipText->SetColor(FColor::White);
 	FVector2 skipTextSize = m_skipText->GetRelativeSize();
 	m_skipText->SetRelativePosition(CoordHelper::RatioCoordToScreen(skipTextSize, FVector2(-0.5, -0.5)));
-    m_skipText->m_layer = Define::ButtonTextLayer + Define::CutSceneLayer;
+    m_skipText->SetLayer(Define::ButtonTextLayer + Define::CutSceneLayer);
 	m_skipText->RemoveFromParent();
 	m_skipButton->AddChildComponent(m_skipText);
 
@@ -170,7 +170,7 @@ void CutSceneWidgetScript::OnStart()
     m_guideText->SetFont(L"사월십육일 TTF 약속", L"ko-KR");
     m_guideText->SetText(L"[SPACE]를 길게 눌러서 컷씬 건너뛰기");
     m_guideText->SetColor(FColor::White);
-    m_guideText->m_layer = Define::PopupTextLayer + Define::CutSceneLayer;
+    m_guideText->SetLayer(Define::PopupTextLayer + Define::CutSceneLayer);
     //m_guideText->RemoveFromParent();
     //m_skipButton->AddChildComponent(m_guideText);
     // 시작 시 감춤
@@ -411,7 +411,7 @@ void CutSceneWidgetScript::ShowImage(int index)
                 spr->SetRelativeScale(FVector2(desc.size.x / w, desc.size.y / h));
             }
             spr->SetRelativePosition(desc.position);
-            spr->m_layer = desc.layer + Define::CutSceneLayer;
+            spr->SetLayer(desc.layer + Define::CutSceneLayer);
             m_activeOverlays.push_back(spr);
         }
     }
@@ -621,7 +621,7 @@ void CutSceneWidgetScript::StartTransitionTo(int targetIndex, float durationSec)
     // 초기 상태
     ApplyOpacityToAll(1.f);
     EnsureFadeOverlay();
-    if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = 9999 + Define::CutSceneLayer; }
+            if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->SetLayer(9999 + Define::CutSceneLayer); }
 }
 
 void CutSceneWidgetScript::StepTransition(float dt)
@@ -651,7 +651,7 @@ void CutSceneWidgetScript::StepTransition(float dt)
         if (t >= 1.f)
         {
             ClearOpacityOnAll();
-            if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->m_layer = Define::Disable; }
+            if (m_fadeOverlay) { m_fadeOverlay->SetOpacity(0.f); m_fadeOverlay->SetLayer(Define::Disable); }
             m_isTransitioning = false;
             m_transitionElapsed = 0.f;
             m_transitionSwitchover = false;
@@ -694,7 +694,7 @@ void CutSceneWidgetScript::EnsureFadeOverlay()
     }
     m_fadeOverlay->SetRelativePosition(FVector2(0, 0));
     // 페이드 오버레이는 컷씬 요소들보다 위 (상대 레이어 적용)
-    m_fadeOverlay->m_layer = 9999 + Define::CutSceneLayer;
+    m_fadeOverlay->SetLayer(9999 + Define::CutSceneLayer);
 }
 
 void CutSceneWidgetScript::EnsureBackdropOverlay()
@@ -712,5 +712,5 @@ void CutSceneWidgetScript::EnsureBackdropOverlay()
     }
     m_backdropOverlay->SetRelativePosition(FVector2(0, 0));
     // 컷씬 전체보다 뒤에 위치 (상대 레이어 적용)
-    m_backdropOverlay->m_layer = -10000 + Define::CutSceneLayer;
+    m_backdropOverlay->SetLayer(-10000 + Define::CutSceneLayer);
 }
