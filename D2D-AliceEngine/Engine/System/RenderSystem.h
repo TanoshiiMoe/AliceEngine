@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Component/Component.h"
 #include <Helpers/StringHelper.h>
 #include <Core/Singleton.h>
@@ -7,12 +7,12 @@
 #include <tuple>
 
 /* 
-*  @briefs : ·»´õ¸µÀ» ´ã´çÇÏ´Â ½Ã½ºÅÛÀÔ´Ï´Ù
+*  @briefs : ë Œë”ë§ì„ ë‹´ë‹¹í•˜ëŠ” ì‹œìŠ¤í…œì…ë‹ˆë‹¤
 */
 class RenderComponent;
 struct ViewRect { float minX, maxX, minY, maxY; };
 
-// ·»´õ¸µ ¾ÆÀÌÅÛÀ» ÅëÇÕ °ü¸®ÇÏ±â À§ÇÑ ±¸Á¶Ã¼
+// ë Œë”ë§ ì•„ì´í…œì„ í†µí•© ê´€ë¦¬í•˜ê¸° ìœ„í•œ êµ¬ì¡°ì²´
 struct RenderItem
 {
 	Define::ERenderType type;
@@ -21,12 +21,12 @@ struct RenderItem
 	Define::EDrawType drawType = Define::EDrawType::WorldSpace;
 	RenderComponent* D2DObject = nullptr;
 
-	// Spine2D¿ë µ¥ÀÌÅÍ
+	// Spine2Dìš© ë°ì´í„°
 	std::function<void()> RenderFunc;
 	RenderItem();
-	// D2D ·»´õ·¯¿ë »ı¼ºÀÚ
+	// D2D ë Œë”ëŸ¬ìš© ìƒì„±ì
 	explicit RenderItem(ObjectHandle handle, RenderComponent* object, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer);
-	// Spine2D ·»´õ·¯¿ë »ı¼ºÀÚ
+	// Spine2D ë Œë”ëŸ¬ìš© ìƒì„±ì
 	explicit RenderItem(Define::ERenderType _type, ObjectHandle handle, std::function<void()> func, Define::EDrawType _drawType, int* renderLayer);
 
 	bool IsValid() const;
@@ -46,22 +46,27 @@ public:
 	void Initialize();
 	void UnInitialize();
 
-	// ·»´õ¸µ ´ë±â¿­
+	// ë Œë”ë§ ëŒ€ê¸°ì—´
 	std::vector<WeakObjectPtr<RenderComponent>> m_renderers;
 
-	// ÅëÇÕ ·»´õ¸µ Å¥
+	// í†µí•© ë Œë”ë§ í
 	std::vector<RenderItem> m_renderQueue;
 
 	void Render();
-	void RenderUnified(); // »õ·Î¿î ÅëÇÕ ·»´õ¸µ ÇÔ¼ö
+	void RenderReady();
+	void RenderWorldSpace(); // ìƒˆë¡œìš´ í†µí•© ë Œë”ë§ í•¨ìˆ˜
 	void DebugCamera();
 	void RenderD2D();
 	void RenderSpine2D();
 
 	ViewRect GetCameraView();
-	bool CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view);
+	static bool CheckCameraCulling(const WeakObjectPtr<RenderComponent>& renderer, const ViewRect& view);
 	static bool RenderSortCompare(const WeakObjectPtr<RenderComponent>& a, const WeakObjectPtr<RenderComponent>& b);
 	static bool RenderItemSortCompare(const RenderItem& a, const RenderItem& b);
+
+	void RenderAfterEffect();
+
+	void RenderScreenSpace();
 
 	void RegistSpine2D(ObjectHandle objectHandle, std::function<void()> f, Define::EDrawType _drawType = Define::EDrawType::ScreenSpace, int* _layer = 0);
 	std::vector<std::pair<ObjectHandle, std::function<void()>>> m_spineRenders;

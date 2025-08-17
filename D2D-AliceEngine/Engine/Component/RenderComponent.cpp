@@ -66,7 +66,7 @@ void RenderComponent::Render()
 	}
 	else if (drawType == Define::EDrawType::ScreenSpace)
 	{
-		view = world * cameraInv;
+		view = world;
 	}
 
 	if (bFlip)
