@@ -134,7 +134,6 @@ void Collider::UpdateAABB()
 	if (boxComponent) size = boxComponent->m_size;
 	else if (m_box) size = m_box->m_size;
 
-	//FVector2 center = GetWorldCenter();
 	FVector2 center = boxComponent ? boxComponent->GetRelativePosition() : GetWorldCenter();
 	const float halfW = size.x * 0.5f;
 	const float halfH = size.y * 0.5f;
@@ -165,4 +164,70 @@ void Collider::SetBoxSize(const FVector2& _size)
 	EnsureDebugBox();
 	SyncDebugBox();
 	UpdateAABB();
+}
+
+// Relative transform delegation
+void Collider::SetRelativePosition(const FVector2& pos)
+{
+	EnsureDebugBox();
+	if (boxComponent) boxComponent->SetRelativePosition(pos);
+	else if (m_box) m_box->SetRelativePosition(pos);
+	dirty = true;
+}
+
+void Collider::AddRelativePosition(const FVector2& delta)
+{
+	EnsureDebugBox();
+	FVector2 p = GetRelativePosition();
+	SetRelativePosition(FVector2(p.x + delta.x, p.y + delta.y));
+}
+
+FVector2 Collider::GetRelativePosition() const
+{
+	if (boxComponent) return boxComponent->GetRelativePosition();
+	if (m_box) return m_box->GetRelativePosition();
+	return m_localOffset;
+}
+
+void Collider::SetRelativeRotation(float degrees)
+{
+	EnsureDebugBox();
+	if (boxComponent) boxComponent->SetRelativeRotation(degrees);
+	else if (m_box) m_box->SetRelativeRotation(degrees);
+	dirty = true;
+}
+
+void Collider::AddRelativeRotation(float delta)
+{
+	EnsureDebugBox();
+	SetRelativeRotation(GetRelativeRotation() + delta);
+}
+
+float Collider::GetRelativeRotation() const
+{
+	if (boxComponent) return boxComponent->GetRelativeRotation();
+	if (m_box) return m_box->GetRelativeRotation();
+	return 0.0f;
+}
+
+void Collider::SetRelativeScale(const FVector2& scale)
+{
+	EnsureDebugBox();
+	if (boxComponent) boxComponent->SetRelativeScale(scale);
+	else if (m_box) m_box->SetRelativeScale(scale);
+	dirty = true;
+}
+
+void Collider::AddRelativeScale(const FVector2& delta)
+{
+	EnsureDebugBox();
+	FVector2 s = GetRelativeScale();
+	SetRelativeScale(FVector2(s.x + delta.x, s.y + delta.y));
+}
+
+FVector2 Collider::GetRelativeScale() const
+{
+	if (boxComponent) return boxComponent->GetRelativeScale();
+	if (m_box) return m_box->GetRelativeScale();
+	return FVector2(1.0f, 1.0f);
 }
