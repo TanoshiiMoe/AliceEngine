@@ -145,7 +145,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 		const float angleDeg = angleRad * 180.0f / Define::PI + armDegree;
 		arm->SetRelativeRotation(angleDeg);
 
-		if (Input::IsMouseLeftDown() && bCanFire)
+		if (Input::IsMouseLeftDown() && !PlayerManager::instance->GetSande() && bCanFire)
 		{
 			float currentSpeed = 0.0f;
 			if (auto bike = owner->GetComponent<BikeMovementScript>())
@@ -169,7 +169,7 @@ void Drone::AttackAction(const FVector2& bodyPos, const FVector2& worldMousePos,
 			bCanFire = false;
 		}
 
-		if (Input::IsMouseRightDown() && PlayerManager::instance->GetSande() && bCanFire)
+		if (Input::IsMouseLeftDown() && PlayerManager::instance->GetSande() && bCanFire)
 		{
 			if (auto player = BulletManager::GetInstance().GetPlayer())
 			{
