@@ -53,11 +53,11 @@ void Aru2::OnStart()
 	m_aru2->AddComponent<SpriteRenderer>()->LoadData(L"aru.png");
 	m_aru2->AddComponent<BoxComponent>(m_aru2->GetComponent<SpriteRenderer>()->GetBitmapSize(), FColor::Green);
 
-	m_aru2->SetTag(L"Enemy");
-	if (auto* t = m_aru2->AddComponent<Collider>())
-	{
-		t->SetBoxSize(FVector2(50, 50));
-	}
+	//m_aru2->SetTag(L"Enemy");
+	//if (auto* t = m_aru2->AddComponent<Collider>())
+	//{
+	//	t->SetBoxSize(FVector2(50, 50));
+	//}
 
 	/*
 	* 게임오브젝트에 TextRenderComponent를 붙이는 예시

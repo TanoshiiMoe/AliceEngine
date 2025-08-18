@@ -21,6 +21,18 @@ void Collider::Initialize()
 {
 	CollisionSystem::GetInstance().Regist(WeakFromThis<Collider>());
 	REGISTER_TICK_TASK(Update, Define::ETickingGroup::TG_PrePhysics);
+
+	// 기본 충돌용 BoxComponent 생성 및 기본값 설정
+	EnsureDebugBox();
+	if (m_box)
+	{
+		m_box->SetUsage(BoxComponent::EUsage::Collision);
+		if (m_box->m_size.x == 0.0f && m_box->m_size.y == 0.0f)
+		{
+			m_box->SetSize(FVector2(50.0f, 50.0f));
+		}
+		m_box->SetRelativePosition(FVector2(0.0f, 0.0f));
+	}
 }
 
 void Collider::Update(const float& deltaSeconds)
@@ -71,11 +83,12 @@ void Collider::EnsureDebugBox()
 		if (gameObject* go = GetOwner())
 		{
 			m_box = go->AddComponent<BoxComponent>();
-			m_box->SetName(L"ColliderDebugBox");
-			m_box->SetTag(L"__debug_collider");
+			m_box->SetName(L"ColliderBox");
+			m_box->SetTag(L"__collision_box");
+			m_box->SetUsage(BoxComponent::EUsage::Collision);
 			m_box->SetIgnoreOwnerScale(false);
 			m_box->SetColor(FColor::Red);
-			m_box->SetThickness(2.0f);
+			m_box->SetThickness(5.0f);
 			m_box->SetDrawType(Define::EDrawType::WorldSpace);
 		}
 	}
@@ -107,21 +120,24 @@ FVector2 Collider::GetWorldCenter() const
 {
 	gameObject* go = owner.Get();
 	FVector2 ownerPos = go ? go->transform()->GetPosition() : FVector2(0, 0);
-	return FVector2(ownerPos.x + m_localOffset.x, ownerPos.y + m_localOffset.y);
+	FVector2 rel = FVector2(0, 0);
+	if (boxComponent) rel = boxComponent->GetRelativePosition();
+	else if (m_box) rel = m_box->GetRelativePosition();
+	else rel = m_localOffset;
+	return FVector2(ownerPos.x + rel.x, ownerPos.y + rel.y);
 }
 
 void Collider::UpdateAABB()
 {
-	// Pull latest size from debug box if changed via legacy pointer
-	if (m_box)
-	{
-		m_size = m_box->m_size;
-		m_localOffset = m_box->GetRelativePosition();
-	}
+	// 최신 크기/오프셋은 BoxComponent에서 취득
+	FVector2 size = m_size;
+	if (boxComponent) size = boxComponent->m_size;
+	else if (m_box) size = m_box->m_size;
 
-	FVector2 center = GetWorldCenter();
-	const float halfW = m_size.x * 0.5f;
-	const float halfH = m_size.y * 0.5f;
+	//FVector2 center = GetWorldCenter();
+	FVector2 center = boxComponent ? boxComponent->GetRelativePosition() : GetWorldCenter();
+	const float halfW = size.x * 0.5f;
+	const float halfH = size.y * 0.5f;
 	aabb.minVector.x = center.x - halfW;
 	aabb.minVector.y = center.y - halfH;
 	aabb.maxVector.x = center.x + halfW;
@@ -132,6 +148,13 @@ void Collider::UpdateAABB()
 
 void Collider::Release()
 {
+	// Collider 수명 종료 시 소유 BoxComponent 제거
+	if (m_box && GetOwner())
+	{
+		GetOwner()->RemoveComponent<BoxComponent>(m_box);
+		m_box = nullptr;
+		boxComponent = nullptr;
+	}
 }
 
 void Collider::SetBoxSize(const FVector2& _size)

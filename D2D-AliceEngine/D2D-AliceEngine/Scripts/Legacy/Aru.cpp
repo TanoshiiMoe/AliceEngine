@@ -68,7 +68,7 @@ void Aru::OnStart()
 		[this]()
 		{
 			bCanFire = true;
-			OutputDebugStringW(L"람다 타이머 호출됨!\n");
+			//OutputDebugStringW(L"람다 타이머 호출됨!\n");
 		}, 
 		0.1f,
 		true,
@@ -305,4 +305,22 @@ void Aru::Input()
 		scale.y -= 0.1f;
 		m_aru->GetComponent<SpriteRenderer>()->SetScale(scale);*/
 	}
+}
+
+void Aru::OnTriggerEnter2D(Collider* collider)
+{
+	std::cout << "OnTriggerEnter2D 호출됨" << std::endl;
+	OutputDebugStringW(L"OnTriggerEnter2D 호출됨\n");
+}
+
+void Aru::OnTriggerStay2D(Collider* collider)
+{
+	std::cout << "OnTriggerStay2D 호출됨" << std::endl;
+	OutputDebugStringW(L"OnTriggerStay2D 호출됨\n");
+}
+
+void Aru::OnTriggerExit2D(Collider* collider)
+{
+	std::cout << "OnTriggerExit2D 호출됨" << std::endl;
+	OutputDebugStringW(L"OnTriggerExit2D 호출됨\n");
 }

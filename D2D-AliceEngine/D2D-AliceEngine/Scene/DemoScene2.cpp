@@ -20,6 +20,7 @@
 #include <Scripts/Spine2D/SpineScript.h>
 #include <Component/ProgressBarComponent.h>
 #include <Scripts/Widget/VignetteWidgetScript.h>
+#include <Component/Collider.h>
 
 /*
 *	NewObject<T>(std::wstring&) : 해당 이름의 게임오브젝트를 생성하고 rawPointer를 반환합니다.
@@ -194,9 +195,27 @@ void DemoScene2::OnEnter()
 
 	m_aru = NewObject<gameObject>(L"Aru");
 	m_aru->AddComponent<Aru>();
+	Collider* t = m_aru->AddComponent<Collider>();
+	t->SetBoxSize(FVector2(200,200));
+	t->boxComponent->SetRelativePosition(FVector2(350, 50));
+	t->SetCollisionChannel(5);
+	//t->boxComponent->SetRelativePosition(FVector2(0, 0));
+	//t->SetLocalOffset(FVector2(50, 50));
+
+	Collider* tt = m_aru->AddComponent<Collider>();
+	tt->SetBoxSize(FVector2(200, 200));
+	tt->boxComponent->SetRelativePosition(FVector2(-350, 50));
+	tt->SetCollisionChannel(3);
+	//t->boxComponent->SetRelativePosition(FVector2(0, 0));
+	//t->SetLocalOffset(FVector2(50, 50));
 
 	m_aru2 = NewObject<gameObject>(L"Aru2");
 	m_aru2->AddComponent<Aru2>();
+	Collider* t2 = m_aru2->AddComponent<Collider>();
+	t2->SetBoxSize(FVector2(200, 200));
+	//t2->boxComponent->SetRelativePosition(FVector2(-350, 50));
+	t2->boxComponent->SetRelativePosition(FVector2(-0, 0));
+	t2->SetCollisionChannel(3);
 
 	// =======================================  Tag Example  ==========================================
 	// 태그 변하는걸 보려면 여기서 m_aru2를 Aru2로 바꿔주세요.

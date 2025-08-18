@@ -58,9 +58,21 @@ void BoxComponent::Render()
 
 	D2D1_MATRIX_3X2_F skewMatrix = CoordHelper::GetSkewMatrix(skewAngle, drawHeight);
 
-	// 부모(Owner) 스케일 무시 옵션: 뷰 행렬에 부모 스케일의 역스케일을 곱해 보정
+	// 스케일 보정: 충돌용은 부모+자기 스케일 모두 무시, 디버그/일반은 옵션에 따라 부모만 무시
 	D2D1_MATRIX_3X2_F localAdjust = D2D1::Matrix3x2F::Identity();
-	if (bIgnoreOwnerScale)
+	if (m_usage == BoxComponent::EUsage::Collision)
+	{
+		FVector2 ownerScale(1.0f, 1.0f);
+		if (auto transformComp = GetOwner() ? GetOwner()->transform() : nullptr)
+			ownerScale = transformComp->GetScale();
+		FVector2 selfScale = relativeTransform.GetScale();
+		const float invOwnerX = (ownerScale.x != 0.0f) ? (1.0f / ownerScale.x) : 1.0f;
+		const float invOwnerY = (ownerScale.y != 0.0f) ? (1.0f / ownerScale.y) : 1.0f;
+		const float invSelfX  = (selfScale.x  != 0.0f) ? (1.0f / selfScale.x ) : 1.0f;
+		const float invSelfY  = (selfScale.y  != 0.0f) ? (1.0f / selfScale.y ) : 1.0f;
+		localAdjust = D2D1::Matrix3x2F::Scale(invOwnerX * invSelfX, invOwnerY * invSelfY);
+	}
+	else if (bIgnoreOwnerScale)
 	{
 		FVector2 ownerScale(1.0f, 1.0f);
 		if (auto transformComp = GetOwner() ? GetOwner()->transform() : nullptr)
@@ -74,8 +86,8 @@ void BoxComponent::Render()
 
 	D2D1_POINT_2F pivot = 
 	{
-		drawWidth * GetOwnerPivot()->x,
-		drawHeight * GetOwnerPivot()->y
+		drawWidth * (m_usage == BoxComponent::EUsage::Collision ? 0.5f : GetOwnerPivot()->x),
+		drawHeight * (m_usage == BoxComponent::EUsage::Collision ? 0.5f : GetOwnerPivot()->y)
 	};
 
 	if (D2DRenderManager::GetInstance().bRenderedBoxRect)

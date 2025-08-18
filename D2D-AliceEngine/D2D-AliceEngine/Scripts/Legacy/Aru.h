@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <Component/ScriptComponent.h>
 #include <Core/StatTraits.h>
 #include <Component/StatComponent.h>
@@ -30,6 +30,10 @@ public:
 	virtual void OnStart() override;
 	virtual void OnEnd() override;
 	virtual void OnDestroy() override;
+
+	virtual void OnTriggerEnter2D(Collider* collider) override;
+	virtual void OnTriggerStay2D(Collider* collider) override;
+	virtual void OnTriggerExit2D(Collider* collider) override;
 
 	void Input();
 
