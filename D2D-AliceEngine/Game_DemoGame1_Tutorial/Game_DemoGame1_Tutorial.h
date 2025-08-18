@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include <Application.h>
 
-class DemoGameApp : public Application
+class Game_DemoGame1_Tutorial : public Application
 {
 public:
-	DemoGameApp();
-	virtual ~DemoGameApp();
+	Game_DemoGame1_Tutorial();
+	virtual ~Game_DemoGame1_Tutorial();
 
 public:
 	void Initialize() override;

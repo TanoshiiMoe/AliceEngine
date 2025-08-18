@@ -76,12 +76,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Game_EffectDemo;$(SolutionDir)Engine;$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Extension\core\lib\x64</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -103,12 +107,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Game_EffectDemo;$(SolutionDir)Engine;$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Extension\core\lib\x64</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(SolutionDir)Extension\core\lib\x64\fmod.dll" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -125,22 +133,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EffectDemoApp.h" />
+    <ClInclude Include="Helper\ParticleHelper.h" />
     <ClInclude Include="Scene\EffectDemoScene.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Game_EffectDemo.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Scripts\Legacy\CameraController.h" />
+    <ClInclude Include="Scripts\Video\YuukaVideo.h" />
+    <ClInclude Include="Scripts\Widget\BlackOutWidgetScript.h" />
+    <ClInclude Include="Scripts\Widget\LocationIndicatorWidgetScript.h" />
+    <ClInclude Include="Scripts\Widget\VignetteWidgetScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EffectDemoApp.cpp" />
+    <ClCompile Include="Helper\ParticleHelper.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\EffectDemoScene.cpp" />
-    <ClCompile Include="Game_EffectDemo.cpp" />
+    <ClCompile Include="Scripts\Legacy\CameraController.cpp" />
+    <ClCompile Include="Scripts\Video\YuukaVideo.cpp" />
+    <ClCompile Include="Scripts\Widget\BlackOutWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Widget\LocationIndicatorWidgetScript.cpp" />
+    <ClCompile Include="Scripts\Widget\VignetteWidgetScript.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Game_EffectDemo.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Game_EffectDemo.ico" />
-    <Image Include="small.ico" />
+    <ProjectReference Include="..\Engine\Engine.vcxproj">
+      <Project>{ff21bb58-7919-4e53-a917-2a8af0469c81}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

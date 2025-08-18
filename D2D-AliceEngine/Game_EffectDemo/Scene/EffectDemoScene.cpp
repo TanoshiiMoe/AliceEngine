@@ -1,4 +1,4 @@
-#include "EffectDemoScene.h"
+ï»¿#include "EffectDemoScene.h"
 #include <Manager/SceneManager.h>
 #include <Manager/D2DRenderManager.h>
 #include <Component/InputComponent.h>
@@ -51,14 +51,14 @@ void EffectDemoScene::OnEnter()
 			L"[3] BlackOut - PointDiffuse (2.0s)\n"
 			L"[4] BlackOut - SpotDiffuse (2.0s)\n"
 			L"[5] BlackOut - SpotSpecular (2.0s)\n"
-			L"[A] Particle Explosion (¿ùµå)\n"
-			L"[B] Particle Impact (¿ùµå)\n"
-			L"[C] ClickBurst L (È­¸é)\n"
-			L"[D] ClickBurst R (È­¸é)\n"
-			L"[E] Toggle Mouse Trail (È­¸é)\n"
-			L"[F] Aura (¿ùµå)\n"
-			L"[G] Electric (¿ùµå)\n"
-			L"[H] Portal Swirl (¿ùµå)\n"
+			L"[A] Particle Explosion (ì›”ë“œ)\n"
+			L"[B] Particle Impact (ì›”ë“œ)\n"
+			L"[C] ClickBurst L (í™”ë©´)\n"
+			L"[D] ClickBurst R (í™”ë©´)\n"
+			L"[E] Toggle Mouse Trail (í™”ë©´)\n"
+			L"[F] Aura (ì›”ë“œ)\n"
+			L"[G] Electric (ì›”ë“œ)\n"
+			L"[H] Portal Swirl (ì›”ë“œ)\n"
 			L"[R] Shader Blending\n"
 			L"[T] Shader ColorChange\n"
 			L"[Y] Shader Distortion\n"
@@ -151,18 +151,18 @@ void EffectDemoScene::SpawnParticleImpact()
 
 void EffectDemoScene::SpawnParticleClickL()
 {
-	ParticleHelper::SpawnParticleClickL(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
+	ParticleHelper::SpawnParticleClickL(Input::GetMousePosition(), Define::Effect_Texture_Collision);
 }
 
 void EffectDemoScene::SpawnParticleClickR()
 {
-	ParticleHelper::SpawnParticleClickR(Input::GetMouseWorldPosition(), Define::Effect_Texture_Collision);
+	ParticleHelper::SpawnParticleClickR(Input::GetMousePosition(), Define::Effect_Texture_Collision);
 }
 
 void EffectDemoScene::ToggleMouseTrail()
 {
-	WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"ParticleScreen");
-	if (!go) go = NewObject<gameObject>(L"ParticleScreen");
+	WeakObjectPtr<gameObject> go = GetWorld()->FindObjectByName<gameObject>(L"Scene_Default_ParticleScreenTrail");
+	if (!go) go = NewObject<gameObject>(L"Scene_Default_ParticleScreenTrail");
 	auto* pc = go->GetComponent<ParticleComponent>();
 	if (!pc) pc = go->AddComponent<ParticleComponent>();
 	pc->SetDrawType(Define::EDrawType::ScreenSpace);

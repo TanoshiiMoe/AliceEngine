@@ -1,32 +1,31 @@
 ﻿#pragma once
-#include "DemoGameApp.h"
-#include "Scene/DemoScene.h"
-#include "Scene/DemoScene2.h"
-#include "Scene/DemoScene3.h"
-#include "Scene/DemoScene4.h"
+#include "Game_DemoGame1_Tutorial.h"
+#include "Scene/DemoScene1_Tutorial.h"
+#include "Scene/DemoScene2_Tutorial.h"
+#include "Scene/DemoScene3_Tutorial.h"
 #include <Manager/SceneManager.h>
 #include <Manager/TimerManager.h>
 
-DemoGameApp::DemoGameApp()
+Game_DemoGame1_Tutorial::Game_DemoGame1_Tutorial()
 {
 }
 
-DemoGameApp::~DemoGameApp()
+Game_DemoGame1_Tutorial::~Game_DemoGame1_Tutorial()
 {
 
 }
 
-void DemoGameApp::Initialize()
+void Game_DemoGame1_Tutorial::Initialize()
 {
 	__super::Initialize();
 
-	SceneManager::AddScene<DemoScene2>(L"aruScene");
-	SceneManager::AddScene<DemoScene3>(L"FSMScene");
-	SceneManager::AddScene<DemoScene>(L"SolarSystemScene");
-	SceneManager::ChangeScene(L"TitleScene");
+	SceneManager::AddScene<DemoScene1_Tutorial>(L"SolarSystemScene");
+	SceneManager::AddScene<DemoScene2_Tutorial>(L"aruScene");
+	SceneManager::AddScene<DemoScene3_Tutorial>(L"FSMScene");
+	SceneManager::ChangeScene(L"SolarSystemScene");
 }
 
-void DemoGameApp::Run()
+void Game_DemoGame1_Tutorial::Run()
 {
 	__super::Run();
 	// �޽��� ����
@@ -46,17 +45,17 @@ void DemoGameApp::Run()
 	}
 }
 
-void DemoGameApp::Render()
+void Game_DemoGame1_Tutorial::Render()
 {
 	__super::Render();
 }
 
-void DemoGameApp::Update()
+void Game_DemoGame1_Tutorial::Update()
 {
 	__super::Update();
 }
 
-void DemoGameApp::Uninitialize()
+void Game_DemoGame1_Tutorial::Uninitialize()
 {
 	__super::Uninitialize();
 }

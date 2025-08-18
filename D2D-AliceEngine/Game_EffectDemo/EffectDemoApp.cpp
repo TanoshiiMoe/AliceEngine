@@ -1,12 +1,12 @@
-#include "EffectDemoApp.h"
+﻿#include "EffectDemoApp.h"
 #include <Manager/SceneManager.h>
 #include <Manager/TimerManager.h>
-#include <Scene/EffectTestScene.h>
+#include <Scene/EffectDemoScene.h>
 
 void EffectDemoApp::Initialize()
 {
 	__super::Initialize();
-	SceneManager::AddScene<EffectTestScene>(L"EffectTestScene");
+	SceneManager::AddScene<EffectDemoScene>(L"EffectTestScene");
 	SceneManager::ChangeScene(L"EffectTestScene");
 }
 

@@ -76,11 +76,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Game_SpineDemo;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Extension\core\lib\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -103,11 +104,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Game_SpineDemo;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Extension\core\lib\x64</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -125,22 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h" />
     <ClInclude Include="Game_SpineDemo.h" />
-    <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene\SpineDemoScene.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game_SpineDemo.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\SpineDemoScene.cpp" />
+    <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Game_SpineDemo.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Game_SpineDemo.ico" />
-    <Image Include="small.ico" />
+    <ProjectReference Include="..\Engine\Engine.vcxproj">
+      <Project>{ff21bb58-7919-4e53-a917-2a8af0469c81}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
