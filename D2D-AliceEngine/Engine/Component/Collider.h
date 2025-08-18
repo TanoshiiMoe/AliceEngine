@@ -24,6 +24,17 @@ public:
 	void SetLocalOffset(const FVector2& offset) { m_localOffset = offset; dirty = true; SyncDebugBox(); }
 	void SetLocalRotation(float degrees) { m_localRotationDeg = degrees; dirty = true; SyncDebugBox(); }
 
+	// 콜라이더 상대 트랜스폼 설정. BoundsBox의 트랜스폼.
+	void SetRelativePosition(const FVector2& pos);
+	void AddRelativePosition(const FVector2& delta);
+	FVector2 GetRelativePosition() const;
+	void SetRelativeRotation(float degrees);
+	void AddRelativeRotation(float delta);
+	float GetRelativeRotation() const;
+	void SetRelativeScale(const FVector2& scale);
+	void AddRelativeScale(const FVector2& delta);
+	FVector2 GetRelativeScale() const;
+
 	FVector2 GetSize() const { return m_size; }
 	FVector2 GetLocalOffset() const { return m_localOffset; }
 	float GetLocalRotation() const { return m_localRotationDeg; }
