@@ -18,7 +18,6 @@
 #include <Scripts/Legacy/CameraController.h>
 #include <Scripts/Spine2D/SpineScript.h>
 #include <Component/ProgressBarComponent.h>
-#include <Scripts/Widget/VignetteWidgetScript.h>
 
 void DemoScene2_Tutorial::Initialize()
 {
@@ -52,14 +51,10 @@ void DemoScene2_Tutorial::Update()
 		if (s_p >= 1.0f) { s_p = 1.0f; s_dir = -1.0f; }
 		s_progress->SetProgress(s_p);
 	}
-	if (Input::IsKeyPressed(VK_SPACE))
+
+	if (Input::IsKeyPressed(VK_3))
 	{
-		if (auto go = NewObject<gameObject>(L"VignetteOverlay"))
-		{
-			auto* vig = go->AddComponent<VignetteWidgetScript>();
-			vig->SetDuration(2.4f);
-			vig->SetMaxEdgeAlpha(1.0f);
-		}
+		SceneManager::ChangeScene(L"SolarSystemScene");
 	}
 }
 
@@ -309,6 +304,7 @@ void DemoScene2_Tutorial::aruInput()
 		sc.y = Math::Clamp(sc.y, 0.1f, 5.0f);
 		spine->spineRenderer->SetRelativeScale(sc);
 	}
+
 }
 
 void DemoScene2_Tutorial::CameraInput()

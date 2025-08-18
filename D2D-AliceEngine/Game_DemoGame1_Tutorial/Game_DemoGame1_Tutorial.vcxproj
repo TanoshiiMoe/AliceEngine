@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Game_DemoGame1_Tutorial;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)D2D-AliceEngine;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)spine-cpp\spine-cpp\;$(SolutionDir)Game_DemoGame1_Tutorial;$(SolutionDir)Engine;$(SolutionDir)Extension\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,23 +136,36 @@
     <ClInclude Include="Scene\DemoScene3_Tutorial.h" />
     <ClInclude Include="Scene\DemoScene2_Tutorial.h" />
     <ClInclude Include="Scene\DemoScene1_Tutorial.h" />
-    <ClInclude Include="framework.h" />
     <ClInclude Include="Game_DemoGame1_Tutorial.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Scripts\BackGroundImage.h" />
+    <ClInclude Include="Scripts\Legacy\Aru.h" />
+    <ClInclude Include="Scripts\Legacy\Aru2.h" />
+    <ClInclude Include="Scripts\Legacy\CameraController.h" />
+    <ClInclude Include="Scripts\Legacy\Enemy.h" />
+    <ClInclude Include="Scripts\Legacy\Player.h" />
+    <ClInclude Include="Scripts\SolarScene\Earth.h" />
+    <ClInclude Include="Scripts\SolarScene\Moon.h" />
+    <ClInclude Include="Scripts\SolarScene\Sun.h" />
+    <ClInclude Include="Scripts\Spine2D\SpineScript.h" />
+    <ClInclude Include="Scripts\Video\YuukaVideo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\DemoScene3_Tutorial.cpp" />
     <ClCompile Include="Scene\DemoScene2_Tutorial.cpp" />
     <ClCompile Include="Scene\DemoScene1_Tutorial.cpp" />
     <ClCompile Include="Game_DemoGame1_Tutorial.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Game_DemoGame1_Tutorial.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Game_DemoGame1_Tutorial.ico" />
-    <Image Include="small.ico" />
+    <ClCompile Include="Scripts\BackGroundImage.cpp" />
+    <ClCompile Include="Scripts\Legacy\Aru.cpp" />
+    <ClCompile Include="Scripts\Legacy\Aru2.cpp" />
+    <ClCompile Include="Scripts\Legacy\CameraController.cpp" />
+    <ClCompile Include="Scripts\Legacy\Enemy.cpp" />
+    <ClCompile Include="Scripts\Legacy\Player.cpp" />
+    <ClCompile Include="Scripts\SolarScene\Earth.cpp" />
+    <ClCompile Include="Scripts\SolarScene\Moon.cpp" />
+    <ClCompile Include="Scripts\SolarScene\Sun.cpp" />
+    <ClCompile Include="Scripts\Spine2D\SpineScript.cpp" />
+    <ClCompile Include="Scripts\Video\YuukaVideo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
