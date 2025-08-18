@@ -92,6 +92,9 @@ void SpineRenderer::RegistSystem(WeakObjectPtr<UObject> object)
 
 void SpineRenderer::Initialize()
 {
+	// 상대 좌표 적용
+	__super::Initialize();
+
 	RenderSystem::GetInstance().Regist(WeakFromThis<RenderComponent>());
 	LoadTextureLoader();
 	if (!m_textureLoader)
@@ -197,7 +200,7 @@ void SpineRenderer::Render()
 
 	D2DRenderManager::GetInstance().DrawDebugBox(-10, -10, 10, 10, 0, 0, 0, 255);
 
-	D2D1::Matrix3x2F worldTransform = GetOwnerTransform() ? relativeTransform.m_worldTransform.ToMatrix() : D2D1::Matrix3x2F::Identity();
+	D2D1::Matrix3x2F worldTransform = relativeTransform.m_worldTransform.ToMatrix();
 	D2D1::Matrix3x2F flipY = D2D1::Matrix3x2F::Scale(1.0f, -1.0f);
 	D2D1::Matrix3x2F cameraInv = camera->relativeTransform.m_worldTransform.ToMatrix();
 	cameraInv.Invert();
@@ -299,14 +302,14 @@ void SpineRenderer::Render()
 			D2DRenderManager::GetInstance().m_d2dDeviceContext->SetTransform(finalMatrix);
 
 			auto solveAffine = [](float sx0, float sy0, float sx1, float sy1, float sx2, float sy2,
-								   float dx0, float dy0, float dx1, float dy1, float dx2, float dy2,
-								   D2D1_MATRIX_3X2_F& outM) -> bool
+							   float dx0, float dy0, float dx1, float dy1, float dx2, float dy2,
+							   D2D1_MATRIX_3X2_F& outM) -> bool
 			{
 				// Solve for m11,m21,dx from sx,sy -> x; and m12,m22,dy from sx,sy -> y
 				auto solve3 = [](float a0,float b0,float c0,float r0,
-								  float a1,float b1,float c1,float r1,
-								  float a2,float b2,float c2,float r2,
-								  float& x,float& y,float& z)->bool{
+							  float a1,float b1,float c1,float r1,
+							  float a2,float b2,float c2,float r2,
+							  float& x,float& y,float& z)->bool{
 					float det = a0*(b1*c2-b2*c1) - b0*(a1*c2-a2*c1) + c0*(a1*b2-a2*b1);
 					if (fabsf(det) < 1e-6f) return false;
 					float detX = r0*(b1*c2-b2*c1) - b0*(r1*c2-r2*c1) + c0*(r1*b2-r2*b1);
@@ -317,13 +320,13 @@ void SpineRenderer::Render()
 				float m11,m21,dx; // x = m11*sx + m21*sy + dx
 				float m12,m22,dy; // y = m12*sx + m22*sy + dy
 				bool okx = solve3(sx0, sy0, 1.0f, dx0,
-								  sx1, sy1, 1.0f, dx1,
-								  sx2, sy2, 1.0f, dx2,
-								  m11, m21, dx);
+							  sx1, sy1, 1.0f, dx1,
+							  sx2, sy2, 1.0f, dx2,
+							  m11, m21, dx);
 				bool oky = solve3(sx0, sy0, 1.0f, dy0,
-								  sx1, sy1, 1.0f, dy1,
-								  sx2, sy2, 1.0f, dy2,
-								  m12, m22, dy);
+							  sx1, sy1, 1.0f, dy1,
+							  sx2, sy2, 1.0f, dy2,
+							  m12, m22, dy);
 				if (!okx || !oky) return false;
 				outM = D2D1::Matrix3x2F(m11, m12, m21, m22, dx, dy);
 				return true;
