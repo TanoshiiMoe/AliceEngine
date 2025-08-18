@@ -7,6 +7,8 @@
 class BoxComponent : public RenderComponent
 {
 public:
+	enum class EUsage { Debug, Collision };
+
 	BoxComponent();
 	BoxComponent(const FVector2& _size, const FColor& color);
 	~BoxComponent();
@@ -29,6 +31,10 @@ public:
 	void SetIgnoreOwnerScale(bool ignore) { bIgnoreOwnerScale = ignore; }
 	bool GetIgnoreOwnerScale() const { return bIgnoreOwnerScale; }
 
+	// Usage (debug rendering vs collision)
+	void SetUsage(EUsage usage) { m_usage = usage; }
+	EUsage GetUsage() const { return m_usage; }
+
 	ComPtr<ID2D1SolidColorBrush> m_pBrush;
 	FColor m_color;
 	float thickness = 5.0f;
@@ -36,5 +42,6 @@ public:
 	FVector2 skewAngle;
 private:
 	bool bIgnoreOwnerScale = false;
+	EUsage m_usage = EUsage::Debug;
 };
 

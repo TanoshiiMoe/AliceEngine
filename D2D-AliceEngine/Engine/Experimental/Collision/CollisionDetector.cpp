@@ -7,7 +7,36 @@
 #include <Component/Rigidbody2D.h>
 #include <Component/ScriptComponent.h>
 #include <System/CollisionSystem.h>
+#include <Component/BoxComponent.h>
 #include "Collision2D.h"
+
+static inline bool GetBoxWorldBounds(Collider* c, float& minX, float& maxX, float& minY, float& maxY)
+{
+	if (!c) return false;
+	gameObject* go = c->GetOwner();
+	if (!go) return false;
+	FVector2 ownerPos = go->transform() ? go->transform()->GetPosition() : FVector2(0, 0);
+	FVector2 size(0, 0);
+	FVector2 center(0, 0);
+	if (c->boxComponent && c->boxComponent->GetUsage() == BoxComponent::EUsage::Collision)
+	{
+		size = c->boxComponent->m_size;
+		// 월드 중심은 BoxComponent의 상대 트랜스폼(월드 위치)을 우선 사용
+		if (auto tr = c->boxComponent->GetRelativeTransform()) center = tr->GetPosition();
+		else center = ownerPos + c->boxComponent->GetRelativePosition();
+	}
+	else
+	{
+		return false;
+	}
+	const float halfW = size.x * 0.5f;
+	const float halfH = size.y * 0.5f;
+	minX = center.x - halfW;
+	maxX = center.x + halfW;
+	minY = center.y - halfH;
+	maxY = center.y + halfH;
+	return true;
+}
 
 void Physics::FCollisionDetector::BruteForceOverlapCheck(std::vector<WeakObjectPtr<Collider>>& objects)
 {
@@ -50,7 +79,9 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
 		if (CheckCollisionCondition(w)) continue;
 
 		Collider* c = w.Get();
-		active.push_back(Entry{ w, c->aabb.minVector.x, c->aabb.maxVector.x });
+		float minX, maxX, minY, maxY;
+		if (!GetBoxWorldBounds(c, minX, maxX, minY, maxY)) continue;
+		active.push_back(Entry{ w, minX, maxX });
 	}
 
 	// minX로 정렬
@@ -74,8 +105,8 @@ std::unordered_set<Rigidbody2D*> Physics::FCollisionDetector::SweepAndPruneOverl
 			if (B.weak.expired()) continue;
 
 			// Prune
-			if (B.minX > A.maxX)
-				break;
+			if (B.maxX < A.minX)
+				continue;
 
 			// 실제 충돌 판정
 			if (IsOverlapped(A.weak, B.weak))
@@ -264,12 +295,14 @@ bool Physics::FCollisionDetector::CompareColliderMinX(const WeakObjectPtr<Collid
 
 bool Physics::FCollisionDetector::IsOverlapped(const WeakObjectPtr<Collider>& a, const WeakObjectPtr<Collider>& b)
 {
-	if (!a.Get()) return false;
-	if (!b.Get()) return false;
-	return !(a.Get()->aabb.minVector.x > b.Get()->aabb.maxVector.x ||
-		a.Get()->aabb.minVector.y > b.Get()->aabb.maxVector.y ||
-		a.Get()->aabb.maxVector.x < b.Get()->aabb.minVector.x ||
-		a.Get()->aabb.maxVector.y < b.Get()->aabb.minVector.y);
+	Collider* ca = a.Get();
+	Collider* cb = b.Get();
+	if (!ca || !cb) return false;
+	float aminX, amaxX, aminY, amaxY;
+	float bminX, bmaxX, bminY, bmaxY;
+	if (!GetBoxWorldBounds(ca, aminX, amaxX, aminY, amaxY)) return false;
+	if (!GetBoxWorldBounds(cb, bminX, bmaxX, bminY, bmaxY)) return false;
+	return !(aminX > bmaxX || amaxX < bminX || aminY > bmaxY || amaxY < bminY);
 }
 
 // 충돌을 감지하고 AABB 오버랩 된 부분을 밀어내는 로직입니다.
@@ -283,8 +316,15 @@ bool Physics::FCollisionDetector::IsOverlapped(const WeakObjectPtr<Collider>& a,
 
 void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 {
-	FAABB& aabb_a = a->aabb;
-	FAABB& aabb_b = b->aabb;
+	FAABB aabb_a; FAABB aabb_b;
+	{
+		float minX, maxX, minY, maxY;
+		if (GetBoxWorldBounds(a, minX, maxX, minY, maxY)) { aabb_a.minVector.x = minX; aabb_a.maxVector.x = maxX; aabb_a.minVector.y = minY; aabb_a.maxVector.y = maxY; }
+	}
+	{
+		float minX, maxX, minY, maxY;
+		if (GetBoxWorldBounds(b, minX, maxX, minY, maxY)) { aabb_b.minVector.x = minX; aabb_b.maxVector.x = maxX; aabb_b.minVector.y = minY; aabb_b.maxVector.y = maxY; }
+	}
 	Rigidbody2D* rbA = a->GetOwner()->GetComponent<Rigidbody2D>();
 	Rigidbody2D* rbB = b->GetOwner()->GetComponent<Rigidbody2D>();
 	float massA = rbA ? rbA->mass : FLT_MAX;
@@ -400,9 +440,16 @@ void Physics::FCollisionDetector::PushOverlappedArea(Collider* a, Collider* b)
 
 void Physics::FCollisionDetector::PushOverlappedAreaNoMass(Collider* a, Collider* b)
 {
-    // aabb 정보 가져오기
-    const auto& aabb_a = a->aabb;
-    const auto& aabb_b = b->aabb;
+    // BoxComponent 기반 AABB 계산
+    FAABB aabb_a; FAABB aabb_b;
+    {
+        float minX, maxX, minY, maxY;
+        if (GetBoxWorldBounds(a, minX, maxX, minY, maxY)) { aabb_a.minVector.x = minX; aabb_a.maxVector.x = maxX; aabb_a.minVector.y = minY; aabb_a.maxVector.y = maxY; }
+    }
+    {
+        float minX, maxX, minY, maxY;
+        if (GetBoxWorldBounds(b, minX, maxX, minY, maxY)) { aabb_b.minVector.x = minX; aabb_b.maxVector.x = maxX; aabb_b.minVector.y = minY; aabb_b.maxVector.y = maxY; }
+    }
 
     // 겹친 거리 계산
     float overlap_x = min(aabb_a.maxVector.x, aabb_b.maxVector.x) - max(aabb_a.minVector.x, aabb_b.minVector.x);
